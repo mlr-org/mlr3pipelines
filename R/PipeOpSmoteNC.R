@@ -111,15 +111,20 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
 
       # Calculate synthetic data
       snc = setDT(invoke(themis::smotenc, df = task$data(), var = task$target_names,
-                        .args = self$param_set$get_values(tags = "smotenc")))
-
-      # Return task unchanged if no synthetic data was generated
-      if (nrow(snc) == task$nrow) {
-        return(task)
-      }
+                         .args = self$param_set$get_values(tags = "smotenc")))
 
       # Filter snc to only contain the generated synthetic data
-      snc <- snc[seq(task$nrow + 1L, nrow(snc))]
+      keep = seq(task$nrow + 1L, nrow(snc))
+      # Return task unchanged if no synthetic data was generated
+      if (keep[[1L]] >= keep[[length(keep)]]) {
+        return(task)
+      }
+      snc = snc[keep]
+
+      # ALT: doesn't work yet
+      # keep = row.names(fsetdiff(snc, task$data()))
+      # snc = snc[as.integer(keep)]  # do this in-place somehow?
+
       # Convert originally integer columns back to integer as SMOTENC treats them as numeric
       int_cols = task$feature_names[task$feature_types$type == "integer"]
       snc[, (int_cols) := lapply(.SD, function(x) as.integer(round(x))), .SDcols = int_cols]
