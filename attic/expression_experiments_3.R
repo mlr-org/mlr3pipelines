@@ -67,15 +67,23 @@ stats = list(depth = integer(0), expweight = numeric(0), simpweight = numeric(0)
 set.seed(3 + ss)
 for (depth_to_check in 2:12) {
   for (repetition in seq_len(2000)) {
-    if (depth_to_check == 11) {
-      expression = random_cnf_expression(10, TRUE, 4)
-    } else if (depth_to_check == 12) {
-      expression = random_cnf_expression(5, TRUE, 2)
-    }  else {
-      expression = random_cnf_expression(depth_to_check)
-    }
-    cat(sprintf("%s\n", deparse1(expression)))
-    simplified = formula_to_expression(eval(expression))
+    subexps = replicate(10, {
+      if (depth_to_check == 11) {
+        expression = random_cnf_expression(10, TRUE, 4)
+      } else if (depth_to_check == 12) {
+        expression = random_cnf_expression(5, TRUE, 2)
+      }  else {
+        expression = random_cnf_expression(depth_to_check)
+      }
+      cat(sprintf("%s\n", deparse1(expression)))
+      eval(expression)
+    }, simplify = FALSE)
+    subexps = Filter(function(x) !is.logical(x), subexps)
+    if (!length(subexps)) next
+    expression = Reduce(function(x, y) substitute(x & y, list(x = x, y = y)), lapply(subexps, formula_to_expression))
+    cat(sprintf("%s\n\n", deparse1(expression)))
+
+    simplified = formula_to_expression(CnfFormula(subexps))
     stats$depth[[length(stats$depth) + 1]] = depth_to_check
     stats$expweight[[length(stats$expweight) + 1]] = expression_weight(expression)
     stats$simpweight[[length(stats$simpweight) + 1]] = expression_weight(simplified)
@@ -105,7 +113,7 @@ for (depth_to_check in 2:12) {
 }
 dti <- as.data.table(stats)
 
-saveRDS(dti, sprintf("expression_experiments_%05i.rds", ss))
+saveRDS(dti, sprintf("expression_experiments_3_%05i.rds", ss))
 
 dti[, .(
     ew = mean(expweight), sw = mean(simpweight),

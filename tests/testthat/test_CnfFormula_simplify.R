@@ -33,6 +33,10 @@ test_that("CnfFormula Regression Tests", {
     sum(all.names(expression) %in% c("|", "&")) + 1
   }
 
+  varnames = names(u)
+  assignments = expand.grid(lapply(varnames, function(var) u[[var]]), stringsAsFactors = FALSE)
+  colnames(assignments) = varnames
+
   stats = list(expweight = numeric(0), simpweight = numeric(0), was_tautology = logical(0), was_contradiction = logical(0))
 
   for (line in testcases) {
@@ -40,9 +44,6 @@ test_that("CnfFormula Regression Tests", {
     simplified = formula_to_expression(eval(expression))
     stats$expweight[[length(stats$expweight) + 1]] = expression_weight(expression)
     stats$simpweight[[length(stats$simpweight) + 1]] = expression_weight(simplified)
-    vars = intersect(names(u), all.names(expression))
-    assignments = expand.grid(lapply(vars, function(var) u[[var]]), stringsAsFactors = FALSE)
-    colnames(assignments) = vars
 
     truevals = evaluate_expression(expression, assignments)
     simpvals = evaluate_expression(simplified, assignments)
@@ -66,7 +67,6 @@ test_that("CnfFormula Regression Tests", {
         deparse1(simplified)
     ))
 
-    cat(".")
   }
 
   dti <- as.data.table(stats)

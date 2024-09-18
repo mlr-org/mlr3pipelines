@@ -1,4 +1,3 @@
-
 # Get 'ss' from command line arguments
 args <- commandArgs(trailingOnly = TRUE)
 checkmate::assert_integer(ss <- as.integer(args[1]), lower = 1, len = 1, any.missing = FALSE)
@@ -9,13 +8,14 @@ library("data.table")
 options(width = 10000)
 
 u = CnfUniverse()
+V = CnfSymbol(u, "V", c("m", "n", "o"))
 W = CnfSymbol(u, "W", c("p", "q", "r"))
 X = CnfSymbol(u, "X", c("s", "t", "u"))
 Y = CnfSymbol(u, "Y", c("v", "w", "x"))
 Z = CnfSymbol(u, "Z", c("y", "z", "a"))
 
 random_atom_expression = function() {
-  symbol = sample(alist(W, X, Y, Z), 1)[[1]]
+  symbol = sample(alist(V, W, X, Y, Z), 1)[[1]]
   values = sample(u[[deparse(symbol)]], sample(2, 1))
   substitute(symbol %among% values, list(symbol = symbol, values = values))
 }
@@ -65,11 +65,11 @@ colnames(assignments) = varnames
 
 stats = list(depth = integer(0), expweight = numeric(0), simpweight = numeric(0), was_tautology = logical(0), was_contradiction = logical(0))
 set.seed(3 + ss)
-for (depth_to_check in 2:12) {
+for (depth_to_check in 2:13) {
   for (repetition in seq_len(2000)) {
-    if (depth_to_check == 11) {
+    if (depth_to_check == 12) {
       expression = random_cnf_expression(10, TRUE, 4)
-    } else if (depth_to_check == 12) {
+    } else if (depth_to_check == 13) {
       expression = random_cnf_expression(5, TRUE, 2)
     }  else {
       expression = random_cnf_expression(depth_to_check)
@@ -105,7 +105,7 @@ for (depth_to_check in 2:12) {
 }
 dti <- as.data.table(stats)
 
-saveRDS(dti, sprintf("expression_experiments_%05i.rds", ss))
+saveRDS(dti, sprintf("expression_experiments_2_%05i.rds", ss))
 
 dti[, .(
     ew = mean(expweight), sw = mean(simpweight),

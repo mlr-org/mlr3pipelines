@@ -625,6 +625,10 @@ test_that("Brute-force test", {
   ss = 0
   # dti_col <- parallel::mclapply(mc.cores = 16, 1:16, function(ss) {
 
+  varnames = names(u)
+  assignments = expand.grid(lapply(varnames, function(var) u[[var]]), stringsAsFactors = FALSE)
+  colnames(assignments) = varnames
+
   stats = list(depth = integer(0), expweight = numeric(0), simpweight = numeric(0), was_tautology = logical(0), was_contradiction = logical(0))
   set.seed(3 + ss)
 
@@ -641,9 +645,6 @@ test_that("Brute-force test", {
       stats$depth[[length(stats$depth) + 1]] = depth_to_check
       stats$expweight[[length(stats$expweight) + 1]] = expression_weight(expression)
       stats$simpweight[[length(stats$simpweight) + 1]] = expression_weight(simplified)
-      vars = intersect(names(u), all.names(expression))
-      assignments = expand.grid(lapply(vars, function(var) u[[var]]), stringsAsFactors = FALSE)
-      colnames(assignments) = vars
 
       truevals = evaluate_expression(expression, assignments)
       simpvals = evaluate_expression(simplified, assignments)
