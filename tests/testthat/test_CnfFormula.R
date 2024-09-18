@@ -645,21 +645,26 @@ test_that("Brute-force test", {
       assignments = expand.grid(lapply(vars, function(var) u[[var]]), stringsAsFactors = FALSE)
       colnames(assignments) = vars
 
-      truevals = rep(NA, nrow(assignments))
-      for (i in seq_len(nrow(assignments))) {
-        assignment = assignments[i, , drop = FALSE]
-        trueval = evaluate_expression(expression, assignment)
-        simpval = evaluate_expression(simplified, assignment)
-        if (trueval != simpval) break
-        truevals[[i]] = trueval
-      }
+      truevals = evaluate_expression(expression, assignments)
+      simpvals = evaluate_expression(simplified, assignments)
+
       stats$was_tautology[[length(stats$was_tautology) + 1]] = all(truevals)
       stats$was_contradiction[[length(stats$was_contradiction) + 1]] = all(!truevals)
+
+      if (!all(truevals == simpvals)) {
+        trueval = truevals[[which(!truevals == simpvals)[1]]]
+        simpval = simpvals[[which(!truevals == simpvals)[1]]]
+        assignment = assignments[which(!truevals == simpvals)[1], , drop = FALSE]
+      } else {
+        # alibi
+        trueval = simpval = TRUE
+        assignment = NULL
+      }
       expect_equal(trueval, simpval,
-          info = sprintf("Expression: %s\nAssignment:\n%s\nSimplified to: %s",
-            deparse1(expression),
-            paste(capture.output(print(assignment)), collapse = "\n"),
-            deparse1(simplified)
+        info = sprintf("Expression: %s\nAssignment:\n%s\nSimplified to: %s",
+          deparse1(expression),
+          paste(capture.output(print(assignment)), collapse = "\n"),
+          deparse1(simplified)
       ))
     }
   }

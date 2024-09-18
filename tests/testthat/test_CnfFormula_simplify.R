@@ -3,7 +3,7 @@
 
 
 test_that("CnfFormula Regression Tests", {
-
+  skip_on_cran()
   testcases = readLines(test_path("testdata", "cnfcases.txt"))
 
   u = CnfUniverse()
@@ -33,12 +33,11 @@ test_that("CnfFormula Regression Tests", {
     sum(all.names(expression) %in% c("|", "&")) + 1
   }
 
-  stats = list(depth = integer(0), expweight = numeric(0), simpweight = numeric(0), was_tautology = logical(0), was_contradiction = logical(0))
+  stats = list(expweight = numeric(0), simpweight = numeric(0), was_tautology = logical(0), was_contradiction = logical(0))
 
   for (line in testcases) {
     expression = parse(text = line)[[1]]
     simplified = formula_to_expression(eval(expression))
-    stats$depth[[length(stats$depth) + 1]] = depth_to_check
     stats$expweight[[length(stats$expweight) + 1]] = expression_weight(expression)
     stats$simpweight[[length(stats$simpweight) + 1]] = expression_weight(simplified)
     vars = intersect(names(u), all.names(expression))
@@ -55,20 +54,23 @@ test_that("CnfFormula Regression Tests", {
       trueval = truevals[[which(!truevals == simpvals)[1]]]
       simpval = simpvals[[which(!truevals == simpvals)[1]]]
       assignment = assignments[which(!truevals == simpvals)[1], , drop = FALSE]
-      expect_equal(trueval, simpval,
-        info = sprintf("Expression: %s\nAssignment:\n%s\nSimplified to: %s",
-          deparse1(expression),
-          paste(capture.output(print(assignment)), collapse = "\n"),
-          deparse1(simplified)
-      ))
+    } else {
+      # alibi
+      trueval = simpval = TRUE
+      assignment = NULL
     }
+    expect_equal(trueval, simpval,
+      info = sprintf("Expression: %s\nAssignment:\n%s\nSimplified to: %s",
+        deparse1(expression),
+        paste(capture.output(print(assignment)), collapse = "\n"),
+        deparse1(simplified)
+    ))
+
     cat(".")
   }
 
   dti <- as.data.table(stats)
-  # })
 
-  # dti <- rbindlist(dti_col, idcol = "seedoffset")
 
   dti[, .(
       ew = mean(expweight), sw = mean(simpweight),
@@ -79,11 +81,7 @@ test_that("CnfFormula Regression Tests", {
       was_contradiction = mean(was_contradiction),
       tautologies_not_recognized = mean(was_tautology & simpweight > 0),
       contradictions_not_recognized = mean(was_contradiction & simpweight > 0)
-    ), by = "depth"]
-
-
-
-
+    )]
 
 })
 
