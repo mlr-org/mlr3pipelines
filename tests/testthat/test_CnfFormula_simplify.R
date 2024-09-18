@@ -4,7 +4,9 @@
 
 test_that("CnfFormula Regression Tests", {
   skip_on_cran()
-  testcases = readLines(test_path("testdata", "cnfcases.txt"))
+  testfile = xzfile(test_path("testdata", "cnf.xz"))
+  testcases = readLines(testfile)
+  close(testfile)
 
   u = CnfUniverse()
   W = CnfSymbol(u, "W", c("p", "q", "r"))
