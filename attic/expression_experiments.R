@@ -6,7 +6,7 @@ checkmate::assert_integer(ss <- as.integer(args[1]), lower = 1, len = 1, any.mis
 library("mlr3pipelines")
 library("testthat")
 library("data.table")
-options(width = 200)
+options(width = 10000)
 
 u = CnfUniverse()
 W = CnfSymbol(u, "W", c("p", "q", "r"))
@@ -70,6 +70,7 @@ expression_weight = function(expression) {
       }  else {
         expression = random_cnf_expression(depth_to_check)
       }
+      cat(sprintf("%s\n", deparse1(expression)))
       simplified = formula_to_expression(eval(expression))
       stats$depth[[length(stats$depth) + 1]] = depth_to_check
       stats$expweight[[length(stats$expweight) + 1]] = expression_weight(expression)
