@@ -913,3 +913,75 @@ gr <- po("replicate", reps = ntree) %>>%
 "one" %<>>% "two" %<>>% "three"
 #> 'one' >> 'two'
 #> 'onetwo' >> 'three'
+
+#   W X Y Z
+#29 q s v z
+
+quote(
+  ((Z %among% "y" & Z %among% c("y", "z")) & (Y %among% "w" & X %among% c("t", "u") | Y %among% c("v", "w") & X %among% "t")) |
+  (Y %among% c("w", "v") & (Z %among% "z" | Y %among% "w") & (X %among% "s" & Y %among% "w" | X %among% c("u", "s") & W %among% "p"))
+) -> expr_full ; evaluate_expression(expr_full, assignment) != evaluate_expression(formula_to_expression(eval(expr_full)), assignment)
+
+evaluate_expression(expr_full, assignment)
+
+clause1 <- ((Z %among% "y" & Z %among% c("y", "z")) & (Y %among% "w" & X %among% c("t", "u") | Y %among% c("v", "w") & X %among% "t"))
+clause2 <- (Y %among% c("w", "v") & (Z %among% "z" | Y %among% "w") & (X %among% "s" & Y %among% "w" | X %among% c("u", "s") & W %among% "p"))
+
+
+formula_to_expression(clause1) |> evaluate_expression(assignment)
+formula_to_expression(clause2) |> evaluate_expression(assignment)
+
+
+clause1
+clause2
+
+clause1 | clause2
+
+formula_to_expression(clause1 | clause2) |> evaluate_expression(assignment)
+
+# > clause1
+# CnfFormula:
+#      (Z ∈ {y}) !!
+#    & (Y ∈ {w, v})
+#    & (X ∈ {t, u}) !!
+#    & (X ∈ {t} | Y ∈ {w}) !!
+# > clause2
+# CnfFormula:
+#      (Y ∈ {w, v})
+#    & (X ∈ {s, u})
+#    & (Z ∈ {z} | Y ∈ {w})
+#    & (W ∈ {p} | X ∈ {s})
+#    & (W ∈ {p} | Y ∈ {w}) !!
+# > clause1 | clause2
+# CnfFormula:
+#      (Y ∈ {w, v})
+#    & (X ∈ {s, u} | Z ∈ {y})
+#    & (W ∈ {p} | X ∈ {s} | Z ∈ {y})
+#    & (Z ∈ {z} | Y ∈ {w} | X ∈ {t})
+
+
+# clause 10: W ∈ {p} | X ∈ {s} | Z ∈ {y}
+# clause 16: W ∈ {p} | X ∈ {t} | Y ∈ {w}
+# for some reason, clasue10$X is registered as subset of clause 16
+
+eval(expr_full)
+
+formula_to_expression(eval(expr_full)) |> evaluate_expression(assignment)
+
+simplified
+
+quote(
+  (Z %among% c("a", "z") | X %among% c("u", "t")) &
+  (W %among% c("r", "p") | X %among% "s" | Z %among% "y") &
+  (X %among% c("s", "u") | Z %among% "y" | Y %among% "v") &
+  (Z %among% c("z", "y") | Y %among% "v" | X %among% "s") &
+  (Z %among% "z" | X %among% c("u", "t") | W %among% c("r", "q")) &
+  (Y %among% c("w", "v") | X %among% "u" | Z %among% "a") &
+  (W %among% "p" | X %among% "s" | Z %among% "y" | Y %among% "v") &
+  (Y %among% c("v", "w") | Z %among% "z" | W %among% "r" | X %among% "s") &
+  (Z %among% c("a", "z") | X %among% "t" | Y %among% c("x", "w") | W %among% "p")
+) |> evaluate_expression(assignment)
+
+
+
+

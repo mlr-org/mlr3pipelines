@@ -152,8 +152,8 @@ simplify_cnf = function(entries, universe) {
 
     if (!is_unit_propagation) {
       # we are not propagating units, so we need to update the subset relations in the other direction.
-      # we do this first, in case on_update_subset_relations gets too eager later
-      idx_to_check = which(available %in% symbol_registry[[symbol]] & available <= meta_idx_outer)
+      # we do this first, in case on_updated_subset_relations gets too eager later
+      idx_to_check = which(available[seq_len(meta_idx_outer)] %in% symbol_registry[[symbol]])
       for (other_meta_idx in idx_to_check) {
         # was the other a subset of us before? that could have changed now.
         if (!is_not_subset_of[[other_meta_idx]][meta_idx, symbol] && !all(entries[[available[[other_meta_idx]]]][[symbol]] %in% entries[[clause_idx]][[symbol]])) {
@@ -174,7 +174,7 @@ simplify_cnf = function(entries, universe) {
     #  --> hence `available %in% symbol_registry[[symbol]]`
     # * We only need to check up to the point where we have built is_not_subset_of
     #  --> hence `available <= meta_idx_outer`
-    rows_to_check = which(is_not_subset_of[[meta_idx]][, is_not_subset_of_col] & available %in% symbol_registry[[symbol]] & available <= meta_idx_outer)
+    rows_to_check = which((is_not_subset_of[[meta_idx]][, is_not_subset_of_col] & available %in% symbol_registry[[symbol]])[seq_len(meta_idx_outer)])
     for (other_meta_idx in rows_to_check) {
       # when we get here, that means that the symbol exists both in clause_idx and in other_ref_this symbol, *and* we have seen both clauses
       # in the is_not_subset_of building process.
@@ -370,6 +370,8 @@ simplify_cnf = function(entries, universe) {
 
       # symbols that are not in common trivially get the matrix entry TRUE
       # (they are not subsets of their counterpart in the other clause, since the other ones are empty)
+      updated_inso_inner = FALSE
+      updated_inso_outer = FALSE
 
       for (symbol_idx_inner in sci_names_in_common) {
         symbol_idx_outer = sci_sc_map[[symbol_idx_inner]]
@@ -381,29 +383,34 @@ simplify_cnf = function(entries, universe) {
         inner_subset_of_outer = all(range_inner %in% range_outer)
         outer_subset_of_inner = (inner_subset_of_outer && length(range_outer) == length(range_inner)) || all(range_outer %in% range_inner)
         if (inner_subset_of_outer) {
+          updated_inso_inner = TRUE
           # Avoid assigning TRUE to matrix that is initialized with TRUE.
           # We index by column name here, since it is possible that clauses were shortened by
           # unit propagation or self subsumption elimination somewhere on the way here
           is_not_subset_of[[meta_idx_inner]][meta_idx_outer, symbol] = FALSE
         }
         if (outer_subset_of_inner) {
+          updated_inso_outer = TRUE
           is_not_subset_of[[meta_idx_outer]][meta_idx_inner, symbol] = FALSE
         }
       }
       # prefer to eliminate the outer loopo clause first, since we have already
       # done more work for the inner loop clause (which comes earlier in 'entries')
-      ousr = on_updated_subset_relations(meta_idx_inner, meta_idx_outer)
-      if (is.null(ousr)) break
-      if (ousr) return(return_entries(FALSE))
-
-      ousr = on_updated_subset_relations(meta_idx_outer, meta_idx_inner)
-      if (identical(ousr, TRUE)) return(return_entries(FALSE))
-      if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) break  # honestly not sure if this could happen here
-      if (is.null(ousr)) next
+      if (updated_inso_inner) {
+        ousr = on_updated_subset_relations(meta_idx_inner, meta_idx_outer)
+        if (is.null(ousr)) break
+        if (ousr) return(return_entries(FALSE))
+      }
+      if (updated_inso_outer) {
+        ousr = on_updated_subset_relations(meta_idx_outer, meta_idx_inner)
+        if (identical(ousr, TRUE)) return(return_entries(FALSE))
+        if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) break  # probably this can happen if things cascade onwards when updating clause_inner
+        if (is.null(ousr)) next
+      }
     }
   }
 
-  # Now for the big one: Asymmetric Hidden Literal Addition
+  # Now for the big one: Asymmetric Hidden Literal Addition (Marijn et al.)
 
   # First, we do non-units, then we do units separately.
   # We go big to small, since eliminating one clause could prevent us from eliminating other clauses, and all things being equal, we prefer eliminating long ones.
