@@ -67,7 +67,7 @@ stats = list(depth = integer(0), expweight = numeric(0), simpweight = numeric(0)
 set.seed(3 + ss)
 for (depth_to_check in 2:12) {
   for (repetition in seq_len(2000)) {
-    subexps = replicate(10, {
+    subexps = replicate(4, {
       if (depth_to_check == 11) {
         expression = random_cnf_expression(10, TRUE, 4)
       } else if (depth_to_check == 12) {
