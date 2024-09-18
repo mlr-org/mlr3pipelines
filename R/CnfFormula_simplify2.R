@@ -176,6 +176,11 @@ simplify_cnf = function(entries, universe) {
     #  --> hence `available <= meta_idx_outer`
     rows_to_check = which((is_not_subset_of[[meta_idx]][, is_not_subset_of_col] & available %in% symbol_registry[[symbol]])[seq_len(meta_idx_outer)])
     for (other_meta_idx in rows_to_check) {
+      clause_idx_other = available[[other_meta_idx]]
+      # while we only get here for rows that are in the symbol_registry and therefore not eliminated / units, we need to check again since on_update_subset_relations()
+      # can change this during the loop.
+      if (eliminated[[clause_idx_other]] || is_unit[[clause_idx_other]]) next
+
       # when we get here, that means that the symbol exists both in clause_idx and in other_ref_this symbol, *and* we have seen both clauses
       # in the is_not_subset_of building process.
       # If this were not the case, then we would not need to change anything.
@@ -235,6 +240,9 @@ simplify_cnf = function(entries, universe) {
       # We have to do this *after* we set the corresponding values to TRUE for others_ref_this_symbol,
       # since calling this could realistically change the symbol registry (e.g. if it leads to a symbol
       # being eliminated from other clauses).
+      clause_idx_other = available[[meta_idx_other]]
+      # while we *do* restrict meta_idx_other in the for loop already, eliminated and is_unit can still change during the loop, so check here again
+      if (eliminated[[clause_idx_other]] || is_unit[[clause_idx_other]]) next
       ousr = on_updated_subset_relations(meta_idx, meta_idx_other)
       if (identical(ousr, TRUE)) return(TRUE)
       # on_updated_subset_relations could cascade down to eliminating meta_idx (i.e. clause_idx)
@@ -269,6 +277,7 @@ simplify_cnf = function(entries, universe) {
   # mark a clause as eliminated and update symbol registry
   # This is relatively safe to call, since it does not modify any other clauses and does not create new units or subset relationships.
   eliminate_clause_update_sr = function(clause_idx) {
+    if (is_unit[[clause_idx]]) stop("Bug in the code, this should never happen.")
     eliminated[[clause_idx]] <<- TRUE
     for (s in names(entries[[clause_idx]])) {
       sr = symbol_registry[[s]]
@@ -463,6 +472,8 @@ simplify_cnf = function(entries, universe) {
         break
       }
       # Now loop over clauses that also use the symbol, checking if they have one less `not_subset_count` because of that
+      # Note we do not need to check subsumption w/r/t units any more: All symbols are proper subsets w/r/t units at this point,
+      # so if adding the complement of one symbol to another made it a superset of a unit, the result was a tautology already.
       for (updating_clause_meta_idx in available_inverse[symbol_registry[[symbol]]]) {
         # we don't want to skip 'was_used' here, since we might still do hidden subsumption elimination with them.
         if (is_not_subset_of[[updating_clause_meta_idx]][meta_idx, symbol] &&
