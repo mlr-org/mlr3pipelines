@@ -65,21 +65,21 @@ colnames(assignments) = varnames
 
 stats = list(depth = integer(0), expweight = numeric(0), simpweight = numeric(0), was_tautology = logical(0), was_contradiction = logical(0))
 set.seed(3 + ss)
-for (depth_to_check in 2:12) {
+for (depth_to_check in 2:11) {
   for (repetition in seq_len(2000)) {
-    subexps = replicate(4, {
-      if (depth_to_check == 11) {
-        expression = random_cnf_expression(10, TRUE, 4)
-      } else if (depth_to_check == 12) {
-        expression = random_cnf_expression(5, TRUE, 2)
-      }  else {
-        expression = random_cnf_expression(depth_to_check)
+    subexps = replicate(if (depth_to_check == 11) 10 else 4, {
+      repeat {
+        if (depth_to_check == 11) {
+          expression = random_cnf_expression(10, TRUE, 4)
+        } else {
+          expression = random_cnf_expression(depth_to_check)
+        }
+        cat(sprintf("%s\n", deparse1(expression)))
+        result = eval(expression)
+        if (!is.logical(result)) break
       }
-      cat(sprintf("%s\n", deparse1(expression)))
-      eval(expression)
+      result
     }, simplify = FALSE)
-    subexps = Filter(function(x) !is.logical(x), subexps)
-    if (!length(subexps)) next
     expression = Reduce(function(x, y) substitute(x & y, list(x = x, y = y)), lapply(subexps, formula_to_expression))
     cat(sprintf("%s\n\n", deparse1(expression)))
 
