@@ -409,6 +409,7 @@ simplify_cnf = function(entries, universe) {
         ousr = on_updated_subset_relations(meta_idx_inner, meta_idx_outer)
         if (is.null(ousr)) break
         if (ousr) return(return_entries(FALSE))
+        if (eliminated[[clause_idx_inner]] || is_unit[[clause_idx_inner]]) next  # yes this can happen.
       }
       if (updated_inso_outer) {
         ousr = on_updated_subset_relations(meta_idx_outer, meta_idx_inner)
