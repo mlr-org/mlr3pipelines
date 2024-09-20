@@ -174,6 +174,12 @@
 #               - to test all these relationships, maybe we are in exponential time already?
 #               - how *could* this work? for all pairs of clauses, intersect w/r/t one symbol, union the others?
 #                 - is this still valid if one of the original clauses gets eliminated? Probably yes, if all we use this for is self subsumption elimination.
+#           - how about this: we keep a separate queue of clauses that could be used for self subsumption elimination of clauses that were potentially already eliminated.
+#             we do this opportunistically, since it could contain information from higher order combinations of other clauses, which we won't bother to check exhaustively.
+#             Whenever rowsum of something is 2 after maximally expanding clause+, we check if there is something else that also has rowsum 2 w/r/t the same variables
+#             (for this it must be in the same variable queues) and if so, try to use it for self subsumption elimination. We need to somehow mark that this happened,
+#             since we don't need to do it again.
+#           - subsumption-eliminating something from clause X means that clause X could now be subset for something else, so we need to react...
 # testcase:
 #     (X ∈ {s} | Z ∈ {y})
 #   & (Y ∈ {x} | X ∈ {t})
