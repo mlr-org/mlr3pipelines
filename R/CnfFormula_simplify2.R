@@ -104,9 +104,18 @@ simplify_cnf = function(entries, universe) {
       entries[[ur]][[1L]] <<- (unit_domains[[nu]] = unit_isct)  # update the *old* unit and unit_domains in one go. unit_domains is updated by-reference (environment)
       eliminated[[unit_idx]] <<- TRUE
     }
-    # The symbol registry is empty at the start, this happens when new units are added later
+    # The symbol registry is empty at the start; the following happens when new units are added later
+
     for (s_clause_idx in symbol_registry[[nu]]) {
-      if (eliminated[[s_clause_idx]]) next  # could have been eliminated by subsumption elimination during unit propagation of another clause
+      # could have been eliminated by subsumption elimination during unit propagation of another clause
+      # (we are not afraid of is_unit here, since we are the unit for the symbol here -- everything else that has the
+      # symbol gets eliminated)
+      if (eliminated[[s_clause_idx]]) next
+      if (!is.null(is_not_subset_of)) {
+        # if we already know that s_clause_idx[[nu]] is a subset of unit_idx, we can skip this
+        s_clause_idx_meta = available_inverse[[s_clause_idx]]
+        if (s_clause_idx_meta <= meta_idx_outer && !is_not_subset_of[[s_clause_idx_meta]][available_inverse[[unit_idx]], nu]) next
+      }
       adr = apply_domain_restriction(s_clause_idx, nu, unit_domains[[nu]], TRUE)
       if (identical(adr, TRUE)) return(TRUE)  # forward contradiction signal
     }
@@ -419,6 +428,77 @@ simplify_cnf = function(entries, universe) {
       }
     }
   }
+
+  ## Some thoughts:
+  # could still do resolution self subsumption:
+  # given Clause X
+  # clause A that is mostly subset of X except for one symbol s
+  # clause B that is complement to A wrt s *outside of X[s]*, otherwise subset of X except for one symbol t, which is also in X
+  # - implied resolution of A and B is (A + B - s), can do self subsumption w/r/t t -> restrict X[t] to B[t]
+  # what else do we know?
+  # - A has rowsum 1; X[s] is therefore already self subsumption restricted to intersection with A[s]
+  # - B has rowsum 2 -- if it were 1, then we could already do the self subsumption w/r/t t
+  # - ideally we don't want to check that intersect(A[s], B[s]) is in X[s] too often
+  # how to do this efficiently?
+  #  - keep matrix of complement relationships? -- would miss out on cases where intersection of A[s] and B[s] is in X[s]
+  #  - if we do this reactively, we have to react every time a new rowsum == 1 OR rowsum == 2 appears?
+  #  - for each entry and each symbol, keep a rowsum == 1 and rowsum == 2 queue?
+  #    - would have to keep a reverse registry as well so we know where to eliminate entries from? or just live with the fact that we have to check for eliminated every time?
+  #    - or just use the symbol registry
+  # suggestion:
+  #  - when rowsum == 2: check symbol registry, intersect where not_subset w/r/t the symbol is TRUE, check rowsum == 1 on the other side, then check intersection relationship?
+  #    - Maybe cache rowsum somewhere.
+  #  - when rowsum == 1, check symbol registry, intersect where not_subset w/r/t the symbol is TRUE, check rowsum == 2 on the other side, then check intersection relationship?
+  # What about longer graphs? For hidden lateral addition, we can just build up one clause at a time and see if it gets eliminated.
+  #  - what happens is that rowsum == 1 elements are "plugs" that can reduce rowsums of other elements.
+  #    - reducing rowsums of other rowsum == 1 elements is boring, since HLA will have the same result
+  #  - the weird thing here is that, when doing the intersection part, we want to consider the intersection outside of X wiht maximal symbols, not minimal symbols;
+  #    this is different than in all the other cases, for which we can just greedily reduce symbols.
+  #  - do we, in principle, want to do this with all the hidden tautology eliminated clauses present?
+  #  - maybe what we do is we continue with self subsumption eliminatoin during HLA?
+  #    - YES
+  #    - this changes the HLA loop, however, since now we need to revisit clauses that we have looped over already
+  #      - keep track of the clause+, as well as rowsums, and update them in the on_subset_relations handler
+  #    - question remains: do we want to keep the HLA-eliminated clauses?
+  #      - suppose a clause A is subset of X w/r/t all symbols except s.
+  #        - if it is eliminated by HLA, then this is only interesting if it is eliminated with at least one clause that is subset of A[s] but not X[s]; otherwise,
+  #          X could have been eliminated already.
+  #        - if we are only on about hidden tautology elimination, then X[s] would be filled up to superset A[s] eventually, and whatever eliminated A[s] can still work on X.
+  #        - however, we are looking at a B that is not a subset of X w/r/t s and another symbol t.
+  #        - test case:
+  #           1   A %among% c("a1", "a2") | B %among% "b1" | C %among% c("c1", "c2")
+  #           2   B %among% c("b1", "b2") | C %among% c("c1", "c3")
+  #           3   A %among% c("a1", "a2") | B %among% c("b1", "b3")
+  #           4   A %among% "a2" | B %among% "b3" | D %among% "d1"
+  #           5   A %among% "a1" | B %among% "b3" | D %among% c("d2", "d3")
+  #          - clause 3 adds 'b2' to clause 1; clause 2 can then restrict clause 1 to 'c1'
+  #          - however, clauses 4 and 5 eliminate clause 3 through hidden subsumption elimination
+  #          - how can clause 1 be restricted to 'c1' now?
+  #            - I guess here we have a special case not treated above: two clauses that have both rowsum 2, that can be combined to rowsum 1 (w/r/t clause 1 here)
+  #        - test case 2:
+  #           1   A %among% c("a1", "a2") | B %among% "b1" | C %among% c("c1", "c2") | D %among% "d3"
+  #           2   B %among% c("b1", "b2") | C %among% c("c1", "c3")
+  #           3   A %among% c("a1", "a2") | B %among% c("b1", "b3") | D %among% "d3"
+  #           4   A %among% "a2" | B %among% "b3" | D %among% c("d1", "d3")
+  #           5   A %among% "a1" | B %among% "b3" | D %among% c("d2", "d3")
+  #           - here, 4 and 5 can also be combined to remove B from clause 1. At the same time, clause 1+ retains B and gains b2 as well.
+  #           - this was not visible from subset relations alone: 4 and 5 could differ in many symbols, only their intersection must be complement w/r/t 1.
+  #             - they don't get built up by clause 1 and they don't build it up.
+  #             - do we have to look at all combinations of all clauses?
+  #               - take two clauses: intersection w/r/t one symbol, union w/r/t all others -- this can do something interesting to a third clause if the#
+  #                 intersection is a subset w/r/t the third clause, but they were not subsets before. Also each clause must have have rowsums >= 2, since rowsum 1
+  #                 clauses are already considered.
+  #                 - this builds up a clause that these clauses could have eliminated
+  #               - to test all these relationships, maybe we are in exponential time already?
+  #               - how *could* this work? for all pairs of clauses, intersect w/r/t one symbol, union the others?
+  #                 - is this still valid if one of the original clauses gets eliminated? Probably yes, if all we use this for is self subsumption elimination.
+  # testcase:
+  #     (X ∈ {s} | Z ∈ {y})
+  #   & (Y ∈ {x} | X ∈ {t})
+  #   & (Y ∈ {x} | Z ∈ {z})
+  # (in R-code, that is: `CnfFormula(list(X %among% "s" | Z %among% "y", Y %among% "x" | X %among% "t", Y %among% "x" | Z %among% "z"))` )
+  # Here, the first two clauses can restrict the 3rd clause to `Y %among% "x"`, which then subsumption-eliminates clauses 2 and 3.
+
 
   # Now for the big one: Asymmetric Hidden Literal Addition (Marijn et al.)
 
