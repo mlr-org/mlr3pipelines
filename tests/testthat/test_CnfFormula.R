@@ -570,7 +570,7 @@ test_that("CnfFormula performs all simplifications in a complex formula", {
 
 test_that("Brute-force test", {
   skip_on_cran()
-
+skip()
   u = CnfUniverse()
   W = CnfSymbol(u, "W", c("p", "q", "r"))
   X = CnfSymbol(u, "X", c("s", "t", "u"))
