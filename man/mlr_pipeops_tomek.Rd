@@ -12,8 +12,9 @@ Generates a cleaner data set by removing all majority-minority Tomek links.
 
 The algorithm down-samples the data by removing all pairs of observations that form a Tomek link,
 i.e. a pair of observations that are nearest neighbors and belong to different classes.
-It can only be applied to \link[mlr3:TaskClassif]{classification tasks} with numeric or integer features that have no missing values.
-Supports multiclass classification.
+For this only numeric and integer features are taken into account. These must have no missing values.
+
+This can only be applied to \link[mlr3:TaskClassif]{classification tasks}. Multiclass classification is supported.
 
 See \code{\link[themis:tomek]{themis::tomek}} for details.
 }

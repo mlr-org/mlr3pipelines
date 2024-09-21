@@ -12,8 +12,9 @@ Generates a more balanced data set by down-sampling the instances of non-minorit
 
 The algorithm down-samples by selecting instances from the non-minority classes that have the smallest mean distance
 to their \code{k} nearest neighbors of different classes.
-This can only be applied to \link[mlr3:TaskClassif]{classification tasks} with numeric or integer features that have no missing values.
-Supports multiclass classification.
+For this only numeric and integer features are taken into account. These must have no missing values.
+
+This can only be applied to \link[mlr3:TaskClassif]{classification tasks}. Multiclass classification is supported.
 
 See \code{\link[themis:nearmiss]{themis::nearmiss}} for details.
 }

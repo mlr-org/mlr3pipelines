@@ -9,8 +9,9 @@
 #'
 #' The algorithm down-samples by selecting instances from the non-minority classes that have the smallest mean distance
 #' to their `k` nearest neighbors of different classes.
-#' This can only be applied to [classification tasks][mlr3::TaskClassif] with numeric or integer features that have no missing values.
-#' Supports multiclass classification.
+#' For this only numeric and integer features are taken into account. These must have no missing values.
+#'
+#' This can only be applied to [classification tasks][mlr3::TaskClassif]. Multiclass classification is supported.
 #'
 #' See [`themis::nearmiss`] for details.
 #'
@@ -85,22 +86,21 @@ PipeOpNearmiss = R6Class("PipeOpNearmiss",
   private = list(
 
     .train_task = function(task) {
-      cols = task$feature_names
-
       # Return task unchanged, if no feature columns exist
-      if (!length(cols)) {
+      if (!length(task$feature_names)) {
         return(task)
       }
-      # Only numeric and integer features allowed
-      if (!all(task$feature_types$type %in% c("numeric", "integer"))) {
-        stop("Nearmiss does only accept numeric and integer features. Use PipeOpSelect to select the appropriate features.")
+      # At least one numeric or integer feature required
+      if (!any(task$feature_types$type %in% c("numeric", "integer"))) {
+        stop("Nearmiss needs at least one numeric or integer feature to work.")
       }
-
+      # Subset columns to only include integer/numeric features and the target
+      cols = c(task$feature_types[type %in% c("integer", "numeric"), id], task$target_names)
       # Down-sample data
-      dt = setDT(invoke(themis::nearmiss, df = task$data(), var = task$target_names,
+      dt = setDT(invoke(themis::nearmiss, df = task$data(cols = cols), var = task$target_names,
                         .args = self$param_set$get_values(tags = "nearmiss")))
 
-      keep = as.integer(row.names(dt))
+      keep = task$row_ids[as.integer(row.names(dt))]
       task$filter(keep)
     }
   )

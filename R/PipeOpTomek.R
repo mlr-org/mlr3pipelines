@@ -9,8 +9,9 @@
 #'
 #' The algorithm down-samples the data by removing all pairs of observations that form a Tomek link,
 #' i.e. a pair of observations that are nearest neighbors and belong to different classes.
-#' It can only be applied to [classification tasks][mlr3::TaskClassif] with numeric or integer features that have no missing values.
-#' Supports multiclass classification.
+#' For this only numeric and integer features are taken into account. These must have no missing values.
+#'
+#' This can only be applied to [classification tasks][mlr3::TaskClassif]. Multiclass classification is supported.
 #'
 #' See [`themis::tomek`] for details.
 #'
@@ -75,21 +76,20 @@ PipeOpTomek = R6Class("PipeOpTomek",
   private = list(
 
     .train_task = function(task) {
-      cols = task$feature_names
-
       # Return task unchanged, if no feature columns exist
-      if (!length(cols)) {
+      if (!length(task$feature_names)) {
         return(task)
       }
-      # Only numeric and integer features allowed
-      if (!all(task$feature_types$type %in% c("numeric", "integer"))) {
-        stop("Tomek does only accept numeric and integer features. Use PipeOpSelect to select the appropriate features.")
+      # At least one numeric or integer feature required
+      if (!any(task$feature_types$type %in% c("numeric", "integer"))) {
+        stop("Tomek needs at least one numeric or integer feature to work.")
       }
-
+      # Subset columns to only include integer/numeric features and the target
+      cols = c(task$feature_types[type %in% c("integer", "numeric"), id], task$target_names)
       # Down-sample data
-      dt = setDT(invoke(themis::tomek, df = task$data(), var = task$target_names))
+      dt = setDT(invoke(themis::tomek, df = task$data(cols = cols), var = task$target_names))
 
-      keep = as.integer(row.names(dt))
+      keep = task$row_ids[as.integer(row.names(dt))]
       task$filter(keep)
     }
   )
