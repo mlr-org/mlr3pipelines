@@ -42,6 +42,8 @@
 #' * `method` :: `character(1)` \cr
 #'   The type of Borderline-SMOTE algorithm to use. Default is `"type1"`.
 #'   See [`BLSMOTE()`][`smotefamily::BLSMOTE`].
+#' * `quiet` :: `logical(1)` \cr
+#'   Whether to suppress printing status during training. Initialized to `TRUE`.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -80,11 +82,13 @@ PipeOpBLSmote = R6Class("PipeOpBLSmote",
       ps = ps(
         K = p_int(lower = 1, default = 5, tags = c("train", "blsmote")),
         C = p_int(lower = 1, default = 5, tags = c("train", "blsmote")),
-        # dup_size = 0 leads to behaviour different from 1, 2, 3, ..., because it means "duplicating until balanced", so it is a 'special_vals'.
+        # dup_size = 0 leads to behaviour different from 1, 2, 3, ..., because it means "duplicating until balanced", so it is a "special_vals".
         dupSize = p_int(lower = 1, default = 0, special_vals = list(0), tags = c("train", "blsmote")),
         # Default of `method` is derived from the source code of smotefamily::BLSMOTE(), not documented there.
-        method = p_fct(levels = c("type1", "type2"), tags = c("train", "blsmote"))
+        method = p_fct(levels = c("type1", "type2"), default = "type1", tags = c("train", "blsmote")),
+        quiet = p_lgl(tags = "train")
       )
+      ps$values = list(quiet = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE,
         packages = "smotefamily", task_type = "TaskClassif", tags = "imbalanced data")
     }
@@ -107,14 +111,22 @@ PipeOpBLSmote = R6Class("PipeOpBLSmote",
       dt = task$data(cols = cols)
 
       # Calculate synthetic data
-      # TODO: Do we have a way to suppress messages by print()?
-      st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = task$truth(),
-        .args = self$param_set$get_values(tags = "blsmote"),
-        .opts = list(warnPartialMatchArgs = FALSE))$syn_data)  # BLSMOTE uses partial arg matching internally
+      if (self$param_set$values$quiet) {
+        base::invisible(utils::capture.output({
+          st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = task$truth(),
+                            .args = self$param_set$get_values(tags = "blsmote"),
+                            .opts = list(warnPartialMatchArgs = FALSE))$syn_data)  # BLSMOTE uses partial arg matching internally
+        }))  # using {} not elegant?
+      } else {
+        st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = task$truth(),
+                          .args = self$param_set$get_values(tags = "blsmote"),
+                          .opts = list(warnPartialMatchArgs = FALSE))$syn_data)
+      }
 
       # Rename target column and fix character conversion
-      st[["class"]] = as_factor(st[["class"]], levels = task$class_names)
-      setnames(st, "class", task$target_names)
+      # We index by position (target should be last column) instead of indexing by name, which would lead to problems if a feature were called "class"
+      st[[ncol(st)]] = as_factor(st[[ncol(st)]], levels = task$class_names)
+      setnames(st, ncol(st), task$target_names)
 
       task$rbind(st)
     }

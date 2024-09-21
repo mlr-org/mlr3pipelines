@@ -98,14 +98,15 @@ PipeOpADAS = R6Class("PipeOpADAS",
       }
       dt = task$data(cols = cols)
 
-      # calculate synthetic data
+      # Calculate synthetic data
       st = setDT(invoke(smotefamily::ADAS, X = dt, target = task$truth(),
         .args = self$param_set$get_values(tags = "adas"),
         .opts = list(warnPartialMatchArgs = FALSE))$syn_data)  # ADAS uses partial arg matching internally
 
-      # rename target column and fix character conversion
-      st[["class"]] = as_factor(st[["class"]], levels = task$class_names)
-      setnames(st, "class", task$target_names)
+      # Rename target column and fix character conversion
+      # We index by position (target should be last column) instead of indexing by name, which would lead to problems if a feature were called "class"
+      st[[ncol(st)]] = as_factor(st[[ncol(st)]], levels = task$class_names)
+      setnames(st, ncol(st), task$target_names)
 
       task$rbind(st)
     }
