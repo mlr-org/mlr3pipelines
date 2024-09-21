@@ -180,6 +180,12 @@
 #             (for this it must be in the same variable queues) and if so, try to use it for self subsumption elimination. We need to somehow mark that this happened,
 #             since we don't need to do it again.
 #           - subsumption-eliminating something from clause X means that clause X could now be subset for something else, so we need to react...
+#           - maybe we should be reactive about clause+ right away: upon constructing the matrix, we also get a subset_count matrix; we build the clause+ right away.
+#             This way the logic for subsumption elimination after clause+-ing is easier; otherwise the code just needs to get written twice...
+#             - self-subsumption elimination after clause+ needs to do all the other things as well anyways...
+#             - check what we are currently doing based on is_not_subset_of -- we would turn it into is_not_subset_of_clause+, effectively.
+#             - do we need another symbol registry? For clause+, or for eliminated-but-can-still-trigger-self-subsumption?
+#             - now we need to treat units more like other clauses, as they can get normal clause+ and need normal subset-relationships.
 # testcase:
 #     (X ∈ {s} | Z ∈ {y})
 #   & (Y ∈ {x} | X ∈ {t})
