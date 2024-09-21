@@ -1,6 +1,7 @@
 # mlr3pipelines 0.6.1
 
-* New PipeOp `PipeOpRowApply` / `po("rowapply")`
+* New PipeOp: `PipeOpRowApply` / `po("rowapply")`
+* New PipeOp for handling inbalanced data: `PipeOpSmoteNC` / `po("smotenc")`
 
 # mlr3pipelines 0.6.0
 
