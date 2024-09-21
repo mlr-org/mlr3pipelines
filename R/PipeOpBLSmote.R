@@ -96,21 +96,21 @@ PipeOpBLSmote = R6Class("PipeOpBLSmote",
   private = list(
 
     .train_task = function(task) {
-      assert_true(all(task$feature_types$type == "numeric"))
       cols = task$feature_names
-
       unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
       if (length(unsupported_cols)) {
         stopf("BLSMOTE cannot generate synthetic data for the following columns since they are neither features nor targets: '%s'",
               paste(unsupported_cols, collapse = "', '"))
       }
-
       if (!length(cols)) {
         return(task)
       }
-      dt = task$data(cols = cols)
+      if (!all(task$feature_types$type %in% c("numeric"))) {
+        stop("BLSmote does only accept numeric features. Use PipeOpSelect to select the appropriate features.")
+      }
 
       # Calculate synthetic data
+      dt = task$data(cols = cols)
       if (self$param_set$values$quiet) {
         base::invisible(utils::capture.output({
           st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = task$truth(),
