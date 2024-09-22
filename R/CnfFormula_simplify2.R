@@ -1,6 +1,6 @@
 
 
-simplify_cnf = function(entries, universe) {
+simplify_cnf_2 = function(entries, universe) {
   #################################
   # Some vocabulary:
   # - `entries` is a list of `clauses`, which are named lists.

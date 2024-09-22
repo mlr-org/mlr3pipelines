@@ -1091,3 +1091,10 @@ CnfFormula:
    & (X ∈ {u} | Y ∈ {w, x} | W ∈ {q})
 
    5, 6,
+
+  if (!is.null(is_not_subset_of) && any(!eliminated & !is_unit)) {
+    indices = available_inverse[!eliminated & !is_unit]
+    assert_true(all.equal(not_subset_count[indices, indices, drop = FALSE],
+      t(sapply(indices, function(i) sapply(indices, function(j) if (is.na(not_subset_count[i, j])) NA_integer_ else sum(is_not_subset_of[[i]][j, ]))))
+    ))
+  }
