@@ -1,6 +1,23 @@
 
+# this does not work:
+# Problems with this:
+#  - 1 (A %among% "a1" | B %among% c("b1", "b2")) &
+#    2 (A %among% "a1" | B %among% "b2" | C %among% "c1") &
+#    3 (A %among% "a2" | C %among% "c2")
+#      2 will add C %among% c2 to 1+, which will let 3 remove A %among% "a1" from 1 by self-subsumption.
+#      The problem here is that, without A %among% "a1", the necessary C %among% c2 could not have been added.
+#  - 1 (A %among% "a1" | B %among% "b1" | D %among% "d1") &
+#    2 (A %among% "a1" | C %among% "c1" | D %among% "d1") &
+#    3 (A %among% "a1" | B %among% "b1" | C %among% "c2") &
+#    4 (B %among% "b2" | C %among% "c1" | D %among% "d1")
+#      Clause 2 adds C %among% "c2" to clause 1, which then gets eliminated by 3.
+#      Clause 1 adds B %among% "b1" to clause 2, which then also gets eliminated by 4.
+#      However, the assignment A = "a2", B = "b2", C = "c2", D = "d2" is TRUE after removing clauses 1 and 2.
+#      The problem is that 2 and 3 imply 1, and 4 and 1 imply 2, but one cannot remove both.
+#      Int he old implementation, this is solved by the fact that we do HLA for one clause at a time, either
+#      eliminating it or not.
 
-simplify_cnf_broken = function(entries, universe) {
+simplify_cnf_greedy = function(entries, universe) {
   #################################
   # Some vocabulary:
   # - `entries` is a list of `clauses`, which are named lists.
