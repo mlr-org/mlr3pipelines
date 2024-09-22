@@ -571,6 +571,22 @@ test_that("CnfFormula performs all simplifications in a complex formula", {
 })
 
 
+formula_to_expression = function(formula) {
+  if (is.logical(formula)) return(c(formula))
+  clause_exprs = lapply(as.CnfFormula(formula), function(clause) {
+    atom_exprs = lapply(clause, function(atom) {
+      substitute(symbol %among% values, list(symbol = as.name(atom$symbol), values = atom$values))
+    })
+    Reduce(function(x, y) substitute(x | y, list(x = x, y = y)), atom_exprs)
+  })
+  Reduce(function(x, y) substitute(x & y, list(x = x, y = y)), clause_exprs)
+}
+
+evaluate_expression = function(expression, assignment) {
+  substituted = do.call(substitute, list(expression, c(list("%among%" = quote(`%in%`)), assignment)))
+  eval(substituted, envir = baseenv())
+}
+
 test_that("Brute-force test", {
   skip_on_cran()
 
@@ -602,22 +618,6 @@ test_that("Brute-force test", {
 
     # create a call object for the expression: (left_expr op right_expr)
     substitute(op(left_expr, right_expr), list(op = op, left_expr = left_expr, right_expr = right_expr))
-  }
-
-  formula_to_expression = function(formula) {
-    if (is.logical(formula)) return(c(formula))
-    clause_exprs = lapply(as.CnfFormula(formula), function(clause) {
-      atom_exprs = lapply(clause, function(atom) {
-        substitute(symbol %among% values, list(symbol = as.name(atom$symbol), values = atom$values))
-      })
-      Reduce(function(x, y) substitute(x | y, list(x = x, y = y)), atom_exprs)
-    })
-    Reduce(function(x, y) substitute(x & y, list(x = x, y = y)), clause_exprs)
-  }
-
-  evaluate_expression = function(expression, assignment) {
-    substituted = do.call(substitute, list(expression, c(list("%among%" = quote(`%in%`)), assignment)))
-    eval(substituted, envir = baseenv())
   }
 
   expression_weight = function(expression) {
@@ -691,3 +691,113 @@ test_that("Brute-force test", {
 
 })
 
+
+test_that("Constructed test cases", {
+
+  u = CnfUniverse()
+  A = CnfSymbol(u, "A", c("a1", "a2", "a3", "a4"))
+  B = CnfSymbol(u, "B", c("b1", "b2", "b3", "b4"))
+  C = CnfSymbol(u, "C", c("c1", "c2", "c3", "c4"))
+  D = CnfSymbol(u, "D", c("d1", "d2", "d3", "d4"))
+
+  varnames = names(u)
+  assignments = expand.grid(lapply(varnames, function(var) u[[var]]), stringsAsFactors = FALSE)
+  colnames(assignments) = varnames
+
+# greedy self-subsumption eliminatoin fails for the following:
+  original = quote((A %among% "a1" | B %among% c("b1", "b2")) & (A %among% "a1" | B %among% "b2" | C %among% "c1") & (A %among% "a2" | C %among% "c2"))
+
+  simplified = CnfFormula(list(
+    CnfClause(list(CnfAtom(A, c("a1")), CnfAtom(B, c("b1", "b2")))),
+    CnfClause(list(CnfAtom(A, c("a1")), CnfAtom(B, c("b2")), CnfAtom(C, c("c1")))),
+    CnfClause(list(CnfAtom(A, c("a2")), CnfAtom(C, c("c2"))))
+  ))
+
+  expect_equal(evaluate_expression(formula_to_expression(simplified), assignments),
+    evaluate_expression(original, assignments))
+
+
+## exactly one of the clauses in the following is eliminated
+#  - 1 (A %among% "a1" | B %among% "b1" | D %among% "d1") &
+#    2 (A %among% "a1" | C %among% "c1" | D %among% "d1") &
+#    3 (A %among% "a1" | B %among% "b1" | C %among% "c2") &
+#    4 (B %among% "b2" | C %among% "c1" | D %among% "d1")
+
+  original = quote(
+    (A %among% "a1" | B %among% "b1" | D %among% "d1") &
+    (A %among% "a1" | C %among% "c1" | D %among% "d1") &
+    (A %among% "a1" | B %among% "b1" | C %among% "c2") &
+    (B %among% "b2" | C %among% "c1" | D %among% "d1")
+  )
+
+  simplified = CnfFormula(list(
+    CnfClause(list(CnfAtom(A, c("a1")), CnfAtom(B, c("b1")), CnfAtom(D, c("d1")))),
+    CnfClause(list(CnfAtom(A, c("a1")), CnfAtom(C, c("c1")), CnfAtom(D, c("d1")))),
+    CnfClause(list(CnfAtom(A, c("a1")), CnfAtom(B, c("b1")), CnfAtom(C, c("c2")))),
+    CnfClause(list(CnfAtom(B, c("b2")), CnfAtom(C, c("c1")), CnfAtom(D, c("d1"))))
+  ))
+
+  expect_equal(length(as.list(simplified)), 3)
+
+  expect_equal(evaluate_expression(formula_to_expression(simplified), assignments),
+    evaluate_expression(original, assignments))
+
+
+#           1   A %among% c("a1", "a2") | B %among% "b1" | C %among% c("c1", "c2")
+#           2   B %among% c("b1", "b2") | C %among% c("c1", "c3")
+#           3   A %among% c("a1", "a2") | B %among% c("b1", "b3")
+#           4   A %among% "a2" | B %among% "b3" | D %among% "d1"
+#           5   A %among% "a1" | B %among% "b3" | D %among% c("d2", "d3")
+#          - clause 3 adds 'b2' to clause 1; clause 2 can then restrict clause 1 to 'c1'
+#            - in other words: clauses 2 + 3 combine on symbol B to form A %among% c("a1", "a2") | C %among% c("c1", "c3")
+#              with respect to clause 1 (which conditions on B %among% "b1")
+#          - however, clauses 4 and 5 eliminate clause 3 through hidden subsumption elimination
+#          - at least B %among% "b1" can be removed from 1 by combining 4 and 5 over D., even if 3 is not present.
+
+  original = quote(
+    (A %among% c("a1", "a2") | B %among% "b1" | C %among% c("c1", "c2")) &
+    (B %among% c("b1", "b2") | C %among% c("c1", "c3")) &
+    (A %among% c("a1", "a2") | B %among% c("b1", "b3")) &
+    (A %among% "a2" | B %among% "b3" | D %among% "d1") &
+    (A %among% "a1" | B %among% "b3" | D %among% c("d2", "d3"))
+  )
+
+  simplified = CnfFormula(list(
+    CnfClause(list(CnfAtom(A, c("a1", "a2")), CnfAtom(B, c("b1")), CnfAtom(C, c("c1", "c2")))),
+    CnfClause(list(CnfAtom(B, c("b1", "b2")), CnfAtom(C, c("c1", "c3")))),
+    CnfClause(list(CnfAtom(A, c("a1", "a2")), CnfAtom(B, c("b1", "b3")))),
+    CnfClause(list(CnfAtom(A, c("a2")), CnfAtom(B, c("b3")), CnfAtom(D, c("d1")))),
+    CnfClause(list(CnfAtom(A, c("a1")), CnfAtom(B, c("b3")), CnfAtom(D, c("d2", "d3"))))
+  ))
+
+  simplified2 = CnfFormula(list(
+    CnfClause(list(CnfAtom(A, c("a1", "a2")), CnfAtom(B, c("b1")), CnfAtom(C, c("c1", "c2")))),
+    CnfClause(list(CnfAtom(B, c("b1", "b2")), CnfAtom(C, c("c1", "c3")))),
+    CnfClause(list(CnfAtom(A, c("a2")), CnfAtom(B, c("b3")), CnfAtom(D, c("d1")))),
+    CnfClause(list(CnfAtom(A, c("a1")), CnfAtom(B, c("b3")), CnfAtom(D, c("d2", "d3"))))
+  ))
+
+  simplified3 = CnfFormula(list(
+    CnfClause(list(CnfAtom(A, c("a1", "a2")), CnfAtom(C, c("c1", "c2")))),
+    CnfClause(list(CnfAtom(B, c("b1", "b2")), CnfAtom(C, c("c1", "c3")))),
+    CnfClause(list(CnfAtom(A, c("a1", "a2")), CnfAtom(B, c("b1", "b3")))),
+    CnfClause(list(CnfAtom(A, c("a2")), CnfAtom(B, c("b3")), CnfAtom(D, c("d1")))),
+    CnfClause(list(CnfAtom(A, c("a1")), CnfAtom(B, c("b3")), CnfAtom(D, c("d2", "d3"))))
+  ))
+
+  expect_equal(evaluate_expression(formula_to_expression(simplified), assignments),
+    evaluate_expression(original, assignments))
+
+  expect_equal(evaluate_expression(formula_to_expression(simplified2), assignments),
+    evaluate_expression(original, assignments))
+
+  expect_equal(evaluate_expression(formula_to_expression(simplified3), assignments),
+    evaluate_expression(original, assignments))
+
+  # check that 'B' was treated the same in all cases, even if C is still unreliable:
+  # clause 2 is always unchanged with 'b1', 'b2'; clauses 4 and 5 contribute one 'b3' each.
+  expect_set_equal(unlist(lapply(as.list(simplified), function(x) unclass(x)$B)), c("b1", "b2", "b3", "b3"))
+  expect_set_equal(unlist(lapply(as.list(simplified2), function(x) unclass(x)$B)), c("b1", "b2", "b3", "b3"))
+  expect_set_equal(unlist(lapply(as.list(simplified3), function(x) unclass(x)$B)), c("b1", "b2", "b3", "b3"))
+
+})
