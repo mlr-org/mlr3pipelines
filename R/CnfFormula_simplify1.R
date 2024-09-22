@@ -364,9 +364,9 @@ simplify_cnf = function(entries, universe) {
 
     clause_idx_target = available[[meta_idx_target]]
     # intersect on symbol with some other clause that has not_subset_count == 2, and where the target symbol is present in the garget
-    if (eliminated[[clause_idx_target]] || is_unit[[clause_idx_target]]) next
+    if (eliminated[[clause_idx_target]] || is_unit[[clause_idx_target]]) return(FALSE)
     twoends = symbol_clauses_meta[not_subset_count[symbol_clauses_meta, meta_idx_target] == 2L]
-    for (meta_idx_twoend in twoends) {
+    for (meta_idx_twoend in twoends[!is.na(twoends)]) {  # twoends is NA for clauses that have not been processed yet
       # in every loop iteration, check our conditions again, since anything can happen when we do sse:
       # target exists, is not a unit (these are checked outside the for loop as well as with `ts2o`), and exactly one symbol ("symbol") of meta_idx does not cover it.
       if (not_subset_count[meta_idx, meta_idx_target] != 1L || !is_not_subset_of[[meta_idx]][meta_idx_target, inso_symbol_col]) break
@@ -395,10 +395,10 @@ simplify_cnf = function(entries, universe) {
 
     clause_idx_target = available[[meta_idx_target]]
     # check that meta_idx_target is still valid: not eliminated, not a unit, not_subset_count 2 w/r/t the target, one of which is still the symbol itself.
-    if (eliminated[[clause_idx_target]] || is_unit[[clause_idx_target]] || not_subset_count[meta_idx, meta_idx_target] != 2) next
+    if (eliminated[[clause_idx_target]] || is_unit[[clause_idx_target]] || not_subset_count[meta_idx, meta_idx_target] != 2) return(FALSE)
     inso_symbols_cols = which(is_not_subset_of[[meta_idx]][meta_idx_target, ])
     symbols_twoend = colnames(is_not_subset_of[[meta_idx]])[inso_symbols_cols]
-    if (!is.null(symbol) && !symbol %in% symbols_twoend) next
+    if (!is.null(symbol) && !symbol %in% symbols_twoend) return(FALSE)
     for (symbol_inner_idx in 1:2) {
       symbol_inner = symbols_twoend[[symbol_inner_idx]]  # the intersection symbol
       symbol_other = symbols_twoend[[3 - symbol_inner_idx]]
@@ -408,7 +408,7 @@ simplify_cnf = function(entries, universe) {
       # 'oneends' may either have 1 or 2 non-subset symbols, with both symbols equal in the latter case.
       # We do this in both inner loops, since we switch on which one of them is the target.
       oneends = symbol_inner_clauses_meta[not_subset_count[symbol_inner_clauses_meta, meta_idx_target] <= 2L]
-      for (meta_idx_oneend in oneends) {
+      for (meta_idx_oneend in oneends[!is.na(oneends)]) {  # oneends is NA for clauses that have not been processed yet
         # check if the twoend-bit broke
         if (not_subset_count[meta_idx, meta_idx_target] != 2 || !all(is_not_subset_of[[meta_idx]][meta_idx_target, inso_symbols_cols])) break
 
