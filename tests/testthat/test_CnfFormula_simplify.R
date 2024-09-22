@@ -4,7 +4,6 @@
 
 test_that("CnfFormula Regression Tests", {
   skip_on_cran()
-  skip()
   testfile = xzfile(test_path("testdata", "cnf.xz"))
   testcases = readLines(testfile)
   close(testfile)

@@ -983,5 +983,111 @@ quote(
 ) |> evaluate_expression(assignment)
 
 
+#     W X Y Z
+#  28 p s v z
+
+X %among% "s" & X %among% "u" & (Z %among% c("y", "a") | Z %among% "a") |
+(Z %among% "a" & W %among% c("p", "r") | X %among% c("t", "s") & Z %among% "y")
+
+evaluate_expression(formula_to_expression(X %among% "s" & X %among% "u" & (Z %among% c("y", "a") | Z %among% "a")), assignment)
+evaluate_expression(formula_to_expression(Z %among% "a" & W %among% c("p", "r") | X %among% c("t", "s") & Z %among% "y"), assignment)
+
+evaluate_expression(formula_to_expression(Z %among% "a" & W %among% c("p", "r")), assignment)
+evaluate_expression(formula_to_expression(X %among% c("t", "s") & Z %among% "y"), assignment)
+
+clause1 = Z %among% "a" & W %among% c("p", "r")
+clause2 = X %among% c("t", "s") & Z %among% "y"
+
+evaluate_expression(formula_to_expression(clause1), assignment)
+evaluate_expression(formula_to_expression(clause2), assignment)
+evaluate_expression(formula_to_expression(clause1 | clause2), assignment)
+
+quote(
+(Y %among% "w" & W %among% c("r", "q") | (X %among% "t" | Y %among% "v")) & (X %among% c("t", "s") | Z %among% "y" | W %among% "p" & Z %among% c("y", "z")) |
+(W %among% c("p", "r") & Z %among% c("z", "a") | (W %among% "q" | W %among% "p")) & ((X %among% c("t", "s") | Y %among% "x") & (Z %among% "z" & X %among% c("u", "s")))
+) |> evaluate_expression(assignment)
+
+(
+(Y %among% "w" & W %among% c("r", "q") | (X %among% "t" | Y %among% "v")) & (X %among% c("t", "s") | Z %among% "y" | W %among% "p" & Z %among% c("y", "z")) |
+(W %among% c("p", "r") & Z %among% c("z", "a") | (W %among% "q" | W %among% "p")) & ((X %among% c("t", "s") | Y %among% "x") & (Z %among% "z" & X %among% c("u", "s")))
+) |> formula_to_expression() |> evaluate_expression(assignment)
 
 
+c1 = (Y %among% "w" & W %among% c("r", "q") | (X %among% "t" | Y %among% "v")) & (X %among% c("t", "s") | Z %among% "y" | W %among% "p" & Z %among% c("y", "z"))
+c2 = (W %among% c("p", "r") & Z %among% c("z", "a") | (W %among% "q" | W %among% "p")) & ((X %among% c("t", "s") | Y %among% "x") & (Z %among% "z" & X %among% c("u", "s")))
+
+evaluate_expression(formula_to_expression(c1), assignment)
+evaluate_expression(formula_to_expression(c2), assignment)
+evaluate_expression(formula_to_expression(c1 | c2), assignment)
+#   W X Y Z
+#17 q u w y
+     (Z ∈ {z, y} | X ∈ {t, s})
+   & (Y ∈ {v, w} | X ∈ {t} | Z ∈ {z})
+   & (X ∈ {s, t} | Y ∈ {x, v}) # !!!
+   & (W ∈ {r, q} | X ∈ {t} | Y ∈ {v} | Z ∈ {z})
+   & (W ∈ {p} | X ∈ {s, t} | Z ∈ {y} | Y ∈ {x})
+
+
+[[1]]
+CnfClause:
+  Z ∈ {z, y} | X ∈ {t, s}
+
+[[2]]
+CnfClause:
+  Y ∈ {v, w} | X ∈ {t} | Z ∈ {z}
+
+[[3]]
+CnfClause:
+  W ∈ {p} | X ∈ {t, s} | Z ∈ {z, y}
+
+[[4]]
+CnfClause:
+  Z ∈ {y, z} | X ∈ {s, t} | Y ∈ {x}
+
+[[5]]
+CnfClause:
+  W ∈ {r, q} | X ∈ {s, t} | Y ∈ {x, v}  # this one removes W
+
+[[6]]
+CnfClause:
+  W ∈ {r, q} | X ∈ {t} | Y ∈ {v} | Z ∈ {z}
+
+[[7]]
+CnfClause:
+  W ∈ {p} | X ∈ {s, t} | Z ∈ {y} | Y ∈ {x}
+
+#   W X Y Z
+# 5 q t v y
+quote(
+Y %among% c("w", "x") & X %among% "t" | W %among% "p" & X %among% "u" |
+(Z %among% c("y", "z") | Y %among% "x") & (Z %among% "z" & W %among% "q")
+) |> # |> evaluate_expression(assignment)
+eval() |> formula_to_expression() |> evaluate_expression(assignment)
+
+c1 = Y %among% c("w", "x") & X %among% "t" | W %among% "p" & X %among% "u"
+c2 = (Z %among% c("y", "z") | Y %among% "x") & (Z %among% "z" & W %among% "q")
+
+evaluate_expression(formula_to_expression(c1), assignment)
+evaluate_expression(formula_to_expression(c2), assignment)
+evaluate_expression(formula_to_expression(c1 | c2), assignment)
+
+
+> c1
+CnfFormula:
+     (X ∈ {t, u})
+   & (W ∈ {p} | Y ∈ {w, x})
+   & (X ∈ {u} | Y ∈ {w, x})
+   & (W ∈ {p} | X ∈ {t})
+> c2
+CnfFormula:
+     (Z ∈ {z})
+   & (W ∈ {q})
+> c1 | c2
+CnfFormula:
+     (X ∈ {t, u} | Z ∈ {z})
+   & (X ∈ {t, u} | W ∈ {q})
+   & (W ∈ {q, p} | X ∈ {t})
+   & (W ∈ {p} | X ∈ {t} | Z ∈ {z})
+   & (X ∈ {u} | Y ∈ {w, x} | W ∈ {q})
+
+   5, 6,

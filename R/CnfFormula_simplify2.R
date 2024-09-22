@@ -1,6 +1,6 @@
 
 
-simplify_cnf = function(entries, universe) {
+simplify_cnf_broken = function(entries, universe) {
   #################################
   # Some vocabulary:
   # - `entries` is a list of `clauses`, which are named lists.
@@ -379,7 +379,7 @@ simplify_cnf = function(entries, universe) {
       ahla = apply_hidden_literal_addition(meta_idx_plus, symbol_to_restrict, range_restricting)
       if (is.null(ahla)) return(NULL)
       if (ahla) return(TRUE)
-
+      return(FALSE)
       # update clause and sc!
       # note we update meta_idx_plus: we are currently subset of that other clause w/r/t all except one symbol.
       # we can therefore intersect that last symbol in the other clause with the range of that symbol in the current clause.
@@ -522,19 +522,27 @@ simplify_cnf = function(entries, universe) {
     clause_idx = available[[meta_idx_outer]]
     if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) next  # may happen if we somehow turn something into a unit that eliminates a later clause
 
-    for (symbol_idx in seq_along(clause)) {
-      symbol = names(clause)[[symbol_idx]]
+    clause = entries[[clause_idx]]
+    colnames_inso = colnames(is_not_subset_of[[meta_idx_outer]])
+    for (inso_idx in seq_along(colnames_inso)) {
+      symbol = colnames_inso[[inso_idx]]
       unit_idx = unit_registry[[symbol]]
       if (!is.null(unit_idx)) {
         meta_idx_plus = available_inverse[[unit_idx]]
-        not_subset_count[meta_idx_outer, meta_idx_plus] = rowsum = length(clause) - 1L
         is_not_subset_of[[meta_idx_outer]][meta_idx_plus, ] = TRUE
-        is_not_subset_of[[meta_idx_outer]][meta_idx_plus, symbol_idx] = FALSE
+        if (symbol %in% names(clause)) {
+          is_not_subset_of[[meta_idx_outer]][meta_idx_plus, symbol] = FALSE
+          not_subset_count[meta_idx_outer, meta_idx_plus] = rowsum = length(colnames_inso) - 1L
+        } else {
+          not_subset_count[meta_idx_outer, meta_idx_plus] = rowsum = length(colnames_inso)
+        }
+        if (rowsum > 2L) next
         ousr = on_updated_subset_relations(meta_idx_outer, meta_idx_plus, rowsum)
         if (identical(ousr, TRUE)) return(return_entries(FALSE))
-        if (is.null(ousr)) break
+        if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) break
       }
     }
+    if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) break
 
     for (meta_idx_plus in seq_along(available)) {
       if (meta_idx_plus == meta_idx_outer) next
@@ -551,32 +559,32 @@ simplify_cnf = function(entries, universe) {
       sci = names(clause_ext_inner)
       sci_sc_map = match(sci, names(clause), nomatch = 0L)
       sci_names_in_common = which(sci_sc_map != 0L)
-      is_not_subset_of[[meta_idx_outer]][meta_idx_plus, !colnames(is_not_subset_of[[meta_idx_outer]]) %in% sci] = TRUE
+      is_not_subset_of[[meta_idx_outer]][meta_idx_plus, !colnames(is_not_subset_of[[meta_idx_outer]]) %in% sci[sci_names_in_common]] = TRUE
 
       # symbols that are not in common trivially get the matrix entry TRUE
       # (they are not subsets of their counterpart in the other clause, since the other ones are empty)
-      any_updated = FALSE
       for (symbol_idx_inner in sci_names_in_common) {
         symbol_idx_outer = sci_sc_map[[symbol_idx_inner]]
         symbol = sci[[symbol_idx_inner]]
         if (!is.na(is_not_subset_of[[meta_idx_outer]][meta_idx_plus, symbol])) next
-        any_updated = TRUE
 
         range_inner = clause_ext_inner[[symbol_idx_inner]]
         range_outer = clause[[symbol_idx_outer]]
 
         outer_subset_of_inner = all(range_outer %in% range_inner)
         inner_subset_of_outer = outer_subset_of_inner && meta_idx_plus > meta_idx_outer && !is_unit[[clause_idx_inner]] && length(range_outer) == length(range_inner)
-        if (inner_subset_of_outer && is.na(is_not_subset_of[[meta_idx_plus]][meta_idx_outer, symbol])) {
-          # We only assign FALSE here if we find equality (which we get for basically free from range_outer %in% range_inner && lengths are equal).
-          # Otherwise we leave the entry NA and set this value when meta_idx_plus is processed in the outer loop.
-          # We index by column name here, since it is possible that clauses were shortened by
-          # unit propagation or self subsumption elimination somewhere on the way here
-          is_not_subset_of[[meta_idx_plus]][meta_idx_outer, symbol] = FALSE
+        if (inner_subset_of_outer) {
+          symbol_idx_inner = match(symbol, colnames(is_not_subset_of[[meta_idx_plus]]))
+          if (!is.na(symbol_idx_inner) && is.na(is_not_subset_of[[meta_idx_plus]][meta_idx_outer, symbol_idx_inner])) {
+            # We only assign FALSE here if we find equality (which we get for basically free from range_outer %in% range_inner && lengths are equal).
+            # Otherwise we leave the entry NA and set this value when meta_idx_plus is processed in the outer loop.
+            # We index by column name here, since it is possible that clauses were shortened by
+            # unit propagation or self subsumption elimination somewhere on the way here
+            is_not_subset_of[[meta_idx_plus]][meta_idx_outer, symbol_idx_inner] = FALSE
+          }
         }
         is_not_subset_of[[meta_idx_outer]][meta_idx_plus, symbol] = !outer_subset_of_inner
       }
-      if (!any_updated) next
       # prefer to eliminate the outer loopo clause first, since we have already
       # done more work for the inner loop clause (which comes earlier in 'entries')
       rowsum = sum(is_not_subset_of[[meta_idx_outer]][meta_idx_plus, ])

@@ -501,8 +501,11 @@ test_that("CnfFormula performs self-subsumption elimination correctly", {
   clause3 = CnfClause(list(CnfAtom(X, c("a")), CnfAtom(Y, c("e"))))       # X ∈ {a} | Y ∈ {e}
 
   # Expected: self-subsumption should simplify the formula
-  expected_formula = CnfFormula(list(CnfClause(list(CnfAtom(X, c("a", "b")))),
-  CnfClause(list(CnfAtom(X, c("a", "c")))), CnfClause(list(CnfAtom(X, c("a")), CnfAtom(Y, c("e"))))))
+  expected_formula = CnfFormula(list(
+      CnfClause(list(CnfAtom(X, c("a", "b")))),
+      CnfClause(list(CnfAtom(X, c("a", "c")))),
+      CnfClause(list(CnfAtom(X, c("a")), CnfAtom(Y, c("e"))))
+  ))
 
   expect_true(all.equal(CnfFormula(list(clause1, clause2, clause3)), expected_formula))
   expect_true(all.equal(CnfFormula(list(clause3, clause2, clause1)), expected_formula))
@@ -570,7 +573,7 @@ test_that("CnfFormula performs all simplifications in a complex formula", {
 
 test_that("Brute-force test", {
   skip_on_cran()
-skip()
+
   u = CnfUniverse()
   W = CnfSymbol(u, "W", c("p", "q", "r"))
   X = CnfSymbol(u, "X", c("s", "t", "u"))
