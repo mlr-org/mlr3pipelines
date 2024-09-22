@@ -29,7 +29,7 @@ simplify_cnf = function(entries, universe) {
   # faster intersect, setdiff etc. that rely on x, y being characters with no duplicates
   char_intersect = function(x, y) x[x %in% y]
   char_setdiff = function(x, y) x[!x %in% y]
-
+  char_union = function(x, y) c(x, y[!y %in% x])
   # construct the CnfFormula return object
   return_entries = function(entries) {
     structure(
@@ -217,10 +217,10 @@ simplify_cnf = function(entries, universe) {
       if (identical(ousr, TRUE)) return(TRUE)  # forward contradiction signal. We don't care if other_meta_idx was eliminated.
       if (eliminated[[clause_idx]]) return(NULL)  # need to check more directly if things escalated somehow and clause_idx was eliminated indirectly
     }
-    # TODO: call on_domain_changed_handle_2nd_order_sse
+    # call on_domain_changed_handle_2nd_order_sse
     # it is not a waste w/r/t the 'on_updated_subset_relations' call, since that one only deals with clauses for which the symbol is set to FALSE now,
     # i.e. precisely the other clauses.
-    FALSE  # no contradiction
+    on_update_range(meta_idx, symbol)
   }
 
   # eliminate `symbol` from `clause_idx`
@@ -288,7 +288,14 @@ simplify_cnf = function(entries, universe) {
     # the row `meta_idx_other` of `is_not_subset_of[[meta_idx]]` has been updated.
     # we now check whether we can apply subsumption elimination, or at least self-subsumption elimination, on `meta_idx`.
     rowsum = not_subset_count[meta_idx, meta_idx_other]
-    if (rowsum > 1) return(FALSE)  # nothing to do
+    if (rowsum > 2L) return(FALSE)  # nothing to do
+    if (rowsum == 2L) {
+      hs2oo = handle_sse_2nd_order_twoend(meta_idx, meta_idx_other, NULL)
+      if (identical(hs2oo, TRUE)) return(TRUE)
+      clause_other = available[[meta_idx_other]]
+      if (eliminated[[clause_other]] || is_unit[[clause_other]]) return(NULL)
+      return(FALSE)
+    }
     if (rowsum == 0) {
       eliminate_clause_update_sr(available[[meta_idx_other]])
       return(NULL)
@@ -301,8 +308,149 @@ simplify_cnf = function(entries, universe) {
     # we can therefore intersect that last symbol in the other clause with the range of that symbol in the current clause.
     # apply_domain_restriction will take care of eliminating the symbol if the range becomes empty.
     # It could in theory even do subsumption, but we have already taken care of that above.
-    apply_domain_restriction(available[[meta_idx_other]], symbol_to_restrict, entries[[available[[meta_idx]]]][[symbol_to_restrict]], FALSE)
-  # TODO: handle == 2 case
+    adr = apply_domain_restriction(available[[meta_idx_other]], symbol_to_restrict, entries[[available[[meta_idx]]]][[symbol_to_restrict]], FALSE)
+    if (is.null(adr)) return(NULL)
+    if (adr) return(TRUE)
+    clause_idx = available[[meta_idx]]
+    if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) return(FALSE)
+    hs2oo = handle_sse_2nd_order_oneend(meta_idx, meta_idx_other, symbol_to_restrict)
+    if (is.null(hs2oo)) return(NULL)
+    if (hs2oo) return(TRUE)
+    clause_other = available[[meta_idx_other]]
+    if (eliminated[[clause_other]] || is_unit[[clause_other]]) return(NULL)
+    FALSE
+  }
+
+  # second order self-subsumption elimination
+  # this is called whenever the range of symbol in meta_idx shrinks, opening up the possibility for 2nd order self-subsumption.
+  # meta_idx is the clause that will remove symbol range from other clauses.
+  # returns NULL if meta_idx was eliminated, FALSE if no contradiction, TRUE if contradiction
+  on_update_range = function(meta_idx, symbol) {
+    ## assuming the symbol exists in meta_idx
+    # availability of symbol in the other clause is not necessary here!
+    # units don't need to be treated separately:
+    # - since they only work with 2 length-2-clauses that have both the same symbol: the one of the unit, and another one; in the other one they must be disjoint.
+    # - because of this, they will HS-eliminate the unit.
+
+    inso_symbol_col = match(symbol, colnames(is_not_subset_of[[meta_idx]]))
+    potential_targets = which(is_not_subset_of[[meta_idx]][, inso_symbol_col] & !eliminated[available] & !is_unit[available] & !is.na(not_subset_count[meta_idx, ]))
+
+    targets_while_oneend = potential_targets[not_subset_count[meta_idx, potential_targets] == 1L]
+
+    for (meta_idx_target in targets_while_oneend) {
+      hs2oo = handle_sse_2nd_order_oneend(meta_idx, meta_idx_target, symbol)
+      if (is.null(hs2oo)) return(NULL)  # meta_idx eliminated
+      if (hs2oo) return(TRUE)
+    }
+
+    targets_while_twoend = potential_targets[not_subset_count[meta_idx, potential_targets] == 2L]
+    for (meta_idx_target in targets_while_twoend) {
+      hs2oo = handle_sse_2nd_order_twoend(meta_idx, meta_idx_target, symbol)
+      if (is.null(hs2oo)) return(NULL)  # meta_idx eliminated
+      if (hs2oo) return(TRUE)
+    }
+    FALSE
+  }
+
+  # meta_idx is not subset of meta_idx_target over 'symbol'.
+  # check if there are other clauses that are non-subsets of meta_idx_target for two symbols, one of which is 'symbol' as well.
+  # return NULL if clause_idx is eliminated.
+  handle_sse_2nd_order_oneend = function(meta_idx, meta_idx_target, symbol) {
+    # we don't need to check whether symbol is in meta_idx, since then it will automatically not be a non-subset of target
+    inso_symbol_col = match(symbol, colnames(is_not_subset_of[[meta_idx]]))
+    clause_idx = available[[meta_idx]]
+    symbol_clauses = symbol_registry[[symbol]]
+    symbol_clauses_meta = available_inverse[symbol_clauses]
+
+    clause_idx_target = available[[meta_idx_target]]
+    # intersect on symbol with some other clause that has not_subset_count == 2, and where the target symbol is present in the garget
+    if (eliminated[[clause_idx_target]] || is_unit[[clause_idx_target]]) next
+    twoends = symbol_clauses_meta[not_subset_count[symbol_clauses_meta, meta_idx_target] == 2L]
+    for (meta_idx_twoend in twoends) {
+      # in every loop iteration, check our conditions again, since anything can happen when we do sse:
+      # target exists, is not a unit (these are checked outside the for loop as well as with `ts2o`), and exactly one symbol ("symbol") of meta_idx does not cover it.
+      if (not_subset_count[meta_idx, meta_idx_target] != 1L || !is_not_subset_of[[meta_idx]][meta_idx_target, inso_symbol_col]) break
+      clause_idx_twoend = available[[meta_idx_twoend]]
+      # now check that the meta_idx_twoend is still valid:
+      # exists, not a unit, it does not cover the target with exactly two symbols, one of which is `symbol`
+      if (eliminated[[clause_idx_twoend]] || is_unit[[clause_idx_twoend]] ||
+          not_subset_count[meta_idx_twoend, meta_idx_target] != 2L) {
+        next
+      }
+      symbol_target = colnames(is_not_subset_of[[meta_idx_twoend]])[is_not_subset_of[[meta_idx_twoend]][meta_idx_target, ]]
+      symbol_target = symbol_target[symbol_target != symbol]
+      if (length(symbol_target) != 1L) next  # this can happen if a previous loop changed the clause in some way
+      if (!symbol_target %in% names(entries[[clause_idx_target]])) next
+      # `symbol_target` is two symbols here: target and intersect
+      ts2o = try_sse_2nd_order(meta_idx, meta_idx_twoend, meta_idx_target, symbol, symbol_target)
+      if (identical(ts2o, TRUE)) return(TRUE)
+      if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) return(NULL)
+      if (is.null(ts2o)) return(FALSE)  # target was eliminated
+    }
+    FALSE
+  }
+
+  handle_sse_2nd_order_twoend = function(meta_idx, meta_idx_target, symbol) {
+    clause_idx = available[[meta_idx]]
+
+    clause_idx_target = available[[meta_idx_target]]
+    # check that meta_idx_target is still valid: not eliminated, not a unit, not_subset_count 2 w/r/t the target, one of which is still the symbol itself.
+    if (eliminated[[clause_idx_target]] || is_unit[[clause_idx_target]] || not_subset_count[meta_idx, meta_idx_target] != 2) next
+    inso_symbols_cols = which(is_not_subset_of[[meta_idx]][meta_idx_target, ])
+    symbols_twoend = colnames(is_not_subset_of[[meta_idx]])[inso_symbols_cols]
+    if (!is.null(symbol) && !symbol %in% symbols_twoend) next
+    for (symbol_inner_idx in 1:2) {
+      symbol_inner = symbols_twoend[[symbol_inner_idx]]  # the intersection symbol
+      symbol_other = symbols_twoend[[3 - symbol_inner_idx]]
+      # symbol_other must be present in the target clause, otherwise we can skip.
+      if (!symbol_other %in% names(entries[[clause_idx_target]])) next
+      symbol_inner_clauses_meta = available_inverse[symbol_registry[[symbol_inner]]]
+      # 'oneends' may either have 1 or 2 non-subset symbols, with both symbols equal in the latter case.
+      # We do this in both inner loops, since we switch on which one of them is the target.
+      oneends = symbol_inner_clauses_meta[not_subset_count[symbol_inner_clauses_meta, meta_idx_target] <= 2L]
+      for (meta_idx_oneend in oneends) {
+        # check if the twoend-bit broke
+        if (not_subset_count[meta_idx, meta_idx_target] != 2 || !all(is_not_subset_of[[meta_idx]][meta_idx_target, inso_symbols_cols])) break
+
+        # check if theoneend-bit broke
+        clause_idx_oneend = available[[meta_idx_oneend]]
+        if (eliminated[[clause_idx_oneend]] || is_unit[[clause_idx_oneend]]) next
+        # so the 'oneend' thing may also overlap with 'twoend' on the other symbol.
+        # The trouble is that we cannot rely on both symbols being in is_not_subset_of[[meta_idx_oneend]].
+        # We therefore get the columns, with '0' if one of the symbols is not there, and then check whether the two columns are the only
+        # two that are TRUE (where the sum may be either 1 or 2).
+        symbols_twoend_idx = match(symbols_twoend, colnames(is_not_subset_of[[meta_idx_oneend]]), nomatch = 0L)
+        if (not_subset_count[meta_idx_oneend, meta_idx_target] != sum(is_not_subset_of[[meta_idx_oneend]][meta_idx_target, symbols_twoend_idx])) {
+          next
+        }
+        if (!symbol_other %in% names(entries[[clause_idx_target]])) next
+        ts2o = try_sse_2nd_order(meta_idx_oneend, meta_idx, meta_idx_target, symbol_inner, symbol_other)
+        if (identical(ts2o, TRUE)) return(TRUE)
+        if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) return(NULL)
+        if (is.null(ts2o)) return(FALSE)  # target was eliminated
+      }
+    }
+    FALSE
+  }
+
+  try_sse_2nd_order = function(meta_idx_oneend, meta_idx_twoends, meta_idx_target, symbol_intersect, symbol_target) {
+    ## assuming that symbol_target exists in meta_idx_target
+    ## assuming that meta_idx_oneend and meta_idx_twoends both have symbol_intersect, and that at least meta_idx_twoends has symbol_target
+    if (!all(is_not_subset_of[[meta_idx_target]][c(meta_idx_oneend, meta_idx_twoends), symbol_target])) return(FALSE)
+    idx_oneend = available[[meta_idx_oneend]]
+    idx_twoends = available[[meta_idx_twoends]]
+    idx_target = available[[meta_idx_target]]
+    # if (any(eliminated[c(idx_oneend, idx_twoends, idx_target)]) || any(is_unit[c(idx_oneend, idx_twoends, idx_target)])) return(FALSE)
+    clause_oneend = entries[[idx_oneend]]
+    clause_twoends = entries[[idx_twoends]]
+
+    # only proceed if clause_oneend and clause_twoends are disjoint outside of clause_target, with respect to symbol_intersect
+    clause_oneend_symbol_intersect = clause_oneend[[symbol_intersect]]
+    if (any(clause_oneend_symbol_intersect %in% clause_twoends[[symbol_intersect]] &
+        !clause_oneend_symbol_intersect %in% entries[[idx_target]][[symbol_intersect]])) {
+      return(FALSE)
+    }
+    apply_domain_restriction(idx_target, symbol_target, char_union(clause_oneend[[symbol_target]], clause_twoends[[symbol_target]]), FALSE)
   }
 
   # mark a clause as eliminated and update symbol registry
