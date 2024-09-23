@@ -102,8 +102,8 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
       # SmoteNC cannot generate synthetic data for non-feature columns
       unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
       if (length(unsupported_cols)) {
-        stopf("SMOTENC cannot generate synthetic data for the following columns since they are neither features nor targets: '%s'",
-              paste(unsupported_cols, collapse = "', '"))
+        stopf("SMOTENC cannot generate synthetic data for the following columns since they are neither features nor targets: %s.",
+              str_collapse(unsupported_cols, quote = '"'))
       }
       # Only factor, ordered, numeric and integer features allowed
       if (!all(task$feature_types$type %in% c("numeric", "integer", "factor", "ordered"))) {
