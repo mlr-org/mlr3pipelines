@@ -800,4 +800,20 @@ test_that("Constructed test cases", {
   expect_set_equal(unlist(lapply(as.list(simplified2), function(x) unclass(x)$B)), c("b1", "b2", "b3", "b3"))
   expect_set_equal(unlist(lapply(as.list(simplified3), function(x) unclass(x)$B)), c("b1", "b2", "b3", "b3"))
 
+
+  original = quote(
+    (A %among% "a2" | B %among% "b1") &
+    (A %among% "a1" | B %among% "b2") &
+    (A %among% "a1" | B %among% "b1"| C %among% "c1")
+  )
+
+  simplified = CnfFormula(list(
+    CnfClause(list(CnfAtom(A, c("a2")), CnfAtom(B, c("b1")))),
+    CnfClause(list(CnfAtom(A, c("a1")), CnfAtom(B, c("b2")))),
+    CnfClause(list(CnfAtom(A, c("a1")), CnfAtom(B, c("b1")), CnfAtom(C, c("c1"))))
+  ))
+
+  expect_equal(evaluate_expression(formula_to_expression(simplified), assignments),
+    evaluate_expression(original, assignments))
+
 })

@@ -215,3 +215,12 @@
 # - problem: this would make unit handling weird, since we get new units that can now still be self-subsumed.
 # - wehn we have that, we can also make sure 2nd order things only run after the initial 1st order things have all run, since we can then expect
 #   fewer range changes and hende fewer updates; that probably gives a lot of performance benefit.
+# - NO this does not work. Example case:
+#   1. CnfFormula(list((A %among% "a1" | B %among% "b1" | C %among% "c1"),
+#   2.                 (A %among% "a1" | B %among% "b2"),
+#   3.                 (A %among% "a2" | B %among% "b1")))
+#   Clause 2 can remove "B" from clause 1 through SSE.
+#   If we keep the memory of the larger clasue 1, then 3 can also remove "A" from 1.
+#   The result contains the unit C = "c1"; however, A = "a1", B = "b1", C = "c2" would have satisfied the original formula.
+#
+#

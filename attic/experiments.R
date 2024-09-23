@@ -1255,6 +1255,60 @@ e1
 e2
 
 
+ex <- quote(
+  (W %among% "q" & W %among% c("r", "q") | (Y %among% "w" | W %among% c("q", "r"))) &
+  (X %among% c("s", "t") | X %among% "t" | W %among% "p" & X %among% c("s", "u")) |
+
+  ((W %among% "q" | Z %among% c("z", "a")) & (Y %among% "v" | Z %among% c("a", "z")) | (Y %among% "w" & W %among% "p" | Z %among% c("z", "a") & X %among% c("t", "s")))
+)
+evaluate_expression(ex, assignment)
+eval(ex) |> formula_to_expression() |> evaluate_expression(assignment)
+
+
+e1 <- (W %among% "q" & W %among% c("r", "q") | (Y %among% "w" | W %among% c("q", "r"))) &
+  (X %among% c("s", "t") | X %among% "t" | W %among% "p" & X %among% c("s", "u"))
+e2 <-   ((W %among% "q" | Z %among% c("z", "a")) & (Y %among% "v" | Z %among% c("a", "z")) | (Y %among% "w" & W %among% "p" | Z %among% c("z", "a") & X %among% c("t", "s")))
+
+e1 |> formula_to_expression() |> evaluate_expression(assignment)
+e2 |> formula_to_expression() |> evaluate_expression(assignment)
+(e1 | e2) |> formula_to_expression() |> evaluate_expression(assignment)
+
+e1
+e2
+e1 | e2
+assignment
+
+
+[[1]]
+CnfClause:
+  Z ∈ {z, a} | Y ∈ {w} | W ∈ {q, r}
+
+[[2]]
+CnfClause:
+  Z ∈ {z, a} | Y ∈ {w} | W ∈ {p, q} | X ∈ {s, t}
+
+[[3]]
+CnfClause:
+  Z ∈ {a, z} | W ∈ {p} | Y ∈ {v} | X ∈ {s, t}
+
+
+
+1. clause 1 is a subset of clause 2 outside of W, it does SSE and removes W == p. Now clause 1 depends on Y=={w} being present.
+2. clause 3 is a subset of clause 2 outside of Y, it does SSE and removes W == y.
+
+u = CnfUniverse()
+A = CnfSymbol(u, "A", c("a1", "a2", "a3"))
+B = CnfSymbol(u, "B", c("b1", "b2", "b3"))
+C = CnfSymbol(u, "C", c("c1", "c2", "c3"))
+
+ CnfFormula(list((A %among% "a1" | B %among% "b1" | C %among% "c1"),
+ (A %among% "a1" | B %among% "b2"),
+ (A %among% "a2" | B %among% "b1")))
+
+
+
+
+
 
  (V3 %among% c("v3_3", "v3_4") | V1 %among% "v1_2" | (V1 %among% "v1_1" | V1 %among% c("v1_1", "v1_5", "v1_4"))) & ((V1
  %among% "v1_3" | V4 %among% "v4_3") & (V1 %among% c("v1_5", "v1_3", "v1_4", "v1_1") | V4 %among% "v4_3")) & (V3 %among%
