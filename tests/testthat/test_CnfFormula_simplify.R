@@ -68,7 +68,6 @@ test_that("CnfFormula Regression Tests", {
         paste(capture.output(print(assignment)), collapse = "\n"),
         deparse1(simplified)
     ))
-
   }
 
   dti <- as.data.table(stats)

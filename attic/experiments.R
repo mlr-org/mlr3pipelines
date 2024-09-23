@@ -1245,6 +1245,8 @@ meta_idx_inner
 c
 lapply(seq_along(eliminated), function(x) if (eliminated[[x]]) FALSE else structure(entries[[x]], class = "CnfClause"))
 
+
+
 entries[!eliminated] |> lapply(structure, class = "CnfClause")
 which(eliminated)
 
@@ -1305,6 +1307,34 @@ C = CnfSymbol(u, "C", c("c1", "c2", "c3"))
  (A %among% "a1" | B %among% "b2"),
  (A %among% "a2" | B %among% "b1")))
 
+
+
+quote(
+  (W %among% "p" | Y %among% "x") |
+   Y %among% "x" & W %among% "p"
+) |> eval() |> formula_to_expression() |> evaluate_expression(assignment)
+
+
+(W %among% "p" | Y %among% "x")
+
+ Y %among% "x" & W %among% "p"
+
+
+e1 <- (W %among% "p" | Y %among% "x")
+e2 <- Y %among% "x" & W %among% "p"
+
+e1
+e2
+
+e1 | e2
+
+
+
+ assignment
+
+
+  (W %among% "p" | Y %among% "x" |
+   Y %among% "x" & W %among% "p")
 
 
 

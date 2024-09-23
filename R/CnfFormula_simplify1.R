@@ -619,17 +619,22 @@ simplify_cnf = function(entries, universe) {
 
   second_order_enabled = TRUE
   second_order_enabled_matrix = not_subset_count > 2L  # allow cascading of indirect SSE, except for the combinations where we trigger it manually (otherwise we'd be running them twice)
+  # we need to make sure we don't trigger for eliminated / unit clauses, so we set them to TRUE here.
+  # This means all remaining entries of the second_order_enabled_matrix are exactly the ones for which we trigger on_updated_subset_relations() manually.
+  meta_disabled = eliminated[available] | is_unit[available]
+  second_order_enabled_matrix[meta_disabled, ] = TRUE
+  second_order_enabled_matrix[, meta_disabled] = TRUE
   # alternatively, we could also enable none of the cascading in the beginning and have a nested loop in the following, where we 'repeat' until there are no more rowsum <= 2L
   # That would probably give uns less cascading, but we'd have to run 'which()' on a N^2 matrix potentially many times.
-  sse_to_trigger = which(not_subset_count <= 2L, arr.ind = TRUE)
+
+  sse_to_trigger = which(!second_order_enabled_matrix, arr.ind = TRUE)
   for (sse_idx in seq_len(nrow(sse_to_trigger))) {
     meta_idx = sse_to_trigger[sse_idx, 1L]
     meta_idx_other = sse_to_trigger[sse_idx, 2L]
+    if (eliminated[[available[[meta_idx]]]] || is_unit[[available[[meta_idx]]]] || eliminated[[available[[meta_idx_other]]]] || is_unit[[available[[meta_idx_other]]]]) next
     second_order_enabled_matrix[meta_idx, meta_idx_other] = TRUE
-    on_updated_subset_relations(meta_idx, meta_idx_other, TRUE)
+    if (identical(on_updated_subset_relations(meta_idx, meta_idx_other, TRUE), TRUE)) return(return_entries(FALSE))
   }
-
-
 
 
   # Now for the big one: Asymmetric Hidden Literal Addition (Marijn et al.)
