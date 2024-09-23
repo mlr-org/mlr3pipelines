@@ -213,15 +213,15 @@ simplify_cnf = function(entries, universe) {
       if (!is_not_subset_of[[meta_idx]][other_meta_idx, is_not_subset_of_col]) next
       is_not_subset_of[[meta_idx]][other_meta_idx, is_not_subset_of_col] <<- FALSE
       not_subset_count[meta_idx, other_meta_idx] <<- (rowsum = not_subset_count[meta_idx, other_meta_idx] - 1L)
-      if (rowsum > 2L) next
-      ousr = on_updated_subset_relations(meta_idx, other_meta_idx)
+      if (rowsum > 1L + second_order_enabled) next
+      ousr = on_updated_subset_relations(meta_idx, other_meta_idx, FALSE)
       if (identical(ousr, TRUE)) return(TRUE)  # forward contradiction signal. We don't care if other_meta_idx was eliminated.
       if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) return(NULL)  # need to check more directly if things escalated somehow and clause_idx was eliminated indirectly
     }
     # call on_domain_changed_handle_2nd_order_sse
     # it is not a waste w/r/t the 'on_updated_subset_relations' call, since that one only deals with clauses for which the symbol is set to FALSE now,
     # i.e. precisely the other clauses.
-    on_update_range(meta_idx, symbol)
+    if (second_order_enabled) on_update_range(meta_idx, symbol) else FALSE
   }
 
   # eliminate `symbol` from `clause_idx`
@@ -274,8 +274,8 @@ simplify_cnf = function(entries, universe) {
       clause_idx_other = available[[meta_idx_other]]
       # while we *do* restrict meta_idx_other in the for loop already, eliminated and is_unit can still change during the loop, so check here again
       if (eliminated[[clause_idx_other]] || is_unit[[clause_idx_other]]) next
-      if (not_subset_count[meta_idx, meta_idx_other] > 2L) next
-      ousr = on_updated_subset_relations(meta_idx, meta_idx_other)
+      if (not_subset_count[meta_idx, meta_idx_other] > 1L + second_order_enabled) next
+      ousr = on_updated_subset_relations(meta_idx, meta_idx_other, FALSE)
       if (identical(ousr, TRUE)) return(TRUE)
       # on_updated_subset_relations could cascade down to eliminating meta_idx (i.e. clause_idx)
       if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) return(NULL)
@@ -285,12 +285,13 @@ simplify_cnf = function(entries, universe) {
 
   # returns 'NULL' when meta_idx_other was eliminated (or possibly turned into a unit),
   # 'TRUE' for contradiction, 'FALSE' for nothing changed
-  on_updated_subset_relations = function(meta_idx, meta_idx_other) {
+  on_updated_subset_relations = function(meta_idx, meta_idx_other, second_order_only) {
     # the row `meta_idx_other` of `is_not_subset_of[[meta_idx]]` has been updated.
     # we now check whether we can apply subsumption elimination, or at least self-subsumption elimination, on `meta_idx`.
     rowsum = not_subset_count[meta_idx, meta_idx_other]
-    if (rowsum > 2L) return(FALSE)  # nothing to do
+    if (rowsum > 1L + second_order_enabled) return(FALSE)  # nothing to do
     if (rowsum == 2L) {
+      # we only get here when second_order_enabled is TRUE
       hs2oo = handle_sse_2nd_order_twoend(meta_idx, meta_idx_other, NULL)
       if (identical(hs2oo, TRUE)) return(TRUE)
       clause_other = available[[meta_idx_other]]
@@ -305,13 +306,17 @@ simplify_cnf = function(entries, universe) {
     symbol_to_restrict = colnames(is_not_subset_of[[meta_idx]])[is_not_subset_of[[meta_idx]][meta_idx_other, ]]
     # update clause and sc!
 
-    # note we update meta_idx_other: we are currently subset of that other clause w/r/t all except one symbol.
-    # we can therefore intersect that last symbol in the other clause with the range of that symbol in the current clause.
-    # apply_domain_restriction will take care of eliminating the symbol if the range becomes empty.
-    # It could in theory even do subsumption, but we have already taken care of that above.
-    adr = apply_domain_restriction(available[[meta_idx_other]], symbol_to_restrict, entries[[available[[meta_idx]]]][[symbol_to_restrict]], FALSE)
-    if (is.null(adr)) return(NULL)
-    if (adr) return(TRUE)
+    if (!second_order_only) {
+      # note we update meta_idx_other: we are currently subset of that other clause w/r/t all except one symbol.
+      # we can therefore intersect that last symbol in the other clause with the range of that symbol in the current clause.
+      # apply_domain_restriction will take care of eliminating the symbol if the range becomes empty.
+      # It could in theory even do subsumption, but we have already taken care of that above.
+      adr = apply_domain_restriction(available[[meta_idx_other]], symbol_to_restrict, entries[[available[[meta_idx]]]][[symbol_to_restrict]], FALSE)
+      if (is.null(adr)) return(NULL)
+      if (adr) return(TRUE)
+      if (!second_order_enabled) return(FALSE)
+    }
+    if (!second_order_enabled_matrix[meta_idx, meta_idx_other]) return(FALSE)
     clause_idx = available[[meta_idx]]
     if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) return(FALSE)
     hs2oo = handle_sse_2nd_order_oneend(meta_idx, meta_idx_other, symbol_to_restrict)
@@ -338,12 +343,14 @@ simplify_cnf = function(entries, universe) {
     targets_while_oneend = potential_targets[not_subset_count[meta_idx, potential_targets] == 1L]
 
     for (meta_idx_target in targets_while_oneend) {
+      if (!second_order_enabled_matrix[meta_idx, meta_idx_target]) next
       hs2oo = handle_sse_2nd_order_oneend(meta_idx, meta_idx_target, symbol)
       if (is.null(hs2oo)) return(NULL)  # meta_idx eliminated
       if (hs2oo) return(TRUE)
     }
     targets_while_twoend = potential_targets[not_subset_count[meta_idx, potential_targets] == 2L]
     for (meta_idx_target in targets_while_twoend) {
+      if (!second_order_enabled_matrix[meta_idx, meta_idx_target]) next
       hs2oo = handle_sse_2nd_order_twoend(meta_idx, meta_idx_target, symbol)
       if (is.null(hs2oo)) return(NULL)  # meta_idx eliminated
       if (hs2oo) return(TRUE)
@@ -527,6 +534,11 @@ simplify_cnf = function(entries, universe) {
   # This is the same as sum(is_not_subset_of[[i]][j, ])
   not_subset_count = matrix(NA_integer_, nrow = length(available), ncol = length(available))
 
+  # whether second-order subsumption is enabled for the pair
+  # We only enable it after the initial first-order checks are done, to reduce 2nd order calls as much as possible.
+  second_order_enabled = FALSE
+  second_order_enabled_matrix = matrix(FALSE, nrow = length(available), ncol = length(available))
+
 
   for (meta_idx_outer in seq_along(available)) {
     clause_idx = available[[meta_idx_outer]]
@@ -588,22 +600,37 @@ simplify_cnf = function(entries, universe) {
       not_subset_count[meta_idx_outer, meta_idx_inner] = sum(is_not_subset_of[[meta_idx_outer]][meta_idx_inner, ])
       rowsum = sum(is_not_subset_of[[meta_idx_inner]][meta_idx_outer, ])
       not_subset_count[meta_idx_inner, meta_idx_outer] = rowsum
-      if (rowsum <= 2) {
-        ousr = on_updated_subset_relations(meta_idx_inner, meta_idx_outer)
+      if (rowsum <= 1) {
+        ousr = on_updated_subset_relations(meta_idx_inner, meta_idx_outer, FALSE)
         if (is.null(ousr)) break
         if (ousr) return(return_entries(FALSE))
         if (eliminated[[clause_idx_inner]] || is_unit[[clause_idx_inner]]) next  # yes this can happen.
       }
       # need to get rowsum back again, since the call above could have changed something!
       rowsum = not_subset_count[meta_idx_outer, meta_idx_inner]
-      if (rowsum <= 2) {
-        ousr = on_updated_subset_relations(meta_idx_outer, meta_idx_inner)
+      if (rowsum <= 1) {
+        ousr = on_updated_subset_relations(meta_idx_outer, meta_idx_inner, FALSE)
         if (identical(ousr, TRUE)) return(return_entries(FALSE))
         if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) break  # probably this can happen if things cascade onwards when updating clause_inner
         if (is.null(ousr)) next
       }
     }
   }
+
+  second_order_enabled = TRUE
+  second_order_enabled_matrix = not_subset_count > 2L  # allow cascading of indirect SSE, except for the combinations where we trigger it manually (otherwise we'd be running them twice)
+  # alternatively, we could also enable none of the cascading in the beginning and have a nested loop in the following, where we 'repeat' until there are no more rowsum <= 2L
+  # That would probably give uns less cascading, but we'd have to run 'which()' on a N^2 matrix potentially many times.
+  sse_to_trigger = which(not_subset_count <= 2L, arr.ind = TRUE)
+  for (sse_idx in seq_len(nrow(sse_to_trigger))) {
+    meta_idx = sse_to_trigger[sse_idx, 1L]
+    meta_idx_other = sse_to_trigger[sse_idx, 2L]
+    second_order_enabled_matrix[meta_idx, meta_idx_other] = TRUE
+    on_updated_subset_relations(meta_idx, meta_idx_other, TRUE)
+  }
+
+
+
 
   # Now for the big one: Asymmetric Hidden Literal Addition (Marijn et al.)
 
