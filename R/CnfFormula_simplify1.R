@@ -216,7 +216,7 @@ simplify_cnf = function(entries, universe) {
       if (rowsum > 2L) next
       ousr = on_updated_subset_relations(meta_idx, other_meta_idx)
       if (identical(ousr, TRUE)) return(TRUE)  # forward contradiction signal. We don't care if other_meta_idx was eliminated.
-      if (eliminated[[clause_idx]]) return(NULL)  # need to check more directly if things escalated somehow and clause_idx was eliminated indirectly
+      if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) return(NULL)  # need to check more directly if things escalated somehow and clause_idx was eliminated indirectly
     }
     # call on_domain_changed_handle_2nd_order_sse
     # it is not a waste w/r/t the 'on_updated_subset_relations' call, since that one only deals with clauses for which the symbol is set to FALSE now,
@@ -342,7 +342,6 @@ simplify_cnf = function(entries, universe) {
       if (is.null(hs2oo)) return(NULL)  # meta_idx eliminated
       if (hs2oo) return(TRUE)
     }
-
     targets_while_twoend = potential_targets[not_subset_count[meta_idx, potential_targets] == 2L]
     for (meta_idx_target in targets_while_twoend) {
       hs2oo = handle_sse_2nd_order_twoend(meta_idx, meta_idx_target, symbol)
