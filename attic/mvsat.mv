@@ -212,5 +212,6 @@
 
 # Now that 2nd order sse is implemented, one more possible obvious optimizatoin would be to keep original larger versions of clauses around
 # and use these for self-subsumption elimination.
-# problem: this would make unit handling weird, since we get new units that can now still be self-subsumed.
-
+# - problem: this would make unit handling weird, since we get new units that can now still be self-subsumed.
+# - wehn we have that, we can also make sure 2nd order things only run after the initial 1st order things have all run, since we can then expect
+#   fewer range changes and hende fewer updates; that probably gives a lot of performance benefit.
