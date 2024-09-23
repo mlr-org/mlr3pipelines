@@ -210,6 +210,7 @@ simplify_cnf = function(entries, universe) {
 
       # we are now a subset (and most likely were not before)
       # ("most likely" because it could probably happen that we re-enter this part through some cascading elimination / propagation)
+      if (!is_not_subset_of[[meta_idx]][other_meta_idx, is_not_subset_of_col]) next
       is_not_subset_of[[meta_idx]][other_meta_idx, is_not_subset_of_col] <<- FALSE
       not_subset_count[meta_idx, other_meta_idx] <<- (rowsum = not_subset_count[meta_idx, other_meta_idx] - 1L)
       if (rowsum > 2L) next
