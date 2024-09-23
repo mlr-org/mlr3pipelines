@@ -314,8 +314,7 @@ simplify_cnf = function(entries, universe) {
     clause_idx = available[[meta_idx]]
     if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) return(FALSE)
     hs2oo = handle_sse_2nd_order_oneend(meta_idx, meta_idx_other, symbol_to_restrict)
-    if (is.null(hs2oo)) return(NULL)
-    if (hs2oo) return(TRUE)
+    if (identical(hs2oo, TRUE)) return(TRUE)
     clause_other = available[[meta_idx_other]]
     if (eliminated[[clause_other]] || is_unit[[clause_other]]) return(NULL)
     FALSE

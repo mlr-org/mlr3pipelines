@@ -210,3 +210,6 @@
 #      Int he old implementation, this is solved by the fact that we do HLA for one clause at a time, either
 #      eliminating it or not.
 
+# Now that 2nd order sse is implemented, one more possible obvious optimizatoin would be to keep original larger versions of clauses around
+# and use these for self-subsumption elimination.
+# problem: this would make unit handling weird, since we get new units that can now still be self-subsumed.
