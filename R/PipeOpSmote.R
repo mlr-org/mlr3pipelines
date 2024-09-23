@@ -89,8 +89,8 @@ PipeOpSmote = R6Class("PipeOpSmote",
       cols = task$feature_names
       unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
       if (length(unsupported_cols)) {
-        stopf("SMOTE cannot generate synthetic data for the following columns since they are neither features nor targets: '%s'",
-              paste(unsupported_cols, collapse = "', '"))
+        stopf("SMOTE cannot generate synthetic data for the following columns since they are neither features nor targets: %s.",
+              str_collapse(unsupported_cols, quote = '"'))
       }
       if (!length(cols)) {
         return(task)
