@@ -540,7 +540,7 @@ simplify_cnf = function(entries, universe) {
   for (meta_idx_outer in seq_along(available)) {
     clause_idx = available[[meta_idx_outer]]
     if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) next  # may happen if we somehow turn something into a unit that eliminates a later clause
-    clause = entries[[clause_idx]]
+    clause_ext = entries_ext[[meta_idx_outer]]
 
     # is_not_subset_of[[i]][j, k] records whether for symbol k, clause i is not a subset of clause_ext j
     # If k is not in clause i, then var(i, k) is trivially a subset of var(j, k), so this is interpreted as FALSE.
@@ -550,8 +550,11 @@ simplify_cnf = function(entries, universe) {
     is_not_subset_of[[meta_idx_outer]] = matrix(
       TRUE,
       nrow = length(available),  # indexed by meta_idx!
-      ncol = length(clause),
-      dimnames = list(NULL, names(clause))
+      ncol = length(clause_ext),
+      # using clause_ext for symbol names, because we can rely on names(clause_ext) being a superset of names(clause).
+      # It could have happened that clause shrinked already in previous loops, even if SSE does not jump ahead in the loop,
+      # from unit propagation. So we may waste a bit of memory here, but in return we can easier index the inso-matrices further down.
+      dimnames = list(NULL, names(clause_ext))
     )
     # we are not a subset of ourselves
     # (this prevents us from checking this later in on_updated_subset_relations; if we do check it there, we would eliminate the clause from itself)
@@ -560,11 +563,11 @@ simplify_cnf = function(entries, universe) {
     for (meta_idx_inner in seq_len(meta_idx_outer - 1L)) {
       ## need to refresh clause here, since it might have been shortened by unit propagation in an earlier iteration
       clause = entries[[clause_idx]]
-      clause_ext = entries_ext[[clause_idx]]
+      clause_ext = entries_ext[[meta_idx_outer]]
       clause_idx_inner = available[[meta_idx_inner]]
       if (eliminated[[clause_idx_inner]] || is_unit[[clause_idx_inner]]) next
       clause_inner = entries[[clause_idx_inner]]
-      clause_ext_inner = entries_ext[[clause_idx_inner]]
+      clause_ext_inner = entries_ext[[meta_idx_inner]]
       # note that even though we sort entries at the beginning, we can *not* rely on clause_inner to have smaller or equal length than clause,
       # since unit elimination can change the length of clauses
 
@@ -609,10 +612,10 @@ simplify_cnf = function(entries, universe) {
           # Avoid assigning TRUE to matrix that is initialized with TRUE.
           # We index by column name here, since it is possible that clauses were shortened by
           # unit propagation or self subsumption elimination somewhere on the way here
-          is_not_subset_of[[meta_idx_inner]][meta_idx_outer, symbol] = FALSE
+          is_not_subset_of[[meta_idx_inner]][meta_idx_outer, symbol_idx_ext_inner] = FALSE
         }
         if (outer_subset_of_inner) {
-          is_not_subset_of[[meta_idx_outer]][meta_idx_inner, symbol] = FALSE
+          is_not_subset_of[[meta_idx_outer]][meta_idx_inner, symbol_idx_ext_outer] = FALSE
         }
       }
       # prefer to eliminate the outer loopo clause first, since we have already
@@ -650,10 +653,10 @@ simplify_cnf = function(entries, universe) {
 
   # iterating from large to small entries
   for (clause_idx in remaining_nonunit_entries) {
-    clause = entries_ext[[clause_idx]]
 
     # index inside `is_not_subset_of`
     meta_idx = available_inverse[[clause_idx]]
+    clause = entries_ext[[meta_idx]]
     remaining_other_entries = remaining_nonunit_entries[remaining_nonunit_entries != clause_idx]
 
     # we keep track of which clauses were used for HLA, since every other clause can only do that once.
