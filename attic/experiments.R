@@ -1133,3 +1133,124 @@ V2 %among% c("v2_5", "v2_2", "v2_3") & V2 %among% c("v2_5", "v2_4", "v2_3", "v2_
 V2 %among% c("v2_2", "v2_1"))) & (V1 %among% c("v1_5", "v1_3") & V4 %among% c("v4_3", "v4_5", "v4_4") & (V1 %among% c("v1_4", "v1_5", "v1_2", "v1_3") &
 V4 %among% c("v4_3",  "v4_2", "v4_1")) |
 V3 %among% c("v3_2", "v3_3", "v3_1") & V3 %among% c("v3_1", "v3_5", "v3_2") & (V4 %among% "v4_4" & V2 %among% c("v2_1", "v2_5", "v2_3", "v2_2")))))
+
+
+quote((V3 %among% c("v3_3", "v3_1") & V2 %among% c("v2_1", "v2_5", "v2_4") & (V1 %among% c("v1_1", "v1_4", "v1_2", "v1_5") & V3 %among% "v3_3") |
+(V3 %among% c("v3_2", "v3_1", "v3_3") & V2 %among% c("v2_5", "v2_4") | V1 %among% c("v1_2", "v1_1", "v1_5", "v1_3") & V4 %among% c("v4_4", "v4_2", "v4_1"))) &
+(V4 %among% c("v4_2", "v4_3", "v4_1", "v4_5") & V4 %among% c("v4_1", "v4_4", "v4_5") | (V2 %among% c("v2_3", "v2_2", "v2_5", "v2_4") | V3 %among% "v3_1") |
+V4 %among% c("v4_3", "v4_4", "v4_5") & V4 %among%      c("v4_1", "v4_5", "v4_4") & (V1 %among% c("v1_3", "v1_1", "v1_5") | V3 %among% "v3_2")) &
+((V3 %among% c("v3_2", "v3_3") & V2 %among% "v2_5" | (V1 %among% "v1_3" | V4 %among% c("v4_3", "v4_2", "v4_4", "v4_1")) | V2 %among% c("v2_5", "v2_4") &
+V4 %among% c("v4_5", "v4_2") & (V2 %among% c("v2_5", "v2_4", "v2_3") | V4 %among% c("v4_1", "v4_5", "v4_4"))) & (V1 %among% "v1_2" & V2 %among% "v2_2" |
+(V2 %among% c("v2_3", "v2_4") | V2 %among% c("v2_3", "v2_4", "v2_1", "v2_2")) |
+(V3 %among% c("v3_1",  "v3_5", "v3_2", "v3_4") & V4 %among% c("v4_1", "v4_4") | V3 %among% "v3_4" & V4 %among% c("v4_5", "v4_4"))))
+) |> eval() |> formula_to_expression() |> evaluate_expression(assignments) -> a1
+
+quote((V3 %among% c("v3_3", "v3_1") & V2 %among% c("v2_1", "v2_5", "v2_4") & (V1 %among% c("v1_1", "v1_4", "v1_2", "v1_5") & V3 %among% "v3_3") |
+(V3 %among% c("v3_2", "v3_1", "v3_3") & V2 %among% c("v2_5", "v2_4") | V1 %among% c("v1_2", "v1_1", "v1_5", "v1_3") & V4 %among% c("v4_4", "v4_2", "v4_1"))) &
+(V4 %among% c("v4_2", "v4_3", "v4_1", "v4_5") & V4 %among% c("v4_1", "v4_4", "v4_5") | (V2 %among% c("v2_3", "v2_2", "v2_5", "v2_4") | V3 %among% "v3_1") |
+V4 %among% c("v4_3", "v4_4", "v4_5") & V4 %among%      c("v4_1", "v4_5", "v4_4") & (V1 %among% c("v1_3", "v1_1", "v1_5") | V3 %among% "v3_2")) &
+((V3 %among% c("v3_2", "v3_3") & V2 %among% "v2_5" | (V1 %among% "v1_3" | V4 %among% c("v4_3", "v4_2", "v4_4", "v4_1")) | V2 %among% c("v2_5", "v2_4") &
+V4 %among% c("v4_5", "v4_2") & (V2 %among% c("v2_5", "v2_4", "v2_3") | V4 %among% c("v4_1", "v4_5", "v4_4"))) & (V1 %among% "v1_2" & V2 %among% "v2_2" |
+(V2 %among% c("v2_3", "v2_4") | V2 %among% c("v2_3", "v2_4", "v2_1", "v2_2")) |
+(V3 %among% c("v3_1",  "v3_5", "v3_2", "v3_4") & V4 %among% c("v4_1", "v4_4") | V3 %among% "v3_4" & V4 %among% c("v4_5", "v4_4"))))
+) |> evaluate_expression(assignments) -> a2
+
+which(a1 != a2)
+
+
+
+quote(
+
+(((V2 %among% "v2_2" | V1 %among% "v1_2") & (V1 %among% c("v1_1", "v1_3") & V4 %among% c("v4_3", "v4_1")) | (V3 %among% c("v3_2", "v3_3") &
+V3 %among% c("v3_3", "v3_1") | V1 %among% "v1_1" & V3 %among% "v3_2") | (V3 %among% "v3_3" | V3 %among% c("v3_3", "v3_2") |
+V1 %among% c("v1_1", "v1_3") & V1 %among% "v1_2" | (V1 %among% c("v1_1", "v1_3") | V1 %among% "v1_1" | (V2 %among% c("v2_2", "v2_1") |
+ V4 %among% "v4_2")))) & (((V2 %among% c("v2_2", "v2_1") | V4 %among% c("v4_3", "v4_1")) & (V2 %among%      c("v2_2", "v2_3") & V4 %among% c("v4_1", "v4_2")) |
+ (V1 %among% c("v1_3", "v1_1") | V4 %among% c("v4_1", "v4_2")) & (V1 %among% "v1_3" & V2 %among% "v2_3")) & (V2 %among% "v2_3" & V4 %among% "v4_2" | (V3 %among% "v3_3" |
+ V3 %among% c("v3_2", "v3_3")) | (V2 %among% "v2_2" | V1 %among% "v1_2" | V2 %among% "v2_2" & V4 %among% c("v4_3", "v4_2")))) | ((V3 %among% "v3_2" | V3 %among% c("v3_2", "v3_1")) &
+ (V2 %among% "v2_1" | V2 %among% c("v2_2", "v2_3")) | V1 %among% "v1_1" & V1 %among% "v1_1" & (V2 %among%      "v2_2" | V3 %among% "v3_3")) &
+ ((V4 %among% c("v4_2", "v4_3") & V3 %among% "v3_1" | (V2 %among% c("v2_3", "v2_2") | V2 %among% c("v2_3", "v2_2"))) & (V1 %among% "v1_2" &
+ V2 %among% "v2_2" & (V2 %among% "v2_3" & V1 %among% "v1_3"))) & ((V2 %among% "v2_1" | V2 %among% c("v2_1", "v2_2") | V2 %among% "v2_2" &
+ V2 %among% c("v2_2", "v2_3") | (V1 %among% c("v1_1", "v1_2") | V2 %among% c("v2_3", "v2_2")) & (V3 %among% c("v3_1", "v3_3") & V4 %among% c("v4_1", "v4_3"))) &
+ (V3 %among% "v3_3" & V3 %among%      c("v3_2", "v3_1") | V4 %among% "v4_2" & V2 %among% "v2_2" | V3 %among% c("v3_1", "v3_3") & V4 %among% c("v4_2", "v4_1") &
+ (V3 %among% "v3_2" & V4 %among% "v4_1")))) &
+
+ ((V2 %among% c("v2_1", "v2_2") & V2 %among% "v2_2" & (V2 %among% c("v2_3", "v2_1") | V3 %among% c("v3_2", "v3_3")) |
+ (V1 %among% "v1_1" | V1 %among% c("v1_2", "v1_1") | (V2 %among% "v2_2" | V2 %among% c("v2_2", "v2_3"))) | (V2 %among% "v2_3" & V2 %among% c("v2_1", "v2_3") &
+ (V4 %among% "v4_2" | V3 %among% c("v3_2", "v3_1")) | V2 %among%      "v2_1" & V4 %among% "v4_3" & (V3 %among% "v3_2" | V2 %among% c("v2_2", "v2_3")))) &
+ (((V1 %among% c("v1_1", "v1_3") | V1 %among% "v1_3") & (V4 %among% c("v4_3", "v4_2") | V1 %among% c("v1_1", "v1_2")) | V3 %among% "v3_1" & V2 %among% c("v2_1", "v2_3") &
+ (V4 %among% c("v4_3", "v4_2") & V3 %among% c("v3_2", "v3_1"))) & ((V1 %among% c("v1_3", "v1_1") | V1 %among% c("v1_3", "v1_2")) & (V2 %among% c("v2_3", "v2_2") & V1 %among% "v1_2") |
+ V4 %among% c("v4_3", "v4_1") & V3 %among% "v3_2" & (V3 %among%      c("v3_2", "v3_1") | V2 %among% "v2_3"))) & (((V1 %among% "v1_2" | V4 %among% "v4_3") & (V1 %among% c("v1_1", "v1_2") |
+ V2 %among% "v2_3") | V3 %among% "v3_2" & V1 %among% c("v1_2", "v1_3") & (V3 %among% c("v3_3", "v3_1") | V2 %among% c("v2_3", "v2_2"))) & (V1 %among% c("v1_1", "v1_2") &
+ V2 %among% c("v2_2", "v2_1") | (V3 %among% "v3_2" | V2 %among% "v2_3") | V2 %among% c("v2_2", "v2_3") & V1 %among% c("v1_3", "v1_1") & (V2 %among% "v2_2" | V2 %among% c("v2_1", "v2_2"))) |
+ (V2 %among% "v2_1" &      V2 %among% "v2_3" | V4 %among% "v4_1" & V2 %among% "v2_1" | V1 %among% c("v1_1", "v1_3") & V1 %among% c("v1_1", "v1_2") & (V4 %among% c("v4_1", "v4_2") & V2 %among% "v2_2")) &
+ (V1 %among% "v1_1" & V1 %among% c("v1_3", "v1_2") | V3 %among% c("v3_2", "v3_1") & V3 %among% "v3_2" | (V2 %among% c("v2_1", "v2_2") | V4 %among% "v4_1" | V2 %among% "v2_3" & V3 %among% "v3_2"))))
+) -> bigex
+
+evaluate_expression(bigex, ass)
+evaluate_expression(formula_to_expression(eval(bigex)), ass)
+
+
+# |> eval() |> formula_to_expression() |> evaluate_expression(assignments) -> a1
+
+which(a1 != a2)
+
+ass <- assignments[which(a1 != a2), ]
+
+
+
+eval(bigex) |> as.list() |> lapply(as.CnfFormula) |> lapply(formula_to_expression) |> sapply(evaluate_expression, assignment = ass) -> clauses
+
+
+which(!clauses)
+
+
+e1 <- (((V2 %among% "v2_2" | V1 %among% "v1_2") & (V1 %among% c("v1_1", "v1_3") & V4 %among% c("v4_3", "v4_1")) | (V3 %among% c("v3_2", "v3_3") &
+V3 %among% c("v3_3", "v3_1") | V1 %among% "v1_1" & V3 %among% "v3_2") | (V3 %among% "v3_3" | V3 %among% c("v3_3", "v3_2") |
+V1 %among% c("v1_1", "v1_3") & V1 %among% "v1_2" | (V1 %among% c("v1_1", "v1_3") | V1 %among% "v1_1" | (V2 %among% c("v2_2", "v2_1") |
+ V4 %among% "v4_2")))) & (((V2 %among% c("v2_2", "v2_1") | V4 %among% c("v4_3", "v4_1")) & (V2 %among%      c("v2_2", "v2_3") & V4 %among% c("v4_1", "v4_2")) |
+ (V1 %among% c("v1_3", "v1_1") | V4 %among% c("v4_1", "v4_2")) & (V1 %among% "v1_3" & V2 %among% "v2_3")) & (V2 %among% "v2_3" & V4 %among% "v4_2" | (V3 %among% "v3_3" |
+ V3 %among% c("v3_2", "v3_3")) | (V2 %among% "v2_2" | V1 %among% "v1_2" | V2 %among% "v2_2" & V4 %among% c("v4_3", "v4_2")))) | ((V3 %among% "v3_2" | V3 %among% c("v3_2", "v3_1")) &
+ (V2 %among% "v2_1" | V2 %among% c("v2_2", "v2_3")) | V1 %among% "v1_1" & V1 %among% "v1_1" & (V2 %among%      "v2_2" | V3 %among% "v3_3")) &
+ ((V4 %among% c("v4_2", "v4_3") & V3 %among% "v3_1" | (V2 %among% c("v2_3", "v2_2") | V2 %among% c("v2_3", "v2_2"))) & (V1 %among% "v1_2" &
+ V2 %among% "v2_2" & (V2 %among% "v2_3" & V1 %among% "v1_3"))) & ((V2 %among% "v2_1" | V2 %among% c("v2_1", "v2_2") | V2 %among% "v2_2" &
+ V2 %among% c("v2_2", "v2_3") | (V1 %among% c("v1_1", "v1_2") | V2 %among% c("v2_3", "v2_2")) & (V3 %among% c("v3_1", "v3_3") & V4 %among% c("v4_1", "v4_3"))) &
+ (V3 %among% "v3_3" & V3 %among%      c("v3_2", "v3_1") | V4 %among% "v4_2" & V2 %among% "v2_2" | V3 %among% c("v3_1", "v3_3") & V4 %among% c("v4_2", "v4_1") &
+ (V3 %among% "v3_2" & V4 %among% "v4_1"))))
+
+e2 <-    ((V2 %among% c("v2_1", "v2_2") & V2 %among% "v2_2" & (V2 %among% c("v2_3", "v2_1") | V3 %among% c("v3_2", "v3_3")) |
+ (V1 %among% "v1_1" | V1 %among% c("v1_2", "v1_1") | (V2 %among% "v2_2" | V2 %among% c("v2_2", "v2_3"))) | (V2 %among% "v2_3" & V2 %among% c("v2_1", "v2_3") &
+ (V4 %among% "v4_2" | V3 %among% c("v3_2", "v3_1")) | V2 %among%      "v2_1" & V4 %among% "v4_3" & (V3 %among% "v3_2" | V2 %among% c("v2_2", "v2_3")))) &
+ (((V1 %among% c("v1_1", "v1_3") | V1 %among% "v1_3") & (V4 %among% c("v4_3", "v4_2") | V1 %among% c("v1_1", "v1_2")) | V3 %among% "v3_1" & V2 %among% c("v2_1", "v2_3") &
+ (V4 %among% c("v4_3", "v4_2") & V3 %among% c("v3_2", "v3_1"))) & ((V1 %among% c("v1_3", "v1_1") | V1 %among% c("v1_3", "v1_2")) & (V2 %among% c("v2_3", "v2_2") & V1 %among% "v1_2") |
+ V4 %among% c("v4_3", "v4_1") & V3 %among% "v3_2" & (V3 %among%      c("v3_2", "v3_1") | V2 %among% "v2_3"))) & (((V1 %among% "v1_2" | V4 %among% "v4_3") & (V1 %among% c("v1_1", "v1_2") |
+ V2 %among% "v2_3") | V3 %among% "v3_2" & V1 %among% c("v1_2", "v1_3") & (V3 %among% c("v3_3", "v3_1") | V2 %among% c("v2_3", "v2_2"))) & (V1 %among% c("v1_1", "v1_2") &
+ V2 %among% c("v2_2", "v2_1") | (V3 %among% "v3_2" | V2 %among% "v2_3") | V2 %among% c("v2_2", "v2_3") & V1 %among% c("v1_3", "v1_1") & (V2 %among% "v2_2" | V2 %among% c("v2_1", "v2_2"))) |
+ (V2 %among% "v2_1" &      V2 %among% "v2_3" | V4 %among% "v4_1" & V2 %among% "v2_1" | V1 %among% c("v1_1", "v1_3") & V1 %among% c("v1_1", "v1_2") & (V4 %among% c("v4_1", "v4_2") & V2 %among% "v2_2")) &
+ (V1 %among% "v1_1" & V1 %among% c("v1_3", "v1_2") | V3 %among% c("v3_2", "v3_1") & V3 %among% "v3_2" | (V2 %among% c("v2_1", "v2_2") | V4 %among% "v4_1" | V2 %among% "v2_3" & V3 %among% "v3_2"))))
+
+evaluate_expression(formula_to_expression(e1), ass)
+evaluate_expression(formula_to_expression(e2), ass)
+evaluate_expression(formula_to_expression(e1 & e2), ass)
+
+e1
+e2
+eval(e1 & e2) |> as.list() |> lapply(as.CnfFormula) |> lapply(formula_to_expression) |> sapply(evaluate_expression, assignment = ass) -> clauses
+
+e1&e2
+
+entries[!eliminated] |> lapply(function(x) structure(list(x), universe = universe, class = "CnfFormula")) |> lapply(formula_to_expression) |> sapply(evaluate_expression, assignment = ass) -> cl
+entries[!eliminated][!cl] |> lapply(structure, class = "CnfClause")
+
+meta_idx_inner
+c
+lapply(seq_along(eliminated), function(x) if (eliminated[[x]]) FALSE else structure(entries[[x]], class = "CnfClause"))
+
+entries[!eliminated] |> lapply(structure, class = "CnfClause")
+which(eliminated)
+
+which(!clauses)
+
+e1&e2
+e1
+e2
+

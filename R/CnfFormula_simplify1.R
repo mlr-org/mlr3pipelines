@@ -586,6 +586,7 @@ simplify_cnf = function(entries, universe) {
       }
       # prefer to eliminate the outer loopo clause first, since we have already
       # done more work for the inner loop clause (which comes earlier in 'entries')
+      not_subset_count[meta_idx_outer, meta_idx_inner] = sum(is_not_subset_of[[meta_idx_outer]][meta_idx_inner, ])
       rowsum = sum(is_not_subset_of[[meta_idx_inner]][meta_idx_outer, ])
       not_subset_count[meta_idx_inner, meta_idx_outer] = rowsum
       if (rowsum <= 2) {
@@ -594,8 +595,8 @@ simplify_cnf = function(entries, universe) {
         if (ousr) return(return_entries(FALSE))
         if (eliminated[[clause_idx_inner]] || is_unit[[clause_idx_inner]]) next  # yes this can happen.
       }
-      rowsum = sum(is_not_subset_of[[meta_idx_outer]][meta_idx_inner, ])
-      not_subset_count[meta_idx_outer, meta_idx_inner] = rowsum
+      # need to get rowsum back again, since the call above could have changed something!
+      rowsum = not_subset_count[meta_idx_outer, meta_idx_inner]
       if (rowsum <= 2) {
         ousr = on_updated_subset_relations(meta_idx_outer, meta_idx_inner)
         if (identical(ousr, TRUE)) return(return_entries(FALSE))
@@ -604,6 +605,7 @@ simplify_cnf = function(entries, universe) {
       }
     }
   }
+
   # Now for the big one: Asymmetric Hidden Literal Addition (Marijn et al.)
 
   # First, we do non-units, then we do units separately.
