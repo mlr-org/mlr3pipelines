@@ -213,3 +213,4 @@
 # Now that 2nd order sse is implemented, one more possible obvious optimizatoin would be to keep original larger versions of clauses around
 # and use these for self-subsumption elimination.
 # problem: this would make unit handling weird, since we get new units that can now still be self-subsumed.
+

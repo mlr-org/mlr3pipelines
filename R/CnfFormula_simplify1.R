@@ -278,7 +278,7 @@ simplify_cnf = function(entries, universe) {
       ousr = on_updated_subset_relations(meta_idx, meta_idx_other)
       if (identical(ousr, TRUE)) return(TRUE)
       # on_updated_subset_relations could cascade down to eliminating meta_idx (i.e. clause_idx)
-      if (eliminated[[clause_idx]]) return(NULL)
+      if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) return(NULL)
     }
     FALSE
   }

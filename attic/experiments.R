@@ -1098,3 +1098,38 @@ CnfFormula:
       t(sapply(indices, function(i) sapply(indices, function(j) if (is.na(not_subset_count[i, j])) NA_integer_ else sum(is_not_subset_of[[i]][j, ]))))
     ))
   }
+
+
+((V1 %among% c("v1_1", "v1_4", "v1_5") | V4 %among% c("v4_1", "v4_3", "v4_5")) & (V2 %among% c("v2_4", "v2_3", "v2_2") & V1 %among% c("v1_2", "v1_1", "v1_5", "v1_3")) &
+((V1 %among% c("v1_1", "v1_4", "v1_3") | V2 %among% c("v2_5", "v2_1")) & (V1 %among% c("v1_2", "v1_5", "v1_4") & V1 %among% c("v1_4", "v1_5", "v1_1", "v1_2"))) &
+((V2 %among% "v2_4" | V4 %among% c("v4_4", "v4_2", "v4_3", "v4_5") | V1 %among% c("v1_4", "v1_2", "v1_3", "v1_1") & V4 %among% "v4_2") & (V3 %among% c("v3_5", "v3_4", "v3_1" ) |
+V2 %among% c("v2_1", "v2_3") | V1 %among% c("v1_5", "v1_1") & V1 %among% c("v1_4", "v1_2"))) & (V2 %among% c("v2_5", "v2_2") & V3 %among% "v3_4" & (V2 %among% c("v2_1", "v2_5") &
+V4 %among% c("v4_5", "v4_2", "v4_4", "v4_3")) & (V3 %among% "v3_5" & V2 %among% c("v2_5", "v2_2") | V3 %among% c("v3_1", "v3_3", "v3_5") &
+V3 %among% c("v3_5", "v3_2", "v3_3", "v3_4")) & (V3 %among% c("v3_1", "v3_2", "v3_3") & V4 %among% c("v4_1", "v4_2") & (V1 %among% c("v1_5", "v1_1", "v1_2") |
+V2 %among% "v2_4") |      (V4 %among% "v4_2" & V3 %among% c("v3_3", "v3_2") | V2 %among% c("v2_5", "v2_3", "v2_4") & V1 %among% c("v1_2", "v1_3", "v1_5")))) |
+(((V4 %among% c("v4_1", "v4_2", "v4_3", "v4_5") | V1 %among% c("v1_5", "v1_2", "v1_1", "v1_4")) & (V3 %among% c("v3_5", "v3_4") | V3 %among% c("v3_5", "v3_4", "v3_1")) |
+(V4 %among% "v4_5" & V3 %among% c("v3_3", "v3_5", "v3_1", "v3_2") | (V1 %among% c("v1_4", "v1_2", "v1_3", "v1_5") | V3 %among% "v3_3"))) & ((V2 %among% c("v2_5", "v2_1") |
+V1 %among% "v1_2") & (V2 %among%      c("v2_2", "v2_3") & V4 %among% c("v4_5", "v4_3")) & (V4 %among% c("v4_3", "v4_5", "v4_2") & V1 %among% c("v1_3", "v1_5", "v1_1") &
+(V1 %among% c("v1_5", "v1_3", "v1_1", "v1_4") | V3 %among% c("v3_4", "v3_3", "v3_1", "v3_5")))) | (V4 %among% c("v4_1", "v4_5", "v4_3") & V1 %among% c("v1_2", "v1_1", "v1_5") &
+(V3 %among% c("v3_3", "v3_2", "v3_4", "v3_5") & V4 %among% c("v4_3", "v4_2", "v4_5", "v4_1")) | V4 %among% c("v4_1", "v4_4", "v4_2") & V1 %among% c("v1_3", "v1_4", "v1_1") &
+(V4 %among% c("v4_4",  "v4_3", "v4_2") & V3 %among% c("v3_2", "v3_3", "v3_1"))) & ((V1 %among% c("v1_5", "v1_4", "v1_1") | V4 %among% "v4_4") & (V2 %among% c("v2_3", "v2_2") &
+V2 %among% "v2_2") & (V3 %among% c("v3_1", "v3_5", "v3_3", "v3_4") & V1 %among% c("v1_5", "v1_3", "v1_2", "v1_4") | V2 %among% "v2_1" & V3 %among% c("v3_1", "v3_4", "v3_2"))))) &
+((V3 %among% c("v3_5", "v3_4", "v3_2", "v3_1") | V1 %among% c("v1_4", "v1_5", "v1_2")) & (V3 %among% c("v3_2", "v3_5") | V3 %among% c("v3_4", "v3_3", "v3_5", "v3_2")) &
+(V1 %among% c("v1_2", "v1_3", "v1_1", "v1_5") | V4 %among% c("v4_1", "v4_3") | V2 %among% "v2_2" & V2 %among% c("v2_3", "v2_4", "v2_5", "v2_2")) &
+((V3 %among% c("v3_5", "v3_1", "v3_2") | V3 %among% "v3_4") & (V3 %among% c("v3_5", "v3_1") | V1 %among% c("v1_4", "v1_1", "v1_2", "v1_3")) &
+(V4 %among% c("v4_2", "v4_1", "v4_4") &
+V4 %among% c("v4_5", "v4_4", "v4_1") | V1 %among% c("v1_2", "v1_5", "v1_4", "v1_1") & V3 %among% c("v3_1", "v3_5", "v3_2", "v3_3"))) & (V4 %among% "v4_4" &
+V2 %among% c("v2_5",  "v2_1", "v2_3") & (V3 %among% c("v3_3", "v3_1") & V4 %among% "v4_5") & (V4 %among% "v4_3" | V4 %among% c("v4_2", "v4_1", "v4_4") |
+(V1 %among% c("v1_4", "v1_2", "v1_3") |
+V3 %among% c("v3_4", "v3_1"))) & ((V3 %among% c("v3_4", "v3_1") & V4 %among% c("v4_5", "v4_4", "v4_1", "v4_3") | V3 %among% c("v3_5", "v3_1") &
+V2 %among% c("v2_4", "v2_5", "v2_1")) &
+((V2 %among% c("v2_4", "v2_3") | V3 %among% c("v3_5", "v3_2")) & (V2 %among% c("v2_4", "v2_1", "v2_3") & V1 %among% c("v1_4", "v1_3", "v1_5", "v1_1" ))))) |
+((V2 %among% c("v2_5", "v2_4", "v2_2", "v2_3") & V3 %among% c("v3_1", "v3_5", "v3_2", "v3_4") & (V2 %among% c("v2_1", "v2_4", "v2_5") | V3 %among% c("v3_4", "v3_5", "v3_2")) |
+(V2 %among% c("v2_4", "v2_1") | V1 %among% c("v1_5", "v1_4", "v1_1") | V3 %among% c("v3_3", "v3_4", "v3_2") & V4 %among% c("v4_5", "v4_2", "v4_4"))) &
+(V2 %among% c("v2_2", "v2_4") & V1 %among% c("v1_1", "v1_2") | V3 %among% "v3_2" & V3 %among% c("v3_1", "v3_2", "v3_4") | V1 %among% c("v1_5", "v1_4", "v1_1", "v1_2") &
+V4 %among% c("v4_3", "v4_2") & (V1 %among% "v1_1" & V1 %among% c("v1_5", "v1_1", "v1_4", "v1_3"))) | (V2 %among% c("v2_1", "v2_4") & V2 %among% "v2_3" |
+V2 %among% c("v2_5", "v2_2", "v2_3") & V2 %among% c("v2_5", "v2_4", "v2_3", "v2_2") | (V4 %among% "v4_4" | V4 %among% c("v4_3", "v4_1")) &
+(V2 %among% c("v2_4", "v2_2", "v2_5") &
+V2 %among% c("v2_2", "v2_1"))) & (V1 %among% c("v1_5", "v1_3") & V4 %among% c("v4_3", "v4_5", "v4_4") & (V1 %among% c("v1_4", "v1_5", "v1_2", "v1_3") &
+V4 %among% c("v4_3",  "v4_2", "v4_1")) |
+V3 %among% c("v3_2", "v3_3", "v3_1") & V3 %among% c("v3_1", "v3_5", "v3_2") & (V4 %among% "v4_4" & V2 %among% c("v2_1", "v2_5", "v2_3", "v2_2")))))
