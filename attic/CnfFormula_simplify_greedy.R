@@ -297,6 +297,7 @@ simplify_cnf_greedy = function(entries, universe) {
     if (meta_idx > meta_idx_outer) return(FALSE)
 
     is_not_subset_of_col = match(symbol, colnames(is_not_subset_of[[meta_idx]]))
+    ## TODO: I THINK the available_ext %in% symbol_registry_ext[[symbol]] in the following line is a bug, since we are *also* a subset of empty clauses.
     rows_changed = which(is_not_subset_of[[meta_idx]][, is_not_subset_of_col] & available_ext %in% symbol_registry_ext[[symbol]] & !is.na(not_subset_count[meta_idx, ]))
     not_subset_count[meta_idx, rows_changed] <<- not_subset_count[meta_idx, rows_changed] - 1L
     is_not_subset_of[[meta_idx]][, is_not_subset_of_col] <<- FALSE
