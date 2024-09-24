@@ -1,20 +1,20 @@
-#' @title SMOTE Balancing
+#' @title ADAS Balancing
 #'
 #' @usage NULL
-#' @name mlr_pipeops_smote
+#' @name mlr_pipeops_adas
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Generates a more balanced data set by creating
-#' synthetic instances of the minority class using the SMOTE algorithm.
-#' The algorithm samples for each minority instance a new data point based on the `K` nearest
-#' neighbors of that data point.
-#' It can only be applied to tasks with purely numeric features.
-#' See [`smotefamily::SMOTE`] for details.
+#' Generates a more balanced data set by creating synthetic instances of the minority class using the ADASYN algorithm.
+#'
+#' The algorithm generates for each minority instance new data points based on its `K` nearest neighbors and the difficulty of learning for that data point.
+#' It can only be applied to tasks with numeric features that have no missing values.
+#'
+#' See [`smotefamily::ADAS`] for details.
 #'
 #' @section Construction:
 #' ```
-#' PipeOpSmote$new(id = "smote", param_vals = list())
+#' PipeOpADAS$new(id = "adas", param_vals = list())
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -34,11 +34,8 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `K` :: `numeric(1)` \cr
-#'   The number of nearest neighbors used for sampling new values.
-#'   See [`SMOTE()`][`smotefamily::SMOTE`].
-#' * `dup_size` :: `numeric` \cr
-#'   Desired times of synthetic minority instances over the original number of
-#'   majority instances. See [`SMOTE()`][`smotefamily::SMOTE`].
+#'   The number of nearest neighbors used for sampling new values. Default is `5`.
+#'   See [`ADAS()`][`smotefamily::ADAS`].
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -47,7 +44,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @references
-#' `r format_bib("chawla_2002")`
+#' `r format_bib("he_2008")`
 #'
 #' @family PipeOps
 #' @template seealso_pipeopslist
@@ -58,26 +55,27 @@
 #' library("mlr3")
 #'
 #' # Create example task
-#' data = smotefamily::sample_generator(1000, ratio = 0.80)
-#' data$result = factor(data$result)
-#' task = TaskClassif$new(id = "example", backend = data, target = "result")
-#' task$data()
-#' table(task$data()$result)
+#' data = data.frame(
+#'   target = factor(sample(c("c1", "c2"), size = 300, replace = TRUE, prob = c(0.1, 0.9))),
+#'   x1 = rnorm(300),
+#'   x2 = rnorm(300)
+#' )
+#' task = TaskClassif$new(id = "example", backend = data, target = "target")
+#' task$head()
+#' table(task$data(cols = "target"))
 #'
 #' # Generate synthetic data for minority class
-#' pop = po("smote")
-#' smotedata = pop$train(list(task))[[1]]$data()
-#' table(smotedata$result)
+#' pop = po("adas")
+#' adas_result = pop$train(list(task))[[1]]$data()
+#' nrow(adas_result)
+#' table(adas_result$target)
 #' \dontshow{ \} }
-PipeOpSmote = R6Class("PipeOpSmote",
+PipeOpADAS = R6Class("PipeOpADAS",
   inherit = PipeOpTaskPreproc,
   public = list(
-    initialize = function(id = "smote", param_vals = list()) {
+    initialize = function(id = "adas", param_vals = list()) {
       ps = ps(
-        K = p_int(lower = 1, default = 5, tags = c("train", "smote")),
-        # dup_size = 0 leads to behaviour different from 1, 2, 3, ..., because it means "autodetect",
-        # so it is a 'special_vals'.
-        dup_size = p_int(lower = 1, default = 0, special_vals = list(0), tags = c("train", "smote"))
+        K = p_int(lower = 1, default = 5, tags = c("train", "adas"))
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE,
         packages = "smotefamily", task_type = "TaskClassif", tags = "imbalanced data")
@@ -89,21 +87,21 @@ PipeOpSmote = R6Class("PipeOpSmote",
       cols = task$feature_names
       unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
       if (length(unsupported_cols)) {
-        stopf("SMOTE cannot generate synthetic data for the following columns since they are neither features nor targets: %s.",
+        stopf("ADAS cannot generate synthetic data for the following columns since they are neither features nor targets: %s.",
               str_collapse(unsupported_cols, quote = '"'))
       }
       if (!length(cols)) {
         return(task)
       }
       if (!all(task$feature_types$type %in% c("numeric"))) {
-        stop("Smote does only accept numeric features. Use PipeOpSelect to select the appropriate features.")
+        stop("ADAS does only accept numeric features. Use PipeOpSelect to select the appropriate features.")
       }
 
       # Calculate synthetic data
       dt = task$data(cols = cols)
-      st = setDT(invoke(smotefamily::SMOTE, X = dt, target = task$truth(),
-        .args = self$param_set$get_values(tags = "smote"),
-        .opts = list(warnPartialMatchArgs = FALSE))$syn_data)
+      st = setDT(invoke(smotefamily::ADAS, X = dt, target = task$truth(),
+        .args = self$param_set$get_values(tags = "adas"),
+        .opts = list(warnPartialMatchArgs = FALSE))$syn_data)  # ADAS uses partial arg matching internally
 
       # Rename target column and fix character conversion
       # We index by position (target should be last column) instead of indexing by name, which would lead to problems if a feature were called "class"
@@ -115,4 +113,4 @@ PipeOpSmote = R6Class("PipeOpSmote",
   )
 )
 
-mlr_pipeops$add("smote", PipeOpSmote)
+mlr_pipeops$add("adas", PipeOpADAS)

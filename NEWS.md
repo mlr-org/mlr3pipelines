@@ -2,6 +2,7 @@
 
 * New PipeOp: `PipeOpRowApply` / `po("rowapply")`
 * New down-sampling PipeOps for inbalanced data: `PipeOpTomek` / `po("tomek")` and `PipeOpNearmiss` / `po("nearmiss")`
+* New PipeOps for handling inbalanced data: `PipeOpADAS` / `po("adas")`, `PipeOpBLSmote` / `po("blsmote")` and `PipeOpSmoteNC` / `po("smotenc")`
 
 # mlr3pipelines 0.6.0
 
