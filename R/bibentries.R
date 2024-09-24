@@ -54,6 +54,25 @@ bibentries = c(
     journal   = "Journal of the American Statistical Association"
   ),
 
+  zhang2003   = bibentry("inproceedings",
+    year      = "2003",
+    author    = "Zhang, J. and Mani, I.",
+    title     = "KNN Approach to Unbalanced Data Distributions: A Case Study Involving Information Extraction",
+    booktitle = "Proceedings of Workshop on Learning from Imbalanced Datasets (ICML)",
+  ),
+
+  tomek1976   = bibentry("article",
+    doi       = "10.1109/TSMC.1976.4309452",
+    author    = "I. Tomek",
+    year      = "1976",
+    title     = "Two Modifications of CNN",
+    journal   = "IEEE Transactions on Systems, Man and Cybernetics",
+    volume    = "6",
+    number    = "11",
+    pages     = "769--772",
+    publisher = "IEEE"
+  ),
+
   he_2008     = bibentry("InProceedings",
     author    = "Haibo He and Yang Bai and Garcia, Edwardo A. and Shutao Li",
     booktitle = "2008 IEEE International Joint Conference on Neural Networks (IEEE World Congress on Computational Intelligence)",
@@ -75,4 +94,5 @@ bibentries = c(
     pages     = "878--887",
     isbn      = "978-3-540-31902-3"
   )
+
 )

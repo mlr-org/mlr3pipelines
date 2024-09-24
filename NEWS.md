@@ -1,3 +1,7 @@
+# mlr3pipelines 0.7.0-9000
+
+* New down-sampling PipeOps for inbalanced data: `PipeOpTomek` / `po("tomek")` and `PipeOpNearmiss` / `po("nearmiss")`
+
 # mlr3pipelines 0.7.0
 
 * New PipeOp `PipeOpRowApply` / `po("rowapply")`
@@ -16,9 +20,7 @@
 * `as_data_table(po())` now works even when some `PipeOp`s can not be constructed.
   For these `PipeOp`s, `NA` is reported in most columns.
 * Compatibility with upcoming `mlr3` release.
-* New PipeOp: `PipeOpRowApply` / `po("rowapply")`
-* New PipeOps for handling inbalanced data: `PipeOpADAS` / `po("adas")` and `PipeOpBLSmote` / `po("blsmote")`
-* New PipeOp for handling inbalanced data: `PipeOpSmoteNC` / `po("smotenc")`
+* New PipeOps for handling inbalanced data: `PipeOpADAS` / `po("adas")`, `PipeOpBLSmote` / `po("blsmote")` and `PipeOpSmoteNC` / `po("smotenc")`
 
 # mlr3pipelines 0.6.0
 

@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.7.0
+Version: 0.7.0-9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -163,6 +163,7 @@ Collate:
     'PipeOpMutate.R'
     'PipeOpNMF.R'
     'PipeOpNOP.R'
+    'PipeOpNearmiss.R'
     'PipeOpOVR.R'
     'PipeOpPCA.R'
     'PipeOpProxy.R'
@@ -183,6 +184,7 @@ Collate:
     'PipeOpSubsample.R'
     'PipeOpTextVectorizer.R'
     'PipeOpThreshold.R'
+    'PipeOpTomek.R'
     'PipeOpTrafo.R'
     'PipeOpTuneThreshold.R'
     'PipeOpUnbranch.R'
