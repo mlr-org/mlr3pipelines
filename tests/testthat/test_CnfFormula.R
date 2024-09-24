@@ -817,14 +817,14 @@ test_that("Constructed test cases", {
     evaluate_expression(original, assignments))
 
 
-  e1 <- (V4 %among% c("v4_3", "v4_1") | V2 %among% c("v2_1", "v2_3")) &
-    (V2 %among% c("v2_2", "v2_1") | V4 %among% "v4_3") & ((V3 %among%
-    c("v3_1", "v3_3") | V4 %among% c("v4_3", "v4_2")) & (V2 %among%
-    "v2_3" | V4 %among% "v4_2"))
+  e1 <- (D %among% c("d3", "d1") | B %among% c("b1", "b3")) &
+    (B %among% c("b1", "b2") | D %among% c("d3")) & ((C %among%
+    c("c1", "c3") | D %among% c("d3", "d2")) & (B %among%
+    "b3" | D %among% "d2"))
 
-  e2 <-    (V4 %among% c("v4_3", "v4_2") & V3 %among% c("v3_2", "v3_3") & (V2 %among% "v2_2" & V3 %among%
-    c("v3_1", "v3_3")) | V4 %among% "v4_1" & V4 %among% c("v4_2",
-    "v4_1") & (V3 %among% "v3_3" & V4 %among% "v4_1"))
+  e2 <-    (D %among% c("d3", "d2") & C %among% c("c2", "c3") & (B %among% "b2" & C %among%
+    c("c1", "c3")) | D %among% "d1" & D %among% c("d2",
+    "d1") & (C %among% "c3" & D %among% "d1"))
 
   expect_false(is.logical(e1))
   expect_false(is.logical(e2))
