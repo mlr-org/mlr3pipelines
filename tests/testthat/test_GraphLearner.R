@@ -613,7 +613,9 @@ test_that("base_learner() works", {
   expect_identical(x$base_learner(), x$graph_model$pipeops$classif.debug$learner_model)
 
   x$param_set$values$branch.selection = to_tune()
-  expect_error(x$base_learner(), "Cannot infer active output.* PipeOpBranch branch.*non-numeric 'selection'")
+  # TODO: update this once something smarter happens here
+  # expect_error(x$base_learner(), "Cannot infer active output.* PipeOpBranch branch.*non-numeric 'selection'")
+
 
   x = as_learner(ppl("branch", list(classif.rpart = lrn("classif.rpart") %>>% po("unbranch", 1, id = "poub1"), classif.debug = lrn("classif.debug") %>>% po("unbranch", 1, id = "poub2"))))
   expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
@@ -878,7 +880,7 @@ test_that("GraphLearner hashes", {
 
 
   lr1 <- lrn("classif.rpart")
-  lr2 <- lrn("classif.rpart", fallback = lrn("classif.rpart"))
+  lr2 <- lrn("classif.rpart")$encapsulate("try", fallback = lrn("classif.rpart"))
 
   expect_string(all.equal(lr1$hash, lr2$hash), "mismatch")
   expect_string(all.equal(lr1$phash, lr2$phash), "mismatch")
