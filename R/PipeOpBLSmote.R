@@ -116,7 +116,7 @@ PipeOpBLSmote = R6Class("PipeOpBLSmote",
           st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = task$truth(),
                             .args = self$param_set$get_values(tags = "blsmote"),
                             .opts = list(warnPartialMatchArgs = FALSE))$syn_data)  # BLSMOTE uses partial arg matching internally
-        }))  # using {} not elegant?
+        }))
       } else {
         st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = task$truth(),
                           .args = self$param_set$get_values(tags = "blsmote"),
