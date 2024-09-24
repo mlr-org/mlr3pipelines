@@ -326,6 +326,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
+\code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
