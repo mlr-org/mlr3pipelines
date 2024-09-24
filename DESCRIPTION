@@ -88,7 +88,8 @@ Suggests:
     vtreat,
     future,
     htmlwidgets,
-    ranger
+    ranger,
+    themis
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
@@ -162,6 +163,7 @@ Collate:
     'PipeOpScaleRange.R'
     'PipeOpSelect.R'
     'PipeOpSmote.R'
+    'PipeOpSmoteNC.R'
     'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
     'PipeOpTextVectorizer.R'
