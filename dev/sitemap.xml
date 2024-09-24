@@ -5,6 +5,11 @@
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/authors.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/index.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/news/index.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/CnfAtom.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/CnfClause.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/CnfFormula.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/CnfSymbol.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/CnfUniverse.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/Graph.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/Multiplicity.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/NO_OP.html</loc></url>
