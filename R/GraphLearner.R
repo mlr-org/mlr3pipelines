@@ -628,13 +628,13 @@ get_po_unbranch_active_input = function(graph) {
     if (pob_ps$class[["selection"]] == "ParamInt") {
       if (!test_int(selection)) {
         stopf("Cannot infer active output of PipeOpBranch %s with non-numeric 'selection'.", pipeop$id)
-        return(pipeop$output$name)
+        # return(pipeop$output$name)
       }
       return(pipeop$output$name[[pob_ps$values$selection]])
     } else {
       if (!test_string(selection)) {
         stopf("Cannot infer active output of PipeOpBranch %s with non-string 'selection'.", pipeop$id)
-        return(pipeop$output$name)
+        # return(pipeop$output$name)
       }
       return(pob_ps$values$selection)
     }
@@ -744,10 +744,21 @@ graph_base_learner = function(graph, resolve_branching = TRUE, lookup_field = "l
       next_pipeop = graph$edges[dst_id == current_pipeop, src_id]
       if (length(next_pipeop) > 1) {
         # more than one predecessor
+        if (inherits(last_pipeop, "PipeOpUnbranch") && resolve_branching) {
+          tryCatch({
+            next_pipeop = po_unbranch_active_input[[current_pipeop]]
+          }, error = function(e) {
+            if (e$message %like% "Cannot infer active output of PipeOpBranch") {
+              resolve_branching <<- FALSE  # give up; this happens when tuning.
+            } else {
+              stop(e)
+            }
+          })
+        }
         if (!inherits(last_pipeop, "PipeOpUnbranch") || !resolve_branching) {
           return(unique(unlist(lapply(next_pipeop, search_base_learner_pipeops), recursive = FALSE, use.names = FALSE)))
         }
-        next_pipeop = po_unbranch_active_input[[current_pipeop]]
+        # PipeOpUnbranch inference succeeded; continue with selected branch.
         if (next_pipeop == "") next_pipeop = character(0)
       }
       if (length(next_pipeop) == 0) return(list())
