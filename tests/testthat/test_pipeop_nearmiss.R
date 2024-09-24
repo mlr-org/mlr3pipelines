@@ -20,6 +20,13 @@ test_that("PipeOpNearmiss - train works as intended", {
 
   expect_equal(train_out, nearmiss_out)
 
+  # Compare to themis::nearmiss for task with uncommon row_ids
+  task$filter(51:150)
+  train_out = op$train(list(task))[[1]]$data()
+  nearmiss_out = setDT(invoke(themis::nearmiss, df = task$data(), var = task$target_names))
+
+  expect_equal(train_out, nearmiss_out)
+
   # Compare to themis::nearmiss for task with other features types (which should be ignored)
   task = mlr_tasks$get("german_credit")
   train_out = op$train(list(task))[[1]]$data()

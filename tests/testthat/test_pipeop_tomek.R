@@ -20,6 +20,13 @@ test_that("PipeOpTomek - train works as intended", {
 
   expect_equal(train_out, tomek_out)
 
+  # Compare to themis::tomek for task with uncommon row_ids
+  task$filter(51:150)
+  train_out = op$train(list(task))[[1]]$data()
+  tomek_out = setDT(invoke(themis::tomek, df = task$data(), var = task$target_names))
+
+  expect_equal(train_out, tomek_out)
+
   # Compare to themis::tomek for task with other features types (which should be ignored)
   task = mlr_tasks$get("german_credit")
   train_out = op$train(list(task))[[1]]$data()
