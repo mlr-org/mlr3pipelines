@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.6.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,8 +42,31 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.1" id="mlr3pipelines-061">mlr3pipelines 0.6.1<a class="anchor" aria-label="anchor" href="#mlr3pipelines-061"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.7.0" id="mlr3pipelines-070">mlr3pipelines 0.7.0<a class="anchor" aria-label="anchor" href="#mlr3pipelines-070"></a></h2><p class="text-muted">CRAN release: 2024-09-24</p>
 <ul><li>New PipeOp <code>PipeOpRowApply</code> / <code>po("rowapply")</code>
+</li>
+<li>Empty <code>PipeOp</code> IDs now explicitly forbidden.</li>
+<li>Bugfix: <code>Graph$tran()</code> / <code>Graph$predict()</code> with <code>single_input = FALSE</code> now correctly handles <code>PipeOp</code>s with multiple inputs.</li>
+<li>
+<code>GraphLearner$base_learner()</code> now works with <code>PipeOpBranch</code>, and is generally more robust.</li>
+<li>
+<code>GraphLearner</code> now supports <code>$importance</code>, <code>$selected_features()</code>, <code>$oob_error()</code>, and <code>$loglik()</code>. These are computed from the underlying <code>Learner</code>.</li>
+<li>
+<code>GraphLearner$impute_selected_features</code> option added: <code>$selected_features()</code> is reported even if the underlying base learner does not report it; in this case, the full feature set as seen by that learner is returned.</li>
+<li>
+<code>GraphLearner$predict_type</code> handling more robust now.</li>
+<li>
+<code>PipeOpThreshold</code> and <code>PipeOpTuneThreshold</code> now have the <code>$predict_type</code> <code>"prob"</code>. They can be set to <code>"response"</code>, in which case the probability predictions are discarded, potentially saving memory.</li>
+<li>Bugfix for handling multiplicities in PipeOps with vararg channels.</li>
+<li>Bugfix: <code>PipeOpImputeOOR</code> now retains the <code>.MISSING</code> level in factors during prediction that were imputed during training, but had no missing values during prediction.</li>
+<li>
+<code>as_data_table(po())</code> now works even when some <code>PipeOp</code>s can not be constructed. For these <code>PipeOp</code>s, <code>NA</code> is reported in most columns.</li>
+<li>Compatibility with upcoming <code>mlr3</code> release.</li>
+<li>New PipeOp: <code>PipeOpRowApply</code> / <code>po("rowapply")</code>
+</li>
+<li>New PipeOps for handling inbalanced data: <code>PipeOpADAS</code> / <code>po("adas")</code> and <code>PipeOpBLSmote</code> / <code>po("blsmote")</code>
+</li>
+<li>New PipeOp for handling inbalanced data: <code>PipeOpSmoteNC</code> / <code>po("smotenc")</code>
 </li>
 </ul></div>
     <div class="section level2">
@@ -360,7 +383,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
