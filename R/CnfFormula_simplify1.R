@@ -619,8 +619,9 @@ simplify_cnf = function(entries, universe) {
   }
 
   second_order_enabled = TRUE
-  second_order_enabled_matrix = not_subset_count != 1L  # allow cascading of indirect SSE, except for the combinations where we trigger it manually (otherwise we'd be running them twice)
-  # We only trigger oneend-clauses, because every oneend clauses looks for all available twoend-clauses by itself.
+  second_order_enabled_matrix = not_subset_count != 2L  # allow cascading of indirect SSE, except for the combinations where we trigger it manually (otherwise we'd be running them twice)
+  # We only trigger twoend-clauses, because every twoend clauses looks for all available oneend-clauses by itself.
+  # We can not do oneend-clauses-only, since twoend-clauses also look for other twoend-clauses that have common overlap.
   # we need to make sure we don't trigger for eliminated / unit clauses, so we set them to TRUE here.
   # This means all remaining entries of the second_order_enabled_matrix are exactly the ones for which we trigger on_updated_subset_relations() manually.
   meta_disabled = eliminated[available] | is_unit[available]

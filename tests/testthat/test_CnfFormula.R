@@ -816,4 +816,19 @@ test_that("Constructed test cases", {
   expect_equal(evaluate_expression(formula_to_expression(simplified), assignments),
     evaluate_expression(original, assignments))
 
+
+  e1 <- (V4 %among% c("v4_3", "v4_1") | V2 %among% c("v2_1", "v2_3")) &
+    (V2 %among% c("v2_2", "v2_1") | V4 %among% "v4_3") & ((V3 %among%
+    c("v3_1", "v3_3") | V4 %among% c("v4_3", "v4_2")) & (V2 %among%
+    "v2_3" | V4 %among% "v4_2"))
+
+  e2 <-    (V4 %among% c("v4_3", "v4_2") & V3 %among% c("v3_2", "v3_3") & (V2 %among% "v2_2" & V3 %among%
+    c("v3_1", "v3_3")) | V4 %among% "v4_1" & V4 %among% c("v4_2",
+    "v4_1") & (V3 %among% "v3_3" & V4 %among% "v4_1"))
+
+  expect_false(is.logical(e1))
+  expect_false(is.logical(e2))
+  expect_true(is.logical(e1 & e2))  # this contradiction should be recognized from 2nd order self subsumption  elimination
+  expect_false(e1 & e2)
+
 })

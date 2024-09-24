@@ -1426,3 +1426,21 @@ CnfSymbol(u, "B", c("T", "F"))
 CnfSymbol(u, "C", c("T", "F"))
 replicate(4, gc())
 profvis::profvis(replicate(3000, { !!(((u$A %among% "T" | u$B %among% "F") & (u$A %among% "F" | u$C %among% "T") & (u$B %among% "T" | u$C %among% "F"))) ; NULL }) -> ., simplify = FALSE)
+
+
+
+
+
+e1 <- (V4 %among% c("v4_3", "v4_1") | V2 %among% c("v2_1", "v2_3")) &
+    (V2 %among% c("v2_2", "v2_1") | V4 %among% "v4_3") & ((V3 %among%
+    c("v3_1", "v3_3") | V4 %among% c("v4_3", "v4_2")) & (V2 %among%
+    "v2_3" | V4 %among% "v4_2"))
+
+e2 <-    (V4 %among% c("v4_3", "v4_2"
+) & V3 %among% c("v3_2", "v3_3") & (V2 %among% "v2_2" & V3 %among%
+    c("v3_1", "v3_3")) | V4 %among% "v4_1" & V4 %among% c("v4_2",
+"v4_1") & (V3 %among% "v3_3" & V4 %among% "v4_1"))
+
+e1 & e2
+
+
