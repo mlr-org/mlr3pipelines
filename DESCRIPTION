@@ -34,7 +34,16 @@ Authors@R:
       person(given = "Susanne",
              family = "Dandl",
              role = "aut",
-             email = "dandl.susanne@googlemail.com"))
+             email = "dandl.susanne@googlemail.com"),
+      person(given = "Keno",
+             family = "Mersmann",
+             role = "ctb",
+             email = "keno.mersmann@gmail.com"),
+      person(given = "Maximilian",
+             family = "Mücke",
+             role = "ctb",
+             email = "muecke.maximilian@gmail.com",
+             comment = c(ORCID = "0009-0000-9432-9795")))
 Description: Dataflow programming toolkit that enriches 'mlr3' with a diverse
   set of pipelining operators ('PipeOps') that can be composed into graphs.
   Operations exist for data preprocessing, model fitting, and ensemble
@@ -99,6 +108,12 @@ Roxygen: list(markdown = TRUE, r6 = FALSE)
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 Collate:
+    'CnfAtom.R'
+    'CnfClause.R'
+    'CnfFormula.R'
+    'CnfFormula_simplify.R'
+    'CnfSymbol.R'
+    'CnfUniverse.R'
     'Graph.R'
     'GraphLearner.R'
     'mlr_pipeops.R'
