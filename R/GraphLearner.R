@@ -627,13 +627,13 @@ get_po_unbranch_active_input = function(graph) {
     # is not given or a TuneToken or something like that.
     if (pob_ps$class[["selection"]] == "ParamInt") {
       if (!test_int(selection)) {
-        # stopf("Cannot infer active output of PipeOpBranch %s with non-numeric 'selection'.", pipeop$id)
+        stopf("Cannot infer active output of PipeOpBranch %s with non-numeric 'selection'.", pipeop$id)
         return(pipeop$output$name)
       }
       return(pipeop$output$name[[pob_ps$values$selection]])
     } else {
       if (!test_string(selection)) {
-        # stopf("Cannot infer active output of PipeOpBranch %s with non-string 'selection'.", pipeop$id)
+        stopf("Cannot infer active output of PipeOpBranch %s with non-string 'selection'.", pipeop$id)
         return(pipeop$output$name)
       }
       return(pob_ps$values$selection)
@@ -697,15 +697,11 @@ get_po_unbranch_active_input = function(graph) {
     if (state_current && inherits(pipeop, "PipeOpBranch")) {
       # PipeOpBranch is only special when it is actually active
       active_output = get_po_branch_active_output(pipeop)
-      if (length(active_output) == 1) {
-        branch_state_info[src_id == pipeop_id, `:=`(state = src_channel == active_output,
-          reason = as.list(sprintf("PipeOpBranch '%s' %s output '%s'",
-            pipeop_id, ifelse(src_channel == active_output, "active", "inactive"),
-            src_channel))
-        )]
-      } else {
-
-      }
+      branch_state_info[src_id == pipeop_id, `:=`(state = src_channel == active_output,
+        reason = as.list(sprintf("PipeOpBranch '%s' %s output '%s'",
+          pipeop_id, ifelse(src_channel == active_output, "active", "inactive"),
+          src_channel))
+      )]
     } else {
       branch_state_info[src_id == pipeop_id, `:=`(state = state_current, reason = list(reason_current))]
     }
