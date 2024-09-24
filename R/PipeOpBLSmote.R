@@ -86,7 +86,7 @@ PipeOpBLSmote = R6Class("PipeOpBLSmote",
         dupSize = p_int(lower = 1, default = 0, special_vals = list(0), tags = c("train", "blsmote")),
         # Default of `method` is derived from the source code of smotefamily::BLSMOTE(), not documented there.
         method = p_fct(levels = c("type1", "type2"), default = "type1", tags = c("train", "blsmote")),
-        quiet = p_lgl(tags = "train")
+        quiet = p_lgl(tags = c("train", "required"))
       )
       ps$values = list(quiet = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE,
@@ -111,12 +111,12 @@ PipeOpBLSmote = R6Class("PipeOpBLSmote",
 
       # Calculate synthetic data
       dt = task$data(cols = cols)
-      if (self$param_set$values$quiet) {
-        base::invisible(utils::capture.output({
+      if (self$param_set$get_values()$quiet) {
+        utils::capture.output({
           st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = task$truth(),
                             .args = self$param_set$get_values(tags = "blsmote"),
                             .opts = list(warnPartialMatchArgs = FALSE))$syn_data)  # BLSMOTE uses partial arg matching internally
-        }))
+        })
       } else {
         st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = task$truth(),
                           .args = self$param_set$get_values(tags = "blsmote"),
