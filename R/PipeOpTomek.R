@@ -85,7 +85,8 @@ PipeOpTomek = R6Class("PipeOpTomek",
         stop("Tomek needs at least one numeric or integer feature to work.")
       }
       # Subset columns to only include integer/numeric features and the target
-      cols = c(task$feature_types[get("type") %in% c("integer", "numeric"), get("id")], task$target_names)
+      type = id = NULL
+      cols = c(task$feature_types[type %in% c("integer", "numeric"), id], task$target_names)
       # Down-sample data
       dt = setDT(invoke(themis::tomek, df = task$data(cols = cols), var = task$target_names))
 

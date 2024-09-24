@@ -95,7 +95,8 @@ PipeOpNearmiss = R6Class("PipeOpNearmiss",
         stop("Nearmiss needs at least one numeric or integer feature to work.")
       }
       # Subset columns to only include integer/numeric features and the target
-      cols = c(task$feature_types[get("type") %in% c("integer", "numeric"), get("id")], task$target_names)
+      type = id = NULL
+      cols = c(task$feature_types[type %in% c("integer", "numeric"), id], task$target_names)
       # Down-sample data
       dt = setDT(invoke(themis::nearmiss, df = task$data(cols = cols), var = task$target_names,
                         .args = self$param_set$get_values(tags = "nearmiss")))
