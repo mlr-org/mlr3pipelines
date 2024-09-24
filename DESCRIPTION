@@ -102,8 +102,6 @@ Collate:
     'CnfClause.R'
     'CnfFormula.R'
     'CnfFormula_simplify.R'
-    'CnfFormula_simplify1.R'
-    'CnfFormula_simplify2.R'
     'CnfSymbol.R'
     'CnfUniverse.R'
     'Graph.R'
