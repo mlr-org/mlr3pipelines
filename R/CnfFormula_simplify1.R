@@ -291,7 +291,8 @@ simplify_cnf = function(entries, universe) {
     rowsum = not_subset_count[meta_idx, meta_idx_other]
     if (rowsum > 1L + second_order_enabled) return(FALSE)  # nothing to do
     if (rowsum == 2L) {
-      # we only get here when second_order_enabled is TRUE
+      # we usually don't get here when we are second_order_only; however, it may be possible that a oneend clause
+      # gets turned into a twoend clause during 2nd order triggering before it gets triggered itself.
       hs2oo = handle_sse_2nd_order_twoend(meta_idx, meta_idx_other, NULL)
       if (identical(hs2oo, TRUE)) return(TRUE)
       clause_other = available[[meta_idx_other]]
@@ -618,7 +619,8 @@ simplify_cnf = function(entries, universe) {
   }
 
   second_order_enabled = TRUE
-  second_order_enabled_matrix = not_subset_count > 2L  # allow cascading of indirect SSE, except for the combinations where we trigger it manually (otherwise we'd be running them twice)
+  second_order_enabled_matrix = not_subset_count != 1L  # allow cascading of indirect SSE, except for the combinations where we trigger it manually (otherwise we'd be running them twice)
+  # We only trigger oneend-clauses, because every oneend clauses looks for all available twoend-clauses by itself.
   # we need to make sure we don't trigger for eliminated / unit clauses, so we set them to TRUE here.
   # This means all remaining entries of the second_order_enabled_matrix are exactly the ones for which we trigger on_updated_subset_relations() manually.
   meta_disabled = eliminated[available] | is_unit[available]

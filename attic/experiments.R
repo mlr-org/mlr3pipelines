@@ -1246,7 +1246,7 @@ c
 lapply(seq_along(eliminated), function(x) if (eliminated[[x]]) FALSE else structure(entries[[x]], class = "CnfClause"))
 
 
-
+prof
 entries[!eliminated] |> lapply(structure, class = "CnfClause")
 which(eliminated)
 
@@ -1419,3 +1419,10 @@ e1 | e2
  "v3_3", "v3_4", "v3_5") & V4 %among% c("v4_4", "v4_5", "v4_3", "v4_2") | V2 %among% c("v2_4", "v2_5", "v2_2", "v2_3") &
  V4 %among% c("v4_1", "v4_5", "v4_3"))))))
 
+
+u = CnfUniverse()
+CnfSymbol(u, "A", c("T", "F"))
+CnfSymbol(u, "B", c("T", "F"))
+CnfSymbol(u, "C", c("T", "F"))
+replicate(4, gc())
+profvis::profvis(replicate(3000, { !!(((u$A %among% "T" | u$B %among% "F") & (u$A %among% "F" | u$C %among% "T") & (u$B %among% "T" | u$C %among% "F"))) ; NULL }) -> ., simplify = FALSE)
