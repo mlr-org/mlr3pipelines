@@ -84,6 +84,7 @@
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_multiplicityexply.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_multiplicityimply.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_mutate.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_nearmiss.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_nmf.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_nop.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_ovrsplit.html</loc></url>
@@ -111,6 +112,7 @@
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_targettrafoscalerange.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_textvectorizer.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_threshold.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_tomek.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_tunethreshold.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_unbranch.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_updatetarget.html</loc></url>
