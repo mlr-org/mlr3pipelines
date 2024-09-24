@@ -52,5 +52,27 @@ bibentries = c(
     author    = "Yujun Wu and Dennis D Boos and Leonard A Stefanski",
     title     = "Controlling Variable Selection by the Addition of Pseudovariables",
     journal   = "Journal of the American Statistical Association"
+  ),
+
+  he_2008     = bibentry("InProceedings",
+    author    = "Haibo He and Yang Bai and Garcia, Edwardo A. and Shutao Li",
+    booktitle = "2008 IEEE International Joint Conference on Neural Networks (IEEE World Congress on Computational Intelligence)",
+    title     = "ADASYN: Adaptive synthetic sampling approach for imbalanced learning",
+    year      = "2008",
+    pages     = "1322-1328",
+    doi       = "10.1109/IJCNN.2008.4633969"
+  ),
+
+  han_2005    = bibentry("InProceedings",
+    doi       = "10.1007/11538059_91",
+    author    = "Han, Hui and Wang, Wen-Yuan and Mao, Bing-Huan",
+    editor    = "Huang, De-Shuang and Zhang, Xiao-Ping and Huang, Guang-Bin",
+    title     = "Borderline-SMOTE: A New Over-Sampling Method in Imbalanced Data Sets Learning",
+    booktitle = "Advances in Intelligent Computing",
+    year      = "2005",
+    publisher = "Springer Berlin Heidelberg",
+    address   = "Berlin, Heidelberg",
+    pages     = "878--887",
+    isbn      = "978-3-540-31902-3"
   )
 )

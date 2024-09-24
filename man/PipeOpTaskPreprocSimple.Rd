@@ -138,6 +138,8 @@ Other PipeOps:
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_adas}},
+\code{\link{mlr_pipeops_blsmote}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},

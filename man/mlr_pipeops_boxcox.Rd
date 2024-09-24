@@ -90,6 +90,8 @@ Other PipeOps:
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_adas}},
+\code{\link{mlr_pipeops_blsmote}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
 \code{\link{mlr_pipeops_classbalancing}},

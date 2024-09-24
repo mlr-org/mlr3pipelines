@@ -109,6 +109,8 @@ Collate:
     'LearnerAvg.R'
     'NO_OP.R'
     'PipeOpTaskPreproc.R'
+    'PipeOpADAS.R'
+    'PipeOpBLSmote.R'
     'PipeOpBoxCox.R'
     'PipeOpBranch.R'
     'PipeOpChunk.R'
