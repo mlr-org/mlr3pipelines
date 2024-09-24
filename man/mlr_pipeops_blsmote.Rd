@@ -54,6 +54,8 @@ Default is \code{0}. See \code{\link[smotefamily:BLSMOTE]{BLSMOTE()}}.
 \item \code{method} :: \code{character(1)} \cr
 The type of Borderline-SMOTE algorithm to use. Default is \code{"type1"}.
 See \code{\link[smotefamily:BLSMOTE]{BLSMOTE()}}.
+\item \code{quiet} :: \code{logical(1)} \cr
+Whether to suppress printing status during training. Initialized to \code{TRUE}.
 }
 }
 
@@ -137,6 +139,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nearmiss}},
 \code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
@@ -156,6 +159,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
+\code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
@@ -163,6 +167,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},

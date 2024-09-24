@@ -71,7 +71,7 @@ bibentries = c(
     number    = "11",
     pages     = "769--772",
     publisher = "IEEE"
-  )
+  ),
 
   he_2008     = bibentry("InProceedings",
     author    = "Haibo He and Yang Bai and Garcia, Edwardo A. and Shutao Li",
