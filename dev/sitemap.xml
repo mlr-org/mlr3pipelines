@@ -96,6 +96,7 @@
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_scalerange.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_select.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_smote.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_smotenc.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_spatialsign.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_subsample.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_targetinvert.html</loc></url>
