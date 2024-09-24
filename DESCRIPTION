@@ -97,7 +97,8 @@ Suggests:
     vtreat,
     future,
     htmlwidgets,
-    ranger
+    ranger,
+    themis
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
@@ -107,6 +108,12 @@ Roxygen: list(markdown = TRUE, r6 = FALSE)
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 Collate:
+    'CnfAtom.R'
+    'CnfClause.R'
+    'CnfFormula.R'
+    'CnfFormula_simplify.R'
+    'CnfSymbol.R'
+    'CnfUniverse.R'
     'Graph.R'
     'GraphLearner.R'
     'mlr_pipeops.R'
@@ -117,6 +124,8 @@ Collate:
     'LearnerAvg.R'
     'NO_OP.R'
     'PipeOpTaskPreproc.R'
+    'PipeOpADAS.R'
+    'PipeOpBLSmote.R'
     'PipeOpBoxCox.R'
     'PipeOpBranch.R'
     'PipeOpChunk.R'
@@ -169,6 +178,7 @@ Collate:
     'PipeOpScaleRange.R'
     'PipeOpSelect.R'
     'PipeOpSmote.R'
+    'PipeOpSmoteNC.R'
     'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
     'PipeOpTextVectorizer.R'
