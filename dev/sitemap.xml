@@ -42,6 +42,8 @@
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_learners_avg.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_learners_graph.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_adas.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_blsmote.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_boxcox.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_branch.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_chunk.html</loc></url>
