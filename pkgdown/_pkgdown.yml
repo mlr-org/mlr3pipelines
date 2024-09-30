@@ -28,7 +28,7 @@ navbar:
       text: Articles
       menu:
       - text: Adding new PipeOps
-      - href: articles/extending.html
+        href: articles/extending.html
     mattermost:
       icon: fa fa-comments
       href: https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/
