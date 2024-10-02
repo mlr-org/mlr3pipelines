@@ -113,37 +113,6 @@ multiplicity_flatten = function(.multip) {
   unlist(map(.multip, multiplicity_flatten), recursive = FALSE, use.names = FALSE)
 }
 
-# replace when new mlr3misc version is released https://github.com/mlr-org/mlr3misc/pull/80
-dictionary_sugar_inc_get = function(dict, .key, ...) {
-  newkey = gsub("_\\d+$", "", .key)
-  add_suffix = .key != newkey
-  if (add_suffix) {
-    assert_true(!methods::hasArg("id"))
-    suffix = regmatches(.key, regexpr("_\\d+$", .key))
-  }
-  obj = mlr3misc::dictionary_sugar_get(dict = dict, .key = newkey, ...)
-
-  if (add_suffix) {
-    obj$id = paste0(obj$id, suffix)
-  }
-  obj
-
-}
-
-# replace when new mlr3misc version is released https://github.com/mlr-org/mlr3misc/pull/80
-dictionary_sugar_inc_mget = function(dict, .keys, ...) {
-  objs = lapply(.keys, dictionary_sugar_inc_get, dict = dict, ...)
-  if (!is.null(names(.keys))) {
-    nn = names2(.keys)
-    ii = which(!is.na(nn))
-    for (i in ii) {
-      objs[[i]]$id = nn[i]
-    }
-  }
-  names(objs) = map_chr(objs, "id")
-  objs
-}
-
 pos_with_property = function(x, property) {
   x = if (test_class(x, "GraphLearner")) {
     x$graph$pipeops
