@@ -59,8 +59,7 @@
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("themis")) \{ }
+#' @examplesIf requireNamespace("themis")
 #' library("mlr3")
 #'
 #' # Create example task
@@ -77,7 +76,6 @@
 #' smotenc_result = pop$train(list(task))[[1]]$data()
 #' nrow(smotenc_result)
 #' table(smotenc_result$target)
-#' \dontshow{ \} }
 PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
   inherit = PipeOpTaskPreproc,
   public = list(

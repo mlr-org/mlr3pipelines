@@ -89,9 +89,7 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{ if (requireNamespace("bbotk")) \{ }
-\dontshow{ if (requireNamespace("rpart")) \{ }
-\dontshow{ if (requireNamespace("GenSA")) \{ }
+\dontshow{if (requireNamespace("bbotk") && requireNamespace("rpart") && requireNamespace("GenSA")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 
 task = tsk("iris")
@@ -102,9 +100,7 @@ task$data()
 pop$train(task)
 
 pop$state
-\dontshow{ \} }
-\dontshow{ \} }
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html

@@ -17,13 +17,11 @@
 #'   underlying function.
 #' @return [`Graph`] (for `ppl()`) or `list` of [`Graph`]s (for `ppls()`).
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
 #'
 #' gr = ppl("bagging", graph = po(lrn("regr.rpart")),
 #'   averager = po("regravg", collect_multiplicity = TRUE))
-#' \dontshow{ \} }
 ppl = function(.key, ...) {
   dictionary_sugar_get(dict = mlr_graphs, .key = .key, ...)
 }

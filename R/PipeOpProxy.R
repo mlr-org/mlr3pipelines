@@ -54,8 +54,7 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
 #' library("mlr3learners")
 #'
@@ -74,7 +73,6 @@
 #' g$param_set$values$learner.content = lrn("classif.rpart")
 #' rr_pca_rpart = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
 #' rr_pca_rpart$aggregate(msr("classif.ce"))
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOp.R

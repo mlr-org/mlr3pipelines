@@ -71,9 +71,7 @@
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("nloptr")) \{ }
-#' \dontshow{ if (requireNamespace("lme4")) \{ }
+#' @examplesIf requireNamespace("nloptr") && requireNamespace("lme4")
 #' library("mlr3")
 #' poe = po("encodelmer")
 #'
@@ -86,8 +84,6 @@
 #' poe$train(list(task))[[1]]$data()
 #'
 #' poe$state
-#' \dontshow{ \} }
-#' \dontshow{ \} }
 PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
   inherit = PipeOpTaskPreprocSimple,
   public = list(

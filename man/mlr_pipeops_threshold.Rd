@@ -67,14 +67,14 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{ if (requireNamespace("rpart")) \{ }
+\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 t = tsk("german_credit")
 gr = po(lrn("classif.rpart", predict_type = "prob")) \%>>\%
   po("threshold", param_vals = list(thresholds = 0.9))
 gr$train(t)
 gr$predict(t)
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html

@@ -93,7 +93,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{ if (requireNamespace("fastICA")) \{ }
+\dontshow{if (requireNamespace("fastICA")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 
 task = tsk("iris")
@@ -103,7 +103,7 @@ task$data()
 pop$train(list(task))[[1]]$data()
 
 pop$state
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html

@@ -23,7 +23,7 @@ perform "One vs. Rest" classification.
 All input arguments are cloned and have no references in common with the returned \code{\link{Graph}}.
 }
 \examples{
-\dontshow{ if (requireNamespace("rpart")) \{ }
+\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 
 task = tsk("wine")
@@ -51,5 +51,5 @@ g3 = po("replicate", reps = 3) \%>>\%
   po("classifavg", collect_multiplicity = TRUE)
 g3$train(task)
 g3$predict(task)
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
