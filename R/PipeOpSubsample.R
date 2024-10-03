@@ -56,7 +56,7 @@
 #' library("mlr3")
 #'
 #' # Subsample with stratification
-#' pop = po("subsample", frac = 0.7, stratify = TRUE)
+#' pop = po("subsample", frac = 0.7, stratify = TRUE, use_groups = FALSE)
 #' pop$train(list(tsk("iris")))
 #'
 #' # Subsample, respecting grouping
