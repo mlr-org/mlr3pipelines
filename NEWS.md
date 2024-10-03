@@ -6,7 +6,6 @@
 
 * New PipeOp `PipeOpRowApply` / `po("rowapply")`
 * Empty `PipeOp` IDs now explicitly forbidden.
-* Bugfix: `Graph$tran()` / `Graph$predict()` with `single_input = FALSE` now correctly handles `PipeOp`s with multiple inputs.
 * `GraphLearner$base_learner()` now works with `PipeOpBranch`, and is generally more robust.
 * `GraphLearner` now supports `$importance`, `$selected_features()`, `$oob_error()`, and `$loglik()`.
   These are computed from the underlying `Learner`.
@@ -15,6 +14,7 @@
 * `GraphLearner$predict_type` handling more robust now.
 * `PipeOpThreshold` and `PipeOpTuneThreshold` now have the `$predict_type` `"prob"`.
   They can be set to `"response"`, in which case the probability predictions are discarded, potentially saving memory.
+* Bugfix: `Graph$tran()` / `Graph$predict()` with `single_input = FALSE` now correctly handles `PipeOp`s with multiple inputs.
 * Bugfix for handling multiplicities in PipeOps with vararg channels.
 * Bugfix: `PipeOpImputeOOR` now retains the `.MISSING` level in factors during prediction that were imputed during training, but had no missing values during prediction.
 * `as_data_table(po())` now works even when some `PipeOp`s can not be constructed.
