@@ -384,14 +384,15 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
     },
     pipeops = function(rhs) {
-      if (!missing(rhs) && (!identical(rhs, private$.graph$pipeops || !identical(rhs, self$graph_model$pipeops)))) {
-        stop("pipeops is read-only")
-      }
-      if (is.null(self$model)) {
+      value = if (is.null(self$model)) {
         private$.graph$pipeops
       } else {
         self$graph_model$pipeops
       }
+      if (!missing(rhs) && (!identical(rhs, value))) {
+        stop("pipeops is read-only")
+      }
+      value
     },
     edges = function(rhs) {
       if (!missing(rhs) && !identical(rhs, private$.graph$edges)) {
