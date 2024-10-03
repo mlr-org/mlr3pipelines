@@ -88,7 +88,7 @@ Only methods inherited \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{if (requireNamespace("nloptr") && requireNamespace("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (mlr3misc::require_namespaces(c("nloptr", "lme4"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 poe = po("encodelmer")
 

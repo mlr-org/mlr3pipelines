@@ -139,7 +139,7 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
-#' @examplesIf requireNamespace("stopwords") && requireNamespace("quanteda")
+#' @examplesIf mlr3misc::require_namespaces(c("stopwords", "quanteda"), quietly = TRUE)
 #' library("mlr3")
 #' library("data.table")
 #' # create some text data

@@ -63,7 +63,7 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @examplesIf requireNamespace("bbotk") && requireNamespace("rpart") && requireNamespace("GenSA")
+#' @examplesIf mlr3misc::require_namespaces(c("bbotk", "rpart", "GenSA"), quietly = TRUE)
 #' library("mlr3")
 #'
 #' task = tsk("iris")

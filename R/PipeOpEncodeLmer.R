@@ -71,7 +71,7 @@
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
-#' @examplesIf requireNamespace("nloptr") && requireNamespace("lme4")
+#' @examplesIf mlr3misc::require_namespaces(c("nloptr", "lme4"), quietly = TRUE)
 #' library("mlr3")
 #' poe = po("encodelmer")
 #'

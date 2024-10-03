@@ -79,7 +79,7 @@
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
-#' @examplesIf requireNamespace("mlr3filters") && requireNamespace("rpart")
+#' @examplesIf mlr3misc::require_namespaces(c("mlr3filters", "rpart"), quietly = TRUE)
 #' library("mlr3")
 #' library("mlr3filters")
 #' \dontshow{data.table::setDTthreads(1)}

@@ -98,7 +98,7 @@ Methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpT
 }
 
 \examples{
-\dontshow{if (requireNamespace("mlr3filters") && requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (mlr3misc::require_namespaces(c("mlr3filters", "rpart"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 library("mlr3filters")
 \dontshow{data.table::setDTthreads(1)}

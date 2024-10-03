@@ -87,7 +87,7 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
-#' @examplesIf requireNamespace("NMF") && requireNamespace("MASS") && requireNamespace("NMF")
+#' @examplesIf mlr3misc::require_namespaces(c("NMF", "MASS"), quietly = TRUE)
 #' library("mlr3")
 #'
 #' task = tsk("iris")
