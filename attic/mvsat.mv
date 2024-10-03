@@ -224,3 +224,24 @@
 #   The result contains the unit C = "c1"; however, A = "a1", B = "b1", C = "c2" would have satisfied the original formula.
 #
 #
+
+
+# now that we have this, how do we use it?
+
+ - when checking the unbranch stuff, we can record what state the branch pipeops must be in at every point in the graph
+ - currently we have two kinds of checks:
+   - unbranch: exactly one input must be active
+     (A & !B & !C & !D) | (!A & B & !C & !D) | ...
+     - this sucks...
+     - conversely: contradiction, if
+       (!A | B | C | D) & (A | !B | C | D) & ...
+   - other pipeops: all inputs must be in the same state
+     (A & B & C & D) | (!A & !B & !C & !D)
+     - conversely: contradiction, if
+       (A | B | C | D) & (!A | !B | !C | !D)
+ - --> we get some global statements
+ - also generally combination
+   - normal pipeops: output = (A & B & C & D)
+   - branch ops: output = (A | B | C | D)
+ - remember: & are cheap, | are expensive
+ -

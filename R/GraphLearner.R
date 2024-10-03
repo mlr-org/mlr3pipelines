@@ -615,30 +615,55 @@ infer_task_type = function(graph) {
 # Typically, there is only one incoming PipeOp ID; only if a `selection` is not set, or a `TuneToken`,
 # do we concede that we do not know the exact input; in this case the list entry contains a vector
 # of all possible incoming PipeOp IDs.
-get_po_unbranch_active_input = function(graph) {
+# - inference_level:
+#   0: do not use CnfFormula
+#   1: use CnfFormula to infer active input -- required for dependency inference
+#   2: use CnfFormula to check contradictions in graph
+#   3: use graph contradiction constraints to simplify active input
+# - use_ps_values: whether to use the hyperparameter values of the PipeOpBranch pipeops.
+#   if FALSE, consider all possible outputs; e.g. for dependency inference.
+get_po_unbranch_active_input = function(graph, inference_level, use_ps_values = TRUE) {
+  # we give the user to cap the inference level, in case things get too slow
+  max_inference_level = assert_number(
+    getOption("mlr3pipelines.max_inference_level", 3), lower = 0, .var.name = "mlr3pipelines.max_inference_level option")
+  if (is.infinite(max_inference_level)) assert_int(max_inference_level, lower = 0, .var.name = "mlr3pipelines.max_inference_level option")
+
+  inference_level = min(max_inference_level, inference_level)
+
   # query a given PipeOpBranch what its selected output is
   # Currently, PipeOpBranch 'selection' can be either integer-valued or a string.
   # If it is something else (unset, or a TuneToken), we cannot infer the active output.
   get_po_branch_active_output = function(pipeop) {
     assertR6(pipeop, "PipeOpBranch")
+    if (!use_ps_values) return(pipeop$output$name)
     pob_ps = pipeop$param_set
     selection = pob_ps$values$selection
     # will have to check if selection is numeric / character, in case it
     # is not given or a TuneToken or something like that.
     if (pob_ps$class[["selection"]] == "ParamInt") {
       if (!test_int(selection)) {
-        stopf("Cannot infer active output of PipeOpBranch %s with non-numeric 'selection'.", pipeop$id)
-        # return(pipeop$output$name)
+        # stopf("Cannot infer active output of PipeOpBranch %s with non-numeric 'selection'.", pipeop$id)
+        return(pipeop$output$name)
       }
       return(pipeop$output$name[[pob_ps$values$selection]])
     } else {
       if (!test_string(selection)) {
-        stopf("Cannot infer active output of PipeOpBranch %s with non-string 'selection'.", pipeop$id)
-        # return(pipeop$output$name)
+        # stopf("Cannot infer active output of PipeOpBranch %s with non-string 'selection'.", pipeop$id)
+        return(pipeop$output$name)
       }
       return(pob_ps$values$selection)
     }
   }
+
+  branch_ops_universe = CnfUniverse()
+
+  # TODO: use CnfFormula in 'state' column
+  # TODO: do we want two 'state's? one for TRUE, one for FALSE, to get CNF & DNF? Or is this just as expensive as doing !()?
+  # TODO: inference_level
+  # TODO: contradiction checks need to 'buffer'
+  # TODO: canonicize & avoid double contradiction checks
+
+
   # pacify static checks
   src_id = NULL
   dst_id = NULL
@@ -670,7 +695,7 @@ get_po_unbranch_active_input = function(graph) {
     if (inherits(pipeop, "PipeOpUnbranch") && sum(inedges$state) > 1) {
       stopf("PipeOpUnbranch %s has multiple active inputs: %s.",
         pipeop_id,
-        inedges[state == TRUE, andpaste(sprintf("input '%s' from %s", dst_channel, unlist(reason, recursive = FALSE, use.names = TRUE)))]
+        inedges[state == TRUE, andpaste(sprintf("input '%s' from %s", dst_channel, unlist(reason, recursive = FALSE, use.names = FALSE)))]
       )
     }
 
@@ -678,8 +703,8 @@ get_po_unbranch_active_input = function(graph) {
     if (all(inedges$state) != any(inedges$state)) {
       if (!inherits(pipeop, "PipeOpUnbranch")) {
         stopf("Inconsistent selection of PipeOpBranch outputs:\n%s in conflict with %s at PipeOp %s.",
-          inedges[state == FALSE, andpaste(unique(unlist(reason, recursive = FALSE, use.names = TRUE)))],
-          inedges[state == TRUE, andpaste(unique(unlist(reason, recursive = FALSE, use.names = TRUE)))],
+          inedges[state == FALSE, andpaste(unique(unlist(reason, recursive = FALSE, use.names = FALSE)))],
+          inedges[state == TRUE, andpaste(unique(unlist(reason, recursive = FALSE, use.names = FALSE)))],
           pipeop_id
         )
       }
@@ -697,11 +722,21 @@ get_po_unbranch_active_input = function(graph) {
     if (state_current && inherits(pipeop, "PipeOpBranch")) {
       # PipeOpBranch is only special when it is actually active
       active_output = get_po_branch_active_output(pipeop)
-      branch_state_info[src_id == pipeop_id, `:=`(state = src_channel == active_output,
-        reason = as.list(sprintf("PipeOpBranch '%s' %s output '%s'",
-          pipeop_id, ifelse(src_channel == active_output, "active", "inactive"),
-          src_channel))
-      )]
+      if (length(active_output) == 1) {
+        branch_state_info[src_id == pipeop_id, `:=`(state = as.CnfFormula(src_channel == active_output),
+          reason = as.list(sprintf("PipeOpBranch '%s' %s output '%s'",
+            pipeop_id, ifelse(src_channel == active_output, "active", "inactive"),
+            src_channel))
+        )]
+      } else {
+        symbol = CnfSymbol(branch_ops_universe, pipeop_id, active_output)
+        branch_state_info[src_id == pipeop_id, `:=`(
+            state = if (src_channel %in% active_output) symbol %among% src_channel else as.CnfFormula(FALSE),
+          reason = as.list(sprintf("PipeOpBranch '%s' %s output '%s'",
+            pipeop_id, ifelse(src_channel %in% active_output, "potentially active", "inactive"),
+            src_channel))
+        )]
+      }
     } else {
       branch_state_info[src_id == pipeop_id, `:=`(state = state_current, reason = list(reason_current))]
     }
