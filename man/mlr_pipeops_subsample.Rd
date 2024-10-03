@@ -89,7 +89,6 @@ df = data.frame(
 )
 task = TaskRegr$new(id = "example", backend = df, target = "target")
 task$set_col_roles("grp", "group")
-task$set_col_roles(c("feat1", "feat2"), "feature")
 
 pop = po("subsample", frac = 0.7, use_groups = TRUE)
 pop$train(list(task))
