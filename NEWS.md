@@ -1,6 +1,7 @@
 # mlr3pipelines 0.7.0-9000
 
 * New down-sampling PipeOps for inbalanced data: `PipeOpTomek` / `po("tomek")` and `PipeOpNearmiss` / `po("nearmiss")`
+* New parameter `use_groups` (default `TRUE`) for `PipeOpSubsampling` to respect grouping (changed default behaviour for grouped data)
 
 # mlr3pipelines 0.7.0
 
