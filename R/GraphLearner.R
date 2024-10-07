@@ -48,24 +48,26 @@
 #' * `graph_model` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Graph`] that is being wrapped. This [`Graph`] contains a trained state after `$train()`. Read-only.
 #' * `pipeops` :: named `list` of [`PipeOp`] \cr
-#'   Contains all [`PipeOp`]s in the underlying [`Graph`], named by the [`PipeOp`]'s `$id`s. Read-only.
+#'   Contains all [`PipeOp`]s in the underlying [`Graph`], named by the [`PipeOp`]'s `$id`s.
 #' * `edges` :: [`data.table`][data.table::data.table]  with columns `src_id` (`character`), `src_channel` (`character`), `dst_id` (`character`), `dst_channel` (`character`)\cr
 #'   Table of connections between the [`PipeOp`]s in the underlying [`Graph`]. A [`data.table`][data.table::data.table]. `src_id` and `dst_id` are `$id`s of [`PipeOp`]s that must be present in
 #'   the `$pipeops` list. `src_channel` and `dst_channel` must respectively be `$output` and `$input` channel names of the
 #'   respective [`PipeOp`]s.
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
-#'
-#' * pipeops_param_set
-#' * pipeops_param_set_values
+#'   Shortcut for `$graph$param_set`.
+#' * `pipeops_param_set` :: named `list()`\cr
+#'   Named list containing the [`ParamSet`][paradox::ParamSet]s of all [`PipeOp`]s in the [`Graph`].
+#' * `pipeops_param_set_values` :: named `list()`\cr
+#'   Named list containing the set parameter values of all [`PipeOp`]s in the [`Graph`].
 #' * `internal_tuned_values` :: named `list()` or `NULL`\cr
-#'   The internal tuned parameter values collected from all `PipeOp`s.
+#'   The internal tuned parameter values collected from all [`PipeOp`]s.
 #'   `NULL` is returned if the learner is not trained or none of the wrapped learners supports internal tuning.
 #' * `internal_valid_scores` :: named `list()` or `NULL`\cr
-#'   The internal validation scores as retrieved from the `PipeOps`.
-#'   The names are prefixed with the respective IDs of the `PipeOp`s.
+#'   The internal validation scores as retrieved from the [`PipeOp`]s.
+#'   The names are prefixed with the respective IDs of the [`PipeOp`]s.
 #'   `NULL` is returned if the learner is not trained or none of the wrapped learners supports internal validation.
 #' * `validate` :: `numeric(1)`, `"predefined"`, `"test"` or `NULL`\cr
-#'   How to construct the validation data. This also has to be configured for the individual `PipeOp`s such as
+#'   How to construct the validation data. This also has to be configured for the individual [`PipeOp`]s such as
 #'   `PipeOpLearner`, see [`set_validate.GraphLearner`].
 #'   For more details on the possible values, see [`mlr3::Learner`].
 #' * `marshaled` :: `logical(1)`\cr
@@ -384,11 +386,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
     },
     pipeops = function(rhs) {
-      value = if (is.null(self$model)) {
-        private$.graph$pipeops
-      } else {
-        self$graph_model$pipeops
-      }
+      value = if (is.null(self$model)) private$.graph$pipeops else self$graph_model$pipeops
       if (!missing(rhs) && (!identical(rhs, value))) {
         stop("pipeops is read-only")
       }
@@ -413,6 +411,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       value
     },
+    # FIXME: assignment doesn't work
     pipeops_param_set_values = function(rhs) {
       value = map(glrn$pipeops, function(x) x$param_set$values)
       if (!missing(rhs) && !identical(value, rhs)) {
