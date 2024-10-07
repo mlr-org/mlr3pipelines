@@ -386,11 +386,10 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
     },
     pipeops = function(rhs) {
-      value = if (is.null(self$model)) private$.graph$pipeops else self$graph_model$pipeops
-      if (!missing(rhs) && (!identical(rhs, value))) {
+      if (!missing(rhs) && (!identical(rhs, self$graph_model$pipeops))) {
         stop("pipeops is read-only")
       }
-      value
+      self$graph_model$pipeops
     },
     edges = function(rhs) {
       if (!missing(rhs) && !identical(rhs, private$.graph$edges)) {
@@ -411,9 +410,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       value
     },
-    # FIXME: assignment doesn't work
     pipeops_param_set_values = function(rhs) {
-      value = map(glrn$pipeops, function(x) x$param_set$values)
+      value = map(self$graph$pipeops, function(x) x$param_set$values)
       if (!missing(rhs) && !identical(value, rhs)) {
         stop("pipeops_param_set_values is read-only")
       }
