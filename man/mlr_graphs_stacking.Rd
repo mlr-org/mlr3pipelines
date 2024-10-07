@@ -43,8 +43,7 @@ features in order to predict the outcome.
 All input arguments are cloned and have no references in common with the returned \code{\link{Graph}}.
 }
 \examples{
-\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-if (requireNamespace("kknn")) {
+\dontshow{if (mlr3misc::require_namespaces(c("rpart", "kknn"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(mlr3)
 library(mlr3learners)
 
@@ -57,6 +56,5 @@ super_learner = lrn("classif.log_reg")
 graph_stack = pipeline_stacking(base_learners, super_learner)
 graph_learner = as_learner(graph_stack)
 graph_learner$train(tsk("german_credit"))
-}
 \dontshow{\}) # examplesIf}
 }

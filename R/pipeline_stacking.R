@@ -25,8 +25,7 @@
 #' @return [`Graph`]
 #'
 #' @export
-#' @examplesIf requireNamespace("rpart")
-#' if (requireNamespace("kknn")) {
+#' @examplesIf mlr3misc::require_namespaces(c("rpart", "kknn"), quietly = TRUE)
 #' library(mlr3)
 #' library(mlr3learners)
 #'
@@ -39,7 +38,6 @@
 #' graph_stack = pipeline_stacking(base_learners, super_learner)
 #' graph_learner = as_learner(graph_stack)
 #' graph_learner$train(tsk("german_credit"))
-#' }
 pipeline_stacking = function(base_learners, super_learner, method = "cv", folds = 3, use_features = TRUE) {
   assert_learners(base_learners)
   assert_learner(super_learner)
