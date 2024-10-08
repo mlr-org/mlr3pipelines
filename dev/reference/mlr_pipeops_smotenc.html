@@ -222,7 +222,38 @@ Ratio of the majority to minority class. Default is <code>1</code>. For details,
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Create example task</span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c1"</span>, <span class="st">"c2"</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">200</span>, replace <span class="op">=</span> <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.9</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  feature <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"example"</span>, backend <span class="op">=</span> <span class="va">data</span>, target <span class="op">=</span> <span class="st">"target"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">head</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    target    feature</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt;      &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     c2 -1.0084861</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     c2 -0.2084793</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     c2 -0.2704835</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     c2 -0.7940955</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     c1 -0.9476550</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     c2 -1.5796010</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="st">"target"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> target</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  c1  c2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  28 172 </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Generate synthetic data for minority class</span></span></span>
+<span class="r-in"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"smotenc"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">smotenc_result</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">smotenc_result</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 344</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">smotenc_result</span><span class="op">$</span><span class="va">target</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  c1  c2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 172 172 </span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

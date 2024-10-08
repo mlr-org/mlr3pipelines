@@ -196,7 +196,27 @@ no other benefits.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">t</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"german_credit"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span>, predict_type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"threshold"</span>, param_vals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>thresholds <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">gr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">t</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $threshold.output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">gr</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">t</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $threshold.output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionClassif&gt; for 1000 observations:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  row_ids truth response prob.good  prob.bad</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        1  good      bad 0.8767123 0.1232877</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        2   bad      bad 0.1388889 0.8611111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        3  good      bad 0.8687090 0.1312910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ---   ---      ---       ---       ---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      998  good      bad 0.8687090 0.1312910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      999   bad      bad 0.3795620 0.6204380</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     1000  good      bad 0.7391304 0.2608696</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

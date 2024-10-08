@@ -196,7 +196,133 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com" class="external-link">mlr3</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"boston_housing"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">po</span> <span class="op">=</span> <span class="va">PipeOpTargetTrafoScaleRange</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $fun</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskRegr:boston_housing&gt; (506 x 18): Boston Housing Prices</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Target: cmedv.scaled</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: -</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Features (17):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (12): age, b, crim, dis, indus, lat, lon, lstat, nox, ptratio,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     rm, zn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - int (3): rad, tax, tract</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - fct (2): chas, town</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $fun</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> function (inputs) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     assert_list(inputs, len = 1L, types = "Prediction")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     list(private$.invert(inputs[[1L]], predict_phase_state))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55a2110a2040&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55a2109b43a0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskRegr:boston_housing&gt; (506 x 18): Boston Housing Prices</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Target: cmedv.scaled</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: -</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Features (17):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (12): age, b, crim, dis, indus, lat, lon, lstat, nox, ptratio,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     rm, zn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - int (3): rad, tax, tract</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - fct (2): chas, town</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#syntactic sugar for a graph using ppl():</span></span></span>
+<span class="r-in"><span><span class="va">ttscalerange</span> <span class="op">=</span> <span class="fu"><a href="ppl.html">ppl</a></span><span class="op">(</span><span class="st">"targettrafo"</span>, trafo_pipeop <span class="op">=</span> <span class="va">PipeOpTargetTrafoScaleRange</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  graph <span class="op">=</span> <span class="va"><a href="mlr_pipeops_learner.html">PipeOpLearner</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com/reference/mlr_learners_regr.rpart.html" class="external-link">LearnerRegrRpart</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ttscalerange</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $targetinvert.output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">ttscalerange</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $targetinvert.output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionRegr&gt; for 506 observations:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  row_ids truth response</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        1  24.0 24.53538</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        2  21.6 26.91481</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        3  34.7 32.96875</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ---   ---      ---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      504  23.9 24.53538</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      505  22.0 24.53538</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      506  19.0 20.96400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">ttscalerange</span><span class="op">$</span><span class="va">state</span><span class="op">$</span><span class="va">regr.rpart</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> n= 506 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> node), split, n, deviance, yval</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       * denotes terminal node</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1) root 506 21.0260400 0.3895301  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2) town=Arlington,Ashland,Beverly,Boston Allston-Brighton,Boston Charlestown,Boston Dorchester,Boston Downtown,Boston East Boston,Boston Forest Hills,Boston Hyde Park,Boston Mattapan,Boston North End,Boston Roxbury,Boston Savin Hill,Boston South Boston,Boston West Roxbury,Braintree,Burlington,Cambridge,Chelsea,Danvers,Dedham,Everett,Framingham,Hamilton,Hanover,Holbrook,Hull,Lynn,Malden,Marshfield,Medford,Melrose,Middleton,Millis,Nahant,Natick,Norfolk,North Reading,Norwell,Norwood,Peabody,Pembroke,Quincy,Randolph,Reading,Revere,Rockland,Salem,Sargus,Scituate,Sharon,Somerville,Stoneham,Wakefield,Walpole,Waltham,Watertown,Weymouth,Wilmington,Winthrop,Woburn 400  7.5706490 0.3174944  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      4) lstat&gt;=14.4 176  1.6065670 0.2189646  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        8) town=Boston Charlestown,Boston East Boston,Boston Forest Hills,Boston North End,Boston Roxbury,Boston Savin Hill,Boston South Boston,Chelsea,Lynn 93  0.4849460 0.1569654 *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        9) town=Arlington,Beverly,Boston Allston-Brighton,Boston Dorchester,Boston Downtown,Boston Hyde Park,Boston Mattapan,Cambridge,Everett,Framingham,Malden,Medford,Middleton,Norwood,Peabody,Quincy,Revere,Salem,Somerville,Waltham,Watertown 83  0.3635828 0.2884337 *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      5) lstat&lt; 14.4 224  2.9129590 0.3949107  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       10) lstat&gt;=4.63 215  0.9995600 0.3787494  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         20) lstat&gt;=7.765 150  0.5226398 0.3547556 *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         21) lstat&lt; 7.765 65  0.1912833 0.4341197 *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       11) lstat&lt; 4.63 9  0.5157443 0.7809877 *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3) town=Bedford,Belmont,Boston Back Bay,Boston Beacon Hill,Brookline,Canton,Cohasset,Concord,Dover,Duxbury,Hingham,Lexington,Lincoln,Lynnfield,Manchester,Marblehead,Medfield,Milton,Needham,Newton,Sherborn,Sudbury,Swampscott,Topsfield,Wayland,Wellesley,Wenham,Weston,Westwood,Winchester 106  3.5470870 0.6613627  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      6) rm&lt; 7.437 82  1.5639410 0.5961518  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       12) crim&lt; 4.12641 75  0.6617538 0.5730963  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         24) rm&lt; 6.727 27  0.1925600 0.4869959 *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         25) rm&gt;=6.727 48  0.1564460 0.6215278 *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       13) crim&gt;=4.12641 7  0.4351788 0.8431746 *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      7) rm&gt;=7.437 24  0.4430451 0.8841667 *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $log</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 3 cols): stage,class,msg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $train_time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.007</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $param_vals</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $param_vals$xval</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $task_hash</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "47ff66d9074b461c"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $feature_names</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "age"     "b"       "chas"    "crim"    "dis"     "indus"   "lat"    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] "lon"     "lstat"   "nox"     "ptratio" "rad"     "rm"      "tax"    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] "town"    "tract"   "zn"     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $validate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mlr3_version</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ‘0.21.0’</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $data_prototype</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 18 cols): cmedv.scaled,age,b,chas,crim,dis...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $task_prototype</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 18 cols): cmedv.scaled,age,b,chas,crim,dis...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $train_task</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskRegr:boston_housing&gt; (506 x 18): Boston Housing Prices</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Target: cmedv.scaled</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: -</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Features (17):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (12): age, b, crim, dis, indus, lat, lon, lstat, nox, ptratio,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     rm, zn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - int (3): rad, tax, tract</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - fct (2): chas, town</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "learner_state" "list"         </span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

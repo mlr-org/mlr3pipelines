@@ -199,7 +199,99 @@ Upper value for estimation of lambda parameter. For details see <code><a href="h
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"boxcox"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa          1.4         0.2          5.1         3.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa          1.4         0.2          4.9         3.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa          1.3         0.2          4.7         3.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa          1.5         0.2          4.6         3.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa          1.4         0.2          5.0         3.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica          5.2         2.3          6.7         3.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica          5.0         1.9          6.3         2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica          5.2         2.0          6.5         3.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica          5.4         2.3          6.2         3.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica          5.1         1.8          5.9         3.0</span>
+<span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa   -1.3431567  -1.3850773   -0.8917547  1.01831791</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa   -1.3431567  -1.3850773   -1.1812229 -0.08167295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa   -1.4033413  -1.3850773   -1.4845435  0.37307046</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa   -1.2832670  -1.3850773   -1.6417967  0.14833599</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa   -1.3431567  -1.3850773   -1.0348319  1.22454068</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica    0.8174171   1.2930924    1.0385560 -0.08167295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica    0.7075555   0.9020852    0.6097200 -1.32264877</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica    0.8174171   1.0023867    0.8279148 -0.08167295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica    0.9269887   1.2930924    0.4976284  0.80781419</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica    0.7625234   0.7998822    0.1485189 -0.08167295</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">state</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $bc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $bc$Petal.Length</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Standardized Box Cox Transformation with 150 nonmissing obs.:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Estimated statistics:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - lambda = 0.931286 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - mean (before standardization) = 2.58137 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - sd (before standardization) = 1.627669 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $bc$Petal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Standardized Box Cox Transformation with 150 nonmissing obs.:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Estimated statistics:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - lambda = 0.6433629 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - mean (before standardization) = 0.08586719 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - sd (before standardization) = 0.7857394 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $bc$Sepal.Length</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Standardized Box Cox Transformation with 150 nonmissing obs.:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Estimated statistics:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - lambda = -0.144751 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - mean (before standardization) = 1.549011 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - sd (before standardization) = 0.1094848 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $bc$Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Standardized Box Cox Transformation with 150 nonmissing obs.:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Estimated statistics:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - lambda = 0.2810121 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - mean (before standardization) = 1.30301 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - sd (before standardization) = 0.1950175 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $dt_columns</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $affected_cols</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $intasklayout</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              id    type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;char&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: Petal.Length numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  Petal.Width numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: Sepal.Length numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  Sepal.Width numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $outtasklayout</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              id    type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;char&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: Petal.Length numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  Petal.Width numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: Sepal.Length numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  Sepal.Width numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $outtaskshell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

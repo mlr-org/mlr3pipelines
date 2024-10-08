@@ -179,7 +179,102 @@ Returns a <code>data.table</code> with columns <code>key</code> (<code>character
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">mlr_pipeops</span><span class="op">$</span><span class="fu">get</span><span class="op">(</span><span class="st">"learner"</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PipeOp: &lt;classif.rpart&gt; (not trained)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> values: &lt;xval=0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Input channels &lt;name [train type, predict type]&gt;:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   input [TaskClassif,TaskClassif]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Output channels &lt;name [train type, predict type]&gt;:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   output [NULL,PredictionClassif]</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># equivalent:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"learner"</span>, learner <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PipeOp: &lt;classif.rpart&gt; (not trained)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> values: &lt;xval=0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Input channels &lt;name [train type, predict type]&gt;:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   input [TaskClassif,TaskClassif]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Output channels &lt;name [train type, predict type]&gt;:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   output [NULL,PredictionClassif]</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># all PipeOps currently in the dictionary:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">mlr_pipeops</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"key"</span>, <span class="st">"input.num"</span>, <span class="st">"output.num"</span>, <span class="st">"packages"</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;key&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       key input.num output.num                         packages</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    &lt;char&gt;     &lt;int&gt;      &lt;int&gt;                           &lt;list&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:                  adas         1          1        mlr3pipelines,smotefamily</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:               blsmote         1          1        mlr3pipelines,smotefamily</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:                boxcox         1          1      mlr3pipelines,bestNormalize</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:                branch         1         NA                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:                 chunk         1         NA                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:        classbalancing         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:            classifavg        NA          1              mlr3pipelines,stats</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:          classweights         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:              colapply         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:       collapsefactors         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:              colroles         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:                  copy         1         NA                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:          datefeatures         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:                encode         1          1              mlr3pipelines,stats</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15:          encodeimpact         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16:            encodelmer         1          1        mlr3pipelines,lme4,nloptr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17:          featureunion        NA          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18:                filter         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19:            fixfactors         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20:               histbin         1          1           mlr3pipelines,graphics</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21:                   ica         1          1            mlr3pipelines,fastICA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22:        imputeconstant         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23:            imputehist         1          1           mlr3pipelines,graphics</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24:         imputelearner         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25:            imputemean         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26:          imputemedian         1          1              mlr3pipelines,stats</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27:            imputemode         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28:             imputeoor         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29:          imputesample         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30:             kernelpca         1          1            mlr3pipelines,kernlab</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31:               learner         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32:            learner_cv         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33:               missind         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34:           modelmatrix         1          1              mlr3pipelines,stats</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35:     multiplicityexply         1         NA                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36:     multiplicityimply        NA          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37:                mutate         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38:              nearmiss         1          1             mlr3pipelines,themis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39:                   nmf         1          1           mlr3pipelines,MASS,NMF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40:                   nop         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41:              ovrsplit         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42:              ovrunite         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43:                   pca         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44:                 proxy        NA          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45:           quantilebin         1          1              mlr3pipelines,stats</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46:      randomprojection         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47:        randomresponse         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48:               regravg        NA          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49:       removeconstants         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50:         renamecolumns         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51:             replicate         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52:              rowapply         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53:                 scale         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54:           scalemaxabs         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55:            scalerange         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56:                select         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57:                 smote         1          1        mlr3pipelines,smotefamily</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58:               smotenc         1          1             mlr3pipelines,themis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59:           spatialsign         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60:             subsample         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61:          targetinvert         2          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62:          targetmutate         1          2                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63: targettrafoscalerange         1          2                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64:        textvectorizer         1          1 mlr3pipelines,quanteda,stopwords</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65:             threshold         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66:                 tomek         1          1             mlr3pipelines,themis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67:         tunethreshold         1          1              mlr3pipelines,bbotk</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68:              unbranch        NA          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69:                vtreat         1          1             mlr3pipelines,vtreat</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70:            yeojohnson         1          1      mlr3pipelines,bestNormalize</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       key input.num output.num                         packages</span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

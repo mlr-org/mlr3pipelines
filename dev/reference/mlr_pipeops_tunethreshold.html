@@ -225,7 +225,116 @@ no other benefits.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"learner_cv"</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span>, predict_type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"tunethreshold"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa          1.4         0.2          5.1         3.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa          1.4         0.2          4.9         3.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa          1.3         0.2          4.7         3.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa          1.5         0.2          4.6         3.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa          1.4         0.2          5.0         3.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica          5.2         2.3          6.7         3.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica          5.0         1.9          6.3         2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica          5.2         2.0          6.5         3.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica          5.4         2.3          6.2         3.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica          5.1         1.8          5.9         3.0</span>
+<span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> OptimInstanceSingleCrit is deprecated. Use OptimInstanceBatchSingleCrit instead.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $tunethreshold.output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">state</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> n= 150 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> node), split, n, loss, yval, (yprob)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       * denotes terminal node</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1) root 150 100 setosa (0.33333333 0.33333333 0.33333333)  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2) Petal.Length&lt; 2.45 50   0 setosa (1.00000000 0.00000000 0.00000000) *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3) Petal.Length&gt;=2.45 100  50 versicolor (0.00000000 0.50000000 0.50000000)  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     6) Petal.Width&lt; 1.75 54   5 versicolor (0.00000000 0.90740741 0.09259259) *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     7) Petal.Width&gt;=1.75 46   1 virginica (0.00000000 0.02173913 0.97826087) *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $log</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 3 cols): stage,class,msg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $train_time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.002</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $param_vals</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $param_vals$xval</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $task_hash</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "34a6beb27c3181c3"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $feature_names</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $validate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mlr3_version</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ‘0.21.0’</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $data_prototype</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $task_prototype</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $train_task</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskClassif:iris&gt; (150 x 5): Iris Flowers</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Target: Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: multiclass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Features (4):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $affected_cols</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $intasklayout</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              id    type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;char&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: Petal.Length numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  Petal.Width numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: Sepal.Length numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  Sepal.Width numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $outtasklayout</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               id    type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                           &lt;char&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     classif.rpart.prob.setosa numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: classif.rpart.prob.versicolor numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  classif.rpart.prob.virginica numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $outtaskshell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 4 cols): Species,classif.rpart.prob.setosa,classif.rpart.prob.versicolor,classif.rpart.prob.virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "pipeop_learner_cv_state" "learner_state"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "list"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $tunethreshold</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $tunethreshold$threshold</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     setosa versicolor  virginica </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.4673619  0.8018827  0.5983749 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
