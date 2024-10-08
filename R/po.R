@@ -111,7 +111,7 @@ pos.NULL = function(.objs, ...) {
 
 #' @export
 pos.character = function(.objs, ...) {
-  dictionary_sugar_inc_mget(dict = mlr_pipeops, .keys = .objs, ..., .dicts_suggest = list("ppl()" = mlr_graphs))
+  dictionary_sugar_inc_mget(dict = mlr_pipeops, .keys = .objs, ..., .dicts_suggest = list("ppls()" = mlr_graphs))
 }
 
 #' @export
