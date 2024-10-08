@@ -48,17 +48,15 @@
 #' * `graph_model` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Graph`] that is being wrapped. This [`Graph`] contains a trained state after `$train()`. Read-only.
 #' * `pipeops` :: named `list` of [`PipeOp`] \cr
-#'   Contains all [`PipeOp`]s in the underlying [`Graph`], named by the [`PipeOp`]'s `$id`s.
+#'   Contains all [`PipeOp`]s in the underlying [`Graph`], named by the [`PipeOp`]'s `$id`s. Shortcut for `$graph_model$pipeops`. See [`Graph`] for details.
 #' * `edges` :: [`data.table`][data.table::data.table]  with columns `src_id` (`character`), `src_channel` (`character`), `dst_id` (`character`), `dst_channel` (`character`)\cr
-#'   Table of connections between the [`PipeOp`]s in the underlying [`Graph`]. A [`data.table`][data.table::data.table]. `src_id` and `dst_id` are `$id`s of [`PipeOp`]s that must be present in
-#'   the `$pipeops` list. `src_channel` and `dst_channel` must respectively be `$output` and `$input` channel names of the
-#'   respective [`PipeOp`]s.
+#'   Table of connections between the [`PipeOp`]s in the underlying [`Graph`]. Shortcut for `$graph$edges`. See [`Graph`] for details.
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
-#'   Shortcut for `$graph$param_set`.
+#'   Parameters of the underlying [`Graph`]. Shortcut for `$graph$param_set`. See [`Graph`] for details.
 #' * `pipeops_param_set` :: named `list()`\cr
-#'   Named list containing the [`ParamSet`][paradox::ParamSet]s of all [`PipeOp`]s in the [`Graph`].
+#'   Named list containing the [`ParamSet`][paradox::ParamSet]s of all [`PipeOp`]s in the [`Graph`]. See there for details.
 #' * `pipeops_param_set_values` :: named `list()`\cr
-#'   Named list containing the set parameter values of all [`PipeOp`]s in the [`Graph`].
+#'   Named list containing the set parameter values of all [`PipeOp`]s in the [`Graph`]. See there for details.
 #' * `internal_tuned_values` :: named `list()` or `NULL`\cr
 #'   The internal tuned parameter values collected from all [`PipeOp`]s.
 #'   `NULL` is returned if the learner is not trained or none of the wrapped learners supports internal tuning.
@@ -411,11 +409,14 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       value
     },
     pipeops_param_set_values = function(rhs) {
-      value = map(self$graph$pipeops, function(x) x$param_set$values)
-      if (!missing(rhs) && !identical(value, rhs)) {
-        stop("pipeops_param_set_values is read-only")
+      if (!missing(rhs)) {
+        assert_list(rhs)
+        assert_names(names(rhs), permutation.of = names(self$graph$pipeops))
+        for (n in names(rhs)) {
+          self$graph$pipeops[[n]]$param_set$values = rhs[[n]]
+        }
       }
-      value
+      map(self$graph$pipeops, function(x) x$param_set$values)
     }
   ),
   private = list(
