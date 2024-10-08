@@ -91,11 +91,12 @@
 #'   Takes a list of `Graph`s or [`PipeOp`]s (or objects that can be automatically converted into `Graph`s or [`PipeOp`]s,
 #'   see [`as_graph()`] and [`as_pipeop()`]) as inputs and joins them in a serial `Graph` coming after `self`, as if
 #'   connecting them using [`%>>%`].
-#' * `plot(html)` \cr
-#'   (`logical(1)`) -> `NULL` \cr
+#' * `plot(html = FALSE, horizontal = FALSE)` \cr
+#'   (`logical(1)`, `logical(1)`) -> `NULL` \cr
 #'   Plot the [`Graph`], using either the \pkg{igraph} package (for `html = FALSE`, default) or
 #'   the `visNetwork` package for `html = TRUE` producing a [`htmlWidget`][htmlwidgets::htmlwidgets].
 #'   The [`htmlWidget`][htmlwidgets::htmlwidgets] can be rescaled using [`visOptions`][visNetwork::visOptions].
+#'   For `html = FALSE`, the orientation of the plotted graph can be controlled through `horizontal`.
 #' * `print(dot = FALSE, dotname = "dot", fontsize = 24L)` \cr
 #'   (`logical(1)`, `character(1)`, `integer(1)`) -> `NULL` \cr
 #'   Print a representation of the [`Graph`] on the console. If `dot` is `FALSE`, output is a table with one row for each contained [`PipeOp`] and
