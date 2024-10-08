@@ -83,7 +83,7 @@ po.PipeOp = function(.obj, ...) {
 
 #' @export
 po.character = function(.obj, ...) {
-  dictionary_sugar_inc_get(dict = mlr_pipeops, .key = .obj, ...)
+  dictionary_sugar_inc_get(dict = mlr_pipeops, .key = .obj, ..., .dicts_suggest = list("ppl()" = mlr_graphs))
 }
 
 #' @export
@@ -111,7 +111,7 @@ pos.NULL = function(.objs, ...) {
 
 #' @export
 pos.character = function(.objs, ...) {
-  dictionary_sugar_inc_mget(dict = mlr_pipeops, .keys = .objs, ...)
+  dictionary_sugar_inc_mget(dict = mlr_pipeops, .keys = .objs, ..., .dicts_suggest = list("ppls()" = mlr_graphs))
 }
 
 #' @export
