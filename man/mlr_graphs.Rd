@@ -35,7 +35,7 @@ Returns a \code{data.table} with column \code{key} (\code{character}).
 }
 
 \examples{
-\dontshow{ if (requireNamespace("rpart")) \{ }
+\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(mlr3)
 lrn = lrn("regr.rpart")
 task = mlr_tasks$get("boston_housing")
@@ -49,7 +49,7 @@ gr = ppl("robustify", task, lrn) \%>>\% po("learner", lrn)
 
 # all Graphs currently in the dictionary:
 as.data.table(mlr_graphs)
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other mlr3pipelines backend related: 

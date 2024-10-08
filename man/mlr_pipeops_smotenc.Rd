@@ -71,7 +71,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{ if (requireNamespace("themis")) \{ }
+\dontshow{if (requireNamespace("themis")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 
 # Create example task
@@ -88,7 +88,7 @@ pop = po("smotenc")
 smotenc_result = pop$train(list(task))[[1]]$data()
 nrow(smotenc_result)
 table(smotenc_result$target)
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \references{
 Chawla NV, Bowyer KW, Hall LO, Kegelmeyer WP (2002).

@@ -155,8 +155,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{ if (requireNamespace("stopwords")) \{ }
-\dontshow{ if (requireNamespace("quanteda")) \{ }
+\dontshow{if (mlr3misc::require_namespaces(c("stopwords", "quanteda"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 library("data.table")
 # create some text data
@@ -174,8 +173,7 @@ one_line_of_iris = task$filter(13)
 one_line_of_iris$data()
 
 pos$predict(list(one_line_of_iris))[[1]]$data()
-\dontshow{ \} }
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html

@@ -50,8 +50,7 @@
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("smotefamily")) \{ }
+#' @examplesIf requireNamespace("smotefamily")
 #' library("mlr3")
 #'
 #' # Create example task
@@ -69,7 +68,6 @@
 #' adas_result = pop$train(list(task))[[1]]$data()
 #' nrow(adas_result)
 #' table(adas_result$target)
-#' \dontshow{ \} }
 PipeOpADAS = R6Class("PipeOpADAS",
   inherit = PipeOpTaskPreproc,
   public = list(

@@ -56,8 +56,7 @@
 #' @template seealso_pipeopslist
 #' @include PipeOpEnsemble.R
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
 #'
 #' # Simple Bagging
@@ -69,7 +68,6 @@
 #'   po("classifavg")
 #'
 #' resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
-#' \dontshow{ \} }
 PipeOpRegrAvg = R6Class("PipeOpRegrAvg",
   inherit = PipeOpEnsemble,
 

@@ -88,8 +88,7 @@ Only methods inherited \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{ if (requireNamespace("nloptr")) \{ }
-\dontshow{ if (requireNamespace("lme4")) \{ }
+\dontshow{if (mlr3misc::require_namespaces(c("nloptr", "lme4"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 poe = po("encodelmer")
 
@@ -102,8 +101,7 @@ task = TaskClassif$new("task",
 poe$train(list(task))[[1]]$data()
 
 poe$state
-\dontshow{ \} }
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html

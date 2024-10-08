@@ -65,7 +65,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{ if (requireNamespace("smotefamily")) \{ }
+\dontshow{if (requireNamespace("smotefamily")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 
 # Create example task
@@ -79,7 +79,7 @@ table(task$data()$result)
 pop = po("smote")
 smotedata = pop$train(list(task))[[1]]$data()
 table(smotedata$result)
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \references{
 Chawla NV, Bowyer KW, Hall LO, Kegelmeyer WP (2002).

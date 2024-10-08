@@ -70,7 +70,7 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{ if (requireNamespace("rpart")) \{ }
+\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 # Create a binary class task from iris
 library(mlr3)
@@ -79,7 +79,7 @@ po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name
 po$train(list(tsk("iris")))
 po$predict(list(tsk("iris")))
 }
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html

@@ -70,7 +70,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{ if (requireNamespace("kernlab")) \{ }
+\dontshow{if (requireNamespace("kernlab")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 
 task = tsk("iris")
@@ -78,7 +78,7 @@ pop = po("kernelpca", features = 3)  # only keep top 3 components
 
 task$data()
 pop$train(list(task))[[1]]$data()
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html

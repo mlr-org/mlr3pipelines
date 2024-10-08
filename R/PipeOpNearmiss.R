@@ -56,8 +56,7 @@
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("themis")) \{ }
+#' @examplesIf requireNamespace("themis")
 #' library("mlr3")
 #'
 #' # Create example task
@@ -70,7 +69,6 @@
 #' nearmiss_result = pop$train(list(task))[[1]]$data()
 #' nrow(nearmiss_result)
 #' table(nearmiss_result$type)
-#' \dontshow{ \} }
 PipeOpNearmiss = R6Class("PipeOpNearmiss",
   inherit = PipeOpTaskPreproc,
   public = list(

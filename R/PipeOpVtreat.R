@@ -101,8 +101,7 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("vtreat")) \{ }
+#' @examplesIf requireNamespace("vtreat")
 #' library("mlr3")
 #'
 #' set.seed(2020)
@@ -121,7 +120,6 @@
 #'
 #' pop = PipeOpVtreat$new()
 #' pop$train(list(task))
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R

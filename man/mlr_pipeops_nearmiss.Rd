@@ -68,7 +68,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{ if (requireNamespace("themis")) \{ }
+\dontshow{if (requireNamespace("themis")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 
 # Create example task
@@ -81,7 +81,7 @@ pop = po("nearmiss")
 nearmiss_result = pop$train(list(task))[[1]]$data()
 nrow(nearmiss_result)
 table(nearmiss_result$type)
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \references{
 Zhang, J., Mani, I. (2003).
