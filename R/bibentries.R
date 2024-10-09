@@ -1,5 +1,16 @@
 #' @importFrom utils bibentry
 bibentries = c(
+  barber_2021 = bibentry("article",
+    doi       = "10.1214/20-AOS1965",
+    year      = "2021",
+    month     = "02",
+    volume    = "49",
+    pages     = "486--507",
+    author    = "Rina Foygel Barber and Emmanuel J. Candes and Aaditya Ramdasa and Ryan J. Tibshirani",
+    title     = "Predictive inference with the jackknife+",
+    journal   = "Annals of Statistics"
+  ),
+
   chawla_2002 = bibentry("article",
     doi       = "10.1613/jair.953",
     year      = "2002",
