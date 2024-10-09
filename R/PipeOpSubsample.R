@@ -34,7 +34,10 @@
 #' * `frac` :: `numeric(1)`\cr
 #'   Fraction of rows in the [`Task`][mlr3::Task] to keep. May only be greater than 1 if `replace` is `TRUE`. Initialized to `(1 - exp(-1)) == 0.6321`.
 #' * `stratify` :: `logical(1)`\cr
-#'   Should the subsamples be stratified by target? Initialized to `FALSE`. May only be `TRUE` for [`TaskClassif`][mlr3::TaskClassif] input.
+#'   Should the subsamples be stratified by target? Initialized to `FALSE`. May only be `TRUE` for [`TaskClassif`][mlr3::TaskClassif] input and if `use_groups = FALSE`.
+#' * `use_groups` :: `logical(1)`\cr
+#'   If `TRUE` and if the [`Task`][mlr3::Task] has a column with role `group`, grouped observations are kept together during subsampling. May only be `TRUE` if `strafiy = FALSE`.
+#'   Initialized to `TRUE`.
 #' * `replace` :: `logical(1)`\cr
 #'   Sample with replacement? Initialized to `FALSE`.
 #'
@@ -52,9 +55,22 @@
 #' @examples
 #' library("mlr3")
 #'
-#' pos = mlr_pipeops$get("subsample", param_vals = list(frac = 0.7, stratify = TRUE))
+#' # Subsample with stratification
+#' pop = po("subsample", frac = 0.7, stratify = TRUE, use_groups = FALSE)
+#' pop$train(list(tsk("iris")))
 #'
-#' pos$train(list(tsk("iris")))
+#' # Subsample, respecting grouping
+#' df = data.frame(
+#'   target = runif(3000),
+#'   x1 = runif(3000),
+#'   x2 = runif(3000),
+#'   grp = sample(paste0("g", 1:100), 3000, replace = TRUE)
+#' )
+#' task = TaskRegr$new(id = "example", backend = df, target = "target")
+#' task$set_col_roles("grp", "group")
+#'
+#' pop = po("subsample", frac = 0.7, use_groups = TRUE)
+#' pop$train(list(task))
 #'
 #' @family PipeOps
 #' @template seealso_pipeopslist
@@ -67,31 +83,49 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
       ps = ps(
         frac = p_dbl(lower = 0, upper = Inf, tags = "train"),
         stratify = p_lgl(tags = "train"),
+        use_groups = p_lgl(tags = "train"),
         replace = p_lgl(tags = "train")
       )
-      ps$values = list(frac = 1 - exp(-1), stratify = FALSE, replace = FALSE)
+      ps$values = list(frac = 1 - exp(-1), stratify = FALSE, use_groups = TRUE, replace = FALSE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
     }
   ),
   private = list(
 
     .train_task = function(task) {
-      if (!self$param_set$values$stratify) {
-        keep = shuffle(task$row_roles$use,
-          ceiling(self$param_set$values$frac * task$nrow),
-          replace = self$param_set$values$replace)
-      } else {
+      pv = self$param_set$get_values(tags = "train")
+
+      if (pv$stratify && pv$use_groups) {
+        stop("Cannot combine stratification with grouping")
+      } else if (pv$use_groups && !is.null(task$groups)) {
+        # task$groups automatically removes rows not in task$row_roles$use and allows rows to be included multiple times
+        grp_sizes = table(task$groups$group)
+
+        # If we sample with replacement, drawing groups of larger sizes should be less probable
+        probs = if (pv$replace) 1 / grp_sizes else NULL
+
+        # We randomly shuffle the groups and keep all up to the group for
+        # which the fraction of rows is closest to the desired fraction.
+        shuffled = shuffle(grp_sizes, prob = probs, replace = pv$replace)
+        cutoff_index = which.min(abs(cumsum(shuffled) / sum(shuffled) - frac))
+        keep_grps = names(shuffled[seq_len(cutoff_index)])
+
+        group = NULL  # for binding
+        keep = task$groups[group %in% keep_grps]$row_id
+      } else if (pv$stratify) {
         if (!inherits(task, "TaskClassif")) {
           stopf("Stratification not supported for %s", class(task))
         }
         splt = split(task$row_roles$use, task$data(cols = task$target_names))
         keep = unlist(map(splt, function(x) {
-          shuffle(x,
-            ceiling(self$param_set$values$frac * length(x)),
-            replace = self$param_set$values$replace)
+          shuffle(x, ceiling(pv$frac * length(x)), replace = pv$replace)
         }))
+      } else {
+        keep = shuffle(task$row_roles$use, ceiling(pv$frac * task$nrow), replace = pv$replace)
       }
+
       self$state = list()
+      # doesn't work for groups??
       task_filter_ex(task, keep)
     },
 

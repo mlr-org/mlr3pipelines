@@ -43,7 +43,7 @@ test_that("PipeOpSubsample works stratified", {
   task = mlr_tasks$get("iris")
 
   po = PipeOpSubsample$new()
-  po$param_set$values = list(stratify = TRUE, frac = 0.6, replace = FALSE)
+  po$param_set$values = list(stratify = TRUE, use_groups = FALSE, frac = 0.6, replace = FALSE)
   expect_class(po, "PipeOpSubsample")
 
   tnew = train_pipeop(po, list(task))
@@ -53,7 +53,7 @@ test_that("PipeOpSubsample works stratified", {
     table(list(Species = rep(c("setosa", "versicolor", "virginica"), 30))))
 
   po = PipeOpSubsample$new()
-  po$param_set$values = list(stratify = TRUE, frac = 0.6, replace = TRUE)
+  po$param_set$values = list(stratify = TRUE, use_groups = FALSE, frac = 0.6, replace = TRUE)
   expect_class(po, "PipeOpSubsample")
 
   tnew = train_pipeop(po, list(task))
@@ -63,7 +63,7 @@ test_that("PipeOpSubsample works stratified", {
     table(list(Species = rep(c("setosa", "versicolor", "virginica"), 30))))
 
   po = PipeOpSubsample$new()
-  po$param_set$values = list(stratify = TRUE, frac = 2, replace = TRUE)
+  po$param_set$values = list(stratify = TRUE, use_groups = FALSE, frac = 2, replace = TRUE)
   expect_class(po, "PipeOpSubsample")
 
   tnew = train_pipeop(po, list(task))
@@ -73,7 +73,40 @@ test_that("PipeOpSubsample works stratified", {
     table(list(Species = rep(c("setosa", "versicolor", "virginica"), 100))))
 })
 
+test_that("PipeOpSubsample works for grouped data", {
+  op = PipeOpSubsample$new()
 
+  test_df = data.frame(
+    target = runif(3000),
+    x1 = runif(3000),
+    x2 = runif(3000),
+    grp = sample(paste0("g", 1:100), 3000, replace = TRUE)
+  )
+  task = TaskRegr$new(id = "test", backend = test_df, target = "target")
+  task$set_col_roles("grp", "group")
+
+  train_out = op$train(list(task))[[1L]]
+  # grouped data are kept together
+  grps_out = table(train_out$groups$group)
+  expect_equal(
+    grps_out,
+    table(task$groups$group)[names(grps_out)]
+  )
+
+  op$param_set$set_values(frac = 2, replace = TRUE)
+  train_out = op$train(list(task))[[1L]]
+  # grouped data are kept together
+  grps_out = table(train_out$groups$group)
+  expect_equal(
+    grps_out,
+    table(task$groups$group)[names(grps_out)]
+  )
+
+  # use_groups = TRUE and stratify = TRUE should throw an error
+  op$param_set$set_values(stratify = TRUE, use_groups = TRUE)
+  expect_error(op$train(list(task)))
+
+})
 
 test_that("task filter utility function", {
   task = mlr_tasks$get("iris")
