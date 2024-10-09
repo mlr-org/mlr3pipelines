@@ -97,13 +97,22 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
 
       if (pv$stratify && pv$use_groups) {
         stop("Cannot combine stratification with grouping")
-      } else if (!pv$stratify && pv$use_groups && !is.null(task$groups)) {
-        group = NULL  # binding for CHECK
-        grps = unique(task$groups$group)
-        # some way to use row_roles = use? Ignore group that has one row with row_roles = use
-        keep_grps = shuffle(grps, ceiling(pv$frac * length(grps)), replace = pv$replace)
+      } else if (pv$use_groups && !is.null(task$groups)) {
+        # task$groups automatically removes rows not in task$row_roles$use and allows rows to be included multiple times
+        grp_sizes = table(task$groups$group)
+
+        # If we sample with replacement, drawing groups of larger sizes should be less probable
+        probs = if (pv$replace) 1 / grp_sizes else NULL
+
+        # We randomly shuffle the groups and keep all up to the group for
+        # which the fraction of rows is closest to the desired fraction.
+        shuffled = shuffle(grp_sizes, prob = probs, replace = pv$replace)
+        cutoff_index = which.min(abs(cumsum(shuffled) / sum(shuffled) - frac))
+        keep_grps = names(shuffled[seq_len(cutoff_index)])
+
+        group = NULL  # for binding
         keep = task$groups[group %in% keep_grps]$row_id
-      } else if (pv$stratify && !pv$use_groups) {
+      } else if (pv$stratify) {
         if (!inherits(task, "TaskClassif")) {
           stopf("Stratification not supported for %s", class(task))
         }
@@ -116,6 +125,7 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
       }
 
       self$state = list()
+      # doesn't work for groups??
       task_filter_ex(task, keep)
     },
 
