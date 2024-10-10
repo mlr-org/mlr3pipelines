@@ -15,6 +15,9 @@ Only binary \link[mlr3:TaskClassif]{classification tasks} are supported.
 
 Caution: when constructed naively without parameter, the weights are all set to 1. The \code{minor_weight} parameter
 must be adjusted for this \code{\link{PipeOp}} to be useful.
+
+Note this only sets the \code{"weights_learner"} column.
+It therefore influences the behaviour of subsequent \code{Learner}s, but does not influence resampling or evaluation metric weights.
 }
 \section{Construction}{
 
@@ -78,12 +81,20 @@ task = tsk("spam")
 opb = po("classweights")
 
 # task weights
-task$weights
+if ("weights_learner" \%in\% names(task)) {
+  task$weights_learner  # recent mlr3-versions
+} else {
+  task$weights  # old mlr3-versions
+}
 
 # double the instances in the minority class (spam)
 opb$param_set$values$minor_weight = 2
 result = opb$train(list(task))[[1L]]
-result$weights
+if ("weights_learner" \%in\% names(result)) {
+  result$weights_learner  # recent mlr3-versions
+} else {
+  result$weights  # old mlr3-versions
+}
 }
 \seealso{
 https://mlr-org.com/pipeops.html
@@ -96,6 +107,8 @@ Other PipeOps:
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_adas}},
+\code{\link{mlr_pipeops_blsmote}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -130,6 +143,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nearmiss}},
 \code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
@@ -149,6 +163,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
+\code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
@@ -156,6 +171,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},

@@ -69,8 +69,7 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
 #'
 #' task = tsk("pima")
@@ -94,7 +93,6 @@
 #' new_task = po$train(list(task = task))[[1]]
 #' new_task$missings()
 #'
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @family Imputation PipeOps
 #' @template seealso_pipeopslist
@@ -153,6 +151,8 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
     },
 
     .impute = function(feature, type, model, context) {
+      nas = which(is.na(feature))
+      if (!length(nas)) return(feature)
       if (is.atomic(model)) {  # handle nullmodel, making use of the fact that `Learner$state` is always a list
         return(super$.impute(feature, type, model, context))
       }
@@ -162,7 +162,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
 
       # Use the trained learner to perform the imputation
       task = private$.create_imputation_task(feature, context)
-      pred = private$.learner$predict(task, which(is.na(feature)))
+      pred = private$.learner$predict(task, nas)
 
       # Replace the missing values with imputed values of the correct format
       imp_vals = private$.convert_to_type(pred$response, type)
@@ -172,7 +172,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
         levels(feature) = c(levels(feature), as.character(type))
       }
 
-      feature[is.na(feature)] = imp_vals
+      feature[nas] = imp_vals
       feature
     },
 
@@ -187,7 +187,11 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
       if (is.numeric(feature)) {
         feature
       } else {
-        factor(feature, ordered = FALSE)
+        if (!is.null(levels(feature))) {
+          factor(feature, levels = levels(feature), ordered = FALSE)
+        } else {
+          factor(feature, ordered = FALSE)
+        }
       }
     },
 

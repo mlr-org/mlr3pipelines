@@ -414,3 +414,21 @@ test_that("impute, test rows and affect_columns", {
   outpredict = po_impute$predict(list(task$internal_valid_task))[[1L]]
   expect_true(isTRUE(all.equal(outtrain$internal_valid_task$data(), outpredict$data())))
 })
+
+test_that("imputeoor keeps missing level even if no missing data in predict task", {
+  task = as_task_classif(data.table(target = factor(c("a", "b", "a", "b", "a")), x = factor(c("a", "b", NA, "b", "a"))), target = "target", id = "testtask")
+
+  task_train = task$clone(deep = TRUE)$filter(1:3)
+  poi = po("imputeoor")
+  expect_identical(
+    poi$train(list(task_train))[[1L]]$data(),
+    data.table(target = factor(c("a", "b", "a")), x = factor(c("a", "b", ".MISSING"), levels = c("a", "b", ".MISSING")))
+  )
+
+  task_predict = task$clone(deep = TRUE)$filter(4:5)
+  expect_identical(
+    poi$predict(list(task_predict))[[1L]]$data(),
+    data.table(target = factor(c("b", "a")), x = factor(c("b", "a"), levels = c("a", "b", ".MISSING")))  # check that factor levels are still present
+  )
+
+})

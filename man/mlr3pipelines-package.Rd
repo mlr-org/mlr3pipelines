@@ -35,6 +35,8 @@ Authors:
 Other contributors:
 \itemize{
   \item Lona Koers \email{lona.koers@gmail.com} [contributor]
+  \item Keno Mersmann \email{keno.mersmann@gmail.com} [contributor]
+  \item Maximilian Mücke \email{muecke.maximilian@gmail.com} (\href{https://orcid.org/0009-0000-9432-9795}{ORCID}) [contributor]
 }
 
 }

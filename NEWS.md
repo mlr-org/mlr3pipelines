@@ -1,7 +1,27 @@
-# mlr3pipelines 0.6.0-9000
+# mlr3pipelines 0.7.0-9000
+
+* New down-sampling PipeOps for inbalanced data: `PipeOpTomek` / `po("tomek")` and `PipeOpNearmiss` / `po("nearmiss")`
+
+# mlr3pipelines 0.7.0
 
 * New PipeOp `PipeOpRowApply` / `po("rowapply")`
 * New PipeOp `PipeOpLearnerCVPlus / po("learner_cv_plus")`
+* Empty `PipeOp` IDs now explicitly forbidden.
+* Bugfix: `Graph$tran()` / `Graph$predict()` with `single_input = FALSE` now correctly handles `PipeOp`s with multiple inputs.
+* `GraphLearner$base_learner()` now works with `PipeOpBranch`, and is generally more robust.
+* `GraphLearner` now supports `$importance`, `$selected_features()`, `$oob_error()`, and `$loglik()`.
+  These are computed from the underlying `Learner`.
+* `GraphLearner$impute_selected_features` option added:
+  `$selected_features()` is reported even if the underlying base learner does not report it; in this case, the full feature set as seen by that learner is returned.
+* `GraphLearner$predict_type` handling more robust now.
+* `PipeOpThreshold` and `PipeOpTuneThreshold` now have the `$predict_type` `"prob"`.
+  They can be set to `"response"`, in which case the probability predictions are discarded, potentially saving memory.
+* Bugfix for handling multiplicities in PipeOps with vararg channels.
+* Bugfix: `PipeOpImputeOOR` now retains the `.MISSING` level in factors during prediction that were imputed during training, but had no missing values during prediction.
+* `as_data_table(po())` now works even when some `PipeOp`s can not be constructed.
+  For these `PipeOp`s, `NA` is reported in most columns.
+* Compatibility with upcoming `mlr3` release.
+* New PipeOps for handling inbalanced data: `PipeOpADAS` / `po("adas")`, `PipeOpBLSmote` / `po("blsmote")` and `PipeOpSmoteNC` / `po("smotenc")`
 
 # mlr3pipelines 0.6.0
 

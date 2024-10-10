@@ -138,8 +138,7 @@
 #'
 #' @family Learners
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
 #'
 #' graph = po("pca") %>>% lrn("classif.rpart")
@@ -158,7 +157,6 @@
 #'
 #' # Feature importance (of principal components):
 #' lr$graph_model$pipeops$classif.rpart$learner_model$importance()
-#' \dontshow{ \} }
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
     impute_selected_features = FALSE,
@@ -611,9 +609,14 @@ infer_task_type = function(graph) {
 # i.e. that gets non-NOP-input in the current hyperparameter configuration of PipeOpBranch ops.
 # Returns a list, named by PipeOpUnbranch IDs, containing the incoming PipeOp IDs.
 # PipeOpBranch ops that are connected to overall Graph input get an empty string as predecessor ID.
+# Returns a named `list`, named by PipeOpUnbranch IDs, containing the incoming PipeOp ID.
+# Typically, there is only one incoming PipeOp ID; only if a `selection` is not set, or a `TuneToken`,
+# do we concede that we do not know the exact input; in this case the list entry contains a vector
+# of all possible incoming PipeOp IDs.
 get_po_unbranch_active_input = function(graph) {
   # query a given PipeOpBranch what its selected output is
   # Currently, PipeOpBranch 'selection' can be either integer-valued or a string.
+  # If it is something else (unset, or a TuneToken), we cannot infer the active output.
   get_po_branch_active_output = function(pipeop) {
     assertR6(pipeop, "PipeOpBranch")
     pob_ps = pipeop$param_set
@@ -623,11 +626,13 @@ get_po_unbranch_active_input = function(graph) {
     if (pob_ps$class[["selection"]] == "ParamInt") {
       if (!test_int(selection)) {
         stopf("Cannot infer active output of PipeOpBranch %s with non-numeric 'selection'.", pipeop$id)
+        # return(pipeop$output$name)
       }
       return(pipeop$output$name[[pob_ps$values$selection]])
     } else {
       if (!test_string(selection)) {
         stopf("Cannot infer active output of PipeOpBranch %s with non-string 'selection'.", pipeop$id)
+        # return(pipeop$output$name)
       }
       return(pob_ps$values$selection)
     }
@@ -737,10 +742,21 @@ graph_base_learner = function(graph, resolve_branching = TRUE, lookup_field = "l
       next_pipeop = graph$edges[dst_id == current_pipeop, src_id]
       if (length(next_pipeop) > 1) {
         # more than one predecessor
+        if (inherits(last_pipeop, "PipeOpUnbranch") && resolve_branching) {
+          tryCatch({
+            next_pipeop = po_unbranch_active_input[[current_pipeop]]
+          }, error = function(e) {
+            if (e$message %like% "Cannot infer active output of PipeOpBranch") {
+              resolve_branching <<- FALSE  # give up; this happens when tuning.
+            } else {
+              stop(e)
+            }
+          })
+        }
         if (!inherits(last_pipeop, "PipeOpUnbranch") || !resolve_branching) {
           return(unique(unlist(lapply(next_pipeop, search_base_learner_pipeops), recursive = FALSE, use.names = FALSE)))
         }
-        next_pipeop = po_unbranch_active_input[[current_pipeop]]
+        # PipeOpUnbranch inference succeeded; continue with selected branch.
         if (next_pipeop == "") next_pipeop = character(0)
       }
       if (length(next_pipeop) == 0) return(list())

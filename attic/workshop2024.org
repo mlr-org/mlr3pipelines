@@ -1,0 +1,73 @@
+
+* **test set rows**
+** TODO GraphLearner: propagate predict_sets #491
+   - predict_sets during prediction: learner wird 3x aufgerufen
+   - predict_sets vom graphlearner sollte das gleiche sein
+* **Filter**
+** filter hash not entirely correct #723
+** Feature intersection #593
+  - meta-filter
+* filter things
+  - unittest: was passiert wenn importance() neue feats gibt, oder feats fehlen? in pipeopfilter?
+  - issue: featureless soll selected_features 0 reporten
+* **UI**
+** **Graph Transparency**
+*** $importance() for graphlearner #291 
+**** Variable importance by "mlr3filters" does not work in "mlr3proba" after preprocessing data with "mlr3pipelines" #579 
+*** GraphLearner could have an AB shortcut for $graph$pipeops #600 
+** **Better messages, warnings etc**
+*** Better warning if po(<id>) does not work, but ppl(<id>) exists #717
+** **UI Changes**
+*** PipeOpCollapseFactors hyperparameters #709 
+*** pos in combination with as_graph leads to unexpected ids #718
+   - pos should not name items
+*** ppl() exported hyperparameters are unnecessary #726
+*** bagging pipeline ideally should do "real" bagging by default, with frac = 1, replace = TRUE #727
+*** PipeOpSubsample: allow stratification by other columns, eg. group column #567 
+*** Add "Split tokens by a separator pattern" to mlr_pipeops_textvectorizer #598 
+*** refactor PipeOpClassBalancing #492 
+** **New Helper Functions**
+*** Simpler helper functions to create e.g. custom preprocessing operators without having to worry about R6 #714
+*** function for renaming (parts of) a graph to avoid nameclashes #688 
+*** double-arrow-operator that automatically avoids ID-clashes. #687 
+*** **Simple Apply**
+**** apply PipeOpTaskPreproc to data.frame / data.table #711 
+**** make single pipeop application easier #683
+  - similar to demo
+**** demo for pipelines #644 
+*** pack_formula #518
+** **Other UI**
+*** options to (not) export hyperparameters #682 
+*** Branching and Graph param sets, dependencies and tuning #101
+*** mlr3pipelines::PipeOpTextVectorizer is very slow #511
+  - dfm column type
+*** Make Selector work for target column #493
+** **Learner Impute**
+*** Learner-Imputation: Allow overall imputation of missing values for feature dimensions #569
+  - overal imputation of missing values before learner imputation
+*** learner imputation can lead to unexpected behaviour #691 
+** **new features**
+*** Recipes connector #490
+* **target**
+** PipeOpUpdateTarget doesn't work for survival tasks with 2 target columns #734
+** Cannot Stack Learners with Different Task Types #708 
+** PipeOpTargetMutate QOL #707 
+** targetmutate doesn't work with more than one target? #694 
+** PipeOpTargetTrafo drops missing factor levels #631 
+* **bugs**
+** **backend bugs**
+*** make autoconvert future test work on cran #665 
+*** handle empty multiplicities #596 
+** **mlr3 backend issues**
+*** TODO Look at PipeOpLearner task_type 655
+  - multiple classes with same task_type
+* **Things probably not happening in the WS**
+* **trained state**
+** Using a PipeOp with a fixed state during training #537 
+** Allow for constructing GraphLearner in a trained state #667 
+* **predict time state change**
+** TODO Store timings for each pipeline step #536
+** TODO .result for train / test separately, or for resampling instances #730
+   - state wird bei callr auch serialisiert
+* **documentation**
+** mlr3pipelines quick reference card #488 

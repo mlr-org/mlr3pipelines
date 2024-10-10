@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.6.0-9000
+Version: 0.7.0-9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -38,7 +38,16 @@ Authors@R:
       person(given = "Lona",
              family = "Koers",
              role = "ctb",
-             email = "lona.koers@gmail.com"))
+             email = "lona.koers@gmail.com"),
+      person(given = "Keno",
+             family = "Mersmann",
+             role = "ctb",
+             email = "keno.mersmann@gmail.com"),
+      person(given = "Maximilian",
+             family = "Mücke",
+             role = "ctb",
+             email = "muecke.maximilian@gmail.com",
+             comment = c(ORCID = "0009-0000-9432-9795")))
 Description: Dataflow programming toolkit that enriches 'mlr3' with a diverse
   set of pipelining operators ('PipeOps') that can be composed into graphs.
   Operations exist for data preprocessing, model fitting, and ensemble
@@ -92,7 +101,8 @@ Suggests:
     vtreat,
     future,
     htmlwidgets,
-    ranger
+    ranger,
+    themis
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
@@ -102,6 +112,12 @@ Roxygen: list(markdown = TRUE, r6 = FALSE)
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 Collate:
+    'CnfAtom.R'
+    'CnfClause.R'
+    'CnfFormula.R'
+    'CnfFormula_simplify.R'
+    'CnfSymbol.R'
+    'CnfUniverse.R'
     'Graph.R'
     'GraphLearner.R'
     'mlr_pipeops.R'
@@ -112,6 +128,8 @@ Collate:
     'LearnerAvg.R'
     'NO_OP.R'
     'PipeOpTaskPreproc.R'
+    'PipeOpADAS.R'
+    'PipeOpBLSmote.R'
     'PipeOpBoxCox.R'
     'PipeOpBranch.R'
     'PipeOpChunk.R'
@@ -150,6 +168,7 @@ Collate:
     'PipeOpMutate.R'
     'PipeOpNMF.R'
     'PipeOpNOP.R'
+    'PipeOpNearmiss.R'
     'PipeOpOVR.R'
     'PipeOpPCA.R'
     'PipeOpProxy.R'
@@ -165,10 +184,12 @@ Collate:
     'PipeOpScaleRange.R'
     'PipeOpSelect.R'
     'PipeOpSmote.R'
+    'PipeOpSmoteNC.R'
     'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
     'PipeOpTextVectorizer.R'
     'PipeOpThreshold.R'
+    'PipeOpTomek.R'
     'PipeOpTrafo.R'
     'PipeOpTuneThreshold.R'
     'PipeOpUnbranch.R'

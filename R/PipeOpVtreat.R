@@ -101,8 +101,7 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("vtreat")) \{ }
+#' @examplesIf requireNamespace("vtreat")
 #' library("mlr3")
 #'
 #' set.seed(2020)
@@ -121,7 +120,6 @@
 #'
 #' pop = PipeOpVtreat$new()
 #' pop$train(list(task))
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
@@ -240,7 +238,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         mlr3misc::invoke(vtreat::fit_prepare,
           vps = transform_design,
           dframe = task$data(),
-          weights = task$weights$weight,
+          weights = if ("weights_learner" %in% names(task)) task$weights_learner$weight else task$weights$weight,
           parallelCluster = NULL),
         error = function(error_condition) {
           if (grepl("no usable vars", x = error_condition$message)) {

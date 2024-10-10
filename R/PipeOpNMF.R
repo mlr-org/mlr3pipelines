@@ -87,10 +87,7 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("NMF")) \{ }
-#' \dontshow{ if (requireNamespace("MASS")) \{ }
-#' if (requireNamespace("NMF")) {
+#' @examplesIf mlr3misc::require_namespaces(c("NMF", "MASS"), quietly = TRUE)
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -100,10 +97,7 @@
 #' pop$train(list(task))[[1]]$data()
 #'
 #' pop$state
-#' }
 #' \dontshow{ try(rm("format.list", envir = .BaseNamespaceEnv$.__S3MethodsTable__.), silent = TRUE)  # BiocGenerics overwrites printer for our tables mlr-org/mlr3#1112 }
-#' \dontshow{ \} }
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
