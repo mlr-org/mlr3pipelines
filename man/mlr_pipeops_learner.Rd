@@ -152,6 +152,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
+\code{\link{mlr_pipeops_learner_cvplus}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
@@ -193,7 +194,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_yeojohnson}}
 
 Other Meta PipeOps: 
-\code{\link{mlr_pipeops_learner_cv}}
+\code{\link{mlr_pipeops_learner_cv}},
+\code{\link{mlr_pipeops_learner_cvplus}}
 }
 \concept{Meta PipeOps}
 \concept{PipeOps}

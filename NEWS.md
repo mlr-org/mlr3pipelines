@@ -5,6 +5,7 @@
 # mlr3pipelines 0.7.0
 
 * New PipeOp `PipeOpRowApply` / `po("rowapply")`
+* New PipeOp `PipeOpLearnerCVPlus / po("learner_cv_plus")`
 * Empty `PipeOp` IDs now explicitly forbidden.
 * Bugfix: `Graph$tran()` / `Graph$predict()` with `single_input = FALSE` now correctly handles `PipeOp`s with multiple inputs.
 * `GraphLearner$base_learner()` now works with `PipeOpBranch`, and is generally more robust.
