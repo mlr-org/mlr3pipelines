@@ -34,7 +34,11 @@ Authors@R:
       person(given = "Susanne",
              family = "Dandl",
              role = "aut",
-             email = "dandl.susanne@googlemail.com"))
+             email = "dandl.susanne@googlemail.com"),
+      person(given = "Lona",
+             family = "Koers",
+             role = "ctb",
+             email = "lona.koers@gmail.com"))
 Description: Dataflow programming toolkit that enriches 'mlr3' with a diverse
   set of pipelining operators ('PipeOps') that can be composed into graphs.
   Operations exist for data preprocessing, model fitting, and ensemble

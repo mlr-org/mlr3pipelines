@@ -32,4 +32,9 @@ Authors:
   \item Susanne Dandl \email{dandl.susanne@googlemail.com}
 }
 
+Other contributors:
+\itemize{
+  \item Lona Koers \email{lona.koers@gmail.com} [contributor]
+}
+
 }

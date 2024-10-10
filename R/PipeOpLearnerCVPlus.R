@@ -12,7 +12,8 @@
 #' Using [`PipeOpLearnerCVPlus`], it is possible to embed a [`mlr3::Learner`] into a [`Graph`].
 #' [`PipeOpLearnerCVPlus`] can then be used to perform cross validation plus (or jackknife plus).
 #' During training, [`PipeOpLearnerCVPlus`] performs cross validation on the training data.
-#' During prediction, the models from the training stage are used to constructs predictive confidence intervals for the prediction data based on out-of-fold residuals and out-of-fold predictions.
+#' During prediction, the models from the training stage are used to construct predictive confidence intervals for the prediction data based on
+#' out-of-fold residuals and out-of-fold predictions.
 #'
 #' @section Construction:
 #' ```
@@ -41,8 +42,8 @@
 #'
 #' @section State:
 #' The `$state` is a named `list` with members:
-#' * `cv_models` :: `list`\cr
-#'   List of cross validation models created by the [`Learner`][`mlr3::Learner`]'s `$.train()` function during resampling with method `"cv"`.
+#' * `cv_model_states` :: `list`\cr
+#'   List of the state of each cross validation model created by the [`Learner`][`mlr3::Learner`]'s `$.train()` function during resampling with method `"cv"`.
 #' * `residuals` :: `data.table`\cr
 #'   `data.table` with columns `fold` and `residual`. Lists the Regression residuals for each observation and cross validation fold.
 #'
@@ -59,9 +60,12 @@
 #' @section Fields:
 #' Fields inherited from [`PipeOp`], as well as:
 #' * `learner` :: [`Learner`][mlr3::Learner]\cr
-#'   [`Learner`][mlr3::Learner] that is being wrapped. Read-only.
-#' * `learner_model` :: [`Learner`][mlr3::Learner]\cr
-#'   [`Learner`][mlr3::Learner] that is being wrapped. This learner contains the model if the `PipeOp` is trained. Read-only.
+#'   [`Learner`][mlr3::Learner] that is being wrapped.
+#'   Read-only.
+#' * `learner_model` :: [`Learner`][mlr3::Learner] or `list`\cr
+#'   If the [`PipeOpLearnerCVPlus`] has been trained, this is a `list` containing the [`Learner`][mlr3::Learner]s of the cross validation models.
+#'   Otherwise, this contains the [`Learner`][mlr3::Learner] that is being wrapped.
+#'   Read-only.
 #' * `predict_type`\cr
 #'   Predict type of the [`PipeOpLearnerCVPlus`], which is always `"response"  "quantiles"`.
 #'   This can be different to the predict type of the [`Learner`][mlr3::Learner] that is being wrapped.
@@ -82,7 +86,7 @@
 #' library("mlr3")
 #'
 #' task = tsk("mtcars")
-#' learner = lrn("regr.ranger")
+#' learner = lrn("regr.rpart")
 #' lrncvplus_po = mlr_pipeops$get("learner_cv_plus", learner)
 #'
 #' lrncvplus_po$train(list(task))
@@ -101,7 +105,7 @@ PipeOpLearnerCVPlus = R6Class("PipeOpLearnerCVPlus",
       }
 
       task_type = mlr_reflections$task_types[type, mult = "first"]$task
-      out_type = mlr_reflections$task_types[type, mult = "first"]$task
+      out_type  = mlr_reflections$task_types[type, mult = "first"]$prediction
 
       # paradox requirements 1.0
       private$.cvplus_param_set = ps(
@@ -129,6 +133,7 @@ PipeOpLearnerCVPlus = R6Class("PipeOpLearnerCVPlus",
       }
       private$.learner
     },
+
     learner_model = function(val) {
       if (!missing(val)) {
         if (!identical(val, private$.learner)) {
@@ -138,7 +143,9 @@ PipeOpLearnerCVPlus = R6Class("PipeOpLearnerCVPlus",
       if (is.null(self$state) || is_noop(self$state)) {
         private$.learner
       } else {
-        multiplicity_recurse(self$state, clone_with_state, learner = private$.learner)
+        multiplicity_recurse(self$state, function(state) {
+          map(state$cv_model_states, clone_with_state, learner = private$.learner)
+        })
       }
     },
     predict_type = function(val) {
@@ -151,7 +158,8 @@ PipeOpLearnerCVPlus = R6Class("PipeOpLearnerCVPlus",
   private = list(
     .state_class = "pipeop_learner_cv_plus_state",
 
-    .train = function(task) {
+    .train = function(inputs) {
+      task = inputs[[1L]]
       pv = private$.cvplus_param_set$values
 
       # Compute CV Predictions
@@ -160,18 +168,22 @@ PipeOpLearnerCVPlus = R6Class("PipeOpLearnerCVPlus",
 
       prds = rbindlist(map(rr$predictions(predict_sets = "test"), as.data.table), idcol = "fold")
 
-      # Add trained models and residuals to PipeOp state
-      self$state = list(cv_models = rr$learners,
+      # Add states of trained models and residuals to PipeOp state
+      self$state = list(cv_model_states = map(rr$learners, "state"),
                         residuals = prds[, .(fold, residual = abs(truth - response))])
 
       list(NULL)
     },
-    .predict = function(task) {
+
+    .predict = function(inputs) {
+      task = inputs[[1L]]
       pv = private$.cvplus_param_set$values
 
-      mu_hat = map(self$state$cv_models, function(learner) {
-          as.data.table(learner$predict(task))
-        })
+      mu_hat = map(self$state$cv_model_states, function(state) {
+        on.exit({private$.learner$state = NULL})
+        private$.learner$state = state
+        as.data.table(private$.learner$predict(task))
+      })
 
       get_quantiles = function(observation) {
         quantiles = pmap_dtr(self$state$residuals, function(fold, residual) {
@@ -182,16 +194,21 @@ PipeOpLearnerCVPlus = R6Class("PipeOpLearnerCVPlus",
              q_upper = quantile(quantiles$upper, probs = 1 - pv$alpha))
       }
 
-      quantiles = matrix(map_dtr(seq_len(task$nrow), get_quantiles), nrow = task$nrow, byrow = TRUE)
+      quantiles = as.matrix(map_dtr(seq_len(task$nrow), get_quantiles))
       quantiles = unname(quantiles)
-
-      response = matrix(map_dtr(seq_len(task$nrow), function(observation) {
-        quantile(pmap_dbl(mu_hat, function(fold) fold[observation, response], numeric(1)), probs = 0.5)
-      }), nrow = task$nrow, byrow = TRUE)
-
       attr(quantiles, "probs") = c(pv$alpha, 1 - pv$alpha)
 
-      list(list(response = response, quantiles = quantiles))
+      response = map_dbl(seq_len(task$nrow), function(observation) {
+        quantile(map_dbl(mu_hat, function(fold) {fold[observation, response]}), probs = 0.5)
+      })
+
+      response = map_dbl(seq_len(task$nrow), function(observation) {
+        quantile(map_dbl(mu_hat, function(fold) {fold[observation, response]}), probs = 0.5)
+      })
+
+      list(PredictionRegr$new(
+        row_ids = task$row_ids, truth = task$truth(),response = response, quantiles = quantiles
+        ))
     },
 
     .cvplus_param_set = NULL,

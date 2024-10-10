@@ -15,7 +15,8 @@ Inherits the \verb{$param_set} (and therefore \verb{$param_set$values}) from the
 Using \code{\link{PipeOpLearnerCVPlus}}, it is possible to embed a \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{Graph}}.
 \code{\link{PipeOpLearnerCVPlus}} can then be used to perform cross validation plus (or jackknife plus).
 During training, \code{\link{PipeOpLearnerCVPlus}} performs cross validation on the training data.
-During prediction, the models from the training stage are used to constructs predictive confidence intervals for the prediction data based on out-of-fold residuals and out-of-fold predictions.
+During prediction, the models from the training stage are used to constructs predictive confidence intervals for the prediction data based on
+out-of-fold residuals and out-of-fold predictions.
 }
 \section{Construction}{
 
@@ -51,8 +52,8 @@ The \code{response} is the median of the prediction of all cross validation mode
 
 The \verb{$state} is a named \code{list} with members:
 \itemize{
-\item \code{cv_models} :: \code{list}\cr
-List of cross validation models created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function during resampling with method \code{"cv"}.
+\item \code{cv_model_states} :: \code{list}\cr
+List of the state of each cross validation model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function during resampling with method \code{"cv"}.
 \item \code{residuals} :: \code{data.table}\cr
 \code{data.table} with columns \code{fold} and \code{residual}. Lists the Regression residuals for each observation and cross validation fold.
 }
@@ -79,9 +80,12 @@ The \verb{$state} is updated during training.
 Fields inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}}\cr
-\code{\link[mlr3:Learner]{Learner}} that is being wrapped. Read-only.
-\item \code{learner_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
-\code{\link[mlr3:Learner]{Learner}} that is being wrapped. This learner contains the model if the \code{PipeOp} is trained. Read-only.
+\code{\link[mlr3:Learner]{Learner}} that is being wrapped.
+Read-only.
+\item \code{learner_model} :: \code{\link[mlr3:Learner]{Learner}} or \code{list}\cr
+If the \code{\link{PipeOpLearnerCVPlus}} has been trained, this is \code{list} containing the \code{\link[mlr3:Learner]{Learner}}s of the cross validation models.
+Otherwise, this contains the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
+Read-only.
 \item \code{predict_type}\cr
 Predict type of the \code{\link{PipeOpLearnerCVPlus}}, which is always \verb{"response"  "quantiles"}.
 This can be different to the predict type of the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
@@ -98,7 +102,7 @@ Methods inherited from \code{\link{PipeOp}}.
 library("mlr3")
 
 task = tsk("mtcars")
-learner = lrn("regr.ranger")
+learner = lrn("regr.rpart")
 lrncvplus_po = mlr_pipeops$get("learner_cv_plus", learner)
 
 lrncvplus_po$train(list(task))
