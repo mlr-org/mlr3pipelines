@@ -35,6 +35,10 @@ Authors@R:
              family = "Dandl",
              role = "aut",
              email = "dandl.susanne@googlemail.com"),
+      person(given = "Lona",
+             family = "Koers",
+             role = "ctb",
+             email = "lona.koers@gmail.com"),
       person(given = "Keno",
              family = "Mersmann",
              role = "ctb",
@@ -157,6 +161,7 @@ Collate:
     'PipeOpKernelPCA.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'
+    'PipeOpLearnerCVPlus.R'
     'PipeOpMissingIndicators.R'
     'PipeOpModelMatrix.R'
     'PipeOpMultiplicity.R'
