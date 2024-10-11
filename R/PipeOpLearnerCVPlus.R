@@ -1,7 +1,7 @@
 #' @title Wrap a Learner into a PipeOp with Cross-validation Plus Confidence Intervals as Predictions
 #'
 #' @usage NULL
-#' @name mlr_pipeops_learner_cvplus
+#' @name mlr_pipeops_learner_cv_plus
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description

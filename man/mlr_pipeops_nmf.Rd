@@ -96,7 +96,7 @@ See \code{\link[NMF:nmf]{nmf()}}.
 
 \section{Internals}{
 
-Uses the \code{\link[NMF:nmf]{nmf()}} function as well as \code{\link[NMF:basis]{basis()}}, \code{\link[NMF:coef]{coef()}} and
+Uses the \code{\link[NMF:nmf]{nmf()}} function as well as \code{\link[NMF:basis-coef-methods]{basis()}}, \code{\link[NMF:basis-coef-methods]{coef()}} and
 \code{\link[MASS:ginv]{ginv()}}.
 }
 
@@ -161,7 +161,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
-\code{\link{mlr_pipeops_learner_cvplus}},
+\code{\link{mlr_pipeops_learner_cv_plus}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
