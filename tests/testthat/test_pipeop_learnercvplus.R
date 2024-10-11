@@ -1,5 +1,28 @@
 context("PipeOpLearnerCVPlusPlus")
 
+# marshaling for regr.debug
+marshal_model.regr.debug_model = function(model, inplace = FALSE, ...) {
+  if (!is.null(model$marshal_count)) {
+    model$marshal_count = model$marshal_count + 1
+  }
+  structure(list(
+    marshaled = model, packages = "mlr3"),
+    class = c("regr.debug_model_marshaled", "marshaled")
+  )
+}
+
+unmarshal_model.regr.debug_model_marshaled = function(model, inplace = FALSE, ...) {
+  unmarshaled = model$marshaled
+  if (!is.null(unmarshaled$marshal_pid)) {
+    unmarshaled$marshal_pid = Sys.getpid()
+  }
+  unmarshaled
+}
+
+registerS3method("marshal_model", "regr.debug_model", marshal_model.regr.debug_model)
+registerS3method("unmarshal_model", "regr.debug_model_marshaled", unmarshal_model.regr.debug_model_marshaled)
+
+
 test_that("PipeOpLearnerCVPlus - basic properties", {
   lrn = mlr_learners$get("regr.featureless")
   po = PipeOpLearnerCVPlus$new(lrn)
@@ -9,13 +32,13 @@ test_that("PipeOpLearnerCVPlus - basic properties", {
   expect_data_table(po$output, nrows = 1)
 
   task = mlr_tasks$get("mtcars")
-  result = train_pipeop(po, list(task = task))
+  result = train_pipeop(po, list(task))
   expect_null(result[[1L]])
   expect_list(po$state$cv_model_states)
   expect_data_table(po$state$residuals)
 
   expect_equal(po$predict_type, c("response", "quantiles"))
-  prds = predict_pipeop(po, list(task = task))
+  prds = predict_pipeop(po, list(task))
   expect_class(prds$output, "PredictionRegr")
   expect_true(all(c("response", "quantiles") %in% names(prds$output)))
   expect_true(nrow(prds$output$quantiles) == task$nrow)
@@ -65,18 +88,18 @@ test_that("PipeOpLearnerCVPlus - model active binding to state", {
   expect_equal(po$learner$state, po$state)
   expect_equal(po$learner_model$state, po$state)
 
-  train_out = po$train(list(task = task))
+  train_out = po$train(list(task))
   train_state = po$state
 
   # after predicting states are unchanged
-  predict_out = po$predict(list(task = task))
+  predict_out = po$predict(list(task))
   expect_equal(po$state, train_state)
 })
 
 test_that("PipeOpLearnerCVPlus - predict_type is fixed", {
   skip_if_not_installed("rpart")
-  learner = lrn("regr.rpart")
-  po = PipeOpLearnerCVPlus$new(learner)
+  lrn = lrn("regr.rpart")
+  po = PipeOpLearnerCVPlus$new(lrn)
   expect_equal(po$predict_type, c("response", "quantiles"))
 })
 
@@ -84,9 +107,9 @@ test_that("PipeOpLearnerCVPlus - integration with larger graph", {
   skip_if_not_installed("rpart")
 
   task = mlr_tasks$get("mtcars")
-  learner = mlr_learners$get("regr.rpart")
+  lrn = mlr_learners$get("regr.rpart")
 
-  po_cvplus = PipeOpLearnerCVPlus$new(learner)
+  po_cvplus = PipeOpLearnerCVPlus$new(lrn)
   po_nop = PipeOpNOP$new()
   graph = po_cvplus %>>% po_nop
 
@@ -99,15 +122,17 @@ test_that("PipeOpLearnerCVPlus - integration with larger graph", {
 })
 
 test_that("marshal", {
-  task = tsk("mtcars")
+  lrn = lrn("regr.debug")
+  lrn$properties = c(lrn$properties, "marshal")
 
-  po_lrn = as_pipeop(po("learner_cv_plus", learner = lrn("regr.debug")))
-  po_lrn$train(list(task = task))
-  po_state = po_lrn$state
+  task = tsk("mtcars")
+  po = PipeOpLearnerCVPlus$new(lrn)
+  po$train(list(task))
+  po_state = po$state
 
   expect_class(po_state, "pipeop_learner_cv_plus_state")
 
-  po_state_marshaled = marshal_model(po_state$cv_model_states[[1L]], inplace = FALSE)
+  po_state_marshaled = marshal_model(po_state, inplace = FALSE)
 
   expect_class(po_state_marshaled, "pipeop_learner_cv_plus_state_marshaled")
   expect_true(is_marshaled_model(po_state_marshaled))
@@ -116,3 +141,36 @@ test_that("marshal", {
   expect_equal(po_state, po_state_unmarshaled)
 })
 
+test_that("marshal multiplicity", {
+  lrn = lrn("regr.debug")
+  lrn$properties = c(lrn$properties, "marshal")
+  po = PipeOpLearnerCVPlus$new(lrn)
+
+  task1 = mlr_tasks$get("mtcars")
+  task2 = mlr_tasks$get("boston_housing")
+
+  po$train(list(Multiplicity(task1, task2)))
+  state = po$state
+
+  marshaled_state = marshal_model(state)
+  expect_class(po$state, "Multiplicity")
+
+  unmarshaled_state = unmarshal_model(marshaled_state)
+  expect_equal(state, unmarshaled_state)
+})
+
+test_that("state class and multiplicity", {
+  lrn = lrn("regr.debug")
+  lrn$properties = c(lrn$properties, "marshal")
+  po = PipeOpLearnerCVPlus$new(lrn)
+  po$train(list(Multiplicity(tsk("mtcars"))))
+  expect_class(po$state, "Multiplicity")
+  expect_class(po$state[[1L]], "pipeop_learner_cv_plus_state")
+
+  # recursive
+  po1 = po("learner_cv_plus", learner = lrn("regr.debug"))
+  po1$train(list(Multiplicity(Multiplicity(tsk("mtcars")))))
+  expect_class(po1$state, "Multiplicity")
+  expect_class(po1$state[[1L]], "Multiplicity")
+  expect_class(po1$state[[1L]][[1L]], "pipeop_learner_cv_plus_state")
+})

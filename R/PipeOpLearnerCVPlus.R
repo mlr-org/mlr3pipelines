@@ -47,6 +47,8 @@
 #' * `residuals` :: `data.table`\cr
 #'   `data.table` with columns `fold` and `residual`. Lists the Regression residuals for each observation and cross validation fold.
 #'
+#' This state is given the class `"pipeop_learner_cv_state"`.
+#'
 #' @section Parameters:
 #' The parameters of the [`Learner`][mlr3::Learner] wrapped by this object, as well as:
 #' * `folds` :: `numeric(1)`\cr
@@ -100,7 +102,7 @@ PipeOpLearnerCVPlus = R6Class("PipeOpLearnerCVPlus",
       id = id %??% private$.learner$id
       type = private$.learner$task_type
 
-      if (!("regr" %in% type)) {
+      if ("regr" != type) {
         stop("PipeOpLearnerCVPlus only supports regression.")
       }
 
@@ -190,8 +192,8 @@ PipeOpLearnerCVPlus = R6Class("PipeOpLearnerCVPlus",
           list(lower = mu_hat[[fold]][observation, response] - residual,
                upper = mu_hat[[fold]][observation, response] + residual)
         })
-        list(q_lower = quantile(quantiles$lower, probs = pv$alpha),
-             q_upper = quantile(quantiles$upper, probs = 1 - pv$alpha))
+        list(q_lower = stats::quantile(quantiles$lower, probs = pv$alpha),
+             q_upper = stats::quantile(quantiles$upper, probs = 1 - pv$alpha))
       }
 
       quantiles = as.matrix(map_dtr(seq_len(task$nrow), get_quantiles))
@@ -199,11 +201,7 @@ PipeOpLearnerCVPlus = R6Class("PipeOpLearnerCVPlus",
       attr(quantiles, "probs") = c(pv$alpha, 1 - pv$alpha)
 
       response = map_dbl(seq_len(task$nrow), function(observation) {
-        quantile(map_dbl(mu_hat, function(fold) {fold[observation, response]}), probs = 0.5)
-      })
-
-      response = map_dbl(seq_len(task$nrow), function(observation) {
-        quantile(map_dbl(mu_hat, function(fold) {fold[observation, response]}), probs = 0.5)
+        stats::quantile(map_dbl(mu_hat, function(fold) {fold[observation, response]}), probs = 0.5)
       })
 
       list(PredictionRegr$new(
@@ -217,5 +215,30 @@ PipeOpLearnerCVPlus = R6Class("PipeOpLearnerCVPlus",
   )
 )
 
+#' @export
+marshal_model.pipeop_learner_cv_plus_state = function(model, inplace = FALSE, ...) {
+  # Note that a Learner state contains other reference objects, but we don't clone them here, even when inplace
+  # is FALSE. For our use-case this is just not necessary and would cause unnecessary overhead in the mlr3
+  # workhorse function
+  model$cv_model_states = map(model$cv_model_states, marshal_model, inplace = inplace)
+  # only wrap this in a marshaled class if the model was actually marshaled above
+  # (the default marshal method does nothing)
+  if (some(model$cv_model_states, is_marshaled_model)) {
+    model = structure(
+      list(marshaled = model, packages = "mlr3pipelines"),
+      class = c(paste0(class(model), "_marshaled"), "marshaled")
+    )
+  }
+  model
+}
 
-mlr_pipeops$add("learner_cv_plus", PipeOpLearnerCVPlus, list(R6Class("Learner", public = list(id = "learner_cv_plus", task_type = "regr", param_set = ps()))$new()))
+#' @export
+unmarshal_model.pipeop_learner_cv_plus_state_marshaled = function(model, inplace = FALSE, ...) {
+  state_marshaled = model$marshaled
+  state_marshaled$cv_model_states = map(state_marshaled$cv_model_states, unmarshal_model, inplace = inplace)
+  state_marshaled
+}
+
+mlr_pipeops$add("learner_cv_plus", PipeOpLearnerCVPlus, list(R6Class("Learner", public = list(id = "learner_cv_plus", task_type = "regr", param_set = ps(), packages = "mlr3pipelines"))$new()))
+
+

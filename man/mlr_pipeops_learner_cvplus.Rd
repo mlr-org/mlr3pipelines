@@ -15,7 +15,7 @@ Inherits the \verb{$param_set} (and therefore \verb{$param_set$values}) from the
 Using \code{\link{PipeOpLearnerCVPlus}}, it is possible to embed a \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{Graph}}.
 \code{\link{PipeOpLearnerCVPlus}} can then be used to perform cross validation plus (or jackknife plus).
 During training, \code{\link{PipeOpLearnerCVPlus}} performs cross validation on the training data.
-During prediction, the models from the training stage are used to constructs predictive confidence intervals for the prediction data based on
+During prediction, the models from the training stage are used to construct predictive confidence intervals for the prediction data based on
 out-of-fold residuals and out-of-fold predictions.
 }
 \section{Construction}{
@@ -57,6 +57,8 @@ List of the state of each cross validation model created by the \code{\link[mlr3
 \item \code{residuals} :: \code{data.table}\cr
 \code{data.table} with columns \code{fold} and \code{residual}. Lists the Regression residuals for each observation and cross validation fold.
 }
+
+This state is given the class \code{"pipeop_learner_cv_state"}.
 }
 
 \section{Parameters}{
@@ -83,7 +85,7 @@ Fields inherited from \code{\link{PipeOp}}, as well as:
 \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
 Read-only.
 \item \code{learner_model} :: \code{\link[mlr3:Learner]{Learner}} or \code{list}\cr
-If the \code{\link{PipeOpLearnerCVPlus}} has been trained, this is \code{list} containing the \code{\link[mlr3:Learner]{Learner}}s of the cross validation models.
+If the \code{\link{PipeOpLearnerCVPlus}} has been trained, this is a \code{list} containing the \code{\link[mlr3:Learner]{Learner}}s of the cross validation models.
 Otherwise, this contains the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
 Read-only.
 \item \code{predict_type}\cr
@@ -126,6 +128,8 @@ Other PipeOps:
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_adas}},
+\code{\link{mlr_pipeops_blsmote}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -160,6 +164,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nearmiss}},
 \code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
@@ -179,6 +184,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
+\code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
@@ -186,6 +192,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
