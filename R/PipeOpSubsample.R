@@ -101,12 +101,9 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
         # task$groups automatically removes rows not in task$row_roles$use and allows rows to be included multiple times
         grp_sizes = table(task$groups$group)
 
-        # If we sample with replacement, drawing groups of larger sizes should be less probable
-        probs = if (pv$replace) 1 / grp_sizes else NULL
-
         # We randomly shuffle the groups and keep all up to the group for
         # which the fraction of rows is closest to the desired fraction.
-        shuffled = shuffle(grp_sizes, prob = probs, replace = pv$replace)
+        shuffled = shuffle(grp_sizes, replace = pv$replace)
         cutoff_index = which.min(abs(cumsum(shuffled) / sum(shuffled) - frac))
         keep_grps = names(shuffled[seq_len(cutoff_index)])
 
