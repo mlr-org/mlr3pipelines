@@ -104,7 +104,7 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
         # We randomly shuffle the groups and keep all up to the group for
         # which the fraction of rows is closest to the desired fraction.
         shuffled = shuffle(grp_sizes, replace = pv$replace)
-        cutoff_index = which.min(abs(cumsum(shuffled) / sum(shuffled) - frac))
+        cutoff_index = which.min(abs(cumsum(shuffled) / sum(shuffled) - pv$frac))
         keep_grps = names(shuffled[seq_len(cutoff_index)])
 
         group = NULL  # for binding
@@ -122,7 +122,6 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
       }
 
       self$state = list()
-      # doesn't work for groups??
       task_filter_ex(task, keep)
     },
 
