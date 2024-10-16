@@ -95,20 +95,38 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
     .train_task = function(task) {
       pv = self$param_set$get_values(tags = "train")
 
+      # error message for frac > 1 and replace = FALSE?
+      # TODO: test what happens when we do this
+
       if (pv$stratify && pv$use_groups) {
         stop("Cannot combine stratification with grouping")
       } else if (pv$use_groups && !is.null(task$groups)) {
         # task$groups automatically removes rows not in task$row_roles$use and allows rows to be included multiple times
         grp_sizes = table(task$groups$group)
 
-        # We randomly shuffle the groups and keep all up to the group for
-        # which the fraction of rows is closest to the desired fraction.
-        shuffled = shuffle(grp_sizes, replace = pv$replace)
-        cutoff_index = which.min(abs(cumsum(shuffled) / sum(shuffled) - pv$frac))
-        keep_grps = names(shuffled[seq_len(cutoff_index)])
-
+        if (pv$replace) {
+          # This should always generate enough samples, but ... too intensive?
+          # shuffled = shuffle(grp_sizes, ceiling(pv$frac * sum(grp_sizes)), replace = pv$replace)
+          # cutoff_index = which.min(abs(cumsum(shuffled) / sum(grp_sizes) - pv$frac))
+          # keep_grps = names(shuffled[seq_len(cutoff_index)])
+          # alt:
+          # maybe combine the two, and initialize with value that will always be higher?
+          shuffled = numeric(0)
+          while (sum(shuffled) / sum(grp_sizes) < pv$frac) {
+            shuffled = c(shuffled, shuffle(grp_sizes, 1, replace = pv$replace))
+          }
+          keep_grps = names(shuffled)
+        } else {
+          # We randomly shuffle the groups and keep all up to the group for
+          # which the fraction of rows is closest to the desired fraction.
+          shuffled = shuffle(grp_sizes, replace = pv$replace)
+          cutoff_index = which.min(abs(cumsum(shuffled) / sum(grp_sizes) - pv$frac))
+          keep_grps = names(shuffled[seq_len(cutoff_index)])
+        }
         group = NULL  # for binding
-        keep = task$groups[group %in% keep_grps]$row_id
+        keep_dt = data.table(group = keep_grps)
+        keep = task$groups[keep_dt, on = "group", allow.cartesian = TRUE]$row_id
+        #keep = task$groups[group %in% keep_grps]$row_id
       } else if (pv$stratify) {
         if (!inherits(task, "TaskClassif")) {
           stopf("Stratification not supported for %s", class(task))

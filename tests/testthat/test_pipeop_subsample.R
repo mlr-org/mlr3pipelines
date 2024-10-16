@@ -91,9 +91,9 @@ test_that("PipeOpSubsample - Grouped Data - Equal group sizes", {
   # Grouped data are kept together
   grps_out = table(train_out$groups$group)
   expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
-  # Proportion optimal
-  train_out$nrow / task$nrow
-  op$param_set$values$frac
+  # Frac is adhered to as best as possible
+  expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.025)
+  # Test for uniformity?
 
   # TESTCASE: changed frac, replace = TRUE
   op$param_set$set_values(frac = 2, replace = TRUE)
@@ -101,17 +101,31 @@ test_that("PipeOpSubsample - Grouped Data - Equal group sizes", {
   # Grouped data are kept together
   grps_out = table(train_out$groups$group)
   expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
-  # Proportion optimal
+  # Frac is adhered to as best as possible
+  #expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.025)
 
   # TESTCASE: Exclude some rows from row_roles$use and one group completely
   task$row_roles$use = setdiff(seq(1, 2800), task$groups[group == "g1", row_id])
   train_out = op$train(list(task))[[1]]
-  # test that all sampled rows are in row_roles$use
+  # Test that all sampled rows are in row_roles$use
   expect_in(train_out$row_ids, task$row_roles$use)
+  # # Grouped data are kept together
+  # grps_out = table(train_out$groups$group)
+  # expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
+  # # Frac is adhered to as best as possible
+  # expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.025)
+
 
   # TESTCASE: Set some rows to be included multiple times in row_roles$use
   task$row_roles$use = c(task$row_roles$use, seq(1:50))
   expect_no_error(op$train(list(task)))
+  # train_out = op$train(list(task))[[1]]
+  # # Grouped data are kept together
+  # grps_out = table(train_out$groups$group)
+  # expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
+  # # Frac is adhered to as best as possible
+  # expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.025)
+
 
   # TESTCASE: use_groups = TRUE and stratify = TRUE should throw an error
   op$param_set$set_values(stratify = TRUE, use_groups = TRUE)
@@ -140,7 +154,8 @@ test_that("PipeOpSubsample - Grouped data - Large variance in group sizes", {
   # Grouped data are kept together
   grps_out = table(train_out$groups$group)
   expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
-  # Proportion optimal
+  # Frac is adhered to as best as possible
+  expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.1)
 
   # TESTCASE: changed frac, replace = TRUE
   op$param_set$set_values(frac = 2, replace = TRUE)
@@ -148,7 +163,8 @@ test_that("PipeOpSubsample - Grouped data - Large variance in group sizes", {
   # grouped data are kept together
   grps_out = table(train_out$groups$group)
   expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
-  # Proportion optimal
+  # Frac is adhered to as best as possible
+  expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.1)
 
 })
 
