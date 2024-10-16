@@ -105,20 +105,17 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
         grp_sizes = table(task$groups$group)
 
         if (pv$replace) {
-          # This should always generate enough samples, but ... too intensive?
-          # shuffled = shuffle(grp_sizes, ceiling(pv$frac * sum(grp_sizes)), replace = pv$replace)
-          # cutoff_index = which.min(abs(cumsum(shuffled) / sum(grp_sizes) - pv$frac))
-          # keep_grps = names(shuffled[seq_len(cutoff_index)])
-          # alt:
-          # maybe combine the two, and initialize with value that will always be higher?
+          # Draw groups as long as the fraction of sampled rows is below the desired fraction
           shuffled = numeric(0)
           while (sum(shuffled) / sum(grp_sizes) < pv$frac) {
             shuffled = c(shuffled, shuffle(grp_sizes, 1, replace = pv$replace))
           }
-          keep_grps = names(shuffled)
+          # Only need to check last two entries => possible improvement?
+          cutoff_index = which.min(abs(cumsum(shuffled) / sum(grp_sizes) - pv$frac))
+          keep_grps = names(shuffled[seq_len(cutoff_index)])
         } else {
           # We randomly shuffle the groups and keep all up to the group for
-          # which the fraction of rows is closest to the desired fraction.
+          # which the fraction of sampled rows is closest to the desired fraction.
           shuffled = shuffle(grp_sizes, replace = pv$replace)
           cutoff_index = which.min(abs(cumsum(shuffled) / sum(grp_sizes) - pv$frac))
           keep_grps = names(shuffled[seq_len(cutoff_index)])
