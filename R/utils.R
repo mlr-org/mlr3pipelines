@@ -31,11 +31,11 @@ calculate_collimit = function(colwidths, outwidth) {
 task_filter_ex = function(task, row_ids) {
 
   addedrows = row_ids[duplicated(row_ids)]
-
+  cols = setdiff(task$backend$colnames, task$backend$primary_key)
   newrows = task$nrow + seq_along(addedrows)
 
   if (length(addedrows)) {
-    task$rbind(task$data(rows = addedrows))
+    task$rbind(task$backend$data(rows = addedrows, cols = cols))
   }
 
   # row ids can be anything, we just take what mlr3 happens to assign.
