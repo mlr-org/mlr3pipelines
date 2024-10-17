@@ -30,12 +30,33 @@ calculate_collimit = function(colwidths, outwidth) {
 # @return [Task] the modified task
 task_filter_ex = function(task, row_ids) {
 
-  addedrows = row_ids[duplicated(row_ids)]
-  cols = setdiff(task$backend$colnames, task$backend$primary_key)
-  newrows = task$nrow + seq_along(addedrows)
+  dupids = row_ids[duplicated(row_ids)]
+  newrows = task$nrow + seq_along(dupids)
 
-  if (length(addedrows)) {
-    task$rbind(task$backend$data(rows = addedrows, cols = cols))
+  cols = unique(unlist(task$col_roles, use.names = FALSE))
+
+  # Save original grp_sizes
+  if (!is.null(task$groups)) {
+    grp_sizes = table(task$groups$group)
+  }
+
+  if (length(dupids)) {
+    task$rbind(task$data(rows = dupids, cols = cols))
+  }
+  # For column with role "group", create new groups for duplicates by adding a suffix
+  if (!is.null(task$groups)) {
+    group = NULL  # for binding
+
+    t_grps = table(task$groups[dupids]$group)
+    n_grps = t_grps / grp_sizes[names(t_grps)]
+
+    for (grp in names(n_grps)) {
+      n = n_grps[[grp]]
+      grp_size = grp_sizes[[grp]]
+      # This relies on correct ordering of rbinded rows ...
+      new_group = rep(paste0(grp, "_", seq_len(n)), each = grp_size)
+      task$groups[row_id %in% newrows & group == grp, group := new_group]
+    }
   }
 
   # row ids can be anything, we just take what mlr3 happens to assign.
