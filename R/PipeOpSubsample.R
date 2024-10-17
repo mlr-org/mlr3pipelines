@@ -95,35 +95,37 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
     .train_task = function(task) {
       pv = self$param_set$get_values(tags = "train")
 
-      # error message for frac > 1 and replace = FALSE?
-      # TODO: test what happens when we do this
+      if (pv$frac > 1 && pv$replace == FALSE){
+        stop("Can't subsample task up to a fraction larger than one if parameter 'replace' is FALSE.")
+      }
 
       if (pv$stratify && pv$use_groups) {
         stop("Cannot combine stratification with grouping")
       } else if (pv$use_groups && !is.null(task$groups)) {
         # task$groups automatically removes rows not in task$row_roles$use and allows rows to be included multiple times
         grp_sizes = table(task$groups$group)
+        ngrps = length(grp_sizes)
+        nrows = task$nrow
 
         if (pv$replace) {
-          # Draw groups as long as the fraction of sampled rows is below the desired fraction
+          # Draw groups until the fraction of sampled rows is no longer below the desired fraction.
+          # We then keep all up to the entry for which the fraction of sampled rows is closest to the desired fraction.
           shuffled = numeric(0)
-          while (sum(shuffled) / sum(grp_sizes) < pv$frac) {
-            shuffled = c(shuffled, shuffle(grp_sizes, 1, replace = pv$replace))
+          while (sum(shuffled) / nrows < pv$frac) {
+            shuffled = c(shuffled, shuffle(grp_sizes, ceiling(max(1, pv$frac) * ngrps), replace = TRUE))
           }
-          # Only need to check last two entries => possible improvement?
-          cutoff_index = which.min(abs(cumsum(shuffled) / sum(grp_sizes) - pv$frac))
+          cutoff_index = which.min(abs(cumsum(shuffled) / nrows - pv$frac))
           keep_grps = names(shuffled[seq_len(cutoff_index)])
         } else {
           # We randomly shuffle the groups and keep all up to the group for
           # which the fraction of sampled rows is closest to the desired fraction.
-          shuffled = shuffle(grp_sizes, replace = pv$replace)
-          cutoff_index = which.min(abs(cumsum(shuffled) / sum(grp_sizes) - pv$frac))
+          shuffled = shuffle(grp_sizes)
+          cutoff_index = which.min(abs(cumsum(shuffled) / nrows - pv$frac))
           keep_grps = names(shuffled[seq_len(cutoff_index)])
         }
         group = NULL  # for binding
         keep_dt = data.table(group = keep_grps)
         keep = task$groups[keep_dt, on = "group", allow.cartesian = TRUE]$row_id
-        #keep = task$groups[group %in% keep_grps]$row_id
       } else if (pv$stratify) {
         if (!inherits(task, "TaskClassif")) {
           stopf("Stratification not supported for %s", class(task))
