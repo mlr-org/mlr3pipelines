@@ -112,15 +112,25 @@ construction of <code>GraphLearner</code>, during <code>$train()</code>, and dur
 <p>Fields inherited from <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>, as well as:</p><ul><li><p><code>graph</code> :: <code><a href="Graph.html">Graph</a></code><br><code><a href="Graph.html">Graph</a></code> that is being wrapped. This field contains the prototype of the <code><a href="Graph.html">Graph</a></code> that is being trained, but does <em>not</em>
 contain the model. Use <code>graph_model</code> to access the trained <code><a href="Graph.html">Graph</a></code> after <code>$train()</code>. Read-only.</p></li>
 <li><p><code>graph_model</code> :: <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code><br><code><a href="Graph.html">Graph</a></code> that is being wrapped. This <code><a href="Graph.html">Graph</a></code> contains a trained state after <code>$train()</code>. Read-only.</p></li>
+<li><p><code>pipeops</code> :: named <code>list</code> of <code><a href="PipeOp.html">PipeOp</a></code> <br>
+Contains all <code><a href="PipeOp.html">PipeOp</a></code>s in the underlying <code><a href="Graph.html">Graph</a></code>, named by the <code><a href="PipeOp.html">PipeOp</a></code>'s <code>$id</code>s. Shortcut for <code>$graph_model$pipeops</code>. See <code><a href="Graph.html">Graph</a></code> for details.</p></li>
+<li><p><code>edges</code> :: <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>  with columns <code>src_id</code> (<code>character</code>), <code>src_channel</code> (<code>character</code>), <code>dst_id</code> (<code>character</code>), <code>dst_channel</code> (<code>character</code>)<br>
+Table of connections between the <code><a href="PipeOp.html">PipeOp</a></code>s in the underlying <code><a href="Graph.html">Graph</a></code>. Shortcut for <code>$graph$edges</code>. See <code><a href="Graph.html">Graph</a></code> for details.</p></li>
+<li><p><code>param_set</code> :: <code><a href="https://paradox.mlr-org.com/reference/ParamSet.html" class="external-link">ParamSet</a></code><br>
+Parameters of the underlying <code><a href="Graph.html">Graph</a></code>. Shortcut for <code>$graph$param_set</code>. See <code><a href="Graph.html">Graph</a></code> for details.</p></li>
+<li><p><code>pipeops_param_set</code> :: named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code><br>
+Named list containing the <code><a href="https://paradox.mlr-org.com/reference/ParamSet.html" class="external-link">ParamSet</a></code>s of all <code><a href="PipeOp.html">PipeOp</a></code>s in the <code><a href="Graph.html">Graph</a></code>. See there for details.</p></li>
+<li><p><code>pipeops_param_set_values</code> :: named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code><br>
+Named list containing the set parameter values of all <code><a href="PipeOp.html">PipeOp</a></code>s in the <code><a href="Graph.html">Graph</a></code>. See there for details.</p></li>
 <li><p><code>internal_tuned_values</code> :: named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> or <code>NULL</code><br>
-The internal tuned parameter values collected from all <code>PipeOp</code>s.
+The internal tuned parameter values collected from all <code><a href="PipeOp.html">PipeOp</a></code>s.
 <code>NULL</code> is returned if the learner is not trained or none of the wrapped learners supports internal tuning.</p></li>
 <li><p><code>internal_valid_scores</code> :: named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> or <code>NULL</code><br>
-The internal validation scores as retrieved from the <code>PipeOps</code>.
-The names are prefixed with the respective IDs of the <code>PipeOp</code>s.
+The internal validation scores as retrieved from the <code><a href="PipeOp.html">PipeOp</a></code>s.
+The names are prefixed with the respective IDs of the <code><a href="PipeOp.html">PipeOp</a></code>s.
 <code>NULL</code> is returned if the learner is not trained or none of the wrapped learners supports internal validation.</p></li>
 <li><p><code>validate</code> :: <code>numeric(1)</code>, <code>"predefined"</code>, <code>"test"</code> or <code>NULL</code><br>
-How to construct the validation data. This also has to be configured for the individual <code>PipeOp</code>s such as
+How to construct the validation data. This also has to be configured for the individual <code><a href="PipeOp.html">PipeOp</a></code>s such as
 <code>PipeOpLearner</code>, see <code><a href="set_validate.GraphLearner.html">set_validate.GraphLearner</a></code>.
 For more details on the possible values, see <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">mlr3::Learner</a></code>.</p></li>
 <li><p><code>marshaled</code> :: <code>logical(1)</code><br>
@@ -142,7 +152,17 @@ The default is <code>FALSE</code>.</p></li>
     <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
 
 
-<p>Methods inherited from <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>, as well as:</p><ul><li><p><code>marshal</code><br>
+<p>Methods inherited from <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>, as well as:</p><ul><li><p><code>ids(sorted = FALSE)</code> <br>
+(<code>logical(1)</code>) -&gt; <code>character</code> <br>
+Get IDs of all <code><a href="PipeOp.html">PipeOp</a></code>s. This is in order that <code><a href="PipeOp.html">PipeOp</a></code>s were added if
+<code>sorted</code> is <code>FALSE</code>, and topologically sorted if <code>sorted</code> is <code>TRUE</code>.</p></li>
+<li><p><code>plot(html = FALSE, horizontal = FALSE)</code> <br>
+(<code>logical(1)</code>, <code>logical(1)</code>) -&gt; <code>NULL</code> <br>
+Plot the <code><a href="Graph.html">Graph</a></code>, using either the <span class="pkg">igraph</span> package (for <code>html = FALSE</code>, default) or
+the <code>visNetwork</code> package for <code>html = TRUE</code> producing a <code><a href="https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-package.html" class="external-link">htmlWidget</a></code>.
+The <code><a href="https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-package.html" class="external-link">htmlWidget</a></code> can be rescaled using <code><a href="https://rdrr.io/pkg/visNetwork/man/visOptions.html" class="external-link">visOptions</a></code>.
+For <code>html = FALSE</code>, the orientation of the plotted graph can be controlled through <code>horizontal</code>.</p></li>
+<li><p><code>marshal</code><br>
 (any) -&gt; <code>self</code><br>
 Marshal the model.</p></li>
 <li><p><code>unmarshal</code><br>
@@ -169,9 +189,11 @@ If <code>resolve_branching</code> is <code>FALSE</code>, <code><a href="mlr_pipe
 Note that these typically only extract information from the <code>$base_learner()</code>.
 This works well for simple <code><a href="Graph.html">Graph</a></code>s that do not modify features too much, but may give unexpected results for <code>Graph</code>s that
 add new features or move information between features.</p>
-<p>As an example, consider a feature <code>A`` with missing values, and a feature </code>B<code> that is used for imputatoin, using a [`po("imputelearner")`][PipeOpImputeLearner]. In a case where the following [`Learner`][mlr3::Learner] performs embedded feature selection and only selects feature A, the `selected_features()` method could return only feature `A</code>, and <code>$importance()</code> may even report 0 for feature <code>B</code>.
-This would not be entirbababababely accurate when considering the entire <code>GraphLearner</code>, as feature <code>B</code> is used for imputation and would therefore have an impact on predictions.
-The following should therefore only be used if the <code>Graph</code> is known to not have an impact on the relevant properties.</p><ul><li><p><code>importance()</code><br>
+<p>As an example, consider a feature <code>A</code> with missing values, and a feature <code>B</code> that is used for imputation, using a <code><a href="mlr_pipeops_imputelearner.html">po("imputelearner")</a></code>.
+In a case where the following <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> performs embedded feature selection and only selects feature <code>A</code>,
+the <code>selected_features()</code> method could return only feature <code>A</code>, and <code>$importance()</code> may even report 0 for feature <code>B</code>.
+This would not be entirely accurate when considering the entire <code>GraphLearner</code>, as feature <code>B</code> is used for imputation and would therefore have an impact on predictions.
+The following should therefore only be used if the <code><a href="Graph.html">Graph</a></code> is known to not have an impact on the relevant properties.</p><ul><li><p><code>importance()</code><br>
 () -&gt; <code>numeric</code><br>
 The <code>$importance()</code> returned by the base learner, if it has the <code>"importance</code> property.
 Throws an error otherwise.</p></li>

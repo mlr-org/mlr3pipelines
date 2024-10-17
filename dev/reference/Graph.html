@@ -160,11 +160,12 @@ are therefore unambiguous, they can be omitted (i.e. left as <code>NULL</code>).
 Takes a list of <code>Graph</code>s or <code><a href="PipeOp.html">PipeOp</a></code>s (or objects that can be automatically converted into <code>Graph</code>s or <code><a href="PipeOp.html">PipeOp</a></code>s,
 see <code><a href="as_graph.html">as_graph()</a></code> and <code><a href="as_pipeop.html">as_pipeop()</a></code>) as inputs and joins them in a serial <code>Graph</code> coming after <code>self</code>, as if
 connecting them using <code>%&gt;&gt;%</code>.</p></li>
-<li><p><code>plot(html)</code> <br>
-(<code>logical(1)</code>) -&gt; <code>NULL</code> <br>
+<li><p><code>plot(html = FALSE, horizontal = FALSE)</code> <br>
+(<code>logical(1)</code>, <code>logical(1)</code>) -&gt; <code>NULL</code> <br>
 Plot the <code>Graph</code>, using either the <span class="pkg">igraph</span> package (for <code>html = FALSE</code>, default) or
 the <code>visNetwork</code> package for <code>html = TRUE</code> producing a <code><a href="https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-package.html" class="external-link">htmlWidget</a></code>.
-The <code><a href="https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-package.html" class="external-link">htmlWidget</a></code> can be rescaled using <code><a href="https://rdrr.io/pkg/visNetwork/man/visOptions.html" class="external-link">visOptions</a></code>.</p></li>
+The <code><a href="https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-package.html" class="external-link">htmlWidget</a></code> can be rescaled using <code><a href="https://rdrr.io/pkg/visNetwork/man/visOptions.html" class="external-link">visOptions</a></code>.
+For <code>html = FALSE</code>, the orientation of the plotted graph can be controlled through <code>horizontal</code>.</p></li>
 <li><p><code>print(dot = FALSE, dotname = "dot", fontsize = 24L)</code> <br>
 (<code>logical(1)</code>, <code>character(1)</code>, <code>integer(1)</code>) -&gt; <code>NULL</code> <br>
 Print a representation of the <code>Graph</code> on the console. If <code>dot</code> is <code>FALSE</code>, output is a table with one row for each contained <code><a href="PipeOp.html">PipeOp</a></code> and
