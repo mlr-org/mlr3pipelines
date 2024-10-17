@@ -40,23 +40,31 @@ task_filter_ex = function(task, row_ids) {
     grp_sizes = table(task$groups$group)
   }
 
+  # rbind duplicated rows to task
   if (length(dupids)) {
     task$rbind(task$data(rows = dupids, cols = cols))
   }
-  # For column with role "group", create new groups for duplicates by adding a suffix
+
+  # For column with role "group", create new groups for duplicates by adding a suffix.
   if (!is.null(task$groups)) {
     group = NULL  # for binding
 
     t_grps = table(task$groups[dupids]$group)
     n_grps = t_grps / grp_sizes[names(t_grps)]
 
+    dt_grps = task$groups[newrows]
+
     for (grp in names(n_grps)) {
       n = n_grps[[grp]]
       grp_size = grp_sizes[[grp]]
       # This relies on correct ordering of rbinded rows ...
       new_group = rep(paste0(grp, "_", seq_len(n)), each = grp_size)
-      task$groups[row_id %in% newrows & group == grp, group := new_group]
+      dt_grps[group == grp, group := new_group]
     }
+    dt = rbind(task$groups[seq(1, task$nrow - length(newrows))], dt_grps)
+    setnames(dt, c(task$backend$primary_key, task$col_roles$group))
+    task$cbind(dt)
+    task$col_roles$feature = setdiff(task$col_roles$feature, task$col_roles$group)
   }
 
   # row ids can be anything, we just take what mlr3 happens to assign.
