@@ -104,11 +104,12 @@ are therefore unambiguous, they can be omitted (i.e. left as \code{NULL}).
 Takes a list of \code{Graph}s or \code{\link{PipeOp}}s (or objects that can be automatically converted into \code{Graph}s or \code{\link{PipeOp}}s,
 see \code{\link[=as_graph]{as_graph()}} and \code{\link[=as_pipeop]{as_pipeop()}}) as inputs and joins them in a serial \code{Graph} coming after \code{self}, as if
 connecting them using \code{\link{\%>>\%}}.
-\item \code{plot(html)} \cr
-(\code{logical(1)}) -> \code{NULL} \cr
+\item \code{plot(html = FALSE, horizontal = FALSE)} \cr
+(\code{logical(1)}, \code{logical(1)}) -> \code{NULL} \cr
 Plot the \code{\link{Graph}}, using either the \pkg{igraph} package (for \code{html = FALSE}, default) or
 the \code{visNetwork} package for \code{html = TRUE} producing a \code{\link[htmlwidgets:htmlwidgets-package]{htmlWidget}}.
 The \code{\link[htmlwidgets:htmlwidgets-package]{htmlWidget}} can be rescaled using \code{\link[visNetwork:visOptions]{visOptions}}.
+For \code{html = FALSE}, the orientation of the plotted graph can be controlled through \code{horizontal}.
 \item \code{print(dot = FALSE, dotname = "dot", fontsize = 24L)} \cr
 (\code{logical(1)}, \code{character(1)}, \code{integer(1)}) -> \code{NULL} \cr
 Print a representation of the \code{\link{Graph}} on the console. If \code{dot} is \code{FALSE}, output is a table with one row for each contained \code{\link{PipeOp}} and

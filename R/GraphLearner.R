@@ -47,15 +47,25 @@
 #'   contain the model. Use `graph_model` to access the trained [`Graph`] after `$train()`. Read-only.
 #' * `graph_model` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Graph`] that is being wrapped. This [`Graph`] contains a trained state after `$train()`. Read-only.
+#' * `pipeops` :: named `list` of [`PipeOp`] \cr
+#'   Contains all [`PipeOp`]s in the underlying [`Graph`], named by the [`PipeOp`]'s `$id`s. Shortcut for `$graph_model$pipeops`. See [`Graph`] for details.
+#' * `edges` :: [`data.table`][data.table::data.table]  with columns `src_id` (`character`), `src_channel` (`character`), `dst_id` (`character`), `dst_channel` (`character`)\cr
+#'   Table of connections between the [`PipeOp`]s in the underlying [`Graph`]. Shortcut for `$graph$edges`. See [`Graph`] for details.
+#' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
+#'   Parameters of the underlying [`Graph`]. Shortcut for `$graph$param_set`. See [`Graph`] for details.
+#' * `pipeops_param_set` :: named `list()`\cr
+#'   Named list containing the [`ParamSet`][paradox::ParamSet]s of all [`PipeOp`]s in the [`Graph`]. See there for details.
+#' * `pipeops_param_set_values` :: named `list()`\cr
+#'   Named list containing the set parameter values of all [`PipeOp`]s in the [`Graph`]. See there for details.
 #' * `internal_tuned_values` :: named `list()` or `NULL`\cr
-#'   The internal tuned parameter values collected from all `PipeOp`s.
+#'   The internal tuned parameter values collected from all [`PipeOp`]s.
 #'   `NULL` is returned if the learner is not trained or none of the wrapped learners supports internal tuning.
 #' * `internal_valid_scores` :: named `list()` or `NULL`\cr
-#'   The internal validation scores as retrieved from the `PipeOps`.
-#'   The names are prefixed with the respective IDs of the `PipeOp`s.
+#'   The internal validation scores as retrieved from the [`PipeOp`]s.
+#'   The names are prefixed with the respective IDs of the [`PipeOp`]s.
 #'   `NULL` is returned if the learner is not trained or none of the wrapped learners supports internal validation.
 #' * `validate` :: `numeric(1)`, `"predefined"`, `"test"` or `NULL`\cr
-#'   How to construct the validation data. This also has to be configured for the individual `PipeOp`s such as
+#'   How to construct the validation data. This also has to be configured for the individual [`PipeOp`]s such as
 #'   `PipeOpLearner`, see [`set_validate.GraphLearner`].
 #'   For more details on the possible values, see [`mlr3::Learner`].
 #' * `marshaled` :: `logical(1)`\cr
@@ -75,6 +85,16 @@
 #'
 #' @section Methods:
 #' Methods inherited from [`Learner`][mlr3::Learner], as well as:
+#' * `ids(sorted = FALSE)` \cr
+#'   (`logical(1)`) -> `character` \cr
+#'   Get IDs of all [`PipeOp`]s. This is in order that [`PipeOp`]s were added if
+#'   `sorted` is `FALSE`, and topologically sorted if `sorted` is `TRUE`.
+#' * `plot(html = FALSE, horizontal = FALSE)` \cr
+#'   (`logical(1)`, `logical(1)`) -> `NULL` \cr
+#'   Plot the [`Graph`], using either the \pkg{igraph} package (for `html = FALSE`, default) or
+#'   the `visNetwork` package for `html = TRUE` producing a [`htmlWidget`][htmlwidgets::htmlwidgets].
+#'   The [`htmlWidget`][htmlwidgets::htmlwidgets] can be rescaled using [`visOptions`][visNetwork::visOptions].
+#'   For `html = FALSE`, the orientation of the plotted graph can be controlled through `horizontal`.
 #' * `marshal`\cr
 #'   (any) -> `self`\cr
 #'   Marshal the model.
@@ -104,11 +124,11 @@
 #' This works well for simple [`Graph`]s that do not modify features too much, but may give unexpected results for `Graph`s that
 #' add new features or move information between features.
 #'
-#' As an example, consider a feature `A`` with missing values, and a feature `B`` that is used for imputatoin, using a [`po("imputelearner")`][PipeOpImputeLearner].
-#' In a case where the following [`Learner`][mlr3::Learner] performs embedded feature selection and only selects feature A,
-#' the `selected_features()` method could return only feature `A``, and `$importance()` may even report 0 for feature `B`.
-#' This would not be entirbababababely accurate when considering the entire `GraphLearner`, as feature `B` is used for imputation and would therefore have an impact on predictions.
-#' The following should therefore only be used if the `Graph` is known to not have an impact on the relevant properties.
+#' As an example, consider a feature `A` with missing values, and a feature `B` that is used for imputation, using a [`po("imputelearner")`][PipeOpImputeLearner].
+#' In a case where the following [`Learner`][mlr3::Learner] performs embedded feature selection and only selects feature `A`,
+#' the `selected_features()` method could return only feature `A`, and `$importance()` may even report 0 for feature `B`.
+#' This would not be entirely accurate when considering the entire `GraphLearner`, as feature `B` is used for imputation and would therefore have an impact on predictions.
+#' The following should therefore only be used if the [`Graph`] is known to not have an impact on the relevant properties.
 #'
 #' * `importance()`\cr
 #'   () -> `numeric`\cr
@@ -286,6 +306,12 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       } else {
         stopf("Baselearner %s of %s does not implement '$loglik()'.", base_learner$id, self$id)
       }
+    },
+    ids = function(sorted = FALSE) {
+      private$.graph$ids(sorted = sorted)
+    },
+    plot = function(html = FALSE, horizontal = FALSE, ...) {
+      private$.graph$plot(html = html, horizontal = horizontal, ...)
     }
   ),
   active = list(
@@ -339,12 +365,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       pt
     },
-    param_set = function(rhs) {
-      if (!missing(rhs) && !identical(rhs, self$graph$param_set)) {
-        stop("param_set is read-only.")
-      }
-      self$graph$param_set
-    },
     graph = function(rhs) {
       if (!missing(rhs) && !identical(rhs, private$.graph)) stop("graph is read-only")
       private$.graph
@@ -360,6 +380,41 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         g$state = self$model
         g
       }
+    },
+    pipeops = function(rhs) {
+      if (!missing(rhs) && (!identical(rhs, self$graph_model$pipeops))) {
+        stop("pipeops is read-only")
+      }
+      self$graph_model$pipeops
+    },
+    edges = function(rhs) {
+      if (!missing(rhs) && !identical(rhs, private$.graph$edges)) {
+        stop("edges is read-only")
+      }
+      private$.graph$edges
+    },
+    param_set = function(rhs) {
+      if (!missing(rhs) && !identical(rhs, self$graph$param_set)) {
+        stop("param_set is read-only.")
+      }
+      self$graph$param_set
+    },
+    pipeops_param_set = function(rhs) {
+      value = map(self$graph$pipeops, "param_set")
+      if (!missing(rhs) && !identical(value, rhs)) {
+        stop("pipeops_param_set is read-only")
+      }
+      value
+    },
+    pipeops_param_set_values = function(rhs) {
+      if (!missing(rhs)) {
+        assert_list(rhs)
+        assert_names(names(rhs), permutation.of = names(self$graph$pipeops))
+        for (n in names(rhs)) {
+          self$graph$pipeops[[n]]$param_set$values = rhs[[n]]
+        }
+      }
+      map(self$graph$pipeops, function(x) x$param_set$values)
     }
   ),
   private = list(

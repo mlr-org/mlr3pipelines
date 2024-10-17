@@ -127,6 +127,7 @@ test_that("graphlearner parameters behave as they should", {
   dblrn = mlr_learners$get("classif.debug")
   dblrn$param_set$values$save_tasks = TRUE
 
+  # Graph ParamSet
   dbgr = PipeOpScale$new() %>>% PipeOpLearner$new(dblrn)
 
   expect_subset(c("scale.center", "scale.scale", "classif.debug.x"), dbgr$param_set$ids())
@@ -163,6 +164,7 @@ test_that("graphlearner parameters behave as they should", {
   expect_equal(dbgr$pipeops$classif.debug$param_set$values$x, 0.5)
   expect_equal(dbgr$pipeops$classif.debug$learner$param_set$values$x, 0.5)
 
+  # Graph Learner ParamSet
   dblrn = mlr_learners$get("classif.debug")
   dblrn$param_set$values$message_train = 1
   dblrn$param_set$values$message_predict = 1
@@ -177,6 +179,32 @@ test_that("graphlearner parameters behave as they should", {
 
   expect_mapequal(gl$param_set$values,
     list(classif.debug.message_predict = 0, classif.debug.message_train = 1, classif.debug.warning_predict = 0, classif.debug.warning_train = 1))
+
+  # GraphLearner AB shortcuts
+  gl = GraphLearner$new(dbgr)
+
+  # GraphLearner AB $pipeops
+  expect_no_error({gl$pipeops$classif.debug$param_set$values$x = 0.5})
+  expect_equal(gl$pipeops$classif.debug$param_set$values$x, 0.5)
+  expect_equal(gl$graph_model$pipeops$classif.debug$param_set$values$x, 0.5)
+
+  # GraphLearner AB $pipeops_param_set
+  expect_no_error({gl$pipeops_param_set$classif.debug$values$x = 0})
+  expect_equal(gl$pipeops_param_set$classif.debug$values$x, 0)
+  expect_equal(gl$graph_model$pipeops$classif.debug$param_set$values$x, 0)
+
+  # GraphLearner AB $pipeops_param_set_values
+  expect_no_error({gl$pipeops_param_set_values$classif.debug$x = 1})
+  expect_equal(gl$pipeops_param_set_values$classif.debug$x, 1)
+  expect_equal(gl$graph_model$pipeops$classif.debug$param_set$values$x, 1)
+
+  # Change param_set pointer should throw error
+  expect_error({gl$pipeops$scale$param_set = ps()})
+  expect_error({gl$pipeops_param_set$scale = ps()})
+  # Lists with wrong properties should not be accepted
+  expect_error({gl$pipeops_param_set_values = list()})
+  expect_error({gl$pipeops_param_set_values = list(x = 5)})
+
 })
 
 test_that("graphlearner type inference", {
