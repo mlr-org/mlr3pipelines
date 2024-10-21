@@ -43,52 +43,26 @@ task_filter_ex = function(task, row_ids) {
   if (length(dup_ids)) {
     task$rbind(task$data(rows = dup_ids, cols = cols))
   }
-
   # For column with role "group", create new groups for duplicates by adding a suffix.
   if (!is.null(task$groups)) {
     group = NULL  # for binding
     row_id = NULL  # for binding
 
-    # Grps for rows that were added as duplicates
-    # could iterate through these
-    # subset dt_grps with grp and dup_ids ... meh
+    # We create a data.table with the corresponding group to each duplicated ID.
+    # We then change the group entry based on how often the ID occurs.
+    # Note that we make no assumptions on whether the whole group is sampled here.
+    # That has to be checked in the functions calling this.
+    #
+    # We assume that the rbinded rows are in the same positions as the original ids in dup_ids
+    # This should generally be the case as long as the task does not have a col role group
+    # and task$data(..., ordered = FALSE) in task$rbind above (default).
+    new_groups = task$groups[dup_ids][, group := paste0(group, "_", seq_len(.N)), by = row_id]
 
-    # This works because we only care about which groups were sampled at this point
-    # not how often they were sampled. Otherwise, we'd need to use join.
-    # grps = unique(task$groups[row_id %in% dup_ids]$group)
-
-    # dup_ids contains the information about which groups belong together
-    # can we get a mapping between dupids and the new row_id that was assigned to it?
-    # by default: dupids -> newrows maps exactly to the same element
-
-    browser()
-
-    grp_sizes = table(task$groups[-newrows]$group)
-
-    # Find out how many times a group was added
-    n_dups_per_grp = table(task$groups[data.table(row_id = dup_ids), on = "row_id", allow.cartesian = TRUE]$group)
-    n_grps = n_dups_per_grp / grp_sizes[names(n_dups_per_grp)]
-
-    # Generate data.table of row_ids and groups with updated group names.
-    dt_grps = task$groups[newrows]
-    for (grp in names(n_grps)) {
-      n_add = n_grps[[grp]]
-      # This assumes that we always filter the whole group. We probably shouldn't assume
-      # that in this general function.
-      grp_size = grp_sizes[[grp]]
-      # This relies on correct ordering of rbinded rows ...
-      # This breaks if task has column with role "order"
-      # Could correct for this by sorting dup_ids before task$rbind if col_role order exists ...
-      # This doesn't seem very future-proof.
-      new_group = rep(paste0(grp, "_", seq_len(n_add)), each = grp_size)
-      dt_grps[group == grp, group := new_group]
-    }
-
+    # Generate data.table with rows for all newly added rows and updated group names
+    dt = task$groups[newrows, group := new_groups$group]
     # Update column in task
-    dt = rbind(task$groups[seq(1, task$nrow - length(newrows))], dt_grps)
     setnames(dt, c(task$backend$primary_key, task$col_roles$group))
     task$cbind(dt)
-
     # Correct that cbind automatically sets col_roles for new columns to feature.
     task$col_roles$feature = setdiff(task$col_roles$feature, task$col_roles$group)
   }
