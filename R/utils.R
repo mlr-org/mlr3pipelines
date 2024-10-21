@@ -24,50 +24,76 @@ calculate_collimit = function(colwidths, outwidth) {
   collimit - 3  # subtracting 3 here because data.table adds "..." whenever it truncates a string
 }
 
-# same as task$filter(), but allows duplicate row IDs
+# Same as task$filter(), but allows duplicate row IDs.
+# Handles duplicate rows in tasks with col_role "group" by renaming groups
+# following pattern grp_name_1, grp_name_1, ... per each duplication of a group.
 # @param task [Task] the task
 # @param row_ids [numeric] the row IDs to select
 # @return [Task] the modified task
 task_filter_ex = function(task, row_ids) {
 
-  dupids = row_ids[duplicated(row_ids)]
-  newrows = task$nrow + seq_along(dupids)
-
+  # Get vector of duplicate row IDs
+  dup_ids = row_ids[duplicated(row_ids)]
+  # Generate vector with new row IDs
+  newrows = task$nrow + seq_along(dup_ids)
+  # Get all columns of task for subsetting using task$data()
   cols = unique(unlist(task$col_roles, use.names = FALSE))
 
-  # Save original grp_sizes
-  if (!is.null(task$groups)) {
-    grp_sizes = table(task$groups$group)
-  }
-
-  # rbind duplicated rows to task
-  if (length(dupids)) {
-    task$rbind(task$data(rows = dupids, cols = cols))
+  # Rbind duplicated rows to task
+  if (length(dup_ids)) {
+    task$rbind(task$data(rows = dup_ids, cols = cols))
   }
 
   # For column with role "group", create new groups for duplicates by adding a suffix.
   if (!is.null(task$groups)) {
     group = NULL  # for binding
+    row_id = NULL  # for binding
 
-    t_grps = table(task$groups[dupids]$group)
-    n_grps = t_grps / grp_sizes[names(t_grps)]
+    # Grps for rows that were added as duplicates
+    # could iterate through these
+    # subset dt_grps with grp and dup_ids ... meh
 
+    # This works because we only care about which groups were sampled at this point
+    # not how often they were sampled. Otherwise, we'd need to use join.
+    # grps = unique(task$groups[row_id %in% dup_ids]$group)
+
+    # dup_ids contains the information about which groups belong together
+    # can we get a mapping between dupids and the new row_id that was assigned to it?
+    # by default: dupids -> newrows maps exactly to the same element
+
+    browser()
+
+    grp_sizes = table(task$groups[-newrows]$group)
+
+    # Find out how many times a group was added
+    n_dups_per_grp = table(task$groups[data.table(row_id = dup_ids), on = "row_id", allow.cartesian = TRUE]$group)
+    n_grps = n_dups_per_grp / grp_sizes[names(n_dups_per_grp)]
+
+    # Generate data.table of row_ids and groups with updated group names.
     dt_grps = task$groups[newrows]
-
     for (grp in names(n_grps)) {
-      n = n_grps[[grp]]
+      n_add = n_grps[[grp]]
+      # This assumes that we always filter the whole group. We probably shouldn't assume
+      # that in this general function.
       grp_size = grp_sizes[[grp]]
       # This relies on correct ordering of rbinded rows ...
-      new_group = rep(paste0(grp, "_", seq_len(n)), each = grp_size)
+      # This breaks if task has column with role "order"
+      # Could correct for this by sorting dup_ids before task$rbind if col_role order exists ...
+      # This doesn't seem very future-proof.
+      new_group = rep(paste0(grp, "_", seq_len(n_add)), each = grp_size)
       dt_grps[group == grp, group := new_group]
     }
+
+    # Update column in task
     dt = rbind(task$groups[seq(1, task$nrow - length(newrows))], dt_grps)
     setnames(dt, c(task$backend$primary_key, task$col_roles$group))
     task$cbind(dt)
+
+    # Correct that cbind automatically sets col_roles for new columns to feature.
     task$col_roles$feature = setdiff(task$col_roles$feature, task$col_roles$group)
   }
 
-  # row ids can be anything, we just take what mlr3 happens to assign.
+  # Row ids can be anything, we just take what mlr3 happens to assign to filter the task.
   row_ids[duplicated(row_ids)] = task$row_ids[newrows]
 
   task$filter(row_ids)
