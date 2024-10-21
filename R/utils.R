@@ -53,9 +53,9 @@ task_filter_ex = function(task, row_ids) {
     # Note that we make no assumptions on whether the whole group is sampled here.
     # That has to be checked in the functions calling this.
     #
-    # We assume that the rbinded rows are in the same positions as the original ids in dup_ids
+    # We assume that the rbinded rows are in the same positions as the original ids in dup_ids.
     # This should generally be the case as long as the task does not have a col role group
-    # and task$data(..., ordered = FALSE) in task$rbind above (default).
+    # and task$data(..., ordered = FALSE) in task$rbind() above (default).
     new_groups = task$groups[dup_ids][, group := paste0(group, "_", seq_len(.N)), by = row_id]
 
     # Generate data.table with rows for all newly added rows and updated group names
