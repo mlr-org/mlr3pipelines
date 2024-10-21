@@ -73,6 +73,59 @@ test_that("PipeOpSubsample works stratified", {
     table(list(Species = rep(c("setosa", "versicolor", "virginica"), 100))))
 })
 
+test_that("PipeOpSubsample - Grouped Data - Sanity Checks", {
+  op = PipeOpSubsample$new()
+  op$param_set$set_values(frac = 0.5)
+
+  df_two = data.frame(
+    target = runif(200),
+    x = rnorm(200),
+    grp = rep(c("g1", "g2"), each = 100)
+  )
+  task_two = TaskRegr$new(id = "two", backend = df_two, target = "target")
+  task_two$set_col_roles("grp", "group")
+
+  df_three = data.frame(
+    target = runif(400),
+    x = rnorm(400),
+    grp = c(rep(c("g1", "g2"), each = 100), rep("g3", 200))
+  )
+  task_three = TaskRegr$new(id = "three", backend = df_three, target = "target")
+  task_three$set_col_roles("grp", "group")
+
+  set.seed(2024)
+  sampled_groups = list(10)
+  for (i in seq_len(10)) {
+    sampled_groups[[i]] = unique(op$train(list(task_two))[[1]]$groups$group)
+  }
+  expect_setequal(sampled_groups, list("g1", "g2"))
+
+  set.seed(2024)
+  sampled_groups = list(20)
+  for (i in seq_len(20)) {
+    sampled_groups[[i]] = unique(op$train(list(task_three))[[1]]$groups$group)
+  }
+  expect_setequal(sampled_groups, list("g1", "g2", "g3", c("g1", "g2")))
+
+  # Tests with replace = TRUE
+  op$param_set$set_values(replace = TRUE)
+
+  set.seed(2024)
+  sampled_groups = list(10)
+  for (i in seq_len(10)) {
+    sampled_groups[[i]] = unique(op$train(list(task_two))[[1]]$groups$group)
+  }
+  expect_setequal(sampled_groups, list("g1", "g2"))
+
+  set.seed(2024)
+  sampled_groups = list(20)
+  for (i in seq_len(20)) {
+    sampled_groups[[i]] = unique(op$train(list(task_three))[[1]]$groups$group)
+  }
+  expect_setequal(sampled_groups, list("g1", "g2", "g3", c("g1", "g2"), c("g1", "g1_1"), c("g2", "g2_1")))
+
+})
+
 test_that("PipeOpSubsample - Grouped Data - Equal group sizes", {
   op = PipeOpSubsample$new()
 
@@ -93,39 +146,33 @@ test_that("PipeOpSubsample - Grouped Data - Equal group sizes", {
   expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
   # Frac is adhered to as best as possible
   expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.025)
-  # Test for uniformity?
 
   # TESTCASE: changed frac, replace = TRUE
   op$param_set$set_values(frac = 2, replace = TRUE)
   train_out = op$train(list(task))[[1]]
   # Grouped data are kept together
   grps_out = table(train_out$groups$group)
-  expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
+  expect_equal(unname(grps_out), unname(table(task$groups$group)[sub("_\\d*", "", names(grps_out))]))
   # Frac is adhered to as best as possible
-  #expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.025)
+  expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.025)
 
   # TESTCASE: Exclude some rows from row_roles$use and one group completely
-  task$row_roles$use = setdiff(seq(1, 2800), task$groups[group == "g1", row_id])
+  task$row_roles$use = setdiff(task$row_roles$use, task$groups[group %in% c("g1", "g2", "g3", "g4")]$row_id)
   train_out = op$train(list(task))[[1]]
-  # Test that all sampled rows are in row_roles$use
-  expect_in(train_out$row_ids, task$row_roles$use)
-  # # Grouped data are kept together
-  # grps_out = table(train_out$groups$group)
-  # expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
-  # # Frac is adhered to as best as possible
-  # expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.025)
-
+  # Grouped data are kept together
+  grps_out = table(train_out$groups$group)
+  expect_equal(unname(grps_out), unname(table(task$groups$group)[sub("_\\d*", "", names(grps_out))]))
+  # Frac is adhered to as best as possible
+  expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.025)
 
   # TESTCASE: Set some rows to be included multiple times in row_roles$use
-  task$row_roles$use = c(task$row_roles$use, seq(1:50))
-  expect_no_error(op$train(list(task)))
-  # train_out = op$train(list(task))[[1]]
-  # # Grouped data are kept together
-  # grps_out = table(train_out$groups$group)
-  # expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
-  # # Frac is adhered to as best as possible
-  # expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.025)
-
+  task$row_roles$use = c(task$row_roles$use, task$groups[group %in% c("g5", "g6", "g7", "g8")]$row_id)
+  train_out = op$train(list(task))[[1]]
+  # Grouped data are kept together
+  expect_equal(unname(grps_out), unname(table(task$groups$group)[sub("_\\d*", "", names(grps_out))]))
+  expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
+  # Frac is adhered to as best as possible
+  expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.025)
 
   # TESTCASE: use_groups = TRUE and stratify = TRUE should throw an error
   op$param_set$set_values(stratify = TRUE, use_groups = TRUE)
