@@ -17,11 +17,14 @@ test_that("task_filter_ex - Basic functionality", {
 })
 
 test_that("task_filter_ex - task with col role group", {
-  task = mlr_tasks$get("iris")
+  task = as_task_classif(rbind(iris, iris, iris), target = "Species", id = "test")
+  task$filter(301:450)
+
+  # task = mlr_tasks$get("iris")
   task$cbind(data.frame(grp = rep(c("A", "A", "B", "C", "D"), 30)))
   task$set_col_roles("grp", "group")
 
-  rowidx = as.integer(c(1, 2, 3, 2, 1, 2, 3, 2, 1, 4))
+  rowidx = as.integer(300 + c(1, 2, 3, 2, 1, 2, 3, 2, 1, 4))
 
   tfiltered = task_filter_ex(task$clone(), rowidx)
   expect_equal(tfiltered$data(), task$data(rows = rowidx))
@@ -34,3 +37,6 @@ test_that("task_filter_ex - task with col role group", {
 test_that("task_filter_ex - changed row_roles$use", {
 
 })
+
+# test name colision
+

@@ -41,36 +41,48 @@ task_filter_ex = function(task, row_ids) {
 
   # Rbind duplicated rows to task
   if (length(dup_ids)) {
-    task$rbind(task$data(rows = dup_ids, cols = cols))
-  }
-  # For column with role "group", create new groups for duplicates by adding a suffix.
-  if (!is.null(task$groups)) {
-    group = NULL  # for binding
-    row_id = NULL  # for binding
 
-    # We create a data.table with the corresponding group to each duplicated ID.
-    # We then change the group entry based on how often the ID occurs.
-    # Note that we make no assumptions on whether the whole group is sampled here.
-    # That has to be checked in the functions calling this.
-    #
-    # We assume that the rbinded rows are in the same positions as the original ids in dup_ids.
-    # This should generally be the case as long as the task does not have a col role group
-    # and task$data(..., ordered = FALSE) in task$rbind() above (default).
-    new_groups = task$groups[dup_ids][, group := paste0(group, "_", seq_len(.N)), by = row_id]
+    new_data = task$data(rows = dup_ids, cols = cols)
 
-    # Generate data.table with rows for all newly added rows and updated group names
-    dt = task$groups[newrows, group := new_groups$group]
-    # Update column in task
-    setnames(dt, c(task$backend$primary_key, task$col_roles$group))
-    task$cbind(dt)
-    # Correct that cbind automatically sets col_roles for new columns to feature.
-    task$col_roles$feature = setdiff(task$col_roles$feature, task$col_roles$group)
+    # For column with role "group", create new groups for duplicates by adding a suffix.
+    if (!is.null(task$groups)) {
+      group = NULL  # for binding
+      row_id = NULL  # for binding
+
+      # We create a data.table with the corresponding group to each duplicated ID.
+      # We then change the group entry based on how often the ID occurs.
+      # Note that we make no assumptions on whether the whole group is sampled here.
+      # That has to be checked in the functions calling this.
+      #
+      # We assume that the rbinded rows are in the same positions as the original ids in dup_ids.
+      # This should generally be the case as long as the task does not have a col role group
+      # and task$data(..., ordered = FALSE) in task$rbind() above (default).
+
+      grps = unique(task$groups)
+      new_groups = task$groups[J(dup_ids), on = "row_id"][, group := {
+        groups = character(0)
+        i = 1
+        while (length(groups) < .N) {
+          new_group = paste0(group[[1]], "_", i)
+          if (new_group %nin% grps) groups[[length(groups) + 1]] = new_group
+          i = i + 1
+        }
+        groups
+      }, by = row_id]
+
+      # Generate data.table with rows for all newly added rows and updated group names
+      new_data[, (task$col_roles$group) := new_groups$group]
+    }
+
+    task$rbind(new_data)
+
   }
 
   # Row ids can be anything, we just take what mlr3 happens to assign to filter the task.
   row_ids[duplicated(row_ids)] = task$row_ids[newrows]
 
-  task$filter(row_ids)
+  task$row_roles$use = row_ids
+  task
 }
 
 # these must be at the root and can not be anonymous functions because all.equal fails otherwise.
