@@ -17,11 +17,33 @@ test_that("task_filter_ex - Basic functionality", {
 })
 
 test_that("task_filter_ex - task with col role group", {
-  task = as_task_classif(rbind(iris, iris, iris), target = "Species", id = "test")
-  task$filter(301:450)
-
-  # task = mlr_tasks$get("iris")
+  task = mlr_tasks$get("iris")
   task$cbind(data.frame(grp = rep(c("A", "A", "B", "C", "D"), 30)))
+  task$set_col_roles("grp", "group")
+
+  rowidx = as.integer(c(1, 2, 3, 2, 1, 2, 3, 2, 1, 4))
+
+  tfiltered = task_filter_ex(task$clone(), rowidx)
+  expect_equal(tfiltered$data(), task$data(rows = rowidx))
+  expect_equal(
+    tfiltered$groups$group,
+    c("A", "A", "B", "A_1", "A_1", "A_2", "B_1", "A_3", "A_2", "C")
+  )
+
+  # Name collision
+  task$cbind(data.frame(grp = rep(c("A", "A_1", "B", "C", "D"), 30)))
+  task$set_col_roles("grp", "group")
+
+  tfiltered = task_filter_ex(task$clone(), rowidx)
+  expect_equal(tfiltered$data(), task$data(rows = rowidx))
+  expect_equal(
+    tfiltered$groups$group,
+    c("A", "A_1", "B", "A_1_1", "A_2", "A_1_2", "B_1", "A_1_3", "A_2", "C")
+  )
+
+  task = as_task_classif(rbind(iris, iris, iris), target = "Species", id = "test")
+  task$cbind(data.frame(grp = rep(c("A", "A", "B", "C", "D"), 90)))
+  task$filter(301:450)
   task$set_col_roles("grp", "group")
 
   rowidx = as.integer(300 + c(1, 2, 3, 2, 1, 2, 3, 2, 1, 4))
@@ -29,14 +51,27 @@ test_that("task_filter_ex - task with col role group", {
   tfiltered = task_filter_ex(task$clone(), rowidx)
   expect_equal(tfiltered$data(), task$data(rows = rowidx))
   expect_equal(
-    table(tfiltered$groups$group),
-    table(c("A", "A", "A_1", "A_1", "A_2", "A_2", "A_3", "B", "B_1", "C"))
+    tfiltered$groups$group,
+    c("A", "A", "B", "A_1", "A_1", "A_2", "B_1", "A_3", "A_2", "C")
   )
 })
 
 test_that("task_filter_ex - changed row_roles$use", {
+  task = mlr_tasks$get("iris")
+
+  rowidx = as.integer(c(1, 2, 3, 2, 1, 2, 3, 2, 1))
+
+  task$row_roles$use = seq(1, 50)
+  tfiltered = task_filter_ex(task$clone(), rowidx)
+  expect_equal(tfiltered$data(), task$data(rows = rowidx))
+
+  task$row_roles$use = c(seq(1, 50), seq(1, 20))
+  tfiltered = task_filter_ex(task$clone(), 50L + rowidx)
+  expect_equal(tfiltered$data(), task$data(rows = 50L + rowidx))
+
+  task$cbind(data.frame(grp = rep(c("A", "A", "B", "C", "D", "C", "A"), 10)))
+  task$set_col_roles("grp", "group")
+
 
 })
-
-# test name colision
 

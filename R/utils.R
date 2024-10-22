@@ -58,7 +58,7 @@ task_filter_ex = function(task, row_ids) {
       # This should generally be the case as long as the task does not have a col role group
       # and task$data(..., ordered = FALSE) in task$rbind() above (default).
 
-      grps = unique(task$groups)
+      grps = unique(task$groups$group)
       new_groups = task$groups[J(dup_ids), on = "row_id"][, group := {
         groups = character(0)
         i = 1
