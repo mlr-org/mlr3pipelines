@@ -29,7 +29,7 @@ test_that("Dictionary contains all PipeOps", {
     PipeOpImputeLearner = list(learner = mlr_learners$get("classif.rpart")),
     PipeOpLearner = list(learner = mlr_learners$get("classif.rpart")),
     PipeOpLearnerCV = list(learner = mlr_learners$get("classif.rpart")),
-    PipeOpLearnerCVPlus = list(learner = mlr_learners$get("regr.rpart")),
+    PipeOpLearnerPICVPlus = list(learner = mlr_learners$get("regr.rpart")),
     PipeOpClassifAvg = list(innum = 2),
     PipeOpRegrAvg = list(innum = 2),
     PipeOpUnbranch = list(options = 2),
@@ -37,7 +37,7 @@ test_that("Dictionary contains all PipeOps", {
     PipeOpMultiplicityExply = list(outnum = 2))
 
   # The PipeOps that may have a default ID different from the mlr_pipeops key
-  unequal_id = c("PipeOpLearner", "PipeOpLearnerCV", "PipeOpLearnerCVPlus", "PipeOpFilter")
+  unequal_id = c("PipeOpLearner", "PipeOpLearnerCV", "PipeOpLearnerPICVPlus", "PipeOpFilter")
 
   # function that recursively checks if an R6 Class Generator generates a subclass of PipeOp (*without* constructing it)
   inherits_from_pipeop = function(r6cg) {
@@ -218,7 +218,7 @@ test_that("data.table of pipeops looks as it should", {
 
   expect_equal(potable["learner"]$output.type.train, list("NULL"))
   expect_equal(potable["learner_cv"]$input.type.train, list("TaskClassif"))
-  expect_equal(potable["learner_cv_plus"]$input.type.train, list("TaskRegr"))
+  expect_equal(potable["learner_pi_cvplus"]$input.type.train, list("TaskRegr"))
 })
 
 test_that("GraphLearner is in mlr_learners", {

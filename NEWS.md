@@ -1,7 +1,7 @@
 # mlr3pipelines 0.7.0-9000
 
 * New down-sampling PipeOps for inbalanced data: `PipeOpTomek` / `po("tomek")` and `PipeOpNearmiss` / `po("nearmiss")`
-* New PipeOp `PipeOpLearnerCVPlus / po("learner_cv_plus")`
+* New PipeOp `PipeOpLearnerPICVPlus / po("learner_pi_cvplus")`
 
 # mlr3pipelines 0.7.0
 

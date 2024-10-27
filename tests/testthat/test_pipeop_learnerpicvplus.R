@@ -1,4 +1,4 @@
-context("PipeOpLearnerCVPlusPlus")
+context("PipeOpLearnerPICVPlus")
 
 # marshaling for regr.debug
 marshal_model.regr.debug_model = function(model, inplace = FALSE, ...) {
@@ -23,9 +23,9 @@ registerS3method("marshal_model", "regr.debug_model", marshal_model.regr.debug_m
 registerS3method("unmarshal_model", "regr.debug_model_marshaled", unmarshal_model.regr.debug_model_marshaled)
 
 
-test_that("PipeOpLearnerCVPlus - basic properties", {
+test_that("PipeOpLearnerPICVPlus - basic properties", {
   lrn = mlr_learners$get("regr.featureless")
-  po = PipeOpLearnerCVPlus$new(lrn)
+  po = PipeOpLearnerPICVPlus$new(lrn)
 
   expect_pipeop(po$clone(), check_ps_default_values = FALSE)
   expect_data_table(po$input, nrows = 1)
@@ -44,15 +44,15 @@ test_that("PipeOpLearnerCVPlus - basic properties", {
   expect_true(nrow(prds$output$quantiles) == task$nrow)
   expect_equal(dim(prds$output$quantiles), c(task$nrow, 2))  # lower and upper quantiles
 
-  expect_error(PipeOpLearnerCVPlus$new())
+  expect_error(PipeOpLearnerPICVPlus$new())
 
-  expect_pipeop(po("learner_cv_plus", lrn("regr.featureless")))
+  expect_pipeop(po("learner_pi_cvplus", lrn("regr.featureless")))
 })
 
-test_that("PipeOpLearnerCVPlus - param set and values", { ####
+test_that("PipeOpLearnerPICVPlus - param set and values", { ####
   skip_if_not_installed("rpart")
   lrn = mlr_learners$get("regr.rpart")
-  po = PipeOpLearnerCVPlus$new(lrn)
+  po = PipeOpLearnerPICVPlus$new(lrn)
 
   expect_subset(c("minsplit", "cvplus.folds", "cvplus.alpha"), po$param_set$ids())
   expect_equal(po$param_set$values, list(cvplus.folds = 3, cvplus.alpha = 0.05, xval = 0))
@@ -63,23 +63,23 @@ test_that("PipeOpLearnerCVPlus - param set and values", { ####
   po$param_set$values$cvplus.folds = 5
   expect_equal(po$param_set$values, list(cvplus.folds = 5, cvplus.alpha = 0.05, minsplit = 2, xval = 0))
 
-  expect_error(PipeOpLearnerCVPlus$new(lrn, param_vals = list(cvplus.folds = 1)))
-  expect_error(PipeOpLearnerCVPlus$new(lrn, param_vals = list(cvplus.alpha = -1)))
+  expect_error(PipeOpLearnerPICVPlus$new(lrn, param_vals = list(cvplus.folds = 1)))
+  expect_error(PipeOpLearnerPICVPlus$new(lrn, param_vals = list(cvplus.alpha = -1)))
 
   lrn_classif = mlr_learners$get("classif.featureless")
-  expect_error(PipeOpLearnerCVPlus$new(lrn_classif))
+  expect_error(PipeOpLearnerPICVPlus$new(lrn_classif))
 })
 
-test_that("PipeOpLearnerCVPlus - graph but no id", {
+test_that("PipeOpLearnerPICVPlus - graph but no id", {
   skip_if_not_installed("rpart")
   g = PipeOpNOP$new() %>>% PipeOpLearner$new(LearnerRegrRpart$new())
-  po = PipeOpLearnerCVPlus$new(g)
+  po = PipeOpLearnerPICVPlus$new(g)
   expect_string(po$id)
 })
 
-test_that("PipeOpLearnerCVPlus - model active binding to state", {
+test_that("PipeOpLearnerPICVPlus - model active binding to state", {
   lrn = mlr_learners$get("regr.featureless")
-  po = PipeOpLearnerCVPlus$new(lrn)
+  po = PipeOpLearnerPICVPlus$new(lrn)
   task = mlr_tasks$get("mtcars")
 
   # before training states are NULL
@@ -96,20 +96,20 @@ test_that("PipeOpLearnerCVPlus - model active binding to state", {
   expect_equal(po$state, train_state)
 })
 
-test_that("PipeOpLearnerCVPlus - predict_type is fixed", {
+test_that("PipeOpLearnerPICVPlus - predict_type is fixed", {
   skip_if_not_installed("rpart")
   lrn = lrn("regr.rpart")
-  po = PipeOpLearnerCVPlus$new(lrn)
+  po = PipeOpLearnerPICVPlus$new(lrn)
   expect_equal(po$predict_type, c("response", "quantiles"))
 })
 
-test_that("PipeOpLearnerCVPlus - integration with larger graph", {
+test_that("PipeOpLearnerPICVPlus - integration with larger graph", {
   skip_if_not_installed("rpart")
 
   task = mlr_tasks$get("mtcars")
   lrn = mlr_learners$get("regr.rpart")
 
-  po_cvplus = PipeOpLearnerCVPlus$new(lrn)
+  po_cvplus = PipeOpLearnerPICVPlus$new(lrn)
   po_nop = PipeOpNOP$new()
   graph = po_cvplus %>>% po_nop
 
@@ -126,15 +126,15 @@ test_that("marshal", {
   lrn$properties = c(lrn$properties, "marshal")
 
   task = tsk("mtcars")
-  po = PipeOpLearnerCVPlus$new(lrn)
+  po = PipeOpLearnerPICVPlus$new(lrn)
   po$train(list(task))
   po_state = po$state
 
-  expect_class(po_state, "pipeop_learner_cv_plus_state")
+  expect_class(po_state, "pipeop_learner_pi_cvplus_state")
 
   po_state_marshaled = marshal_model(po_state, inplace = FALSE)
 
-  expect_class(po_state_marshaled, "pipeop_learner_cv_plus_state_marshaled")
+  expect_class(po_state_marshaled, "pipeop_learner_pi_cvplus_state_marshaled")
   expect_true(is_marshaled_model(po_state_marshaled))
 
   po_state_unmarshaled = unmarshal_model(po_state_marshaled)
@@ -144,7 +144,7 @@ test_that("marshal", {
 test_that("marshal multiplicity", {
   lrn = lrn("regr.debug")
   lrn$properties = c(lrn$properties, "marshal")
-  po = PipeOpLearnerCVPlus$new(lrn)
+  po = PipeOpLearnerPICVPlus$new(lrn)
 
   task1 = mlr_tasks$get("mtcars")
   task2 = mlr_tasks$get("boston_housing")
@@ -162,15 +162,15 @@ test_that("marshal multiplicity", {
 test_that("state class and multiplicity", {
   lrn = lrn("regr.debug")
   lrn$properties = c(lrn$properties, "marshal")
-  po = PipeOpLearnerCVPlus$new(lrn)
+  po = PipeOpLearnerPICVPlus$new(lrn)
   po$train(list(Multiplicity(tsk("mtcars"))))
   expect_class(po$state, "Multiplicity")
-  expect_class(po$state[[1L]], "pipeop_learner_cv_plus_state")
+  expect_class(po$state[[1L]], "pipeop_learner_pi_cvplus_state")
 
   # recursive
-  po1 = po("learner_cv_plus", learner = lrn("regr.debug"))
+  po1 = po("learner_pi_cvplus", learner = lrn("regr.debug"))
   po1$train(list(Multiplicity(Multiplicity(tsk("mtcars")))))
   expect_class(po1$state, "Multiplicity")
   expect_class(po1$state[[1L]], "Multiplicity")
-  expect_class(po1$state[[1L]][[1L]], "pipeop_learner_cv_plus_state")
+  expect_class(po1$state[[1L]][[1L]], "pipeop_learner_pi_cvplus_state")
 })

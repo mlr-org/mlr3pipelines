@@ -1,7 +1,7 @@
 #' @title Wrap a Learner into a PipeOp with Cross-validation Plus Confidence Intervals as Predictions
 #'
 #' @usage NULL
-#' @name mlr_pipeops_learner_cv_plus
+#' @name mlr_pipeops_learner_pi_cvplus
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
@@ -9,20 +9,20 @@
 #'
 #' Inherits the `$param_set` (and therefore `$param_set$values`) from the [`Learner`][mlr3::Learner] it is constructed from.
 #'
-#' Using [`PipeOpLearnerCVPlus`], it is possible to embed a [`mlr3::Learner`] into a [`Graph`].
-#' [`PipeOpLearnerCVPlus`] can then be used to perform cross validation plus (or jackknife plus).
-#' During training, [`PipeOpLearnerCVPlus`] performs cross validation on the training data.
+#' Using [`PipeOpLearnerPICVPlus`], it is possible to embed a [`mlr3::Learner`] into a [`Graph`].
+#' [`PipeOpLearnerPICVPlus`] can then be used to perform cross validation plus (or jackknife plus).
+#' During training, [`PipeOpLearnerPICVPlus`] performs cross validation on the training data.
 #' During prediction, the models from the training stage are used to construct predictive confidence intervals for the prediction data based on
 #' out-of-fold residuals and out-of-fold predictions.
 #'
 #' @section Construction:
 #' ```
-#' PipeOpLearnerCVPlus$new(learner, id = NULL, param_vals = list())
+#' PipeOpLearnerPICVPlus$new(learner, id = NULL, param_vals = list())
 #' ```
 #'
 #' * `learner` :: [`LearnerRegr`][mlr3::LearnerRegr]
 #'   [`LearnerRegr`][mlr3::LearnerRegr] to use for the cross validation models in the Cross Validation Plus method.
-#'  This argument is always cloned; to access the [`Learner`][mlr3::Learner] inside `PipeOpLearnerCVPlus` by-reference, use `$learner`.\cr
+#'  This argument is always cloned; to access the [`Learner`][mlr3::Learner] inside `PipeOpLearnerPICVPlus` by-reference, use `$learner`.\cr
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
 #' * `param_vals` :: named `list`\cr
@@ -30,10 +30,10 @@
 #'   Default is `list()`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpLearnerCVPlus`] has one input channel named `"input"`, taking a [`Task`][mlr3::Task] specific to the [`Learner`][mlr3::Learner]
+#' [`PipeOpLearnerPICVPlus`] has one input channel named `"input"`, taking a [`Task`][mlr3::Task] specific to the [`Learner`][mlr3::Learner]
 #' type given to `learner` during construction; both during training and prediction.
 #'
-#' [`PipeOpLearnerCVPlus`] has one output channel named `"output"`, producing `NULL` during training and a [`PredictionRegr`][mlr3::PredictionRegr]
+#' [`PipeOpLearnerPICVPlus`] has one output channel named `"output"`, producing `NULL` during training and a [`PredictionRegr`][mlr3::PredictionRegr]
 #' during prediction.
 #'
 #' The output during prediction is a [`PredictionRegr`][mlr3::PredictionRegr] with `predict_type` `quantiles` on the prediction input data.
@@ -65,11 +65,11 @@
 #'   [`Learner`][mlr3::Learner] that is being wrapped.
 #'   Read-only.
 #' * `learner_model` :: [`Learner`][mlr3::Learner] or `list`\cr
-#'   If the [`PipeOpLearnerCVPlus`] has been trained, this is a `list` containing the [`Learner`][mlr3::Learner]s of the cross validation models.
+#'   If the [`PipeOpLearnerPICVPlus`] has been trained, this is a `list` containing the [`Learner`][mlr3::Learner]s of the cross validation models.
 #'   Otherwise, this contains the [`Learner`][mlr3::Learner] that is being wrapped.
 #'   Read-only.
 #' * `predict_type`\cr
-#'   Predict type of the [`PipeOpLearnerCVPlus`], which is always `"response"  "quantiles"`.
+#'   Predict type of the [`PipeOpLearnerPICVPlus`], which is always `"response"  "quantiles"`.
 #'   This can be different to the predict type of the [`Learner`][mlr3::Learner] that is being wrapped.
 #'
 #' @section Methods:
@@ -89,12 +89,12 @@
 #'
 #' task = tsk("mtcars")
 #' learner = lrn("regr.rpart")
-#' lrncvplus_po = mlr_pipeops$get("learner_cv_plus", learner)
+#' lrncvplus_po = mlr_pipeops$get("learner_pi_cvplus", learner)
 #'
 #' lrncvplus_po$train(list(task))
 #' lrncvplus_po$predict(list(task))
 #' \dontshow{ \} }
-PipeOpLearnerCVPlus = R6Class("PipeOpLearnerCVPlus",
+PipeOpLearnerPICVPlus = R6Class("PipeOpLearnerPICVPlus",
   inherit = PipeOp,
   public = list(
     initialize = function(learner, id = NULL, param_vals = list()) {
@@ -103,7 +103,7 @@ PipeOpLearnerCVPlus = R6Class("PipeOpLearnerCVPlus",
       type = private$.learner$task_type
 
       if ("regr" != type) {
-        stop("PipeOpLearnerCVPlus only supports regression.")
+        stop("PipeOpLearnerPICVPlus only supports regression.")
       }
 
       task_type = mlr_reflections$task_types[type, mult = "first"]$task
@@ -158,7 +158,7 @@ PipeOpLearnerCVPlus = R6Class("PipeOpLearnerCVPlus",
     }
   ),
   private = list(
-    .state_class = "pipeop_learner_cv_plus_state",
+    .state_class = "pipeop_learner_pi_cvplus_state",
 
     .train = function(inputs) {
       task = inputs[[1L]]
@@ -216,7 +216,7 @@ PipeOpLearnerCVPlus = R6Class("PipeOpLearnerCVPlus",
 )
 
 #' @export
-marshal_model.pipeop_learner_cv_plus_state = function(model, inplace = FALSE, ...) {
+marshal_model.pipeop_learner_pi_cvplus_state = function(model, inplace = FALSE, ...) {
   # Note that a Learner state contains other reference objects, but we don't clone them here, even when inplace
   # is FALSE. For our use-case this is just not necessary and would cause unnecessary overhead in the mlr3
   # workhorse function
@@ -233,12 +233,12 @@ marshal_model.pipeop_learner_cv_plus_state = function(model, inplace = FALSE, ..
 }
 
 #' @export
-unmarshal_model.pipeop_learner_cv_plus_state_marshaled = function(model, inplace = FALSE, ...) {
+unmarshal_model.pipeop_learner_pi_cvplus_state_marshaled = function(model, inplace = FALSE, ...) {
   state_marshaled = model$marshaled
   state_marshaled$cv_model_states = map(state_marshaled$cv_model_states, unmarshal_model, inplace = inplace)
   state_marshaled
 }
 
-mlr_pipeops$add("learner_cv_plus", PipeOpLearnerCVPlus, list(R6Class("Learner", public = list(id = "learner_cv_plus", task_type = "regr", param_set = ps(), packages = "mlr3pipelines"))$new()))
+mlr_pipeops$add("learner_pi_cvplus", PipeOpLearnerPICVPlus, list(R6Class("Learner", public = list(id = "learner_pi_cvplus", task_type = "regr", param_set = ps(), packages = "mlr3pipelines"))$new()))
 
 
