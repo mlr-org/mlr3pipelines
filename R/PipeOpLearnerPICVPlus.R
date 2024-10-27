@@ -110,14 +110,14 @@ PipeOpLearnerPICVPlus = R6Class("PipeOpLearnerPICVPlus",
       out_type  = mlr_reflections$task_types[type, mult = "first"]$prediction
 
       # paradox requirements 1.0
-      private$.cvplus_param_set = ps(
+      private$.picvplus_param_set = ps(
         folds = p_int(lower = 2L, upper = Inf, tags = c("train", "required")),
         alpha = p_dbl(lower = 0L, upper = 1L, tags = c("predict", "required"))
       )
 
-      private$.cvplus_param_set$values = list(folds = 3, alpha = 0.05) # default
+      private$.picvplus_param_set$values = list(folds = 3, alpha = 0.05) # default
 
-      super$initialize(id, param_set = alist(cvplus = private$.cvplus_param_set, private$.learner$param_set),
+      super$initialize(id, param_set = alist(picvplus = private$.picvplus_param_set, private$.learner$param_set),
                         param_vals = param_vals,
                         input = data.table(name = "input", train = task_type, predict = task_type),
                         output = data.table(name = "output", train = "NULL", predict = out_type),
@@ -162,7 +162,7 @@ PipeOpLearnerPICVPlus = R6Class("PipeOpLearnerPICVPlus",
 
     .train = function(inputs) {
       task = inputs[[1L]]
-      pv = private$.cvplus_param_set$values
+      pv = private$.picvplus_param_set$values
 
       # Compute CV Predictions
       rdesc = rsmp("cv", folds = pv$folds)
@@ -179,7 +179,7 @@ PipeOpLearnerPICVPlus = R6Class("PipeOpLearnerPICVPlus",
 
     .predict = function(inputs) {
       task = inputs[[1L]]
-      pv = private$.cvplus_param_set$values
+      pv = private$.picvplus_param_set$values
 
       mu_hat = map(self$state$cv_model_states, function(state) {
         on.exit({private$.learner$state = NULL})
@@ -209,7 +209,7 @@ PipeOpLearnerPICVPlus = R6Class("PipeOpLearnerPICVPlus",
         ))
     },
 
-    .cvplus_param_set = NULL,
+    .picvplus_param_set = NULL,
     .learner = NULL,
     .additional_phash_input = function() private$.learner$phash
   )

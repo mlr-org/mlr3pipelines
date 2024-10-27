@@ -54,17 +54,17 @@ test_that("PipeOpLearnerPICVPlus - param set and values", {
   lrn = mlr_learners$get("regr.rpart")
   po = PipeOpLearnerPICVPlus$new(lrn)
 
-  expect_subset(c("minsplit", "cvplus.folds", "cvplus.alpha"), po$param_set$ids())
-  expect_equal(po$param_set$values, list(cvplus.folds = 3, cvplus.alpha = 0.05, xval = 0))
+  expect_subset(c("minsplit", "picvplus.folds", "picvplus.alpha"), po$param_set$ids())
+  expect_equal(po$param_set$values, list(picvplus.folds = 3, picvplus.alpha = 0.05, xval = 0))
 
   po$param_set$values$minsplit = 2
-  expect_equal(po$param_set$values, list(cvplus.folds = 3, cvplus.alpha = 0.05, minsplit = 2, xval = 0))
+  expect_equal(po$param_set$values, list(picvplus.folds = 3, picvplus.alpha = 0.05, minsplit = 2, xval = 0))
 
-  po$param_set$values$cvplus.folds = 5
-  expect_equal(po$param_set$values, list(cvplus.folds = 5, cvplus.alpha = 0.05, minsplit = 2, xval = 0))
+  po$param_set$values$picvplus.folds = 5
+  expect_equal(po$param_set$values, list(picvplus.folds = 5, picvplus.alpha = 0.05, minsplit = 2, xval = 0))
 
-  expect_error(PipeOpLearnerPICVPlus$new(lrn, param_vals = list(cvplus.folds = 1)), "is not >= 1")
-  expect_error(PipeOpLearnerPICVPlus$new(lrn, param_vals = list(cvplus.alpha = -1)), "is not >= -")
+  expect_error(PipeOpLearnerPICVPlus$new(lrn, param_vals = list(picvplus.folds = 1)), "is not >= 1")
+  expect_error(PipeOpLearnerPICVPlus$new(lrn, param_vals = list(picvplus.alpha = -1)), "is not >= -")
 
   lrn_classif = mlr_learners$get("classif.featureless")
   expect_error(PipeOpLearnerPICVPlus$new(lrn_classif), "only supports regression")
@@ -109,9 +109,9 @@ test_that("PipeOpLearnerPICVPlus - integration with larger graph", {
   task = mlr_tasks$get("mtcars")
   lrn = mlr_learners$get("regr.rpart")
 
-  po_cvplus = PipeOpLearnerPICVPlus$new(lrn)
+  po_picvplus = PipeOpLearnerPICVPlus$new(lrn)
   po_nop = PipeOpNOP$new()
-  graph = po_cvplus %>>% po_nop
+  graph = po_picvplus %>>% po_nop
 
   graph$train(task)
   predictions = graph$predict(task)[[1]]
@@ -163,14 +163,40 @@ test_that("state class and multiplicity", {
   lrn = lrn("regr.debug")
   lrn$properties = c(lrn$properties, "marshal")
   po = PipeOpLearnerPICVPlus$new(lrn)
-  po$train(list(Multiplicity(tsk("mtcars"))))
+
+  task1 = mlr_tasks$get("mtcars")
+  task2 = mlr_tasks$get("boston_housing")
+  input = Multiplicity(task1, task2)
+
+  po$train(list(input))
   expect_class(po$state, "Multiplicity")
   expect_class(po$state[[1L]], "pipeop_learner_pi_cvplus_state")
+  expect_class(po$learner_model, "Multiplicity")
+  expect_class(po$learner_model[[1L]][[1L]], "LearnerRegr")
+  expect_equal(length(po$learner_model), length(input))
+  expect_equal(length(po$learner_model[[1]]), po$param_set$values$picvplus.folds)
+
+  prds = po$predict(list(input))
+  expect_class(prds$output, "Multiplicity")
+  expect_equal(length(prds$output), length(input))
+  expect_class(prds$output[[1L]], "PredictionRegr")
 
   # recursive
-  po1 = po("learner_pi_cvplus", learner = lrn("regr.debug"))
-  po1$train(list(Multiplicity(Multiplicity(tsk("mtcars")))))
+  po1 = PipeOpLearnerPICVPlus$new(lrn)
+  po1$train(list(Multiplicity(input)))
   expect_class(po1$state, "Multiplicity")
   expect_class(po1$state[[1L]], "Multiplicity")
   expect_class(po1$state[[1L]][[1L]], "pipeop_learner_pi_cvplus_state")
+
+  expect_class(po1$learner_model, "Multiplicity")
+  expect_class(po1$learner_model[[1L]], "Multiplicity")
+  expect_class(po1$learner_model[[1L]][[1L]][[1]], "LearnerRegr")
+  expect_equal(length(po1$learner_model[[1L]]), length(input))
+  expect_equal(length(po1$learner_model[[1L]][[1L]]), po1$param_set$values$picvplus.folds)
+
+  prds1 = po1$predict(list(Multiplicity(input)))
+  expect_class(prds1$output, "Multiplicity")
+  expect_class(prds1$output[[1L]], "Multiplicity")
+  expect_class(prds1$output[[1L]][[1L]], "PredictionRegr")
+  expect_equal(length(prds1$output[[1L]]), length(input))
 })
