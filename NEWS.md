@@ -2,6 +2,8 @@
 
 * New down-sampling PipeOps for inbalanced data: `PipeOpTomek` / `po("tomek")` and `PipeOpNearmiss` / `po("nearmiss")`
 * New PipeOp for Quantile Regression `PipeOpLearnerQuantiles` / `po(learner_quantiles)`
+* `GraphLearner` has new active bindings/methods as shortcuts for active bindings/methods of the underlying `Graph`:
+`$pipeops`, `$edges`, `$pipeops_param_set`, and `$pipeops_param_set_values` as well as `$ids()` and `$plot()`.
 
 # mlr3pipelines 0.7.0
 
