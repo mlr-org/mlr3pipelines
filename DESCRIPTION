@@ -35,10 +35,6 @@ Authors@R:
              family = "Dandl",
              role = "aut",
              email = "dandl.susanne@googlemail.com"),
-      person(given = "Lona",
-             family = "Koers",
-             role = "ctb",
-             email = "lona.koers@gmail.com"),
       person(given = "Keno",
              family = "Mersmann",
              role = "ctb",
@@ -47,7 +43,11 @@ Authors@R:
              family = "Mücke",
              role = "ctb",
              email = "muecke.maximilian@gmail.com",
-             comment = c(ORCID = "0009-0000-9432-9795")))
+             comment = c(ORCID = "0009-0000-9432-9795")),
+      person(given = "Lona",
+             family = "Koers",
+             role = "ctb",
+             email = "lona.koers@gmail.com"))
 Description: Dataflow programming toolkit that enriches 'mlr3' with a diverse
   set of pipelining operators ('PipeOps') that can be composed into graphs.
   Operations exist for data preprocessing, model fitting, and ensemble
@@ -162,6 +162,7 @@ Collate:
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'
     'PipeOpLearnerPICVPlus.R'
+    'PipeOpLearnerQuantiles.R'
     'PipeOpMissingIndicators.R'
     'PipeOpModelMatrix.R'
     'PipeOpMultiplicity.R'

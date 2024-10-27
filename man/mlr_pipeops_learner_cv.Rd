@@ -140,7 +140,8 @@ https://mlr-org.com/pipeops.html
 
 Other Meta PipeOps: 
 \code{\link{mlr_pipeops_learner}},
-\code{\link{mlr_pipeops_learner_pi_cvplus}}
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}}
 }
 \concept{Meta PipeOps}
 \concept{Pipeops}
