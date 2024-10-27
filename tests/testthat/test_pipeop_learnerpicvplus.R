@@ -44,12 +44,12 @@ test_that("PipeOpLearnerPICVPlus - basic properties", {
   expect_true(nrow(prds$output$quantiles) == task$nrow)
   expect_equal(dim(prds$output$quantiles), c(task$nrow, 2))  # lower and upper quantiles
 
-  expect_error(PipeOpLearnerPICVPlus$new())
+  expect_error(PipeOpLearnerPICVPlus$new(), "learner")
 
   expect_pipeop(po("learner_pi_cvplus", lrn("regr.featureless")))
 })
 
-test_that("PipeOpLearnerPICVPlus - param set and values", { ####
+test_that("PipeOpLearnerPICVPlus - param set and values", {
   skip_if_not_installed("rpart")
   lrn = mlr_learners$get("regr.rpart")
   po = PipeOpLearnerPICVPlus$new(lrn)
@@ -63,11 +63,11 @@ test_that("PipeOpLearnerPICVPlus - param set and values", { ####
   po$param_set$values$cvplus.folds = 5
   expect_equal(po$param_set$values, list(cvplus.folds = 5, cvplus.alpha = 0.05, minsplit = 2, xval = 0))
 
-  expect_error(PipeOpLearnerPICVPlus$new(lrn, param_vals = list(cvplus.folds = 1)))
-  expect_error(PipeOpLearnerPICVPlus$new(lrn, param_vals = list(cvplus.alpha = -1)))
+  expect_error(PipeOpLearnerPICVPlus$new(lrn, param_vals = list(cvplus.folds = 1)), "is not >= 1")
+  expect_error(PipeOpLearnerPICVPlus$new(lrn, param_vals = list(cvplus.alpha = -1)), "is not >= -")
 
   lrn_classif = mlr_learners$get("classif.featureless")
-  expect_error(PipeOpLearnerPICVPlus$new(lrn_classif))
+  expect_error(PipeOpLearnerPICVPlus$new(lrn_classif), "only supports regression")
 })
 
 test_that("PipeOpLearnerPICVPlus - graph but no id", {
