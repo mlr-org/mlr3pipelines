@@ -1,6 +1,7 @@
 # mlr3pipelines 0.7.0-9000
 
 * New down-sampling PipeOps for inbalanced data: `PipeOpTomek` / `po("tomek")` and `PipeOpNearmiss` / `po("nearmiss")`
+* New PipeOp for Quantile Regression `PipeOpLearnerQuantiles` / `po(learner_quantiles)`
 
 # mlr3pipelines 0.7.0
 
