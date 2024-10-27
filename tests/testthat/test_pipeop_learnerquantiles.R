@@ -168,15 +168,42 @@ test_that("state class and multiplicity", {
   lrn = lrn("regr.debug")
   lrn$properties = c(lrn$properties, "marshal")
   po = PipeOpLearnerQuantiles$new(lrn)
-  po$train(list(Multiplicity(tsk("mtcars"))))
+
+  task1 = mlr_tasks$get("mtcars")
+  task2 = mlr_tasks$get("boston_housing")
+
+  input = Multiplicity(task1, task2)
+
+  po$train(list(input))
+
   expect_class(po$state, "Multiplicity")
   expect_class(po$state[[1L]], "pipeop_learner_quantiles_state")
+  expect_class(po$learner_model, "Multiplicity")
+  expect_class(po$learner_model[[1L]][[1L]], "LearnerRegr")
+  expect_equal(length(po$learner_model), length(input))
+  expect_equal(length(po$learner_model[[1]]), length(po$param_set$values$quantiles.q_vals))
+
+  prds = po$predict(list(input))
+  expect_class(prds$output, "Multiplicity")
+  expect_equal(length(prds$output), length(input))
+  expect_class(prds$output[[1L]], "PredictionRegr")
 
   # recursive
-  po1 = po("learner_quantiles", learner = lrn("regr.debug"))
-  po1$train(list(Multiplicity(Multiplicity(tsk("mtcars")))))
+  po1 = PipeOpLearnerQuantiles$new(lrn)
+  po1$train(list(Multiplicity(input)))
   expect_class(po1$state, "Multiplicity")
   expect_class(po1$state[[1L]], "Multiplicity")
   expect_class(po1$state[[1L]][[1L]], "pipeop_learner_quantiles_state")
+  expect_class(po1$learner_model, "Multiplicity")
+  expect_class(po1$learner_model[[1L]], "Multiplicity")
+  expect_class(po1$learner_model[[1L]][[1L]][[1]], "LearnerRegr")
+  expect_equal(length(po1$learner_model[[1L]]), length(input))
+  expect_equal(length(po1$learner_model[[1L]][[1L]]), length(po1$param_set$values$quantiles.q_vals))
+
+  prds1 = po1$predict(list(Multiplicity(input)))
+  expect_class(prds1$output, "Multiplicity")
+  expect_class(prds1$output[[1L]], "Multiplicity")
+  expect_class(prds1$output[[1L]][[1L]], "PredictionRegr")
+  expect_equal(length(prds1$output[[1L]]), length(input))
 })
 

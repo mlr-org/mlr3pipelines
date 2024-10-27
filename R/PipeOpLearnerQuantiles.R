@@ -63,7 +63,7 @@
 #'   If [`PipeOpLearnerQuantiles`] has been trained, this is a `list` containing the [`Learner`][mlr3::Learner]s for each quantile.
 #'   Otherwise, this contains the [`Learner`][mlr3::Learner] that is being wrapped.
 #'   Read-only.
-#' * `predict_type`\cr
+#' * `predict_type` :: `character(1)`\cr
 #'   Predict type of the [`PipeOpLearnerQuantiles`], which is always `"response"  "quantiles"`.
 #'
 #' @section Methods:
@@ -86,117 +86,116 @@
 PipeOpLearnerQuantiles = R6Class("PipeOpLearnerQuantiles",
   inherit = PipeOp,
   public = list(
-   initialize = function(learner, id = NULL, param_vals = list()) {
-     private$.learner = as_learner(learner, clone = TRUE)
-     id = id %??% private$.learner$id
-     type = private$.learner$task_type
+    initialize = function(learner, id = NULL, param_vals = list()) {
+      private$.learner = as_learner(learner, clone = TRUE)
+      id = id %??% private$.learner$id
+      type = private$.learner$task_type
 
-     if ("regr" != type) {
-       stop("PipeOpLearnerQuantiles only supports regression.")
-     }
+      if ("regr" != type) {
+        stop("PipeOpLearnerQuantiles only supports regression.")
+      }
 
-     task_type = mlr_reflections$task_types[type, mult = "first"]$task
-     out_type  = mlr_reflections$task_types[type, mult = "first"]$prediction
+      task_type = mlr_reflections$task_types[type, mult = "first"]$task
+      out_type  = mlr_reflections$task_types[type, mult = "first"]$prediction
 
-     # paradox requirements 1.0
-     private$.quantiles_param_set = ps(
-       q_vals = p_uty(custom_check = crate(function(x) {
-         checkmate::check_numeric(x, lower = 0L, upper = 1L, any.missing = FALSE, min.len = 1L, sorted = TRUE)
-       }), tags = c("train", "predict", "required")),
-       q_response = p_dbl(lower = 0L, upper = 1L, tags = c("train", "predict", "required"))
+      # paradox requirements 1.0
+      private$.quantiles_param_set = ps(
+        q_vals = p_uty(custom_check = crate(function(x) {
+          checkmate::check_numeric(x, lower = 0L, upper = 1L, any.missing = FALSE, min.len = 1L, sorted = TRUE)
+        }), tags = c("train", "predict", "required")),
+        q_response = p_dbl(lower = 0L, upper = 1L, tags = c("train", "predict", "required"))
       )
 
-     private$.quantiles_param_set$values = list(q_vals = c(0.05, 0.5, 0.95), q_response = 0.5)  # default
+      private$.quantiles_param_set$values = list(q_vals = c(0.05, 0.5, 0.95), q_response = 0.5)  # default
 
-     super$initialize(id, param_set = alist(quantiles = private$.quantiles_param_set, private$.learner$param_set),
-                      param_vals = param_vals,
-                      input = data.table(name = "input", train = task_type, predict = task_type),
-                      output = data.table(name = "output", train = "NULL", predict = out_type),
-                      packages = learner$packages,
-                      tags = c("learner", "ensemble")
-     )
-   }
+      super$initialize(id, param_set = alist(quantiles = private$.quantiles_param_set, private$.learner$param_set),
+                       param_vals = param_vals,
+                       input = data.table(name = "input", train = task_type, predict = task_type),
+                       output = data.table(name = "output", train = "NULL", predict = out_type),
+                       packages = learner$packages, tags = c("learner", "ensemble")
+      )
+    }
   ),
   active = list(
-   learner = function(val) {
-     if (!missing(val)) {
-       if (!identical(val, private$.learner)) {
-         stop("$learner is read-only.")
-       }
-     }
-     private$.learner
-   },
+    learner = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$learner is read-only.")
+        }
+      }
+      private$.learner
+    },
 
-   learner_model = function(val) {
-     if (!missing(val)) {
-       if (!identical(val, private$.learner)) {
-         stop("$learner_model is read-only.")
-       }
-     }
-     if (is.null(self$state) || is_noop(self$state)) {
-       private$.learner
-     } else {
-       multiplicity_recurse(self$state, function(state) {
-         map(state$model_states, clone_with_state, learner = private$.learner)
-       })
-     }
-   },
-   predict_type = function(val) {
-     if (!missing(val)) {
-       stop("$predict_type is read-only.")
-     }
-     mlr_reflections$learner_predict_types$regr$quantiles  # Returns c("response", "quantiles")
-   }
+    learner_model = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$learner_model is read-only.")
+        }
+      }
+      if (is.null(self$state) || is_noop(self$state)) {
+        private$.learner
+      } else {
+        multiplicity_recurse(self$state, function(state) {
+          map(state$model_states, clone_with_state, learner = private$.learner)
+        })
+      }
+    },
+    predict_type = function(val) {
+      if (!missing(val)) {
+        stop("$predict_type is read-only.")
+      }
+      mlr_reflections$learner_predict_types$regr$quantiles  # Returns c("response", "quantiles")
+    }
   ),
   private = list(
-   .state_class = "pipeop_learner_quantiles_state",
+    .state_class = "pipeop_learner_quantiles_state",
 
-   .train = function(inputs) {
-     task = inputs[[1L]]
-     pv = private$.quantiles_param_set$values
+    .train = function(inputs) {
+      task = inputs[[1L]]
+      pv = private$.quantiles_param_set$values
 
-     assert_subset(pv$q_response, pv$q_vals, empty.ok = FALSE)
-     if ("quantiles" %nin% private$.learner$predict_types) {
-       stopf("Learner needs to be able to predict quantiles.")
-     }
-     private$.learner$predict_type = "quantiles"
+      assert_subset(pv$q_response, pv$q_vals, empty.ok = FALSE)
+      if ("quantiles" %nin% private$.learner$predict_types) {
+        stopf("Learner needs to be able to predict quantiles.")
+      }
+      private$.learner$predict_type = "quantiles"
 
-     # train learner on all quantiles in q_vals
-     states = map(pv$q_vals, function(quantile) {
-       on.exit({private$.learner$state = NULL})
-       private$.learner$quantiles = quantile
-       private$.learner$train(task)$state
-     })
+      # train learner on all quantiles in q_vals
+      states = map(pv$q_vals, function(quantile) {
+        on.exit({private$.learner$state = NULL})
+        private$.learner$quantiles = quantile
+        private$.learner$train(task)$state
+      })
 
-     # add states of trained models to PipeOp state
-     self$state = list(model_states = states)
+      # add states of trained models to PipeOp state
+      self$state = list(model_states = states)
 
-     list(NULL)
-   },
+      list(NULL)
+    },
 
-   .predict = function(inputs) {
-     task = inputs[[1L]]
-     pv = private$.quantiles_param_set$values
+    .predict = function(inputs) {
+      task = inputs[[1L]]
+      pv = private$.quantiles_param_set$values
 
-     prds = pmap(list(self$state$model_states, pv$q_vals), function(state, quantile) {
-       on.exit({private$.learner$state = NULL})
-       private$.learner$state = state
-       private$.learner$quantiles = quantile
-       as.data.table(private$.learner$predict(task))
-     })
+      prds = pmap(list(self$state$model_states, pv$q_vals), function(state, quantile) {
+        on.exit({private$.learner$state = NULL})
+        private$.learner$state = state
+        private$.learner$quantiles = quantile
+        as.data.table(private$.learner$predict(task))
+      })
 
-     quantiles = as.matrix(map_dtc(prds, "response"))
-     unname(quantiles)
-     attr(quantiles, "probs") = pv$q_vals
-     attr(quantiles, "response") = pv$q_response
+      quantiles = as.matrix(map_dtc(prds, "response"))
+      unname(quantiles)
+      attr(quantiles, "probs") = pv$q_vals
+      attr(quantiles, "response") = pv$q_response
 
-     # return quantile PredictionRegr with all requested quantiles
-     list(as_prediction(as_prediction_data(list(quantiles = quantiles), task = task)))
-   },
+      # return quantile PredictionRegr with all requested quantiles
+      list(as_prediction(as_prediction_data(list(quantiles = quantiles), task = task)))
+    },
 
-   .quantiles_param_set = NULL,
-   .learner = NULL,
-   .additional_phash_input = function() private$.learner$phash
+    .quantiles_param_set = NULL,
+    .learner = NULL,
+    .additional_phash_input = function() private$.learner$phash
   )
 )
 
