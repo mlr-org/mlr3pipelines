@@ -82,7 +82,7 @@ Fields inherited from \code{\link{PipeOp}}, as well as:
 If \code{\link{PipeOpLearnerQuantiles}} has been trained, this is a \code{list} containing the \code{\link[mlr3:Learner]{Learner}}s for each quantile.
 Otherwise, this contains the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
 Read-only.
-\item \code{predict_type}\cr
+\item \code{predict_type} :: \code{character(1)}\cr
 Predict type of the \code{\link{PipeOpLearnerQuantiles}}, which is always \verb{"response"  "quantiles"}.
 }
 }
@@ -144,6 +144,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
@@ -186,7 +187,8 @@ Other PipeOps:
 
 Other Meta PipeOps: 
 \code{\link{mlr_pipeops_learner}},
-\code{\link{mlr_pipeops_learner_cv}}
+\code{\link{mlr_pipeops_learner_cv}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}}
 }
 \concept{Meta PipeOps}
 \concept{PipeOps}

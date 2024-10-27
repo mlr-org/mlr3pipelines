@@ -161,6 +161,7 @@ Collate:
     'PipeOpKernelPCA.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'
+    'PipeOpLearnerPICVPlus.R'
     'PipeOpLearnerQuantiles.R'
     'PipeOpMissingIndicators.R'
     'PipeOpModelMatrix.R'
