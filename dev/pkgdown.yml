@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   extending: extending.html
-last_built: 2024-10-27T17:25Z
+last_built: 2024-10-27T19:04Z
 urls:
   reference: https://mlr3pipelines.mlr-org.com/reference
   article: https://mlr3pipelines.mlr-org.com/articles
