@@ -51,11 +51,13 @@ task_filter_ex = function(task, row_ids) {
       row_id = NULL  # for binding
 
       # We create a data.table "new_groups" with the corresponding group to each duplicated ID.
+      #   1. Remove duplicates from task$groups which could exist in case of duplicates in task$row_roles$use.
+      #   2. Get correct number and positioning of rows through dup_ids.
       # We then change the group entry based on how often the ID occurs. E.g. row_id = 1 occurs
       # two times has the group entry "g". Then we rename the group entries to "g_1" and "g_2".
       # If a group with a suffix (e.g. "_1") already exists, we add another suffix to it (i.e. "_1_1").
       grps = unique(task$groups$group)
-      new_groups = task$groups[J(dup_ids), on = "row_id"][, group := {
+      new_groups = unique(task$groups, by = "row_id")[J(dup_ids), on = "row_id"][, group := {
         groups = character(0)
         i = 1
         while (length(groups) < .N) {
