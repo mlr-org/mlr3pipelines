@@ -96,7 +96,7 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
       pv = self$param_set$get_values(tags = "train")
 
       if (pv$frac > 1 && pv$replace == FALSE){
-        stop("Can't subsample task up to a fraction larger than one if parameter 'replace' is FALSE.")
+        stop("Can't subsample task up to a fraction larger than 1 if parameter 'replace' is FALSE")
       }
 
       if (pv$stratify && pv$use_groups) {
