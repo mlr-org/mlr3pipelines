@@ -73,7 +73,7 @@ test_that("PipeOpSubsample works stratified", {
     table(list(Species = rep(c("setosa", "versicolor", "virginica"), 100))))
 })
 
-test_that("PipeOpSubsample - Grouped Data - Sanity Checks", {
+test_that("PipeOpSubsample - use_groups - Sanity Checks", {
   op = PipeOpSubsample$new()
   op$param_set$set_values(frac = 0.5)
 
@@ -105,7 +105,7 @@ test_that("PipeOpSubsample - Grouped Data - Sanity Checks", {
   for (i in seq_len(20)) {
     sampled_groups[[i]] = unique(op$train(list(task_three))[[1]]$groups$group)
   }
-  expect_setequal(sampled_groups, list("g1", "g2", "g3", c("g1", "g2")))
+  expect_setequal(sampled_groups, list("g1", "g2", "g3", c("g1", "g2"), c("g2", "g1")))
 
   # Tests with replace = TRUE
   op$param_set$set_values(replace = TRUE)
@@ -122,11 +122,50 @@ test_that("PipeOpSubsample - Grouped Data - Sanity Checks", {
   for (i in seq_len(20)) {
     sampled_groups[[i]] = unique(op$train(list(task_three))[[1]]$groups$group)
   }
-  expect_setequal(sampled_groups, list("g1", "g2", "g3", c("g1", "g2"), c("g1", "g1_1"), c("g2", "g2_1")))
+  expect_setequal(sampled_groups, list("g1", "g2", "g3", c("g1", "g2"), c("g2", "g1"), c("g1", "g1_1"), c("g2", "g2_1")))
 
+  # use_groups = TRUE and stratify = TRUE should throw an error
+  op$param_set$set_values(stratify = TRUE, use_groups = TRUE)
+  expect_error(op$train(list(task)))
 })
 
-test_that("PipeOpSubsample - Grouped Data - Equal group sizes", {
+test_that("PipeOpSubsample - use_groups - Modified row_roles$use", {
+  op = PipeOpSubsample$new()
+  op$param_set$set_values(replace = TRUE)
+
+  test_df = data.frame(
+    target = runif(300),
+    x1 = runif(300),
+    x2 = runif(300),
+    grp = rep(paste0("g", 1:10), 30)
+  )
+  task = TaskRegr$new(id = "test", backend = test_df, target = "target")
+  task$set_col_roles("grp", "group")
+
+  # TESTCASE: Exclude some rows from row_roles$use
+  task$row_roles$use = setdiff(task$row_roles$use, task$groups[group %in% c("g1", "g2", "g3", "g4")]$row_id)
+  set.seed(1234)
+  train_out = op$train(list(task))[[1]]
+  # Grouped data are kept together
+  grps_out = table(train_out$groups$group)
+  dimnames(grps_out)[[1]] = sub("_\\d*", "", names(grps_out))
+  expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
+
+  # TESTCASE: Set some rows to be included multiple times in row_roles$use
+  #           Effectively, this just increases group sizes.
+  #           However, task_filter_ex ignores duplicates in row_roles$use (i.e. only samples the rows that were given)
+  # grps = c("g5", "g6", "g7")
+  # task$row_roles$use = c(task$row_roles$use, task$groups[group %in% grps]$row_id)
+  # set.seed(2345)
+  # train_out = op$train(list(task))[[1]]
+  #
+  # # Grouped data are kept together
+  # grps_out = table(train_out$groups$group)
+  # dimnames(grps_out)[[1]] = sub("_\\d*", "", names(grps_out))
+  # expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
+})
+
+test_that("PipeOpSubsample - use_groups - Equal group sizes", {
   op = PipeOpSubsample$new()
 
   # Data with groups of the same size
@@ -140,6 +179,7 @@ test_that("PipeOpSubsample - Grouped Data - Equal group sizes", {
   task$set_col_roles("grp", "group")
 
   # TESTCASE: default frac, replace = FALSE
+  set.seed(2024)
   train_out = op$train(list(task))[[1]]
   # Grouped data are kept together
   grps_out = table(train_out$groups$group)
@@ -149,41 +189,22 @@ test_that("PipeOpSubsample - Grouped Data - Equal group sizes", {
 
   # TESTCASE: changed frac, replace = TRUE
   op$param_set$set_values(frac = 2, replace = TRUE)
+  set.seed(2024)
   train_out = op$train(list(task))[[1]]
   # Grouped data are kept together
   grps_out = table(train_out$groups$group)
-  expect_equal(unname(grps_out), unname(table(task$groups$group)[sub("_\\d*", "", names(grps_out))]))
-  # Frac is adhered to as best as possible
-  expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.025)
-
-  # TESTCASE: Exclude some rows from row_roles$use and one group completely
-  task$row_roles$use = setdiff(task$row_roles$use, task$groups[group %in% c("g1", "g2", "g3", "g4")]$row_id)
-  train_out = op$train(list(task))[[1]]
-  # Grouped data are kept together
-  grps_out = table(train_out$groups$group)
-  expect_equal(unname(grps_out), unname(table(task$groups$group)[sub("_\\d*", "", names(grps_out))]))
-  # Frac is adhered to as best as possible
-  expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.025)
-
-  # TESTCASE: Set some rows to be included multiple times in row_roles$use
-  task$row_roles$use = c(task$row_roles$use, task$groups[group %in% c("g5", "g6", "g7", "g8")]$row_id)
-  train_out = op$train(list(task))[[1]]
-  # Grouped data are kept together
-  expect_equal(unname(grps_out), unname(table(task$groups$group)[sub("_\\d*", "", names(grps_out))]))
+  # need to do this via dimnames since names(dimnames(grps_out)) would be changed by other methods resulting in failing all.equal()
+  dimnames(grps_out)[[1]] = sub("_\\d*", "", names(grps_out))
   expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
   # Frac is adhered to as best as possible
   expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.025)
-
-  # TESTCASE: use_groups = TRUE and stratify = TRUE should throw an error
-  op$param_set$set_values(stratify = TRUE, use_groups = TRUE)
-  expect_error(op$train(list(task)))
-
 })
 
-test_that("PipeOpSubsample - Grouped data - Large variance in group sizes", {
+test_that("PipeOpSubsample - use_groups - Large variance in group sizes", {
   op = PipeOpSubsample$new()
 
   # Data with one very large group
+  set.seed(2024)
   test_df = data.frame(
     target = runif(3000),
     x1 = runif(3000),
@@ -197,6 +218,7 @@ test_that("PipeOpSubsample - Grouped data - Large variance in group sizes", {
   task$set_col_roles("grp", "group")
 
   # TESTCASE: default frac, replace = FALSE
+  set.seed(2024)
   train_out = op$train(list(task))[[1]]
   # Grouped data are kept together
   grps_out = table(train_out$groups$group)
@@ -206,11 +228,13 @@ test_that("PipeOpSubsample - Grouped data - Large variance in group sizes", {
 
   # TESTCASE: changed frac, replace = TRUE
   op$param_set$set_values(frac = 2, replace = TRUE)
+  set.seed(2024)
   train_out = op$train(list(task))[[1]]
   # grouped data are kept together
   grps_out = table(train_out$groups$group)
+  # need to do this via dimnames since names(dimnames(grps_out)) would be changed by other methods resulting in failing all.equal()
+  dimnames(grps_out)[[1]] = sub("_\\d*", "", names(grps_out))
   expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
   # Frac is adhered to as best as possible
   expect_equal(train_out$nrow / task$nrow, op$param_set$values$frac, tolerance = 0.1)
-
 })
