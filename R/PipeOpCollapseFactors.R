@@ -38,7 +38,12 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `no_collapse_above_prevalence`  :: `numeric(1)` \cr
 #'   Fraction of samples below which factor levels get collapsed. Default is 1, which causes all levels
-#'   to be collapsed until `target_level_count` remain.
+#'   to be collapsed until `target_level_count` remain. In case both `no_collapse_above_prevalence` and
+#'   `no_collapse_above_absolute` are given, the higher threshold of the two will be used.
+#' * `no_collapse_above_absolute`  :: `integer(1)` \cr
+#'   Number of samples below which factor levels get collapsed. Default is `Inf`, which causes all levels
+#'   to be collapsed until `target_level_count` remain. In case both `no_collapse_above_prevalence` and
+#'   `no_collapse_above_absolute` are given, the higher threshold of the two will be used.
 #' * `target_level_count`  :: `integer(1)` \cr
 #'   Number of levels to retain. Default is 2.
 #'
@@ -55,6 +60,8 @@
 #' @export
 #' @examples
 #' library("mlr3")
+#'
+#' # add something here
 PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
@@ -85,14 +92,20 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
         if (length(levels(d)) <= target_count) {
           return(NULL)
         }
+
         dtable = table(d)
-        fractions = sort(dtable, decreasing = TRUE) / sum(!is.na(d))
+
+        absolutes = sort(dtable, decreasing = TRUE)
+        keep_absolute = names(absolutes)[absolutes >= keep_absolute]
+
+        fractions = absolutes / sum(is.na(d))
         keep_fraction = names(fractions)[fractions >= keep_fraction]
-        # TODO: test this
-        keep_absolute = names(fractions)[fractions >= keep_absolute]
+
         keep_count = names(fractions)[seq_len(target_count)]  # at this point we know there are more levels than target_count
-        keep = union(keep_fraction, setdiff(keep_count, keep_absolute))
+
+        keep = union(keep_fraction, keep_count, keep_absolute)
         dont_keep = setdiff(levels(d), keep)
+
         if (is.ordered(d)) {
           cmap = stats::setNames(as.list(levels(d)), levels(d))
           for (eliminating in dont_keep) {
@@ -112,6 +125,7 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
           lowest_kept = keep[length(keep)]
           cmap[[lowest_kept]] = c(lowest_kept, dont_keep)
         }
+
         cmap
       }, simplify = FALSE)
 
