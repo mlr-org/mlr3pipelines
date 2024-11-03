@@ -62,7 +62,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{ if (requireNamespace("smotefamily")) \{ }
+\dontshow{if (requireNamespace("smotefamily")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 
 # Create example task
@@ -80,7 +80,7 @@ pop = po("adas")
 adas_result = pop$train(list(task))[[1]]$data()
 nrow(adas_result)
 table(adas_result$target)
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \references{
 He H, Bai Y, Garcia, A. E, Li S (2008).
@@ -129,6 +129,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
