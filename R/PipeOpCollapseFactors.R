@@ -5,10 +5,10 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Collapses factors of type `factor`, `ordered`: Collapses the rarest factors in the
-#' training samples, until `target_level_count` levels remain. Levels that have prevalence above `no_collapse_above_prevalence`
-#'  are retained, however. For `factor` variables, these are collapsed to the next larger level, for `ordered` variables,
-#' rare variables are collapsed to the neighbouring class, whichever has fewer samples.
+#' Collapses factors of type `factor`, `ordered`: Collapses the rarest factors in the training samples, until `target_level_count`
+#' levels remain. Levels that have prevalence above `no_collapse_above_prevalence` or absolute count above `no_collapse_above_absolute`´
+#' are retained, however. For `factor` variables, these are collapsed to the next larger level, for `ordered` variables, rare variables
+#' are collapsed to the neighbouring class, whichever has fewer samples.
 #'
 #' Levels not seen during training are not touched during prediction; Therefore it is useful to combine this with the
 #' [`PipeOpFixFactors`].
@@ -71,7 +71,7 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
         no_collapse_above_absolute = p_int(1, special_vals = list(Inf), tags = c("train", "predict")),
         target_level_count = p_int(2, tags = c("train", "predict"))
       )
-      ps$values = list(no_collapse_above_prevalence = 1, no_collapse_above_count = Inf, target_level_count = 2)
+      ps$values = list(no_collapse_above_prevalence = 1, no_collapse_above_absolute = Inf, target_level_count = 2)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("factor", "ordered"))
     }
   ),
@@ -98,12 +98,13 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
         absolutes = sort(dtable, decreasing = TRUE)
         keep_absolute = names(absolutes)[absolutes >= keep_absolute]
 
-        fractions = absolutes / sum(is.na(d))
+        fractions = absolutes / sum(!is.na(d))
         keep_fraction = names(fractions)[fractions >= keep_fraction]
 
         keep_count = names(fractions)[seq_len(target_count)]  # at this point we know there are more levels than target_count
 
-        keep = union(keep_fraction, keep_count, keep_absolute)
+        # DEV: union is binary, so need to repeat it
+        keep = union(keep_fraction, union(keep_count, keep_absolute))
         dont_keep = setdiff(levels(d), keep)
 
         if (is.ordered(d)) {
