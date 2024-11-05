@@ -19,6 +19,7 @@ test_that("PipeOpCollapseFactors", {
   #                 correct levels are chosen for this
   train_out = op$train(list(task))[[1]]
 
+  # test: ordered, correct renaming
 
   # test: prevalance works
   # test: absolute works

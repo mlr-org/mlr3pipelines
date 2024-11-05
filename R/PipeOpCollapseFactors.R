@@ -114,9 +114,9 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
             if (position == 1) {
               cmap[[2]] = c(cmap[[2]], eliminating)
             } else if (position == length(cmap) || dtable[position - 1] < dtable[position + 1]) {
-              cmap[[position - 1]] = c(cmap[[position - 1]], eliminating)
+              cmap[[position - 1]] = c(cmap[[position - 1]], cmap[[eliminating]])
             } else {
-              cmap[[position + 1]] = c(cmap[[position + 1]], eliminating)
+              cmap[[position + 1]] = c(cmap[[position + 1]], cmap[[eliminating]])
             }
             dtable = dtable[-position]
             cmap[[position]] = NULL
