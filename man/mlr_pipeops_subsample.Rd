@@ -49,8 +49,7 @@ Fraction of rows in the \code{\link[mlr3:Task]{Task}} to keep. May only be great
 \item \code{stratify} :: \code{logical(1)}\cr
 Should the subsamples be stratified by target? Initialized to \code{FALSE}. May only be \code{TRUE} for \code{\link[mlr3:TaskClassif]{TaskClassif}} input and if \code{use_groups = FALSE}.
 \item \code{use_groups} :: \code{logical(1)}\cr
-If \code{TRUE} and if the \code{\link[mlr3:Task]{Task}} has a column with role \code{group}, grouped observations are kept together during subsampling. May only be \code{TRUE} if \code{strafiy = FALSE}.
-Initialized to \code{TRUE}.
+If \code{TRUE} and if the \code{\link[mlr3:Task]{Task}} has a column with role \code{group}, grouped observations are kept together during subsampling. In case of  sampling with
 \item \code{replace} :: \code{logical(1)}\cr
 Sample with replacement? Initialized to \code{FALSE}.
 }

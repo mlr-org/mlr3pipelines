@@ -36,8 +36,8 @@
 #' * `stratify` :: `logical(1)`\cr
 #'   Should the subsamples be stratified by target? Initialized to `FALSE`. May only be `TRUE` for [`TaskClassif`][mlr3::TaskClassif] input and if `use_groups = FALSE`.
 #' * `use_groups` :: `logical(1)`\cr
-#'   If `TRUE` and if the [`Task`][mlr3::Task] has a column with role `group`, grouped observations are kept together during subsampling. May only be `TRUE` if `strafiy = FALSE`.
-#'   Initialized to `TRUE`.
+#'  If `TRUE` and if the [`Task`][mlr3::Task] has a column with role `group`, grouped observations are kept together during subsampling. In case of  sampling with
+#  `replace = TRUE`, the group entry of duplicate samples is suffixed (`_1`, `_2`, ...). May only be `TRUE` if `strafiy = FALSE`. Initialized to `TRUE`.
 #' * `replace` :: `logical(1)`\cr
 #'   Sample with replacement? Initialized to `FALSE`.
 #'
