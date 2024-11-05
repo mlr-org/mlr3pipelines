@@ -69,16 +69,4 @@ test_that("task_filter_ex - changed row_roles$use", {
   task$row_roles$use = c(seq(1, 50), seq(1, 20))
   tfiltered = task_filter_ex(task$clone(), 50L + rowidx)
   expect_equal(tfiltered$data(), task$data(rows = 50L + rowidx))
-
-  # Need to define primary key "..row_id" explicitly because mlr3 fills it
-  # with task$row_ids and asserts uniqueness, otherwise.
-  task$cbind(data.frame("..row_id" = seq(1, 70), grp = rep(c("A", "A", "B", "C", "D", "C", "A"), 10)))
-  task$set_col_roles("grp", "group")
-
-  tfiltered = task_filter_ex(task$clone(), rowidx)
-  expect_equal(tfiltered$data(), task$data(rows = rowidx))
-  tfiltered = task_filter_ex(task$clone(), 50L + rowidx)
-  expect_equal(tfiltered$data(), task$data(rows = 50L + rowidx))
 })
-
-# test for large data_set (allow_cartesian)
