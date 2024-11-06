@@ -95,7 +95,7 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
     .train_task = function(task) {
       pv = self$param_set$get_values(tags = "train")
 
-      if (pv$frac > 1 && pv$replace == FALSE){
+      if (pv$frac > 1 && pv$replace == FALSE) {
         stop("Can't subsample task up to a fraction larger than 1 if parameter 'replace' is FALSE")
       }
 

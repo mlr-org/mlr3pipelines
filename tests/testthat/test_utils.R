@@ -70,3 +70,34 @@ test_that("task_filter_ex - changed row_roles$use", {
   tfiltered = task_filter_ex(task$clone(), 50L + rowidx)
   expect_equal(tfiltered$data(), task$data(rows = 50L + rowidx))
 })
+
+test_that("task_filter_ex - group renaming in changed row_roles$use", {
+  df = data.frame(
+    target = 1:3,
+    x = 1:3,
+    grp = c("a", "b", "c")
+  )
+  task = TaskRegr$new(id = "test", backend = df, target = "target")
+  task$set_col_roles("grp", "group")
+  task$row_roles$use = c(1, 1, 2, 2, 3)
+
+  tfiltered = task_filter_ex(task$clone(), c(1L, 1L, 2L, 2L, 3L))
+  expect_equal(tfiltered$row_ids, 1:5)
+  expect_equal(tfiltered$groups$group, c("a", "b", "c", "a", "b"))
+
+  tfiltered = task_filter_ex(task$clone(), c(1L, 1L, 1L, 1L, 2L, 2L, 3L))
+  expect_equal(tfiltered$row_ids, 1:7)
+  expect_equal(tfiltered$groups$group, c("a", "b", "c", "a", "b", "a_1", "a_1"))
+
+  tfiltered = task_filter_ex(task$clone(), c(1L, 1L, 1L, 1L, 3L))
+  expect_equal(tfiltered$row_ids, c(1, 3, 4, 5, 6))
+  expect_equal(tfiltered$groups$group, c("a", "c", "a", "a_1", "a_1"))
+
+  tfiltered = task_filter_ex(task$clone(), 3L)
+  expect_equal(tfiltered$row_ids, 3)
+  expect_equal(tfiltered$groups$group, "c")
+
+  tfiltered = task_filter_ex(task$clone(), c(1L, 1L, 1L, 1L, 3L, 1L, 1L))
+  expect_equal(tfiltered$row_ids, c(1, 3, 4, 5, 6, 7, 8))
+  expect_equal(tfiltered$groups$group, c("a", "c", "a", "a_1", "a_1", "a_2", "a_2"))
+})
