@@ -12,7 +12,7 @@ Wraps a \code{\link[mlr3:LearnerRegr]{LearnerRegr}} into a \code{\link{PipeOp}} 
 
 \code{\link{PipeOpLearnerQuantiles}} only supports \code{\link[mlr3:LearnerRegr]{LearnerRegr}}s that have \code{quantiles} as a possible \code{pedict_type}.
 
-It produces quantile-based predictions for multiple quantiles in one \code{\link[mlr3:Prediction]{PredictionRegr}}. This is especially helpful if the \code{\link[mlr3:LearnerRegr]{LearnerRegr}} can only predict one quantile (like for example \code{\link[mlr3extralearners:mlr_learners_regr.gbm]{LearnerRegrGBM}})
+It produces quantile-based predictions for multiple quantiles in one \code{\link[mlr3:Prediction]{PredictionRegr}}. This is especially helpful if the \code{\link[mlr3:LearnerRegr]{LearnerRegr}} can only predict one quantile (like for example \code{LearnerRegrGBM} in \code{mlr3extralearners})
 
 Inherits the \verb{$param_set} (and therefore \verb{$param_set$values}) from the \code{\link[mlr3:Learner]{Learner}} it is constructed from.
 }

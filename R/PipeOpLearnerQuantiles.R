@@ -9,7 +9,7 @@
 #'
 #' [`PipeOpLearnerQuantiles`] only supports [`LearnerRegr`][mlr3::LearnerRegr]s that have `quantiles` as a possible `pedict_type`.
 #'
-#' It produces quantile-based predictions for multiple quantiles in one [`PredictionRegr`][mlr3::Prediction]. This is especially helpful if the [`LearnerRegr`][mlr3::LearnerRegr] can only predict one quantile (like for example [`LearnerRegrGBM`][mlr3extralearners::LearnerRegrGBM])
+#' It produces quantile-based predictions for multiple quantiles in one [`PredictionRegr`][mlr3::Prediction]. This is especially helpful if the [`LearnerRegr`][mlr3::LearnerRegr] can only predict one quantile (like for example `LearnerRegrGBM` in `mlr3extralearners`)
 #'
 #' Inherits the `$param_set` (and therefore `$param_set$values`) from the [`Learner`][mlr3::Learner] it is constructed from.
 #'
