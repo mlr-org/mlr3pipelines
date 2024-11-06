@@ -57,7 +57,7 @@ task_filter_ex = function(task, row_ids) {
       # two times has the group entry "g". Then we rename the group entries to "g_1" and "g_2".
       # If a group with a suffix (e.g. "_1") already exists, we add another suffix to it (i.e. "_1_1").
       grps = unique(task$groups$group)
-      new_groups = unique(task$groups, by = "row_id")[J(dup_ids), on = "row_id"][, group := {
+      new_groups = unique(task$groups, by = "row_id")[list(dup_ids), on = "row_id"][, group := {
         groups = character(0)
         i = 1
         while (length(groups) < .N) {
