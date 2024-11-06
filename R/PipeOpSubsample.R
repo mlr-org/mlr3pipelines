@@ -123,7 +123,7 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
           cutoff_index = which.min(abs(cumsum(shuffled) / nrows - pv$frac))
           keep_grps = names(shuffled[seq_len(cutoff_index)])
         }
-        keep = task$groups[J(keep_grps), on = "group", allow.cartesian = TRUE]$row_id
+        keep = task$groups[list(keep_grps), on = "group", allow.cartesian = TRUE]$row_id
       } else if (pv$stratify) {
         if (!inherits(task, "TaskClassif")) {
           stopf("Stratification not supported for %s", class(task))
