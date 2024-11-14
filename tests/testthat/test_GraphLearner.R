@@ -1262,13 +1262,14 @@ test_that("GraphLearner Selected Features", {
 test_that("GraphLearner other properties", {
 
   has_loglik = "loglik" %in% mlr_reflections$learner_properties[["classif"]]
+  if (!has_loglik) skip()
   DebugWithProperties = R6Class("DebugWithProperties", inherit = LearnerClassifDebug,
     public = list(
       initialize = function(...) {
         super$initialize(...)
         self$properties = c(
           setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error")),
-          if (has_loglik) "loglik", "oob_error")
+          "loglik", "oob_error")
       },
       loglik = function() {
         1
@@ -1282,7 +1283,7 @@ test_that("GraphLearner other properties", {
   g_properties = GraphLearner$new(Graph$new()$add_pipeop(DebugWithProperties$new()))
 
   expect_false(any(c("loglik", "oob_error") %in% g_basic$properties))
-  expect_true(all(c(if (has_loglik) "loglik", "oob_error") %in% g_properties$properties))
+  expect_true(all(c("loglik", "oob_error") %in% g_properties$properties))
 
   expect_error(g_basic$loglik(), "does not implement.*loglik")
   expect_error(g_basic$oob_error(), "does not implement.*oob_error")
@@ -1293,9 +1294,9 @@ test_that("GraphLearner other properties", {
 
   g_bagging = as_learner(ppl("bagging", DebugWithProperties$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
 
-  expect_true(all(c(if (has_loglik) "loglik", "oob_error") %in% g_bagging$properties))
+  expect_true(all(c("loglik", "oob_error") %in% g_bagging$properties))
   g_bagging$train(tsk("iris"))
-  expect_true(all(c(if (has_loglik) "loglik", "oob_error") %in% g_bagging$properties))
+  expect_true(all(c("loglik", "oob_error") %in% g_bagging$properties))
   expect_error(g_bagging$loglik(), "Multiplicity that does not contain exactly one Learner")
   expect_error(g_bagging$oob_error(), "Multiplicity that does not contain exactly one Learner")
 
@@ -1309,7 +1310,7 @@ test_that("GraphLearner other properties", {
   lbasic$id = "basic"
   g_branch = as_learner(ppl("branch", list(basic = lbasic, properties = DebugWithProperties$new())))
 
-  expect_true(all(c(if (has_loglik) "loglik", "oob_error") %in% g_branch$properties))
+  expect_true(all(c("loglik", "oob_error") %in% g_branch$properties))
   g_branch$train(tsk("iris"))
   expect_error(g_branch$loglik(), "does not implement.*loglik")
   expect_error(g_branch$oob_error(), "does not implement.*oob_error")
@@ -1328,6 +1329,6 @@ test_that("GraphLearner other properties", {
     2
   )
 
-  expect_true(all(c(if (has_loglik) "loglik", "oob_error") %in% g_nested$properties))
+  expect_true(all(c("loglik", "oob_error") %in% g_nested$properties))
 
 })
