@@ -20,15 +20,15 @@ test_that("linear graph", {
 
   expect_graph(g)
 
-  expect_output(print(g), "Graph with 2 PipeOps.*subsample.*UNTRAINED.*pca.*UNTRAINED")
-
-
+  expect_message(print(g), "Graph with 2 PipeOps:")
+  expect_output(print(g), ".*subsample.*UNTRAINED.*pca.*UNTRAINED")
 
   inputs = mlr_tasks$get("iris")
   x = g$train(inputs)
   expect_task(x[[1]])
 
-  expect_output(print(g), "Graph with 2 PipeOps.*subsample.*list.*pca.*prcomp")
+  expect_message(print(g), "Graph with 2 PipeOps")
+  expect_output(print(g), ".*subsample.*list.*pca.*prcomp")
 
   out = g$predict(inputs)
   expect_task(x[[1]])

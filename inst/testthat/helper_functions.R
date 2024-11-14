@@ -97,7 +97,7 @@ expect_pipeop = function(po, check_ps_default_values = TRUE) {
   expect_class(po$param_set, "ParamSet", label = label)
   expect_list(po$param_set$values, names = "unique", label = label)
   expect_flag(po$is_trained, label = label)
-  expect_output(print(po), "PipeOp:", label = label)
+  expect_message(print(po), "PipeOp", label = label)
   expect_character(po$packages, any.missing = FALSE, unique = TRUE, label = label)
   expect_function(po$train, nargs = 1)
   expect_function(po$predict, nargs = 1)

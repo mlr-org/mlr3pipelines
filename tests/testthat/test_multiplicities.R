@@ -10,7 +10,7 @@ test_that("Multiplicity class and methods", {
   expect_multiplicity(assert_multiplicity(nmp))
   expect_multiplicity(assert_multiplicity(nmp, check_nesting = TRUE))
   expect_error(assert_multiplicity(as.Multiplicity(list(0, Multiplicity(0))), .var.name = "y", check_nesting = TRUE), regexp = "Inconsistent multiplicity nesting level")
-  expect_output(print(mp), regexp = "Multiplicity:")
+  expect_message(print(mp), regexp = "Multiplicity:")
   expect_output(print(Multiplicity()), regexp = "Empty Multiplicity.")
 })
 
