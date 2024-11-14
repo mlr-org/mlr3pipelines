@@ -31,6 +31,7 @@ paradox_info <- list2env(list(is_old = FALSE), parent = emptyenv())
     lg$set_threshold("warn")
   }
   paradox_info$is_old = "set_id" %in% names(ps())
+  supply_boston_housing()
 }  # nocov end
 
 .onUnload = function(libpath) { # nocov start
