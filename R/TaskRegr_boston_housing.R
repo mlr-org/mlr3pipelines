@@ -17,7 +17,6 @@ load_boston_housing = function(id = "boston_housing") {
   bht$man = "mlr3pipelines::mlr_tasks_boston_housing"
   bht$backend$hash = "mlr3::mlr_tasks_boston_housing"
   bht
-  tsk()$add("boston_housing", bht)
 }
 
 supply_boston_housing = function() {
