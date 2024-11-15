@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,6 +16,10 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../reference/index.html"><span class="fa fa-file-alt"></span> Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/extending.html">Adding new PipeOps</a></li>
+  </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://mlr3book.mlr-org.com"><span class="fa fa-link"></span> mlr3book</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -38,9 +42,22 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.7.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.7.1" id="mlr3pipelines-071">mlr3pipelines 0.7.1<a class="anchor" aria-label="anchor" href="#mlr3pipelines-071"></a></h2><p class="text-muted">CRAN release: 2024-11-14</p>
+<ul><li>Compatibility fix for upcoming <code>mlr3</code>
+</li>
+<li>New down-sampling PipeOps for inbalanced data: <code>PipeOpTomek</code> / <code>po("tomek")</code> and <code>PipeOpNearmiss</code> / <code>po("nearmiss")</code>
+</li>
+<li>New PipeOp <code>PipeOpLearnerPICVPlus / po("learner_pi_cvplus")</code>
+</li>
+<li>New PipeOp for Quantile Regression <code>PipeOpLearnerQuantiles</code> / <code>po(learner_quantiles)</code>
+</li>
+<li>
+<code>GraphLearner</code> has new active bindings/methods as shortcuts for active bindings/methods of the underlying <code>Graph</code>: <code>$pipeops</code>, <code>$edges</code>, <code>$pipeops_param_set</code>, and <code>$pipeops_param_set_values</code> as well as <code>$ids()</code> and <code>$plot()</code>.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.0" id="mlr3pipelines-070">mlr3pipelines 0.7.0<a class="anchor" aria-label="anchor" href="#mlr3pipelines-070"></a></h2><p class="text-muted">CRAN release: 2024-09-24</p>
 <ul><li>New PipeOp <code>PipeOpRowApply</code> / <code>po("rowapply")</code>
@@ -62,11 +79,7 @@
 <li>
 <code>as_data_table(po())</code> now works even when some <code>PipeOp</code>s can not be constructed. For these <code>PipeOp</code>s, <code>NA</code> is reported in most columns.</li>
 <li>Compatibility with upcoming <code>mlr3</code> release.</li>
-<li>New PipeOp: <code>PipeOpRowApply</code> / <code>po("rowapply")</code>
-</li>
-<li>New PipeOps for handling inbalanced data: <code>PipeOpADAS</code> / <code>po("adas")</code> and <code>PipeOpBLSmote</code> / <code>po("blsmote")</code>
-</li>
-<li>New PipeOp for handling inbalanced data: <code>PipeOpSmoteNC</code> / <code>po("smotenc")</code>
+<li>New PipeOps for handling inbalanced data: <code>PipeOpADAS</code> / <code>po("adas")</code>, <code>PipeOpBLSmote</code> / <code>po("blsmote")</code> and <code>PipeOpSmoteNC</code> / <code>po("smotenc")</code>
 </li>
 </ul></div>
     <div class="section level2">

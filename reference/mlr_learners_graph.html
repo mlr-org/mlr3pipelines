@@ -27,7 +27,7 @@ non-NULL $state, it is ignored."><meta property="og:image" content="https://mlr3
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,10 @@ non-NULL $state, it is ignored."><meta property="og:image" content="https://mlr3
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html"><span class="fa fa-file-alt"></span> Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/extending.html">Adding new PipeOps</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://mlr3book.mlr-org.com"><span class="fa fa-link"></span> mlr3book</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -58,7 +62,7 @@ non-NULL $state, it is ignored."><meta property="og:image" content="https://mlr3
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Encapsulate a Graph as a Learner</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.7.0/R/GraphLearner.R" class="external-link"><code>R/GraphLearner.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/GraphLearner.R" class="external-link"><code>R/GraphLearner.R</code></a></small>
       <div class="d-none name"><code>mlr_learners_graph.Rd</code></div>
     </div>
 
@@ -108,15 +112,25 @@ construction of <code>GraphLearner</code>, during <code>$train()</code>, and dur
 <p>Fields inherited from <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>, as well as:</p><ul><li><p><code>graph</code> :: <code><a href="Graph.html">Graph</a></code><br><code><a href="Graph.html">Graph</a></code> that is being wrapped. This field contains the prototype of the <code><a href="Graph.html">Graph</a></code> that is being trained, but does <em>not</em>
 contain the model. Use <code>graph_model</code> to access the trained <code><a href="Graph.html">Graph</a></code> after <code>$train()</code>. Read-only.</p></li>
 <li><p><code>graph_model</code> :: <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code><br><code><a href="Graph.html">Graph</a></code> that is being wrapped. This <code><a href="Graph.html">Graph</a></code> contains a trained state after <code>$train()</code>. Read-only.</p></li>
+<li><p><code>pipeops</code> :: named <code>list</code> of <code><a href="PipeOp.html">PipeOp</a></code> <br>
+Contains all <code><a href="PipeOp.html">PipeOp</a></code>s in the underlying <code><a href="Graph.html">Graph</a></code>, named by the <code><a href="PipeOp.html">PipeOp</a></code>'s <code>$id</code>s. Shortcut for <code>$graph_model$pipeops</code>. See <code><a href="Graph.html">Graph</a></code> for details.</p></li>
+<li><p><code>edges</code> :: <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>  with columns <code>src_id</code> (<code>character</code>), <code>src_channel</code> (<code>character</code>), <code>dst_id</code> (<code>character</code>), <code>dst_channel</code> (<code>character</code>)<br>
+Table of connections between the <code><a href="PipeOp.html">PipeOp</a></code>s in the underlying <code><a href="Graph.html">Graph</a></code>. Shortcut for <code>$graph$edges</code>. See <code><a href="Graph.html">Graph</a></code> for details.</p></li>
+<li><p><code>param_set</code> :: <code><a href="https://paradox.mlr-org.com/reference/ParamSet.html" class="external-link">ParamSet</a></code><br>
+Parameters of the underlying <code><a href="Graph.html">Graph</a></code>. Shortcut for <code>$graph$param_set</code>. See <code><a href="Graph.html">Graph</a></code> for details.</p></li>
+<li><p><code>pipeops_param_set</code> :: named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code><br>
+Named list containing the <code><a href="https://paradox.mlr-org.com/reference/ParamSet.html" class="external-link">ParamSet</a></code>s of all <code><a href="PipeOp.html">PipeOp</a></code>s in the <code><a href="Graph.html">Graph</a></code>. See there for details.</p></li>
+<li><p><code>pipeops_param_set_values</code> :: named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code><br>
+Named list containing the set parameter values of all <code><a href="PipeOp.html">PipeOp</a></code>s in the <code><a href="Graph.html">Graph</a></code>. See there for details.</p></li>
 <li><p><code>internal_tuned_values</code> :: named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> or <code>NULL</code><br>
-The internal tuned parameter values collected from all <code>PipeOp</code>s.
+The internal tuned parameter values collected from all <code><a href="PipeOp.html">PipeOp</a></code>s.
 <code>NULL</code> is returned if the learner is not trained or none of the wrapped learners supports internal tuning.</p></li>
 <li><p><code>internal_valid_scores</code> :: named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> or <code>NULL</code><br>
-The internal validation scores as retrieved from the <code>PipeOps</code>.
-The names are prefixed with the respective IDs of the <code>PipeOp</code>s.
+The internal validation scores as retrieved from the <code><a href="PipeOp.html">PipeOp</a></code>s.
+The names are prefixed with the respective IDs of the <code><a href="PipeOp.html">PipeOp</a></code>s.
 <code>NULL</code> is returned if the learner is not trained or none of the wrapped learners supports internal validation.</p></li>
 <li><p><code>validate</code> :: <code>numeric(1)</code>, <code>"predefined"</code>, <code>"test"</code> or <code>NULL</code><br>
-How to construct the validation data. This also has to be configured for the individual <code>PipeOp</code>s such as
+How to construct the validation data. This also has to be configured for the individual <code><a href="PipeOp.html">PipeOp</a></code>s such as
 <code>PipeOpLearner</code>, see <code><a href="set_validate.GraphLearner.html">set_validate.GraphLearner</a></code>.
 For more details on the possible values, see <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">mlr3::Learner</a></code>.</p></li>
 <li><p><code>marshaled</code> :: <code>logical(1)</code><br>
@@ -138,7 +152,17 @@ The default is <code>FALSE</code>.</p></li>
     <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
 
 
-<p>Methods inherited from <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>, as well as:</p><ul><li><p><code>marshal</code><br>
+<p>Methods inherited from <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>, as well as:</p><ul><li><p><code>ids(sorted = FALSE)</code> <br>
+(<code>logical(1)</code>) -&gt; <code>character</code> <br>
+Get IDs of all <code><a href="PipeOp.html">PipeOp</a></code>s. This is in order that <code><a href="PipeOp.html">PipeOp</a></code>s were added if
+<code>sorted</code> is <code>FALSE</code>, and topologically sorted if <code>sorted</code> is <code>TRUE</code>.</p></li>
+<li><p><code>plot(html = FALSE, horizontal = FALSE)</code> <br>
+(<code>logical(1)</code>, <code>logical(1)</code>) -&gt; <code>NULL</code> <br>
+Plot the <code><a href="Graph.html">Graph</a></code>, using either the <span class="pkg">igraph</span> package (for <code>html = FALSE</code>, default) or
+the <code>visNetwork</code> package for <code>html = TRUE</code> producing a <code><a href="https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-package.html" class="external-link">htmlWidget</a></code>.
+The <code><a href="https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-package.html" class="external-link">htmlWidget</a></code> can be rescaled using <code><a href="https://rdrr.io/pkg/visNetwork/man/visOptions.html" class="external-link">visOptions</a></code>.
+For <code>html = FALSE</code>, the orientation of the plotted graph can be controlled through <code>horizontal</code>.</p></li>
+<li><p><code>marshal</code><br>
 (any) -&gt; <code>self</code><br>
 Marshal the model.</p></li>
 <li><p><code>unmarshal</code><br>
@@ -165,9 +189,11 @@ If <code>resolve_branching</code> is <code>FALSE</code>, <code><a href="mlr_pipe
 Note that these typically only extract information from the <code>$base_learner()</code>.
 This works well for simple <code><a href="Graph.html">Graph</a></code>s that do not modify features too much, but may give unexpected results for <code>Graph</code>s that
 add new features or move information between features.</p>
-<p>As an example, consider a feature <code>A`` with missing values, and a feature </code>B<code> that is used for imputatoin, using a [`po("imputelearner")`][PipeOpImputeLearner]. In a case where the following [`Learner`][mlr3::Learner] performs embedded feature selection and only selects feature A, the `selected_features()` method could return only feature `A</code>, and <code>$importance()</code> may even report 0 for feature <code>B</code>.
-This would not be entirbababababely accurate when considering the entire <code>GraphLearner</code>, as feature <code>B</code> is used for imputation and would therefore have an impact on predictions.
-The following should therefore only be used if the <code>Graph</code> is known to not have an impact on the relevant properties.</p><ul><li><p><code>importance()</code><br>
+<p>As an example, consider a feature <code>A</code> with missing values, and a feature <code>B</code> that is used for imputation, using a <code><a href="mlr_pipeops_imputelearner.html">po("imputelearner")</a></code>.
+In a case where the following <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> performs embedded feature selection and only selects feature <code>A</code>,
+the <code>selected_features()</code> method could return only feature <code>A</code>, and <code>$importance()</code> may even report 0 for feature <code>B</code>.
+This would not be entirely accurate when considering the entire <code>GraphLearner</code>, as feature <code>B</code> is used for imputation and would therefore have an impact on predictions.
+The following should therefore only be used if the <code><a href="Graph.html">Graph</a></code> is known to not have an impact on the relevant properties.</p><ul><li><p><code>importance()</code><br>
 () -&gt; <code>numeric</code><br>
 The <code>$importance()</code> returned by the base learner, if it has the <code>"importance</code> property.
 Throws an error otherwise.</p></li>
@@ -204,7 +230,44 @@ recommended.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">graph</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"pca"</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">lr</span> <span class="op">=</span> <span class="va">GraphLearner</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lr</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_learner.html" class="external-link">as_learner</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span>  <span class="co"># equivalent</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">lr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">lr</span><span class="op">$</span><span class="va">graph</span><span class="op">$</span><span class="va">state</span>  <span class="co"># untrained version!</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $pca</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co"># The following is therefore NULL:</span></span></span>
+<span class="r-in"><span><span class="va">lr</span><span class="op">$</span><span class="va">graph</span><span class="op">$</span><span class="va">pipeops</span><span class="op">$</span><span class="va">classif.rpart</span><span class="op">$</span><span class="va">learner_model</span><span class="op">$</span><span class="va">model</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># To access the trained model from the PipeOpLearner's Learner, use:</span></span></span>
+<span class="r-in"><span><span class="va">lr</span><span class="op">$</span><span class="va">graph_model</span><span class="op">$</span><span class="va">pipeops</span><span class="op">$</span><span class="va">classif.rpart</span><span class="op">$</span><span class="va">learner_model</span><span class="op">$</span><span class="va">model</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> n= 150 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> node), split, n, loss, yval, (yprob)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       * denotes terminal node</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1) root 150 100 setosa (0.33333333 0.33333333 0.33333333)  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2) PC1&lt; -1.553145 50   0 setosa (1.00000000 0.00000000 0.00000000) *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3) PC1&gt;=-1.553145 100  50 versicolor (0.00000000 0.50000000 0.50000000)  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     6) PC1&lt; 1.142805 44   1 versicolor (0.00000000 0.97727273 0.02272727) *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     7) PC1&gt;=1.142805 56   7 virginica (0.00000000 0.12500000 0.87500000) *</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Feature importance (of principal components):</span></span></span>
+<span class="r-in"><span><span class="va">lr</span><span class="op">$</span><span class="va">graph_model</span><span class="op">$</span><span class="va">pipeops</span><span class="op">$</span><span class="va">classif.rpart</span><span class="op">$</span><span class="va">learner_model</span><span class="op">$</span><span class="fu">importance</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       PC1       PC2       PC3       PC4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85.795455 18.016529  5.694731  3.254132 </span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

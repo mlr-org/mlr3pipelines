@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,6 +16,10 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html"><span class="fa fa-file-alt"></span> Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/extending.html">Adding new PipeOps</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://mlr3book.mlr-org.com"><span class="fa fa-link"></span> mlr3book</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -38,7 +42,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Imputation Base Class</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.7.0/R/PipeOpImpute.R" class="external-link"><code>R/PipeOpImpute.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpImpute.R" class="external-link"><code>R/PipeOpImpute.R</code></a></small>
       <div class="d-none name"><code>PipeOpImpute.Rd</code></div>
     </div>
 
@@ -95,10 +99,10 @@ the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external
 Names of features being selected by the <code>affect_columns</code> parameter.</p></li>
 <li><p><code>context_cols</code> :: <code>character</code><br>
 Names of features being selected by the <code>context_columns</code> parameter.</p></li>
-<li><p><code>intasklayout</code> :: <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code><br>
+<li><p><code>intasklayout</code> :: <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code><br>
 Copy of the training <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>'s <code>$feature_types</code> slot. This is used during prediction to ensure that
 the prediction <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> has the same features, feature layout, and feature types as during training.</p></li>
-<li><p><code>outtasklayout</code> :: <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code><br>
+<li><p><code>outtasklayout</code> :: <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code><br>
 Copy of the trained <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>'s <code>$feature_types</code> slot. This is used during prediction to ensure that
 the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> resulting from the prediction operation has the same features, feature layout, and feature types as after training.</p></li>
 <li><p><code>model</code> :: named <code>list</code><br>
@@ -149,17 +153,17 @@ to limit the columns that a <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPre
 This method can optionally be overloaded when inheriting <code>PipeOpImpute</code>;
 If this method is not overloaded, it defaults to selecting the columns of type indicated by the <code>feature_types</code> construction argument.</p></li>
 <li><p><code>.train_imputer(feature, type, context)</code><br>
-(<code>atomic</code>, <code>character(1)</code>, <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>) -&gt; <code>any</code><br>
+(<code>atomic</code>, <code>character(1)</code>, <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>) -&gt; <code>any</code><br>
 Abstract function that must be overloaded when inheriting.
 Called once for each feature selected by <code>affect_columns</code> to create the model entry to be used for <code>private$.impute()</code>. This function
 is only called for features with at least one non-missing value.</p></li>
 <li><p><code>.train_nullmodel(feature, type, context)</code><br>
-(<code>atomic</code>, <code>character(1)</code>, <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>) -&gt; <code>any</code><br>
+(<code>atomic</code>, <code>character(1)</code>, <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>) -&gt; <code>any</code><br>
 Like <code>.train_imputer()</code>, but only called for each feature that only contains missing values. This is not an abstract function
 and, if not overloaded, gives a default response of <code>0</code> (<code>integer</code>, <code>numeric</code>), <code>c(TRUE, FALSE)</code> (<code>logical</code>), all available levels (<code>factor</code>/<code>ordered</code>),
 or the empty  string (<code>character</code>).</p></li>
 <li><p><code>.impute(feature, type, model, context)</code><br>
-(<code>atomic</code>, <code>character(1)</code>, <code>any</code>, <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>) -&gt; <code>atomic</code><br>
+(<code>atomic</code>, <code>character(1)</code>, <code>any</code>, <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>) -&gt; <code>atomic</code><br>
 Imputes the features. <code>model</code> is the model created by <code>private$.train_imputer()</code> Default behaviour is to assume <code>model</code> is an atomic vector
 from which values are sampled to impute missing values of <code>feature</code>. <code>model</code> may have an attribute <code>probabilities</code> for non-uniform sampling.</p></li>
 </ul></div>
@@ -204,11 +208,14 @@ from which values are sampled to impute missing values of <code>feature</code>. 
 <code><a href="mlr_pipeops_imputesample.html">mlr_pipeops_imputesample</a></code>,
 <code><a href="mlr_pipeops_kernelpca.html">mlr_pipeops_kernelpca</a></code>,
 <code><a href="mlr_pipeops_learner.html">mlr_pipeops_learner</a></code>,
+<code><a href="mlr_pipeops_learner_pi_cvplus.html">mlr_pipeops_learner_pi_cvplus</a></code>,
+<code><a href="mlr_pipeops_learner_quantiles.html">mlr_pipeops_learner_quantiles</a></code>,
 <code><a href="mlr_pipeops_missind.html">mlr_pipeops_missind</a></code>,
 <code><a href="mlr_pipeops_modelmatrix.html">mlr_pipeops_modelmatrix</a></code>,
 <code><a href="mlr_pipeops_multiplicityexply.html">mlr_pipeops_multiplicityexply</a></code>,
 <code><a href="mlr_pipeops_multiplicityimply.html">mlr_pipeops_multiplicityimply</a></code>,
 <code><a href="mlr_pipeops_mutate.html">mlr_pipeops_mutate</a></code>,
+<code><a href="mlr_pipeops_nearmiss.html">mlr_pipeops_nearmiss</a></code>,
 <code><a href="mlr_pipeops_nmf.html">mlr_pipeops_nmf</a></code>,
 <code><a href="mlr_pipeops_nop.html">mlr_pipeops_nop</a></code>,
 <code><a href="mlr_pipeops_ovrsplit.html">mlr_pipeops_ovrsplit</a></code>,
@@ -236,6 +243,7 @@ from which values are sampled to impute missing values of <code>feature</code>. 
 <code><a href="mlr_pipeops_targettrafoscalerange.html">mlr_pipeops_targettrafoscalerange</a></code>,
 <code><a href="mlr_pipeops_textvectorizer.html">mlr_pipeops_textvectorizer</a></code>,
 <code><a href="mlr_pipeops_threshold.html">mlr_pipeops_threshold</a></code>,
+<code><a href="mlr_pipeops_tomek.html">mlr_pipeops_tomek</a></code>,
 <code><a href="mlr_pipeops_tunethreshold.html">mlr_pipeops_tunethreshold</a></code>,
 <code><a href="mlr_pipeops_unbranch.html">mlr_pipeops_unbranch</a></code>,
 <code><a href="mlr_pipeops_updatetarget.html">mlr_pipeops_updatetarget</a></code>,

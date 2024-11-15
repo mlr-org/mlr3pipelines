@@ -9,7 +9,7 @@ See fastICA::fastICA for details."><meta property="og:image" content="https://ml
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,6 +18,10 @@ See fastICA::fastICA for details."><meta property="og:image" content="https://ml
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html"><span class="fa fa-file-alt"></span> Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/extending.html">Adding new PipeOps</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://mlr3book.mlr-org.com"><span class="fa fa-link"></span> mlr3book</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -40,7 +44,7 @@ See fastICA::fastICA for details."><meta property="og:image" content="https://ml
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Independent Component Analysis</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.7.0/R/PipeOpICA.R" class="external-link"><code>R/PipeOpICA.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpICA.R" class="external-link"><code>R/PipeOpICA.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_ica.Rd</code></div>
     </div>
 
@@ -171,11 +175,14 @@ Default is <code>NULL</code>.</p></li>
 <code><a href="mlr_pipeops_imputesample.html">mlr_pipeops_imputesample</a></code>,
 <code><a href="mlr_pipeops_kernelpca.html">mlr_pipeops_kernelpca</a></code>,
 <code><a href="mlr_pipeops_learner.html">mlr_pipeops_learner</a></code>,
+<code><a href="mlr_pipeops_learner_pi_cvplus.html">mlr_pipeops_learner_pi_cvplus</a></code>,
+<code><a href="mlr_pipeops_learner_quantiles.html">mlr_pipeops_learner_quantiles</a></code>,
 <code><a href="mlr_pipeops_missind.html">mlr_pipeops_missind</a></code>,
 <code><a href="mlr_pipeops_modelmatrix.html">mlr_pipeops_modelmatrix</a></code>,
 <code><a href="mlr_pipeops_multiplicityexply.html">mlr_pipeops_multiplicityexply</a></code>,
 <code><a href="mlr_pipeops_multiplicityimply.html">mlr_pipeops_multiplicityimply</a></code>,
 <code><a href="mlr_pipeops_mutate.html">mlr_pipeops_mutate</a></code>,
+<code><a href="mlr_pipeops_nearmiss.html">mlr_pipeops_nearmiss</a></code>,
 <code><a href="mlr_pipeops_nmf.html">mlr_pipeops_nmf</a></code>,
 <code><a href="mlr_pipeops_nop.html">mlr_pipeops_nop</a></code>,
 <code><a href="mlr_pipeops_ovrsplit.html">mlr_pipeops_ovrsplit</a></code>,
@@ -203,6 +210,7 @@ Default is <code>NULL</code>.</p></li>
 <code><a href="mlr_pipeops_targettrafoscalerange.html">mlr_pipeops_targettrafoscalerange</a></code>,
 <code><a href="mlr_pipeops_textvectorizer.html">mlr_pipeops_textvectorizer</a></code>,
 <code><a href="mlr_pipeops_threshold.html">mlr_pipeops_threshold</a></code>,
+<code><a href="mlr_pipeops_tomek.html">mlr_pipeops_tomek</a></code>,
 <code><a href="mlr_pipeops_tunethreshold.html">mlr_pipeops_tunethreshold</a></code>,
 <code><a href="mlr_pipeops_unbranch.html">mlr_pipeops_unbranch</a></code>,
 <code><a href="mlr_pipeops_updatetarget.html">mlr_pipeops_updatetarget</a></code>,
@@ -212,7 +220,94 @@ Default is <code>NULL</code>.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"ica"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa          1.4         0.2          5.1         3.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa          1.4         0.2          4.9         3.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa          1.3         0.2          4.7         3.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa          1.5         0.2          4.6         3.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa          1.4         0.2          5.0         3.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica          5.2         2.3          6.7         3.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica          5.0         1.9          6.3         2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica          5.2         2.0          6.5         3.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica          5.4         2.3          6.2         3.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica          5.1         1.8          5.9         3.0</span>
+<span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Species         V1         V2          V3          V4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;      &lt;num&gt;      &lt;num&gt;       &lt;num&gt;       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa  0.2618804  1.3930423  0.01858163  0.37322898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa  0.3780112  1.3292462 -0.08402269 -0.97539362</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa -0.3621013  1.3478643 -0.16088078 -0.34866766</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa -0.8821564  1.2050708  0.31459635 -0.37346222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa -0.1972881  1.3733227  0.09785696  0.73767564</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica  1.2526553 -0.8398994 -2.59510472 -0.34005412</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica  0.7134698 -0.7614934 -1.04626777 -1.37118659</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica  0.3381378 -0.8319335 -0.98242690  0.08514387</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica -1.2518547 -1.0580918 -1.76521840  1.38972597</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica -1.5464571 -0.8768282  0.05313113  0.58218232</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">state</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $K</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            [,1]       [,2]       [,3]      [,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] -0.4180098  0.3531217  0.2735163  3.118456</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -0.1748261  0.1537381  1.9583093 -4.897992</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.1763375 -1.3373258 -2.0881803 -2.050340</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  0.0412425 -1.4871770  2.1451574  2.077869</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $W</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            [,1]        [,2]        [,3]        [,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] -0.1472535  0.98656218 -0.01579210 -0.06900775</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -0.5896973 -0.14339476  0.01308129 -0.79468480</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.6413565 -0.07174251 -0.59498373  0.47907115</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] -0.4682257 -0.03140099  0.80347610  0.36633979</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]        [,2]        [,3]        [,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  0.16013328  0.04299547  0.42593333  0.05597331</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -1.74811998 -0.73699926 -0.67128589  0.20879744</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  0.07551950 -0.17161440  0.06499724 -0.06705313</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  0.09073779  0.05162242  0.21178676  0.37079291</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $center</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Length  Petal.Width Sepal.Length  Sepal.Width </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3.758000     1.199333     5.843333     3.057333 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $dt_columns</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $affected_cols</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $intasklayout</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              id    type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;char&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: Petal.Length numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  Petal.Width numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: Sepal.Length numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  Sepal.Width numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $outtasklayout</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        id    type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     V1 numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     V2 numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     V3 numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     V4 numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $outtaskshell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 5 cols): Species,V1,V2,V3,V4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

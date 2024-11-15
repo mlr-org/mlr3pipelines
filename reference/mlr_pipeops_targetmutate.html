@@ -9,7 +9,7 @@ An inverter-function that undoes the transformation during prediction must also 
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,6 +18,10 @@ An inverter-function that undoes the transformation during prediction must also 
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html"><span class="fa fa-file-alt"></span> Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/extending.html">Adding new PipeOps</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://mlr3book.mlr-org.com"><span class="fa fa-link"></span> mlr3book</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -40,7 +44,7 @@ An inverter-function that undoes the transformation during prediction must also 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Transform a Target by a Function</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.7.0/R/PipeOpTrafo.R" class="external-link"><code>R/PipeOpTrafo.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpTrafo.R" class="external-link"><code>R/PipeOpTrafo.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_targetmutate.Rd</code></div>
     </div>
 
@@ -88,12 +92,12 @@ Defaults to <code>NULL</code>: no change in task type.</p></li>
 Transformation function for the target. Should only be a function of the target, i.e., taking a
 single <code>data.table</code> argument, typically with one column. The return value is used as the new
 target of the resulting <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>. To change target names, change the column name of the data
-using e.g. <code><a href="https://rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames()</a></code>.<br>
+using e.g. <code><a href="https://rdrr.io/pkg/data.table/man/setattr.html" class="external-link">setnames()</a></code>.<br>
 Note that this function also gets called during prediction and should thus gracefully handle <code>NA</code> values.<br>
 Initialized to <code><a href="https://rdrr.io/r/base/identity.html" class="external-link">identity()</a></code>.</p></li>
 <li><p><code>inverter</code> :: <code>function</code> <code>data.table</code> -&gt; <code>data.table</code> | named <code>list</code><br>
 Inversion of the transformation function for the target. Called on a <code>data.table</code> created from a <code><a href="https://mlr3.mlr-org.com/reference/Prediction.html" class="external-link">Prediction</a></code>
-using <code><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table()</a></code>, without the <code>$row_ids</code> and <code>$truth</code> columns,
+using <code><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table()</a></code>, without the <code>$row_ids</code> and <code>$truth</code> columns,
 and should return a <code>data.table</code> or named <code>list</code> that contains the new relevant slots of a
 <code><a href="https://mlr3.mlr-org.com/reference/Prediction.html" class="external-link">Prediction</a></code> subclass (e.g., <code>$response</code>, <code>$prob</code>, <code>$se</code>, ...). Initialized to <code><a href="https://rdrr.io/r/base/identity.html" class="external-link">identity()</a></code>.</p></li>
 </ul></div>
@@ -158,11 +162,14 @@ and should return a <code>data.table</code> or named <code>list</code> that cont
 <code><a href="mlr_pipeops_imputesample.html">mlr_pipeops_imputesample</a></code>,
 <code><a href="mlr_pipeops_kernelpca.html">mlr_pipeops_kernelpca</a></code>,
 <code><a href="mlr_pipeops_learner.html">mlr_pipeops_learner</a></code>,
+<code><a href="mlr_pipeops_learner_pi_cvplus.html">mlr_pipeops_learner_pi_cvplus</a></code>,
+<code><a href="mlr_pipeops_learner_quantiles.html">mlr_pipeops_learner_quantiles</a></code>,
 <code><a href="mlr_pipeops_missind.html">mlr_pipeops_missind</a></code>,
 <code><a href="mlr_pipeops_modelmatrix.html">mlr_pipeops_modelmatrix</a></code>,
 <code><a href="mlr_pipeops_multiplicityexply.html">mlr_pipeops_multiplicityexply</a></code>,
 <code><a href="mlr_pipeops_multiplicityimply.html">mlr_pipeops_multiplicityimply</a></code>,
 <code><a href="mlr_pipeops_mutate.html">mlr_pipeops_mutate</a></code>,
+<code><a href="mlr_pipeops_nearmiss.html">mlr_pipeops_nearmiss</a></code>,
 <code><a href="mlr_pipeops_nmf.html">mlr_pipeops_nmf</a></code>,
 <code><a href="mlr_pipeops_nop.html">mlr_pipeops_nop</a></code>,
 <code><a href="mlr_pipeops_ovrsplit.html">mlr_pipeops_ovrsplit</a></code>,
@@ -189,6 +196,7 @@ and should return a <code>data.table</code> or named <code>list</code> that cont
 <code><a href="mlr_pipeops_targettrafoscalerange.html">mlr_pipeops_targettrafoscalerange</a></code>,
 <code><a href="mlr_pipeops_textvectorizer.html">mlr_pipeops_textvectorizer</a></code>,
 <code><a href="mlr_pipeops_threshold.html">mlr_pipeops_threshold</a></code>,
+<code><a href="mlr_pipeops_tomek.html">mlr_pipeops_tomek</a></code>,
 <code><a href="mlr_pipeops_tunethreshold.html">mlr_pipeops_tunethreshold</a></code>,
 <code><a href="mlr_pipeops_unbranch.html">mlr_pipeops_unbranch</a></code>,
 <code><a href="mlr_pipeops_updatetarget.html">mlr_pipeops_updatetarget</a></code>,
@@ -198,7 +206,83 @@ and should return a <code>data.table</code> or named <code>list</code> that cont
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com" class="external-link">mlr3</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"boston_housing"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">po</span> <span class="op">=</span> <span class="va">PipeOpTargetMutate</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"logtrafo"</span>, param_vals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  trafo <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">x</span>, base <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  inverter <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>response <span class="op">=</span> <span class="fl">2</span> <span class="op">^</span> <span class="va">x</span><span class="op">$</span><span class="va">response</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Note that this example is ill-equipped to work with</span></span></span>
+<span class="r-in"><span><span class="co"># `predict_type == "se"` predictions.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $fun</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskRegr:boston_housing&gt; (506 x 18): Boston Housing Prices</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Target: cmedv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: -</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Features (17):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (12): age, b, crim, dis, indus, lat, lon, lstat, nox, ptratio,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     rm, zn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - int (3): rad, tax, tract</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - fct (2): chas, town</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $fun</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> function (inputs) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     assert_list(inputs, len = 1L, types = "Prediction")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     list(private$.invert(inputs[[1L]], predict_phase_state))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55e290e05cd0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55e290e05410&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskRegr:boston_housing&gt; (506 x 18): Boston Housing Prices</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Target: cmedv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: -</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Features (17):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (12): age, b, crim, dis, indus, lat, lon, lstat, nox, ptratio,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     rm, zn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - int (3): rad, tax, tract</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - fct (2): chas, town</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">g</span> <span class="op">=</span> <span class="va"><a href="Graph.html">Graph</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g</span><span class="op">$</span><span class="fu">add_pipeop</span><span class="op">(</span><span class="va">po</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g</span><span class="op">$</span><span class="fu">add_pipeop</span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com/reference/mlr_learners_regr.rpart.html" class="external-link">LearnerRegrRpart</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g</span><span class="op">$</span><span class="fu">add_pipeop</span><span class="op">(</span><span class="va"><a href="mlr_pipeops_targetinvert.html">PipeOpTargetInvert</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g</span><span class="op">$</span><span class="fu">add_edge</span><span class="op">(</span>src_id <span class="op">=</span> <span class="st">"logtrafo"</span>, dst_id <span class="op">=</span> <span class="st">"targetinvert"</span>,</span></span>
+<span class="r-in"><span>  src_channel <span class="op">=</span> <span class="fl">1</span>, dst_channel <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g</span><span class="op">$</span><span class="fu">add_edge</span><span class="op">(</span>src_id <span class="op">=</span> <span class="st">"logtrafo"</span>, dst_id <span class="op">=</span> <span class="st">"regr.rpart"</span>,</span></span>
+<span class="r-in"><span>  src_channel <span class="op">=</span> <span class="fl">2</span>, dst_channel <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g</span><span class="op">$</span><span class="fu">add_edge</span><span class="op">(</span>src_id <span class="op">=</span> <span class="st">"regr.rpart"</span>, dst_id <span class="op">=</span> <span class="st">"targetinvert"</span>,</span></span>
+<span class="r-in"><span>  src_channel <span class="op">=</span> <span class="fl">1</span>, dst_channel <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">g</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $targetinvert.output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">g</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $targetinvert.output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionRegr&gt; for 506 observations:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  row_ids truth response</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        1  24.0 22.97871</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        2  21.6 22.97871</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        3  34.7 33.42115</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ---   ---      ---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      504  23.9 25.44298</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      505  22.0 25.44298</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      506  19.0 20.16845</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#syntactic sugar using ppl():</span></span></span>
+<span class="r-in"><span><span class="va">tt</span> <span class="op">=</span> <span class="fu"><a href="ppl.html">ppl</a></span><span class="op">(</span><span class="st">"targettrafo"</span>, graph <span class="op">=</span> <span class="va"><a href="mlr_pipeops_learner.html">PipeOpLearner</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com/reference/mlr_learners_regr.rpart.html" class="external-link">LearnerRegrRpart</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tt</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">targetmutate.trafo</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">x</span>, base <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tt</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">targetmutate.inverter</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>response <span class="op">=</span> <span class="fl">2</span> <span class="op">^</span> <span class="va">x</span><span class="op">$</span><span class="va">response</span><span class="op">)</span></span></span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

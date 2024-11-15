@@ -29,7 +29,7 @@ list of objects, and creates a list of PipeOps."><meta property="og:image" conte
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,6 +38,10 @@ list of objects, and creates a list of PipeOps."><meta property="og:image" conte
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html"><span class="fa fa-file-alt"></span> Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/extending.html">Adding new PipeOps</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://mlr3book.mlr-org.com"><span class="fa fa-link"></span> mlr3book</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -60,7 +64,7 @@ list of objects, and creates a list of PipeOps."><meta property="og:image" conte
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Shorthand PipeOp Constructor</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.7.0/R/po.R" class="external-link"><code>R/po.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/po.R" class="external-link"><code>R/po.R</code></a></small>
       <div class="d-none name"><code>po.Rd</code></div>
     </div>
 
@@ -118,7 +122,52 @@ If this is a named <code>list</code>, then the names are used as <code>$id</code
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">po</span><span class="op">(</span><span class="st">"learner"</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span>, cp <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PipeOp: &lt;classif.rpart&gt; (not trained)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> values: &lt;cp=0.3, xval=0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Input channels &lt;name [train type, predict type]&gt;:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   input [TaskClassif,TaskClassif]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Output channels &lt;name [train type, predict type]&gt;:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   output [NULL,PredictionClassif]</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">po</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span>, cp <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PipeOp: &lt;classif.rpart&gt; (not trained)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> values: &lt;cp=0.3, xval=0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Input channels &lt;name [train type, predict type]&gt;:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   input [TaskClassif,TaskClassif]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Output channels &lt;name [train type, predict type]&gt;:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   output [NULL,PredictionClassif]</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># is equivalent with:</span></span></span>
+<span class="r-in"><span><span class="va">mlr_pipeops</span><span class="op">$</span><span class="fu">get</span><span class="op">(</span><span class="st">"learner"</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  param_vals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>cp <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PipeOp: &lt;classif.rpart&gt; (not trained)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> values: &lt;cp=0.3, xval=0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Input channels &lt;name [train type, predict type]&gt;:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   input [TaskClassif,TaskClassif]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Output channels &lt;name [train type, predict type]&gt;:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   output [NULL,PredictionClassif]</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">mlr3pipelines</span><span class="fu">::</span><span class="fu">pos</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pca"</span>, original <span class="op">=</span> <span class="st">"nop"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $pca</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PipeOp: &lt;pca&gt; (not trained)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> values: &lt;list()&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Input channels &lt;name [train type, predict type]&gt;:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   input [Task,Task]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Output channels &lt;name [train type, predict type]&gt;:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   output [Task,Task]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $original</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PipeOp: &lt;original&gt; (not trained)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> values: &lt;list()&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Input channels &lt;name [train type, predict type]&gt;:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   input [*,*]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Output channels &lt;name [train type, predict type]&gt;:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   output [*,*]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

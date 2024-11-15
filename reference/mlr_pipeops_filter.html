@@ -15,7 +15,7 @@ this means e.g. that setting nfeat to 0 will only remove features of the type th
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,6 +24,10 @@ this means e.g. that setting nfeat to 0 will only remove features of the type th
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html"><span class="fa fa-file-alt"></span> Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/extending.html">Adding new PipeOps</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://mlr3book.mlr-org.com"><span class="fa fa-link"></span> mlr3book</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -46,7 +50,7 @@ this means e.g. that setting nfeat to 0 will only remove features of the type th
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Feature Filtering</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.7.0/R/PipeOpFilter.R" class="external-link"><code>R/PipeOpFilter.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpFilter.R" class="external-link"><code>R/PipeOpFilter.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_filter.Rd</code></div>
     </div>
 
@@ -189,11 +193,14 @@ after training; instead, use <code>$state$scores</code>. Read-only.</p></li>
 <code><a href="mlr_pipeops_imputesample.html">mlr_pipeops_imputesample</a></code>,
 <code><a href="mlr_pipeops_kernelpca.html">mlr_pipeops_kernelpca</a></code>,
 <code><a href="mlr_pipeops_learner.html">mlr_pipeops_learner</a></code>,
+<code><a href="mlr_pipeops_learner_pi_cvplus.html">mlr_pipeops_learner_pi_cvplus</a></code>,
+<code><a href="mlr_pipeops_learner_quantiles.html">mlr_pipeops_learner_quantiles</a></code>,
 <code><a href="mlr_pipeops_missind.html">mlr_pipeops_missind</a></code>,
 <code><a href="mlr_pipeops_modelmatrix.html">mlr_pipeops_modelmatrix</a></code>,
 <code><a href="mlr_pipeops_multiplicityexply.html">mlr_pipeops_multiplicityexply</a></code>,
 <code><a href="mlr_pipeops_multiplicityimply.html">mlr_pipeops_multiplicityimply</a></code>,
 <code><a href="mlr_pipeops_mutate.html">mlr_pipeops_mutate</a></code>,
+<code><a href="mlr_pipeops_nearmiss.html">mlr_pipeops_nearmiss</a></code>,
 <code><a href="mlr_pipeops_nmf.html">mlr_pipeops_nmf</a></code>,
 <code><a href="mlr_pipeops_nop.html">mlr_pipeops_nop</a></code>,
 <code><a href="mlr_pipeops_ovrsplit.html">mlr_pipeops_ovrsplit</a></code>,
@@ -221,6 +228,7 @@ after training; instead, use <code>$state$scores</code>. Read-only.</p></li>
 <code><a href="mlr_pipeops_targettrafoscalerange.html">mlr_pipeops_targettrafoscalerange</a></code>,
 <code><a href="mlr_pipeops_textvectorizer.html">mlr_pipeops_textvectorizer</a></code>,
 <code><a href="mlr_pipeops_threshold.html">mlr_pipeops_threshold</a></code>,
+<code><a href="mlr_pipeops_tomek.html">mlr_pipeops_tomek</a></code>,
 <code><a href="mlr_pipeops_tunethreshold.html">mlr_pipeops_tunethreshold</a></code>,
 <code><a href="mlr_pipeops_unbranch.html">mlr_pipeops_unbranch</a></code>,
 <code><a href="mlr_pipeops_updatetarget.html">mlr_pipeops_updatetarget</a></code>,
@@ -230,7 +238,77 @@ after training; instead, use <code>$state$scores</code>. Read-only.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3filters.mlr-org.com" class="external-link">"mlr3filters"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># setup PipeOpFilter to keep the 5 most important</span></span></span>
+<span class="r-in"><span><span class="co"># features of the spam task w.r.t. their AUC</span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"spam"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">filter</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3filters.mlr-org.com/reference/flt.html" class="external-link">flt</a></span><span class="op">(</span><span class="st">"auc"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">po</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"filter"</span>, filter <span class="op">=</span> <span class="va">filter</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="va">param_set</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;ParamSetCollection(5)&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 id    class lower upper nlevels        default  value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             &lt;char&gt;   &lt;char&gt; &lt;num&gt; &lt;num&gt;   &lt;num&gt;         &lt;list&gt; &lt;list&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    filter.nfeat ParamInt     0   Inf     Inf &lt;NoDefault[0]&gt; [NULL]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     filter.frac ParamDbl     0     1     Inf &lt;NoDefault[0]&gt; [NULL]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:   filter.cutoff ParamDbl  -Inf   Inf     Inf &lt;NoDefault[0]&gt; [NULL]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: filter.permuted ParamInt     1   Inf     Inf &lt;NoDefault[0]&gt; [NULL]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  affect_columns ParamUty    NA    NA     Inf  &lt;Selector[1]&gt; [NULL]</span>
+<span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">filter.nfeat</span> <span class="op">=</span> <span class="fl">5</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># filter the task</span></span></span>
+<span class="r-in"><span><span class="va">filtered_task</span> <span class="op">=</span> <span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># filtered task + extracted AUC scores</span></span></span>
+<span class="r-in"><span><span class="va">filtered_task</span><span class="op">$</span><span class="va">feature_names</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "capitalAve"      "capitalLong"     "charDollar"      "charExclamation"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "your"           </span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">po</span><span class="op">$</span><span class="va">state</span><span class="op">$</span><span class="va">scores</span>, <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> charExclamation     capitalLong      capitalAve            your      charDollar </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       0.3290461       0.3041626       0.2882004       0.2801659       0.2721394 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    capitalTotal            free             our             you          remove </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       0.2622801       0.2327285       0.2109325       0.2104681       0.2031303 </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># feature selection embedded in a 3-fold cross validation</span></span></span>
+<span class="r-in"><span><span class="co"># keep 30% of features based on their AUC score</span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"spam"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"filter"</span>, filter <span class="op">=</span> <span class="fu"><a href="https://mlr3filters.mlr-org.com/reference/flt.html" class="external-link">flt</a></span><span class="op">(</span><span class="st">"auc"</span><span class="op">)</span>, filter.frac <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"learner"</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">learner</span> <span class="op">=</span> <span class="va"><a href="mlr_learners_graph.html">GraphLearner</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">gr</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rr</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/resample.html" class="external-link">resample</a></span><span class="op">(</span><span class="va">task</span>, <span class="va">learner</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">rsmp</a></span><span class="op">(</span><span class="st">"holdout"</span><span class="op">)</span>, store_models <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rr</span><span class="op">$</span><span class="va">learners</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">auc</span><span class="op">$</span><span class="va">scores</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   charExclamation       capitalLong        capitalAve              your </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      3.290018e-01      3.084719e-01      2.924356e-01      2.850997e-01 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        charDollar      capitalTotal              free               you </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      2.760477e-01      2.690304e-01      2.328002e-01      2.133331e-01 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               our            remove             money               all </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      2.127344e-01      2.049659e-01      1.848303e-01      1.800999e-01 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                hp            num000          business              over </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      1.768315e-01      1.592152e-01      1.529875e-01      1.490547e-01 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              mail          internet               hpl            george </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      1.395390e-01      1.362281e-01      1.362075e-01      1.341867e-01 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             email           receive           address             order </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      1.316039e-01      1.303801e-01      1.246968e-01      1.142778e-01 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              make           num1999          charHash            credit </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      1.090133e-01      1.049933e-01      1.024926e-01      9.926152e-02 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              will            people              labs         addresses </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      9.423281e-02      9.040350e-02      7.689188e-02      7.541491e-02 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            num650             num85               edu               lab </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      6.979414e-02      6.939648e-02      6.787860e-02      6.004967e-02 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        technology            telnet           meeting              data </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      5.498094e-02      5.137943e-02      4.946566e-02      4.597672e-02 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                pm            report           project            num857 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      3.984151e-02      3.941819e-02      3.742082e-02      3.490039e-02 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> charSquarebracket            num415          original        conference </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      3.485239e-02      3.285303e-02      2.864972e-02      2.808021e-02 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                cs                re              font     charSemicolon </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      2.658932e-02      2.658113e-02      2.309021e-02      2.247249e-02 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  charRoundbracket            direct             num3d             table </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      1.810618e-02      1.206585e-02      9.208792e-03      2.783626e-03 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             parts </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      5.883081e-05 </span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

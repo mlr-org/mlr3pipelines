@@ -11,7 +11,7 @@ All input arguments are cloned and have no references in common with the returne
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,6 +20,10 @@ All input arguments are cloned and have no references in common with the returne
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html"><span class="fa fa-file-alt"></span> Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/extending.html">Adding new PipeOps</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://mlr3book.mlr-org.com"><span class="fa fa-link"></span> mlr3book</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -42,7 +46,7 @@ All input arguments are cloned and have no references in common with the returne
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Create A Graph to Perform "One vs. Rest" classification.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.7.0/R/pipeline_ovr.R" class="external-link"><code>R/pipeline_ovr.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/pipeline_ovr.R" class="external-link"><code>R/pipeline_ovr.R</code></a></small>
       <div class="d-none name"><code>mlr_graphs_ovr.Rd</code></div>
     </div>
 
@@ -75,7 +79,76 @@ The Graph should return <code>NULL</code> during training and a
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"wine"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">learner</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">learner</span><span class="op">$</span><span class="va">predict_type</span> <span class="op">=</span> <span class="st">"prob"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Simple OVR</span></span></span>
+<span class="r-in"><span><span class="va">g1</span> <span class="op">=</span> <span class="fu">pipeline_ovr</span><span class="op">(</span><span class="va">learner</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g1</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ovrunite.output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">g1</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ovrunite.output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionClassif&gt; for 178 observations:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  row_ids truth response     prob.1     prob.2     prob.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        1     1        1 0.93301153 0.04437722 0.02261125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        2     1        1 0.93301153 0.04437722 0.02261125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        3     1        1 0.93301153 0.04437722 0.02261125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ---   ---      ---        ---        ---        ---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      176     3        3 0.08896784 0.04157376 0.86945841</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      177     3        3 0.08896784 0.04157376 0.86945841</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      178     3        3 0.01729144 0.04484461 0.93786395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Bagged Learners</span></span></span>
+<span class="r-in"><span><span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"replicate"</span>, reps <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"subsample"</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="va">learner</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"classifavg"</span>, collect_multiplicity <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g2</span> <span class="op">=</span> <span class="fu">pipeline_ovr</span><span class="op">(</span><span class="va">gr</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g2</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ovrunite.output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">g2</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ovrunite.output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionClassif&gt; for 178 observations:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  row_ids truth response     prob.1     prob.2      prob.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        1     1        1 0.94464381 0.05147707 0.003879117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        2     1        1 0.94464381 0.05147707 0.003879117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        3     1        1 0.94464381 0.05147707 0.003879117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ---   ---      ---        ---        ---         ---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      176     3        3 0.26352226 0.03891908 0.697558661</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      177     3        3 0.26352226 0.03891908 0.697558661</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      178     3        3 0.01850032 0.05186723 0.929632453</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Bagging outside OVR</span></span></span>
+<span class="r-in"><span><span class="va">g3</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"replicate"</span>, reps <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">pipeline_ovr</span><span class="op">(</span><span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"subsample"</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span> <span class="va">learner</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"classifavg"</span>, collect_multiplicity <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g3</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $classifavg.output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">g3</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $classifavg.output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionClassif&gt; for 178 observations:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  row_ids truth response     prob.1     prob.2     prob.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        1     1        1 0.94463024 0.03159972 0.02377004</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        2     1        1 0.94463024 0.03159972 0.02377004</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        3     1        1 0.94463024 0.03159972 0.02377004</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ---   ---      ---        ---        ---        ---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      176     3        3 0.03047528 0.03001841 0.93950630</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      177     3        3 0.03047528 0.03001841 0.93950630</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      178     3        3 0.03047528 0.03001841 0.93950630</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
