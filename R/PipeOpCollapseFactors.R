@@ -6,9 +6,12 @@
 #'
 #' @description
 #' Collapses factors of type `factor`, `ordered`: Collapses the rarest factors in the training samples, until `target_level_count`
-#' levels remain. Levels that have prevalence above `no_collapse_above_prevalence` or absolute count above `no_collapse_above_absolute`´
+#' levels remain. Levels that have prevalence strictly above `no_collapse_above_prevalence` or absolute count strictly above `no_collapse_above_absolute`
 #' are retained, however. For `factor` variables, these are collapsed to the next larger level, for `ordered` variables, rare variables
 #' are collapsed to the neighbouring class, whichever has fewer samples.
+#' In case both `no_collapse_above_prevalence` and `no_collapse_above_absolute` are given, the less strict threshold of the two will be used, i.e. if
+#' `no_collapse_above_prevalence` is 1 and `no_collapse_above_absolute` is 10 for a task with 100 samples, levels that are seen more than 10 times
+#' will not be collapsed.
 #'
 #' Levels not seen during training are not touched during prediction; Therefore it is useful to combine this with the
 #' [`PipeOpFixFactors`].
@@ -38,12 +41,10 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `no_collapse_above_prevalence`  :: `numeric(1)` \cr
 #'   Fraction of samples below which factor levels get collapsed. Default is 1, which causes all levels
-#'   to be collapsed until `target_level_count` remain. In case both `no_collapse_above_prevalence` and
-#'   `no_collapse_above_absolute` are given, the higher threshold of the two will be used.
+#'   to be collapsed until `target_level_count` remain.
 #' * `no_collapse_above_absolute`  :: `integer(1)` \cr
 #'   Number of samples below which factor levels get collapsed. Default is `Inf`, which causes all levels
-#'   to be collapsed until `target_level_count` remain. In case both `no_collapse_above_prevalence` and
-#'   `no_collapse_above_absolute` are given, the higher threshold of the two will be used.
+#'   to be collapsed until `target_level_count` remain.
 #' * `target_level_count`  :: `integer(1)` \cr
 #'   Number of levels to retain. Default is 2.
 #'
@@ -60,8 +61,31 @@
 #' @export
 #' @examples
 #' library("mlr3")
+#' op = PipeOpCollapseFactors$new()
 #'
-#' # add something here
+#' # Create example training task
+#' df = data.frame(
+#'   target = runif(100),
+#'   fct = factor(rep(LETTERS[1:6], times = c(25, 30, 5, 15, 5, 20))),
+#'   ord = factor(rep(1:6, times = c(20, 25, 30, 5, 5, 15)), ordered = TRUE)
+#' )
+#' task = TaskRegr$new(df, target = "target", id = "example_train")
+#'
+#' # Training
+#' train_task_collapsed = op$train(list(task))[[1]]
+#' train_task_collapsed$levels(c("fct", "ord"))
+#'
+#' # Create example prediction task
+#' df_pred = data.frame(
+#'   target = runif(7),
+#'   fct = factor(LETTERS[1:7]),
+#'   ord = factor(1:7, ordered = TRUE)
+#' )
+#' pred_task = TaskRegr$new(df_pred, target = "target", id = "example_pred")
+#'
+#' # Prediction
+#' pred_task_collapsed = op$predict(list(pred_task))[[1]]
+#' pred_task_collapsed$levels(c("fct", "ord"))
 PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
@@ -96,14 +120,13 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
         dtable = table(d)
 
         absolutes = sort(dtable, decreasing = TRUE)
-        keep_absolute = names(absolutes)[absolutes >= keep_absolute]
+        keep_absolute = names(absolutes)[absolutes > keep_absolute]
 
         fractions = absolutes / sum(!is.na(d))
-        keep_fraction = names(fractions)[fractions >= keep_fraction]
+        keep_fraction = names(fractions)[fractions > keep_fraction]
 
         keep_count = names(fractions)[seq_len(target_count)]  # at this point we know there are more levels than target_count
 
-        # DEV: union is binary, so need to repeat it
         keep = union(keep_fraction, union(keep_count, keep_absolute))
         dont_keep = setdiff(levels(d), keep)
 
