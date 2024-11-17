@@ -1,5 +1,16 @@
 #' @importFrom utils bibentry
 bibentries = c(
+  barber_2021 = bibentry("article",
+    doi       = "10.1214/20-AOS1965",
+    year      = "2021",
+    month     = "02",
+    volume    = "49",
+    pages     = "486--507",
+    author    = "Rina Foygel Barber and Emmanuel J. Candes and Aaditya Ramdasa and Ryan J. Tibshirani",
+    title     = "Predictive inference with the jackknife+",
+    journal   = "Annals of Statistics"
+  ),
+
   chawla_2002 = bibentry("article",
     doi       = "10.1613/jair.953",
     year      = "2002",
@@ -93,6 +104,14 @@ bibentries = c(
     address   = "Berlin, Heidelberg",
     pages     = "878--887",
     isbn      = "978-3-540-31902-3"
-  )
+  ),
 
+  freeman_1979 = bibentry("InCollection",
+    author    = "Freeman III, A Myrick",
+    title     = "The Hedonic Price Approach to Measuring Demand for Neighborhood Characteristics",
+    booktitle = "The Economics of Neighborhood",
+    year      = "1979",
+    publisher = "Elsevier",
+    pages     = "191--217"
+  )
 )
