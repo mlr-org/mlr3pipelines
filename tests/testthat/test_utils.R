@@ -112,5 +112,34 @@ test_that("task_filter_ex - group renaming in changed row_roles$use", {
   expect_setequal(tfiltered$groups$group, c("a", "c", "a", "a_1", "a_1", "a_2", "a_2"))
 })
 
+# test case
+df = data.frame(
+  target = 1:3,
+  x = 1:3,
+  grp = c("a", "b", "c")
+)
+task = TaskRegr$new(id = "test", backend = df, target = "target")
+task$set_col_roles("grp", "group")
+task$row_roles$use = c(1, 1, 2, 2, 3, 3)
+
+# 1 occurs more often than in task$row_roles$use, exact multiple
+# 2 occurs more often than in task$row_roles$use, not exact multiple
+# 3 occurs less often than in task$row_roles$use
+# 4 is a non-existing row_id (IGNORE this for now)
+row_ids = c(1, 1, 1, 1, 2, 2, 2, 3)
+
+dup_ids = row_ids[duplicated(row_ids)]
+
+id_counts = table(row_ids)
+row_counts = table(task$row_roles$use)
+
+row_counts = row_counts[names(id_counts)]
+count_diff = id_counts - row_counts
+# These are the only ids which need updated group names
+count_diff = count_diff[count_diff >= 1]
+
+# creates new dup_ids (however, not in the same order!)
+dup_ids = rep(as.integer(names(count_diff)), count_diff)
+
 # add test for when a non-existing row_id is passed to row_ids in task_filter_ex()
 # should generate empty data.table in $data() or ignore it (like in task$filter())

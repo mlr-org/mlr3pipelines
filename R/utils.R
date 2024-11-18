@@ -50,22 +50,24 @@ task_filter_ex = function(task, row_ids) {
       group = NULL  # for binding
       row_id = NULL  # for binding
 
-      # row_ids:
-      # - might have IDs that are not in task$row_roles$use
-      # - might have more occurances of an ID than in task$row_roles$use which does not have to be an exact multiple
-      # - might have less occurances of an ID than in task$row_roles$use (how do we handle that?)
-      ids_counts = table(row_ids)
-      row_counts = table(task$row_roles$use)
+      # If there are duplicates in task$row_roles$use, we change dup_ids ... (but also need to change assignemnt later)
+      if (length(task$row_roles$use) > length(unique(task$row_roles$use))) {
+        # row_ids:
+        # - might have IDs that are not in task$row_roles$use
+        # - might have more occurances of an ID than in task$row_roles$use which does not have to be an exact multiple
+        # - might have less occurances of an ID than in task$row_roles$use (how do we handle that?)
+        id_counts = table(row_ids)
+        row_counts = table(task$row_roles$use)
 
-      dup_counts = table(dup_ids)
-      use_counts = table(task$row_roles$use)
-      # Restrict use_counts to only include the same row IDs as dup_counts (only ones of interest)
-      use_counts = use_counts[names(dup_counts)]
-      count_diff = dup_counts - use_counts
+        # Restrict row_counts to only include the same row IDs as dup_counts (only ones of interest) to get same dimension
+        row_counts = row_counts[names(id_counts)]
+        count_diff = id_counts - row_counts
+        # These are the only ids which need updated group names
+        count_diff = count_diff[count_diff >= 1]
 
-      ids = 1
-
-      browser()
+        # creates new dup_ids (however, not in the same order!)
+        dup_ids = rep(as.integer(names(count_diff)), count_diff)
+      }
 
       # We create a data.table "new_groups" with the corresponding group to each duplicated ID.
       #   1. Remove duplicates from task$groups which could exist in case of duplicates in task$row_roles$use.
@@ -73,48 +75,24 @@ task_filter_ex = function(task, row_ids) {
       # We then change the group entry based on how often the ID occurs. E.g. row_id = 1 occurs
       # two times has the group entry "g". Then we rename the group entries to "g_1" and "g_2".
       # If a group with a suffix (e.g. "_1") already exists, we add another suffix to it (i.e. "_1_1").
-      orig_grps = task$groups$group
+      grps = unique(task$groups$group)
       new_groups = unique(task$groups, by = "row_id")[list(dup_ids), on = "row_id"][, group := {
         groups = character(0)
-
-        browser()
-
-        # Number of how often the same group name should occur for this row ID
-        n_grp_name = count_diff[row_id]
-        # Initialize new_group as default group name
-        new_group = group[[1]]
-        # Initialize count for how often new_group occurs in groups
-        count = 0
-        # Initialize suffix to be appended to group name if it is otherwise already taken
-        suffix = 1
-
+        i = 1
         while (length(groups) < .N) {
-          # If the group occurs less often than it should, add it and go to next round
-          if (count < n_grp_name) {
-            groups[[length(groups) + 1]] = new_group
-            # Update count
-            count = table(c(orig_grps, groups))[[new_group]]
-          } else {
-            # Otherwise, create a new group with a suffix
-            new_group = paste0(group[[1]], "_", suffix)
-            # Add it if the suffixed name is not already taken; If it is, increment suffix.
-            if (new_group %nin% unique(orig_grps)) {
-              groups[[length(groups) + 1]] = new_group
-            } else {
-              suffix = suffix + 1
-            }
-          }
+          new_group = paste0(group[[1]], "_", i)
+          if (new_group %nin% grps) groups[[length(groups) + 1]] = new_group
+          i = i + 1
         }
         groups
       }, by = row_id]
 
-      # at this point new_groups must have the same number of rows
-      # as new_data, otherwise, assignment doesn't work
-      # with zero length of new groups -> error
-      # with nrow(new_groups) < nrow(new_data) -> implicit recycling
-
       # Use "new_groups" to update the group entries.
-      new_data[, (task$col_roles$group) := new_groups$group]
+      if (length(task$row_roles$use) > length(unique(task$row_roles$use))) {
+
+      } else {
+        new_data[, (task$col_roles$group) := new_groups$group]
+      }
     }
 
     # Lastly, new data is rbinded to the original task.
