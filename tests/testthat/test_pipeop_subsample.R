@@ -7,8 +7,7 @@ test_that("PipeOpSubsample - basic properties", {
   train_pipeop(op, inputs = list(task))
   predict_pipeop(op, inputs = list(task))
 
-  expect_datapreproc_pipeop_class(PipeOpSubsample, task = task,
-    predict_like_train = FALSE, deterministic_train = FALSE)
+  expect_datapreproc_pipeop_class(PipeOpSubsample, task = task, predict_like_train = FALSE, deterministic_train = FALSE)
 })
 
 test_that("PipeOpSubsample works unstratified", {
@@ -161,6 +160,7 @@ test_that("PipeOpSubsample - use_groups - Modified row_roles$use", {
   #
   # # Grouped data are kept together
   # grps_out = table(train_out$groups$group)
+  # use dnn argument? dnn = sub("_\\d*", "", unique(train_out$groups$group))
   # dimnames(grps_out)[[1]] = sub("_\\d*", "", names(grps_out))
   # expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
 })

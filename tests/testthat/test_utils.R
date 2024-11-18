@@ -81,23 +81,36 @@ test_that("task_filter_ex - group renaming in changed row_roles$use", {
   task$set_col_roles("grp", "group")
   task$row_roles$use = c(1, 1, 2, 2, 3)
 
+  # Might want to switch back to set_equal to check for correct ordering
+
   tfiltered = task_filter_ex(task$clone(), c(1L, 1L, 2L, 2L, 3L))
-  expect_equal(tfiltered$row_ids, 1:5)
-  expect_equal(tfiltered$groups$group, c("a", "b", "c", "a", "b"))
+  expect_setequal(tfiltered$row_ids, 1:5)
+  expect_setequal(tfiltered$groups$group, c("a", "b", "c", "a", "b"))
 
   tfiltered = task_filter_ex(task$clone(), c(1L, 1L, 1L, 1L, 2L, 2L, 3L))
-  expect_equal(tfiltered$row_ids, 1:7)
-  expect_equal(tfiltered$groups$group, c("a", "b", "c", "a", "b", "a_1", "a_1"))
+  expect_setequal(tfiltered$row_ids, 1:7)
+  expect_setequal(tfiltered$groups$group, c("a", "b", "c", "a", "b", "a_1", "a_1"))
 
   tfiltered = task_filter_ex(task$clone(), c(1L, 1L, 1L, 1L, 3L))
-  expect_equal(tfiltered$row_ids, c(1, 3, 4, 5, 6))
-  expect_equal(tfiltered$groups$group, c("a", "c", "a", "a_1", "a_1"))
+  expect_setequal(tfiltered$row_ids, c(1, 3, 4, 5, 6))
+  expect_setequal(tfiltered$groups$group, c("a", "c", "a", "a_1", "a_1"))
 
   tfiltered = task_filter_ex(task$clone(), 3L)
-  expect_equal(tfiltered$row_ids, 3)
-  expect_equal(tfiltered$groups$group, "c")
+  expect_setequal(tfiltered$row_ids, 3)
+  expect_setequal(tfiltered$groups$group, "c")
+
+  # What do we want in this case?
+  # We have row 2 twice in row_roles$use
+  # However, we expect only one row to be returned
+  # so in this case we only want one row, with unchanged group
+  tfiltered = task_filter_ex(task$clone(), 2L)
+  expect_setequal(tfiltered$row_ids, 2)
+  expect_setequal(tfiltered$groups$group, "b")
 
   tfiltered = task_filter_ex(task$clone(), c(1L, 1L, 1L, 1L, 3L, 1L, 1L))
-  expect_equal(tfiltered$row_ids, c(1, 3, 4, 5, 6, 7, 8))
-  expect_equal(tfiltered$groups$group, c("a", "c", "a", "a_1", "a_1", "a_2", "a_2"))
+  expect_setequal(tfiltered$row_ids, c(1, 3, 4, 5, 6, 7, 8))
+  expect_setequal(tfiltered$groups$group, c("a", "c", "a", "a_1", "a_1", "a_2", "a_2"))
 })
+
+# add test for when a non-existing row_id is passed to row_ids in task_filter_ex()
+# should generate empty data.table in $data() or ignore it (like in task$filter())

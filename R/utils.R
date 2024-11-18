@@ -50,6 +50,16 @@ task_filter_ex = function(task, row_ids) {
       group = NULL  # for binding
       row_id = NULL  # for binding
 
+      browser()
+
+      dup_counts = table(dup_ids)
+      use_counts = table(task$row_roles$use)
+      # pad with zeros to be the same length as the other
+      # dup_counts = setNames(c(dup_counts, rep(0, length(use_counts) - length(dup_counts))), names(use_counts))
+      # Restrict use_counts to only include the same row IDs as dup_counts (only ones of interest)
+      use_counts = use_counts[names(dup_counts)]
+      count_diff = dup_counts - use_counts
+
       # We create a data.table "new_groups" with the corresponding group to each duplicated ID.
       #   1. Remove duplicates from task$groups which could exist in case of duplicates in task$row_roles$use.
       #   2. Get correct number and positioning of rows through dup_ids.
@@ -59,14 +69,42 @@ task_filter_ex = function(task, row_ids) {
       grps = unique(task$groups$group)
       new_groups = unique(task$groups, by = "row_id")[list(dup_ids), on = "row_id"][, group := {
         groups = character(0)
-        i = 1
+
+        # Number of how often the same group name should occur for this row ID
+        n_grp_name = count_diff[row_id]
+        # Initialize new_group as default group name
+        new_group = group[[1]]
+        # Initialize count for how often new_group occurs in groups
+        count = 1  # 1 because default group name is already present in task
+        # Initialize suffix to be appended to group name if it is otherwise already taken
+        suffix = 1
+
+        browser()
+
         while (length(groups) < .N) {
-          new_group = paste0(group[[1]], "_", i)
-          if (new_group %nin% grps) groups[[length(groups) + 1]] = new_group
-          i = i + 1
+          # If the group occurs less often than it should, add it and go to next round
+          if (count < n_grp_name) {
+            groups[[length(groups) + 1]] = new_group
+            # Update count
+            count = table(groups)[[new_group]]
+          } else {
+            # Otherwise, create a new group with a suffix
+            new_group = paste0(group[[1]], "_", suffix)
+            # Add it if the suffixed name is not already taken; If it is, increment suffix.
+            if (new_group %nin% grps) {
+              groups[[length(groups) + 1]] = new_group
+            } else {
+              suffix = suffix + 1
+            }
+          }
         }
         groups
       }, by = row_id]
+
+      # at this point new_groups must have the same number of rows
+      # as new_data, otherwise, assignment doesn't work
+      # with zero length of new groups -> error
+      # with nrow(new_groups) < nrow(new_data) -> implicit recycling
 
       # Use "new_groups" to update the group entries.
       new_data[, (task$col_roles$group) := new_groups$group]
