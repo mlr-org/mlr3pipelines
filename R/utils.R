@@ -40,7 +40,6 @@ task_filter_ex = function(task, row_ids) {
 
   # Rbind duplicated rows to task
   if (length(dup_ids)) {
-
     # First, get a data.table with all duplicated rows.
     new_data = task$data(rows = dup_ids, cols = cols)
 

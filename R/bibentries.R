@@ -104,6 +104,14 @@ bibentries = c(
     address   = "Berlin, Heidelberg",
     pages     = "878--887",
     isbn      = "978-3-540-31902-3"
-  )
+  ),
 
+  freeman_1979 = bibentry("InCollection",
+    author    = "Freeman III, A Myrick",
+    title     = "The Hedonic Price Approach to Measuring Demand for Neighborhood Characteristics",
+    booktitle = "The Economics of Neighborhood",
+    year      = "1979",
+    publisher = "Elsevier",
+    pages     = "191--217"
+  )
 )

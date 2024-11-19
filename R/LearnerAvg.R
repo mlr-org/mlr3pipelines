@@ -59,11 +59,11 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
   public = list(
     initialize = function(id = "classif.avg") {
       ps = ps(
-        measure = p_uty(custom_check = check_class_or_character("MeasureClassif", mlr_measures), tags = "train"),
-        optimizer = p_uty(custom_check = check_optimizer, tags = "train"),
+        measure = p_uty(custom_check = check_class_or_character("MeasureClassif", mlr_measures), tags = c("train", "required")),
+        optimizer = p_uty(custom_check = check_optimizer, tags = c("train", "required")),
         log_level = p_uty(
           custom_check = crate(function(x) check_string(x) %check||% check_integerish(x), .parent = topenv()),
-          tags = "train"
+          tags = c("train", "required")
         )
       )
       ps$values = list(measure = "classif.ce", optimizer = "nloptr", log_level = "warn")
@@ -135,9 +135,9 @@ LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
   public = list(
     initialize = function(id = "regr.avg") {
       ps = ps(
-        measure = p_uty(custom_check = check_class_or_character("MeasureRegr", mlr_measures), tags = "train"),
-        optimizer = p_uty(custom_check = check_optimizer, tags = "train"),
-        log_level = p_uty(tags = "train",
+        measure = p_uty(custom_check = check_class_or_character("MeasureRegr", mlr_measures), tags = c("train", "required")),
+        optimizer = p_uty(custom_check = check_optimizer, tags = c("train", "required")),
+        log_level = p_uty(tags = c("train", "required"),
           function(x) check_string(x) %check||% check_integerish(x))
       )
       ps$values = list(measure = "regr.mse", optimizer = "nloptr", log_level = "warn")

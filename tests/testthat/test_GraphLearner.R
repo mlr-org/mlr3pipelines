@@ -1261,6 +1261,8 @@ test_that("GraphLearner Selected Features", {
 
 test_that("GraphLearner other properties", {
 
+  has_loglik = "loglik" %in% mlr_reflections$learner_properties[["classif"]]
+  if (!has_loglik) skip()
   DebugWithProperties = R6Class("DebugWithProperties", inherit = LearnerClassifDebug,
     public = list(
       initialize = function(...) {

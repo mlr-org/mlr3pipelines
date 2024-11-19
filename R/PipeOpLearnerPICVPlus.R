@@ -171,8 +171,9 @@ PipeOpLearnerPICVPlus = R6Class("PipeOpLearnerPICVPlus",
       prds = rbindlist(map(rr$predictions(predict_sets = "test"), as.data.table), idcol = "fold")
 
       # Add states of trained models and residuals to PipeOp state
+      fold = NULL  # for binding
       self$state = list(cv_model_states = map(rr$learners, "state"),
-                        residuals = prds[, .(fold, residual = abs(truth - response))])
+                        residuals = prds[, list(fold, residual = abs(truth - response))])
 
       list(NULL)
     },
@@ -240,5 +241,3 @@ unmarshal_model.pipeop_learner_pi_cvplus_state_marshaled = function(model, inpla
 }
 
 mlr_pipeops$add("learner_pi_cvplus", PipeOpLearnerPICVPlus, list(R6Class("Learner", public = list(id = "learner_pi_cvplus", task_type = "regr", param_set = ps(), packages = "mlr3pipelines"))$new()))
-
-

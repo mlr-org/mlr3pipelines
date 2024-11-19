@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.7.0-9000
+Version: 0.7.1
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -197,6 +197,7 @@ Collate:
     'PipeOpVtreat.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'
+    'TaskRegr_boston_housing.R'
     'assert_graph.R'
     'bibentries.R'
     'greplicate.R'
