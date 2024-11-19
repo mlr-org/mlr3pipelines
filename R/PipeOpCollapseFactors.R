@@ -92,7 +92,7 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
     initialize = function(id = "collapsefactors", param_vals = list()) {
       ps = ps(
         no_collapse_above_prevalence = p_dbl(0, 1, tags = c("train", "predict")),
-        no_collapse_above_absolute = p_int(1, special_vals = list(Inf), tags = c("train", "predict")),
+        no_collapse_above_absolute = p_int(0, special_vals = list(Inf), tags = c("train", "predict")),
         target_level_count = p_int(2, tags = c("train", "predict"))
       )
       ps$values = list(no_collapse_above_prevalence = 1, no_collapse_above_absolute = Inf, target_level_count = 2)

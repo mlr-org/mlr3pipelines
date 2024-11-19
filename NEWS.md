@@ -1,4 +1,4 @@
-# mlr3pipelines 0.7.9000
+# mlr3pipelines 0.7.1-9000
 
 * New parameter `no_collapse_above_absolute` in `PipeOpCollapseFactors` / `po("collapse_factors")`.
 * Fix: `PipeOpCollapseFactors` now correctly collapses levels of ordered factors.
