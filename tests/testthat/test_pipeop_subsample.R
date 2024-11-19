@@ -153,16 +153,15 @@ test_that("PipeOpSubsample - use_groups - Modified row_roles$use", {
   # TESTCASE: Set some rows to be included multiple times in row_roles$use
   #           Effectively, this just increases group sizes.
   #           However, task_filter_ex ignores duplicates in row_roles$use (i.e. only samples the rows that were given)
-  # grps = c("g5", "g6", "g7")
-  # task$row_roles$use = c(task$row_roles$use, task$groups[group %in% grps]$row_id)
-  # set.seed(2345)
-  # train_out = op$train(list(task))[[1]]
-  #
-  # # Grouped data are kept together
-  # grps_out = table(train_out$groups$group)
-  # use dnn argument? dnn = sub("_\\d*", "", unique(train_out$groups$group))
-  # dimnames(grps_out)[[1]] = sub("_\\d*", "", names(grps_out))
-  # expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
+  grps = c("g5", "g6", "g7")
+  task$row_roles$use = c(task$row_roles$use, task$groups[group %in% grps]$row_id)
+  set.seed(2345)
+  train_out = op$train(list(task))[[1]]
+
+  # Grouped data are kept together
+  grps_out = table(train_out$groups$group)
+  dimnames(grps_out)[[1]] = sub("_\\d*", "", names(grps_out))
+  expect_equal(grps_out, table(task$groups$group)[names(grps_out)])
 })
 
 test_that("PipeOpSubsample - use_groups - Equal group sizes", {
