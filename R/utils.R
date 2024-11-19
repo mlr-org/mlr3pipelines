@@ -48,12 +48,7 @@ task_filter_ex = function(task, row_ids) {
       group = NULL  # for binding
       row_id = NULL  # for binding
 
-      # row_ids:
-      # - might have more occurances of an ID than in task$row_roles$use which does not have to be an exact multiple
-      # - might have less occurances of an ID than in task$row_roles$use
-      # -> We decide to ignore this.
       row_counts = table(task$row_roles$use)
-      # Original group names
       grps = unique(task$groups$group)
 
       # by = "row_id" for faster computation since groups are implied by row_id in task$groups
@@ -68,14 +63,17 @@ task_filter_ex = function(task, row_ids) {
 
         while (length(groups) < .N) {
           suffix = suffix + 1
-          # Otherwise, create a new group with a suffix
           new_group = paste0(group[[1]], "_", suffix)
-          # Add it if the suffixed name is not already taken; If it is, increment suffix.
+          # Add it new_group already exists, skip to next iteration.
           if (new_group %in% grps) {
             next
           }
+          # Otherwise, add new_group to groups
           groups[length(groups) + seq_len(target_count)] = new_group
         }
+        # This can happen if row_ids
+        # - has more occurances of an ID than in task$row_roles$use which is not an exact multiple
+        # - has less occurances of an ID than in task$row_roles$use
         if (length(groups) != .N) {
           stopf("Called task_filter_ex() but constructed incomplete group '%s'. Try removing column with role 'group'.", group[[1]])
         }
