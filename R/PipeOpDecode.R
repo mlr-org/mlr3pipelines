@@ -71,6 +71,7 @@ PipeOpDecode = R6Class("PipeOpDecode",
       cols = cols[grepl(pv$group_pattern, cols)]
 
       # Extract factor names
+      # If group_pattern contains does not contain a capturing group, fcts cannot be generated
       matches = regmatches(cols, regexec(pv$group_pattern, cols))
       fcts = vapply(matches, function(x) x[[2]], character(1))
       # Extract level names
@@ -104,19 +105,19 @@ PipeOpDecode = R6Class("PipeOpDecode",
         lvls = colmaps[[fct]]
 
         # Do we check that which.max is unique?
-        # Generally what checks should we perform? e.g. that group_pattern contains a capturing group
 
         # Find the column with the maximal value for each row
         dt[, (fct) := old_cols[apply(.SD, 1, which.max)], .SDcols = old_cols]
+        # add handling for reference class if treatment_encoding == TRUE
+
         # Assign the corresponding value from the named vector to the new column
-        # dt[, (fct) := lvls[get(fct)]]
-        dt[, (fct) := lvls[dt[[fct]]]]
-
-        # type conversion to factor?
-
-        # Remove the old columns (can move this to outside the loop)
-        dt[, (old_cols) := NULL]
+        # dt[, (fct) := as.factor(lvls[get(fct)])]
+        dt[, (fct) := as.factor(lvls[dt[[fct]]])]
       }
+
+      # Drop old columns
+      drop = unlist(lapply(colmaps, names))
+      dt[, (drop) := NULL]
 
       dt
     }
@@ -124,7 +125,3 @@ PipeOpDecode = R6Class("PipeOpDecode",
 )
 
 mlr_pipeops$add("decode", PipeOpDecode)
-
-# We don't add columns that have no match with group_pattern to state
-# We only remove old_cols in .train_dt -> These columns are just ignored. Good.
-#
