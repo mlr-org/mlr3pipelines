@@ -423,6 +423,14 @@ Graph = R6Class("Graph",
           with_options(list(datatable.prettyprint.char = collimit), {
             print(lines, row.names = FALSE)
           })
+
+          if(all(!duplicated(self$edges[["src_id"]]))) {
+            ppunit = paste0(self$ids(), collapse = " -> ")
+          } else {
+            ppunit = "<SUPPRESSED>"
+          }
+          pp = paste0(c("<INPUT>", ppunit, "<OUTPUT>"), collapse = " -> ")
+          cli_h3(sprintf("Pipeline: %s", pp))
         } else {
           cat("Empty Graph.\n")
         }
