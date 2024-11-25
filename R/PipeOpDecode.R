@@ -56,13 +56,54 @@ PipeOpDecode = R6Class("PipeOpDecode",
   private = list(
 
     .get_state_dt = function(dt, levels, target) {
+      pv = self$param_set$values
+      cols = colnames(dt)
 
+      # If pattern == "", all columns are collapsed into one column
+      if (pv$group_pattern == "") {
+        return(list(colmaps = list(result = set_names(cols, cols))))
+      }
+
+      # Extract group names
+      matches = regmatches(cols, regexec(pv$group_pattern, cols))
+      grps = unlist(map(matches, function(x) if (length(x)) x[[2]] else ""))
+      # Extract level names
+      lvls = set_names(gsub(pv$group_pattern, "", cols), cols)
+
+      # Drop entries for which no match to group_pattern was found
+      keep = fcts != ""
+      fcts = fcts[keep]
+      lvls = lvls[keep]
+
+      # add "" = "ref" if pv$treatment_encoding == TRUE
+      # test that split is consistent for this use case
+      list(colmaps = split(lvls, fcts))
     },
 
-    .transform_dt = function(dt, levels) {
+    # take maximum value, bc could be scaled
+    # treatment dass alles 0 ist, hard coden, referenzname als reference nennen (und ref.1 falls es die spalte schon gibt)
 
+    # decide when to assign "ref" (e.g. no unique maximum)
+    .transform_dt = function(dt, levels) {
+      colmaps = self$state$colmaps
+
+      for (fct in names(colmaps)) {
+        old_cols = names(colmaps[[fct]])
+        lvls = unname(colmaps[[fct]])
+
+        # Find the column with the maximal value for each row
+        dt[, (fct) := old_cols[apply(.SD, 1, which.max)], .SDcols = old_cols]
+        # Assign the corresponding value from the named vector to the new column
+        dt[, (fct) := lvls[get(fct)]]
+        # Remove the old columns (can move this to outside the loop)
+        dt[, (old_cols) := NULL]
+      }
     }
   )
 )
 
 mlr_pipeops$add("decode", PipeOpDecode)
+
+# We don't add columns that have no match with group_pattern to state
+# We only remove old_cols in .train_dt -> These columns are just ignored. Good.
+#
