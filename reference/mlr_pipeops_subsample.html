@@ -95,7 +95,9 @@ The output during prediction is the unchanged input.</p>
 <p>The parameters are the parameters inherited from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>; however, the <code>affect_columns</code> parameter is <em>not</em> present. Further parameters are:</p><ul><li><p><code>frac</code> :: <code>numeric(1)</code><br>
 Fraction of rows in the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> to keep. May only be greater than 1 if <code>replace</code> is <code>TRUE</code>. Initialized to <code>(1 - exp(-1)) == 0.6321</code>.</p></li>
 <li><p><code>stratify</code> :: <code>logical(1)</code><br>
-Should the subsamples be stratified by target? Initialized to <code>FALSE</code>. May only be <code>TRUE</code> for <code><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></code> input.</p></li>
+Should the subsamples be stratified by target? Initialized to <code>FALSE</code>. May only be <code>TRUE</code> for <code><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></code> input and if <code>use_groups = FALSE</code>.</p></li>
+<li><p><code>use_groups</code> :: <code>logical(1)</code><br>
+If <code>TRUE</code> and if the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> has a column with role <code>group</code>, grouped observations are kept together during subsampling. In case of  sampling with</p></li>
 <li><p><code>replace</code> :: <code>logical(1)</code><br>
 Sample with replacement? Initialized to <code>FALSE</code>.</p></li>
 </ul></div>
@@ -207,15 +209,36 @@ a new <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">pos</span> <span class="op">=</span> <span class="va">mlr_pipeops</span><span class="op">$</span><span class="fu">get</span><span class="op">(</span><span class="st">"subsample"</span>, param_vals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>frac <span class="op">=</span> <span class="fl">0.7</span>, stratify <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">pos</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Subsample with stratification</span></span></span>
+<span class="r-in"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"subsample"</span>, frac <span class="op">=</span> <span class="fl">0.7</span>, stratify <span class="op">=</span> <span class="cn">TRUE</span>, use_groups <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskClassif:iris&gt; (105 x 5): Iris Flowers</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Target: Species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: multiclass</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Features (4):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Subsample, respecting grouping</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">3000</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  x1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">3000</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  x2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">3000</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  grp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"g"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>, <span class="fl">3000</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskRegr.html" class="external-link">TaskRegr</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"example"</span>, backend <span class="op">=</span> <span class="va">df</span>, target <span class="op">=</span> <span class="st">"target"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">set_col_roles</span><span class="op">(</span><span class="st">"grp"</span>, <span class="st">"group"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"subsample"</span>, frac <span class="op">=</span> <span class="fl">0.7</span>, use_groups <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskRegr:example&gt; (2096 x 3)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Target: target</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: groups</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Features (2):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (2): x1, x2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Groups: grp</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
