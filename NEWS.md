@@ -3,6 +3,7 @@
 * New parameter `no_collapse_above_absolute` in `PipeOpCollapseFactors` / `po("collapse_factors")`.
 * Fix: `PipeOpCollapseFactors` now correctly collapses levels of ordered factors.
 * Fix: `LearnerClassifAvg` and `LearnerRegrAvg` hyperparameters get the `"required"` tag.
+* New parameter `use_groups` (default `TRUE`) for `PipeOpSubsampling` to respect grouping (changed default behaviour for grouped data)
 
 # mlr3pipelines 0.7.1
 

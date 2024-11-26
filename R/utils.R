@@ -24,24 +24,76 @@ calculate_collimit = function(colwidths, outwidth) {
   collimit - 3  # subtracting 3 here because data.table adds "..." whenever it truncates a string
 }
 
-# same as task$filter(), but allows duplicate row IDs
+# Same as task$filter(), but allows duplicate row IDs.
+# Handles duplicate rows in tasks with col_role "group" by renaming groups
+# following pattern grp_name_1, grp_name_1, ... per each duplication of a group.
 # @param task [Task] the task
 # @param row_ids [numeric] the row IDs to select
 # @return [Task] the modified task
 task_filter_ex = function(task, row_ids) {
+  # Get vector of duplicate row IDs
+  dup_ids = row_ids[duplicated(row_ids)]
+  # Generate vector with new row IDs
+  newrows = task$nrow + seq_along(dup_ids)
+  # Get all columns of task for subsetting using task$data()
+  cols = unique(unlist(task$col_roles, use.names = FALSE))
 
-  addedrows = row_ids[duplicated(row_ids)]
+  # Rbind duplicated rows to task
+  if (length(dup_ids)) {
+    # First, get a data.table with all duplicated rows.
+    new_data = task$data(rows = dup_ids, cols = cols)
 
-  newrows = task$nrow + seq_along(addedrows)
+    # Second, if task has a column with role "group", create new groups for duplicate rows by adding a suffix to the group entry.
+    if (!is.null(task$groups)) {
+      group = NULL  # for binding
+      row_id = NULL  # for binding
 
-  if (length(addedrows)) {
-    task$rbind(task$data(rows = addedrows))
+      row_counts = table(task$row_roles$use)
+      grps = unique(task$groups$group)
+
+      # by = "row_id" for faster computation since groups are implied by row_id in task$groups
+      new_groups = unique(task$groups, by = "row_id")[list(dup_ids), on = "row_id"]
+      new_groups[, group := {
+        # Number of how often the same group name should occur for this row ID
+        target_count = row_counts[as.character(row_id)]
+        # Get default group name target_count - 1 times since default group already exists in task once
+        groups = group[seq_len(target_count - 1)]
+        # Initialize suffix to be appended to group name if it is otherwise already taken
+        suffix = 0
+
+        while (length(groups) < .N) {
+          suffix = suffix + 1
+          new_group = paste0(group[[1]], "_", suffix)
+          # Add it new_group already exists, skip to next iteration.
+          if (new_group %in% grps) {
+            next
+          }
+          # Otherwise, add new_group to groups
+          groups[length(groups) + seq_len(target_count)] = new_group
+        }
+        # This can happen if row_ids
+        # - has more occurances of an ID than in task$row_roles$use which is not an exact multiple
+        # - has less occurances of an ID than in task$row_roles$use
+        if (length(groups) != .N) {
+          stopf("Called task_filter_ex() but constructed incomplete group '%s'. Try removing column with role 'group'.", group[[1]])
+        }
+        groups
+      }, by = row_id]
+
+      # Use "new_groups" to update the group entries.
+      new_data[, (task$col_roles$group) := new_groups$group]
+    }
+
+    # Lastly, new data is rbinded to the original task.
+    task$rbind(new_data)
   }
 
-  # row ids can be anything, we just take what mlr3 happens to assign.
+  # row_ids can be anything, we just take what mlr3 happens to assign to filter the task.
   row_ids[duplicated(row_ids)] = task$row_ids[newrows]
 
-  task$filter(row_ids)
+  # Update row_ids, effectively filtering the task
+  task$row_roles$use = row_ids
+  task
 }
 
 # these must be at the root and can not be anonymous functions because all.equal fails otherwise.
@@ -66,7 +118,6 @@ curry = function(fn, ..., varname = "x") {
   }
 }
 
-
 # 'and' operator for checkmate check_*-functions
 # example:
 # check_numeric(x) %check&&% check_true(all(x < 0))
@@ -79,7 +130,6 @@ curry = function(fn, ..., varname = "x") {
   if (!isTRUE(lhs) && !isTRUE(rhs)) return(paste0(lhs, ", or ", rhs))
   TRUE
 }
-
 
 # perform gsub on names of list
 # `...` are given to `gsub()`
