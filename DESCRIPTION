@@ -62,7 +62,7 @@ Imports:
     digest,
     lgr,
     mlr3 (>= 0.20.0),
-    mlr3misc (>= 0.15.2),
+    mlr3misc (>= 0.16.0),
     paradox,
     R6,
     withr
