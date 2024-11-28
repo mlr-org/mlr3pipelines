@@ -28,13 +28,15 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `new_role` :: `list`\cr
+#' * `new_role` :: named `list`\cr
 #'   Named list of new column roles. The names must match the column names of the input task that
 #'   will later be trained/predicted on. Each entry of the list must contain a character vector with
 #'   possible values of [`mlr_reflections$task_col_roles`][mlr3::mlr_reflections]. If the value is
 #'   given as `character()`, the column will be dropped from the input task. Changing the role of a
 #'   column results in this column loosing its previous role(s). Setting a new target variable or
 #'   changing the role of an existing target variable is not supported.
+#' * `new_role_direct` :: named `list`\cr#
+#'   a
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -48,6 +50,11 @@
 #' ))
 #'
 #' pop$train(list(task))
+#'
+#' pop$param_set$set_values(new_role_direct = list(
+#'
+#' ))
+#'
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
@@ -70,6 +77,17 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
             # a value of "character()" will lead to the column being dropped
             all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
             check_subset(unlist(x), all_col_roles[all_col_roles != "target"])
+          }, .parent = topenv())
+        ),
+        new_role_direct = p_uty(
+          tags = c("train", "predict"),
+          custom_check = crate(function(x) {
+            first_check = check_list(x, types = "character", any.missing = FALSE, min.len = 1L, names = "named")
+            # return the error directly if this failed
+            if (is.character(first_check)) {
+              return(first_check)
+            }
+
           }, .parent = topenv())
         )
       )
