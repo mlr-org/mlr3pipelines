@@ -12,25 +12,39 @@
 #' PipeOpEncode$new(id = "decode", param_vals = list())
 #' ```
 #' * `id` :: `character(1)`\cr
-#'   Identifier of resulting object, default `"encode"`.
+#'   Identifier of resulting object, default `"decode"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with
+#' The output is the input [`Task`][mlr3::Task] with decoded columns, i.e. reversed encoding.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
-#' * ...
+#' * `colmaps` :: named `list`\cr
+#'   Named list of named character vectors. Each element is named according to the new column name extracted by `group_pattern`.
+#'   Each vector contains the level names for the new factor column that should be created, named by the corresponding old column name.
+#'   If `treament_encoding` is `TRUE`, then each vector also contains `"ref"` as the name of the reference class with empty string as name instead
+#'   of an old column name.
+#' * `treatment_encoding` :: `logical(1)`\cr
+#'   Parameter `treatment_encoding`.
+#' * `cutoff` :: `numeric(1)`\cr
+#'   Parameter `treatment_cutoff`.
+#' * `ties_method` :: `character(1)`\cr
+#'   Parameter `ties_method`.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * ...
+#' * `group_pattern` :: `character(1)`\cr
+#' * `treatment_encoding` :: `logical(1)`\cr
+#' * `treatment_cutoff` :: `numeric(1)`\cr
+#' * `ties_method` :: `character(1)`\cr
+#'   Method for resolving ties, if multiple columns have the same value
+#'    to be passed to [`mlr3misc::which_max`]. In case of ties, either the `first`, the `last` or
+#'   a `random` column is picked. Initialized to `"random"`.
 #'
-#' @section Internals:
-#' Uses the [`stats::contrasts`] functions. This is relatively inefficient for features with a large number of levels.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -47,9 +61,9 @@ PipeOpDecode = R6Class("PipeOpDecode",
   public = list(
     initialize = function(id = "decode", param_vals = list()) {
       ps = ps(
+        group_pattern = p_uty(custom_check = check_string, tags = c("train", "required")),
         treatment_encoding = p_lgl(tags = c("train", "required")),
         treatment_cutoff = p_dbl(default = 0, tags = "train", depends = quote(treatment_encoding == TRUE)),
-        group_pattern = p_uty(custom_check = check_string, tags = c("train", "required")),
         ties_method = p_fct(c("first", "last", "random"), tags = c("train", "required"))
       )
       ps$values = list(treatment_encoding = FALSE, group_pattern = "^([^.]+)\\.", ties_method = "random")
@@ -118,8 +132,8 @@ PipeOpDecode = R6Class("PipeOpDecode",
       cmap = split(lvls, fcts)
       if (pv$treatment_encoding) {
         # Append ref_name with empty name (i.e. "") to all list entries
-        for (map in cmap) {
-          map[[length(map) + 1]] = ref_name
+        for (i in seq_along(cmap)) {
+          cmap[[i]][[length(cmap[[i]]) + 1]] = ref_name
         }
       }
 
@@ -143,16 +157,17 @@ PipeOpDecode = R6Class("PipeOpDecode",
 
       for (new_col in names(colmaps)) {
         lvls = colmaps[[new_col]]
-        old_cols = names(lvls)
+        # If existent, remove empty string element (for subsetting dt, later)
+        old_cols = discard(names(lvls), names(lvls) == "")
 
         # Create matrix from subset of dt with columns old_cols
         old_cols_matrix = as.matrix(dt[, old_cols, with = FALSE])
         # Populate new column with name of column with maximal value per row
         set(dt, , new_col, old_cols[apply(old_cols_matrix, 1, which_max, ties_method = ties_method)])
-        # If any value in old_cols_matrix are smaller than the cutoff, replace with empty string
-        # This implies replacement with reference level in next step.
+        # If all values in old_cols_matrix are smaller than or equal to the cutoff, replace with empty string
+        # This leads to replacement with reference level in next step.
         if (treatment_encoding) {
-          set(dt, rowSums(old_cols_matrix <= cutoff) > 0, "")
+          set(dt, which(rowSums(old_cols_matrix > cutoff) == 0), new_col, "")
         }
         # Replace occurrences of old column names with corresponding new level names
         set(dt, , new_col, factor(lvls[match(dt[[new_col]], names(lvls))], levels = lvls))
@@ -160,6 +175,8 @@ PipeOpDecode = R6Class("PipeOpDecode",
 
       # Drop old columns
       drop = unlist(lapply(colmaps, names))
+      # If existent, remove empty string elements
+      drop = discard(drop, drop == "")
       dt[, (drop) := NULL]
 
       dt
