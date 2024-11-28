@@ -1,14 +1,14 @@
 context("PipeOpDecode")
 
+#Notiz: tests mit mehreren gruppen und skallierten werten
+
 test_that("PipeOpDecode - basic properties", {
   dt = data.table(
     target = runif(120),
     x.1 = rep(c(1, 0, 0), 40),
     x.2 = rep(c(0, 1, 0), 40),
-    x.3 = rep(c(0, 0, 1), 40),
     y.1 = rep(c(1, 0, 0), 40),
     y.2 = rep(c(0, 1, 0), 40),
-    y.3 = rep(c(0, 0, 1), 40),
     a = runif(120)
   )
   task = TaskRegr$new(id = "decode", backend = dt, target = "target")
@@ -23,6 +23,8 @@ test_that("PipeOpDecode - one-hot-encoding", {
     target = runif(10),
     x.1 = rep(c(1, 0), 5),
     x.2 = rep(c(0, 1), 5),
+    y.1 = rep(c(2, 1), 5),
+    y.2 = rep(c(1, 2), 5),
     .a = runif(10),
     a = runif(10)
   )
@@ -33,7 +35,8 @@ test_that("PipeOpDecode - one-hot-encoding", {
     target = dt$target,
     .a = dt$.a,
     a = dt$a,
-    x = as.factor(rep(c(1, 2), times = 5))
+    x = as.factor(rep(c(1, 2), times = 5)),
+    y = as.factor(rep(c(1, 2), times = 5))
   )
   expect_equal(train_out, dt_compare)
 
@@ -46,7 +49,30 @@ test_that("PipeOpDecode - one-hot-encoding", {
   train_out = op$train(list(task))[[1]]$data()
   expect_equal(train_out, dt)
 
-  # test tiebreak
+  # tiebreak
+  dt = data.frame(
+    target = runif(10),
+    x.1 = c(1, 0, 1, 0, 0),
+    x.2 = c(0, 1, 0, 1, 1),
+    x.3 = c(0, 0, 1, 1, 1)
+  )
+  task = TaskRegr$new(id = "decode", backend = dt, target = "target")
+
+  op$param_set$values$ties_method = "first"
+  train_out = op$train(list(task))[[1]]$data()
+  dt_compare = data.table(
+    target = dt$target,
+    x = as.factor(c(1, 2, 1, 2, 2))
+  )
+  expect_equal(train_out, dt_compare)
+
+  op$param_set$values$ties_method = "last"
+  train_out = op$train(list(task))[[1]]$data()
+  dt_compare = data.table(
+    target = dt$target,
+    x = as.factor(c(1, 2, 3, 3, 3))
+  )
+  expect_equal(train_out, dt_compare)
 })
 
 test_that("PipeOpDecode - treatment encoding", {
@@ -56,21 +82,28 @@ test_that("PipeOpDecode - treatment encoding", {
   dt = data.table(
     target = runif(15),
     x.1 = rep(c(1, 0, 0), 5),
-    x.2 = rep(c(0, 0, 1), 5),
+    x.2 = rep(c(0, 0, 0.5), 5),
     a = runif(15)
   )
   task = TaskRegr$new(id = "decode", backend = dt, target = "target")
 
   train_out = op$train(list(task))[[1]]$data()
   dt_compare = data.table(
-    target = df$target,
-    a = df$a,
-    x = rep(c("1", "ref", "2"), times = 5)
+    target = dt$target,
+    a = dt$a,
+    x = as.factor(rep(c("1", "ref", "2"), times = 5))
   )
   expect_equal(train_out, dt_compare)
 
   # test cutoff
-  # test tiebreak
+  op$param_set$values$treatment_cutoff = 0.5
+  train_out = op$train(list(task))[[1]]$data()
+  dt_compare = data.table(
+    target = dt$target,
+    a = dt$a,
+    x = as.factor(rep(c("1", "ref", "ref"), times = 5))
+  )
+  expect_equal(train_out, dt_compare)
 })
 
 test_that("PipOpDecode - collapse all into one", {
@@ -79,16 +112,16 @@ test_that("PipOpDecode - collapse all into one", {
 
   dt = data.frame(
     target = runif(15),
-    x.1 = rep(c(1, 0, 0), 5),
-    x.2 = rep(c(0, 0, 1), 5),
-    a = rep(c(0, 1, 0), 5)
+    x = rep(c(1, 0, 0), 5),
+    y = rep(c(0, 1, 0), 5),
+    z = rep(c(0, 0, 1), 5)
   )
   task = TaskRegr$new(id = "decode", backend = dt, target = "target")
 
   train_out = op$train(list(task))[[1]]$data()
   dt_compare = data.table(
     target = dt$target,
-    pipeop.decoded = as.factor(rep(c("x.1", "a", "x.2"), times = 5))
+    pipeop.decoded = as.factor(rep(c("x", "y", "z"), times = 5))
   )
   expect_equal(train_out, dt_compare)
 })
