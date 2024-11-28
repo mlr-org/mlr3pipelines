@@ -1,11 +1,19 @@
-#' @title Factor Decoding
+#' @title Reverse Encoding
 #'
 #' @usage NULL
 #' @name mlr_pipeops_decode
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Description
+#' Reverses one-hot or treatment encoding of columns. It collapses multiple `numeric` or `integer` columns into one `factor`
+#' column based on a specified grouping pattern of column names.
+#'
+#' May be applied to multiple groups of columns, grouped by matching a common naming pattern. The grouping pattern is
+#' extracted to form the name of the newly derived `factor` column, and levels are constructed from the previous column
+#' names, with parts matching the grouping pattern removed. The level per row of the new factor column is generally
+#' determined as the name of the column with the maximum value in the group.
+#' For example, columns `x.1` and `x.2` might be collapsed into a new factor column `x` with levels `1` and `2`, while
+#' columns `y.1` and `y.2` might be interpreted as a separate group and collapsed into a new column `y`.
 #'
 #' @section Construction:
 #' ```
@@ -19,32 +27,42 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with decoded columns, i.e. reversed encoding.
+#' The output is the input [`Task`][mlr3::Task] with encoding columns collapsed into new decoded columns.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `colmaps` :: named `list`\cr
-#'   Named list of named character vectors. Each element is named according to the new column name extracted by `group_pattern`.
-#'   Each vector contains the level names for the new factor column that should be created, named by the corresponding old column name.
-#'   If `treament_encoding` is `TRUE`, then each vector also contains `"ref"` as the name of the reference class with empty string as name instead
-#'   of an old column name.
+#'   Named list of named character vectors. Each element is named according to the new column name extracted by
+#'   `group_pattern`. Each vector contains the level names for the new factor column that should be created, named by
+#'   the corresponding old column name. If `treatment_encoding` is `TRUE`, then each vector also contains `"ref"` as the
+#'   reference class with an empty string (`""`) as name.
 #' * `treatment_encoding` :: `logical(1)`\cr
-#'   Parameter `treatment_encoding`.
+#'   Indicates whether treatment encoding (`TRUE`) or one-hot encoding (`FALSE`) is assumed.
 #' * `cutoff` :: `numeric(1)`\cr
-#'   Parameter `treatment_cutoff`.
+#'   The cutoff value for identifying the reference level in case of treatment encoding.
 #' * `ties_method` :: `character(1)`\cr
-#'   Parameter `ties_method`.
+#'   Method for resolving ties when multiple columns have the same value. Options include `"first"`, `"last"`, or `"random"`.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `group_pattern` :: `character(1)`\cr
+#'   A [regular expression](`base::regex`) to be applied to column names. Should contain a capturing group for the new
+#'   column name, and match everything that should not be interpreted as the new factor levels (which are constructed as
+#'   the difference between column names and what `group_pattern` matches).
+#'   If set to `""`, all columns matching the `group_pattern` are collapsed into one factor column called
+#'   `pipeop.decoded`. Use [`PipeOpRenameColumns`] to rename this column.
+#'   Initialized to `"^([^.]+)\\."`, which would extract everything up to the first dot as the new column name and
+#'   construct new levels as everything after the first dot.
 #' * `treatment_encoding` :: `logical(1)`\cr
+#'   If `TRUE`, treatment encoding is assumed instead of one-hot encoding. Initialized to `FALSE`.
 #' * `treatment_cutoff` :: `numeric(1)`\cr
+#'   If `treatment_encoding` is `TRUE`, specifies a cutoff value for identifying the reference level. The reference level
+#'   is set to `"ref"` in rows where the value is less than or equal to a specified cutoff value (e.g., `0`) in all
+#'   columns in that group To change the name of the reference level, use [`PipeOp???`] (Mutate? ColApply?).
+#'   Initialized to `0`.
 #' * `ties_method` :: `character(1)`\cr
-#'   Method for resolving ties, if multiple columns have the same value
-#'    to be passed to [`mlr3misc::which_max`]. In case of ties, either the `first`, the `last` or
-#'   a `random` column is picked. Initialized to `"random"`.
-#'
+#'   Method for resolving ties if multiple columns have the same value. Specifies the value from which of the columns
+#'   with the same value is to be picked. Options are `"first"`, `"last"`, or `"random"`. Initialized to `"random"`.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -55,6 +73,41 @@
 #' @export
 #' @examples
 #' library("mlr3")
+#'
+#' # Create example task with one-hot encoding
+#' df = data.frame(
+#'   target = runif(10),
+#'   x.1 = rep(c(1, 0), 5),
+#'   x.2 = rep(c(0, 1), 5),
+#'   y.1 = rep(c(1, 0), 5),
+#'   y.2 = rep(c(0, 1), 5),
+#'   a = runif(10)
+#' )
+#' task = TaskRegr$new(id = "example", backend = df, target = "target")
+#'
+#' pop = po("decode")
+#'
+#' # Training
+#' train_out = pop$train(list(task))[[1]]
+#' # x.1 and x.2 are collapsed into x, same for y; a is ignored.
+#' train_out$data()
+#'
+#' # Create example task with treatment encoding
+#' df = data.frame(
+#'   target = runif(15),
+#'   x.1 = rep(c(1, 0, 0), 5),
+#'   x.2 = rep(c(0, 1, 0), 5)
+#' )
+#' task = TaskRegr$new(id = "example", backend = df, target = "target")
+#'
+#' pop = po("decode")
+#' pop$param_set$set_values(treatment_encoding = TRUE)
+#'
+#' # Training
+#' train_out = pop$train(list(task))[[1]]
+#' # x.1 and x.2 are collapsed into x; in rows where all values
+#' # are smaller or equal to 0, the reference level is set
+#' train_out$data()
 #'
 PipeOpDecode = R6Class("PipeOpDecode",
   inherit = PipeOpTaskPreprocSimple,

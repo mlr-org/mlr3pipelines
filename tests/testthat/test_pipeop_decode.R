@@ -1,15 +1,13 @@
 context("PipeOpDecode")
 
-#Notiz: tests mit mehreren gruppen und skallierten werten
-
 test_that("PipeOpDecode - basic properties", {
   dt = data.table(
-    target = runif(120),
-    x.1 = rep(c(1, 0, 0), 40),
-    x.2 = rep(c(0, 1, 0), 40),
-    y.1 = rep(c(1, 0, 0), 40),
-    y.2 = rep(c(0, 1, 0), 40),
-    a = runif(120)
+    target = runif(12),
+    x.1 = rep(c(1, 0, 0), 4),
+    x.2 = rep(c(0, 1, 0), 4),
+    y.1 = rep(c(1, 0, 0), 4),
+    y.2 = rep(c(0, 1, 0), 4),
+    a = runif(12)
   )
   task = TaskRegr$new(id = "decode", backend = dt, target = "target")
 
@@ -19,7 +17,7 @@ test_that("PipeOpDecode - basic properties", {
 test_that("PipeOpDecode - one-hot-encoding", {
   op = PipeOpDecode$new()
 
-  dt = data.frame(
+  dt = data.table(
     target = runif(10),
     x.1 = rep(c(1, 0), 5),
     x.2 = rep(c(0, 1), 5),
@@ -28,7 +26,7 @@ test_that("PipeOpDecode - one-hot-encoding", {
     .a = runif(10),
     a = runif(10)
   )
-  task = TaskRegr$new(id = "decode", backend = dt, target = "target")
+  task = TaskRegr$new(id = "test", backend = dt, target = "target")
 
   train_out = op$train(list(task))[[1]]$data()
   dt_compare = data.table(
@@ -45,18 +43,18 @@ test_that("PipeOpDecode - one-hot-encoding", {
     target = runif(10),
     a = runif(10)
   )
-  task = TaskRegr$new(id = "decode", backend = dt, target = "target")
+  task = TaskRegr$new(id = "test", backend = dt, target = "target")
   train_out = op$train(list(task))[[1]]$data()
   expect_equal(train_out, dt)
 
   # tiebreak
-  dt = data.frame(
+  dt = data.table(
     target = runif(10),
     x.1 = c(1, 0, 1, 0, 0),
     x.2 = c(0, 1, 0, 1, 1),
     x.3 = c(0, 0, 1, 1, 1)
   )
-  task = TaskRegr$new(id = "decode", backend = dt, target = "target")
+  task = TaskRegr$new(id = "test", backend = dt, target = "target")
 
   op$param_set$values$ties_method = "first"
   train_out = op$train(list(task))[[1]]$data()
@@ -85,7 +83,7 @@ test_that("PipeOpDecode - treatment encoding", {
     x.2 = rep(c(0, 0, 0.5), 5),
     a = runif(15)
   )
-  task = TaskRegr$new(id = "decode", backend = dt, target = "target")
+  task = TaskRegr$new(id = "test", backend = dt, target = "target")
 
   train_out = op$train(list(task))[[1]]$data()
   dt_compare = data.table(
@@ -110,13 +108,13 @@ test_that("PipOpDecode - collapse all into one", {
   op = PipeOpDecode$new()
   op$param_set$values$group_pattern = ""
 
-  dt = data.frame(
+  dt = data.table(
     target = runif(15),
     x = rep(c(1, 0, 0), 5),
     y = rep(c(0, 1, 0), 5),
     z = rep(c(0, 0, 1), 5)
   )
-  task = TaskRegr$new(id = "decode", backend = dt, target = "target")
+  task = TaskRegr$new(id = "test", backend = dt, target = "target")
 
   train_out = op$train(list(task))[[1]]$data()
   dt_compare = data.table(
@@ -128,13 +126,13 @@ test_that("PipOpDecode - collapse all into one", {
 
 test_that("PipeOpDecode - errors", {
   op = PipeOpDecode$new()
-  dt = data.frame(
+  dt = data.table(
     target = runif(20),
     x.1 = rep(c(1, 0), 10),
     x.2 = rep(c(0, 1), 10),
     .a = rep(1, 20)
   )
-  task = TaskRegr$new(id = "decode", backend = dt, target = "target")
+  task = TaskRegr$new(id = "test", backend = dt, target = "target")
 
   # pattern without capturing group
   op$param_set$values$group_pattern = "^[^.]+\\."
