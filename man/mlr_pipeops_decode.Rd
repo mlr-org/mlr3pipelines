@@ -46,7 +46,7 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 Named list of named character vectors. Each element is named according to the new column name extracted by
 \code{group_pattern}. Each vector contains the level names for the new factor column that should be created, named by
 the corresponding old column name. If \code{treatment_encoding} is \code{TRUE}, then each vector also contains \code{"ref"} as the
-reference class with an empty string (\code{""}) as name.
+reference class with an empty string as name.
 \item \code{treatment_encoding} :: \code{logical(1)}\cr
 Indicates whether treatment encoding (\code{TRUE}) or one-hot encoding (\code{FALSE}) is assumed.
 \item \code{cutoff} :: \code{numeric(1)}\cr
@@ -61,7 +61,7 @@ Method for resolving ties when multiple columns have the same value. Options inc
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{group_pattern} :: \code{character(1)}\cr
-A \href{`base::regex`}{regular expression} to be applied to column names. Should contain a capturing group for the new
+A regular expression to be applied to column names. Should contain a capturing group for the new
 column name, and match everything that should not be interpreted as the new factor levels (which are constructed as
 the difference between column names and what \code{group_pattern} matches).
 If set to \code{""}, all columns matching the \code{group_pattern} are collapsed into one factor column called

@@ -35,7 +35,7 @@
 #'   Named list of named character vectors. Each element is named according to the new column name extracted by
 #'   `group_pattern`. Each vector contains the level names for the new factor column that should be created, named by
 #'   the corresponding old column name. If `treatment_encoding` is `TRUE`, then each vector also contains `"ref"` as the
-#'   reference class with an empty string (`""`) as name.
+#'   reference class with an empty string as name.
 #' * `treatment_encoding` :: `logical(1)`\cr
 #'   Indicates whether treatment encoding (`TRUE`) or one-hot encoding (`FALSE`) is assumed.
 #' * `cutoff` :: `numeric(1)`\cr
@@ -46,7 +46,7 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `group_pattern` :: `character(1)`\cr
-#'   A [regular expression](`base::regex`) to be applied to column names. Should contain a capturing group for the new
+#'   A regular expression to be applied to column names. Should contain a capturing group for the new
 #'   column name, and match everything that should not be interpreted as the new factor levels (which are constructed as
 #'   the difference between column names and what `group_pattern` matches).
 #'   If set to `""`, all columns matching the `group_pattern` are collapsed into one factor column called
