@@ -50,8 +50,7 @@
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("themis")) \{ }
+#' @examplesIf requireNamespace("themis")
 #' library("mlr3")
 #'
 #' # Create example task
@@ -64,7 +63,6 @@
 #' tomek_result = pop$train(list(task))[[1]]$data()
 #' nrow(tomek_result)
 #' table(tomek_result$Species)
-#' \dontshow{ \} }
 PipeOpTomek = R6Class("PipeOpTomek",
   inherit = PipeOpTaskPreproc,
   public = list(

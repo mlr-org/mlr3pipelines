@@ -100,7 +100,7 @@ Methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{ if (requireNamespace("rpart")) \{ }
+\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 
 task = tsk("iris")
@@ -109,7 +109,7 @@ lrn_po = mlr_pipeops$get("learner", learner)
 
 lrn_po$train(list(task))
 lrn_po$predict(list(task))
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html
@@ -153,6 +153,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
@@ -194,7 +196,9 @@ Other PipeOps:
 \code{\link{mlr_pipeops_yeojohnson}}
 
 Other Meta PipeOps: 
-\code{\link{mlr_pipeops_learner_cv}}
+\code{\link{mlr_pipeops_learner_cv}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}}
 }
 \concept{Meta PipeOps}
 \concept{PipeOps}

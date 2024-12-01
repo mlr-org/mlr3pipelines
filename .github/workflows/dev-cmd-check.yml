@@ -24,7 +24,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: ubuntu-latest, r: 'release', dev-package: "mlr-org/bbotk', 'mlr-org/mlr3learners', 'mlr-org/paradox"}
+          - {os: ubuntu-latest, r: 'release', dev-package: "mlr-org/mlr3', 'mlr-org/bbotk', 'mlr-org/mlr3learners', 'mlr-org/paradox"}
 
     steps:
       - uses: actions/checkout@v4

@@ -81,6 +81,9 @@ reference:
     contents:
       - mlr_learners_graph
       - mlr_learners_avg
+  - title: Tasks
+    contents:
+      - mlr_tasks_boston_housing
   - title: Helpers
     contents:
       - Selector

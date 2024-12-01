@@ -308,8 +308,7 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTargetTrafo`]/[`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library(mlr3)
 #' task = tsk("boston_housing")
 #' po = PipeOpTargetMutate$new("logtrafo", param_vals = list(
@@ -340,7 +339,6 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #' tt = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()))
 #' tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
 #' tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOp.R
@@ -437,8 +435,7 @@ mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTargetTrafo`]/[`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library(mlr3)
 #' task = tsk("boston_housing")
 #' po = PipeOpTargetTrafoScaleRange$new()
@@ -452,7 +449,6 @@ mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 #' ttscalerange$train(task)
 #' ttscalerange$predict(task)
 #' ttscalerange$state$regr.rpart
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOp.R
@@ -551,8 +547,7 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' \dontrun{
 #' # Create a binary class task from iris
 #' library(mlr3)
@@ -561,7 +556,6 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' po$train(list(tsk("iris")))
 #' po$predict(list(tsk("iris")))
 #' }
-#' \dontshow{ \} }
 #' @family mlr3pipelines backend related
 #' @family PipeOps
 #' @template seealso_pipeopslist

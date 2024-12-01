@@ -70,7 +70,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{ if (requireNamespace("smotefamily")) \{ }
+\dontshow{if (requireNamespace("smotefamily")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 
 # Create example task
@@ -85,7 +85,7 @@ pop = po("blsmote")
 bls_result = pop$train(list(task))[[1]]$data()
 nrow(bls_result)
 table(bls_result$result)
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \references{
 Han, Hui, Wang, Wen-Yuan, Mao, Bing-Huan (2005).
@@ -135,6 +135,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},

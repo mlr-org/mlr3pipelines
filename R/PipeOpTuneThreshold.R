@@ -63,10 +63,7 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("bbotk")) \{ }
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
-#' \dontshow{ if (requireNamespace("GenSA")) \{ }
+#' @examplesIf mlr3misc::require_namespaces(c("bbotk", "rpart", "GenSA"), quietly = TRUE)
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -77,9 +74,6 @@
 #' pop$train(task)
 #'
 #' pop$state
-#' \dontshow{ \} }
-#' \dontshow{ \} }
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @export
