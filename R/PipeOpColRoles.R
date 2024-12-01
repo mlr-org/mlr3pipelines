@@ -5,7 +5,9 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Changes the column roles of the input [`Task`][mlr3::Task] according to `new_role`.
+#' Changes the column roles of the input [`Task`][mlr3::Task] according to `new_role` or its inverse `new_role_direct`.
+#'
+#' Setting a new target variable or changing the role of an existing target variable is not supported.
 #'
 #' @section Construction:
 #' ```
@@ -21,7 +23,7 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with transformed column roles according to `new_role`.
+#' The output is the input [`Task`][mlr3::Task] with transformed column roles according to `new_role` or its inverse `new_role_direct`.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`].
@@ -29,14 +31,17 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `new_role` :: named `list`\cr
-#'   Named list of new column roles. The names must match the column names of the input task that
+#'   Named list of new column roles by column. The names must match the column names of the input task that
 #'   will later be trained/predicted on. Each entry of the list must contain a character vector with
-#'   possible values of [`mlr_reflections$task_col_roles`][mlr3::mlr_reflections]. If the value is
-#'   given as `character()`, the column will be dropped from the input task. Changing the role of a
-#'   column results in this column loosing its previous role(s). Setting a new target variable or
-#'   changing the role of an existing target variable is not supported.
+#'   possible values of [`mlr_reflections$task_col_roles`][mlr3::mlr_reflections].
+#'   If the value is given as `character()`, the column will be dropped from the input task. Changing the role
+#'   of a column results in this column loosing its previous role(s).
 #' * `new_role_direct` :: named `list`\cr#
-#'   a
+#'   Named list of new column roles by role. The names must match the possible column roles, i.e. values of
+#'   [`mlr_reflections$task_col_roles`][mlr3::mlr_reflections]. Each entry of the list must contain a character
+#'   vector with column names of the input task that will later be trained/predicted on.
+#'   If the value is given as `character()` or `NULL`, all columns will be dropped from the role given in the element
+#'   name. The value given for a role overwrites the previous entry in `task$col_roles` for that role, completely.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -44,16 +49,21 @@
 #' @examples
 #' library("mlr3")
 #'
-#' task = tsk("boston_housing")
+#' task = tsk("penguins")
 #' pop = po("colroles", param_vals = list(
-#'   new_role = list(town = c("order", "feature"))
+#'   new_role = list(body_mass = c("order", "feature"))
 #' ))
 #'
-#' pop$train(list(task))
+#' train_out1 = pop$train(list(task))
+#' train_out1$col_roles
 #'
-#' pop$param_set$set_values(new_role_direct = list(
+#' pop$param_set$set_values(
+#'  new_role = NULL,
+#'  new_role_direct = list(order = character(), group = "island")
+#' )
 #'
-#' ))
+#' train_out2 = pop$train(list(train_out))
+#' train_out2$col_roles
 #'
 #' @family PipeOps
 #' @template seealso_pipeopslist
