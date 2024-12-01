@@ -77,7 +77,7 @@ test_that("mlr3book authors don't sleepwalk through life", {
 test_that("ppl - dictionary suggest works", {
 
   # test that correct dictionary is checked against
-  expect_error(ppl("adas"), "po\\(\\): 'pca'")
-  expect_error(ppls("adas"), "pos\\(\\): 'pca'")
+  expect_error(ppl("adas"), "po\\(\\): 'adas'")
+  expect_error(ppls("adas"), "pos\\(\\): 'adas'")
 
 })
