@@ -78,7 +78,7 @@ pop$param_set$set_values(
  new_role_direct = list(order = character(), group = "island")
 )
 
-train_out2 = pop$train(list(train_out))
+train_out2 = pop$train(list(train_out1))
 train_out2$col_roles
 
 }
