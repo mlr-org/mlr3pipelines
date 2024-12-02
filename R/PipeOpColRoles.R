@@ -54,7 +54,7 @@
 #'   new_role = list(body_mass = c("order", "feature"))
 #' ))
 #'
-#' train_out1 = pop$train(list(task))
+#' train_out1 = pop$train(list(task))[[1L]]
 #' train_out1$col_roles
 #'
 #' pop$param_set$set_values(
