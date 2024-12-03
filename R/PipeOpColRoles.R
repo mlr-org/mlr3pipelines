@@ -138,7 +138,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
 
         # Add new role(s) for column(s) for which we change the role
         all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
-        for(role in all_col_roles) {
+        for (role in all_col_roles) {
           task$col_roles[[role]] = union(task$col_roles[[role]],
             names(which(unlist(map(new_role, .f = function(x) role %in% x)))))
         }
