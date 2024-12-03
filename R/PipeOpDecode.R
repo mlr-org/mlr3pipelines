@@ -142,7 +142,7 @@ PipeOpDecode = R6Class("PipeOpDecode",
       # If pattern == "", all columns are collapsed into one column.
       # Note, that column "pipeop.decoded" gets overwritten if it already exists.
       if (pv$group_pattern == "") {
-        cmap = list(pipeop.decoded = c(set_names(cols, cols)))
+        cmap = list(pipeop.decoded = set_names(cols, cols))
         if (pv$treatment_encoding) {
           # Append ref_name with empty name (i.e. "")
           cmap[[pipeop.decoded]][[length(cols) + 1]] = ref_name
@@ -174,7 +174,7 @@ PipeOpDecode = R6Class("PipeOpDecode",
       }
       fcts = map_chr(matches, 2)
 
-      # Error if no group could be extracted for an entry in col. Thus, we could not create a column name from it.
+      # Error, if no group could be extracted for an entry in col so that we could not create a column name from it.
       if (any(nchar(fcts) == 0)) {
         stopf("Pattern %s with column(s) %s would produce empty string as decoded column name(s). Try using a different pattern.",
               str_collapse(pv$group_pattern, quote = '"'),
@@ -210,7 +210,7 @@ PipeOpDecode = R6Class("PipeOpDecode",
 
       for (new_col in names(colmaps)) {
         lvls = colmaps[[new_col]]
-        # If existent, remove empty string element (for subsetting dt, later)
+        # If existent, remove empty string element (for subsetting dt in next step)
         old_cols = discard(names(lvls), names(lvls) == "")
 
         # Create matrix from subset of dt with columns old_cols
