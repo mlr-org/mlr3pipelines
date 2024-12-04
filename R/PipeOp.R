@@ -271,18 +271,18 @@ PipeOp = R6Class("PipeOp",
 
     print = function(...) {
       type_table_printout = function(table) {
-        strings = do.call(sprintf, cbind(fmt = "%s`[%s,%s]", table[, c("name", "train", "predict")]))
-        strings = strwrap(paste(strings, collapse = ", "), indent = 2, exdent = 2)
-        if (length(strings) > 6) {
-          strings = c(strings[1:5], sprintf("  [... (%s lines omitted)]", length(strings) - 5))
+        print(head(table, 5L), row.names = FALSE, print.keys = FALSE)
+        if (nrow(table) > 5L) {
+          catf("[...] (%i rows omitted)", nrow(table) - 5L)
         }
-        gsub("`", " ", paste(strings, collapse = "\n"))
       }
 
-      catf("PipeOp: <%s> (%strained)", self$id, if (self$is_trained) "" else "not ")
-      catf("values: <%s>", as_short_string(self$param_set$values))
-      catf("Input channels <name [train type, predict type]>:\n%s", type_table_printout(self$input))
-      catf("Output channels <name [train type, predict type]>:\n%s", type_table_printout(self$output))
+      cli_h1(sprintf("PipeOp %s: %strained", self$id, if (self$is_trained) "" else "not "))
+      cli_text(sprintf("values: %s", as_short_string(self$param_set$values)))
+      cli_h3("Input channels:")
+      type_table_printout(self$input)
+      cli_h3("Output channels:")
+      type_table_printout(self$output)
     },
 
     train = function(input) {

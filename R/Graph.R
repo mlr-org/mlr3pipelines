@@ -414,7 +414,7 @@ Graph = R6Class("Graph",
           scc = self$edges[, list(sccssors = paste(unique(dst_id), collapse = ",")), by = list(ID = src_id)]
           lines = scc[prd[lines, on = "ID"], on = "ID"][, c("ID", "State", "sccssors", "prdcssors")]
           lines[is.na(lines)] = ""
-          catf("Graph with %s PipeOps:", nrow(lines))
+          cli_h1(sprintf("Graph with %s PipeOps:", nrow(lines)))
           ## limit column width ##
 
           outwidth = getOption("width") %??% 80  # output width we want (default 80)
@@ -423,6 +423,14 @@ Graph = R6Class("Graph",
           with_options(list(datatable.prettyprint.char = collimit), {
             print(lines, row.names = FALSE)
           })
+
+          if(all(!duplicated(self$edges[["src_id"]]))) {
+            ppunit = paste0(self$ids(), collapse = " -> ")
+          } else {
+            ppunit = "<SUPPRESSED>"
+          }
+          pp = paste0(c("<INPUT>", ppunit, "<OUTPUT>"), collapse = " -> ")
+          cli_h3(sprintf("Pipeline: %s", pp))
         } else {
           cat("Empty Graph.\n")
         }

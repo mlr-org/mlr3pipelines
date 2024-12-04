@@ -9,7 +9,7 @@ test_that("PipeOp - General functions", {
   expect_false(po_1$is_trained)
   expect_class(po_1$param_set, "ParamSet")
   expect_list(po_1$param_set$values, names = "unique")
-  expect_output(print(po_1), "PipeOp:")
+  expect_message(print(po_1), "PipeOp")
   expect_equal(po_1$packages, "mlr3pipelines")
   expect_null(po_1$state)
   assert_subset(po_1$tags, mlr_reflections$pipeops$valid_tags)
@@ -29,22 +29,29 @@ test_that("PipeOp - simple tests with PipeOpScale", {
 })
 
 test_that("PipeOp printer", {
-  expect_output(print(PipeOpNOP$new()),
-    "PipeOp.*<nop>.*not trained.*values.*list().*Input channels.*input \\[\\*,\\*\\]\n.*Output channels.*output \\[\\*,\\*\\]$")
+  expect_snapshot(print(PipeOpNOP$new()))
+  expect_snapshot(print(PipeOpDebugMulti$new(3, 4)))
+  expect_snapshot(print(PipeOpDebugMulti$new(100, 0)))
+  expect_snapshot(print(PipeOpBranch$new(c("odin", "dva", "tri"))))
+  expect_snapshot(print(PipeOpLearner$new(mlr_learners$get("classif.debug"))))
 
 
-  expect_output(print(PipeOpDebugMulti$new(3, 4)),
-    "PipeOp.*<debug.multi>.*not trained.*values.*list().*Input channels.*input_1 \\[\\*,\\*\\], input_2 \\[\\*,\\*\\], input_3 \\[\\*,\\*\\]\n.*Output channels.*output_1 \\[\\*,\\*\\], output_2 \\[\\*,\\*\\], output_3 \\[\\*,\\*\\], output_4 \\[\\*,\\*\\]$")
-
-
-  expect_output(print(PipeOpDebugMulti$new(100, 0)),
-    "\\[\\.\\.\\. \\([0-9]+ lines omitted\\)\\]")
-
-  expect_output(print(PipeOpBranch$new(c("odin", "dva", "tri"))),
-    "Output channels.*odin \\[\\*,\\*\\], dva \\[\\*,\\*\\], tri \\[\\*,\\*\\]$")
-
-  expect_output(print(PipeOpLearner$new(mlr_learners$get("classif.debug"))),
-    "PipeOp.*<classif.debug>.*Input channels.*input \\[TaskClassif,TaskClassif\\]\nOutput channels.*output \\[NULL,PredictionClassif\\]$")
+  # expect_output(print(PipeOpNOP$new()),
+  #   "PipeOp.*<nop>.*not trained.*values.*list().*Input channels.*input \\[\\*,\\*\\]\n.*Output channels.*output \\[\\*,\\*\\]$")
+  #
+  #
+  # expect_output(print(PipeOpDebugMulti$new(3, 4)),
+  #   "PipeOp.*<debug.multi>.*not trained.*values.*list().*Input channels.*input_1 \\[\\*,\\*\\], input_2 \\[\\*,\\*\\], input_3 \\[\\*,\\*\\]\n.*Output channels.*output_1 \\[\\*,\\*\\], output_2 \\[\\*,\\*\\], output_3 \\[\\*,\\*\\], output_4 \\[\\*,\\*\\]$")
+  #
+  #
+  # expect_output(print(PipeOpDebugMulti$new(100, 0)),
+  #   "\\[\\.\\.\\. \\([0-9]+ lines omitted\\)\\]")
+  #
+  # expect_output(print(PipeOpBranch$new(c("odin", "dva", "tri"))),
+  #   "Output channels.*odin \\[\\*,\\*\\], dva \\[\\*,\\*\\], tri \\[\\*,\\*\\]$")
+  #
+  # expect_output(print(PipeOpLearner$new(mlr_learners$get("classif.debug"))),
+  #   "PipeOp.*<classif.debug>.*Input channels.*input \\[TaskClassif,TaskClassif\\]\nOutput channels.*output \\[NULL,PredictionClassif\\]$")
 })
 
 test_that("Prevent creation of PipeOps with no channels", {
