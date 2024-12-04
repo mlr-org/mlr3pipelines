@@ -1,9 +1,10 @@
 # mlr3pipelines 0.7.1-9000
 
-* New parameter `no_collapse_above_absolute` in `PipeOpCollapseFactors` / `po("collapse_factors")`.
+* New parameter `no_collapse_above_absolute` for `PipeOpCollapseFactors` / `po("collapse_factors")`.
 * Fix: `PipeOpCollapseFactors` now correctly collapses levels of ordered factors.
 * Fix: `LearnerClassifAvg` and `LearnerRegrAvg` hyperparameters get the `"required"` tag.
 * New parameter `use_groups` (default `TRUE`) for `PipeOpSubsampling` to respect grouping (changed default behaviour for grouped data)
+* New parameter `new_role_direct` for `PipeOpColRoles` / `po("colroles")` to change column roles by role instead of by column.
 
 # mlr3pipelines 0.7.1
 
