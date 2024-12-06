@@ -71,6 +71,27 @@ test_that("PipeOpDecode - one-hot-encoding", {
     x = as.factor(c(1, 2, 3, 3, 3))
   )
   expect_equal(train_out, dt_compare)
+
+  # no name collision
+  op$param_set$values$group_pattern = "^(.+)\\."  # matches everything till last dot
+
+  dt = data.table(
+    target = runif(10),
+    x.1 = rep(c(1, 0), 5),
+    x.2 = rep(c(0, 1), 5),
+    x.1.a = rep(c(2, 1), 5),
+    x.1.b = rep(c(1, 2), 5)
+  )
+  task = TaskRegr$new(id = "test", backend = dt, target = "target")
+
+  train_out = op$train(list(task))[[1]]$data()
+  dt_compare = data.table(
+    target = dt$target,
+    x = as.factor(rep(c(1, 2), 5)),
+    x.1 = as.factor(rep(c("a", "b"), 5))
+  )
+  expect_equal(train_out, dt_compare)
+
 })
 
 test_that("PipeOpDecode - treatment encoding", {
@@ -102,6 +123,24 @@ test_that("PipeOpDecode - treatment encoding", {
     x = as.factor(rep(c("1", "ref", "ref"), times = 5))
   )
   expect_equal(train_out, dt_compare)
+  op$param_set$values$treatment_cutoff = 0
+
+  # test incrementing reference level name
+  op$param_set$values$ref_name = "x"
+  dt = data.table(
+    target = runif(15),
+    x.x = rep(c(1, 0, 0), 5),
+    x.x.1 = rep(c(0, 0, 0.5), 5)
+  )
+  task = TaskRegr$new(id = "test", backend = dt, target = "target")
+
+  train_out = op$train(list(task))[[1]]$data()
+  dt_compare = data.table(
+    target = dt$target,
+    x = as.factor(rep(c("x", "x.2", "x.1"), times = 5))
+  )
+  expect_equal(train_out, dt_compare)
+
 })
 
 test_that("PipOpDecode - collapse all into one", {
