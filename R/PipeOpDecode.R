@@ -6,14 +6,12 @@
 #'
 #' @description
 #' Reverses one-hot or treatment encoding of columns. It collapses multiple `numeric` or `integer` columns into one `factor`
-#' column based on a specified grouping pattern of column names.
+#' column based on a pre-specified grouping pattern of column names.
 #'
 #' May be applied to multiple groups of columns, grouped by matching a common naming pattern. The grouping pattern is
 #' extracted to form the name of the newly derived `factor` column, and levels are constructed from the previous column
-#' names, with parts matching the grouping pattern removed. The level per row of the new factor column is generally
+#' names, with parts matching the grouping pattern removed (see examples). The level per row of the new factor column is generally
 #' determined as the name of the column with the maximum value in the group.
-#' For example, columns `x.1` and `x.2` might be collapsed into a new factor column `x` with levels `1` and `2`, while
-#' columns `y.1` and `y.2` might be interpreted as a separate group and collapsed into a new column `y`.
 #'
 #' @section Construction:
 #' ```
@@ -34,14 +32,14 @@
 #' * `colmaps` :: named `list`\cr
 #'   Named list of named character vectors. Each element is named according to the new column name extracted by
 #'   `group_pattern`. Each vector contains the level names for the new factor column that should be created, named by
-#'   the corresponding old column name. If `treatment_encoding` is `TRUE`, then each vector also contains `reflevel_name` as the
+#'   the corresponding old column name. If `treatment_encoding` is `TRUE`, then each vector also contains `ref_name` as the
 #'   reference class with an empty string as name.
 #' * `treatment_encoding` :: `logical(1)`\cr
-#'   Indicates whether treatment encoding (`TRUE`) or one-hot encoding (`FALSE`) is assumed.
+#'   Value of `treatment_encoding` hyperparameter.
 #' * `cutoff` :: `numeric(1)`\cr
-#'   The cutoff value for identifying the reference level in case of treatment encoding.
+#'   Value of `treatment_encoding` hyperparameter, or `0` if that is not given.
 #' * `ties_method` :: `character(1)`\cr
-#'   Method for resolving ties when multiple columns have the same value. Options include `"first"`, `"last"`, or `"random"`.
+#'   Value of `ties_method` hyperparameter.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
@@ -57,14 +55,13 @@
 #'   If `TRUE`, treatment encoding is assumed instead of one-hot encoding. Initialized to `FALSE`.
 #' * `treatment_cutoff` :: `numeric(1)`\cr
 #'   If `treatment_encoding` is `TRUE`, specifies a cutoff value for identifying the reference level. The reference level
-#'   is set to `reflevel_name` in rows where the value is less than or equal to a specified cutoff value (e.g., `0`) in all
-#'   columns in that group To change the name of the reference level, use [`PipeOp???`] (Mutate? ColApply?).
-#'   Default is `0`.
+#'   is set to `ref_name` in rows where the value is less than or equal to a specified cutoff value (e.g., `0`) in all
+#'   columns in that group. Default is `0`.
+#' * `ref_name` :: `character(1)`\cr
+#'   If `treatment_encoding` is `TRUE`, specifies the name for reference levels. Default is `"ref"`.
 #' * `ties_method` :: `character(1)`\cr
 #'   Method for resolving ties if multiple columns have the same value. Specifies the value from which of the columns
 #'   with the same value is to be picked. Options are `"first"`, `"last"`, or `"random"`. Initialized to `"random"`.
-#' * `ref_name` :: `character(1)`\cr
-#'   Default is `"ref"`.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -76,39 +73,62 @@
 #' @examples
 #' library("mlr3")
 #'
-#' # Create example task with one-hot encoding
+#' # Reverse one-hot encoding
 #' df = data.frame(
-#'   target = runif(10),
-#'   x.1 = rep(c(1, 0), 5),
-#'   x.2 = rep(c(0, 1), 5),
-#'   y.1 = rep(c(1, 0), 5),
-#'   y.2 = rep(c(0, 1), 5),
-#'   a = runif(10)
+#'   target = runif(4),
+#'   x.1 = rep(c(1, 0), 2),
+#'   x.2 = rep(c(0, 1), 2),
+#'   y.1 = rep(c(1, 0), 2),
+#'   y.2 = rep(c(0, 1), 2),
+#'   a = runif(4)
 #' )
-#' task = TaskRegr$new(id = "example", backend = df, target = "target")
+#' task_one_hot = TaskRegr$new(id = "example", backend = df, target = "target")
 #'
 #' pop = po("decode")
 #'
-#' # Training
-#' train_out = pop$train(list(task))[[1]]
+#' train_out = pop$train(list(task_one_hot))[[1]]
 #' # x.1 and x.2 are collapsed into x, same for y; a is ignored.
 #' train_out$data()
 #'
-#' # Create example task with treatment encoding
+#' # Reverse treatment encoding from PipeOpEncode
 #' df = data.frame(
-#'   target = runif(15),
-#'   x.1 = rep(c(1, 0, 0), 5),
-#'   x.2 = rep(c(0, 1, 0), 5)
+#'   target = runif(6),
+#'   fct = factor(rep(c("a", "b", "c"), 2))
 #' )
 #' task = TaskRegr$new(id = "example", backend = df, target = "target")
 #'
-#' pop = po("decode")
-#' pop$param_set$set_values(treatment_encoding = TRUE)
+#' po_enc = po("encode", method = "treatment")
+#' task_encoded = po_enc$train(list(task))[[1]]
+#' task_encoded$data()
 #'
-#' # Training
+#' po_dec = po("decode", treatment_encoding = TRUE)
+#' task_decoded = pop$train(list(task))[[1]]
+#' # x.1 and x.2 are collapsed into x. All rows where all values
+#' # are smaller or equal to 0, the level is set to the reference level.
+#' task_decoded$data()
+#'
+#' # Different group_pattern
+#' df = data.frame(
+#'   target = runif(4),
+#'   x_1 = rep(c(1, 0), 2),
+#'   x_2 = rep(c(0, 1), 2),
+#'   y_1 = rep(c(2, 0), 2),
+#'   y_2 = rep(c(0, 1), 2)
+#' )
+#' task = TaskRegr$new(id = "example", backend = df, target = "target")
+#'
+#' # Grouped by first underscore
+#' pop = po("decode", group_pattern = "^([^_]+)\\_")
 #' train_out = pop$train(list(task))[[1]]
-#' # x.1 and x.2 are collapsed into x; in rows where all values
-#' # are smaller or equal to 0, the reference level is set
+#' # x_1 and x_2 are collapsed into x, same for y
+#' train_out$data()
+#'
+#' # Empty string to collapse all matches into one factor column.
+#' pop$param_set$set_values(group_pattern = "")
+#' train_out = pop$train(list(task))[[1]]
+#' # All columns are combined into a single column.
+#' # The level for each row is determined by the column with the largest value in that row.
+#' # By default, ties are resolved randomly.
 #' train_out$data()
 #'
 PipeOpDecode = R6Class("PipeOpDecode",

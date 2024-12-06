@@ -3,20 +3,18 @@
 \name{mlr_pipeops_decode}
 \alias{mlr_pipeops_decode}
 \alias{PipeOpDecode}
-\title{Reverse Encoding}
+\title{Reverse Factor Encoding}
 \format{
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Reverses one-hot or treatment encoding of columns. It collapses multiple \code{numeric} or \code{integer} columns into one \code{factor}
-column based on a specified grouping pattern of column names.
+column based on a pre-specified grouping pattern of column names.
 
 May be applied to multiple groups of columns, grouped by matching a common naming pattern. The grouping pattern is
 extracted to form the name of the newly derived \code{factor} column, and levels are constructed from the previous column
-names, with parts matching the grouping pattern removed. The level per row of the new factor column is generally
+names, with parts matching the grouping pattern removed (see examples). The level per row of the new factor column is generally
 determined as the name of the column with the maximum value in the group.
-For example, columns \code{x.1} and \code{x.2} might be collapsed into a new factor column \code{x} with levels \code{1} and \code{2}, while
-columns \code{y.1} and \code{y.2} might be interpreted as a separate group and collapsed into a new column \code{y}.
 }
 \section{Construction}{
 
@@ -45,14 +43,14 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 \item \code{colmaps} :: named \code{list}\cr
 Named list of named character vectors. Each element is named according to the new column name extracted by
 \code{group_pattern}. Each vector contains the level names for the new factor column that should be created, named by
-the corresponding old column name. If \code{treatment_encoding} is \code{TRUE}, then each vector also contains \code{"ref"} as the
+the corresponding old column name. If \code{treatment_encoding} is \code{TRUE}, then each vector also contains \code{ref_name} as the
 reference class with an empty string as name.
 \item \code{treatment_encoding} :: \code{logical(1)}\cr
-Indicates whether treatment encoding (\code{TRUE}) or one-hot encoding (\code{FALSE}) is assumed.
+Value of \code{treatment_encoding} hyperparameter.
 \item \code{cutoff} :: \code{numeric(1)}\cr
-The cutoff value for identifying the reference level in case of treatment encoding.
+Value of \code{treatment_encoding} hyperparameter, or \code{0} if that is not given.
 \item \code{ties_method} :: \code{character(1)}\cr
-Method for resolving ties when multiple columns have the same value. Options include \code{"first"}, \code{"last"}, or \code{"random"}.
+Value of \code{ties_method} hyperparameter.
 }
 }
 
@@ -72,9 +70,10 @@ construct new levels as everything after the first dot.
 If \code{TRUE}, treatment encoding is assumed instead of one-hot encoding. Initialized to \code{FALSE}.
 \item \code{treatment_cutoff} :: \code{numeric(1)}\cr
 If \code{treatment_encoding} is \code{TRUE}, specifies a cutoff value for identifying the reference level. The reference level
-is set to \code{"ref"} in rows where the value is less than or equal to a specified cutoff value (e.g., \code{0}) in all
-columns in that group To change the name of the reference level, use \code{\link{PipeOp???}} (Mutate? ColApply?).
-Initialized to \code{0}.
+is set to \code{ref_name} in rows where the value is less than or equal to a specified cutoff value (e.g., \code{0}) in all
+columns in that group. Default is \code{0}.
+\item \code{ref_name} :: \code{character(1)}\cr
+If \code{treatment_encoding} is \code{TRUE}, specifies the name for reference levels. Default is \code{"ref"}.
 \item \code{ties_method} :: \code{character(1)}\cr
 Method for resolving ties if multiple columns have the same value. Specifies the value from which of the columns
 with the same value is to be picked. Options are \code{"first"}, \code{"last"}, or \code{"random"}. Initialized to \code{"random"}.
@@ -89,39 +88,62 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 \examples{
 library("mlr3")
 
-# Create example task with one-hot encoding
+# Reverse one-hot encoding
 df = data.frame(
-  target = runif(10),
-  x.1 = rep(c(1, 0), 5),
-  x.2 = rep(c(0, 1), 5),
-  y.1 = rep(c(1, 0), 5),
-  y.2 = rep(c(0, 1), 5),
-  a = runif(10)
+  target = runif(4),
+  x.1 = rep(c(1, 0), 2),
+  x.2 = rep(c(0, 1), 2),
+  y.1 = rep(c(1, 0), 2),
+  y.2 = rep(c(0, 1), 2),
+  a = runif(4)
 )
-task = TaskRegr$new(id = "example", backend = df, target = "target")
+task_one_hot = TaskRegr$new(id = "example", backend = df, target = "target")
 
 pop = po("decode")
 
-# Training
-train_out = pop$train(list(task))[[1]]
+train_out = pop$train(list(task_one_hot))[[1]]
 # x.1 and x.2 are collapsed into x, same for y; a is ignored.
 train_out$data()
 
-# Create example task with treatment encoding
+# Reverse treatment encoding from PipeOpEncode
 df = data.frame(
-  target = runif(15),
-  x.1 = rep(c(1, 0, 0), 5),
-  x.2 = rep(c(0, 1, 0), 5)
+  target = runif(6),
+  fct = factor(rep(c("a", "b", "c"), 2))
 )
 task = TaskRegr$new(id = "example", backend = df, target = "target")
 
-pop = po("decode")
-pop$param_set$set_values(treatment_encoding = TRUE)
+po_enc = po("encode", method = "treatment")
+task_encoded = po_enc$train(list(task))[[1]]
+task_encoded$data()
 
-# Training
+po_dec = po("decode", treatment_encoding = TRUE)
+task_decoded = pop$train(list(task))[[1]]
+# x.1 and x.2 are collapsed into x. All rows where all values
+# are smaller or equal to 0, the level is set to the reference level.
+task_decoded$data()
+
+# Different group_pattern
+df = data.frame(
+  target = runif(4),
+  x_1 = rep(c(1, 0), 2),
+  x_2 = rep(c(0, 1), 2),
+  y_1 = rep(c(2, 0), 2),
+  y_2 = rep(c(0, 1), 2)
+)
+task = TaskRegr$new(id = "example", backend = df, target = "target")
+
+# Grouped by first underscore
+pop = po("decode", group_pattern = "^([^_]+)\\\\_")
 train_out = pop$train(list(task))[[1]]
-# x.1 and x.2 are collapsed into x; in rows where all values
-# are smaller or equal to 0, the reference level is set
+# x_1 and x_2 are collapsed into x, same for y
+train_out$data()
+
+# Empty string to collapse all matches into one factor column.
+pop$param_set$set_values(group_pattern = "")
+train_out = pop$train(list(task))[[1]]
+# All columns are combined into a single column.
+# The level for each row is determined by the column with the largest value in that row.
+# By default, ties are resolved randomly.
 train_out$data()
 
 }
@@ -167,6 +189,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
