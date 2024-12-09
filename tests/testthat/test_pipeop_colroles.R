@@ -13,21 +13,29 @@ test_that("PipeOpColRoles - basic properties", {
 
 })
 
-test_that("PipeOpColRoles - only correct roles are accepted", {
+test_that("PipeOpColRoles - assertions on params work", {
 
   expect_error(PipeOpColRoles$new(param_vals = list(new_role = "wrong")), regexp = "list")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "wrong", b = NA))), regexp = "character")
+  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "wrong", b = NA))), regexp = "character,null")
+  expect_no_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = NULL))))
   expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "wrong"))), regexp = "subset")
   expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "target"))), regexp = "subset")
 
+  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "group", b = "group"))), regexp = "up to one column per role")
+  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "weight", b = "weight"))), regexp = "up to one column per role")
+  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "name", b = "name"))), regexp = "up to one column per role")
+  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = c("group", "name"), b = c("group", "name")))), regexp = "up to one column per role.*?\"group\", \"name\"")
+
   expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = "wrong")), regexp = "list")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(wrong = "x", feature = NA))), regexp = "character")
+  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(wrong = "x", feature = NA))), regexp = "character,null")
+  expect_no_error(PipeOpColRoles$new(param_vals = list(new_role = list(feature = NULL))))
   expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(wrong = "x"))), regexp = "subset")
   expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(target = "y"))), regexp = "subset")
 
-  # test that no duplicates for group, name, weight? (error during init)
-
-  # test that roles are correct for task types? (error during training)
+  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(group = c("x", "y")))), regexp = "up to one column per role")
+  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(weight = c("x", "y")))), regexp = "up to one column per role")
+  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(name = c("x", "y")))), regexp = "up to one column per role")
+  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(group = c("x", "y"), name = c("x", "y")))), regexp = "up to one column per role.*?\"group\", \"name\"")
 
 })
 
@@ -61,22 +69,23 @@ test_that("PipeOpColRoles - new_role works", {
   task = mlr_tasks$get("iris")
   task$cbind(data.table(rn = sprintf("%03d", 1:150)))
 
-  op = PipeOpColRoles$new(param_vals = list(new_role = list(rn = "name", Petal.Length = "order", Petal.Width = character(0))))
+  op = PipeOpColRoles$new(param_vals = list(new_role = list(rn = "name", Petal.Length = "order", Petal.Width = character(0), Sepal.Width = NULL)))
 
   train_out = train_pipeop(op, inputs = list(task))[[1L]]
 
   col_roles_actual = train_out$col_roles
   col_roles_expected = list(
-    feature = c("Sepal.Length", "Sepal.Width"), target = "Species", name = "rn",
-    order = "Petal.Length", stratum = character(0), group = character(0), weight = character(0)
+    feature = "Sepal.Length", target = "Species", name = "rn", order = "Petal.Length",
+    stratum = character(0), group = character(0), weight = character(0)
   )
 
-  # this does nothing?
+  # Compatibility with upcoming new weights_learner role in mlr3
   if ("weights_learner" %in% names(task)) names(col_roles_expected)[names(col_roles_expected) == "weight"] = "weights_learner"
 
   expect_equal(train_out$col_roles[names(col_roles_expected)], col_roles_expected)
   expect_equal(train_out$row_names$row_name, task$data(cols = "rn")[[1L]])
   expect_true("Petal.Width" %nin% colnames(train_out$data()))
+  expect_true("Sepal.Width" %nin% colnames(train_out$data()))
 
   predict_out = predict_pipeop(op, inputs = list(task))[[1L]]
   expect_equal(train_out, predict_out)
@@ -86,20 +95,21 @@ test_that("PipeOpColRoles - new_role_direct works", {
 
   task = mlr_tasks$get("iris")
   task$cbind(data.table(rn = sprintf("%03d", 1:150)))
+  task$col_roles$group = "Species"
 
   op = PipeOpColRoles$new(param_vals = list(new_role_direct = list(
-    name = "rn", order = "Petal.Length", feature = character(0))))
+    name = "rn", order = "Petal.Length", feature = character(0), group = NULL)))
 
   train_out = train_pipeop(op, inputs = list(task))[[1L]]
 
   col_roles_actual = train_out$col_roles
   col_roles_expected = list(
-    feature = character(0), target = "Species", name = "rn",
-    order = "Petal.Length", stratum = character(0), group = character(0), weight = character(0)
+    feature = character(0), target = "Species", name = "rn", order = "Petal.Length",
+    stratum = character(0), group = character(0), weight = character(0)
   )
 
-  # ask whether necessary
-  # if ("weights_learner" %in% names(task)) names(col_roles_expected)[names(col_roles_expected) == "weight"] = "weights_learner"
+  # Compatibility with upcoming new weights_learner role in mlr3
+  if ("weights_learner" %in% names(task)) names(col_roles_expected)[names(col_roles_expected) == "weight"] = "weights_learner"
 
   expect_equal(train_out$col_roles[names(col_roles_expected)], col_roles_expected)
   expect_equal(train_out$row_names$row_name, task$data(cols = "rn")[[1L]])
@@ -108,5 +118,3 @@ test_that("PipeOpColRoles - new_role_direct works", {
   predict_out = predict_pipeop(op, inputs = list(task))[[1L]]
   expect_equal(train_out, predict_out)
 })
-
-# if we keep behavior with NULL, add tests
