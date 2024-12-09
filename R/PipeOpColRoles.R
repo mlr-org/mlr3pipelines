@@ -34,7 +34,7 @@
 #'   Named list of new column roles by column. The names must match the column names of the input task that
 #'   will later be trained/predicted on. Each entry of the list must contain a character vector with
 #'   possible values of [`mlr_reflections$task_col_roles`][mlr3::mlr_reflections].
-#'   If the value is given as `character()`, the column will be dropped from the input task. Changing the role
+#'   If the value is given as `character()` or `NULL`, the column will be dropped from the input task. Changing the role
 #'   of a column results in this column loosing its previous role(s).
 #' * `new_role_direct` :: named `list`\cr#
 #'   Named list of new column roles by role. The names must match the possible column roles, i.e. values of
@@ -78,11 +78,22 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
         new_role = p_uty(
           tags = c("train", "predict"),
           custom_check = crate(function(x) {
-            first_check = check_list(x, types = "character", any.missing = FALSE, min.len = 1L, names = "named")
+            first_check = check_list(x, types = c("character", "null"), min.len = 1L, names = "unique")
+            # test that this works if two vectors have the name of a column, otherwise "unique"; is unique in task$col_roles
             # Return the error directly if this failed
-            if (is.character(first_check)) return(first_check)
+            if (!isTRUE(first_check)) return(first_check)
+
+            # Only one column for roles "group", "weight", and "name"
+            counter = c(group = 0L, weight = 0L, name = 0L)
+            for (i in seq_along(x)) {
+              counter = counter + c("group", "weight", "name") %in% x[[i]]
+            }
+            if (any(counter > 1L)) {
+              stopf("There may only be up to one column per role for role(s) %s.", str_collapse(names(which(counter > 1L)), quote = '"'))
+            }
+
             # Changing anything target related is not supported.
-            # A value of "character()" is accepted.
+            # A value of character() or NULL is accepted.
             all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
             check_subset(unlist(x), all_col_roles[all_col_roles != "target"])
           }, .parent = topenv())
@@ -91,11 +102,18 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
         new_role_direct = p_uty(
           tags = c("train", "predict"),
           custom_check = crate(function(x) {
-            first_check = check_list(x, types = "character", any.missing = FALSE, min.len = 1L, unique = TRUE, names = "named", null.ok = TRUE)
+            first_check = check_list(x, types = c("character", "null"), min.len = 1L, names = "unique")
             # Return the error directly if this failed
-            if (is.character(first_check)) return(first_check)
+            if (!isTRUE(first_check)) return(first_check)
+
+            # Only one column for roles "group", "weight", and "name"
+            lens = lengths(x[c("group", "weight", "name")])
+            if (any(lens > 1L)) {
+              stopf("There may only be up to one column per role for role(s) %s.", str_collapse(names(which(lens > 1L)), quote = '"'))
+            }
+
             # Changing anything target related is not supported.
-            # A value of "character()" is accepted.
+            # A value of character() or NULL is accepted.
             all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
             check_subset(names(x), all_col_roles[all_col_roles != "target"])
           }, .parent = topenv())
@@ -116,36 +134,35 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
         stop("Both parameters, 'new_role' and 'new_role_direct', are set. Provide only one parameter at a time.")
       }
 
-      # Get the columns for which we change roles
-      # Replace NULLs with character(0)
+      # Create list new_roles with similar structure to col_roles (names are column roles, entries are column names)
       if (!is.null(new_role)) {
-        new_role_cols = names(new_role)
-      } else if (!is.null(new_role_direct)) {
-        new_role_cols = unique(unlist(new_role_direct))
-        # Replace NULL with empty string, to allow option with NULL (might throw this out)
-        # would make sense to add NULL to new_role as well if we keep it
-        new_role_direct <- lapply(new_role_direct, function(x) if (is.null(x)) character(0) else x)
+        # Set new_roles to task$col_roles with columns removed for which we change roles (as we want a column to only
+        # have the roles given for that column in new_role)
+        new_roles = map(task$col_roles, .f = function(x) x[x %nin% names(new_role)])
+
+        # Add new role(s) for column(s) for which we change the role
+        possible_col_roles = mlr3::mlr_reflections$task_col_roles[[task$task_type]]
+        for (role in possible_col_roles) {
+          new_roles[[role]] = union(
+            new_roles[[role]],
+            names(which(unlist(map(new_role, .f = function(x) role %in% x))))
+          )
+        }
+      } else {
+        new_roles = new_role_direct
       }
 
+      # Replace NULLs with character(0)
+      new_roles = lapply(new_roles, as.character)
+
       # Changing the role of a target is not supported
-      if (any(task$col_roles$target %in% new_role_cols)) {
+      cols = unique(unlist(new_roles[names(new_roles) != "target"]))
+      if (any(task$col_roles$target %in% cols)) {
         stop("Cannot change the role of a target.")
       }
 
-      if (!is.null(new_role)) {
-        # Drop (all) column(s) for which we change the role
-        task$col_roles = map(task$col_roles, .f = function(x) x[x %nin% new_role_cols])
-
-        # Add new role(s) for column(s) for which we change the role
-        all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
-        for (role in all_col_roles) {
-          task$col_roles[[role]] = union(task$col_roles[[role]],
-            names(which(unlist(map(new_role, .f = function(x) role %in% x)))))
-        }
-      } else if (!is.null(new_role_direct)) {
-        # Update roles to match new_role_direct
-        task$col_roles[names(new_role_direct)] = lapply(names(new_role_direct), function(role) new_role_direct[[role]])
-      }
+      # Update column roles
+      task$col_roles[names(new_roles)] = lapply(names(new_roles), function(role) new_roles[[role]])
 
       task
     }

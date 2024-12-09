@@ -46,7 +46,7 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 Named list of new column roles by column. The names must match the column names of the input task that
 will later be trained/predicted on. Each entry of the list must contain a character vector with
 possible values of \code{\link[mlr3:mlr_reflections]{mlr_reflections$task_col_roles}}.
-If the value is given as \code{character()}, the column will be dropped from the input task. Changing the role
+If the value is given as \code{character()} or \code{NULL}, the column will be dropped from the input task. Changing the role
 of a column results in this column loosing its previous role(s).
 \item \code{new_role_direct} :: named \code{list}\cr#
 Named list of new column roles by role. The names must match the possible column roles, i.e. values of
