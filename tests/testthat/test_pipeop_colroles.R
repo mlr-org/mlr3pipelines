@@ -69,13 +69,15 @@ test_that("PipeOpColRoles - new_role works", {
   task = mlr_tasks$get("iris")
   task$cbind(data.table(rn = sprintf("%03d", 1:150)))
 
-  op = PipeOpColRoles$new(param_vals = list(new_role = list(rn = "name", Petal.Length = "order", Petal.Width = character(0), Sepal.Width = NULL)))
+  op = PipeOpColRoles$new(param_vals = list(new_role = list(
+    rn = "name", Petal.Length = c("feature", "order"), Petal.Width = character(0), Sepal.Width = NULL))
+  )
 
   train_out = train_pipeop(op, inputs = list(task))[[1L]]
 
   col_roles_actual = train_out$col_roles
   col_roles_expected = list(
-    feature = "Sepal.Length", target = "Species", name = "rn", order = "Petal.Length",
+    feature = c("Sepal.Length", "Petal.Length"), target = "Species", name = "rn", order = "Petal.Length",
     stratum = character(0), group = character(0), weight = character(0)
   )
 
@@ -98,13 +100,14 @@ test_that("PipeOpColRoles - new_role_direct works", {
   task$col_roles$group = "Species"
 
   op = PipeOpColRoles$new(param_vals = list(new_role_direct = list(
-    name = "rn", order = "Petal.Length", feature = character(0), group = NULL)))
+    name = "rn", order = c("Petal.Length", "Sepal.Length"), feature = character(0), group = NULL))
+  )
 
   train_out = train_pipeop(op, inputs = list(task))[[1L]]
 
   col_roles_actual = train_out$col_roles
   col_roles_expected = list(
-    feature = character(0), target = "Species", name = "rn", order = "Petal.Length",
+    feature = character(0), target = "Species", name = "rn", order = c("Petal.Length", "Sepal.Length"),
     stratum = character(0), group = character(0), weight = character(0)
   )
 
@@ -118,3 +121,4 @@ test_that("PipeOpColRoles - new_role_direct works", {
   predict_out = predict_pipeop(op, inputs = list(task))[[1L]]
   expect_equal(train_out, predict_out)
 })
+
