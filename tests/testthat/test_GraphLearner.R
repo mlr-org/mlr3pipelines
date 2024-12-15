@@ -932,7 +932,7 @@ test_that("validation, internal_valid_scores", {
   # None of the Learners can do validation -> NULL
   glrn1 = as_learner(as_graph(lrn("classif.rpart")))$train(tsk("iris"))
   expect_false("validation" %in% glrn1$properties)
-  expect_equal(glrn1$internal_valid_scores, NULL)
+  expect_null(glrn1$internal_valid_scores)
 
   glrn2 = as_learner(as_graph(lrn("classif.debug")))
   expect_true("validation" %in% glrn2$properties)
@@ -945,7 +945,7 @@ test_that("validation, internal_valid_scores", {
 
   set_validate(glrn2, NULL)
   glrn2$train(tsk("iris"))
-  expect_true(is.null(glrn2$internal_valid_scores))
+  expect_null(glrn2$internal_valid_scores)
 
   # No validation set specified --> No internal_valid_scores
   expect_equal(
@@ -960,13 +960,13 @@ test_that("internal_tuned_values", {
   task = tsk("iris")
   glrn1 = as_learner(as_graph(lrn("classif.rpart")))$train(task)
   expect_false("internal_tuning" %in% glrn1$properties)
-  expect_equal(glrn1$internal_tuned_values, NULL)
+  expect_null(glrn1$internal_tuned_values)
 
   # learner wQ
   # ith internal tuning
   glrn2 = as_learner(as_graph(lrn("classif.debug")))
   expect_true("internal_tuning" %in% glrn2$properties)
-  expect_equal(glrn2$internal_tuned_values, NULL)
+  expect_null(glrn2$internal_tuned_values)
   glrn2$train(task)
   expect_equal(glrn2$internal_tuned_values, named_list())
   glrn2$param_set$set_values(classif.debug.early_stopping = TRUE, classif.debug.iter = 1000)
@@ -981,8 +981,8 @@ test_that("set_validate", {
   expect_equal(glrn$validate, "test")
   expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, "predefined")
   set_validate(glrn, NULL)
-  expect_equal(glrn$validate, NULL)
-  expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, NULL)
+  expect_null(glrn$validate)
+  expect_null(glrn$graph$pipeops$classif.debug$learner$validate)
   set_validate(glrn, 0.2, ids = "classif.debug")
   expect_equal(glrn$validate, 0.2)
   expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, "predefined")
@@ -1002,7 +1002,7 @@ test_that("set_validate", {
   expect_equal(glrn2$validate, 0.25)
   expect_equal(glrn2$graph$pipeops$polearner$learner$validate, "predefined")
   expect_equal(glrn2$graph$pipeops$polearner$learner$graph$pipeops$final$learner$validate, "predefined")
-  expect_equal(glrn2$graph$pipeops$polearner$learner$graph$pipeops$classif.debug$learner$validate, NULL)
+  expect_null(glrn2$graph$pipeops$polearner$learner$graph$pipeops$classif.debug$learner$validate)
 
   # graphlearner in graphlearner: failure handling
   glrn = as_learner(po("pca") %>>% lrn("classif.debug"))
@@ -1013,15 +1013,15 @@ test_that("set_validate", {
     set_validate(gglrn, validate = "test", args = list(po_glrn = list(ids = "pca"))),
     "Trying to heuristically reset"
   )
-  expect_equal(gglrn$validate, NULL)
+  expect_null(gglrn$validate)
 
   # base_learner is not final learner
   glrn = as_learner(lrn("classif.debug") %>>% po("nop"))
   set_validate(glrn, 0.3)
   expect_equal(glrn$graph$pipeops$classif.debug$validate, "predefined")
   set_validate(glrn, NULL)
-  expect_equal(glrn$graph$pipeops$classif.debug$validate, NULL)
-  expect_equal(glrn$validate, NULL)
+  expect_null(glrn$graph$pipeops$classif.debug$validate)
+  expect_null(glrn$validate)
 
   # args and args_all
   bglrn = as_learner(ppl("branch", list(lrn("classif.debug", id = "d1"), lrn("classif.debug", id = "d2"))))
@@ -1033,13 +1033,13 @@ test_that("set_validate", {
   # args
   set_validate(gglrn, validate = 0.2, args = list(po_glrn = list(ids = "d1")))
   expect_equal(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d1$validate, "predefined")
-  expect_equal(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d2$validate, NULL)
+  expect_null(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d2$validate)
 
   # args all
   gglrn = as_learner(obj)
   set_validate(gglrn, validate = 0.2, args_all = list(ids = "d1"))
   expect_equal(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d1$validate, "predefined")
-  expect_equal(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d2$validate, NULL)
+  expect_null(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d2$validate)
 })
 
 test_that("marshal", {
