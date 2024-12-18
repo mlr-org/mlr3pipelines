@@ -95,7 +95,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
             # A value of character() or NULL is accepted.
             all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
             check_subset(unlist(x), all_col_roles[all_col_roles != "target"])
-          }, .parent = topenv())
+          })
         ),
         # named list, each with a vector of columns, names are column roles
         new_role_direct = p_uty(
@@ -115,7 +115,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
             # A value of character() or NULL is accepted.
             all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
             check_subset(names(x), all_col_roles[all_col_roles != "target"])
-          }, .parent = topenv())
+          })
         )
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)

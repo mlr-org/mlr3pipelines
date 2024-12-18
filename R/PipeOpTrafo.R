@@ -349,8 +349,8 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
     initialize = function(id = "targetmutate", param_vals = list(), new_task_type = NULL) {
       private$.new_task_type = assert_choice(new_task_type, mlr_reflections$task_types$type, null.ok = TRUE)
       ps = ps(
-        trafo = p_uty(tags = c("train", "predict"), custom_check = crate(function(x) check_function(x, nargs = 1L), .parent = topenv())),
-        inverter = p_uty(tags = "predict", custom_check = crate(function(x) check_function(x, nargs = 1L), .parent = topenv()))
+        trafo = p_uty(tags = c("train", "predict"), custom_check = crate(function(x) check_function(x, nargs = 1L))),
+        inverter = p_uty(tags = "predict", custom_check = crate(function(x) check_function(x, nargs = 1L)))
       )
       # We could add a condition here for new_task_type on trafo and inverter when mlr-org/paradox#278 has an answer.
       # HOWEVER conditions are broken in paradox, it is a terrible idea to use them in PipeOps,
@@ -567,8 +567,8 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
     initialize = function(id = "update_target", param_vals = list()) {
       ps = ps(
         trafo = p_uty(tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
-        new_target_name = p_uty(tags = c("train", "predict"), custom_check = crate(function(x) check_character(x, any.missing = FALSE, len = 1L), .parent = topenv())),
-        new_task_type = p_uty(tags = c("train", "predict"), custom_check = crate(function(x) check_choice(x, choices = mlr_reflections$task_types$type), .parent = topenv())),
+        new_target_name = p_uty(tags = c("train", "predict"), custom_check = crate(function(x) check_character(x, any.missing = FALSE, len = 1L))),
+        new_task_type = p_uty(tags = c("train", "predict"), custom_check = crate(function(x) check_choice(x, choices = mlr_reflections$task_types$type))),
         drop_original_target = p_lgl(tags = c("train", "predict"))
       )
       ps$values = list(trafo = identity, drop_original_target = TRUE)

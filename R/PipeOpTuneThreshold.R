@@ -86,7 +86,7 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
         measure = p_uty(custom_check = check_class_or_character("Measure", mlr_measures), tags = "train"),
         optimizer = p_uty(custom_check = check_optimizer, tags = "train"),
         log_level = p_uty(
-          custom_check = crate(function(x) check_string(x) %check||% check_integerish(x), .parent = topenv()),
+          custom_check = crate(function(x) check_string(x) %check||% check_integerish(x)),
           tags = "train"
         )
       )
