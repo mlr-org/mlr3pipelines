@@ -118,19 +118,6 @@ curry = function(fn, ..., varname = "x") {
   }
 }
 
-# 'and' operator for checkmate check_*-functions
-# example:
-# check_numeric(x) %check&&% check_true(all(x < 0))
-`%check&&%` = function(lhs, rhs) {
-  if (!isTRUE(lhs) && !isTRUE(rhs)) return(paste0(lhs, ", and ", rhs))
-  if (isTRUE(lhs)) rhs else lhs
-}
-# check_numeric(x) %check||% check_character(x)
-`%check||%` = function(lhs, rhs) {
-  if (!isTRUE(lhs) && !isTRUE(rhs)) return(paste0(lhs, ", or ", rhs))
-  TRUE
-}
-
 # perform gsub on names of list
 # `...` are given to `gsub()`
 rename_list = function(x, ...) {
