@@ -133,33 +133,33 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
         stop("Both parameters, 'new_role' and 'new_role_direct', are set. Provide only one parameter at a time.")
       }
 
-      # Create list new_roles_direct with similar structure to col_roles (names are column roles, entries are column names)
+      # Create list new_role_direct with similar structure to col_roles (names are column roles, entries are column names)
       if (!is.null(new_role)) {
-        # Set new_roles_direct to task$col_roles with columns removed for which we change roles (as we want a column to only
+        # Set new_role_direct to task$col_roles with columns removed for which we change roles (as we want a column to only
         # have the roles given for that column in new_role)
-        new_roles_direct = map(task$col_roles, .f = function(x) x[x %nin% names(new_role)])
+        new_role_direct = map(task$col_roles, .f = function(x) x[x %nin% names(new_role)])
 
         # Add new role(s) for column(s) for which we change the role
         possible_col_roles = mlr3::mlr_reflections$task_col_roles[[task$task_type]]
         for (role in possible_col_roles) {
-          new_roles_direct[[role]] = union(
-            new_roles_direct[[role]],
+          new_role_direct[[role]] = union(
+            new_role_direct[[role]],
             names(which(unlist(map(new_role, .f = function(x) role %in% x))))
           )
         }
       }
 
       # Replace NULLs with character(0)
-      new_roles_direct = lapply(new_roles_direct, as.character)
+      new_role_direct = lapply(new_role_direct, as.character)
 
       # Changing the role of a target is not supported
-      cols = unlist(new_roles[names(new_roles_direct) != "target"])
+      cols = unlist(new_roles[names(new_role_direct) != "target"])
       if (any(task$col_roles$target %in% cols)) {
         stop("Cannot change the role of a target.")
       }
 
       # Update column roles
-      task$col_roles[names(new_roles_direct)] = new_roles_direct
+      task$col_roles[names(new_role_direct)] = new_role_direct
 
       task
     }
