@@ -79,7 +79,6 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
           tags = c("train", "predict"),
           custom_check = crate(function(x) {
             first_check = check_list(x, types = c("character", "null"), min.len = 1L, names = "unique")
-            # test that this works if two vectors have the name of a column, otherwise "unique"; is unique in task$col_roles
             # Return the error directly if this failed
             if (!isTRUE(first_check)) return(first_check)
 
