@@ -153,7 +153,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
       new_role_direct = lapply(new_role_direct, as.character)
 
       # Changing the role of a target is not supported
-      cols = unlist(new_roles[names(new_role_direct) != "target"])
+      cols = unlist(new_role_direct[names(new_role_direct) != "target"])
       if (any(task$col_roles$target %in% cols)) {
         stop("Cannot change the role of a target.")
       }
