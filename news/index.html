@@ -51,6 +51,8 @@
 <li>Fix: <code>PipeOpCollapseFactors</code> now correctly collapses levels of ordered factors.</li>
 <li>Fix: <code>LearnerClassifAvg</code> and <code>LearnerRegrAvg</code> hyperparameters get the <code>"required"</code> tag.</li>
 <li>New parameter <code>use_groups</code> (default <code>TRUE</code>) for <code>PipeOpSubsampling</code> to respect grouping (changed default behaviour for grouped data)</li>
+<li>Dictionary sugar functions <code><a href="../reference/po.html">po()</a></code> / <code><a href="../reference/po.html">pos()</a></code> / <code><a href="../reference/ppl.html">ppl()</a></code> / <code><a href="../reference/ppl.html">ppls()</a></code> now make suggestions for entries in both <code>mlr_pipeops</code> as well as <code>mlr_graphs</code> when an object by the given name could not be found in the respective dictionary.</li>
+<li>New PipeOp <code>PipeOpDecode</code> / <code>po("decode")</code> to reverse one-hot or treatment encoding.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.1" id="mlr3pipelines-071">mlr3pipelines 0.7.1<a class="anchor" aria-label="anchor" href="#mlr3pipelines-071"></a></h2><p class="text-muted">CRAN release: 2024-11-14</p>
