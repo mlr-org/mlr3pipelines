@@ -88,7 +88,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
               counter = counter + names(counter) %in% x[[i]]
             }
             if (any(counter > 1L)) {
-              stopf("There may only be up to one column per role for role(s) %s.", str_collapse(names(which(counter > 1L)), quote = '"'))
+              return(sprintf("There may only be up to one column per role for role(s) %s.", str_collapse(names(which(counter > 1L)), quote = '"')))
             }
 
             # Changing anything target related is not supported.
@@ -108,7 +108,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
             # Only one column for roles "group", "weight", and "name"
             lens = lengths(x[c("group", "weight", "name")])
             if (any(lens > 1L)) {
-              stopf("There may only be up to one column per role for role(s) %s.", str_collapse(names(which(lens > 1L)), quote = '"'))
+              return(sprintf("There may only be up to one column per role for role(s) %s.", str_collapse(names(which(lens > 1L)), quote = '"')))
             }
 
             # Changing anything target related is not supported.
