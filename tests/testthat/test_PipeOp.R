@@ -87,13 +87,13 @@ test_that("Informative error and warning messages", {
 
   # two 'expect_warning', because we want to 'expect' that there is exactly one warning.
   # a function argument for expect_warning that tests exactly this would be a good idea, and has therefore been removed -.-
-  expect_warning(expect_warning(gr$train(tsk("iris")), "This happened PipeOp classif.debug's \\$train\\(\\)$"), NA)
+  expect_no_warning(expect_warning(gr$train(tsk("iris")), "This happened PipeOp classif.debug's \\$train\\(\\)$"))
 
-  expect_warning(suppressWarnings(gr$train(tsk("iris"))), NA)
+  expect_no_warning(suppressWarnings(gr$train(tsk("iris"))))
 
-  expect_warning(expect_warning(gr$predict(tsk("iris")), "This happened PipeOp classif.debug's \\$predict\\(\\)$"), NA)
+  expect_no_warning(expect_warning(gr$predict(tsk("iris")), "This happened PipeOp classif.debug's \\$predict\\(\\)$"))
 
-  expect_warning(suppressWarnings(gr$predict(tsk("iris"))), NA)
+  expect_no_warning(suppressWarnings(gr$predict(tsk("iris"))))
 
 
   gr$param_set$values$classif.debug.warning_train = 0
@@ -119,8 +119,8 @@ test_that("Informative error and warning messages", {
     )
   )$new(id = "potest", input = data.table(name = "input", train = "*", predict = "*"), output = data.table(name = "input", train = "*", predict = "*"))
 
-  expect_warning(potest$train(list(1)), NA)
-  expect_warning(potest$predict(list(1)), NA)
+  expect_no_warning(potest$train(list(1)))
+  expect_no_warning(potest$predict(list(1)))
 
 })
 
