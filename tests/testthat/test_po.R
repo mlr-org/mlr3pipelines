@@ -217,3 +217,11 @@ test_that("Incrementing ids works", {
   xs = pos(c("pca_1", "pca_2"))
   assert_true(all(names(xs) == c("pca_1", "pca_2")))
 })
+
+test_that("po - dictionary suggest works", {
+
+  # test that correct dictionary is checked against
+  expect_error(po("robustify"), "ppl\\(\\): 'robustify'")
+  expect_error(pos("robustify"), "ppls\\(\\): 'robustify'")
+
+})

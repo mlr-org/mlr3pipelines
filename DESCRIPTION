@@ -66,7 +66,7 @@ Imports:
     digest,
     lgr,
     mlr3 (>= 0.20.0),
-    mlr3misc (>= 0.9.0),
+    mlr3misc (>= 0.16.0),
     paradox,
     R6,
     withr
@@ -141,6 +141,7 @@ Collate:
     'PipeOpCollapseFactors.R'
     'PipeOpCopy.R'
     'PipeOpDateFeatures.R'
+    'PipeOpDecode.R'
     'PipeOpEncode.R'
     'PipeOpEncodeImpact.R'
     'PipeOpEncodeLmer.R'
