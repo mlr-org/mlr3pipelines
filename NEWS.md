@@ -4,6 +4,8 @@
 * Fix: `PipeOpCollapseFactors` now correctly collapses levels of ordered factors.
 * Fix: `LearnerClassifAvg` and `LearnerRegrAvg` hyperparameters get the `"required"` tag.
 * New parameter `use_groups` (default `TRUE`) for `PipeOpSubsampling` to respect grouping (changed default behaviour for grouped data)
+* Dictionary sugar functions `po()` / `pos()` / `ppl()` / `ppls()` now make suggestions for entries in both `mlr_pipeops` as well as `mlr_graphs` when an object by the given name could not be found in the respective dictionary.
+* New PipeOp `PipeOpDecode` / `po("decode")` to reverse one-hot or treatment encoding.
 
 # mlr3pipelines 0.7.1
 
