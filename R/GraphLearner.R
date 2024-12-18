@@ -312,6 +312,17 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     },
     plot = function(html = FALSE, horizontal = FALSE, ...) {
       private$.graph$plot(html = html, horizontal = horizontal, ...)
+    },
+    print = function() {
+      super$print(self)
+
+      if(all(!duplicated(self$edges[["src_id"]]))) {
+        ppunit = paste0(self$ids(), collapse = " -> ")
+      } else {
+        ppunit = "<SUPPRESSED>"
+      }
+      pp = paste0(c("<INPUT>", ppunit, "<OUTPUT>"), collapse = " -> ")
+      cli_h3(sprintf("Pipeline: %s", pp))
     }
   ),
   active = list(
