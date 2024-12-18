@@ -85,7 +85,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
             # Only one column for roles "group", "weight", and "name"
             counter = c(group = 0L, weight = 0L, name = 0L)
             for (i in seq_along(x)) {
-              counter = counter + c("group", "weight", "name") %in% x[[i]]
+              counter = counter + names(counter) %in% x[[i]]
             }
             if (any(counter > 1L)) {
               stopf("There may only be up to one column per role for role(s) %s.", str_collapse(names(which(counter > 1L)), quote = '"'))
