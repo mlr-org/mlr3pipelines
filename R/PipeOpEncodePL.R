@@ -5,14 +5,18 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Encodes columns of type `factor` and `ordered`.
+#' Encodes columns of type `numeric` and `integer`.
+#'
+#'
 #'
 #' Use the [`PipeOpTaskPreproc`] `$affect_columns` functionality to only encode a subset of columns, or only encode columns of a certain type.
 #'
 #' @section Construction:
 #' ```
-#' PipeOpEncodePL$new(id = "encodepl", param_vals = list())
+#' PipeOpEncodePL$new(task_type, id = "encodepl", param_vals = list())
 #' ```
+#' * `task_type` :: `character(1)`\cr
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"encode"`.
 #' * `param_vals` :: named `list`\cr
@@ -35,6 +39,9 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
+#' @references
+#' `r format_bib("gorishniy_2022")`
+#'
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
@@ -45,29 +52,38 @@
 PipeOpEncodePL = R6Class("PipeOpEncodePL",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
-    initialize = function(id = "encodepl", param_vals = list()) {
-      private$.reg_tree = LearnerRegrRpart$new()
-      # this would only work for regr tasks, how do we handle classif tasks, esp. since we don't now task type in init?
+    initialize = function(task_type, id = "encodepl", param_vals = list()) {
+      # NOTE: Might use different name, change assert, and conditions
+      assert_choice(task_type, mlr_reflections$task_types$task)
+      if (task_type == "TaskRegr") {
+        private$.tree_learner = LearnerRegrRpart$new()
+      } else if (task_type == "TaskClassif") {
+        private$.tree_learner = LearnerClassifRpart$new()
+      } else {
+        stopf("Task type %s not supported", task_type)
+      }
 
       private$.encodepl_param_set = ps(
-        method = p_fct(levels = c("quantiles", "regtree"), tags = c("train", "predict", "required")),
-        # cannot set init value for quantiles numsplits since it has depends, use %??% instead? then document it as default or not?
+        method = p_fct(levels = c("quantiles", "tree"), tags = c("train", "predict", "required")),
         quantiles_numsplits = p_int(lower = 2, default = 2, tags = c("train", "predict"), depends = quote(method == "quantiles"))
       )
       private$.encodepl_param_set$values = list(method = "quantiles")
 
-      super$initialize(id, param_set = alist(encodepl = private$.encodepl_param_set, private$.reg_tree$param_set),
-                       param_vals = param_vals, packages = c("stats", private$.reg_tree$packages), tags = "encode", feature_types = c("numeric", "integer"))
+      super$initialize(id, param_set = alist(encodepl = private$.encodepl_param_set, private$.tree_learner$param_set),
+                       param_vals = param_vals, packages = c("stats", private$.tree_learner$packages),
+                       task_type = task_type, tags = "encode", feature_types = c("numeric", "integer"))
     }
   ),
   private = list(
 
-    .reg_tree = NULL,
+    .tree_learner = NULL,
     .encodepl_param_set = NULL,
 
     .get_state = function(task) {
       cols = private$.select_cols(task)
-      # do we need early exit if there are no cols?
+      if (!length(cols)) {
+        return(task)  # early exit
+      }
 
       pv = private$.encodepl_param_set$values
       numsplits = pv$quantiles_numsplits %??% 2
@@ -78,14 +94,14 @@ PipeOpEncodePL = R6Class("PipeOpEncodePL",
           unique(c(min(d), stats::quantile(d, seq(1, numsplits - 1) / numsplits, na.rm = TRUE), max(d)))
         })
       } else {
-        learner = private$.reg_tree
+        learner = private$.tree_learner
 
         bins = list()
         for (col in cols) {
           t = task$clone(deep = TRUE)$select(col)
           splits = learner$train(t)$model$splits
           # Get column "index" in model splits
-          boundaries = unname(sort(splits[, which(colnames(splits) == "index")]))
+          boundaries = unname(sort(splits[, "index"]))
 
           d = task$data(cols = col)
           bins[[col]] = c(min(d), boundaries, max(d))
@@ -102,36 +118,33 @@ PipeOpEncodePL = R6Class("PipeOpEncodePL",
         return(task)  # early exit
       }
 
-      dt = data.table()
-      for (col in cols) {
-        dt = cbind(dt, ple(task$data(cols = col), bins[[col]]))
-      }
+      dt = task$data(cols = cols)
+      res = as.data.table(imap(dt, function(d, col) encode_piecewise_linear(d, col, bins[[col]])))
 
-      # TODO: handle name colision
-      task$cbind(dt)
+      task$select(setdiff(task$feature_names, cols))$cbind(res)
     }
   )
 )
 
-mlr_pipeops$add("encodepl", PipeOpEncodePL)
+mlr_pipeops$add("encodepl", PipeOpEncodePL, list(task_type = "TaskRegr"))
 
-# Piecewise linear encoding
-ple = function(column, bins) {
+# Helper function to implement piecewise linear encoding.
+# * column: numeric vector
+# * colname: name of `column`
+# * bins as numeric vector of boundaries
+encode_piecewise_linear = function(column, colname, bins) {
   n_bins = length(bins) - 1
 
-  dt = data.table(matrix(0, nrow(column), n_bins))
-  setnames(dt, paste0(colnames(column), ".bin", seq_len(n_bins)))
-
-  # Transform into vector for logical subsetting in data.table
-  vec = column[[1]]
+  dt = data.table(matrix(0, length(column), n_bins))
+  setnames(dt, paste0(colname, ".bin", seq_len(n_bins)))
 
   for (t in seq_len(n_bins)) {
     lower = bins[[t]]
     upper = bins[[t + 1]]
 
-    dt[vec >= upper, colnames(dt)[[t]] := 1]
-    indices = vec < upper & vec >= lower
-    dt[indices, colnames(dt)[[t]] := (vec[indices] - lower) / (upper - lower)]
+    dt[column >= upper, colnames(dt)[[t]] := 1]
+    indices = column < upper & column >= lower
+    dt[indices, colnames(dt)[[t]] := (column[indices] - lower) / (upper - lower)]
   }
 
   dt
