@@ -322,7 +322,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         ppunit = "<SUPPRESSED>"
       }
       pp = paste0(c("<INPUT>", ppunit, "<OUTPUT>"), collapse = " -> ")
-      cli_h3(sprintf("Pipeline: %s", pp))
+      cli_h3("Pipeline: {.strong {pp}}")
     }
   ),
   active = list(

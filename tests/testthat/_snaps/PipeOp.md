@@ -5,7 +5,7 @@
     Message
       
       -- PipeOp nop: not trained -----------------------------------------------------
-      values: list()
+      values: `list()`
       
       -- Input channels: 
     Output
@@ -27,7 +27,7 @@
     Message
       
       -- PipeOp debug.multi: not trained ---------------------------------------------
-      values: list()
+      values: `list()`
       
       -- Input channels: 
     Output
@@ -54,7 +54,7 @@
     Message
       
       -- PipeOp debug.multi: not trained ---------------------------------------------
-      values: list()
+      values: `list()`
       
       -- Input channels: 
     Output
@@ -81,7 +81,7 @@
     Message
       
       -- PipeOp branch: not trained --------------------------------------------------
-      values: selection=odin
+      values: `selection=odin`
       
       -- Input channels: 
     Output
@@ -105,7 +105,7 @@
     Message
       
       -- PipeOp classif.debug: not trained -------------------------------------------
-      values: list()
+      values: `list()`
       
       -- Input channels: 
     Output

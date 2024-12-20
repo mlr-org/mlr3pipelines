@@ -277,11 +277,12 @@ PipeOp = R6Class("PipeOp",
         }
       }
 
-      cli_h1(sprintf("PipeOp %s: %strained", self$id, if (self$is_trained) "" else "not "))
-      cli_text(sprintf("values: %s", as_short_string(self$param_set$values)))
-      cli_h3("Input channels:")
+      msg_h = if (self$is_trained) "" else "not "
+      cli_h1("PipeOp {self$id}: {msg_h}trained")
+      cli_text("values: {.arg {as_short_string(self$param_set$values)}}")
+      cli_h3("{.strong Input channels:}")
       type_table_printout(self$input)
-      cli_h3("Output channels:")
+      cli_h3("{.strong Output channels:}")
       type_table_printout(self$output)
     },
 

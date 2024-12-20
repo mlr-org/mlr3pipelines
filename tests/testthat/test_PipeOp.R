@@ -34,24 +34,6 @@ test_that("PipeOp printer", {
   expect_snapshot(print(PipeOpDebugMulti$new(100, 0)))
   expect_snapshot(print(PipeOpBranch$new(c("odin", "dva", "tri"))))
   expect_snapshot(print(PipeOpLearner$new(mlr_learners$get("classif.debug"))))
-
-
-  # expect_output(print(PipeOpNOP$new()),
-  #   "PipeOp.*<nop>.*not trained.*values.*list().*Input channels.*input \\[\\*,\\*\\]\n.*Output channels.*output \\[\\*,\\*\\]$")
-  #
-  #
-  # expect_output(print(PipeOpDebugMulti$new(3, 4)),
-  #   "PipeOp.*<debug.multi>.*not trained.*values.*list().*Input channels.*input_1 \\[\\*,\\*\\], input_2 \\[\\*,\\*\\], input_3 \\[\\*,\\*\\]\n.*Output channels.*output_1 \\[\\*,\\*\\], output_2 \\[\\*,\\*\\], output_3 \\[\\*,\\*\\], output_4 \\[\\*,\\*\\]$")
-  #
-  #
-  # expect_output(print(PipeOpDebugMulti$new(100, 0)),
-  #   "\\[\\.\\.\\. \\([0-9]+ lines omitted\\)\\]")
-  #
-  # expect_output(print(PipeOpBranch$new(c("odin", "dva", "tri"))),
-  #   "Output channels.*odin \\[\\*,\\*\\], dva \\[\\*,\\*\\], tri \\[\\*,\\*\\]$")
-  #
-  # expect_output(print(PipeOpLearner$new(mlr_learners$get("classif.debug"))),
-  #   "PipeOp.*<classif.debug>.*Input channels.*input \\[TaskClassif,TaskClassif\\]\nOutput channels.*output \\[NULL,PredictionClassif\\]$")
 })
 
 test_that("Prevent creation of PipeOps with no channels", {
