@@ -316,12 +316,13 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     print = function() {
       super$print(self)
 
-      if(all(!duplicated(self$edges[["src_id"]]))) {
+      is_sequential = all(table(self$edges$src_id) <= 1) && all(table(self$edges$dst_id) <= 1)
+      if(is_sequential) {
         ppunit = paste0(self$ids(), collapse = " -> ")
+        pp = paste0(c("<INPUT>", ppunit, "<OUTPUT>"), collapse = " -> ")
       } else {
-        ppunit = "<SUPPRESSED>"
+        pp = "non-sequential"
       }
-      pp = paste0(c("<INPUT>", ppunit, "<OUTPUT>"), collapse = " -> ")
       cat_cli(cli_h3("Pipeline: {.strong {pp}}"))
     }
   ),
