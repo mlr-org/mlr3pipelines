@@ -278,11 +278,15 @@ PipeOp = R6Class("PipeOp",
       }
 
       msg_h = if (self$is_trained) "" else "not "
-      cli_h1("PipeOp {self$id}: {msg_h}trained")
-      cli_text("values: {.arg {as_short_string(self$param_set$values)}}")
-      cli_h3("{.strong Input channels:}")
+      cat_cli({
+        cli_h1("PipeOp {.cls {self$id}}: {msg_h}trained")
+        cli_text("Values: {as_short_string(self$param_set$values)}")
+        cli_h3("{.strong Input channels:}")
+      })
       type_table_printout(self$input)
-      cli_h3("{.strong Output channels:}")
+      cat_cli({
+        cli_h3("{.strong Output channels:}")
+      })
       type_table_printout(self$output)
     },
 

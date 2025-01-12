@@ -9,7 +9,7 @@ test_that("PipeOp - General functions", {
   expect_false(po_1$is_trained)
   expect_class(po_1$param_set, "ParamSet")
   expect_list(po_1$param_set$values, names = "unique")
-  expect_message(print(po_1), "PipeOp")
+  expect_output(print(po_1), "PipeOp")
   expect_equal(po_1$packages, "mlr3pipelines")
   expect_null(po_1$state)
   assert_subset(po_1$tags, mlr_reflections$pipeops$valid_tags)

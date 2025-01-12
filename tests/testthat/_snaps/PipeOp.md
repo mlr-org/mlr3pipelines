@@ -2,20 +2,17 @@
 
     Code
       print(PipeOpNOP$new())
-    Message
+    Output
       
-      -- PipeOp nop: not trained -----------------------------------------------------
-      values: `list()`
+      -- PipeOp <nop>: not trained ---------------------------------------------------
+      Values: list()
       
       -- Input channels: 
-    Output
          name  train predict
        <char> <char>  <char>
         input      *       *
-    Message
       
       -- Output channels: 
-    Output
          name  train predict
        <char> <char>  <char>
        output      *       *
@@ -24,22 +21,19 @@
 
     Code
       print(PipeOpDebugMulti$new(3, 4))
-    Message
+    Output
       
-      -- PipeOp debug.multi: not trained ---------------------------------------------
-      values: `list()`
+      -- PipeOp <debug.multi>: not trained -------------------------------------------
+      Values: list()
       
       -- Input channels: 
-    Output
           name  train predict
         <char> <char>  <char>
        input_1      *       *
        input_2      *       *
        input_3      *       *
-    Message
       
       -- Output channels: 
-    Output
            name  train predict
          <char> <char>  <char>
        output_1      *       *
@@ -51,13 +45,12 @@
 
     Code
       print(PipeOpDebugMulti$new(100, 0))
-    Message
+    Output
       
-      -- PipeOp debug.multi: not trained ---------------------------------------------
-      values: `list()`
+      -- PipeOp <debug.multi>: not trained -------------------------------------------
+      Values: list()
       
       -- Input channels: 
-    Output
           name  train predict
         <char> <char>  <char>
        input_1      *       *
@@ -66,10 +59,8 @@
        input_4      *       *
        input_5      *       *
       [...] (95 rows omitted)
-    Message
       
       -- Output channels: 
-    Output
           name  train predict
         <char> <char>  <char>
        output_      *       *
@@ -78,20 +69,17 @@
 
     Code
       print(PipeOpBranch$new(c("odin", "dva", "tri")))
-    Message
+    Output
       
-      -- PipeOp branch: not trained --------------------------------------------------
-      values: `selection=odin`
+      -- PipeOp <branch>: not trained ------------------------------------------------
+      Values: selection=odin
       
       -- Input channels: 
-    Output
          name  train predict
        <char> <char>  <char>
         input      *       *
-    Message
       
       -- Output channels: 
-    Output
          name  train predict
        <char> <char>  <char>
          odin      *       *
@@ -102,20 +90,17 @@
 
     Code
       print(PipeOpLearner$new(mlr_learners$get("classif.debug")))
-    Message
+    Output
       
-      -- PipeOp classif.debug: not trained -------------------------------------------
-      values: `list()`
+      -- PipeOp <classif.debug>: not trained -----------------------------------------
+      Values: list()
       
       -- Input channels: 
-    Output
          name       train     predict
        <char>      <char>      <char>
         input TaskClassif TaskClassif
-    Message
       
       -- Output channels: 
-    Output
          name  train           predict
        <char> <char>            <char>
        output   NULL PredictionClassif
