@@ -208,9 +208,8 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       if (do_subset) {
         affected_cols = self$param_set$values$affect_columns(intask)
         assert_subset(affected_cols, intask$feature_names, empty.ok = TRUE)
-        # FIXME: this fails when something is both a feature and something else
         remove_cols = setdiff(intask$feature_names, affected_cols)
-        intask$col_roles = map(intask$col_roles, .f = setdiff, y = remove_cols)
+        intask$col_roles$feature = affected_cols
       }
       intasklayout = copy(intask$feature_types)
 
@@ -228,7 +227,6 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       }
 
       if (do_subset) {
-        # FIXME: this fails if .train_task added a column with the same name
         intask$col_roles$feature = union(intask$col_roles$feature, y = remove_cols)
       }
 
