@@ -47,7 +47,7 @@ test_that("PipeOpTaskPreproc - fix for #864 works", {
   )
   po = POPP$new("test", param_vals = list(affect_columns = selector_name("Petal.Length")))
   expect_pipeop(po)
-  task = tsk("iris")
+  task = mlr_tasks$get("iris")
   task$col_roles$order = "Petal.Width"
 
   train_out = po$train(list(task))[[1L]]
