@@ -13,4 +13,5 @@ test_that("PipeOpEncodePL - basic properties", {
 # - different methods
 #    - with params (not all for regtree, hopefully)
 # - test on tasks with simple data that behaviour is as expected (compare dts)
+# - for different task types
 # - TODO: decide how to handle NAs in feature columns and test that
