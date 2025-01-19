@@ -208,9 +208,8 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       if (do_subset) {
         affected_cols = self$param_set$values$affect_columns(intask)
         assert_subset(affected_cols, intask$feature_names, empty.ok = TRUE)
-        # FIXME: this fails when something is both a feature and something else
         remove_cols = setdiff(intask$feature_names, affected_cols)
-        intask$col_roles = map(intask$col_roles, .f = setdiff, y = remove_cols)
+        intask$col_roles$feature = affected_cols
       }
       intasklayout = copy(intask$feature_types)
 
@@ -228,8 +227,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       }
 
       if (do_subset) {
-        # FIXME: this fails if .train_task added a column with the same name
-        intask$col_roles$feature = union(intask$col_roles$feature, y = remove_cols)
+        intask$col_roles$feature = union(intask$feature_names, y = remove_cols)
       }
 
       list(intask)
@@ -238,11 +236,9 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     .predict = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
       do_subset = !is.null(self$param_set$values$affect_columns)
-
       if (do_subset) {
-        # FIXME: see train fixme: this fails when something is both a feature and something else
         remove_cols = setdiff(intask$feature_names, self$state$affected_cols)
-        intask$col_roles = map(intask$col_roles, .f = setdiff, y = remove_cols)
+        intask$col_roles$feature = setdiff(intask$feature_names, remove_cols)
       }
       if (!isTRUE(all.equal(self$state$intasklayout, intask$feature_types, ignore.row.order = TRUE))) {
         stopf("Input task during prediction of %s does not match input task during training.", self$id)
@@ -262,8 +258,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         stopf("Processed output task during prediction of %s does not match output task during training.", self$id)
       }
       if (do_subset) {
-        # FIXME: see train fixme: this fails if .train_task added a column with the same name
-        intask$col_roles$feature = union(intask$col_roles$feature, y = remove_cols)
+        intask$col_roles$feature = union(intask$feature_names, y = remove_cols)
       }
       list(intask)
     },
