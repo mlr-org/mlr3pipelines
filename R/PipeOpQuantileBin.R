@@ -58,7 +58,7 @@ PipeOpQuantileBin = R6Class("PipeOpQuantileBin",
     initialize = function(id = "quantilebin", param_vals = list()) {
       ps = ps(
         numsplits = p_int(lower = 2, special_vals = list(NULL), tags = "train")
-        )
+      )
       ps$values = list(numsplits = 2L)
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats", feature_types = c("numeric", "integer"))
     }

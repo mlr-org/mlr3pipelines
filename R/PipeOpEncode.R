@@ -28,7 +28,7 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with all affected `factor` and `ordered` parameters encoded according to the `method`
+#' The output is the input [`Task`][mlr3::Task] with all affected `factor` and `ordered` columns encoded according to the `method`
 #' parameter.
 #'
 #' @section State:

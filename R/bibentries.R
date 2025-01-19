@@ -95,8 +95,8 @@ bibentries = c(
 
   han_2005    = bibentry("InProceedings",
     doi       = "10.1007/11538059_91",
-    author    = "Han, Hui and Wang, Wen-Yuan and Mao, Bing-Huan",
-    editor    = "Huang, De-Shuang and Zhang, Xiao-Ping and Huang, Guang-Bin",
+    author    = "Hui Han and Wen-Yuan Wang and Bing-Huan Mao",
+    editor    = "De-Shuang Huang and Xiao-Ping Zhang and Guang-Bin Huang",
     title     = "Borderline-SMOTE: A New Over-Sampling Method in Imbalanced Data Sets Learning",
     booktitle = "Advances in Intelligent Computing",
     year      = "2005",
@@ -107,11 +107,24 @@ bibentries = c(
   ),
 
   freeman_1979 = bibentry("InCollection",
-    author    = "Freeman III, A Myrick",
-    title     = "The Hedonic Price Approach to Measuring Demand for Neighborhood Characteristics",
-    booktitle = "The Economics of Neighborhood",
-    year      = "1979",
-    publisher = "Elsevier",
-    pages     = "191--217"
+    doi        = "10.1016/B978-0-12-636250-3.50015-5",
+    author     = "A Myrick Freeman III",
+    title      = "The Hedonic Price Approach to Measuring Demand for Neighborhood Characteristics",
+    booktitle  = "The Economics of Neighborhood",
+    year       = "1979",
+    publisher  = "Elsevier",
+    pages      = "191--217"
+  ),
+
+
+  gorishniy_2022 = bibentry("InProceedings",
+    title        = "On Embeddings for Numerical Features in Tabular Deep Learning",
+    volume       = "35",
+    url          = "https://proceedings.neurips.cc/paper_files/paper/2022/hash/9e9f0ffc3d836836ca96cbf8fe14b105-Abstract-Conference.html",
+    booktitle    = "Advances in Neural Information Processing Systems",
+    author       = "Yury Gorishniy and Ivan Rubachev and Artem Babenko",
+    year         = "2022",
+    pages        = "24991--25004"
   )
+
 )
