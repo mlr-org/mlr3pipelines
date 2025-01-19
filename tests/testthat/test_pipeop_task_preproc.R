@@ -22,9 +22,9 @@ test_that("PipeOpTaskPreprocSimple - basic properties", {
 test_that("Wrong affect_columns errors", {
   POPP = R6Class("POPP",
     inherit = PipeOpTaskPreproc,
-    public = list(
-      train_dt = function(dt, levels, target) dt,
-      predict_dt = function(dt, levels) dt
+    private = list(
+      .train_dt = function(dt, levels, target) dt,
+      .predict_dt = function(dt, levels) dt
     )
   )
   tsk = tsk("boston_housing_classic")
@@ -34,4 +34,25 @@ test_that("Wrong affect_columns errors", {
 
   po = POPP$new("foo", param_vals = list(affect_columns = function(x) x$target_names))
   expect_error(po$train(list(tsk)), "affected_cols")
+})
+
+test_that("PipeOpTaskPreproc - fix for #864 works", {
+  # Fixes #864: A column that is a feature and something else does not loose the other role during training or prediction
+  POPP = R6Class("POPP",
+    inherit = PipeOpTaskPreproc,
+    private = list(
+      .train_dt = function(dt, levels, target) dt,
+      .predict_dt = function(dt, levels) dt
+    )
+  )
+  po = POPP$new("test", param_vals = list(affect_columns = selector_name("Petal.Length")))
+  expect_pipeop(po)
+  task = tsk("iris")
+  task$col_roles$order = "Petal.Width"
+
+  train_out = po$train(list(task))[[1L]]
+  expect_equal(train_out$col_roles, task$col_roles)
+
+  predict_out = po$predict(list(task))[[1L]]
+  expect_equal(predict_out$col_roles, task$col_roles)
 })
