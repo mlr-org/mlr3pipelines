@@ -8,6 +8,7 @@
 * Dictionary sugar functions `po()` / `pos()` / `ppl()` / `ppls()` now make suggestions for entries in both `mlr_pipeops` as well as `mlr_graphs` when an object by the given name could not be found in the respective dictionary.
 * New PipeOp `PipeOpDecode` / `po("decode")` to reverse one-hot or treatment encoding.
 * Fix: Columns that are `feature` and something else no longer lose the other column role during training or prediction.
+* Fix: Made tests for `PipeOpBLSmote` deterministic.
 
 # mlr3pipelines 0.7.1
 
