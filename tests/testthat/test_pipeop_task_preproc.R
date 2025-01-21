@@ -50,9 +50,9 @@ test_that("PipeOpTaskPreproc - fix for #864 works", {
   task = mlr_tasks$get("iris")
   task$col_roles$order = "Petal.Width"
 
-  train_out = po$train(list(task))[[1L]]
+  train_out = po$train(list(task$clone(deep = TRUE)))[[1L]]
   expect_equal(train_out$col_roles, task$col_roles)
 
-  predict_out = po$predict(list(task))[[1L]]
+  predict_out = po$predict(list(task$clone(deep = TRUE)))[[1L]]
   expect_equal(predict_out$col_roles, task$col_roles)
 })
