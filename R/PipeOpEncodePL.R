@@ -48,7 +48,7 @@
 #' `r format_bib("gorishniy_2022")`
 #'
 #' @family PipeOps
-#' @family PipeOpsPLE
+#' @family Piecewise Linear Encoding PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
@@ -57,7 +57,7 @@ PipeOpEncodePL = R6Class("PipeOpEncodePL",
   public = list(
     initialize = function(id = "encodepl", param_set = ps(), param_vals = list()) {
       super$initialize(id, param_set = param_set, param_vals = param_vals,
-                       task_type = task_type, tags = "encode", feature_types = c("numeric", "integer"))
+        task_type = task_type, tags = "encode", feature_types = c("numeric", "integer"))
     }
   ),
   private = list(
@@ -150,7 +150,7 @@ PipeOpEncodePLTree = R6Class("PipeOpEncodePLTree",
       }
 
       super$initialize(id, param_set = alist(private$.tree_learner$param_set), param_vals = param_vals,
-                       packages = private$.tree_learner$packages, task_type = task_type)
+        packages = private$.tree_learner$packages, task_type = task_type)
     }
   ),
   private = list(
