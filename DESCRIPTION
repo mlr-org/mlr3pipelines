@@ -145,6 +145,7 @@ Collate:
     'PipeOpEncode.R'
     'PipeOpEncodeImpact.R'
     'PipeOpEncodeLmer.R'
+    'PipeOpEncodePL.R'
     'PipeOpFeatureUnion.R'
     'PipeOpFilter.R'
     'PipeOpFixFactors.R'
