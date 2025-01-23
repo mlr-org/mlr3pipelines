@@ -59,7 +59,7 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 \itemize{
 \item \code{bins} :: named \code{list}\cr
 Named list of numeric vectors. Each element corresponds to one of the affected feature columns and contains the
-inner bin boundaries derived through the private method \code{.get_bins()}. The element vectors are named by the respective
+bin boundaries derived through the private method \code{.get_bins()}. The element vectors are named by the respective
 feature column.
 }
 }

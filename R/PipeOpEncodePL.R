@@ -46,7 +46,7 @@
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreprocSimple`], as well as:
 #' * `bins` :: named `list`\cr
 #'   Named list of numeric vectors. Each element corresponds to one of the affected feature columns and contains the
-#'   inner bin boundaries derived through the private method `.get_bins()`. The element vectors are named by the respective
+#'   bin boundaries derived through the private method `.get_bins()`. The element vectors are named by the respective
 #'   feature column.
 #'
 #' @section Parameters:
@@ -105,7 +105,7 @@ PipeOpEncodePL = R6Class("PipeOpEncodePL",
       }
 
       dt = task$data(cols = cols)
-      res = as.data.table(imap(dt, function(d, col) encode_piecewise_linear(d, col, bins[[col]])))
+      res = imap_dtc(dt, function(d, col) encode_piecewise_linear(d, bins[[col]]))
 
       task$select(setdiff(task$feature_names, cols))$cbind(res)
     }
@@ -114,13 +114,12 @@ PipeOpEncodePL = R6Class("PipeOpEncodePL",
 
 # Helper function to implement piecewise linear encoding.
 # * column: numeric vector
-# * colname: name of `column`
 # * bins as numeric vector of boundaries
-encode_piecewise_linear = function(column, colname, bins) {
+encode_piecewise_linear = function(column, bins) {
   n_bins = length(bins) - 1
 
   dt = data.table(matrix(0, length(column), n_bins))
-  setnames(dt, paste0(colname, ".bin", seq_len(n_bins)))
+  setnames(dt, paste0("bin", seq_len(n_bins)))
 
   for (t in seq_len(n_bins)) {
     lower = bins[[t]]
@@ -307,9 +306,11 @@ PipeOpEncodePLTree = R6Class("PipeOpEncodePLTree",
         bins[[col]] = c(min(d), boundaries, max(d))
       }
       bins
-    }
+    },
+
+    .additional_phash_input = function() private$.tree_learner$phash
   )
 )
 
-# Registering with "TaskClassif", however both "TaskRegr" and "TaskClassif" are acceptable, see issue ...
+# Registering with "TaskClassif", however both "TaskRegr" and "TaskClassif" are acceptable, see #869.
 mlr_pipeops$add("encodepltree", PipeOpEncodePLTree, list(task_type = "TaskClassif"))
