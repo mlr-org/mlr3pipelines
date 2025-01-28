@@ -60,14 +60,21 @@ test_that("PipeOpEncodePLTree - basic properties", {
 
   task = mlr_tasks$get("iris")
   expect_datapreproc_pipeop_class(PipeOpEncodePLTree, constargs = list(task_type = "TaskClassif"), task = task)
+
+  # error for non-existing task type
+
+  # error for not supported task type
+
 })
 
 test_that("PipeOpEncodePLTree - TaskRegr train and predict", {
+  skip_if_not_installed("rpart")
+
   op = PipeOpEncodePLTree$new(task_type = "TaskRegr")
   dt = data.table(
-    target = c(1.5, 20, 3.5, 30.8, 14.3, 90.4, 15, 60.4),
-    x = c(2, 8, 4, 10, 6, 12, NA, NA),
-    y = c(NA, NA, 10, 25, 40, 60, 65, 95)
+    target = c(1.5, 20, 3.5, 30.8, 14.3, 90.4),
+    x = c(2, 8, 4, 10, 6, 12),
+    y = c(10, 25, 40, 60, 65, 95)
   )
   task = TaskRegr$new(id = "test", backend = dt, target = "target")
 
@@ -77,8 +84,60 @@ test_that("PipeOpEncodePLTree - TaskRegr train and predict", {
   # Test that bins are correct
   #expect_equal(op$state$bins, list(x = c(), y = c()))
 
+  # Test encoding and column naming
+
+  # Changed param vals
+
+
+  train_out = op$train(list(task))[[1L]]
+  predict_out = op$predict(list(task))[[1L]]
+
+  # Test that bins are correct
+
+  # Test encoding and column naming
+
+  # Cannot handle NAs in feature nor in target
+  task_nafeature = task$clone(deep = TRUE)$cbind(data.frame(target = 0, x = NA, y = 0))
+  expect_error(op$train(list(task_nafeature)), "")
+  expect_error(op$predict(list(task_nafeature)), "")
+  task_natarget = task$clone(deep = TRUE)$cbind(data.frame(target = NA, x = 0, y = 0))
+  expect_error(op$train(list(task_nafeature)), "")
+  expect_error(op$predict(list(task_nafeature)), "")
 })
 
 test_that("PipeOpEncodePLTree - TaskClassif train and predict", {
+  skip_if_not_installed("rpart")
 
+  op = PipeOpEncodePLTree$new(task_type = "TaskClassif")
+  dt = data.table(
+    target = rep(c("A", "B"), 3),
+    x = c(2, 8, 4, 10, 6, 12),
+    y = c(10, 25, 40, 60, 65, 95)
+  )
+  task = TaskRegr$new(id = "test", backend = dt, target = "target")
+
+  train_out = op$train(list(task))[[1L]]
+  predict_out = op$predict(list(task))[[1L]]
+
+  # Test that bins are correct
+  #expect_equal(op$state$bins, list(x = c(), y = c()))
+
+  # Test encoding and column naming
+
+  # Changed param vals
+
+  train_out = op$train(list(task))[[1L]]
+  predict_out = op$predict(list(task))[[1L]]
+
+  # Test that bins are correct
+
+  # Test encoding and column naming
+
+  # Cannot handle NAs in feature nor in target
+  task_nafeature = task$clone(deep = TRUE)$cbind(data.frame(target = 0, x = NA, y = 0))
+  expect_error(op$train(list(task_nafeature)), "")
+  expect_error(op$predict(list(task_nafeature)), "")
+  task_natarget = task$clone(deep = TRUE)$cbind(data.frame(target = NA, x = 0, y = 0))
+  expect_error(op$train(list(task_nafeature)), "")
+  expect_error(op$predict(list(task_nafeature)), "")
 })
