@@ -43,7 +43,7 @@ List of intervals representing the bins for each numeric feature.
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{numsplits}  :: \code{numeric(1)} \cr
+\item \code{numsplits}  :: \code{integer(1)} \cr
 Number of bins to create. Default is \code{2}.
 }
 }

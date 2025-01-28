@@ -29,7 +29,7 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `numsplits`  :: `numeric(1)` \cr
+#' * `numsplits`  :: `integer(1)` \cr
 #'   Number of bins to create. Default is `2`.
 #'
 #' @section Internals:
