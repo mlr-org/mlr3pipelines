@@ -53,7 +53,9 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`].
 #'
 #' @section Internals:
-#'
+#' `PipeOpEncodePL` is an abstract class inheriting from [`PipeOpTaskPreprocSimple`] that allows easier implementation
+#' of different binning algorithms for piecewise linear encoding. The respective binning algorithm should be implemented
+#' as `private$.get_bins()`.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -104,10 +106,6 @@ PipeOpEncodePL = R6Class("PipeOpEncodePL",
         return(task)  # early exit
       }
 
-      # if (private$.can_handle_nas && any(task$missings())) {
-      #   stopf("%s does not support handling of tasks with missing data.", class(self))
-      # }
-
       dt = task$data(cols = cols)
       res = imap_dtc(dt, function(d, col) encode_piecewise_linear(d, bins[[col]]))
 
@@ -150,12 +148,10 @@ encode_piecewise_linear = function(column, bins) {
 #' Encodes `numeric` and `integer` feature columns using piecewise lienar encoding. For details, see documentation of
 #' `PipeOpEncodePL` or the paper referenced below.
 #'
-#' Bins are constructed by taking the quantiles of the respective feature column as bin boundaries. The number of
-#' ... are given by the `numsplits` parameter. CHECK WHETHER THIS WORKS AS INTENDED
-#' AND HOW THE NUMBER IS TO BE INTERPRETEED
-#' (i.e. numsplits=2 creates 3 values, meaning five bins??!)
-#'
-#' document that nas are removed for calculating quantiles
+#' Bins are constructed by taking the quantiles of the respective feature column as bin boundaries. The first and
+#' last boundaries are set to the minimum and maximum value of the feature, respectively. The number of bins can be
+#' controlled with the `numsplits` hyperparameter.
+#' Affected feature columns may contain `NA`s. These are ignored when calculating quantiles.
 #'
 #' @section Construction:
 #' ```
@@ -170,7 +166,7 @@ encode_piecewise_linear = function(column, bins) {
 #' Input and output channels are inherited from [`PipeOpEncodePL`].
 #'
 #' The output is the input [`Task`][mlr3::Task] with all affected `numeric` and `integer` columns encoded using piecewise
-#' linear encoding with bins being derived from the quantiles of the respective original feature column..
+#' linear encoding with bins being derived from the quantiles of the respective original feature column.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpEncodePL`].
@@ -200,7 +196,30 @@ encode_piecewise_linear = function(column, bins) {
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
+#' library(mlr3)
 #'
+#' task = tsk("iris")$select(c("Petal.Width", "Petal.Length"))
+#' pop = po("encodeplquantiles")
+#'
+#' train_out = pop$train(list(task))[[1L]]
+#' # Calculated bin boundaries per feature
+#' pop$state$bins
+#' # Each feature was split into two encoded features using piecewise linear encoding
+#' train_out$head()
+#'
+#' # Prediction works the same as training, using the bins learned during training
+#' predict_out = pop$predict(list(task))[[1L]]
+#' predict_out$head()
+#'
+#' # Binning into three bins per feature
+#' # Using the nearest even order statistic for caluclating quantiles
+#' pop$param_set$set_values(numsplits = 4, type = 3)
+#'
+#' train_out = pop$train(list(task))[[1L]]
+#' # Calculated bin boundaries per feature
+#' pop$state$bins
+#' # Each feature was split into three encoded features using piecewise linear encoding
+#' train_out$head()
 #'
 PipeOpEncodePLQuantiles = R6Class("PipeOpEncodePLQuantiles",
   inherit = PipeOpEncodePL,

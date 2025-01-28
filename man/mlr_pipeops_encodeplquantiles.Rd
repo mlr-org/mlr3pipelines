@@ -11,10 +11,10 @@
 Encodes \code{numeric} and \code{integer} feature columns using piecewise lienar encoding. For details, see documentation of
 \code{PipeOpEncodePL} or the paper referenced below.
 
-Bins are constructed by taking the quantiles of the respective feature column as bin boundaries. The number of
-... are given by the \code{numsplits} parameter. CHECK WHETHER THIS WORKS AS INTENDED
-AND HOW THE NUMBER IS TO BE INTERPRETEED
-(i.e. numsplits=2 creates 3 values, meaning five bins??!)
+Bins are constructed by taking the quantiles of the respective feature column as bin boundaries. The first and
+last boundaries are set to the minimum and maximum value of the feature, respectively. The number of bins can be
+controlled with the \code{numsplits} hyperparameter.
+Affected feature columns may contain \code{NA}s. These are ignored when calculating quantiles.
 }
 \section{Construction}{
 
@@ -34,7 +34,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 Input and output channels are inherited from \code{\link{PipeOpEncodePL}}.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with all affected \code{numeric} and \code{integer} columns encoded using piecewise
-linear encoding with bins being derived from the quantiles of the respective original feature column..
+linear encoding with bins being derived from the quantiles of the respective original feature column.
 }
 
 \section{State}{
@@ -46,13 +46,16 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 
 The parameters are the parameters inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPreprocSimple}}, as well as:
 \itemize{
-\item \code{numsplits}  :: \code{numeric(1)} \cr
-Default is ``.
+\item \code{numsplits} :: \code{integer(1)} \cr
+Number of bins to create. Default is \code{2}.
+\item \code{type} :: \code{integer(1)}\cr
+Method used to calculate sample quantiles. See help of \code{\link[stats:quantile]{stats::quantile}}. Default is \code{7}.
 }
 }
 
 \section{Internals}{
 
+Uses the \code{\link[stats:quantile]{stats::quantile}} function.
 }
 
 \section{Fields}{
@@ -65,6 +68,33 @@ Only fields inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPr
 Only methods inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
+\examples{
+library(mlr3)
+
+task = tsk("iris")$select(c("Petal.Width", "Petal.Length"))
+pop = po("encodeplquantiles")
+
+train_out = pop$train(list(task))[[1L]]
+# Calculated bin boundaries per feature
+pop$state$bins
+# Each feature was split into two encoded features using piecewise linear encoding
+train_out$head()
+
+# Prediction works the same as training, using the bins learned during training
+predict_out = pop$predict(list(task))[[1L]]
+predict_out$head()
+
+# Binning into three bins per feature
+# Using the nearest even order statistic for caluclating quantiles
+pop$param_set$set_values(numsplits = 4, type = 3)
+
+train_out = pop$train(list(task))[[1L]]
+# Calculated bin boundaries per feature
+pop$state$bins
+# Each feature was split into three encoded features using piecewise linear encoding
+train_out$head()
+
+}
 \references{
 Gorishniy Y, Rubachev I, Babenko A (2022).
 \dQuote{On Embeddings for Numerical Features in Tabular Deep Learning.}

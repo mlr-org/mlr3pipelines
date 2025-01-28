@@ -15,7 +15,7 @@ in \code{private$.get_bins()}, and then creating new feature columns through a c
 Here, one new feature per bin is constructed, with values being either
 \itemize{
 \item \code{0}, if the original value was below the lower bin boundary,
-\item \code{1}, if the original value was above the upper bin boundary, or
+\item \code{1}, if the original value was above or equal to the upper bin boundary, or
 \item a scaled value between \code{0} and \code{1}, if the original value was inside the bin boundaries. Scaling is done by
 offsetting the original value by the lower bin boundary and dividing by the bin width.
 }
@@ -59,7 +59,7 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 \itemize{
 \item \code{bins} :: named \code{list}\cr
 Named list of numeric vectors. Each element corresponds to one of the affected feature columns and contains the
-bin boundaries derived through the private method \code{.get_bins()}. The element vectors are named by the respective
+bin boundaries derived through  \code{private$.get_bins()}. The element vectors are named by the respective
 feature column.
 }
 }
@@ -71,6 +71,9 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreprocSi
 
 \section{Internals}{
 
+\code{PipeOpEncodePL} is an abstract class inheriting from \code{\link{PipeOpTaskPreprocSimple}} that allows easier implementation
+of different binning algorithms for piecewise linear encoding. The respective binning algorithm should be implemented
+as \code{private$.get_bins()}.
 }
 
 \section{Fields}{
