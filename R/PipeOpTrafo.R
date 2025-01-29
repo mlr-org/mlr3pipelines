@@ -308,8 +308,7 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTargetTrafo`]/[`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library(mlr3)
 #' task = tsk("boston_housing")
 #' po = PipeOpTargetMutate$new("logtrafo", param_vals = list(
@@ -340,7 +339,6 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #' tt = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()))
 #' tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
 #' tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOp.R
@@ -351,8 +349,8 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
     initialize = function(id = "targetmutate", param_vals = list(), new_task_type = NULL) {
       private$.new_task_type = assert_choice(new_task_type, mlr_reflections$task_types$type, null.ok = TRUE)
       ps = ps(
-        trafo = p_uty(tags = c("train", "predict"), custom_check = crate(function(x) check_function(x, nargs = 1L), .parent = topenv())),
-        inverter = p_uty(tags = "predict", custom_check = crate(function(x) check_function(x, nargs = 1L), .parent = topenv()))
+        trafo = p_uty(tags = c("train", "predict"), custom_check = crate(function(x) check_function(x, nargs = 1L))),
+        inverter = p_uty(tags = "predict", custom_check = crate(function(x) check_function(x, nargs = 1L)))
       )
       # We could add a condition here for new_task_type on trafo and inverter when mlr-org/paradox#278 has an answer.
       # HOWEVER conditions are broken in paradox, it is a terrible idea to use them in PipeOps,
@@ -437,8 +435,7 @@ mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTargetTrafo`]/[`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library(mlr3)
 #' task = tsk("boston_housing")
 #' po = PipeOpTargetTrafoScaleRange$new()
@@ -452,7 +449,6 @@ mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 #' ttscalerange$train(task)
 #' ttscalerange$predict(task)
 #' ttscalerange$state$regr.rpart
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOp.R
@@ -551,8 +547,7 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' \dontrun{
 #' # Create a binary class task from iris
 #' library(mlr3)
@@ -561,7 +556,6 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' po$train(list(tsk("iris")))
 #' po$predict(list(tsk("iris")))
 #' }
-#' \dontshow{ \} }
 #' @family mlr3pipelines backend related
 #' @family PipeOps
 #' @template seealso_pipeopslist
@@ -573,8 +567,8 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
     initialize = function(id = "update_target", param_vals = list()) {
       ps = ps(
         trafo = p_uty(tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
-        new_target_name = p_uty(tags = c("train", "predict"), custom_check = crate(function(x) check_character(x, any.missing = FALSE, len = 1L), .parent = topenv())),
-        new_task_type = p_uty(tags = c("train", "predict"), custom_check = crate(function(x) check_choice(x, choices = mlr_reflections$task_types$type), .parent = topenv())),
+        new_target_name = p_uty(tags = c("train", "predict"), custom_check = crate(function(x) check_character(x, any.missing = FALSE, len = 1L))),
+        new_task_type = p_uty(tags = c("train", "predict"), custom_check = crate(function(x) check_choice(x, choices = mlr_reflections$task_types$type))),
         drop_original_target = p_lgl(tags = c("train", "predict"))
       )
       ps$values = list(trafo = identity, drop_original_target = TRUE)

@@ -47,8 +47,7 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("bestNormalize")) \{ }
+#' @examplesIf requireNamespace("bestNormalize")
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -58,7 +57,7 @@
 #' pop$train(list(task))[[1]]$data()
 #'
 #' pop$state
-#' \dontshow{ \} }
+#'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @template seealso_pipeopslist

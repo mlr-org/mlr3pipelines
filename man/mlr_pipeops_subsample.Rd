@@ -47,7 +47,9 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \item \code{frac} :: \code{numeric(1)}\cr
 Fraction of rows in the \code{\link[mlr3:Task]{Task}} to keep. May only be greater than 1 if \code{replace} is \code{TRUE}. Initialized to \code{(1 - exp(-1)) == 0.6321}.
 \item \code{stratify} :: \code{logical(1)}\cr
-Should the subsamples be stratified by target? Initialized to \code{FALSE}. May only be \code{TRUE} for \code{\link[mlr3:TaskClassif]{TaskClassif}} input.
+Should the subsamples be stratified by target? Initialized to \code{FALSE}. May only be \code{TRUE} for \code{\link[mlr3:TaskClassif]{TaskClassif}} input and if \code{use_groups = FALSE}.
+\item \code{use_groups} :: \code{logical(1)}\cr
+If \code{TRUE} and if the \code{\link[mlr3:Task]{Task}} has a column with role \code{group}, grouped observations are kept together during subsampling. In case of  sampling with
 \item \code{replace} :: \code{logical(1)}\cr
 Sample with replacement? Initialized to \code{FALSE}.
 }
@@ -73,9 +75,22 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 \examples{
 library("mlr3")
 
-pos = mlr_pipeops$get("subsample", param_vals = list(frac = 0.7, stratify = TRUE))
+# Subsample with stratification
+pop = po("subsample", frac = 0.7, stratify = TRUE, use_groups = FALSE)
+pop$train(list(tsk("iris")))
 
-pos$train(list(tsk("iris")))
+# Subsample, respecting grouping
+df = data.frame(
+  target = runif(3000),
+  x1 = runif(3000),
+  x2 = runif(3000),
+  grp = sample(paste0("g", 1:100), 3000, replace = TRUE)
+)
+task = TaskRegr$new(id = "example", backend = df, target = "target")
+task$set_col_roles("grp", "group")
+
+pop = po("subsample", frac = 0.7, use_groups = TRUE)
+pop$train(list(task))
 
 }
 \seealso{
@@ -89,6 +104,8 @@ Other PipeOps:
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_adas}},
+\code{\link{mlr_pipeops_blsmote}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -100,6 +117,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
@@ -118,11 +136,14 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nearmiss}},
 \code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
@@ -142,12 +163,14 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
+\code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_targetinvert}},
 \code{\link{mlr_pipeops_targetmutate}},
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},

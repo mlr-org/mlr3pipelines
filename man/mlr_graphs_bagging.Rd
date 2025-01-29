@@ -54,7 +54,7 @@ This is done as follows:
 All input arguments are cloned and have no references in common with the returned \code{\link{Graph}}.
 }
 \examples{
-\dontshow{ if (requireNamespace("rpart")) \{ }
+\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 library(mlr3)
 lrn_po = po("learner", lrn("regr.rpart"))
@@ -67,5 +67,5 @@ gr = ppl("bagging", lrn_po, frac = 1, replace = TRUE,
   averager = po("regravg", collect_multiplicity = TRUE))
 resample(task, GraphLearner$new(gr), rsmp("holdout"))$aggregate()
 }
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }

@@ -70,7 +70,7 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{ if (requireNamespace("rpart")) \{ }
+\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 # Create a binary class task from iris
 library(mlr3)
@@ -79,7 +79,7 @@ po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name
 po$train(list(tsk("iris")))
 po$predict(list(tsk("iris")))
 }
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html
@@ -101,6 +101,8 @@ Other PipeOps:
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_adas}},
+\code{\link{mlr_pipeops_blsmote}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -112,6 +114,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
@@ -130,11 +133,14 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nearmiss}},
 \code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
@@ -154,6 +160,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
+\code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
@@ -161,6 +168,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_vtreat}},

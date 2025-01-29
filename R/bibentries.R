@@ -1,5 +1,16 @@
 #' @importFrom utils bibentry
 bibentries = c(
+  barber_2021 = bibentry("article",
+    doi       = "10.1214/20-AOS1965",
+    year      = "2021",
+    month     = "02",
+    volume    = "49",
+    pages     = "486--507",
+    author    = "Rina Foygel Barber and Emmanuel J. Candes and Aaditya Ramdasa and Ryan J. Tibshirani",
+    title     = "Predictive inference with the jackknife+",
+    journal   = "Annals of Statistics"
+  ),
+
   chawla_2002 = bibentry("article",
     doi       = "10.1613/jair.953",
     year      = "2002",
@@ -52,5 +63,55 @@ bibentries = c(
     author    = "Yujun Wu and Dennis D Boos and Leonard A Stefanski",
     title     = "Controlling Variable Selection by the Addition of Pseudovariables",
     journal   = "Journal of the American Statistical Association"
+  ),
+
+  zhang2003   = bibentry("inproceedings",
+    year      = "2003",
+    author    = "Zhang, J. and Mani, I.",
+    title     = "KNN Approach to Unbalanced Data Distributions: A Case Study Involving Information Extraction",
+    booktitle = "Proceedings of Workshop on Learning from Imbalanced Datasets (ICML)",
+  ),
+
+  tomek1976   = bibentry("article",
+    doi       = "10.1109/TSMC.1976.4309452",
+    author    = "I. Tomek",
+    year      = "1976",
+    title     = "Two Modifications of CNN",
+    journal   = "IEEE Transactions on Systems, Man and Cybernetics",
+    volume    = "6",
+    number    = "11",
+    pages     = "769--772",
+    publisher = "IEEE"
+  ),
+
+  he_2008     = bibentry("InProceedings",
+    author    = "Haibo He and Yang Bai and Garcia, Edwardo A. and Shutao Li",
+    booktitle = "2008 IEEE International Joint Conference on Neural Networks (IEEE World Congress on Computational Intelligence)",
+    title     = "ADASYN: Adaptive synthetic sampling approach for imbalanced learning",
+    year      = "2008",
+    pages     = "1322-1328",
+    doi       = "10.1109/IJCNN.2008.4633969"
+  ),
+
+  han_2005    = bibentry("InProceedings",
+    doi       = "10.1007/11538059_91",
+    author    = "Han, Hui and Wang, Wen-Yuan and Mao, Bing-Huan",
+    editor    = "Huang, De-Shuang and Zhang, Xiao-Ping and Huang, Guang-Bin",
+    title     = "Borderline-SMOTE: A New Over-Sampling Method in Imbalanced Data Sets Learning",
+    booktitle = "Advances in Intelligent Computing",
+    year      = "2005",
+    publisher = "Springer Berlin Heidelberg",
+    address   = "Berlin, Heidelberg",
+    pages     = "878--887",
+    isbn      = "978-3-540-31902-3"
+  ),
+
+  freeman_1979 = bibentry("InCollection",
+    author    = "Freeman III, A Myrick",
+    title     = "The Hedonic Price Approach to Measuring Demand for Neighborhood Characteristics",
+    booktitle = "The Economics of Neighborhood",
+    year      = "1979",
+    publisher = "Elsevier",
+    pages     = "191--217"
   )
 )

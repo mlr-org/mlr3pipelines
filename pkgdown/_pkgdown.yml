@@ -16,7 +16,7 @@ toc:
 
 navbar:
   structure:
-    left: [reference, news, book]
+    left: [reference, articles, news, book]
     right: [search, github, mattermost, stackoverflow, rss, lightswitch]
   components:
     home: ~
@@ -24,6 +24,11 @@ navbar:
       icon: fa fa-file-alt
       text: Reference
       href: reference/index.html
+    articles:
+      text: Articles
+      menu:
+      - text: Adding new PipeOps
+        href: articles/extending.html
     mattermost:
       icon: fa fa-comments
       href: https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/
@@ -76,6 +81,9 @@ reference:
     contents:
       - mlr_learners_graph
       - mlr_learners_avg
+  - title: Tasks
+    contents:
+      - mlr_tasks_boston_housing
   - title: Helpers
     contents:
       - Selector

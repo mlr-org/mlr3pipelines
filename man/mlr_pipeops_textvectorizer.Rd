@@ -155,8 +155,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{ if (requireNamespace("stopwords")) \{ }
-\dontshow{ if (requireNamespace("quanteda")) \{ }
+\dontshow{if (mlr3misc::require_namespaces(c("stopwords", "quanteda"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 library("data.table")
 # create some text data
@@ -174,8 +173,7 @@ one_line_of_iris = task$filter(13)
 one_line_of_iris$data()
 
 pos$predict(list(one_line_of_iris))[[1]]$data()
-\dontshow{ \} }
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html
@@ -188,6 +186,8 @@ Other PipeOps:
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_adas}},
+\code{\link{mlr_pipeops_blsmote}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -199,6 +199,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
@@ -217,11 +218,14 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nearmiss}},
 \code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
@@ -241,12 +245,14 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
+\code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
 \code{\link{mlr_pipeops_targetmutate}},
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},

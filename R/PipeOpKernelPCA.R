@@ -1,11 +1,11 @@
-#' @title Kernelized Principle Component Analysis
+#' @title Kernelized Principal Component Analysis
 #'
 #' @usage NULL
 #' @name mlr_pipeops_kernelpca
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Extracts kernel principle components from data. Only affects numerical features.
+#' Extracts kernel principal components from data. Only affects numerical features.
 #' See [kernlab::kpca] for details.
 #'
 #' @section Construction:
@@ -51,8 +51,7 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("kernlab")) \{ }
+#' @examplesIf requireNamespace("kernlab")
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -60,7 +59,6 @@
 #'
 #' task$data()
 #' pop$train(list(task))[[1]]$data()
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R

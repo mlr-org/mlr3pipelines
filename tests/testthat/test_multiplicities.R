@@ -55,7 +55,7 @@ test_that("PipeOp - unpack_multiplicities", {
   expect_error(unpack_multiplicities(list(a = Multiplicity(x = 1, z = 2), b = Multiplicity(x = 10, y = 20)), c(0, 0), c("a", "b"), "test"), regexp = "bad multiplicities")
   expect_equal(unpack_multiplicities(list(a = Multiplicity(x = 1, z = 2), b = Multiplicity(x = 10, y = 20)), c(0, 1), c("a", "b"), "test"),
     list(x = list(a = 1, b = Multiplicity(x = 10, y = 20)), z = list(a = 2, b = Multiplicity(x = 10, y = 20))))
-  expect_equal(unpack_multiplicities(list(0), 0, "a", "test"), NULL)
+  expect_null(unpack_multiplicities(list(0), 0, "a", "test"))
 })
 
 test_that("PipeOp - evaluate_multiplicities", {
@@ -112,7 +112,7 @@ test_that("PipeOp - evaluate_multiplicities", {
   old_state = po$state
   po$param_set$values$state = "error"
   expect_error(po$train(as.Multiplicity(list(0, as.Multiplicity(0)))), regexp = "Error")
-  expect_equal(po$state, NULL)  # state is completely reset to NULL
+  expect_null(po$state)  # state is completely reset to NULL
 })
 
 test_that("Graph - add_edge", {

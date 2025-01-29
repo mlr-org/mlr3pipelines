@@ -13,6 +13,7 @@ test_that("basic properties", {
 
 test_that("renaming works", {
   task = mlr_tasks$get("iris")
+  task$cbind(data.table(Petal.Width = as.character(1:150)))  # need a char column that we can turn into the 'name'-col
   op = PipeOpRenameColumns$new(param_vals = list(renaming = c("Petal.Length" = "PL")))
   train_out1 = op$train(list(task))[[1L]]
   predict_out1 = op$predict(list(task))[[1L]]

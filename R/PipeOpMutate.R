@@ -132,6 +132,6 @@ check_mutation_formulae = crate(function(x) {
       }
       TRUE
     }), TRUE)
-}, .parent = topenv())
+})
 
 mlr_pipeops$add("mutate", PipeOpMutate)

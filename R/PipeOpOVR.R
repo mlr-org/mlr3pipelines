@@ -67,14 +67,12 @@
 #' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library(mlr3)
 #' task = tsk("iris")
 #' po = po("ovrsplit")
 #' po$train(list(task))
 #' po$predict(list(task))
-#' \dontshow{ \} }
 PipeOpOVRSplit = R6Class("PipeOpOVRSplit",
   inherit = PipeOp,
   public = list(
@@ -175,8 +173,7 @@ mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 #' @template seealso_pipeopslist
 #' @include PipeOpEnsemble.R
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library(mlr3)
 #' task = tsk("iris")
 #' gr = po("ovrsplit") %>>% lrn("classif.rpart") %>>% po("ovrunite")
@@ -184,7 +181,6 @@ mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 #' gr$predict(task)
 #' gr$pipeops$classif.rpart$learner$predict_type = "prob"
 #' gr$predict(task)
-#' \dontshow{ \} }
 PipeOpOVRUnite = R6Class("PipeOpOVRUnite",
   inherit = PipeOpEnsemble,
   public = list(

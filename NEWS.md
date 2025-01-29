@@ -1,6 +1,43 @@
-# mlr3pipelines 0.6.0-9000
+# mlr3pipelines 0.7.1-9000
+
+* New parameter `no_collapse_above_absolute` for `PipeOpCollapseFactors` / `po("collapse_factors")`.
+* Fix: `PipeOpCollapseFactors` now correctly collapses levels of ordered factors.
+* Fix: `LearnerClassifAvg` and `LearnerRegrAvg` hyperparameters get the `"required"` tag.
+* New parameter `use_groups` (default `TRUE`) for `PipeOpSubsampling` to respect grouping (changed default behaviour for grouped data)
+* New parameter `new_role_direct` for `PipeOpColRoles` / `po("colroles")` to change column roles by role instead of by column.
+* Dictionary sugar functions `po()` / `pos()` / `ppl()` / `ppls()` now make suggestions for entries in both `mlr_pipeops` as well as `mlr_graphs` when an object by the given name could not be found in the respective dictionary.
+* New PipeOp `PipeOpDecode` / `po("decode")` to reverse one-hot or treatment encoding.
+* Fix: Columns that are `feature` and something else no longer lose the other column role during training or predicting of `PipeOp`s inheriting from `PipeOpTaskPreproc`.
+* Fix: Made tests for `PipeOpBLSmote` deterministic.
+
+# mlr3pipelines 0.7.1
+
+* Compatibility fix for upcoming `mlr3`
+* New down-sampling PipeOps for inbalanced data: `PipeOpTomek` / `po("tomek")` and `PipeOpNearmiss` / `po("nearmiss")`
+* New PipeOp `PipeOpLearnerPICVPlus / po("learner_pi_cvplus")`
+* New PipeOp for Quantile Regression `PipeOpLearnerQuantiles` / `po(learner_quantiles)`
+* `GraphLearner` has new active bindings/methods as shortcuts for active bindings/methods of the underlying `Graph`:
+`$pipeops`, `$edges`, `$pipeops_param_set`, and `$pipeops_param_set_values` as well as `$ids()` and `$plot()`.
+
+# mlr3pipelines 0.7.0
 
 * New PipeOp `PipeOpRowApply` / `po("rowapply")`
+* Empty `PipeOp` IDs now explicitly forbidden.
+* Bugfix: `Graph$tran()` / `Graph$predict()` with `single_input = FALSE` now correctly handles `PipeOp`s with multiple inputs.
+* `GraphLearner$base_learner()` now works with `PipeOpBranch`, and is generally more robust.
+* `GraphLearner` now supports `$importance`, `$selected_features()`, `$oob_error()`, and `$loglik()`.
+  These are computed from the underlying `Learner`.
+* `GraphLearner$impute_selected_features` option added:
+  `$selected_features()` is reported even if the underlying base learner does not report it; in this case, the full feature set as seen by that learner is returned.
+* `GraphLearner$predict_type` handling more robust now.
+* `PipeOpThreshold` and `PipeOpTuneThreshold` now have the `$predict_type` `"prob"`.
+  They can be set to `"response"`, in which case the probability predictions are discarded, potentially saving memory.
+* Bugfix for handling multiplicities in PipeOps with vararg channels.
+* Bugfix: `PipeOpImputeOOR` now retains the `.MISSING` level in factors during prediction that were imputed during training, but had no missing values during prediction.
+* `as_data_table(po())` now works even when some `PipeOp`s can not be constructed.
+  For these `PipeOp`s, `NA` is reported in most columns.
+* Compatibility with upcoming `mlr3` release.
+* New PipeOps for handling inbalanced data: `PipeOpADAS` / `po("adas")`, `PipeOpBLSmote` / `po("blsmote")` and `PipeOpSmoteNC` / `po("smotenc")`
 
 # mlr3pipelines 0.6.0
 

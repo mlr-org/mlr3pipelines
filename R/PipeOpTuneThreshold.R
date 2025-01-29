@@ -63,10 +63,7 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("bbotk")) \{ }
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
-#' \dontshow{ if (requireNamespace("GenSA")) \{ }
+#' @examplesIf mlr3misc::require_namespaces(c("bbotk", "rpart", "GenSA"), quietly = TRUE)
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -77,9 +74,6 @@
 #' pop$train(task)
 #'
 #' pop$state
-#' \dontshow{ \} }
-#' \dontshow{ \} }
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @export
@@ -92,7 +86,7 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
         measure = p_uty(custom_check = check_class_or_character("Measure", mlr_measures), tags = "train"),
         optimizer = p_uty(custom_check = check_optimizer, tags = "train"),
         log_level = p_uty(
-          custom_check = crate(function(x) check_string(x) %check||% check_integerish(x), .parent = topenv()),
+          custom_check = crate(function(x) check_string(x) %check||% check_integerish(x)),
           tags = "train"
         )
       )

@@ -56,15 +56,25 @@ Fields inherited from \code{\link[mlr3:Learner]{Learner}}, as well as:
 contain the model. Use \code{graph_model} to access the trained \code{\link{Graph}} after \verb{$train()}. Read-only.
 \item \code{graph_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
 \code{\link{Graph}} that is being wrapped. This \code{\link{Graph}} contains a trained state after \verb{$train()}. Read-only.
+\item \code{pipeops} :: named \code{list} of \code{\link{PipeOp}} \cr
+Contains all \code{\link{PipeOp}}s in the underlying \code{\link{Graph}}, named by the \code{\link{PipeOp}}'s \verb{$id}s. Shortcut for \verb{$graph_model$pipeops}. See \code{\link{Graph}} for details.
+\item \code{edges} :: \code{\link[data.table:data.table]{data.table}}  with columns \code{src_id} (\code{character}), \code{src_channel} (\code{character}), \code{dst_id} (\code{character}), \code{dst_channel} (\code{character})\cr
+Table of connections between the \code{\link{PipeOp}}s in the underlying \code{\link{Graph}}. Shortcut for \verb{$graph$edges}. See \code{\link{Graph}} for details.
+\item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}}\cr
+Parameters of the underlying \code{\link{Graph}}. Shortcut for \verb{$graph$param_set}. See \code{\link{Graph}} for details.
+\item \code{pipeops_param_set} :: named \code{list()}\cr
+Named list containing the \code{\link[paradox:ParamSet]{ParamSet}}s of all \code{\link{PipeOp}}s in the \code{\link{Graph}}. See there for details.
+\item \code{pipeops_param_set_values} :: named \code{list()}\cr
+Named list containing the set parameter values of all \code{\link{PipeOp}}s in the \code{\link{Graph}}. See there for details.
 \item \code{internal_tuned_values} :: named \code{list()} or \code{NULL}\cr
-The internal tuned parameter values collected from all \code{PipeOp}s.
+The internal tuned parameter values collected from all \code{\link{PipeOp}}s.
 \code{NULL} is returned if the learner is not trained or none of the wrapped learners supports internal tuning.
 \item \code{internal_valid_scores} :: named \code{list()} or \code{NULL}\cr
-The internal validation scores as retrieved from the \code{PipeOps}.
-The names are prefixed with the respective IDs of the \code{PipeOp}s.
+The internal validation scores as retrieved from the \code{\link{PipeOp}}s.
+The names are prefixed with the respective IDs of the \code{\link{PipeOp}}s.
 \code{NULL} is returned if the learner is not trained or none of the wrapped learners supports internal validation.
 \item \code{validate} :: \code{numeric(1)}, \code{"predefined"}, \code{"test"} or \code{NULL}\cr
-How to construct the validation data. This also has to be configured for the individual \code{PipeOp}s such as
+How to construct the validation data. This also has to be configured for the individual \code{\link{PipeOp}}s such as
 \code{PipeOpLearner}, see \code{\link{set_validate.GraphLearner}}.
 For more details on the possible values, see \code{\link[mlr3:Learner]{mlr3::Learner}}.
 \item \code{marshaled} :: \code{logical(1)}\cr
@@ -88,6 +98,16 @@ The default is \code{FALSE}.
 
 Methods inherited from \code{\link[mlr3:Learner]{Learner}}, as well as:
 \itemize{
+\item \code{ids(sorted = FALSE)} \cr
+(\code{logical(1)}) -> \code{character} \cr
+Get IDs of all \code{\link{PipeOp}}s. This is in order that \code{\link{PipeOp}}s were added if
+\code{sorted} is \code{FALSE}, and topologically sorted if \code{sorted} is \code{TRUE}.
+\item \code{plot(html = FALSE, horizontal = FALSE)} \cr
+(\code{logical(1)}, \code{logical(1)}) -> \code{NULL} \cr
+Plot the \code{\link{Graph}}, using either the \pkg{igraph} package (for \code{html = FALSE}, default) or
+the \code{visNetwork} package for \code{html = TRUE} producing a \code{\link[htmlwidgets:htmlwidgets-package]{htmlWidget}}.
+The \code{\link[htmlwidgets:htmlwidgets-package]{htmlWidget}} can be rescaled using \code{\link[visNetwork:visOptions]{visOptions}}.
+For \code{html = FALSE}, the orientation of the plotted graph can be controlled through \code{horizontal}.
 \item \code{marshal}\cr
 (any) -> \code{self}\cr
 Marshal the model.
@@ -118,9 +138,11 @@ Note that these typically only extract information from the \verb{$base_learner(
 This works well for simple \code{\link{Graph}}s that do not modify features too much, but may give unexpected results for \code{Graph}s that
 add new features or move information between features.
 
-As an example, consider a feature \verb{A`` with missing values, and a feature }B\verb{ that is used for imputatoin, using a [`po("imputelearner")`][PipeOpImputeLearner]. In a case where the following [`Learner`][mlr3::Learner] performs embedded feature selection and only selects feature A, the `selected_features()` method could return only feature `A}, and \verb{$importance()} may even report 0 for feature \code{B}.
-This would not be entirbababababely accurate when considering the entire \code{GraphLearner}, as feature \code{B} is used for imputation and would therefore have an impact on predictions.
-The following should therefore only be used if the \code{Graph} is known to not have an impact on the relevant properties.
+As an example, consider a feature \code{A} with missing values, and a feature \code{B} that is used for imputation, using a \code{\link[=PipeOpImputeLearner]{po("imputelearner")}}.
+In a case where the following \code{\link[mlr3:Learner]{Learner}} performs embedded feature selection and only selects feature \code{A},
+the \code{selected_features()} method could return only feature \code{A}, and \verb{$importance()} may even report 0 for feature \code{B}.
+This would not be entirely accurate when considering the entire \code{GraphLearner}, as feature \code{B} is used for imputation and would therefore have an impact on predictions.
+The following should therefore only be used if the \code{\link{Graph}} is known to not have an impact on the relevant properties.
 \itemize{
 \item \code{importance()}\cr
 () -> \code{numeric}\cr
@@ -153,7 +175,7 @@ recommended.
 }
 
 \examples{
-\dontshow{ if (requireNamespace("rpart")) \{ }
+\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 
 graph = po("pca") \%>>\% lrn("classif.rpart")
@@ -172,7 +194,7 @@ lr$graph_model$pipeops$classif.rpart$learner_model$model
 
 # Feature importance (of principal components):
 lr$graph_model$pipeops$classif.rpart$learner_model$importance()
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other Learners: 
