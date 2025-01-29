@@ -9,6 +9,7 @@
 * New PipeOp `PipeOpDecode` / `po("decode")` to reverse one-hot or treatment encoding.
 * Fix: Columns that are `feature` and something else no longer lose the other column role during training or predicting of `PipeOp`s inheriting from `PipeOpTaskPreproc`.
 * Fix: Made tests for `PipeOpBLSmote` deterministic.
+* Fix: Corrected hash calculation for `PipeOpFilter`.
 
 # mlr3pipelines 0.7.1
 
