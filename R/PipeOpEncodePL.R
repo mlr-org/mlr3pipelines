@@ -155,7 +155,7 @@ encode_piecewise_linear = function(column, bins) {
 #'
 #' @section Construction:
 #' ```
-#' PipeOpEncodePL$new(id = "encodeplquantiles", param_vals = list())
+#' PipeOpEncodePLQuantiles$new(id = "encodeplquantiles", param_vals = list())
 #' ```
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"encodeplquantiles"`.
@@ -163,16 +163,16 @@ encode_piecewise_linear = function(column, bins) {
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpEncodePL`].
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
 #' The output is the input [`Task`][mlr3::Task] with all affected `numeric` and `integer` columns encoded using piecewise
 #' linear encoding with bins being derived from the quantiles of the respective original feature column.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpEncodePL`].
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreproc`].
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreprocSimple`], as well as:
+#' The parameters are the parameters inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreproc`], as well as:
 #' * `numsplits` :: `integer(1)` \cr
 #'   Number of bins to create. Default is `2`.
 #' * `type` :: `integer(1)`\cr
@@ -182,10 +182,10 @@ encode_piecewise_linear = function(column, bins) {
 #' Uses the [`stats::quantile`] function.
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @section Methods:
-#' Only methods inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only methods inherited from [`PipeOpEncodePL`][`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @references
 #' `r format_bib("gorishniy_2022")`
@@ -338,10 +338,30 @@ PipeOpEncodePLTree = R6Class("PipeOpEncodePLTree",
       bins = list()
       for (col in cols) {
         t = task$clone(deep = TRUE)$select(col)
-        # Get column "index" in model splits
-        boundaries = unname(sort(learner$train(t)$model$splits[, "index"]))
+        model = learner$train(t)$model
+        frame = model$frame
+
+        # Extracting splits according to https://github.com/cran/rpart/blob/983544575b80df286bf8ce238faf4afa145872cd/R/labels.rpart.R#L26
+        # NOTE: Maybe this isn't necessary, and we can just take index of splits (should splits exist), since compete and
+        # surrogate *might* only be larger than 0 than trained with more than one feature?
+        # - surrogates could only be used, if multiple variables exist (cannot use a non-existing variable as surrogate
+        #   if the first considered variables has NAs)
+        # - competes could not occur with one feature, since no alternative splits are possible
+        if (nrow(frame) > 1L) {  # do splits exist?
+          is_leaf = frame$var == "<leaf>"
+          frame = frame[!is_leaf, ]
+          index = cumsum(c(1, frame$nsurrogate + frame$ncompete + 1))
+          # remove last entry introduced by appending 1 in cumsum
+          index = index[-length(index)]
+          splits = model$splits[index, "index"]
+          boundaries = unname(sort(splits))
+        } else {
+          # No boundaries if no splits exist (only root in frame)
+          boundaries = numeric(0)
+        }
+
         d = task$data(cols = col)
-        bins[[col]] = c(min(d), boundaries, max(d))
+        bins[[col]] = c(min(d, na.rm = TRUE), boundaries, max(d, na.rm = TRUE))
       }
       bins
     },
