@@ -35,7 +35,8 @@ test_that("Dictionary contains all PipeOps", {
     PipeOpRegrAvg = list(innum = 2),
     PipeOpUnbranch = list(options = 2),
     PipeOpFilter = list(filter = mlr3filters::FilterVariance$new(), param_vals = list(filter.nfeat = 1)),
-    PipeOpMultiplicityExply = list(outnum = 2))
+    PipeOpMultiplicityExply = list(outnum = 2),
+    PipeOpEncodePLTree = list(task_type = "TaskClassif"))
 
   # The PipeOps that may have a default ID different from the mlr_pipeops key
   unequal_id = c("PipeOpLearner", "PipeOpLearnerCV",  "PipeOpLearnerPICVPlus","PipeOpLearnerQuantiles", "PipeOpFilter")
