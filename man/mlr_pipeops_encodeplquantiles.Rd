@@ -19,7 +19,7 @@ Affected feature columns may contain \code{NA}s. These are ignored when calculat
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpEncodePL$new(id = "encodeplquantiles", param_vals = list())
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpEncodePLQuantiles$new(id = "encodeplquantiles", param_vals = list())
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -31,7 +31,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpEncodePL}}.
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with all affected \code{numeric} and \code{integer} columns encoded using piecewise
 linear encoding with bins being derived from the quantiles of the respective original feature column.
@@ -39,12 +39,12 @@ linear encoding with bins being derived from the quantiles of the respective ori
 
 \section{State}{
 
-The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpEncodePL}}.
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPreproc}}.
 }
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPreprocSimple}}, as well as:
+The parameters are the parameters inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{numsplits} :: \code{integer(1)} \cr
 Number of bins to create. Default is \code{2}.
@@ -60,12 +60,12 @@ Uses the \code{\link[stats:quantile]{stats::quantile}} function.
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
 
-Only methods inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only methods inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{
@@ -93,7 +93,6 @@ train_out = pop$train(list(task))[[1L]]
 pop$state$bins
 # Each feature was split into three encoded features using piecewise linear encoding
 train_out$head()
-
 }
 \references{
 Gorishniy Y, Rubachev I, Babenko A (2022).

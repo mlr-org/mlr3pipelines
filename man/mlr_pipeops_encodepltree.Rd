@@ -34,7 +34,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpEncodePL}}.
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with all affected \code{numeric} and \code{integer} columns encoded using piecewise
 linear encoding with bins being derived from a decision tree \code{\link[mlr3:Learner]{Learner}} trained on the respective feature column.
@@ -42,12 +42,12 @@ linear encoding with bins being derived from a decision tree \code{\link[mlr3:Le
 
 \section{State}{
 
-The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpEncodePL}}.
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPreproc}}.
 }
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpEncodePL}}, as well as the parameters of
+The parameters are the parameters inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPreproc}}, as well as the parameters of
 the \code{\link[mlr3:Learner]{Learner}} used for obtaining the bins for piecewise linear encoding.
 }
 
@@ -57,17 +57,49 @@ the \code{\link[mlr3:Learner]{Learner}} used for obtaining the bins for piecewis
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
 
-Only methods inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only methods inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{
-# example code
+library(mlr3)
 
+# For classification task
+task = tsk("iris")$select(c("Petal.Width", "Petal.Length"))
+pop = po("encodepltree", task_type = "TaskClassif")
+train_out = pop$train(list(task))[[1L]]
+
+# Calculated bin boundaries per feature
+pop$state$bins
+# Each feature was split into three encoded features using piecewise linear encoding
+train_out$head()
+
+# Prediction works the same as training, using the bins learned during training
+predict_out = pop$predict(list(task))[[1L]]
+predict_out$head()
+
+# Controlling behavior of the tree learner, here: setting minimum number of
+# observations per node for a split to be attempted
+pop$param_set$set_values(minsplit = 5)
+
+train_out = pop$train(list(task))[[1L]]
+# feature "hp" now gets split into five encoded features instead of three
+pop$state$bins
+train_out$head()
+
+# For regression task
+task = tsk("mtcars")$select(c("cyl", "hp"))
+pop = po("encodepltree", task_type = "TaskRegr")
+train_out = pop$train(list(task))[[1L]]
+
+# Calculated bin boundaries per feature
+pop$state$bins
+# First feature was split into three encoded features, second into two, using piecewise linear encoding
+train_out$head()
 }
 \references{
 Gorishniy Y, Rubachev I, Babenko A (2022).

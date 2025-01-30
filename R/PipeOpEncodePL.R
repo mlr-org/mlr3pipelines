@@ -182,10 +182,10 @@ encode_piecewise_linear = function(column, bins) {
 #' Uses the [`stats::quantile`] function.
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
-#' Only methods inherited from [`PipeOpEncodePL`][`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only methods inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @references
 #' `r format_bib("gorishniy_2022")`
@@ -220,7 +220,6 @@ encode_piecewise_linear = function(column, bins) {
 #' pop$state$bins
 #' # Each feature was split into three encoded features using piecewise linear encoding
 #' train_out$head()
-#'
 PipeOpEncodePLQuantiles = R6Class("PipeOpEncodePLQuantiles",
   inherit = PipeOpEncodePL,
   public = list(
@@ -280,26 +279,26 @@ mlr_pipeops$add("encodeplquantiles", PipeOpEncodePLQuantiles)
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpEncodePL`].
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
 #' The output is the input [`Task`][mlr3::Task] with all affected `numeric` and `integer` columns encoded using piecewise
 #' linear encoding with bins being derived from a decision tree [`Learner`][mlr3::Learner] trained on the respective feature column.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpEncodePL`].
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreproc`].
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpEncodePL`], as well as the parameters of
+#' The parameters are the parameters inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreproc`], as well as the parameters of
 #' the [`Learner`][mlr3::Learner] used for obtaining the bins for piecewise linear encoding.
 #'
 #' @section Internals:
 #'
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
-#' Only methods inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only methods inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @references
 #' `r format_bib("gorishniy_2022")`
@@ -310,8 +309,40 @@ mlr_pipeops$add("encodeplquantiles", PipeOpEncodePLQuantiles)
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
-#' # example code
+#' library(mlr3)
 #'
+#' # For classification task
+#' task = tsk("iris")$select(c("Petal.Width", "Petal.Length"))
+#' pop = po("encodepltree", task_type = "TaskClassif")
+#' train_out = pop$train(list(task))[[1L]]
+#'
+#' # Calculated bin boundaries per feature
+#' pop$state$bins
+#' # Each feature was split into three encoded features using piecewise linear encoding
+#' train_out$head()
+#'
+#' # Prediction works the same as training, using the bins learned during training
+#' predict_out = pop$predict(list(task))[[1L]]
+#' predict_out$head()
+#'
+#' # Controlling behavior of the tree learner, here: setting minimum number of
+#' # observations per node for a split to be attempted
+#' pop$param_set$set_values(minsplit = 5)
+#'
+#' train_out = pop$train(list(task))[[1L]]
+#' # feature "hp" now gets split into five encoded features instead of three
+#' pop$state$bins
+#' train_out$head()
+#'
+#' # For regression task
+#' task = tsk("mtcars")$select(c("cyl", "hp"))
+#' pop = po("encodepltree", task_type = "TaskRegr")
+#' train_out = pop$train(list(task))[[1L]]
+#'
+#' # Calculated bin boundaries per feature
+#' pop$state$bins
+#' # First feature was split into three encoded features, second into two, using piecewise linear encoding
+#' train_out$head()
 PipeOpEncodePLTree = R6Class("PipeOpEncodePLTree",
   inherit = PipeOpEncodePL,
   public = list(
@@ -351,7 +382,7 @@ PipeOpEncodePLTree = R6Class("PipeOpEncodePLTree",
           is_leaf = frame$var == "<leaf>"
           frame = frame[!is_leaf, ]
           index = cumsum(c(1, frame$nsurrogate + frame$ncompete + 1))
-          # remove last entry introduced by appending 1 in cumsum
+          # remove last entry introduced by prepending 1 in cumsum
           index = index[-length(index)]
           splits = model$splits[index, "index"]
           boundaries = unname(sort(splits))
