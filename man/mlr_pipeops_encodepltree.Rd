@@ -53,6 +53,11 @@ the \code{\link[mlr3:Learner]{Learner}} used for obtaining the bins for piecewis
 
 \section{Internals}{
 
+This overloads the \code{private$.get_bins()} method of \code{\link{PipeOpEncodePL}}. To derive the bins for each feature, the
+\code{\link[mlr3:Task]{Task}} is split into smaller \code{\link[mlr3:Task]{Tasks}} with only the target and respective feature as columns.
+On these \code{\link[mlr3:Task]{Tasks}} either a \code{\link[mlr3:mlr_learners_classif.rpart]{LearnerClassifRpart}} or
+\code{\link[mlr3:mlr_learners_regr.rpart]{LearnerRegrRpart}} gets trained and the respective splits extracted as bin boundaries used
+for piecewise linear encodings.
 }
 
 \section{Fields}{

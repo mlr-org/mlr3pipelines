@@ -179,7 +179,8 @@ encode_piecewise_linear = function(column, bins) {
 #'   Method used to calculate sample quantiles. See help of [`stats::quantile`]. Default is `7`.
 #'
 #' @section Internals:
-#' Uses the [`stats::quantile`] function.
+#' This overloads the `private$.get_bins()` method of [`PipeOpEncodePL`] and uses the [`stats::quantile`] function
+#' to derive the bins used for piecewise linear encoding.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -292,7 +293,11 @@ mlr_pipeops$add("encodeplquantiles", PipeOpEncodePLQuantiles)
 #' the [`Learner`][mlr3::Learner] used for obtaining the bins for piecewise linear encoding.
 #'
 #' @section Internals:
-#'
+#' This overloads the `private$.get_bins()` method of [`PipeOpEncodePL`]. To derive the bins for each feature, the
+#' [`Task`][mlr3::Task] is split into smaller [`Tasks`][mlr3::Task] with only the target and respective feature as columns.
+#' On these [`Tasks`][mlr3::Task] either a [`LearnerClassifRpart`][mlr3::LearnerClassifRpart] or
+#' [`LearnerRegrRpart`][mlr3::LearnerRegrRpart] gets trained and the respective splits extracted as bin boundaries used
+#' for piecewise linear encodings.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].

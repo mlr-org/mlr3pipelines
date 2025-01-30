@@ -55,7 +55,8 @@ Method used to calculate sample quantiles. See help of \code{\link[stats:quantil
 
 \section{Internals}{
 
-Uses the \code{\link[stats:quantile]{stats::quantile}} function.
+This overloads the \code{private$.get_bins()} method of \code{\link{PipeOpEncodePL}} and uses the \code{\link[stats:quantile]{stats::quantile}} function
+to derive the bins used for piecewise linear encoding.
 }
 
 \section{Fields}{
