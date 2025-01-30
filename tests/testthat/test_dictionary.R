@@ -15,7 +15,7 @@ test_that("Dictionary contains all PipeOps", {
   }
 
   # abstract pipeops that don't need to be in mlr_pipeops
-  abstracts = c("PipeOp", "PipeOpEnsemble", "PipeOpTaskPreproc", "PipeOpTaskPreprocSimple", "PipeOpImpute", "PipeOpTargetTrafo")
+  abstracts = c("PipeOp", "PipeOpEnsemble", "PipeOpTaskPreproc", "PipeOpTaskPreprocSimple", "PipeOpImpute", "PipeOpTargetTrafo", "PipeOpEncodePL")
 
   # param set values not hashable, because functions
   pval_unhashable = "missind"
@@ -183,7 +183,7 @@ test_that("Dictionary contains all PipeOps", {
       )
 
       expect_equal(
-          # use c() to strip all attributes; they indicate the actual help()-call which is obviously different here.
+        # use c() to strip all attributes; they indicate the actual help()-call which is obviously different here.
         c(help(paste0("mlr_pipeops_", dictname), package = "mlr3pipelines")),
         c(test_obj$help()),
         info = paste("help for", dictname, "II")
