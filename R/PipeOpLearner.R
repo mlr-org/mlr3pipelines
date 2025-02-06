@@ -114,8 +114,8 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       )
     },
     hotstart = function(input) {
-      # copy model from state to learner
-      private$.learner$state$model = self$state$model
+      # copy state to learner
+      private$.learner$state = self$state
       output = get_private(private$.learner)$.hotstart(input[[1]])
       list(NULL)
     }
