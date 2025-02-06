@@ -26,7 +26,8 @@ This inherits from \code{\link{PipeOpTaskPreproc}} and behaves essentially the s
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTaskPreprocSimple$new(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task")
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTaskPreprocSimple$new(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE,
+  packages = character(0), task_type = "Task", tags = NULL, feature_types = mlr_reflections$task_feature_types)
 }\if{html}{\out{</div>}}
 
 (Construction is identical to \code{\link{PipeOpTaskPreproc}}.)
@@ -42,13 +43,18 @@ subclass should have its own \code{param_vals} parameter and pass it on to \code
 Whether the \code{affect_columns} parameter should be added which lets the user limit the columns that are
 modified by the \code{\link{PipeOpTaskPreprocSimple}}. This should generally be \code{FALSE} if the operation adds or removes
 rows from the \code{\link[mlr3:Task]{Task}}, and \code{TRUE} otherwise. Default is \code{TRUE}.
-\item packages :: \code{character}\cr
+\item \code{packages} :: \code{character}\cr
 Set of all required packages for the \code{\link{PipeOp}}'s \code{private$.train()} and \code{private$.predict()} methods. See \verb{$packages} slot.
 Default is \code{character(0)}.
 \item \code{task_type} :: \code{character(1)}\cr
 The class of \code{\link[mlr3:Task]{Task}} that should be accepted as input and will be returned as output. This
 should generally be a \code{character(1)} identifying a type of \code{\link[mlr3:Task]{Task}}, e.g. \code{"Task"}, \code{"TaskClassif"} or
 \code{"TaskRegr"} (or another subclass introduced by other packages). Default is \code{"Task"}.
+\item \code{tags} :: \code{character} | \code{NULL}\cr
+Tags of the resulting \code{PipeOp}. This is added to the tag \code{"data transform"}. Default \code{NULL}.
+\item \code{feature_types} :: \code{character}\cr
+Feature types affected by the \code{PipeOp}. See \code{private$.select_cols()} for more information.
+Defaults to all available feature types.
 }
 }
 

@@ -39,7 +39,6 @@
 #' PipeOpTaskPreproc$new(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE,
 #'   packages = character(0), task_type = "Task", tags = NULL, feature_types = mlr_reflections$task_feature_types)
 #' ```
-#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object. See `$id` slot of [`PipeOp`].
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
@@ -51,14 +50,14 @@
 #'   Whether the `affect_columns` parameter should be added which lets the user limit the columns that are
 #'   modified by the [`PipeOpTaskPreproc`]. This should generally be `FALSE` if the operation adds or removes
 #'   rows from the [`Task`][mlr3::Task], and `TRUE` otherwise. Default is `TRUE`.
-#' * packages :: `character`\cr
+#' * `packages` :: `character`\cr
 #'   Set of all required packages for the [`PipeOp`]'s `private$.train()` and `private$.predict()` methods. See `$packages` slot.
 #'   Default is `character(0)`.
 #' * `task_type` :: `character(1)`\cr
 #'   The class of [`Task`][mlr3::Task] that should be accepted as input and will be returned as output. This
 #'   should generally be a `character(1)` identifying a type of [`Task`][mlr3::Task], e.g. `"Task"`, `"TaskClassif"` or
 #'   `"TaskRegr"` (or another subclass introduced by other packages). Default is `"Task"`.
-#' * tags :: `character` | `NULL`\cr
+#' * `tags` :: `character` | `NULL`\cr
 #'   Tags of the resulting `PipeOp`. This is added to the tag `"data transform"`. Default `NULL`.
 #'* `feature_types` :: `character`\cr
 #'   Feature types affected by the `PipeOp`. See `private$.select_cols()` for more information.
@@ -324,8 +323,10 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'
 #' @section Construction:
 #' ```
-#' PipeOpTaskPreprocSimple$new(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task")
+#' PipeOpTaskPreprocSimple$new(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE,
+#'   packages = character(0), task_type = "Task", tags = NULL, feature_types = mlr_reflections$task_feature_types)
 #' ```
+#'
 #' (Construction is identical to [`PipeOpTaskPreproc`].)
 #'
 #' * `id` :: `character(1)`\cr
@@ -339,13 +340,18 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'   Whether the `affect_columns` parameter should be added which lets the user limit the columns that are
 #'   modified by the [`PipeOpTaskPreprocSimple`]. This should generally be `FALSE` if the operation adds or removes
 #'   rows from the [`Task`][mlr3::Task], and `TRUE` otherwise. Default is `TRUE`.
-#' * packages :: `character`\cr
+#' * `packages` :: `character`\cr
 #'   Set of all required packages for the [`PipeOp`]'s `private$.train()` and `private$.predict()` methods. See `$packages` slot.
 #'   Default is `character(0)`.
 #' * `task_type` :: `character(1)`\cr
 #'   The class of [`Task`][mlr3::Task] that should be accepted as input and will be returned as output. This
 #'   should generally be a `character(1)` identifying a type of [`Task`][mlr3::Task], e.g. `"Task"`, `"TaskClassif"` or
 #'   `"TaskRegr"` (or another subclass introduced by other packages). Default is `"Task"`.
+#' * `tags` :: `character` | `NULL`\cr
+#'   Tags of the resulting `PipeOp`. This is added to the tag `"data transform"`. Default `NULL`.
+#'* `feature_types` :: `character`\cr
+#'   Feature types affected by the `PipeOp`. See `private$.select_cols()` for more information.
+#'   Defaults to all available feature types.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].

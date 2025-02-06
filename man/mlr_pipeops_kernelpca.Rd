@@ -3,12 +3,12 @@
 \name{mlr_pipeops_kernelpca}
 \alias{mlr_pipeops_kernelpca}
 \alias{PipeOpKernelPCA}
-\title{Kernelized Principle Component Analysis}
+\title{Kernelized Principal Component Analysis}
 \format{
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Extracts kernel principle components from data. Only affects numerical features.
+Extracts kernel principal components from data. Only affects numerical features.
 See \link[kernlab:kpca]{kernlab::kpca} for details.
 }
 \section{Construction}{
