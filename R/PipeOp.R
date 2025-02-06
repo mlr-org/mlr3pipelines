@@ -348,6 +348,9 @@ PipeOp = R6Class("PipeOp",
       output = check_types(self, output, "output", "predict")
       output
     },
+    hotstart = function(input) {
+      self$train(input)
+    },
     help = function(help_type = getOption("help_type")) {
       parts = strsplit(self$man, split = "::", fixed = TRUE)[[1]]
       match.fun("help")(parts[[2]], package = parts[[1]], help_type = help_type)

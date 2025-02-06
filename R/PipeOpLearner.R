@@ -112,6 +112,12 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
         output = data.table(name = "output", train = "NULL", predict = out_type),
         tags = "learner", packages = learner$packages, properties = properties
       )
+    },
+    hotstart = function(input) {
+      # copy model from state to learner
+      private$.learner$state$model = self$state$model
+      output = get_private(private$.learner)$.hotstart(input[[1]])
+      list(NULL)
     }
   ),
   active = list(
@@ -199,6 +205,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       private$.learner$state = self$state
       list(private$.learner$predict(task))
     },
+
     .additional_phash_input = function() private$.learner$phash
   )
 )

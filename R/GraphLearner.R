@@ -454,6 +454,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
 
       on.exit({self$graph$state = NULL})
+
       self$graph$train(task)
       state = self$graph$state
       class(state) = c("graph_learner_model", class(state))
@@ -466,6 +467,23 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       assert_list(prediction, types = "Prediction", len = 1,
         .var.name = sprintf("Prediction returned by Graph %s", self$id))
       prediction[[1]]
+    },
+
+    .hotstart = function(task) {
+      if (!is.null(get0("validate", self))) {
+        some_pipeops_validate = some(pos_with_property(self, "validation"), function(po) !is.null(po$validate))
+        if (!some_pipeops_validate) {
+          lg$warn("GraphLearner '%s' specifies a validation set, but none of its PipeOps use it.", self$id)
+        }
+      }
+
+      on.exit({self$graph$state = NULL})
+      # copy hotstart state to graph
+      self$graph$state = self$state$model
+      self$graph$hotstart(task)
+      state = self$graph$state
+      class(state) = c("graph_learner_model", class(state))
+      state
     }
   )
 )
