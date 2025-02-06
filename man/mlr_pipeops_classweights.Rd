@@ -17,7 +17,7 @@ Caution: when constructed naively without parameter, the weights are all set to 
 must be adjusted for this \code{\link{PipeOp}} to be useful.
 
 Note this only sets the \code{"weights_learner"} column.
-It therefore influences the behaviour of subsequent \code{Learner}s, but does not influence resampling or evaluation metric weights.
+It therefore influences the behaviour of subsequent \code{\link[mlr3:Learner]{Learner}}s, but does not influence resampling or evaluation metric weights.
 }
 \section{Construction}{
 
