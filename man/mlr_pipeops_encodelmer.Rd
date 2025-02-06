@@ -68,12 +68,12 @@ List of coefficients learned via \code{glmer}
 
 \section{Parameters}{
 
+The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{fast_optim}  :: \code{logical(1)} \cr
+If \code{fast_optim} is \code{TRUE} (default), a faster (up to 50 percent) optimizer from the \code{nloptr} package is used when
+fitting the lmer models. This uses additional stopping criteria which can give suboptimal results.
 Initialized to \code{TRUE}.
-If "fast_optim" is \code{TRUE} (default), a faster (up to 50 percent)
-optimizer from the nloptr package is used when fitting the lmer models.
-This uses additional stopping criteria which can give suboptimal results.
 }
 }
 
