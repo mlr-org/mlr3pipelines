@@ -11,8 +11,8 @@
 Encodes \code{numeric} and \code{integer} feature columns using piecewise lienar encoding. For details, see documentation of
 \code{PipeOpEncodePL} or the paper referenced below.
 
-Bins are constructed by trainig one decision tree \code{\link[mlr3:Learner]{Learner}} per feature column, taking the target column into account,
-and using decision boundaries as bin boundaries.
+Bins are constructed by trainig one decision tree \code{\link[mlr3:Learner]{Learner}} per feature column, taking the target
+column into account, and using decision boundaries as bin boundaries.
 }
 \section{Construction}{
 
@@ -47,7 +47,7 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPreproc}}, as well as the parameters of
+The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as the parameters of
 the \code{\link[mlr3:Learner]{Learner}} used for obtaining the bins for piecewise linear encoding.
 }
 

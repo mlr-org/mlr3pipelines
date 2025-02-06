@@ -20,7 +20,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpEncodePL$new(id = "encodepl", param_set = ps(), param_vals = list(), packages = character(0), task_type = "Task)
+#' PipeOpEncodePL$new(id = "encodepl", param_set = ps(), param_vals = list(), packages = character(0), task_type = "Task")
 #' ```
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object. See `$id` slot of [`PipeOp`].
@@ -38,19 +38,18 @@
 #'   `"TaskRegr"` (or another subclass introduced by other packages). Default is `"Task"`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpTaskPreprocSimple`].
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
 #' The output is the input [`Task`][mlr3::Task] with all affected `numeric` and `integer` columns encoded using piecewise linear encoding.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreprocSimple`], as well as:
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `bins` :: named `list`\cr
-#'   Named list of numeric vectors. Each element corresponds to one of the affected feature columns and contains the
-#'   bin boundaries derived through  `private$.get_bins()`. The element vectors are named by the respective
-#'   feature column.
+#'   Named list of numeric vectors. Each element corresponds to and is named after one of the affected feature columns
+#'   and contains the bin boundaries derived through `private$.get_bins()`.
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`].
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`].
 #'
 #' @section Internals:
 #' `PipeOpEncodePL` is an abstract class inheriting from [`PipeOpTaskPreprocSimple`] that allows easier implementation
@@ -58,7 +57,7 @@
 #' as `private$.get_bins()`.
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`] as well as
@@ -172,7 +171,7 @@ encode_piecewise_linear = function(column, bins) {
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreproc`].
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreproc`], as well as:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `numsplits` :: `integer(1)` \cr
 #'   Number of bins to create. Default is `2`.
 #' * `type` :: `integer(1)`\cr
@@ -262,8 +261,8 @@ mlr_pipeops$add("encodeplquantiles", PipeOpEncodePLQuantiles)
 #' Encodes `numeric` and `integer` feature columns using piecewise lienar encoding. For details, see documentation of
 #' `PipeOpEncodePL` or the paper referenced below.
 #'
-#' Bins are constructed by trainig one decision tree [`Learner`][mlr3::Learner] per feature column, taking the target column into account,
-#' and using decision boundaries as bin boundaries.
+#' Bins are constructed by trainig one decision tree [`Learner`][mlr3::Learner] per feature column, taking the target
+#' column into account, and using decision boundaries as bin boundaries.
 #'
 #' @section Construction:
 #' ```
@@ -289,7 +288,7 @@ mlr_pipeops$add("encodeplquantiles", PipeOpEncodePLQuantiles)
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreproc`].
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpEncodePL`]/[`PipeOpTaskPreproc`], as well as the parameters of
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as the parameters of
 #' the [`Learner`][mlr3::Learner] used for obtaining the bins for piecewise linear encoding.
 #'
 #' @section Internals:

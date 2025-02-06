@@ -26,7 +26,7 @@ offsetting the original value by the lower bin boundary and dividing by the bin 
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpEncodePL$new(id = "encodepl", param_set = ps(), param_vals = list(), packages = character(0), task_type = "Task)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpEncodePL$new(id = "encodepl", param_set = ps(), param_vals = list(), packages = character(0), task_type = "Task")
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -48,25 +48,24 @@ should generally be a \code{character(1)} identifying a type of \code{\link[mlr3
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpTaskPreprocSimple}}.
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with all affected \code{numeric} and \code{integer} columns encoded using piecewise linear encoding.
 }
 
 \section{State}{
 
-The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreprocSimple}}, as well as:
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{bins} :: named \code{list}\cr
-Named list of numeric vectors. Each element corresponds to one of the affected feature columns and contains the
-bin boundaries derived through  \code{private$.get_bins()}. The element vectors are named by the respective
-feature column.
+Named list of numeric vectors. Each element corresponds to and is named after one of the affected feature columns
+and contains the bin boundaries derived through \code{private$.get_bins()}.
 }
 }
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpTaskPreprocSimple}}.
+The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}.
 }
 
 \section{Internals}{
@@ -78,7 +77,7 @@ as \code{private$.get_bins()}.
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{

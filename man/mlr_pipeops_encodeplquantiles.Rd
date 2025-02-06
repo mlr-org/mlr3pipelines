@@ -44,7 +44,7 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPreproc}}, as well as:
+The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{numsplits} :: \code{integer(1)} \cr
 Number of bins to create. Default is \code{2}.
