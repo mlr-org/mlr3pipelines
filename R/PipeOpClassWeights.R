@@ -14,7 +14,7 @@
 #' must be adjusted for this [`PipeOp`] to be useful.
 #'
 #' Note this only sets the `"weights_learner"` column.
-#' It therefore influences the behaviour of subsequent `Learner`s, but does not influence resampling or evaluation metric weights.
+#' It therefore influences the behaviour of subsequent [`Learner`][mlr3::Learner]s, but does not influence resampling or evaluation metric weights.
 #'
 #' @section Construction:
 #' ```

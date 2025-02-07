@@ -20,8 +20,6 @@
 #' equal weights for each prediction.
 #' Defaults to equal weights for each model.
 #'
-#' If `
-#'
 #' @section Construction:
 #' ```
 #' PipeOpClassifAvg$new(innum = 0, collect_multiplicity = FALSE, id = "classifavg", param_vals = list())

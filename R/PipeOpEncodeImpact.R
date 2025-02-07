@@ -43,6 +43,7 @@
 #'   this feature level on each *outcome level*.
 #'
 #' @section Parameters:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `smoothing`  :: `numeric(1)` \cr
 #'   A finite positive value used for smoothing. Mostly relevant for [classification Tasks][mlr3::TaskClassif] if
 #'   a factor does not coincide with a target factor level (and would otherwise give an infinite logit value).
@@ -54,7 +55,7 @@
 #' Uses Laplace smoothing, mostly to avoid infinite values for [classification Task][mlr3::TaskClassif].
 #'
 #' @section Methods:
-#' Only methods inherited [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only methods inherited [`PipeOpTaskPreprocSimple`][`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
 #' library("mlr3")
