@@ -114,9 +114,14 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       )
     },
     hotstart = function(input) {
+      on.exit({private$.learner$state = NULL})
       # copy state to learner
-      private$.learner$state = self$state
-      output = get_private(private$.learner)$.hotstart(input[[1]])
+      learner = private$.learner
+      learner$state = self$state
+
+      train_result = mlr3:::learner_train(learner, task = input[[1]], train_row_ids = NULL, mode = "hotstart")
+      self$state = train_result$learner$state
+
       list(NULL)
     }
   ),
