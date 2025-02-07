@@ -93,7 +93,7 @@ PipeOpEncodePL = R6Class("PipeOpEncodePL",
     .get_state = function(task) {
       cols = private$.select_cols(task)
       if (!length(cols)) {
-        return(list(bins = numeric(0)))  # early exit
+        return(list(bins = named_list()))  # early exit
       }
       list(bins = private$.get_bins(task, cols))
     },
@@ -225,7 +225,7 @@ PipeOpEncodePLQuantiles = R6Class("PipeOpEncodePLQuantiles",
   public = list(
     initialize = function(id = "encodeplquantiles", param_vals = list()) {
       ps = ps(
-        numsplits = p_int(lower = 2, default = 2, tags = c("train", "predict")),
+        numsplits = p_int(lower = 2, init = 2, tags = c("train", "predict", "required")),
         type = p_int(lower = 1, upper = 9, default = 7, tags = c("train", "predict"))
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats")
@@ -234,7 +234,7 @@ PipeOpEncodePLQuantiles = R6Class("PipeOpEncodePLQuantiles",
   private = list(
 
     .get_bins = function(task, cols) {
-      numsplits = self$param_set$values$numsplits %??% 2
+      numsplits = self$param_set$values$numsplits
       # Defaulting to default value in stats::quantile, i.e. method 7
       type = self$param_set$values$type %??% 7
 
@@ -377,14 +377,14 @@ PipeOpEncodePLTree = R6Class("PipeOpEncodePLTree",
         frame = model$frame
 
         # Extracting splits according to https://github.com/cran/rpart/blob/983544575b80df286bf8ce238faf4afa145872cd/R/labels.rpart.R#L26
-        # NOTE: Maybe this isn't necessary, and we can just take index of splits (should splits exist), since compete and
-        # surrogate *might* only be larger than 0 than trained with more than one feature?
+        # NOTE: `frame$nsurrogate` and `frame$ncompete` seem to be always 0 in our case, since competing and
+        # surrogate splits only exist when there are more than one freature. Leaving it in for completeness.
         # - surrogates could only be used, if multiple variables exist (cannot use a non-existing variable as surrogate
         #   if the first considered variables has NAs)
         # - competes could not occur with one feature, since no alternative splits are possible
         if (nrow(frame) > 1L) {  # do splits exist?
           is_leaf = frame$var == "<leaf>"
-          frame = frame[!is_leaf, ]
+          frame = frame[!is_leaf, , drop = FALSE]
           index = cumsum(c(1, frame$nsurrogate + frame$ncompete + 1))
           # remove last entry introduced by prepending 1 in cumsum
           index = index[-length(index)]
