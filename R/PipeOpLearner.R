@@ -211,7 +211,6 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       private$.learner$state = self$state
       list(private$.learner$predict(task))
     },
-
     .additional_phash_input = function() private$.learner$phash
   )
 )
