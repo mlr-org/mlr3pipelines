@@ -459,6 +459,10 @@ Graph = R6Class("Graph",
       graph_load_namespaces(self, "predict")
       graph_reduce(self, input, "predict", single_input)
     },
+    hotstart = function(input, single_input = TRUE) {
+      graph_load_namespaces(self, "train")
+      graph_reduce(self, input, "hotstart", single_input)
+    },
     help = function(help_type = getOption("help_type")) {
       parts = strsplit(self$man, split = "::", fixed = TRUE)[[1]]
       match.fun("help")(parts[[2]], package = parts[[1]], help_type = help_type)
