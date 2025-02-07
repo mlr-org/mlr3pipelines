@@ -191,7 +191,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
     .transform = function(task) {
       task$select(self$state$features)
     },
-    .additional_phash_input = function() class(self$filter)
+    .additional_phash_input = function() self$filter$hash
   )
 )
 
