@@ -349,6 +349,8 @@ PipeOp = R6Class("PipeOp",
       output
     },
     hotstart = function(input) {
+      # default for all pipops is to just train them
+      # pipeops that can do hotstarting should overload this method
       self$train(input)
     },
     help = function(help_type = getOption("help_type")) {

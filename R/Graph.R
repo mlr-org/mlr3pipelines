@@ -449,10 +449,12 @@ Graph = R6Class("Graph",
       self$set_names(ids, sprintf("%s%s%s", assert_string(prefix), ids, assert_string(postfix)))
       invisible(self)
     },
+
     train = function(input, single_input = TRUE) {
       graph_load_namespaces(self, "train")
       graph_reduce(self, input, "train", single_input)
     },
+
     predict = function(input, single_input = TRUE) {
       graph_load_namespaces(self, "predict")
       graph_reduce(self, input, "predict", single_input)
