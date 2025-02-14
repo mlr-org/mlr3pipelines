@@ -85,8 +85,6 @@ test_that("Dictionary contains all PipeOps", {
 
   # the loop now checks whether we can construct each pipeop from the dictionary *and* by itself
   for (idx in seq_along(dictnames)) {
-    if (dictnames[[idx]] == "filter") next  # TODO: remove this when https://github.com/mlr-org/mlr3filters/issues/162 is solved
-
     pogen = get(pipeops[idx], pkgenv)  # the constructor, as found in the package namespace
     dictname = dictnames[idx]  # the "key" in the mlr_pipeops dictionary
     args = initargs[[pipeops[idx]]] %??% list()  # the required arguments, if any. e.g. 'outnum' for PipeOpCopy.
