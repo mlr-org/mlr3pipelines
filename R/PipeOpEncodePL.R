@@ -218,7 +218,8 @@ encode_piecewise_linear = function(column, bins) {
 #' train_out = pop$train(list(task))[[1L]]
 #' # Calculated bin boundaries per feature
 #' pop$state$bins
-#' # Each feature was split into three encoded features using piecewise linear encoding
+#' # Each feature was split into three encoded features using
+#' # piecewise linear encoding
 #' train_out$head()
 PipeOpEncodePLQuantiles = R6Class("PipeOpEncodePLQuantiles",
   inherit = PipeOpEncodePL,
