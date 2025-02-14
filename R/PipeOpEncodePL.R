@@ -251,11 +251,11 @@ mlr_pipeops$add("encodeplquantiles", PipeOpEncodePLQuantiles)
 #'
 #' @usage NULL
 #' @name mlr_pipeops_encodepltree
-#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpEncodePL`] / [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpEncodePL`]/[`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Encodes `numeric` and `integer` feature columns using piecewise lienar encoding. For details, see documentation of
-#' `PipeOpEncodePL` or the paper referenced below.
+#' `PipeOpEncodePL` or Gorishniy et al. (2022).
 #'
 #' Bins are constructed by trainig one decision tree [`Learner`][mlr3::Learner] per feature column, taking the target
 #' column into account, and using decision boundaries as bin boundaries.

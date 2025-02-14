@@ -5,11 +5,11 @@
 \alias{PipeOpEncodePLTree}
 \title{Piecewise Linear Encoding using Decision Trees}
 \format{
-\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpEncodePL}} / \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Encodes \code{numeric} and \code{integer} feature columns using piecewise lienar encoding. For details, see documentation of
-\code{PipeOpEncodePL} or the paper referenced below.
+\code{PipeOpEncodePL} or Gorishniy et al. (2022).
 
 Bins are constructed by trainig one decision tree \code{\link[mlr3:Learner]{Learner}} per feature column, taking the target
 column into account, and using decision boundaries as bin boundaries.

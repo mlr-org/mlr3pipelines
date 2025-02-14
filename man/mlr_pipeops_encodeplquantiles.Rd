@@ -47,7 +47,7 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{numsplits} :: \code{integer(1)} \cr
-Number of bins to create. Default is \code{2}.
+Number of bins to create. Initialized to \code{2}.
 \item \code{type} :: \code{integer(1)}\cr
 Method used to calculate sample quantiles. See help of \code{\link[stats:quantile]{stats::quantile}}. Default is \code{7}.
 }
