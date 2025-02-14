@@ -24,6 +24,7 @@
 #' ```
 #' PipeOpClassifAvg$new(innum = 0, collect_multiplicity = FALSE, id = "classifavg", param_vals = list())
 #' ```
+#'
 #' * `innum` :: `numeric(1)`\cr
 #'   Determines the number of input channels.
 #'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
@@ -50,10 +51,11 @@
 #' Inherits from [`PipeOpEnsemble`] by implementing the `private$weighted_avg_predictions()` method.
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpEnsemble`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpEnsemble`]/[`PipeOp`].
+#'
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Ensembles

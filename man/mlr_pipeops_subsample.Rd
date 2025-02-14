@@ -64,7 +64,7 @@ a new \code{\link[data.table:data.table]{data.table}} is attached that contains 
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{

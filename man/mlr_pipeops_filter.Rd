@@ -84,7 +84,7 @@ instead the whole \code{\link[mlr3:Task]{Task}} is used by \code{private$.get_st
 
 \section{Fields}{
 
-Fields inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
+Fields inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
 \item \code{filter} :: \code{\link[mlr3filters:Filter]{Filter}}\cr
 \code{\link[mlr3filters:Filter]{Filter}} that is being used for feature filtering. Do \emph{not} use this slot to get to the feature filtering scores

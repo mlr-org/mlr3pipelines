@@ -148,7 +148,7 @@
 #'        parameter tagged with `"internal_tuning"`.
 #'        An example for such a `PipeOp` is a `PipeOpLearner` that wraps a `Learner` with the `"internal_tuning"` property.
 #'
-#'   Programatic access to all available properties is possible via `mlr_reflections$pipeops$properties`.
+#' Programatic access to all available properties is possible via `mlr_reflections$pipeops$properties`.
 #'
 #' @section Methods:
 #' * `train(input)`\cr

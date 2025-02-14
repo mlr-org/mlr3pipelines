@@ -64,8 +64,11 @@
 #' @section Internals:
 #' Uses the [`lme4::glmer`]. This is relatively inefficient for features with a large number of levels.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
-#' Only methods inherited [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only methods inherited [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
 #' @template seealso_pipeopslist

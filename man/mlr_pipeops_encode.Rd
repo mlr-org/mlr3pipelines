@@ -71,6 +71,11 @@ Initialized to \code{"one-hot"}. One of:
 Uses the \code{\link[stats:contrasts]{stats::contrasts}} functions. This is relatively inefficient for features with a large number of levels.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.

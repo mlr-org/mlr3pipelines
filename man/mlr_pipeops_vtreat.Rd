@@ -116,6 +116,11 @@ Follows vtreat's fit/prepare interface. See \code{\link[vtreat:NumericOutcomeTre
 \code{\link[vtreat:MultinomialOutcomeTreatment]{vtreat::MultinomialOutcomeTreatment()}}, \code{\link[vtreat:fit_prepare]{vtreat::fit_prepare()}} and \code{\link[vtreat:prepare]{vtreat::prepare()}}.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.

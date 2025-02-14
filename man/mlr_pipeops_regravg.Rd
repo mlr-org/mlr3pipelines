@@ -61,7 +61,7 @@ Inherits from \code{\link{PipeOpEnsemble}} by implementing the \code{private$wei
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{

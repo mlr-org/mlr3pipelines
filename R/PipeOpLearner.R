@@ -73,6 +73,7 @@
 #'    The internally tuned values if the wrapped `Learner` supports internal tuning, `NULL` otherwise.
 #' * `internal_valid_scores` :: named `list()` or `NULL`\cr
 #'    The internal validation scores if the wrapped `Learner` supports internal validation, `NULL` otherwise.
+#'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
 #'

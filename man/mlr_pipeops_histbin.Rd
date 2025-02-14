@@ -61,6 +61,11 @@ For details see \code{\link[graphics:hist]{hist()}}.
 Uses the \code{\link[graphics:hist]{graphics::hist}} function.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.

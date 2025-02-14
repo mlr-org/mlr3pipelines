@@ -17,6 +17,7 @@
 #' ```
 #' PipeOpEncode$new(id = "decode", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"decode"`.
 #' * `param_vals` :: named `list`\cr
@@ -62,6 +63,9 @@
 #' * `ties_method` :: `character(1)`\cr
 #'   Method for resolving ties if multiple columns have the same value. Specifies the value from which of the columns
 #'   with the same value is to be picked. Options are `"first"`, `"last"`, or `"random"`. Initialized to `"random"`.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].

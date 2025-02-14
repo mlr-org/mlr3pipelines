@@ -156,9 +156,9 @@ This works analogously to the internal tuning implementation for \code{\link[mlr
 parameter tagged with \code{"internal_tuning"}.
 An example for such a \code{PipeOp} is a \code{PipeOpLearner} that wraps a \code{Learner} with the \code{"internal_tuning"} property.
 }
+}
 
 Programatic access to all available properties is possible via \code{mlr_reflections$pipeops$properties}.
-}
 }
 
 \section{Methods}{

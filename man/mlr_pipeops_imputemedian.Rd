@@ -47,6 +47,11 @@ The parameters are the parameters inherited from \code{\link{PipeOpImpute}}.
 Uses the \code{\link[stats:median]{stats::median()}} function. Features that are entirely \code{NA} are imputed as \code{0}.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.

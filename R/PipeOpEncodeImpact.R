@@ -54,8 +54,11 @@
 #' @section Internals:
 #' Uses Laplace smoothing, mostly to avoid infinite values for [classification Task][mlr3::TaskClassif].
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
-#' Only methods inherited [`PipeOpTaskPreprocSimple`][`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only methods inherited [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
 #' library("mlr3")

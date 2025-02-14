@@ -20,6 +20,7 @@
 #' ```
 #' PipeOpClassWeights$new(id = "classweights", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, default `"classweights"`
 #' * `param_vals` :: named `list`\cr
@@ -47,7 +48,7 @@
 #' weight column itself.
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].

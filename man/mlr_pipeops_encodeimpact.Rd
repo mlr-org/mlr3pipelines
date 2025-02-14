@@ -72,9 +72,14 @@ If \code{TRUE}, impute missing values as impact 0; otherwise the respective impa
 Uses Laplace smoothing, mostly to avoid infinite values for \link[mlr3:TaskClassif]{classification Task}.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
-Only methods inherited \code{\link[=PipeOpTaskPreproc]{PipeOpTaskPreprocSimple}}/\code{\link{PipeOp}}.
+Only methods inherited \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{

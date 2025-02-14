@@ -87,6 +87,11 @@ Default is \code{NULL}.
 Uses the \code{\link[fastICA:fastICA]{fastICA()}} function.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.

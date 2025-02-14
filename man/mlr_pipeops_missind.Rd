@@ -63,12 +63,12 @@ can be set to \code{selector_type("numeric")}.
 
 \section{Fields}{
 
-Fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
 
-Methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Methods inherited from \code{\link{PipeOpTaskPreprocSimple}}(\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{

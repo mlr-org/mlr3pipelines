@@ -51,7 +51,7 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{

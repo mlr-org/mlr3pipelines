@@ -65,6 +65,11 @@ Maximal number of principal components to be used. Default is \code{NULL}: use a
 Uses the \code{\link[stats:prcomp]{prcomp()}} function.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.

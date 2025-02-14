@@ -22,7 +22,7 @@ See \code{\link[smotefamily:adas]{smotefamily::ADAS}} for details.
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
-Identifier of resulting object, default \code{"smote"}.
+Identifier of resulting object, default \code{"adas"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
@@ -53,7 +53,7 @@ See \code{\link[smotefamily:adas]{ADAS()}}.
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{

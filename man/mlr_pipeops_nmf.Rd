@@ -100,6 +100,11 @@ Uses the \code{\link[NMF:nmf]{nmf()}} function as well as \code{\link[NMF:basis-
 \code{\link[MASS:ginv]{ginv()}}.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.

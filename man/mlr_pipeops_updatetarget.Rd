@@ -64,6 +64,11 @@ The \verb{$state} is a list of class levels for each target after trafo.
 \code{list()} if none of the targets have levels.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOp}}.

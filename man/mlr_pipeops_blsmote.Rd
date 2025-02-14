@@ -48,7 +48,7 @@ See \code{\link[smotefamily:BLSMOTE]{BLSMOTE()}}.
 \item \code{C} :: \code{numeric(1)} \cr
 The number of nearest neighbors used for classifying sample points as SAFE/DANGER/NOISE. Default is \code{5}.
 See \code{\link[smotefamily:BLSMOTE]{BLSMOTE()}}.
-\item \code{dup_size} :: \code{numeric} \cr
+\item \code{dup_size} :: \code{numeric(1)} \cr
 Desired times of synthetic minority instances over the original number of majority instances. \code{0} leads to balancing minority and majority class.
 Default is \code{0}. See \code{\link[smotefamily:BLSMOTE]{BLSMOTE()}}.
 \item \code{method} :: \code{character(1)} \cr
@@ -61,7 +61,7 @@ Whether to suppress printing status during training. Initialized to \code{TRUE}.
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{

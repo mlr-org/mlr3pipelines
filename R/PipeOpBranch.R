@@ -16,6 +16,7 @@
 #' ```
 #' PipeOpBranch$new(options, id = "branch", param_vals = list())
 #' ```
+#'
 #' * `options` :: `numeric(1)` | `character`\cr
 #'   If `options` is an integer number, it determines the number of
 #'   output channels / options that are created, named `output1`...`output<n>`. The
