@@ -10,8 +10,7 @@ Abstract \code{\link[R6:R6Class]{R6Class}}.
 A \code{\link{PipeOp}} represents a transformation of a given "input" into a given "output", with two stages: "training"
 and "prediction". It can be understood as a generalized function that not only has multiple inputs, but
 also multiple outputs (as well as two stages). The "training" stage is used when training a machine learning pipeline or
-fitting a statistical model, and the "predicting" stage is then used for making predictions
-on new data.
+fitting a statistical model, and the "predicting" stage is then used for making predictions on new data.
 
 To perform training, the \verb{$train()} function is called which takes inputs and transforms them, while simultaneously storing information
 in its \verb{$state} slot. For prediction, the \verb{$predict()} function is called, where the \verb{$state} information can be used to influence the transformation
@@ -24,7 +23,7 @@ return different objects, for example different subsets of a \code{\link[mlr3:Ta
 connect different outputs of some \code{\link{PipeOp}}s to inputs of other \code{\link{PipeOp}}s.
 
 Input and output channel information of a \code{\link{PipeOp}} is defined in the \verb{$input} and \verb{$output} slots; each channel has a \emph{name}, a required
-type during training, and a required type during prediction. The \verb{$train()} and \verb{$predict()} function are called with a \code{list} argument
+type during training, and a required type during prediction. The \verb{$train()} and \verb{$predict()} functions are called with a \code{list} argument
 that has one entry for each declared channel (with one exception, see next paragraph). The \code{list} is automatically type-checked
 for each channel against \verb{$input} and then passed on to the \code{private$.train()} or \code{private$.predict()} functions. There the data is processed and
 a result \code{list} is created. This \code{list} is again type-checked for declared output types of each channel. The length and types of the result
@@ -33,7 +32,7 @@ a result \code{list} is created. This \code{list} is again type-checked for decl
 A special input channel name is \code{"..."}, which creates a \emph{vararg} channel that takes arbitrarily many arguments, all of the same type. If the \verb{$input}
 table contains an \code{"..."}-entry, then the input given to \verb{$train()} and \verb{$predict()} may be longer than the number of declared input channels.
 
-This class is an abstract base class that all \code{\link{PipeOp}}s being used in a \code{\link{Graph}} should inherit from,  and
+This class is an abstract base class that all \code{\link{PipeOp}}s being used in a \code{\link{Graph}} should inherit from, and
 is not intended to be instantiated.
 }
 \section{Construction}{
@@ -52,11 +51,11 @@ These \code{\link[paradox:ParamSet]{ParamSet}} are combined using a \code{\link[
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}. The
 subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}. Default \code{list()}.
-\item input :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
+\item \code{input} :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
 Sets the \verb{$input} slot of the resulting object; see description there.
-\item output :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
+\item \code{output} :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
 Sets the \verb{$output} slot of the resulting object; see description there.
-\item packages :: \code{character}\cr
+\item \code{packages} :: \code{character}\cr
 Set of all required packages for the \code{\link{PipeOp}}'s \verb{$train} and \verb{$predict} methods. See \verb{$packages} slot.
 Default is \code{character(0)}.
 \item \code{tags} ::\code{character}\cr
@@ -72,7 +71,7 @@ Can be used to filter \code{as.data.table(mlr_pipeops)}. Default is \code{"abstr
 the \code{\link{PipeOp}}'s input channels, and must return a \code{list} (names are ignored) with values in the order of output
 channels in \verb{$output}. The \code{private$.train()} and \code{private$.predict()} function should not be called by the user;
 instead, a \verb{$train()} and \verb{$predict()} should be used. The most convenient usage is to add the \code{\link{PipeOp}}
-to a \code{Graph} (possibly as singleton in that \code{Graph}), and using the \code{Graph}'s \verb{$train()} / \verb{$predict()} methods.
+to a \code{\link{Graph}} (possibly as singleton in that \code{\link{Graph}}), and using the \code{\link{Graph}}'s \verb{$train()} / \verb{$predict()} methods.
 
 \code{private$.train()} and \code{private$.predict()} should treat their inputs as read-only. If they are \code{\link[R6:R6Class]{R6}} objects,
 they should be cloned before being manipulated in-place. Objects, or parts of objects, that are not changed, do
@@ -98,8 +97,8 @@ Method-dependent state obtained during training step, and usually required for t
 if and only if the \code{\link{PipeOp}} has not been trained. The \verb{$state} is the \emph{only} slot that can be reliably modified during
 \verb{$train()}, because \code{private$.train()} may theoretically be executed in a different \code{R}-session (e.g. for parallelization).
 \verb{$state} should furthermore always be set to something with copy-semantics, since it is never cloned. This is a limitation
-not of \code{\link{PipeOp}} or \code{mlr3pipelines}, but of the way the system as a whole works, together with \code{\link{GraphLearner}} and \code{mlr3}.
-\item input :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
+not of \code{\link{PipeOp}} or \code{mlr3pipelines}, but of the way the system as a whole works, together with \code{\link{GraphLearner}} and \code{\link{mlr3}}.
+\item \code{input} :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
 Input channels of \code{\link{PipeOp}}. Column \code{name} gives the names (and order) of values in the list given to
 \verb{$train()} and \verb{$predict()}. Column \code{train} is the (S3) class that an input object must conform to during
 training, column \code{predict} is the (S3) class that an input object must conform to during prediction. Types
@@ -111,7 +110,7 @@ is given to the \code{.train()} and \code{.predict()} functions directly. Otherw
 unpacked and the \code{.train()} and \code{.predict()} functions are called multiple times, once for each \code{\link{Multiplicity}} element.
 The type enclosed by square brackets indicates that only a \code{\link{Multiplicity}} containing values of this type are accepted.
 See \code{\link{Multiplicity}} for more information.
-\item output :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
+\item \code{output} :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
 Output channels of \code{\link{PipeOp}}, in the order in which they will be given in the list returned by \verb{$train} and
 \verb{$predict} functions. Column \code{train} is the (S3) class that an output object must conform to during training,
 column \code{predict} is the (S3) class that an output object must conform to during prediction. The \code{\link{PipeOp}} checks
@@ -125,9 +124,9 @@ Number of output channels. This equals \verb{nrow($output)}.
 \item \code{is_trained} :: \code{logical(1)} \cr
 Indicate whether the \code{\link{PipeOp}} was already trained and can therefore be used for prediction.
 \item \code{tags} ::\code{character}\cr
-A set of tags associated with the \code{PipeOp}. Tags describe a PipeOp's purpose.
-Can be used to filter \code{as.data.table(mlr_pipeops)}.
-PipeOp tags are inherited and child classes can introduce additional tags.
+A set of tags associated with the \code{\link{PipeOp}}. Tags describe a PipeOp's purpose.
+Can be used to filter \code{\link[=mlr_pipeops]{as.data.table(mlr_pipeops)}}.
+\code{\link{PipeOp}} tags are inherited and child classes can introduce additional tags.
 \item \code{hash} :: \code{character(1)} \cr
 Checksum calculated on the \code{\link{PipeOp}}, depending on the \code{\link{PipeOp}}'s \code{class} and the slots \verb{$id} and \verb{$param_set$values}. If a
 \code{\link{PipeOp}}'s functionality may change depending on more than these values, it should inherit the \verb{$hash} active
@@ -143,18 +142,18 @@ and done, if requested, by the \code{\link{Graph}} backend itself; it should \em
 \item \code{man} :: \code{character(1)}\cr
 Identifying string of the help page that shows with \code{help()}.
 \item \code{properties} :: \code{character()}\cr
-The properties of the pipeop.
+The properties of the \code{\link{PipeOp}}.
 Currently supported values are:
 \itemize{
-\item \code{"validation"}: the \code{PipeOp} can make use of the \verb{$internal_valid_task} of an \code{\link[mlr3:Task]{mlr3::Task}}.
-This is for example used for \code{PipeOpLearner}s that wrap a \code{Learner} with this property, see \code{\link[mlr3:Learner]{mlr3::Learner}}.
-\code{PipeOp}s that have this property, also have a \verb{$validate} field, which controls whether to use the validation task,
+\item \code{"validation"}: the \code{\link{PipeOp}} can make use of the \verb{$internal_valid_task} of an \code{\link[mlr3:Task]{mlr3::Task}}.
+This is for example used for \code{\link{PipeOpLearner}}s that wrap a \code{\link[mlr3:Learner]{Learner}} with this property, see \code{\link[mlr3:Learner]{mlr3::Learner}}.
+\code{\link{PipeOp}}s that have this property, also have a \verb{$validate} field, which controls whether to use the validation task,
 as well as a \verb{$internal_valid_scores} field, which allows to access the internal validation scores after training.
 \item \code{"internal_tuning"}: the \code{PipeOp} is able to internally optimize hyperparameters.
 This works analogously to the internal tuning implementation for \code{\link[mlr3:Learner]{mlr3::Learner}}.
-\code{PipeOp}s with that property also implement the standardized accessor \verb{$internal_tuned_values} and have at least one
+\code{\link{PipeOp}}s with that property also implement the standardized accessor \verb{$internal_tuned_values} and have at least one
 parameter tagged with \code{"internal_tuning"}.
-An example for such a \code{PipeOp} is a \code{PipeOpLearner} that wraps a \code{Learner} with the \code{"internal_tuning"} property.
+An example for such a \code{\link{PipeOp}} is a \code{\link{PipeOpLearner}} that wraps a \code{\link[mlr3:Learner]{Learner}} with the \code{"internal_tuning"} property.
 }
 }
 
@@ -164,30 +163,6 @@ Programatic access to all available properties is possible via \code{mlr_reflect
 \section{Methods}{
 
 \itemize{
-\item \code{train(input)}\cr
-(\code{list}) -> named \code{list}\cr
-Train \code{\link{PipeOp}} on \code{inputs}, transform it to output and store the learned \verb{$state}. If the PipeOp is already
-trained, already present \verb{$state} is overwritten. Input list is typechecked against the \verb{$input} \code{train} column.
-Return value is a list with as many entries as \verb{$output} has
-rows, with each entry named after the \verb{$output} \code{name} column and class according to the \verb{$output} \code{train} column.
-The workhorse function for training each \code{\link{PipeOp}} is the private
-\code{.train(input)}\cr: (named \code{list}) -> \code{list}\cr function.
-It's an Abstract function that must be implemented by concrete subclasses. \code{private$.train()} is called by \verb{$train()} after
-typechecking. It must change the \verb{$state} value to something non-\code{NULL} and return a list of transformed data according to
-the \verb{$output} \code{train} column. Names of the returned list are ignored.\cr
-The \code{private$.train()} method should not be called by a user; instead, the \verb{$train()} method should be used which does some
-checking and possibly type conversion.
-\item \code{predict(input)} \cr
-(\code{list}) -> named \code{list}\cr
-Predict on new data in \code{input}, possibly using the stored \verb{$state}. Input and output are specified by \verb{$input} and \verb{$output}
-in the same way as for \verb{$train()}, except that
-the \code{predict} column is used for type checking.
-The workhorse function for predicting in each using each \code{\link{PipeOp}} is
-\code{.predict(input)}\cr (named \code{list}) -> \code{list}\cr
-Abstract function that must be implemented by concrete subclasses. \code{private$.predict()} is called by \verb{$predict()} after
-typechecking and works analogously to \code{private$.train()}. Unlike \code{private$.train()}, \code{private$.predict()} should not modify
-the \code{\link{PipeOp}} in any way.\cr
-Just as \code{private$.train()}, \code{private$.predict()} should not be called by a user; instead, the \verb{$predict()} method should be used.
 \item \code{print()} \cr
 () -> \code{NULL} \cr
 Prints the \code{\link{PipeOp}}s most salient information: \verb{$id}, \verb{$is_trained}, \verb{$param_set$values}, \verb{$input} and \verb{$output}.
@@ -196,17 +171,48 @@ Prints the \code{\link{PipeOp}}s most salient information: \verb{$id}, \verb{$is
 Displays the help file of the concrete \code{PipeOp} instance. \code{help_type} is one of \code{"text"}, \code{"html"}, \code{"pdf"} and behaves
 as the \code{help_type} argument of R's \code{help()}.
 }
+
+The following public \verb{$train()} and \verb{$predict()} methods are the primary user-facing functions intended for direct use:
+\itemize{
+\item \code{train(input)}\cr
+(\code{list}) -> named \code{list}\cr
+Train \code{\link{PipeOp}} on \code{input}s, transform it to output and store the learned \verb{$state}. If the \code{\link{PipeOp}} is already
+trained, already present \verb{$state} is overwritten. Input list is typechecked against the \verb{$input} \code{train} column.
+Return value is a list with as many entries as \verb{$output} has rows, with each entry named after the \verb{$output} \code{name}
+column and class according to the \verb{$output} \code{train} column.
+The workhorse function for training each \code{\link{PipeOp}} is the \code{private$.train()} function.
+\item \code{predict(input)} \cr
+(\code{list}) -> named \code{list}\cr
+Predict on new data in \code{input}, possibly using the stored \verb{$state}. Input and output are specified by \verb{$input} and \verb{$output}
+in the same way as for \verb{$train()}, except that the \code{predict} column is used for type checking.
+The workhorse function for predicting in each \code{\link{PipeOp}} is the \code{private$.predict()} function.
+}
+
+To implement a \code{\link{PipeOp}} the following abstract private functions should be overloaded in the inheriting \code{\link{PipeOp}}.
+Note that these should not be called by a user; instead the public \verb{$train()} and \verb{$predict()} method should be used.
+\itemize{
+\item \code{.train(input)}\cr
+(named \code{list}) -> \code{list}\cr
+Abstract function that must be implemented by concrete subclasses. \code{private$.train()} is called by \verb{$train()} after
+typechecking. It must change the \verb{$state} value to something non-\code{NULL} and return a list of transformed data
+according to the \verb{$output} \code{train} column. Names of the returned list are ignored.\cr
+\item \code{.predict(input)}\cr
+(named \code{list}) -> \code{list}\cr
+Abstract function that must be implemented by concrete subclasses. \code{private$.predict()} is called by \verb{$predict()}
+after typechecking and works analogously to \code{private$.train()}. Unlike \code{private$.train()}, \code{private$.predict()}
+should not modify the \code{\link{PipeOp}} in any way.\cr
+}
 }
 
 \section{Inheriting}{
 
-To create your own \code{PipeOp}, you need to overload the \code{private$.train()} and \code{private$.test()} functions.
+To create your own \code{\link{PipeOp}}, you need to overload the \code{private$.train()} and \code{private$.test()} functions.
 It is most likely also necessary to overload the \verb{$initialize()} function to do additional initialization.
 The \verb{$initialize()} method should have at least the arguments \code{id} and \code{param_vals}, which should be passed on to \code{super$initialize()} unchanged.
 \code{id} should have a useful default value, and \code{param_vals} should have the default value \code{list()}, meaning no initialization of hyperparameters.
 
 If the \verb{$initialize()} method has more arguments, then it is necessary to also overload the \code{private$.additional_phash_input()} function.
-This function should return either all objects, or a hash of all objects, that can change the function or behavior of the \code{PipeOp} and are independent
+This function should return either all objects, or a hash of all objects, that can change the function or behavior of the \code{\link{PipeOp}} and are independent
 of the class, the id, the \verb{$state}, and the \verb{$param_set$values}. The last point is particularly important: changing the \verb{$param_set$values} should
 \emph{not} change the return value of \code{private$.additional_phash_input()}.
 }
