@@ -134,6 +134,8 @@
 #'   and done, if requested, by the [`Graph`] backend itself; it should *not* be done explicitly by `private$.train()` or `private$.predict()`.
 #' * `man` :: `character(1)`\cr
 #'   Identifying string of the help page that shows with `help()`.
+#' * `label` :: `character(1)`\cr
+#'   Description of the [`PipeOp`]'s functionality. Derived from the title of its help page.
 #' * `properties` :: `character()`\cr
 #'   The properties of the [`PipeOp`].
 #'   Currently supported values are:

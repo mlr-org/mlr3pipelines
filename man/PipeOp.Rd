@@ -141,6 +141,8 @@ are saved to this slot, exactly as they are returned by these functions. This is
 and done, if requested, by the \code{\link{Graph}} backend itself; it should \emph{not} be done explicitly by \code{private$.train()} or \code{private$.predict()}.
 \item \code{man} :: \code{character(1)}\cr
 Identifying string of the help page that shows with \code{help()}.
+\item \code{label} :: \code{character(1)}\cr
+Description of the \code{\link{PipeOp}}'s functionality. Derived from the title of its help page.
 \item \code{properties} :: \code{character()}\cr
 The properties of the \code{\link{PipeOp}}.
 Currently supported values are:
