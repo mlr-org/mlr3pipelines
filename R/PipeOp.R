@@ -97,7 +97,7 @@
 #'   training, column `predict` is the (S3) class that an input object must conform to during prediction. Types
 #'   are checked by the [`PipeOp`] itself and do not need to be checked by `private$.train()` / `private$.predict()` code.\cr
 #'   A special name is `"..."`, which creates a *vararg* input channel that accepts a variable number of inputs.\cr
-#'   If a row has both `train` and `predict` values enclosed by square brackets ("`[`", "`]`), then this channel is
+#'   If a row has both `train` and `predict` values enclosed by square brackets ("`[`", "`]`"), then this channel is
 #'   [`Multiplicity`]-aware. If the [`PipeOp`] receives a [`Multiplicity`] value on these channels, this [`Multiplicity`]
 #'   is given to the `.train()` and `.predict()` functions directly. Otherwise, the [`Multiplicity`] is transparently
 #'   unpacked and the `.train()` and `.predict()` functions are called multiple times, once for each [`Multiplicity`] element.
@@ -108,7 +108,7 @@
 #'   `$predict` functions. Column `train` is the (S3) class that an output object must conform to during training,
 #'   column `predict` is the (S3) class that an output object must conform to during prediction. The [`PipeOp`] checks
 #'   values returned by `private$.train()` and `private$.predict()` against these types specifications.\cr
-#'   If a row has both `train` and `predict` values enclosed by square brackets ("`[`", "`]`), then this signals that the channel
+#'   If a row has both `train` and `predict` values enclosed by square brackets ("`[`", "`]`"), then this signals that the channel
 #'   emits a [`Multiplicity`] of the indicated type. See [`Multiplicity`] for more information.
 #' * `innum` :: `numeric(1)` \cr
 #'   Number of input channels. This equals `nrow($input)`.
