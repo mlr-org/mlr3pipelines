@@ -173,7 +173,7 @@ encode_piecewise_linear = function(column, bins) {
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `numsplits` :: `integer(1)` \cr
-#'   Number of bins to create. Default is `2`.
+#'   Number of bins to create. Initialized to `2`.
 #' * `type` :: `integer(1)`\cr
 #'   Method used to calculate sample quantiles. See help of [`stats::quantile`]. Default is `7`.
 #'
@@ -239,11 +239,7 @@ PipeOpEncodePLQuantiles = R6Class("PipeOpEncodePLQuantiles",
       type = self$param_set$values$type %??% 7
 
       lapply(task$data(cols = cols), function(d) {
-        unique(c(
-          min(d, na.rm = TRUE),
-          stats::quantile(d, seq(1, numsplits - 1) / numsplits, na.rm = TRUE, names = FALSE, type = type),
-          max(d, na.rm = TRUE)
-        ))
+        stats::quantile(d, seq(0, 1, length.out = numsplits + 1), na.rm = TRUE, names = FALSE, type = type)
       })
     }
   )
@@ -377,11 +373,12 @@ PipeOpEncodePLTree = R6Class("PipeOpEncodePLTree",
         frame = model$frame
 
         # Extracting splits according to https://github.com/cran/rpart/blob/983544575b80df286bf8ce238faf4afa145872cd/R/labels.rpart.R#L26
-        # NOTE: `frame$nsurrogate` and `frame$ncompete` seem to be always 0 in our case, since competing and
-        # surrogate splits only exist when there are more than one freature. Leaving it in for completeness.
+        # NOTE: `frame$nsurrogate` and `frame$ncompete` seem to be always 0 in our case, since competing and surrogate
+        # splits only exist when there are more than one feature. Leaving it in for completeness.
         # - surrogates could only be used, if multiple variables exist (cannot use a non-existing variable as surrogate
         #   if the first considered variables has NAs)
-        # - competes could not occur with one feature, since no alternative splits are possible
+        # - competes could not occur with one feature, since no alternative splits are possible (this means alternative
+        #   splits with other variables)
         if (nrow(frame) > 1L) {  # do splits exist?
           is_leaf = frame$var == "<leaf>"
           frame = frame[!is_leaf, , drop = FALSE]

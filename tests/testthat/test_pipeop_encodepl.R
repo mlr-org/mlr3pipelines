@@ -23,10 +23,10 @@ test_that("PipeOpEncodePLQuantiles - train and predict", {
 
   # encoding and column naming
   dt_encoded = data.table(
-    x.bin1 = c(0, 1, 2/5, 1, 4/5, 1, NA, NA),
-    x.bin2 = c(0, 1/5, 0, 3/5, 0, 1, NA, NA),
-    y.bin1 = c(NA, NA, 0, 15/40, 3/4, 1, 1, 1),
-    y.bin2 = c(NA, NA, 0, 0, 0, 10/45, 15/45, 1)
+    x.bin1 = c(0, 1, 2 / 5, 1, 4 / 5, 1, NA, NA),
+    x.bin2 = c(0, 1 / 5, 0, 3 / 5, 0, 1, NA, NA),
+    y.bin1 = c(NA, NA, 0, 15 / 40, 3 / 4, 1, 1, 1),
+    y.bin2 = c(NA, NA, 0, 0, 0, 10 / 45, 15 / 45, 1)
   )
   expect_equal(train_out$data(cols = train_out$feature_names), dt_encoded)
   expect_equal(predict_out$data(cols = predict_out$feature_names), dt_encoded)
@@ -46,11 +46,23 @@ test_that("PipeOpEncodePLQuantiles - train and predict", {
     x.bin2 = c(0, 1, 0, 1, 0.5, 1, NA, NA),
     x.bin3 = c(0, 0, 0, 0.5, 0, 1, NA, NA),
     y.bin1 = c(NA, NA, 0, 1, 1, 1, 1, 1),
-    y.bin2 = c(NA, NA, 0, 0, 15/35, 1, 1, 1),
-    y.bin3 = c(NA, NA, 0, 0, 0, 0, 5/35, 1)
+    y.bin2 = c(NA, NA, 0, 0, 15 / 35, 1, 1, 1),
+    y.bin3 = c(NA, NA, 0, 0, 0, 0, 5 / 35, 1)
   )
   expect_equal(train_out$data(cols = train_out$feature_names), dt_encoded)
   expect_equal(predict_out$data(cols = predict_out$feature_names), dt_encoded)
+
+  # Quantile types are producing correct bins (incl. min and max)
+  op$param_set$set_values(numsplits = 2)
+  for (t in seq(1, 9)) {
+    op$param_set$set_values(type = t)
+    op$train(list(task))[[1L]]
+    if (t %in% c(1, 3, 4)) {
+      expect_equal(op$state$bins, list(x = c(2, 6, 12), y = c(10, 40, 95)))
+    } else {
+      expect_equal(op$state$bins, list(x = c(2, 7, 12), y = c(10, 50, 95)))
+    }
+  }
 })
 
 test_that("PipeOpEncodePLTree - basic properties", {
@@ -89,11 +101,11 @@ test_that("PipeOpEncodePLTree - TaskRegr train and predict", {
 
   # encoding and column naming
   dt_encoded = data.table(
-    x.bin1 = c(seq(0, 14)/14.5, rep(1, 30), NA),
-    x.bin2 = c(rep(0, 15), seq(0.5, 14.5)/15, rep(1, 15), NA),
-    x.bin3 = c(rep(0, 30), seq(0.5, 14.5)/14.5, NA),
+    x.bin1 = c(seq(0, 14) / 14.5, rep(1, 30), NA),
+    x.bin2 = c(rep(0, 15), seq(0.5, 14.5) / 15, rep(1, 15), NA),
+    x.bin3 = c(rep(0, 30), seq(0.5, 14.5) / 14.5, NA),
     y.bin1 = c(rep(0, 15), rep(1, 30), NA),
-    y.bin2 = c(rep(0, 15), rep(0.5/1.5, 15), rep(1, 15), NA),
+    y.bin2 = c(rep(0, 15), rep(0.5 / 1.5, 15), rep(1, 15), NA),
     y.bin3 = c(rep(0, 30), rep(1, 15), NA)
   )
   expect_equal(train_out$data(cols = train_out$feature_names), dt_encoded)
@@ -128,10 +140,10 @@ test_that("PipeOpEncodePLTree - TaskRegr train and predict", {
 
   # encoding and column naming
   dt_encoded = data.table(
-    x.bin1 = c(seq(0, 14)/14.5, rep(1, 30), NA),
-    x.bin2 = c(rep(0, 15), seq(0.5, 29.5)/29.5, NA),
+    x.bin1 = c(seq(0, 14) / 14.5, rep(1, 30), NA),
+    x.bin2 = c(rep(0, 15), seq(0.5, 29.5) / 29.5, NA),
     y.bin1 = c(rep(0, 15), rep(1, 30), NA),
-    y.bin2 = c(rep(0, 15), rep(0.5/2.5, 15), rep(1, 15), NA)
+    y.bin2 = c(rep(0, 15), rep(0.5 / 2.5, 15), rep(1, 15), NA)
   )
   expect_equal(train_out$data(cols = train_out$feature_names), dt_encoded)
   expect_equal(predict_out$data(cols = predict_out$feature_names), dt_encoded)
@@ -157,11 +169,11 @@ test_that("PipeOpEncodePLTree - TaskClassif train and predict", {
 
   # encoding and column naming
   dt_encoded = data.table(
-    x.bin1 = c(seq(0, 14)/14.5, rep(1, 30), NA),
-    x.bin2 = c(rep(0, 15), seq(0.5, 14.5)/15, rep(1, 15), NA),
-    x.bin3 = c(rep(0, 30), seq(0.5, 14.5)/14.5, NA),
+    x.bin1 = c(seq(0, 14) / 14.5, rep(1, 30), NA),
+    x.bin2 = c(rep(0, 15), seq(0.5, 14.5) / 15, rep(1, 15), NA),
+    x.bin3 = c(rep(0, 30), seq(0.5, 14.5) / 14.5, NA),
     y.bin1 = c(rep(0, 15), rep(1, 30), NA),
-    y.bin2 = c(rep(0, 15), rep(0.5/1.5, 15), rep(1, 15), NA),
+    y.bin2 = c(rep(0, 15), rep(0.5 / 1.5, 15), rep(1, 15), NA),
     y.bin3 = c(rep(0, 30), rep(1, 15), NA)
   )
   expect_equal(train_out$data(cols = train_out$feature_names), dt_encoded)
@@ -196,10 +208,10 @@ test_that("PipeOpEncodePLTree - TaskClassif train and predict", {
 
   # encoding and column naming
   dt_encoded = data.table(
-    x.bin1 = c(seq(0, 14)/14.5, rep(1, 30), NA),
-    x.bin2 = c(rep(0, 15), seq(0.5, 29.5)/29.5, NA),
+    x.bin1 = c(seq(0, 14) / 14.5, rep(1, 30), NA),
+    x.bin2 = c(rep(0, 15), seq(0.5, 29.5) / 29.5, NA),
     y.bin1 = c(rep(0, 15), rep(1, 30), NA),
-    y.bin2 = c(rep(0, 15), rep(0.5/2.5, 15), rep(1, 15), NA)
+    y.bin2 = c(rep(0, 15), rep(0.5 / 2.5, 15), rep(1, 15), NA)
   )
   expect_equal(train_out$data(cols = train_out$feature_names), dt_encoded)
   expect_equal(predict_out$data(cols = predict_out$feature_names), dt_encoded)
