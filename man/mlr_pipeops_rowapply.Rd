@@ -26,7 +26,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \link{`PipeOpTaskPreproc}.
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with the original affected columns replaced by the columns created by
 applying \code{applicator} to each row.
