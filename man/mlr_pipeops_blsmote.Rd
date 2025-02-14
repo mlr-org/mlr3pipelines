@@ -88,9 +88,9 @@ table(bls_result$result)
 \dontshow{\}) # examplesIf}
 }
 \references{
-Han, Hui, Wang, Wen-Yuan, Mao, Bing-Huan (2005).
+Han H, Wang W, Mao B (2005).
 \dQuote{Borderline-SMOTE: A New Over-Sampling Method in Imbalanced Data Sets Learning.}
-In Huang, De-Shuang, Zhang, Xiao-Ping, Huang, Guang-Bin (eds.), \emph{Advances in Intelligent Computing}, 878--887.
+In Huang D, Zhang X, Huang G (eds.), \emph{Advances in Intelligent Computing}, 878--887.
 ISBN 978-3-540-31902-3, \doi{10.1007/11538059_91}.
 }
 \seealso{
@@ -120,6 +120,9 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodepl}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
