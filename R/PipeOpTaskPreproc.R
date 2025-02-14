@@ -112,7 +112,7 @@
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`], as well as:
-#' * `.train_task`\cr
+#' * `.train_task(task)`\cr
 #'   ([`Task`][mlr3::Task]) -> [`Task`][mlr3::Task]\cr
 #'   Called by the [`PipeOpTaskPreproc`]'s implementation of `private$.train()`. Takes a single [`Task`][mlr3::Task] as input
 #'   and modifies it (ideally in-place without cloning) while storing information in the `$state` slot. Note that unlike
@@ -122,7 +122,7 @@
 #'   `$state` elements added by `private$.train_task()` and [`PipeOpTaskPreproc`].\cr
 #'   By default this function calls the `private$.train_dt()` function, but it can be overloaded to perform operations on the [`Task`][mlr3::Task]
 #'   directly.
-#' * `.predict_task`\cr
+#' * `.predict_task(task)`\cr
 #'   ([`Task`][mlr3::Task]) -> [`Task`][mlr3::Task]\cr
 #'   Called by the [`PipeOpTaskPreproc`]'s implementation of `$.predict()`. Takes a single [`Task`][mlr3::Task] as input
 #'   and modifies it (ideally in-place without cloning) while using information in the `$state` slot. Works analogously to

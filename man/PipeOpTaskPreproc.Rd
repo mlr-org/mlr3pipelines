@@ -135,7 +135,7 @@ Fields inherited from \code{\link{PipeOp}}.
 
 Methods inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
-\item \code{.train_task}\cr
+\item \code{.train_task(task)}\cr
 (\code{\link[mlr3:Task]{Task}}) -> \code{\link[mlr3:Task]{Task}}\cr
 Called by the \code{\link{PipeOpTaskPreproc}}'s implementation of \code{private$.train()}. Takes a single \code{\link[mlr3:Task]{Task}} as input
 and modifies it (ideally in-place without cloning) while storing information in the \verb{$state} slot. Note that unlike
@@ -145,7 +145,7 @@ the \code{\link{PipeOpTaskPreproc}} will add additional slots to (see Section \e
 \verb{$state} elements added by \code{private$.train_task()} and \code{\link{PipeOpTaskPreproc}}.\cr
 By default this function calls the \code{private$.train_dt()} function, but it can be overloaded to perform operations on the \code{\link[mlr3:Task]{Task}}
 directly.
-\item \code{.predict_task}\cr
+\item \code{.predict_task(task)}\cr
 (\code{\link[mlr3:Task]{Task}}) -> \code{\link[mlr3:Task]{Task}}\cr
 Called by the \code{\link{PipeOpTaskPreproc}}'s implementation of \verb{$.predict()}. Takes a single \code{\link[mlr3:Task]{Task}} as input
 and modifies it (ideally in-place without cloning) while using information in the \verb{$state} slot. Works analogously to
