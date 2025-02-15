@@ -62,6 +62,11 @@ For details see \code{\link[bestNormalize:yeojohnson]{yeojohnson()}}.
 Uses the \code{\link[bestNormalize:yeojohnson]{bestNormalize::yeojohnson}} function.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.

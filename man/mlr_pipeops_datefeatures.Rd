@@ -40,7 +40,7 @@ be set during construction. Default \code{list()}.
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpTaskPreprocSimple}}.
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with date-related features computed and added to the
 feature set of the output task and the \code{POSIXct} columns of the data removed from the
@@ -50,12 +50,12 @@ feature set (depending on the value of \code{keep_date_var}).
 \section{State}{
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from
-\code{\link{PipeOpTaskPreprocSimple}}.
+\code{\link{PipeOpTaskPreproc}}.
 }
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpTaskPreprocSimple}}, as well as:
+The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{keep_date_var} :: \code{logical(1)}\cr
 Should the \code{POSIXct} columns be kept as features? Default FALSE.
@@ -91,14 +91,14 @@ The cyclic feature transformation always assumes that values range from 0, so so
 (e.g. day of the month) are shifted before sine/cosine transform.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
-}
-
-\section{Fields}{
-
-Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{

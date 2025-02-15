@@ -11,6 +11,7 @@
 #' ```
 #' PipeOpUnbranch$new(options, id = "unbranch", param_vals = list())
 #' ```
+#'
 #' * `options` :: `numeric(1)` | `character`\cr
 #'   If `options` is 0, a vararg input channel is created that can take
 #'   any number of inputs.

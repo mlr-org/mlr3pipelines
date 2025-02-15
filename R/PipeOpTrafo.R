@@ -432,6 +432,9 @@ mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 #' Overloads [`PipeOpTargetTrafo`]'s `.get_state()`, `.transform()`, and
 #' `.invert()`. Should be used in combination with [`PipeOpTargetInvert`].
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTargetTrafo`]/[`PipeOp`].
 #'
@@ -543,6 +546,9 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' @section State:
 #' The `$state` is a list of class levels for each target after trafo.
 #' `list()` if none of the targets have levels.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].

@@ -55,6 +55,11 @@ Overloads \code{\link{PipeOpTargetTrafo}}'s \code{.get_state()}, \code{.transfor
 \code{.invert()}. Should be used in combination with \code{\link{PipeOpTargetInvert}}.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTargetTrafo}}/\code{\link{PipeOp}}.

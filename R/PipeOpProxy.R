@@ -13,6 +13,7 @@
 #' ```
 #' PipeOpProxy$new(innum = 0, outnum = 1, id = "proxy", param_vals = list())
 #' ```
+#'
 #' * `innum` :: `numeric(1)\cr
 #'   Determines the number of input channels.
 #'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.

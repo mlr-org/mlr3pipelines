@@ -22,8 +22,6 @@ All incoming \code{\link[mlr3:Learner]{Learner}}'s \verb{$predict_type} must agr
 Weights can be set as a parameter; if none are provided, defaults to
 equal weights for each prediction.
 Defaults to equal weights for each model.
-
-If `
 }
 \section{Construction}{
 
@@ -68,7 +66,7 @@ Inherits from \code{\link{PipeOpEnsemble}} by implementing the \code{private$wei
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{

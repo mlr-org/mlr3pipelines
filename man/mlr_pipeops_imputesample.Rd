@@ -50,6 +50,11 @@ For logicals, \code{TRUE} or \code{FALSE} are sampled uniformly at random.
 Numerics and integers are imputed as \code{0}.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.

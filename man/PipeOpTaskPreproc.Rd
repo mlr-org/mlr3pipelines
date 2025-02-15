@@ -55,14 +55,14 @@ subclass should have its own \code{param_vals} parameter and pass it on to \code
 Whether the \code{affect_columns} parameter should be added which lets the user limit the columns that are
 modified by the \code{\link{PipeOpTaskPreproc}}. This should generally be \code{FALSE} if the operation adds or removes
 rows from the \code{\link[mlr3:Task]{Task}}, and \code{TRUE} otherwise. Default is \code{TRUE}.
-\item packages :: \code{character}\cr
+\item \code{packages} :: \code{character}\cr
 Set of all required packages for the \code{\link{PipeOp}}'s \code{private$.train()} and \code{private$.predict()} methods. See \verb{$packages} slot.
 Default is \code{character(0)}.
 \item \code{task_type} :: \code{character(1)}\cr
 The class of \code{\link[mlr3:Task]{Task}} that should be accepted as input and will be returned as output. This
 should generally be a \code{character(1)} identifying a type of \code{\link[mlr3:Task]{Task}}, e.g. \code{"Task"}, \code{"TaskClassif"} or
 \code{"TaskRegr"} (or another subclass introduced by other packages). Default is \code{"Task"}.
-\item tags :: \code{character} | \code{NULL}\cr
+\item \code{tags} :: \code{character} | \code{NULL}\cr
 Tags of the resulting \code{PipeOp}. This is added to the tag \code{"data transform"}. Default \code{NULL}.
 \item \code{feature_types} :: \code{character}\cr
 Feature types affected by the \code{PipeOp}. See \code{private$.select_cols()} for more information.
@@ -135,7 +135,7 @@ Fields inherited from \code{\link{PipeOp}}.
 
 Methods inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
-\item \code{.train_task}\cr
+\item \code{.train_task(task)}\cr
 (\code{\link[mlr3:Task]{Task}}) -> \code{\link[mlr3:Task]{Task}}\cr
 Called by the \code{\link{PipeOpTaskPreproc}}'s implementation of \code{private$.train()}. Takes a single \code{\link[mlr3:Task]{Task}} as input
 and modifies it (ideally in-place without cloning) while storing information in the \verb{$state} slot. Note that unlike
@@ -145,7 +145,7 @@ the \code{\link{PipeOpTaskPreproc}} will add additional slots to (see Section \e
 \verb{$state} elements added by \code{private$.train_task()} and \code{\link{PipeOpTaskPreproc}}.\cr
 By default this function calls the \code{private$.train_dt()} function, but it can be overloaded to perform operations on the \code{\link[mlr3:Task]{Task}}
 directly.
-\item \code{.predict_task}\cr
+\item \code{.predict_task(task)}\cr
 (\code{\link[mlr3:Task]{Task}}) -> \code{\link[mlr3:Task]{Task}}\cr
 Called by the \code{\link{PipeOpTaskPreproc}}'s implementation of \verb{$.predict()}. Takes a single \code{\link[mlr3:Task]{Task}} as input
 and modifies it (ideally in-place without cloning) while using information in the \verb{$state} slot. Works analogously to

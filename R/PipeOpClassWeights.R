@@ -14,12 +14,13 @@
 #' must be adjusted for this [`PipeOp`] to be useful.
 #'
 #' Note this only sets the `"weights_learner"` column.
-#' It therefore influences the behaviour of subsequent `Learner`s, but does not influence resampling or evaluation metric weights.
+#' It therefore influences the behaviour of subsequent [`Learner`][mlr3::Learner]s, but does not influence resampling or evaluation metric weights.
 #'
 #' @section Construction:
 #' ```
 #' PipeOpClassWeights$new(id = "classweights", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, default `"classweights"`
 #' * `param_vals` :: named `list`\cr
@@ -47,7 +48,7 @@
 #' weight column itself.
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].

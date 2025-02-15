@@ -43,6 +43,7 @@ A vector of all feature names that are kept (i.e. not dropped) in the \code{\lin
 
 \section{Parameters}{
 
+The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{selector} :: \code{function} | \code{\link{Selector}} \cr
 \code{\link{Selector}} function, takes a \code{Task} as argument and returns a \code{character}
@@ -58,7 +59,7 @@ Uses \code{task$select()}.
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{

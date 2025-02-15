@@ -36,6 +36,9 @@
 #' For logicals, `TRUE` or `FALSE` are sampled uniformly at random.
 #' Numerics and integers are imputed as `0`.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
 #'

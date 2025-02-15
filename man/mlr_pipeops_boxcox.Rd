@@ -61,6 +61,11 @@ Upper value for estimation of lambda parameter. For details see \code{\link[best
 Uses the \code{\link[bestNormalize:boxcox]{bestNormalize::boxcox}} function.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.

@@ -60,6 +60,11 @@ Adds an explicit new level to \code{factor} and \code{ordered} features, but not
 if \code{check_levels} is \code{FALSE} and the level is not already present.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.

@@ -13,6 +13,7 @@
 #' ```
 #' PipeOpThreshold$new(id = "threshold", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, default `"threshold"`.
 #' * `param_vals` :: named `list`\cr

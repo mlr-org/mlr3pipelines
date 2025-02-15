@@ -20,6 +20,7 @@
 #' ```
 #' PipeOpEncode$new(id = "encode", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"encode"`.
 #' * `param_vals` :: named `list`\cr
@@ -49,6 +50,9 @@
 #'
 #' @section Internals:
 #' Uses the [`stats::contrasts`] functions. This is relatively inefficient for features with a large number of levels.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].

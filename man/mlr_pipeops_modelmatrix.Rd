@@ -51,6 +51,11 @@ See \code{\link[stats:model.matrix]{model.matrix()}}.
 Uses the \code{\link[stats:model.matrix]{model.matrix()}} function.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
