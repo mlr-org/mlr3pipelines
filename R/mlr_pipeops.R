@@ -5,7 +5,7 @@
 #'
 #' @description
 #' A simple [`Dictionary`][mlr3misc::Dictionary] storing objects of class [`PipeOp`].
-#' Each `PipeOp` has an associated help page, see `mlr_pipeops_[id]`.
+#' Each [`PipeOp`] has an associated help page, see `mlr_pipeops_[id]`.
 #'
 #' @section Fields:
 #' Fields inherited from [`Dictionary`][mlr3misc::Dictionary], as well as:
@@ -31,7 +31,7 @@
 #'   * `label` :: (`character`)\cr
 #'     Description of the [`PipeOp`]'s functionality.
 #'   * `packages` :: (`character`)\cr
-#'     Set of all required packages for the ['PipeOp']'s train and ⁠predict⁠ methods.
+#'     Set of all required packages for the [`PipeOp`]'s train and ⁠predict⁠ methods.
 #'   * `tags` :: (`character`)\cr
 #'     A set of tags associated with the [`PipeOp`] describing its purpose.
 #'   * `feature_types` :: (`character`)\cr
