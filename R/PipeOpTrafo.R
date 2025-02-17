@@ -15,7 +15,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpTargetTrafo$new(id, param_set = ps(), param_vals = list() packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL)
+#' PipeOpTargetTrafo$new(id, param_set = ps(), param_vals = list(), packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL)
 #' ```
 #'
 #' * `id` :: `character(1)`\cr

@@ -19,7 +19,7 @@ Users can overload up to four \verb{private$}-functions: \code{.get_state()} (op
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTargetTrafo$new(id, param_set = ps(), param_vals = list() packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTargetTrafo$new(id, param_set = ps(), param_vals = list(), packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL)
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
