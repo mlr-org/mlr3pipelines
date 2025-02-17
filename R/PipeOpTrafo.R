@@ -374,7 +374,7 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
     .transform = function(task, phase) {
       new_target = self$param_set$values$trafo(task$data(cols = task$target_names))
       task$cbind(new_target)
-      convert_task(task, target = colnames(new_target), new_type = private$.new_task_type, drop_original_target = TRUE)
+      convert_task(task, target = colnames(new_target), new_type = private$.new_task_type, drop_original_target = TRUE, drop_levels = FALSE)
     },
 
     .invert = function(prediction, predict_phase_state) {
@@ -478,7 +478,7 @@ PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
       new_target = self$state$offset + x * self$state$scale
       setnames(new_target, paste0(colnames(new_target), ".scaled"))
       task$cbind(new_target)
-      convert_task(task, target = colnames(new_target), drop_original_target = TRUE)
+      convert_task(task, target = colnames(new_target), drop_original_target = TRUE, drop_levels = FALSE)
     },
 
     .invert = function(prediction, predict_phase_state) {

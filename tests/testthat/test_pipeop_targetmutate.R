@@ -71,13 +71,12 @@ test_that("PipeOpTargetMutate - log base 2 trafo", {
 
 test_that("PipeOpTargetMutate - does not drop missing levels, #631", {
   task = tsk("boston_housing")$filter(1:100)
+  op = po("targetmutate")
   train_out = op$train(list(task))[["output"]]
-  # train_out should also know all levels
+  predict_out = op$predict(list(task))[["output"]]
+  # train_out and predict_out should also know all levels
   expect_equal(task$levels(), train_out$levels())
-
-  # Check whether we need to fix and test this in other TargetTrafo POs
-  # Check why this does not occur in predict
-  # Think about how to solve this: in pipelines or mlr3::convert_task?
+  expect_equal(task$levels(), predict_out$levels())
 })
 
 #'test_that("PipeOpTargetMutate - Regr -> Classif", {
