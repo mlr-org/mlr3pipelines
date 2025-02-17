@@ -25,24 +25,23 @@ Users can overload up to four \verb{private$}-functions: \code{.get_state()} (op
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object. See \verb{$id} slot of \code{\link{PipeOp}}.
 \item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}}\cr
-Parameter space description. This should be created by the subclass and given to
-\code{super$initialize()}.
+Parameter space description. This should be created by the subclass and given to \code{super$initialize()}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}.
 The subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}.
 Default \code{list()}.
 \item \code{task_type_in} :: \code{character(1)}\cr
-The class of \code{\link[mlr3:Task]{Task}} that should be accepted as input. This
-should generally be a \code{character(1)} identifying a type of \code{\link[mlr3:Task]{Task}}, e.g. \code{"Task"}, \code{"TaskClassif"} or
-\code{"TaskRegr"} (or another subclass introduced by other packages). Default is \code{"Task"}.
+The class of \code{\link[mlr3:Task]{Task}} that should be accepted as input. This should generally be a \code{character(1)}
+identifying a type of \code{\link[mlr3:Task]{Task}}, e.g. \code{"Task"}, \code{"TaskClassif"} or \code{"TaskRegr"} (or another subclass
+introduced by other packages). Default is \code{"Task"}.
 \item \code{task_type_out} :: \code{character(1)}\cr
-The class of \code{\link[mlr3:Task]{Task}} that is produced as output. This
-should generally be a \code{character(1)} identifying a type of \code{\link[mlr3:Task]{Task}}, e.g. \code{"Task"}, \code{"TaskClassif"} or
-\code{"TaskRegr"} (or another subclass introduced by other packages). Default is the value of \code{task_type_in}.
-\item packages :: \code{character}\cr
+The class of \code{\link[mlr3:Task]{Task}} that is produced as output. This should generally be a \code{character(1)}
+identifying  a type of \code{\link[mlr3:Task]{Task}}, e.g. \code{"Task"}, \code{"TaskClassif"} or \code{"TaskRegr"} (or another subclass
+introduced by ther packages). Default is the value of \code{task_type_in}.
+\item \code{packages} :: \code{character}\cr
 Set of all required packages for the \code{\link{PipeOp}}'s methods. See \verb{$packages} slot. Default is
 \code{character(0)}.
-\item tags :: \code{character} | \code{NULL}\cr
+\item \code{tags} :: \code{character} | \code{NULL}\cr
 Tags of the resulting \code{PipeOp}. This is added to the tag \code{"target transform"}. Default \code{NULL}.
 }
 }
@@ -111,14 +110,13 @@ This function is abstract and should be overloaded by inheriting classes.
 (\code{\link[mlr3:Task]{Task}}) -> \code{any}\cr
 Called by \code{\link{PipeOpTargetTrafo}}'s implementation of \code{private$.predict()}. Takes a single
 \code{\link[mlr3:Task]{Task}} as input and returns an arbitrary value that will be given as
-\code{predict_phase_state} to \code{.invert()}. This should not modify the input \code{\link[mlr3:Task]{Task}} .\cr
+\code{predict_phase_state} to \code{.invert()}. This should not modify the input \code{\link[mlr3:Task]{Task}}.\cr
 The base implementation returns a list with a single element, the \verb{$truth} column of the \code{\link[mlr3:Task]{Task}},
 and should be overloaded if a more training-phase-dependent state is desired.
 \item \code{.invert(prediction, predict_phase_state)}\cr
 (\code{\link[mlr3:Prediction]{Prediction}}, \code{any}) -> \code{\link[mlr3:Prediction]{Prediction}}\cr
-Takes a \code{\link[mlr3:Prediction]{Prediction}} and a \code{predict_phase_state}
-object as input and inverts the prediction. This function is sent as \code{"fun"} to
-\code{\link{PipeOpTargetInvert}}.\cr
+Takes a \code{\link[mlr3:Prediction]{Prediction}} and a \code{predict_phase_state} object as input and inverts the prediction.
+This function is sent as \code{"fun"} to \code{\link{PipeOpTargetInvert}}.\cr
 This function is abstract and should be overloaded by inheriting classes. Care should be
 taken that the \code{predict_type} of the \code{\link[mlr3:Prediction]{Prediction}} being inverted is handled well.
 \item \code{.invert_help(predict_phase_state)}\cr

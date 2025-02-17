@@ -21,24 +21,23 @@
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object. See `$id` slot of [`PipeOp`].
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
-#'   Parameter space description. This should be created by the subclass and given to
-#'   `super$initialize()`.
+#'   Parameter space description. This should be created by the subclass and given to `super$initialize()`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`.
 #'   The subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`.
 #'   Default `list()`.
 #' * `task_type_in` :: `character(1)`\cr
-#'   The class of [`Task`][mlr3::Task] that should be accepted as input. This
-#'   should generally be a `character(1)` identifying a type of [`Task`][mlr3::Task], e.g. `"Task"`, `"TaskClassif"` or
-#'   `"TaskRegr"` (or another subclass introduced by other packages). Default is `"Task"`.
+#'   The class of [`Task`][mlr3::Task] that should be accepted as input. This should generally be a `character(1)`
+#'   identifying a type of [`Task`][mlr3::Task], e.g. `"Task"`, `"TaskClassif"` or `"TaskRegr"` (or another subclass
+#'   introduced by other packages). Default is `"Task"`.
 #' * `task_type_out` :: `character(1)`\cr
-#'   The class of [`Task`][mlr3::Task] that is produced as output. This
-#'   should generally be a `character(1)` identifying a type of [`Task`][mlr3::Task], e.g. `"Task"`, `"TaskClassif"` or
-#'   `"TaskRegr"` (or another subclass introduced by other packages). Default is the value of `task_type_in`.
-#' * packages :: `character`\cr
+#'   The class of [`Task`][mlr3::Task] that is produced as output. This should generally be a `character(1)`
+#'   identifying  a type of [`Task`][mlr3::Task], e.g. `"Task"`, `"TaskClassif"` or `"TaskRegr"` (or another subclass
+#'   introduced by ther packages). Default is the value of `task_type_in`.
+#' * `packages` :: `character`\cr
 #'   Set of all required packages for the [`PipeOp`]'s methods. See `$packages` slot. Default is
 #'   `character(0)`.
-#' * tags :: `character` | `NULL`\cr
+#' * `tags` :: `character` | `NULL`\cr
 #'   Tags of the resulting `PipeOp`. This is added to the tag `"target transform"`. Default `NULL`.
 #'
 #' @section Input and Output Channels:
@@ -95,14 +94,13 @@
 #'   ([`Task`][mlr3::Task]) -> `any`\cr
 #'   Called by [`PipeOpTargetTrafo`]'s implementation of `private$.predict()`. Takes a single
 #'   [`Task`][mlr3::Task] as input and returns an arbitrary value that will be given as
-#'   `predict_phase_state` to `.invert()`. This should not modify the input [`Task`][mlr3::Task] .\cr
+#'   `predict_phase_state` to `.invert()`. This should not modify the input [`Task`][mlr3::Task].\cr
 #'   The base implementation returns a list with a single element, the `$truth` column of the [`Task`][mlr3::Task],
 #'   and should be overloaded if a more training-phase-dependent state is desired.
 #' * `.invert(prediction, predict_phase_state)`\cr
 #'   ([`Prediction`][mlr3::Prediction], `any`) -> [`Prediction`][mlr3::Prediction]\cr
-#'   Takes a [`Prediction`][mlr3::Prediction] and a `predict_phase_state`
-#'   object as input and inverts the prediction. This function is sent as `"fun"` to
-#'   [`PipeOpTargetInvert`].\cr
+#'   Takes a [`Prediction`][mlr3::Prediction] and a `predict_phase_state` object as input and inverts the prediction.
+#'   This function is sent as `"fun"` to [`PipeOpTargetInvert`].\cr
 #'   This function is abstract and should be overloaded by inheriting classes. Care should be
 #'   taken that the `predict_type` of the [`Prediction`][mlr3::Prediction] being inverted is handled well.
 #' * `.invert_help(predict_phase_state)`\cr
