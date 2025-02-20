@@ -33,7 +33,7 @@
 #' * `task_type_out` :: `character(1)`\cr
 #'   The class of [`Task`][mlr3::Task] that is produced as output. This should generally be a `character(1)`
 #'   identifying  a type of [`Task`][mlr3::Task], e.g. `"Task"`, `"TaskClassif"` or `"TaskRegr"` (or another subclass
-#'   introduced by ther packages). Default is the value of `task_type_in`.
+#'   introduced by other packages). Default is the value of `task_type_in`.
 #' * `packages` :: `character`\cr
 #'   Set of all required packages for the [`PipeOp`]'s methods. See `$packages` slot. Default is
 #'   `character(0)`.
@@ -371,6 +371,7 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
 
     .transform = function(task, phase) {
       new_target = self$param_set$values$trafo(task$data(cols = task$target_names))
+      # We implicitly assume that output of new_target is still a data.frame-like object; maybe check this and try as.data.table
       task$cbind(new_target)
       convert_task(task, target = colnames(new_target), new_type = private$.new_task_type, drop_original_target = TRUE, drop_levels = FALSE)
     },

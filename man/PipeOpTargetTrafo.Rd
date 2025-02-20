@@ -37,7 +37,7 @@ introduced by other packages). Default is \code{"Task"}.
 \item \code{task_type_out} :: \code{character(1)}\cr
 The class of \code{\link[mlr3:Task]{Task}} that is produced as output. This should generally be a \code{character(1)}
 identifying  a type of \code{\link[mlr3:Task]{Task}}, e.g. \code{"Task"}, \code{"TaskClassif"} or \code{"TaskRegr"} (or another subclass
-introduced by ther packages). Default is the value of \code{task_type_in}.
+introduced by other packages). Default is the value of \code{task_type_in}.
 \item \code{packages} :: \code{character}\cr
 Set of all required packages for the \code{\link{PipeOp}}'s methods. See \verb{$packages} slot. Default is
 \code{character(0)}.
