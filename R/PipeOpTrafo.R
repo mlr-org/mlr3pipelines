@@ -233,7 +233,7 @@ PipeOpTargetInvert = R6Class("PipeOpTargetInvert",
     initialize = function(id = "targetinvert", param_vals = list()) {
       super$initialize(id = id, param_vals = param_vals,
         input = data.table(name = c("fun", "prediction"), train = c("NULL", "NULL"), predict = c("function", "Prediction")),
-        output = data.table(name = "output", train = "NULL", predict = "Prediction"), tags = "target transformation"
+        output = data.table(name = "output", train = "NULL", predict = "Prediction"), tags = "target transform"
       )
     }
   ),
