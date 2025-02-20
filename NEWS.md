@@ -10,6 +10,8 @@
 * Fix: Columns that are `feature` and something else no longer lose the other column role during training or predicting of `PipeOp`s inheriting from `PipeOpTaskPreproc`.
 * Fix: Made tests for `PipeOpBLSmote` deterministic.
 * Fix: Corrected hash calculation for `PipeOpFilter`.
+* New PipeOps `PipeOpEncodePLQuantiles` and `PipeOpEncodePLTree` that implement piecewise linear encoding with two different binning methods.
+* Compatibility with new `R6` release.
 * Fix: `PipeOpTargetMutate` and `PipeOpTargetTrafoScaleRange` no longer drop unseen factor levels of features or targets during train and predict.
 
 # mlr3pipelines 0.7.1
