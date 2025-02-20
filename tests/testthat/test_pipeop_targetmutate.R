@@ -79,6 +79,12 @@ test_that("PipeOpTargetMutate - does not drop missing levels, #631", {
   expect_equal(task$levels(), predict_out$levels())
 })
 
+test_that("PipeOpTargetMutate - error if trafo does not return dt/df/matrix", {
+  task = tsk("boston_housing")
+  op = po("targetmutate", trafo = function(x) 1)
+  expect_error(op$train(list(task)), "'data.frame', 'data.table', or 'matrix'")
+})
+
 #'test_that("PipeOpTargetMutate - Regr -> Classif", {
 #' g = Graph$new()
 #' g$add_pipeop(PipeOpTargetMutate$new("regr_classif",

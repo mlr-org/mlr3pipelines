@@ -347,8 +347,8 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
     initialize = function(id = "targetmutate", param_vals = list(), new_task_type = NULL) {
       private$.new_task_type = assert_choice(new_task_type, mlr_reflections$task_types$type, null.ok = TRUE)
       ps = ps(
-        trafo = p_uty(tags = c("train", "predict"), custom_check = crate(function(x) check_function(x, nargs = 1L))),
-        inverter = p_uty(tags = "predict", custom_check = crate(function(x) check_function(x, nargs = 1L)))
+        trafo = p_uty(tags = c("train", "predict"), custom_check = check_function),
+        inverter = p_uty(tags = "predict", custom_check = check_function)
       )
       # We could add a condition here for new_task_type on trafo and inverter when mlr-org/paradox#278 has an answer.
       # HOWEVER conditions are broken in paradox, it is a terrible idea to use them in PipeOps,
@@ -371,9 +371,8 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
 
     .transform = function(task, phase) {
       new_target = self$param_set$values$trafo(task$data(cols = task$target_names))
-      # add test for this
       if (!is.data.frame(new_target) || !is.matrix(new_target)) {
-        stopf("trafo must be a function returning a 'data.frame', 'data.table', or 'matrix', not '%s'.", class(new_target))
+        stopf("Hyperparameter 'trafo' must be a function returning a 'data.frame', 'data.table', or 'matrix', not '%s'.", class(new_target))
       }
       task$cbind(new_target)
       convert_task(task, target = colnames(new_target), new_type = private$.new_task_type, drop_original_target = TRUE, drop_levels = FALSE)
