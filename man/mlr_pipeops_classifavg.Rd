@@ -9,7 +9,7 @@
 }
 \description{
 Perform (weighted) majority vote prediction from classification \code{\link[mlr3:Prediction]{Prediction}}s by connecting
-\code{\link{PipeOpClassifAvg}} to multiple \code{\link{PipeOpLearner}} outputs.
+\code{PipeOpClassifAvg} to multiple \code{\link{PipeOpLearner}} outputs.
 
 Always returns a \code{"prob"} prediction, regardless of the incoming \code{\link[mlr3:Learner]{Learner}}'s
 \verb{$predict_type}. The label of the class with the highest predicted probability is selected as the
@@ -22,8 +22,6 @@ All incoming \code{\link[mlr3:Learner]{Learner}}'s \verb{$predict_type} must agr
 Weights can be set as a parameter; if none are provided, defaults to
 equal weights for each prediction.
 Defaults to equal weights for each model.
-
-If `
 }
 \section{Construction}{
 
@@ -68,7 +66,7 @@ Inherits from \code{\link{PipeOpEnsemble}} by implementing the \code{private$wei
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{

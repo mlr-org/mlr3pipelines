@@ -17,12 +17,12 @@ Returns cross-validated predictions during training as a \code{\link[mlr3:Task]{
 The \code{\link[mlr3:Task]{Task}} gets features depending on the capsuled \code{\link[mlr3:Learner]{Learner}}'s
 \verb{$predict_type}. If the \code{\link[mlr3:Learner]{Learner}}'s \verb{$predict.type} is \code{"response"}, a feature \verb{<ID>.response} is created,
 for \verb{$predict.type} \code{"prob"} the \verb{<ID>.prob.<CLASS>} features are created, and for \verb{$predict.type} \code{"se"} the new columns
-are \verb{<ID>.response} and \verb{<ID>.se}. \verb{<ID>} denotes the \verb{$id} of the \code{\link{PipeOpLearnerCV}} object.
+are \verb{<ID>.response} and \verb{<ID>.se}. \verb{<ID>} denotes the \verb{$id} of the \code{PipeOpLearnerCV} object.
 
 Inherits the \verb{$param_set} (and therefore \verb{$param_set$values}) from the \code{\link[mlr3:Learner]{Learner}} it is constructed from.
 
-\code{\link{PipeOpLearnerCV}} can be used to create "stacking" or "super learning" \code{\link{Graph}}s that use the output of one \code{\link[mlr3:Learner]{Learner}}
-as feature for another \code{\link[mlr3:Learner]{Learner}}. Because the \code{\link{PipeOpLearnerCV}} erases the original input features, it is often
+\code{PipeOpLearnerCV} can be used to create "stacking" or "super learning" \code{\link{Graph}}s that use the output of one \code{\link[mlr3:Learner]{Learner}}
+as feature for another \code{\link[mlr3:Learner]{Learner}}. Because the \code{PipeOpLearnerCV} erases the original input features, it is often
 useful to use \code{\link{PipeOpFeatureUnion}} to bind the prediction \code{\link[mlr3:Task]{Task}} to the original input \code{\link[mlr3:Task]{Task}}.
 }
 \section{Construction}{
@@ -44,10 +44,10 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpLearnerCV}} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
+\code{PipeOpLearnerCV} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
 type given to \code{learner} during construction; both during training and prediction.
 
-\code{\link{PipeOpLearnerCV}} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
+\code{PipeOpLearnerCV} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
 type given to \code{learner} during construction; both during training and prediction.
 
 The output is a task with the same target as the input task, with features replaced by predictions made by the \code{\link[mlr3:Learner]{Learner}}.

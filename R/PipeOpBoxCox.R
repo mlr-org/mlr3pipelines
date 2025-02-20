@@ -44,6 +44,10 @@
 #'
 #' @section Internals:
 #' Uses the [`bestNormalize::boxcox`] function.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'

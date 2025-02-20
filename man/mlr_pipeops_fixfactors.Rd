@@ -57,6 +57,11 @@ Whether to drop empty factor levels of the training task. Default \code{TRUE}
 Changes factor levels of columns and attaches them with a new \code{data.table} backend and the virtual \code{cbind()} backend.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.

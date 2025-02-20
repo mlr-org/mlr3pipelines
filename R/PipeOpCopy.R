@@ -5,11 +5,9 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
-#' Copies its input `outnum` times. This PipeOp usually not needed,
-#' because copying happens automatically when one `PipeOp` is followed
-#' by multiple different `PipeOp`s. However, when constructing big
-#' Graphs using the [`%>>%`]-operator, `PipeOpCopy` can be helpful to
-#' specify which [`PipeOp`] gets connected to which.
+#' Copies its input `outnum` times. This [`PipeOp`] usually not needed, because copying happens automatically when one
+#' [`PipeOp`] is followed by multiple different [`PipeOp`]s. However, when constructing big Graphs using the
+#' [`%>>%`]-operator, `PipeOpCopy` can be helpful to specify which [`PipeOp`] gets connected to which.
 #'
 #' @section Construction:
 #' ```
@@ -24,21 +22,20 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpCopy`] has one input channel named `"input"`, taking any input (`"*"`) both during training and prediction.
+#' `PipeOpCopy` has one input channel named `"input"`, taking any input (`"*"`) both during training and prediction.
 #'
-#' [`PipeOpCopy`] has multiple output channels depending on the `outnum` construction argument, named `"output1"`, `"output2"`, ...
+#' `PipeOpCopy` has multiple output channels depending on the `outnum` construction argument, named `"output1"`, `"output2"`, ...
 #' All output channels produce the object given as input (`"*"`).
 #'
 #' @section State:
 #' The `$state` is left empty (`list()`).
 #'
 #' @section Parameters:
-#' [`PipeOpCopy`] has no parameters.
+#' `PipeOpCopy` has no parameters.
 #'
 #' @section Internals:
-#' Note that copies are not clones, but only reference copies. This affects
-#' R6-objects: If R6 objects are copied using PipeOpCopy, they must be cloned
-#' before
+#' Note that copies are not clones, but only reference copies. This affects R6-objects: If R6 objects are copied using
+#' `PipeOpCopy`, they must be cloned beforehand.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].

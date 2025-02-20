@@ -9,7 +9,7 @@
 }
 \description{
 Encodes \code{numeric} and \code{integer} feature columns using piecewise lienar encoding. For details, see documentation of
-\code{PipeOpEncodePL} or Gorishniy et al. (2022).
+\code{\link{PipeOpEncodePL}} or Gorishniy et al. (2022).
 
 Bins are constructed by trainig one decision tree \code{\link[mlr3:Learner]{Learner}} per feature column, taking the target
 column into account, and using decision boundaries as bin boundaries.

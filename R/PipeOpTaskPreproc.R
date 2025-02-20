@@ -27,10 +27,10 @@
 #' to operate only on subsets of the [`Task`][mlr3::Task]'s data, e.g. only on numerical columns.
 #'
 #' If the `can_subset_cols` argument of the constructor is `TRUE` (the default), then the hyperparameter `affect_columns`
-#' is added, which can limit the columns of the [`Task`][mlr3::Task] that is modified by the [`PipeOpTaskPreproc`]
+#' is added, which can limit the columns of the [`Task`][mlr3::Task] that is modified by the `PipeOpTaskPreproc`
 #' using a [`Selector`] function. Note this functionality is entirely independent of the `private$.select_cols()` functionality.
 #'
-#' [`PipeOpTaskPreproc`] is useful for operations that behave differently during training and prediction. For operations
+#' `PipeOpTaskPreproc` is useful for operations that behave differently during training and prediction. For operations
 #' that perform essentially the same operation and only need to perform extra work to build a `$state` during training,
 #' the [`PipeOpTaskPreprocSimple`] class can be used instead.
 #'
@@ -39,7 +39,6 @@
 #' PipeOpTaskPreproc$new(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE,
 #'   packages = character(0), task_type = "Task", tags = NULL, feature_types = mlr_reflections$task_feature_types)
 #' ```
-#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object. See `$id` slot of [`PipeOp`].
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
@@ -49,26 +48,26 @@
 #'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
 #' * `can_subset_cols` :: `logical(1)`\cr
 #'   Whether the `affect_columns` parameter should be added which lets the user limit the columns that are
-#'   modified by the [`PipeOpTaskPreproc`]. This should generally be `FALSE` if the operation adds or removes
+#'   modified by the `PipeOpTaskPreproc`. This should generally be `FALSE` if the operation adds or removes
 #'   rows from the [`Task`][mlr3::Task], and `TRUE` otherwise. Default is `TRUE`.
-#' * packages :: `character`\cr
+#' * `packages` :: `character`\cr
 #'   Set of all required packages for the [`PipeOp`]'s `private$.train()` and `private$.predict()` methods. See `$packages` slot.
 #'   Default is `character(0)`.
 #' * `task_type` :: `character(1)`\cr
 #'   The class of [`Task`][mlr3::Task] that should be accepted as input and will be returned as output. This
 #'   should generally be a `character(1)` identifying a type of [`Task`][mlr3::Task], e.g. `"Task"`, `"TaskClassif"` or
 #'   `"TaskRegr"` (or another subclass introduced by other packages). Default is `"Task"`.
-#' * tags :: `character` | `NULL`\cr
+#' * `tags` :: `character` | `NULL`\cr
 #'   Tags of the resulting `PipeOp`. This is added to the tag `"data transform"`. Default `NULL`.
 #'* `feature_types` :: `character`\cr
 #'   Feature types affected by the `PipeOp`. See `private$.select_cols()` for more information.
 #'   Defaults to all available feature types.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpTaskPreproc`] has one input channel named `"input"`, taking a [`Task`][mlr3::Task], or a subclass of
+#' `PipeOpTaskPreproc` has one input channel named `"input"`, taking a [`Task`][mlr3::Task], or a subclass of
 #' [`Task`][mlr3::Task] if the `task_type` construction argument is given as such; both during training and prediction.
 #'
-#' [`PipeOpTaskPreproc`] has one output channel named `"output"`, producing a [`Task`][mlr3::Task], or a subclass;
+#' `PipeOpTaskPreproc` has one output channel named `"output"`, producing a [`Task`][mlr3::Task], or a subclass;
 #' the [`Task`][mlr3::Task] type is the same as for input; both during training and prediction.
 #'
 #' The output [`Task`][mlr3::Task] is the modified input [`Task`][mlr3::Task] according to the overloaded
@@ -92,16 +91,16 @@
 #'
 #' @section Parameters:
 #' * `affect_columns` :: `function` | [`Selector`] | `NULL` \cr
-#'   What columns the [`PipeOpTaskPreproc`] should operate on. This parameter is only present if the constructor is called with
+#'   What columns the `PipeOpTaskPreproc` should operate on. This parameter is only present if the constructor is called with
 #'   the `can_subset_cols` argument set to `TRUE` (the default).\cr
 #'   The parameter must be a [`Selector`] function, which takes a [`Task`][mlr3::Task] as argument and returns a `character`
 #'   of features to use.\cr
 #'   See [`Selector`] for example functions. Defaults to `NULL`, which selects all features.
 #'
 #' @section Internals:
-#' [`PipeOpTaskPreproc`] is an abstract class inheriting from [`PipeOp`]. It implements the `private$.train()` and
+#' `PipeOpTaskPreproc` is an abstract class inheriting from [`PipeOp`]. It implements the `private$.train()` and
 #' `$.predict()` functions. These functions perform checks and go on to call `private$.train_task()` and `private$.predict_task()`.
-#' A subclass of [`PipeOpTaskPreproc`] may implement these functions, or implement `private$.train_dt()` and `private$.predict_dt()` instead.
+#' A subclass of `PipeOpTaskPreproc` may implement these functions, or implement `private$.train_dt()` and `private$.predict_dt()` instead.
 #' This works by having the default implementations of `private$.train_task()` and `private$.predict_task()` call `private$.train_dt()` and `private$.predict_dt()`,
 #' respectively.
 #'
@@ -113,31 +112,31 @@
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`], as well as:
-#' * `.train_task`\cr
+#' * `.train_task(task)`\cr
 #'   ([`Task`][mlr3::Task]) -> [`Task`][mlr3::Task]\cr
-#'   Called by the [`PipeOpTaskPreproc`]'s implementation of `private$.train()`. Takes a single [`Task`][mlr3::Task] as input
+#'   Called by the `PipeOpTaskPreproc`'s implementation of `private$.train()`. Takes a single [`Task`][mlr3::Task] as input
 #'   and modifies it (ideally in-place without cloning) while storing information in the `$state` slot. Note that unlike
 #'   `$.train()`, the argument is *not* a list but a singular [`Task`][mlr3::Task], and the return object is also *not* a list but
 #'   a singular [`Task`][mlr3::Task]. Also, contrary to `private$.train()`, the `$state` being generated must be a `list`, which
-#'   the [`PipeOpTaskPreproc`] will add additional slots to (see Section *State*). Care should be taken to avoid name collisions between
-#'   `$state` elements added by `private$.train_task()` and [`PipeOpTaskPreproc`].\cr
+#'   the `PipeOpTaskPreproc` will add additional slots to (see Section *State*). Care should be taken to avoid name collisions between
+#'   `$state` elements added by `private$.train_task()` and `PipeOpTaskPreproc`.\cr
 #'   By default this function calls the `private$.train_dt()` function, but it can be overloaded to perform operations on the [`Task`][mlr3::Task]
 #'   directly.
-#' * `.predict_task`\cr
+#' * `.predict_task(task)`\cr
 #'   ([`Task`][mlr3::Task]) -> [`Task`][mlr3::Task]\cr
-#'   Called by the [`PipeOpTaskPreproc`]'s implementation of `$.predict()`. Takes a single [`Task`][mlr3::Task] as input
+#'   Called by the `PipeOpTaskPreproc`'s implementation of `$.predict()`. Takes a single [`Task`][mlr3::Task] as input
 #'   and modifies it (ideally in-place without cloning) while using information in the `$state` slot. Works analogously to
 #'   `private$.train_task()`. If `private$.predict_task()` should only be overloaded if `private$.train_task()` is overloaded (i.e. `private$.train_dt()` is *not* used).
 #' * `.train_dt(dt, levels, target)` \cr
 #'   ([`data.table`][data.table::data.table], named `list`, `any`) -> [`data.table`][data.table::data.table] | `data.frame` | `matrix` \cr
-#'   Train [`PipeOpTaskPreproc`] on `dt`, transform it and store a state in `$state`. A transformed object must be returned
+#'   Train `PipeOpTaskPreproc` on `dt`, transform it and store a state in `$state`. A transformed object must be returned
 #'   that can be converted to a `data.table` using [`as.data.table`]. `dt` does not need to be copied deliberately, it
 #'   is possible and encouraged to change it in-place.\cr
 #'   The `levels` argument is a named list of factor levels for factorial or character features.
 #'   If the input [`Task`][mlr3::Task] inherits from [`TaskSupervised`][mlr3::TaskSupervised], the `target` argument
 #'   contains the `$truth()` information of the training [`Task`][mlr3::Task]; its type depends on the [`Task`][mlr3::Task]
 #'   type being trained on.\cr
-#'   This method can be overloaded when inheriting from [`PipeOpTaskPreproc`], together with `private$.predict_dt()` and optionally
+#'   This method can be overloaded when inheriting from `PipeOpTaskPreproc`, together with `private$.predict_dt()` and optionally
 #'   `private$.select_cols()`; alternatively, `private$.train_task()` and `private$.predict_task()` can be overloaded.
 #' * `.predict_dt(dt, levels)` \cr
 #'   ([`data.table`][data.table::data.table], named `list`) -> [`data.table`][data.table::data.table] | `data.frame` | `matrix` \cr
@@ -153,8 +152,8 @@
 #'   is not called if `private$.train_task()` and `private$.predict_task()` are overloaded. In contrast to
 #'   the `affect_columns` parameter. `private$.select_cols()` is for the *inheriting class* to determine which columns
 #'   the operator should function on, e.g. based on feature type, while `affect_columns` is a way for the *user*
-#'   to limit the columns that a [`PipeOpTaskPreproc`] should operate on.\cr
-#'   This method can optionally be overloaded when inheriting [`PipeOpTaskPreproc`], together with `private$.train_dt()` and
+#'   to limit the columns that a `PipeOpTaskPreproc` should operate on.\cr
+#'   This method can optionally be overloaded when inheriting `PipeOpTaskPreproc`, together with `private$.train_dt()` and
 #'   `private$.predict_dt()`; alternatively, `private$.train_task()` and `private$.predict_task()` can be overloaded.\cr
 #'   If this method is not overloaded, it defaults to selecting of type indicated by the `feature_types` construction argument.
 #'
@@ -324,8 +323,10 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'
 #' @section Construction:
 #' ```
-#' PipeOpTaskPreprocSimple$new(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task")
+#' PipeOpTaskPreprocSimple$new(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE,
+#'   packages = character(0), task_type = "Task", tags = NULL, feature_types = mlr_reflections$task_feature_types)
 #' ```
+#'
 #' (Construction is identical to [`PipeOpTaskPreproc`].)
 #'
 #' * `id` :: `character(1)`\cr
@@ -337,15 +338,20 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
 #' * `can_subset_cols` :: `logical(1)`\cr
 #'   Whether the `affect_columns` parameter should be added which lets the user limit the columns that are
-#'   modified by the [`PipeOpTaskPreprocSimple`]. This should generally be `FALSE` if the operation adds or removes
+#'   modified by the `PipeOpTaskPreprocSimple`. This should generally be `FALSE` if the operation adds or removes
 #'   rows from the [`Task`][mlr3::Task], and `TRUE` otherwise. Default is `TRUE`.
-#' * packages :: `character`\cr
+#' * `packages` :: `character`\cr
 #'   Set of all required packages for the [`PipeOp`]'s `private$.train()` and `private$.predict()` methods. See `$packages` slot.
 #'   Default is `character(0)`.
 #' * `task_type` :: `character(1)`\cr
 #'   The class of [`Task`][mlr3::Task] that should be accepted as input and will be returned as output. This
 #'   should generally be a `character(1)` identifying a type of [`Task`][mlr3::Task], e.g. `"Task"`, `"TaskClassif"` or
 #'   `"TaskRegr"` (or another subclass introduced by other packages). Default is `"Task"`.
+#' * `tags` :: `character` | `NULL`\cr
+#'   Tags of the resulting `PipeOp`. This is added to the tag `"data transform"`. Default `NULL`.
+#'* `feature_types` :: `character`\cr
+#'   Feature types affected by the `PipeOp`. See `private$.select_cols()` for more information.
+#'   Defaults to all available feature types.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
@@ -359,8 +365,8 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`].
 #'
 #' @section Internals:
-#' [`PipeOpTaskPreprocSimple`] is an abstract class inheriting from [`PipeOpTaskPreproc`] and implementing the
-#' `private$.train_task()` and `private$.predict_task()` functions. A subclass of [`PipeOpTaskPreprocSimple`] may implement the
+#' `PipeOpTaskPreprocSimple` is an abstract class inheriting from [`PipeOpTaskPreproc`] and implementing the
+#' `private$.train_task()` and `private$.predict_task()` functions. A subclass of `PipeOpTaskPreprocSimple` may implement the
 #' functions `private$.get_state()` and `private$.transform()`, or alternatively the functions `private$.get_state_dt()` and `private$.transform_dt()`
 #' (as well as `private$.select_cols()`, in the latter case). This works by having the default implementations of
 #' `private$.get_state()` and `private$.transform()` call `private$.get_state_dt()` and `private$.transform_dt()`.
@@ -376,7 +382,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'   The state can then influence the `private$.transform()` function. Note that `private$.get_state()` must *return* the state, and
 #'   should not store it in `$state`. It is not strictly necessary to implement either `private$.get_state()` or `private$.get_state_dt()`;
 #'   if they are not implemented, the state will be stored as `list()`. \cr
-#'   This method can optionally be overloaded when inheriting from [`PipeOpTaskPreprocSimple`], together with `private$.transform()`;
+#'   This method can optionally be overloaded when inheriting from `PipeOpTaskPreprocSimple`, together with `private$.transform()`;
 #'   alternatively, `private$.get_state_dt()` (optional) and `private$.transform_dt()` (and possibly `private$.select_cols()`, from [`PipeOpTaskPreproc`])
 #'   can be overloaded.
 #' * `.transform(task)` \cr
@@ -384,8 +390,8 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'   Predict on new data in `task`, possibly using the stored `$state`. `task` should not be cloned, instead it should be
 #'   changed in-place. This method is called both during training and prediction phase, and should essentially behave the
 #'   same independently of phase. (If this is incongruent with the functionality to be implemented, then it should inherit from
-#'   [`PipeOpTaskPreproc`], not from [`PipeOpTaskPreprocSimple`].) \cr
-#'   This method can be overloaded when inheriting from [`PipeOpTaskPreprocSimple`], optionally with `private$.get_state()`;
+#'   [`PipeOpTaskPreproc`], not from `PipeOpTaskPreprocSimple`.) \cr
+#'   This method can be overloaded when inheriting from `PipeOpTaskPreprocSimple`, optionally with `private$.get_state()`;
 #'   alternatively, `private$.get_state_dt()` (optional) and `private$.transform_dt()` (and possibly `private$.select_cols()`, from [`PipeOpTaskPreproc`])
 #'   can be overloaded.
 #' * `.get_state_dt(dt)` \cr
@@ -394,7 +400,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'   The state can then influence the `private$.transform_dt()` function. Note that `private$.get_state_dt()` must *return* the state, and
 #'   should not store it in `$state`. If neither `private$.get_state()` nor `private$.get_state_dt()` are overloaded, the state will
 #'   be stored as `list()`. \cr
-#'   This method can optionally be overloaded when inheriting from [`PipeOpTaskPreprocSimple`], together with `private$.transform_dt()`
+#'   This method can optionally be overloaded when inheriting from `PipeOpTaskPreprocSimple`, together with `private$.transform_dt()`
 #'   (and optionally `private$.select_cols()`, from [`PipeOpTaskPreproc`]); Alternatively, `private$.get_state()` (optional) and `private$.transform()`
 #'   can be overloaded.
 #' * `.transform_dt(dt)` \cr
@@ -404,8 +410,8 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'   is possible and encouraged to change it in-place. This method is called both during training and prediction phase,
 #'   and should essentially behave the same independently of phase.
 #'   (If this is incongruent with the functionality to be implemented, then it should inherit from
-#'   [`PipeOpTaskPreproc`], not from [`PipeOpTaskPreprocSimple`].) \cr
-#'   This method can optionally be overloaded when inheriting from [`PipeOpTaskPreprocSimple`], together with `private$.transform_dt()`
+#'   [`PipeOpTaskPreproc`], not from `PipeOpTaskPreprocSimple`.) \cr
+#'   This method can optionally be overloaded when inheriting from `PipeOpTaskPreprocSimple`, together with `private$.transform_dt()`
 #'   (and optionally `private$.select_cols()`, from [`PipeOpTaskPreproc`]); Alternatively, `private$.get_state()` (optional) and `private$.transform()`
 #'   can be overloaded.
 #'

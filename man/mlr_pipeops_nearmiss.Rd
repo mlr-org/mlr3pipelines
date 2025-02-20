@@ -59,7 +59,7 @@ Default is \code{1}. For details, see \code{\link[themis:nearmiss]{themis::nearm
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{

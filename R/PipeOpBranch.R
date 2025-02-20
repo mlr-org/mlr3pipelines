@@ -5,7 +5,7 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
-#' Perform alternative path branching: [`PipeOpBranch`] has multiple output channels
+#' Perform alternative path branching: `PipeOpBranch` has multiple output channels
 #' that connect to different paths in a [`Graph`]. At any time, only one of these
 #' paths will be taken for execution. At the end of the different paths, the
 #' [`PipeOpUnbranch`] `PipeOp` must be used to indicate the end of alternative paths.
@@ -16,6 +16,7 @@
 #' ```
 #' PipeOpBranch$new(options, id = "branch", param_vals = list())
 #' ```
+#'
 #' * `options` :: `numeric(1)` | `character`\cr
 #'   If `options` is an integer number, it determines the number of
 #'   output channels / options that are created, named `output1`...`output<n>`. The
@@ -28,9 +29,9 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpBranch`] has one input channel named `"input"`, taking any input (`"*"`) both during training and prediction.
+#' `PipeOpBranch` has one input channel named `"input"`, taking any input (`"*"`) both during training and prediction.
 #'
-#' [`PipeOpBranch`] has multiple output channels depending on the `options` construction argument, named `"output1"`, `"output2"`, ...
+#' `PipeOpBranch` has multiple output channels depending on the `options` construction argument, named `"output1"`, `"output2"`, ...
 #' if `options` is `numeric`, and named after each `options` value if `options` is a `character`.
 #' All output channels produce the object given as input (`"*"`) or [`NO_OP`], both during training and prediction.
 #'
@@ -47,7 +48,7 @@
 #'
 #' @section Internals:
 #' Alternative path branching is handled by the [`PipeOp`] backend. To indicate that
-#' a path should not be taken, [`PipeOpBranch`] returns the [`NO_OP`] object on its
+#' a path should not be taken, `PipeOpBranch` returns the [`NO_OP`] object on its
 #' output channel. The [`PipeOp`] handles each [`NO_OP`] input by automatically
 #' returning a [`NO_OP`] output without calling `private$.train()` or `private$.predict()`,
 #' until [`PipeOpUnbranch`] is reached. [`PipeOpUnbranch`] will then take multiple inputs,

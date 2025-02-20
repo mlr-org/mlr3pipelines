@@ -15,6 +15,7 @@
 #' ```
 #' PipeOpClassBalancing$new(id = "classbalancing", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, default `"classbalancing"`
 #' * `param_vals` :: named `list`\cr
@@ -61,7 +62,7 @@
 #' class count" is just the value of `ratio` (i.e. `1 * ratio`).
 #'
 #' Then for each class that is referenced by the `adjust` parameter (e.g. if `adjust` is `"nonminor"`:
-#' each class that is not the class with the fewest samples), [`PipeOpClassBalancing`] either throws out
+#' each class that is not the class with the fewest samples), `PipeOpClassBalancing` either throws out
 #' samples (downsampling), or adds additional rows that are equal to randomly chosen samples (upsampling),
 #' until the number of samples for these classes equals the "target class count".
 #'
@@ -70,7 +71,7 @@
 #' a new [`data.table`][data.table::data.table] is attached that contains all rows that are being duplicated exactly as many times as they are being added.
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].

@@ -29,6 +29,7 @@
 #'   A vector of all feature names that are kept (i.e. not dropped) in the [`Task`][mlr3::Task]. Initialized to [`selector_all()`]
 #'
 #' @section Parameters:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `selector` :: `function` | [`Selector`] \cr
 #'   [`Selector`] function, takes a `Task` as argument and returns a `character`
 #'   of features to keep.\cr
@@ -38,7 +39,7 @@
 #' Uses `task$select()`.
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].

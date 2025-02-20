@@ -71,6 +71,11 @@ Makes use of the fact that \code{levels(fact_var) = list(target1 = c("source1", 
 renaming of level \code{"source1"} and \code{"source2"} both to \code{"target1"}, and also \code{"source2"} to \code{"target2"}.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.

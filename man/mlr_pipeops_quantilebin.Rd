@@ -53,6 +53,11 @@ Number of bins to create. Default is \code{2}.
 Uses the \code{\link[stats:quantile]{stats::quantile}} function.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.

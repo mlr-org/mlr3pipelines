@@ -38,6 +38,9 @@
 #' * `upper` :: `numeric(1)`\cr
 #'   Target value of greatest item of input data. Initialized to 1.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'

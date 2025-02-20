@@ -35,12 +35,12 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output}{
 
-\code{\link{PipeOpUnbranch}} has multiple input channels depending on the \code{options} construction argument, named \code{"input1"}, \code{"input2"}, ...
+\code{PipeOpUnbranch} has multiple input channels depending on the \code{options} construction argument, named \code{"input1"}, \code{"input2"}, ...
 if \code{options} is a nonzero integer and named after each \code{options} value if \code{options} is a \code{character}; if \code{options} is 0, there is only one
 \emph{vararg} input channel named \code{"..."}.
 All input channels take any argument (\code{"*"}) both during training and prediction.
 
-\code{\link{PipeOpUnbranch}} has one output channel named \code{"output"}, producing the only \code{\link{NO_OP}} object received as input (\code{"*"}),
+\code{PipeOpUnbranch} has one output channel named \code{"output"}, producing the only \code{\link{NO_OP}} object received as input (\code{"*"}),
 both during training and prediction.
 }
 
@@ -51,7 +51,7 @@ The \verb{$state} is left empty (\code{list()}).
 
 \section{Parameters}{
 
-\code{\link{PipeOpUnbranch}} has no parameters.
+\code{PipeOpUnbranch} has no parameters.
 }
 
 \section{Internals}{

@@ -61,6 +61,7 @@
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
+#'
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Experimental Features

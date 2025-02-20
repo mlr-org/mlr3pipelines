@@ -9,7 +9,7 @@
 #'
 #' Inherits the `$param_set` (and therefore `$param_set$values`) from the [`Learner`][mlr3::Learner] it is constructed from.
 #'
-#' Using [`PipeOpLearner`], it is possible to embed [`mlr3::Learner`]s into [`Graph`]s, which themselves can be
+#' Using `PipeOpLearner`, it is possible to embed [`mlr3::Learner`]s into [`Graph`]s, which themselves can be
 #' turned into Learners using [`GraphLearner`]. This way, preprocessing and ensemble methods can be included
 #' into a machine learning pipeline which then can be handled as singular object for resampling, benchmarking
 #' and tuning.
@@ -28,10 +28,10 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpLearner`] has one input channel named `"input"`, taking a [`Task`][mlr3::Task] specific to the [`Learner`][mlr3::Learner]
+#' `PipeOpLearner` has one input channel named `"input"`, taking a [`Task`][mlr3::Task] specific to the [`Learner`][mlr3::Learner]
 #' type given to `learner` during construction; both during training and prediction.
 #'
-#' [`PipeOpLearner`] has one output channel named `"output"`, producing `NULL` during training and a [`Prediction`][mlr3::Prediction] subclass
+#' `PipeOpLearner` has one output channel named `"output"`, producing `NULL` during training and a [`Prediction`][mlr3::Prediction] subclass
 #' during prediction; this subclass is specific to the [`Learner`][mlr3::Learner] type given to `learner` during construction.
 #'
 #' The output during prediction is the [`Prediction`][mlr3::Prediction] on the prediction input data, produced by the [`Learner`][mlr3::Learner]
@@ -73,6 +73,7 @@
 #'    The internally tuned values if the wrapped `Learner` supports internal tuning, `NULL` otherwise.
 #' * `internal_valid_scores` :: named `list()` or `NULL`\cr
 #'    The internal validation scores if the wrapped `Learner` supports internal validation, `NULL` otherwise.
+#'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
 #'

@@ -47,6 +47,11 @@ if \code{norm} is \code{Inf}. Default is 2.
 }
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.

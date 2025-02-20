@@ -8,11 +8,9 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
-Copies its input \code{outnum} times. This PipeOp usually not needed,
-because copying happens automatically when one \code{PipeOp} is followed
-by multiple different \code{PipeOp}s. However, when constructing big
-Graphs using the \code{\link{\%>>\%}}-operator, \code{PipeOpCopy} can be helpful to
-specify which \code{\link{PipeOp}} gets connected to which.
+Copies its input \code{outnum} times. This \code{\link{PipeOp}} usually not needed, because copying happens automatically when one
+\code{\link{PipeOp}} is followed by multiple different \code{\link{PipeOp}}s. However, when constructing big Graphs using the
+\code{\link{\%>>\%}}-operator, \code{PipeOpCopy} can be helpful to specify which \code{\link{PipeOp}} gets connected to which.
 }
 \section{Construction}{
 
@@ -31,9 +29,9 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpCopy}} has one input channel named \code{"input"}, taking any input (\code{"*"}) both during training and prediction.
+\code{PipeOpCopy} has one input channel named \code{"input"}, taking any input (\code{"*"}) both during training and prediction.
 
-\code{\link{PipeOpCopy}} has multiple output channels depending on the \code{outnum} construction argument, named \code{"output1"}, \code{"output2"}, ...
+\code{PipeOpCopy} has multiple output channels depending on the \code{outnum} construction argument, named \code{"output1"}, \code{"output2"}, ...
 All output channels produce the object given as input (\code{"*"}).
 }
 
@@ -44,14 +42,13 @@ The \verb{$state} is left empty (\code{list()}).
 
 \section{Parameters}{
 
-\code{\link{PipeOpCopy}} has no parameters.
+\code{PipeOpCopy} has no parameters.
 }
 
 \section{Internals}{
 
-Note that copies are not clones, but only reference copies. This affects
-R6-objects: If R6 objects are copied using PipeOpCopy, they must be cloned
-before
+Note that copies are not clones, but only reference copies. This affects R6-objects: If R6 objects are copied using
+\code{PipeOpCopy}, they must be cloned beforehand.
 }
 
 \section{Fields}{

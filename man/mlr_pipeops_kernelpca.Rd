@@ -64,6 +64,11 @@ Function to specify NA action. Default is \code{\link{na.omit}}. See \code{\link
 Uses the \code{\link[kernlab:kpca]{kpca()}} function.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.

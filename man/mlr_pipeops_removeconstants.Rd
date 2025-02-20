@@ -54,7 +54,7 @@ Initialized to \code{TRUE}.
 
 \section{Fields}{
 
-Fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{

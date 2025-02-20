@@ -7,11 +7,11 @@
 \code{\link[R6:R6Class]{R6Class}}.
 }
 \description{
-A \code{\link{Graph}} is a representation of a machine learning pipeline graph. It can be \emph{trained}, and subsequently used for \emph{prediction}.
+A \code{Graph} is a representation of a machine learning pipeline graph. It can be \emph{trained}, and subsequently used for \emph{prediction}.
 
-A \code{\link{Graph}} is most useful when used together with \code{\link[mlr3:Learner]{Learner}} objects encapsulated as \code{\link{PipeOpLearner}}. In this case,
-the \code{\link{Graph}} produces \code{\link[mlr3:Prediction]{Prediction}} data during its \verb{$predict()} phase and can be used as a \code{\link[mlr3:Learner]{Learner}}
-itself (using the \code{\link{GraphLearner}} wrapper). However, the \code{\link{Graph}} can also be used without \code{\link[mlr3:Learner]{Learner}} objects to simply
+A \code{Graph} is most useful when used together with \code{\link[mlr3:Learner]{Learner}} objects encapsulated as \code{\link{PipeOpLearner}}. In this case,
+the \code{Graph} produces \code{\link[mlr3:Prediction]{Prediction}} data during its \verb{$predict()} phase and can be used as a \code{\link[mlr3:Learner]{Learner}}
+itself (using the \code{\link{GraphLearner}} wrapper). However, the \code{Graph} can also be used without \code{\link[mlr3:Learner]{Learner}} objects to simply
 perform preprocessing of data, and, in principle, does not even need to handle data at all but can be used for general processes with
 dependency structure (although the \code{\link{PipeOp}}s for this would need to be written).
 }
@@ -24,7 +24,7 @@ dependency structure (although the \code{\link{PipeOp}}s for this would need to 
 
 \section{Internals}{
 
-A \code{\link{Graph}} is made up of a list of \code{\link{PipeOp}}s, and a \code{\link[data.table:data.table]{data.table}} of edges. Both for training and prediction, the \code{\link{Graph}}
+A \code{Graph} is made up of a list of \code{\link{PipeOp}}s, and a \code{\link[data.table:data.table]{data.table}} of edges. Both for training and prediction, the \code{Graph}
 performs topological sorting of the \code{\link{PipeOp}}s and executes their respective \verb{$train()} or \verb{$predict()} functions in order, moving
 the \code{\link{PipeOp}} results along the edges as input to other \code{\link{PipeOp}}s.
 }
@@ -33,39 +33,39 @@ the \code{\link{PipeOp}} results along the edges as input to other \code{\link{P
 
 \itemize{
 \item \code{pipeops} :: named \code{list} of \code{\link{PipeOp}} \cr
-Contains all \code{\link{PipeOp}}s in the \code{\link{Graph}}, named by the \code{\link{PipeOp}}'s \verb{$id}s.
+Contains all \code{\link{PipeOp}}s in the \code{Graph}, named by the \code{\link{PipeOp}}'s \verb{$id}s.
 \item \code{edges} :: \code{\link[data.table:data.table]{data.table}}  with columns \code{src_id} (\code{character}), \code{src_channel} (\code{character}), \code{dst_id} (\code{character}), \code{dst_channel} (\code{character})\cr
 Table of connections between the \code{\link{PipeOp}}s. A \code{\link[data.table:data.table]{data.table}}. \code{src_id} and \code{dst_id} are \verb{$id}s of \code{\link{PipeOp}}s that must be present in
 the \verb{$pipeops} list. \code{src_channel} and \code{dst_channel} must respectively be \verb{$output} and \verb{$input} channel names of the
 respective \code{\link{PipeOp}}s.
 \item \code{is_trained} :: \code{logical(1)} \cr
-Is the \code{\link{Graph}}, i.e. are all of its \code{\link{PipeOp}}s, trained, and can the \code{\link{Graph}} be used for prediction?
+Is the \code{Graph}, i.e. are all of its \code{\link{PipeOp}}s, trained, and can the \code{Graph} be used for prediction?
 \item \code{lhs} :: \code{character} \cr
-Ids of the 'left-hand-side' \code{\link{PipeOp}}s that have some unconnected input channels and therefore act as \code{\link{Graph}} input layer.
+Ids of the 'left-hand-side' \code{\link{PipeOp}}s that have some unconnected input channels and therefore act as \code{Graph} input layer.
 \item \code{rhs} :: \code{character} \cr
-Ids of the 'right-hand-side' \code{\link{PipeOp}}s that have some unconnected output channels and therefore act as \code{\link{Graph}} output layer.
+Ids of the 'right-hand-side' \code{\link{PipeOp}}s that have some unconnected output channels and therefore act as \code{Graph} output layer.
 \item \code{input} :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character}), \code{op.id} (\code{character}), \code{channel.name} (\code{character})\cr
-Input channels of the \code{\link{Graph}}. For each channel lists the name, input type during training, input type during prediction,
+Input channels of the \code{Graph}. For each channel lists the name, input type during training, input type during prediction,
 \code{\link{PipeOp}} \verb{$id} of the \code{\link{PipeOp}} the channel pertains to, and channel name as the \code{\link{PipeOp}} knows it.
 \item \code{output} :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character}), \code{op.id} (\code{character}), \code{channel.name} (\code{character})\cr
-Output channels of the \code{\link{Graph}}. For each channel lists the name, output type during training, output type during prediction,
+Output channels of the \code{Graph}. For each channel lists the name, output type during training, output type during prediction,
 \code{\link{PipeOp}} \verb{$id} of the \code{\link{PipeOp}} the channel pertains to, and channel name as the \code{\link{PipeOp}} knows it.
 \item \code{packages} :: \code{character}\cr
-Set of all required packages for the various methods in the \code{\link{Graph}}, a set union of all required packages of all contained
+Set of all required packages for the various methods in the \code{Graph}, a set union of all required packages of all contained
 \code{\link{PipeOp}} objects.
 \item \code{state} :: named \code{list}\cr
 Get / Set the \verb{$state} of each of the members of \code{\link{PipeOp}}.
 \item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}}\cr
 Parameters and parameter constraints. Parameter values are in \verb{$param_set$values}. These are the union of \verb{$param_set}s
-of all \code{\link{PipeOp}}s in the \code{\link{Graph}}. Parameter names
-as seen by the \code{\link{Graph}} have the naming scheme \verb{<PipeOp$id>.<PipeOp original parameter name>}.
+of all \code{\link{PipeOp}}s in the \code{Graph}. Parameter names
+as seen by the \code{Graph} have the naming scheme \verb{<PipeOp$id>.<PipeOp original parameter name>}.
 Changing \verb{$param_set$values} also propagates the changes directly to the contained
 \code{\link{PipeOp}}s and is an alternative to changing a \code{\link{PipeOp}}s \verb{$param_set$values} directly.
 \item \code{hash} :: \code{character(1)} \cr
-Stores a checksum calculated on the \code{\link{Graph}} configuration, which includes all \code{\link{PipeOp}} hashes
+Stores a checksum calculated on the \code{Graph} configuration, which includes all \code{\link{PipeOp}} hashes
 (and therefore their \verb{$param_set$values}) and a hash of \verb{$edges}.
 \item \code{phash} :: \code{character(1)} \cr
-Stores a checksum calculated on the \code{\link{Graph}} configuration, which includes all \code{\link{PipeOp}} hashes
+Stores a checksum calculated on the \code{Graph} configuration, which includes all \code{\link{PipeOp}} hashes
 \emph{except} their \verb{$param_set$values}, and a hash of \verb{$edges}.
 \item \code{keep_results} :: \code{logical(1)}\cr
 Whether to store intermediate results in the \code{\link{PipeOp}}'s \verb{$.result} slot, mostly for debugging purposes. Default \code{FALSE}.
@@ -83,8 +83,8 @@ Get IDs of all \code{\link{PipeOp}}s. This is in order that \code{\link{PipeOp}}
 \code{sorted} is \code{FALSE}, and topologically sorted if \code{sorted} is \code{TRUE}.
 \item \code{add_pipeop(op, clone = TRUE)} \cr
 (\code{\link{PipeOp}} | \code{\link[mlr3:Learner]{Learner}} | \code{\link[mlr3filters:Filter]{Filter}} | \code{...}, \code{logical(1)}) -> \code{self} \cr
-Mutates \code{\link{Graph}} by adding a \code{\link{PipeOp}} to the \code{\link{Graph}}. This does not add any edges, so the new \code{\link{PipeOp}}
-will not be connected within the \code{\link{Graph}} at first.\cr
+Mutates \code{Graph} by adding a \code{\link{PipeOp}} to the \code{Graph}. This does not add any edges, so the new \code{\link{PipeOp}}
+will not be connected within the \code{Graph} at first.\cr
 Instead of supplying a \code{\link{PipeOp}} directly, an object that can naturally be converted to a \code{\link{PipeOp}} can also
 be supplied, e.g. a \code{\link[mlr3:Learner]{Learner}} or a \code{\link[mlr3filters:Filter]{Filter}}; see \code{\link[=as_pipeop]{as_pipeop()}}.
 The argument given as \code{op} is cloned if \code{clone} is \code{TRUE} (default); to access a \code{Graph}'s \code{\link{PipeOp}}s
@@ -106,16 +106,16 @@ see \code{\link[=as_graph]{as_graph()}} and \code{\link[=as_pipeop]{as_pipeop()}
 connecting them using \code{\link{\%>>\%}}.
 \item \code{plot(html = FALSE, horizontal = FALSE)} \cr
 (\code{logical(1)}, \code{logical(1)}) -> \code{NULL} \cr
-Plot the \code{\link{Graph}}, using either the \pkg{igraph} package (for \code{html = FALSE}, default) or
+Plot the \code{Graph}, using either the \pkg{igraph} package (for \code{html = FALSE}, default) or
 the \code{visNetwork} package for \code{html = TRUE} producing a \code{\link[htmlwidgets:htmlwidgets-package]{htmlWidget}}.
 The \code{\link[htmlwidgets:htmlwidgets-package]{htmlWidget}} can be rescaled using \code{\link[visNetwork:visOptions]{visOptions}}.
 For \code{html = FALSE}, the orientation of the plotted graph can be controlled through \code{horizontal}.
 \item \code{print(dot = FALSE, dotname = "dot", fontsize = 24L)} \cr
 (\code{logical(1)}, \code{character(1)}, \code{integer(1)}) -> \code{NULL} \cr
-Print a representation of the \code{\link{Graph}} on the console. If \code{dot} is \code{FALSE}, output is a table with one row for each contained \code{\link{PipeOp}} and
+Print a representation of the \code{Graph} on the console. If \code{dot} is \code{FALSE}, output is a table with one row for each contained \code{\link{PipeOp}} and
 columns \code{ID} (\verb{$id} of \code{PipeOp}), \code{State} (short representation of \verb{$state} of \code{\link{PipeOp}}), \code{sccssors} (\code{\link{PipeOp}}s that
 take their input directly from the \code{\link{PipeOp}} on this line), and \code{prdcssors} (the \code{\link{PipeOp}}s that produce the data
-that is read as input by the \code{\link{PipeOp}} on this line). If \code{dot} is \code{TRUE}, print a DOT representation of the \code{\link{Graph}} on the console.
+that is read as input by the \code{\link{PipeOp}} on this line). If \code{dot} is \code{TRUE}, print a DOT representation of the \code{Graph} on the console.
 The DOT output can be named via the argument \code{dotname} and the \code{fontsize} can also be specified.
 \item \code{set_names(old, new)} \cr
 (\code{character}, \code{character}) -> \code{self} \cr
@@ -126,21 +126,21 @@ instead of changing a \code{\link{PipeOp}}'s \verb{$id} value directly!
 Pre- or postfix \code{\link{PipeOp}}'s existing ids. Both \code{prefix} and \code{postfix} default to \code{""}, i.e. no changes.
 \item \code{train(input, single_input = TRUE)} \cr
 (\code{any}, \code{logical(1)}) -> named \code{list}\cr
-Train \code{\link{Graph}} by traversing the \code{\link{Graph}}s' edges and calling all the \code{\link{PipeOp}}'s \verb{$train} methods in turn.
+Train \code{Graph} by traversing the \code{Graph}s' edges and calling all the \code{\link{PipeOp}}'s \verb{$train} methods in turn.
 Return a named \code{list} of outputs for each unconnected
-\code{\link{PipeOp}} out-channel, named according to the \code{\link{Graph}}'s \verb{$output} \code{name} column. During training, the \verb{$state}
+\code{\link{PipeOp}} out-channel, named according to the \code{Graph}'s \verb{$output} \code{name} column. During training, the \verb{$state}
 member of each \code{\link{PipeOp}}s will be set and the \verb{$is_trained} slot of the \code{Graph} (and each individual \code{PipeOp}) will
 consequently be set to \code{TRUE}.\cr
 If \code{single_input} is \code{TRUE}, the \code{input} value will be sent to each unconnected \code{\link{PipeOp}}'s input channel
-(as listed in the \code{\link{Graph}}'s \verb{$input}). Typically, \code{input} should be a \code{\link[mlr3:Task]{Task}}, although this is dependent
-on the \code{\link{PipeOp}}s in the \code{\link{Graph}}. If \code{single_input} is \code{FALSE}, then
-\code{input} should be a \code{list} with the same length as the \code{\link{Graph}}'s \verb{$input} table has rows; each list item will be sent
-to a corresponding input channel of the \code{\link{Graph}}. If \code{input} is a named \code{list}, names must correspond to input channel
+(as listed in the \code{Graph}'s \verb{$input}). Typically, \code{input} should be a \code{\link[mlr3:Task]{Task}}, although this is dependent
+on the \code{\link{PipeOp}}s in the \code{Graph}. If \code{single_input} is \code{FALSE}, then
+\code{input} should be a \code{list} with the same length as the \code{Graph}'s \verb{$input} table has rows; each list item will be sent
+to a corresponding input channel of the \code{Graph}. If \code{input} is a named \code{list}, names must correspond to input channel
 names (\verb{$input$name}) and inputs will be sent to the channels by name; otherwise they will be sent to the channels
 in order in which they are listed in \verb{$input}.
 \item \code{predict(input, single_input = TRUE)} \cr
 (\code{any}, \code{logical(1)}) -> \code{list} of \code{any} \cr
-Predict with the \code{\link{Graph}} by calling all the \code{\link{PipeOp}}'s \verb{$train} methods. Input and output, as well as the function
+Predict with the \code{Graph} by calling all the \code{\link{PipeOp}}'s \verb{$train} methods. Input and output, as well as the function
 of the \code{single_input} argument, are analogous to \verb{$train()}.
 \item \code{help(help_type)} \cr
 (\code{character(1)}) -> help file\cr

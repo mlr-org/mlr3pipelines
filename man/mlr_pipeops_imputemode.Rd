@@ -54,6 +54,11 @@ Note that every random imputation is drawn independently, so different values ma
 if multiple values are missing.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.

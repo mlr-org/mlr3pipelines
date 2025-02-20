@@ -12,9 +12,9 @@ Wraps an \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{PipeOp}}.
 
 Inherits the \verb{$param_set} (and therefore \verb{$param_set$values}) from the \code{\link[mlr3:Learner]{Learner}} it is constructed from.
 
-Using \code{\link{PipeOpLearnerPICVPlus}}, it is possible to embed a \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{Graph}}.
-\code{\link{PipeOpLearnerPICVPlus}} can then be used to perform cross validation plus (or jackknife plus).
-During training, \code{\link{PipeOpLearnerPICVPlus}} performs cross validation on the training data.
+Using \code{PipeOpLearnerPICVPlus}, it is possible to embed a \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{Graph}}.
+\code{PipeOpLearnerPICVPlus} can then be used to perform cross validation plus (or jackknife plus).
+During training, \code{PipeOpLearnerPICVPlus} performs cross validation on the training data.
 During prediction, the models from the training stage are used to construct predictive confidence intervals for the prediction data based on
 out-of-fold residuals and out-of-fold predictions.
 }
@@ -37,10 +37,10 @@ Default is \code{list()}.
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpLearnerPICVPlus}} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
+\code{PipeOpLearnerPICVPlus} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
 type given to \code{learner} during construction; both during training and prediction.
 
-\code{\link{PipeOpLearnerPICVPlus}} has one output channel named \code{"output"}, producing \code{NULL} during training and a \code{\link[mlr3:PredictionRegr]{PredictionRegr}}
+\code{PipeOpLearnerPICVPlus} has one output channel named \code{"output"}, producing \code{NULL} during training and a \code{\link[mlr3:PredictionRegr]{PredictionRegr}}
 during prediction.
 
 The output during prediction is a \code{\link[mlr3:PredictionRegr]{PredictionRegr}} with \code{predict_type} \code{quantiles} on the prediction input data.
@@ -85,11 +85,11 @@ Fields inherited from \code{\link{PipeOp}}, as well as:
 \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
 Read-only.
 \item \code{learner_model} :: \code{\link[mlr3:Learner]{Learner}} or \code{list}\cr
-If the \code{\link{PipeOpLearnerPICVPlus}} has been trained, this is a \code{list} containing the \code{\link[mlr3:Learner]{Learner}}s of the cross validation models.
+If the \code{PipeOpLearnerPICVPlus} has been trained, this is a \code{list} containing the \code{\link[mlr3:Learner]{Learner}}s of the cross validation models.
 Otherwise, this contains the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
 Read-only.
 \item \code{predict_type}\cr
-Predict type of the \code{\link{PipeOpLearnerPICVPlus}}, which is always \verb{"response"  "quantiles"}.
+Predict type of the \code{PipeOpLearnerPICVPlus}, which is always \verb{"response"  "quantiles"}.
 This can be different to the predict type of the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
 }
 }

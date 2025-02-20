@@ -76,6 +76,11 @@ For \code{integer} and \code{numeric} features uses the \code{min}, \code{max}, 
 \code{integer} and \code{numeric} features that are entirely \code{NA} are imputed as \code{0}.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
