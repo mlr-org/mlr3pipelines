@@ -65,6 +65,9 @@
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encode.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encodeimpact.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encodelmer.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encodepl.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encodeplquantiles.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encodepltree.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_featureunion.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_filter.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_fixfactors.html</loc></url>
