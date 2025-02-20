@@ -9,7 +9,7 @@
 }
 \description{
 Encodes \code{numeric} and \code{integer} feature columns using piecewise lienar encoding. For details, see documentation of
-\code{PipeOpEncodePL} or the paper referenced below.
+\code{\link{PipeOpEncodePL}} or Gorishniy et al. (2022).
 
 Bins are constructed by taking the quantiles of the respective feature column as bin boundaries. The first and
 last boundaries are set to the minimum and maximum value of the feature, respectively. The number of bins can be
