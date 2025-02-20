@@ -247,8 +247,10 @@ test_that("mlr_graphs dictionary", {
 })
 
 test_that("Cannot add pipeops with keys that invalidates the convenience for id incrementation", {
-  copy = mlr_pipeops$clone(deep = TRUE)
-  expect_error(copy$add("name_1", PipeOp), regexp = "grepl")
+  expect_error(mlr_pipeops$add("name_1", PipeOp), regexp = "grepl")
+  if ("name_1" %in% mlr_pipeops$keys()) {
+    mlr_pipeops$remove("name_1")
+  }
 })
 
 test_that("as.data.table(mlr_pipeops) works when a pipeop can not be constructed", {

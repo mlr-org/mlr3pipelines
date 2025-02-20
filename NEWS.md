@@ -11,6 +11,7 @@
 * Fix: Made tests for `PipeOpBLSmote` deterministic.
 * Fix: Corrected hash calculation for `PipeOpFilter`.
 * New PipeOps `PipeOpEncodePLQuantiles` and `PipeOpEncodePLTree` that implement piecewise linear encoding with two different binning methods.
+* Compatibility with new `R6` release.
 
 # mlr3pipelines 0.7.1
 
