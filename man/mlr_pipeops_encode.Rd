@@ -36,7 +36,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
-The output is the input \code{\link[mlr3:Task]{Task}} with all affected \code{factor} and \code{ordered} parameters encoded according to the \code{method}
+The output is the input \code{\link[mlr3:Task]{Task}} with all affected \code{factor} and \code{ordered} columns encoded according to the \code{method}
 parameter.
 }
 
@@ -140,6 +140,9 @@ Other PipeOps:
 \code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodepl}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

@@ -78,7 +78,7 @@ Suggests:
     lme4,
     mlbench,
     bbotk (>= 0.3.0),
-    mlr3filters (>= 0.1.1),
+    mlr3filters (>= 0.8.1),
     mlr3learners,
     mlr3measures,
     nloptr,
@@ -145,6 +145,7 @@ Collate:
     'PipeOpEncode.R'
     'PipeOpEncodeImpact.R'
     'PipeOpEncodeLmer.R'
+    'PipeOpEncodePL.R'
     'PipeOpFeatureUnion.R'
     'PipeOpFilter.R'
     'PipeOpFixFactors.R'
