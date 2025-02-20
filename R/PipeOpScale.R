@@ -32,7 +32,7 @@
 #' * `scale` :: `numeric`\cr
 #'   The value by which features are divided. 1 if `scale` is `FALSE`\cr
 #'   If `robust` is `FALSE`, this is the root mean square, defined as `sqrt(sum(x^2)/(length(x)-1))`, of each feature, possibly after centering.
-#'   If `robust` is `TRUE`, this is the mean absolute deviation multiplied by 1.4826 (see [stats::mad] of each feature, possibly after centering.
+#'   If `robust` is `TRUE`, this is the median absolute deviation multiplied by 1.4826 (see [stats::mad] of each feature, possibly after centering.
 #'   This is 1 for features that are constant during training if `center` is `TRUE`, to avoid division-by-zero.
 #'
 #' @section Parameters:
