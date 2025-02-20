@@ -48,10 +48,10 @@ Tags of the resulting \code{PipeOp}. This is added to the tag \code{"target tran
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpTargetTrafo}} has one input channels named \code{"input"} taking a \code{\link[mlr3:Task]{Task}} (or whatever class
+\code{PipeOpTargetTrafo} has one input channels named \code{"input"} taking a \code{\link[mlr3:Task]{Task}} (or whatever class
 was specified by the \code{task_type} during construction) both during training and prediction.
 
-\code{\link{PipeOpTargetTrafo}} has two output channels named \code{"fun"} and \code{"output"}. During training,
+\code{PipeOpTargetTrafo} has two output channels named \code{"fun"} and \code{"output"}. During training,
 \code{"fun"} returns \code{NULL} and during prediction, \code{"fun"} returns a function that can later be used
 to invert the transformation done during training according to the overloaded \code{.train_invert()}
 and \code{.invert()} functions. \code{"output"} returns the modified input \code{\link[mlr3:Task]{Task}} (or \code{task_type})
@@ -66,11 +66,11 @@ The \verb{$state} is a named \code{list} and should be returned explicitly by th
 
 \section{Internals}{
 
-\code{\link{PipeOpTargetTrafo}} is an abstract class inheriting from \code{\link{PipeOp}}. It implements the
+\code{PipeOpTargetTrafo} is an abstract class inheriting from \code{\link{PipeOp}}. It implements the
 \code{private$.train()} and \code{private$.predict()} functions. These functions perform checks and go on
 to call \code{.get_state()}, \code{.transform()}, \code{.train_invert()}. \code{.invert()} is packaged and sent along
 the \code{"fun"} output to be applied to a \code{\link[mlr3:Prediction]{Prediction}} by \code{\link{PipeOpTargetInvert}}.
-A subclass of \code{\link{PipeOpTargetTrafo}} should implement these functions and be used in combination
+A subclass of \code{PipeOpTargetTrafo} should implement these functions and be used in combination
 with \code{\link{PipeOpTargetInvert}}.
 }
 
@@ -85,7 +85,7 @@ Methods inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
 \item \code{.get_state(task)}\cr
 (\code{\link[mlr3:Task]{Task}}) -> \code{list}\cr
-Called by \code{\link{PipeOpTargetTrafo}}'s implementation of \code{private$.train()}. Takes a single
+Called by \code{PipeOpTargetTrafo}'s implementation of \code{private$.train()}. Takes a single
 \code{\link[mlr3:Task]{Task}} as input and returns a \code{list} to set the \verb{$state}.
 \code{.get_state()} will be called a single time during \emph{training} right before
 \code{.transform()} is called. The return value (i.e. the \verb{$state}) should contain info needed in
@@ -93,7 +93,7 @@ Called by \code{\link{PipeOpTargetTrafo}}'s implementation of \code{private$.tra
 The base implementation returns \code{list()} and should be overloaded if setting the state is desired.
 \item \code{.transform(task, phase)}\cr
 (\code{\link[mlr3:Task]{Task}}, \code{character(1)}) -> \code{\link[mlr3:Task]{Task}}\cr
-Called by \code{\link{PipeOpTargetTrafo}}'s implementation of \code{private$.train()} and
+Called by \code{PipeOpTargetTrafo}'s implementation of \code{private$.train()} and
 \code{private$.predict()}. Takes a single \code{\link[mlr3:Task]{Task}} as input and modifies it.
 This should typically consist of calculating a new target and modifying the
 \code{\link[mlr3:Task]{Task}} by using the \code{\link[mlr3:convert_task]{convert_task}} function. \code{.transform()} will be called during training and
@@ -108,7 +108,7 @@ The input should \emph{not} be cloned and if possible should be changed in-place
 This function is abstract and should be overloaded by inheriting classes.
 \item \code{.train_invert(task)}\cr
 (\code{\link[mlr3:Task]{Task}}) -> \code{any}\cr
-Called by \code{\link{PipeOpTargetTrafo}}'s implementation of \code{private$.predict()}. Takes a single
+Called by \code{PipeOpTargetTrafo}'s implementation of \code{private$.predict()}. Takes a single
 \code{\link[mlr3:Task]{Task}} as input and returns an arbitrary value that will be given as
 \code{predict_phase_state} to \code{.invert()}. This should not modify the input \code{\link[mlr3:Task]{Task}}.\cr
 The base implementation returns a list with a single element, the \verb{$truth} column of the \code{\link[mlr3:Task]{Task}},

@@ -41,10 +41,10 @@
 #'   Tags of the resulting `PipeOp`. This is added to the tag `"target transform"`. Default `NULL`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpTargetTrafo`] has one input channels named `"input"` taking a [`Task`][mlr3::Task] (or whatever class
+#' `PipeOpTargetTrafo` has one input channels named `"input"` taking a [`Task`][mlr3::Task] (or whatever class
 #' was specified by the `task_type` during construction) both during training and prediction.
 #'
-#' [`PipeOpTargetTrafo`] has two output channels named `"fun"` and `"output"`. During training,
+#' `PipeOpTargetTrafo` has two output channels named `"fun"` and `"output"`. During training,
 #' `"fun"` returns `NULL` and during prediction, `"fun"` returns a function that can later be used
 #' to invert the transformation done during training according to the overloaded `.train_invert()`
 #' and `.invert()` functions. `"output"` returns the modified input [`Task`][mlr3::Task] (or `task_type`)
@@ -55,11 +55,11 @@
 #' `.get_state()` function.
 #'
 #' @section Internals:
-#' [`PipeOpTargetTrafo`] is an abstract class inheriting from [`PipeOp`]. It implements the
+#' `PipeOpTargetTrafo` is an abstract class inheriting from [`PipeOp`]. It implements the
 #' `private$.train()` and `private$.predict()` functions. These functions perform checks and go on
 #' to call `.get_state()`, `.transform()`, `.train_invert()`. `.invert()` is packaged and sent along
 #' the `"fun"` output to be applied to a [`Prediction`][mlr3::Prediction] by [`PipeOpTargetInvert`].
-#' A subclass of [`PipeOpTargetTrafo`] should implement these functions and be used in combination
+#' A subclass of `PipeOpTargetTrafo` should implement these functions and be used in combination
 #' with [`PipeOpTargetInvert`].
 #'
 #' @section Fields:
@@ -69,7 +69,7 @@
 #' Methods inherited from [`PipeOp`], as well as:
 #' * `.get_state(task)`\cr
 #'   ([`Task`][mlr3::Task]) -> `list`\cr
-#'   Called by [`PipeOpTargetTrafo`]'s implementation of `private$.train()`. Takes a single
+#'   Called by `PipeOpTargetTrafo`'s implementation of `private$.train()`. Takes a single
 #'   [`Task`][mlr3::Task] as input and returns a `list` to set the `$state`.
 #'   `.get_state()` will be called a single time during *training* right before
 #'   `.transform()` is called. The return value (i.e. the `$state`) should contain info needed in
@@ -77,7 +77,7 @@
 #'   The base implementation returns `list()` and should be overloaded if setting the state is desired.
 #' * `.transform(task, phase)`\cr
 #'   ([`Task`][mlr3::Task], `character(1)`) -> [`Task`][mlr3::Task]\cr
-#'   Called by [`PipeOpTargetTrafo`]'s implementation of `private$.train()` and
+#'   Called by `PipeOpTargetTrafo`'s implementation of `private$.train()` and
 #'   `private$.predict()`. Takes a single [`Task`][mlr3::Task] as input and modifies it.
 #'   This should typically consist of calculating a new target and modifying the
 #'   [`Task`][mlr3::Task] by using the [`convert_task`][mlr3::convert_task] function. `.transform()` will be called during training and
@@ -92,7 +92,7 @@
 #'   This function is abstract and should be overloaded by inheriting classes.
 #' * `.train_invert(task)`\cr
 #'   ([`Task`][mlr3::Task]) -> `any`\cr
-#'   Called by [`PipeOpTargetTrafo`]'s implementation of `private$.predict()`. Takes a single
+#'   Called by `PipeOpTargetTrafo`'s implementation of `private$.predict()`. Takes a single
 #'   [`Task`][mlr3::Task] as input and returns an arbitrary value that will be given as
 #'   `predict_phase_state` to `.invert()`. This should not modify the input [`Task`][mlr3::Task].\cr
 #'   The base implementation returns a list with a single element, the `$truth` column of the [`Task`][mlr3::Task],
@@ -186,7 +186,7 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
 #'
 #' During prediction phase the function supplied through `"fun"` is called with a `list` containing
 #' the `"prediction"` as a single element, and should return a `list` with a single element
-#' (a [`Prediction`][mlr3::Prediction]) that is returned by [`PipeOpTargetInvert`].
+#' (a [`Prediction`][mlr3::Prediction]) that is returned by `PipeOpTargetInvert`.
 #'
 #' @section Construction:
 #' ```
@@ -199,18 +199,18 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpTargetInvert`] has two input channels named `"fun"` and `"prediction"`. During
+#' `PipeOpTargetInvert` has two input channels named `"fun"` and `"prediction"`. During
 #' training, both take `NULL` as input. During prediction, `"fun"` takes a function and
 #' `"prediction"` takes a [`Prediction`][mlr3::Prediction].
 #'
-#' [`PipeOpTargetInvert`] has one output channel named `"output"` and returns `NULL` during
+#' `PipeOpTargetInvert` has one output channel named `"output"` and returns `NULL` during
 #' training and a [`Prediction`][mlr3::Prediction] during prediction.
 #'
 #' @section State:
 #' The `$state` is left empty (`list()`).
 #'
 #' @section Parameters:
-#' [`PipeOpTargetInvert`] has no parameters.
+#' `PipeOpTargetInvert` has no parameters.
 #'
 #' @section Internals:
 #' Should be used in combination with a subclass of [`PipeOpTargetTrafo`].
@@ -371,7 +371,10 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
 
     .transform = function(task, phase) {
       new_target = self$param_set$values$trafo(task$data(cols = task$target_names))
-      # We implicitly assume that output of new_target is still a data.frame-like object; maybe check this and try as.data.table
+      # add test for this
+      if (!is.data.frame(new_target) || !is.matrix(new_target)) {
+        stopf("trafo must be a function returning a 'data.frame', 'data.table', or 'matrix', not '%s'.", class(new_target))
+      }
       task$cbind(new_target)
       convert_task(task, target = colnames(new_target), new_type = private$.new_task_type, drop_original_target = TRUE, drop_levels = FALSE)
     },
