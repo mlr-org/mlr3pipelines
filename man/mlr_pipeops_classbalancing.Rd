@@ -77,7 +77,7 @@ and multiplying this with the value of the \code{ratio} parameter. If \code{refe
 class count" is just the value of \code{ratio} (i.e. \code{1 * ratio}).
 
 Then for each class that is referenced by the \code{adjust} parameter (e.g. if \code{adjust} is \code{"nonminor"}:
-each class that is not the class with the fewest samples), \code{\link{PipeOpClassBalancing}} either throws out
+each class that is not the class with the fewest samples), \code{PipeOpClassBalancing} either throws out
 samples (downsampling), or adds additional rows that are equal to randomly chosen samples (upsampling),
 until the number of samples for these classes equals the "target class count".
 

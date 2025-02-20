@@ -10,8 +10,8 @@
 \description{
 Provides an interface to the vtreat package.
 
-\code{\link{PipeOpVtreat}} naturally works for \link[mlr3:TaskClassif]{classification tasks} and \link[mlr3:TaskRegr]{regression tasks}.
-Internally, \code{\link{PipeOpVtreat}} follows the fit/prepare interface of vtreat, i.e., first creating a data treatment transform object via
+\code{PipeOpVtreat} naturally works for \link[mlr3:TaskClassif]{classification tasks} and \link[mlr3:TaskRegr]{regression tasks}.
+Internally, \code{PipeOpVtreat} follows the fit/prepare interface of vtreat, i.e., first creating a data treatment transform object via
 \code{\link[vtreat:NumericOutcomeTreatment]{vtreat::NumericOutcomeTreatment()}}, \code{\link[vtreat:BinomialOutcomeTreatment]{vtreat::BinomialOutcomeTreatment()}}, or \code{\link[vtreat:MultinomialOutcomeTreatment]{vtreat::MultinomialOutcomeTreatment()}}, followed by calling
 \code{\link[vtreat:fit_prepare]{vtreat::fit_prepare()}} on the training data and \code{\link[vtreat:prepare]{vtreat::prepare()}} during predicton.
 }

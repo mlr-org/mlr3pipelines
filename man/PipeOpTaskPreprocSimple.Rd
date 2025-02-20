@@ -41,7 +41,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings given i
 subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}. Default \code{list()}.
 \item \code{can_subset_cols} :: \code{logical(1)}\cr
 Whether the \code{affect_columns} parameter should be added which lets the user limit the columns that are
-modified by the \code{\link{PipeOpTaskPreprocSimple}}. This should generally be \code{FALSE} if the operation adds or removes
+modified by the \code{PipeOpTaskPreprocSimple}. This should generally be \code{FALSE} if the operation adds or removes
 rows from the \code{\link[mlr3:Task]{Task}}, and \code{TRUE} otherwise. Default is \code{TRUE}.
 \item \code{packages} :: \code{character}\cr
 Set of all required packages for the \code{\link{PipeOp}}'s \code{private$.train()} and \code{private$.predict()} methods. See \verb{$packages} slot.
@@ -77,8 +77,8 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 
 \section{Internals}{
 
-\code{\link{PipeOpTaskPreprocSimple}} is an abstract class inheriting from \code{\link{PipeOpTaskPreproc}} and implementing the
-\code{private$.train_task()} and \code{private$.predict_task()} functions. A subclass of \code{\link{PipeOpTaskPreprocSimple}} may implement the
+\code{PipeOpTaskPreprocSimple} is an abstract class inheriting from \code{\link{PipeOpTaskPreproc}} and implementing the
+\code{private$.train_task()} and \code{private$.predict_task()} functions. A subclass of \code{PipeOpTaskPreprocSimple} may implement the
 functions \code{private$.get_state()} and \code{private$.transform()}, or alternatively the functions \code{private$.get_state_dt()} and \code{private$.transform_dt()}
 (as well as \code{private$.select_cols()}, in the latter case). This works by having the default implementations of
 \code{private$.get_state()} and \code{private$.transform()} call \code{private$.get_state_dt()} and \code{private$.transform_dt()}.
@@ -99,7 +99,7 @@ Store create something that will be stored in \verb{$state} during training phas
 The state can then influence the \code{private$.transform()} function. Note that \code{private$.get_state()} must \emph{return} the state, and
 should not store it in \verb{$state}. It is not strictly necessary to implement either \code{private$.get_state()} or \code{private$.get_state_dt()};
 if they are not implemented, the state will be stored as \code{list()}. \cr
-This method can optionally be overloaded when inheriting from \code{\link{PipeOpTaskPreprocSimple}}, together with \code{private$.transform()};
+This method can optionally be overloaded when inheriting from \code{PipeOpTaskPreprocSimple}, together with \code{private$.transform()};
 alternatively, \code{private$.get_state_dt()} (optional) and \code{private$.transform_dt()} (and possibly \code{private$.select_cols()}, from \code{\link{PipeOpTaskPreproc}})
 can be overloaded.
 \item \code{.transform(task)} \cr
@@ -107,8 +107,8 @@ can be overloaded.
 Predict on new data in \code{task}, possibly using the stored \verb{$state}. \code{task} should not be cloned, instead it should be
 changed in-place. This method is called both during training and prediction phase, and should essentially behave the
 same independently of phase. (If this is incongruent with the functionality to be implemented, then it should inherit from
-\code{\link{PipeOpTaskPreproc}}, not from \code{\link{PipeOpTaskPreprocSimple}}.) \cr
-This method can be overloaded when inheriting from \code{\link{PipeOpTaskPreprocSimple}}, optionally with \code{private$.get_state()};
+\code{\link{PipeOpTaskPreproc}}, not from \code{PipeOpTaskPreprocSimple}.) \cr
+This method can be overloaded when inheriting from \code{PipeOpTaskPreprocSimple}, optionally with \code{private$.get_state()};
 alternatively, \code{private$.get_state_dt()} (optional) and \code{private$.transform_dt()} (and possibly \code{private$.select_cols()}, from \code{\link{PipeOpTaskPreproc}})
 can be overloaded.
 \item \code{.get_state_dt(dt)} \cr
@@ -117,7 +117,7 @@ Create something that will be stored in \verb{$state} during training phase of \
 The state can then influence the \code{private$.transform_dt()} function. Note that \code{private$.get_state_dt()} must \emph{return} the state, and
 should not store it in \verb{$state}. If neither \code{private$.get_state()} nor \code{private$.get_state_dt()} are overloaded, the state will
 be stored as \code{list()}. \cr
-This method can optionally be overloaded when inheriting from \code{\link{PipeOpTaskPreprocSimple}}, together with \code{private$.transform_dt()}
+This method can optionally be overloaded when inheriting from \code{PipeOpTaskPreprocSimple}, together with \code{private$.transform_dt()}
 (and optionally \code{private$.select_cols()}, from \code{\link{PipeOpTaskPreproc}}); Alternatively, \code{private$.get_state()} (optional) and \code{private$.transform()}
 can be overloaded.
 \item \code{.transform_dt(dt)} \cr
@@ -127,8 +127,8 @@ that can be converted to a \code{data.table} using \code{\link{as.data.table}}. 
 is possible and encouraged to change it in-place. This method is called both during training and prediction phase,
 and should essentially behave the same independently of phase.
 (If this is incongruent with the functionality to be implemented, then it should inherit from
-\code{\link{PipeOpTaskPreproc}}, not from \code{\link{PipeOpTaskPreprocSimple}}.) \cr
-This method can optionally be overloaded when inheriting from \code{\link{PipeOpTaskPreprocSimple}}, together with \code{private$.transform_dt()}
+\code{\link{PipeOpTaskPreproc}}, not from \code{PipeOpTaskPreprocSimple}.) \cr
+This method can optionally be overloaded when inheriting from \code{PipeOpTaskPreprocSimple}, together with \code{private$.transform_dt()}
 (and optionally \code{private$.select_cols()}, from \code{\link{PipeOpTaskPreproc}}); Alternatively, \code{private$.get_state()} (optional) and \code{private$.transform()}
 can be overloaded.
 }

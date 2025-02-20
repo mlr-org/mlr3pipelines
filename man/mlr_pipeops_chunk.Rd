@@ -29,9 +29,9 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output}{
 
-\code{\link{PipeOpChunk}} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}} both during training and prediction.
+\code{PipeOpChunk} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}} both during training and prediction.
 
-\code{\link{PipeOpChunk}} has multiple output channels depending on the \code{options} construction argument, named \code{"output1"}, \code{"output2"}, ...
+\code{PipeOpChunk} has multiple output channels depending on the \code{options} construction argument, named \code{"output1"}, \code{"output2"}, ...
 All output channels produce (respectively disjoint, random) subsets of the input \code{\link[mlr3:Task]{Task}} during training, and
 pass on the original \code{\link[mlr3:Task]{Task}} during prediction.
 }

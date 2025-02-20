@@ -6,7 +6,7 @@
 #'
 #' @description
 #' Perform (weighted) majority vote prediction from classification [`Prediction`][mlr3::Prediction]s by connecting
-#' [`PipeOpClassifAvg`] to multiple [`PipeOpLearner`] outputs.
+#' `PipeOpClassifAvg` to multiple [`PipeOpLearner`] outputs.
 #'
 #' Always returns a `"prob"` prediction, regardless of the incoming [`Learner`][mlr3::Learner]'s
 #' `$predict_type`. The label of the class with the highest predicted probability is selected as the

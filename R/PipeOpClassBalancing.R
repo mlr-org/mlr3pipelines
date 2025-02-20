@@ -62,7 +62,7 @@
 #' class count" is just the value of `ratio` (i.e. `1 * ratio`).
 #'
 #' Then for each class that is referenced by the `adjust` parameter (e.g. if `adjust` is `"nonminor"`:
-#' each class that is not the class with the fewest samples), [`PipeOpClassBalancing`] either throws out
+#' each class that is not the class with the fewest samples), `PipeOpClassBalancing` either throws out
 #' samples (downsampling), or adds additional rows that are equal to randomly chosen samples (upsampling),
 #' until the number of samples for these classes equals the "target class count".
 #'

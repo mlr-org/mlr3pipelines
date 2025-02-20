@@ -26,11 +26,11 @@
 #'   be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpProxy`] has multiple input channels depending on the `innum` construction argument, named
+#' `PipeOpProxy` has multiple input channels depending on the `innum` construction argument, named
 #' `"input1"`, `"input2"`, ... if `innum` is nonzero; if `innum` is 0, there is only one *vararg*
 #' input channel named `"..."`.
 #'
-#' [`PipeOpProxy`] has multiple output channels depending on the `outnum` construction argument,
+#' `PipeOpProxy` has multiple output channels depending on the `outnum` construction argument,
 #' named `"output1"`, `"output2"`, ...
 #' The output is determined by the output of the `content` operation (a [`PipeOp`] or [`Graph`]).
 #'
