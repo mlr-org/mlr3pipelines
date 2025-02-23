@@ -371,7 +371,7 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
 
     .transform = function(task, phase) {
       new_target = self$param_set$values$trafo(task$data(cols = task$target_names))
-      if (!is.data.frame(new_target) || !is.matrix(new_target)) {
+      if (!is.data.frame(new_target) && !is.matrix(new_target)) {
         stopf("Hyperparameter 'trafo' must be a function returning a 'data.frame', 'data.table', or 'matrix', not '%s'.", class(new_target))
       }
       task$cbind(new_target)
