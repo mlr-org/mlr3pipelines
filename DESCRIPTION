@@ -215,6 +215,7 @@ Collate:
     'pipeline_targettrafo.R'
     'po.R'
     'ppl.R'
+    'preproc.R'
     'reexports.R'
     'typecheck.R'
     'zzz.R'
