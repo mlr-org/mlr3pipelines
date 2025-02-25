@@ -342,7 +342,8 @@ mlr_pipeops$add("encodeplquantiles", PipeOpEncodePLQuantiles)
 #'
 #' # Calculated bin boundaries per feature
 #' pop$state$bins
-#' # First feature was split into three encoded features, second into two, using piecewise linear encoding
+#' # First feature was split into three encoded features,
+#' # second into two, using piecewise linear encoding
 #' train_out$head()
 PipeOpEncodePLTree = R6Class("PipeOpEncodePLTree",
   inherit = PipeOpEncodePL,
