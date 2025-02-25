@@ -42,7 +42,7 @@ The \verb{$state} is left empty (\code{list()}).
 
 The parameters are the parameters inherited from \code{\link{PipeOpTargetTrafo}}, as well as:
 \itemize{
-\item \code{trafo} :: \code{function} \code{data.table} -> \code{data.table}\cr
+\item \code{trafo} :: \code{function} \code{data.table} -> \code{data.table} | \code{matrix}\cr
 Transformation function for the target. Should only be a function of the target, i.e., taking a
 single \code{data.table} argument, typically with one column. The return value is used as the new
 target of the resulting \code{\link[mlr3:Task]{Task}}. To change target names, change the column name of the data
