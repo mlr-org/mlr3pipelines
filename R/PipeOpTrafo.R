@@ -281,7 +281,7 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTargetTrafo`], as well as:
-#' * `trafo` :: `function` `data.table` -> `data.table`\cr
+#' * `trafo` :: `function` `data.table` -> `data.table` | `matrix`\cr
 #'   Transformation function for the target. Should only be a function of the target, i.e., taking a
 #'   single `data.table` argument, typically with one column. The return value is used as the new
 #'   target of the resulting [`Task`][mlr3::Task]. To change target names, change the column name of the data
