@@ -57,6 +57,7 @@ reference:
       - PipeOpTaskPreproc
       - PipeOpTaskPreprocSimple
       - PipeOpImpute
+      - PipeOpEnsemble
       - Multiplicity
   - title: Graph Tools
     contents:
@@ -100,7 +101,13 @@ reference:
       - starts_with("is.")
   - title: Abstract PipeOps
     contents:
+      - PipeOp
+      - PipeOpTaskPreproc
+      - PipeOpTaskPreprocSimple
+      - PipeOpImpute
       - PipeOpEnsemble
+      - PipeOpEncodePL
+      - PipeOpTargetTrafo
   - title: PipeOp Type Inference
     contents:
       - add_class_hierarchy_cache
