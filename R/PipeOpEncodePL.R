@@ -1,7 +1,6 @@
 #' @title Piecewise Linear Encoding Base Class
 #'
 #' @usage NULL
-#' @name mlr_pipeops_encodepl
 #' @format Abstract [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
