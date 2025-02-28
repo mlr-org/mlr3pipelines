@@ -56,14 +56,13 @@ reference:
       - Graph
       - PipeOpTaskPreproc
       - PipeOpTaskPreprocSimple
-      - PipeOpImpute
-      - PipeOpEnsemble
       - Multiplicity
   - title: Graph Tools
     contents:
       - "%>>%"
       - gunion
       - greplicate
+      - chain_graphs
   - title: PipeOps
     contents:
       - mlr_pipeops
@@ -72,12 +71,9 @@ reference:
       - starts_with("PipeOp")
   - title: Pipelines
     contents:
+      - mlr_graphs
       - ppl
       - starts_with("pipeline_")
-  - title: Graphs
-    contents:
-      - starts_with("mlr_graph")
-      - chain_graphs
   - title: Learners
     contents:
       - mlr_learners_graph
@@ -106,8 +102,8 @@ reference:
       - PipeOpTaskPreprocSimple
       - PipeOpImpute
       - PipeOpEnsemble
-      - PipeOpEncodePL
       - PipeOpTargetTrafo
+      - PipeOpEncodePL
   - title: PipeOp Type Inference
     contents:
       - add_class_hierarchy_cache
