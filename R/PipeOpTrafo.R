@@ -281,7 +281,7 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTargetTrafo`], as well as:
-#' * `trafo` :: `function` `data.table` -> `data.table` | `matrix`\cr
+#' * `trafo` :: `function` `data.table` -> `data.frame` | `data.table` | `matrix`\cr
 #'   Transformation function for the target. Should only be a function of the target, i.e., taking a
 #'   single `data.table` argument, typically with one column. The return value is used as the new
 #'   target of the resulting [`Task`][mlr3::Task]. To change target names, change the column name of the data
@@ -372,7 +372,7 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
     .transform = function(task, phase) {
       new_target = self$param_set$values$trafo(task$data(cols = task$target_names))
       if (!is.data.frame(new_target) && !is.matrix(new_target)) {
-        stopf("Hyperparameter 'trafo' must be a function returning a 'data.frame', 'data.table', or 'matrix', not '%s'.", class(new_target))
+        stopf("Hyperparameter 'trafo' must be a function returning a 'data.frame', 'data.table', or 'matrix', not '%s'.", class(new_target)[[1L]])
       }
       task$cbind(new_target)
       convert_task(task, target = colnames(new_target), new_type = private$.new_task_type, drop_original_target = TRUE, drop_levels = FALSE)
