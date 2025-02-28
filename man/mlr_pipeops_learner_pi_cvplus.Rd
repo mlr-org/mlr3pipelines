@@ -100,7 +100,7 @@ Methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{ if (requireNamespace("rpart")) \{ }
+\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 
 task = tsk("mtcars")
@@ -109,7 +109,7 @@ lrncvplus_po = mlr_pipeops$get("learner_pi_cvplus", learner)
 
 lrncvplus_po$train(list(task))
 lrncvplus_po$predict(list(task))
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \references{
 Barber RF, Candes EJ, Ramdasa A, Tibshirani RJ (2021).

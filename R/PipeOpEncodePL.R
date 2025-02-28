@@ -308,7 +308,7 @@ mlr_pipeops$add("encodeplquantiles", PipeOpEncodePLQuantiles)
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
-#' @examples
+#' @examplesIf requireNamespace("rpart")
 #' library(mlr3)
 #'
 #' # For classification task

@@ -83,8 +83,7 @@
 #' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
 #'
 #' task = tsk("mtcars")
@@ -93,7 +92,6 @@
 #'
 #' lrncvplus_po$train(list(task))
 #' lrncvplus_po$predict(list(task))
-#' \dontshow{ \} }
 PipeOpLearnerPICVPlus = R6Class("PipeOpLearnerPICVPlus",
   inherit = PipeOp,
   public = list(

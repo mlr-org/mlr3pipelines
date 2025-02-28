@@ -71,6 +71,7 @@ Only methods inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskP
 }
 
 \examples{
+\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(mlr3)
 
 # For classification task
@@ -106,6 +107,7 @@ pop$state$bins
 # First feature was split into three encoded features,
 # second into two, using piecewise linear encoding
 train_out$head()
+\dontshow{\}) # examplesIf}
 }
 \references{
 Gorishniy Y, Rubachev I, Babenko A (2022).
