@@ -26,23 +26,15 @@
 #'
 preproc <- function(indata, graph, state = NULL, predict = !is.null(state)) {
   assert(
-    # could also accept backends here? anything that is acceptable for task constructor would be OK
-    # or we just later call task_constructor on anything that is not task, and let it throw relevant errors?
     check_data_frame(indata, col.names = "unique"),
     check_class(indata, "Task")  # effectively the only thing assert_task checks with default args
   )
   assert_list(state, names = "unique", null.ok = TRUE)  # from Graph
   assert_flag(predict)
-  # don't need to assert on graph, since S3 handles it
 
-  UseMethod("preproc", graph)
-}
+  # TODO: check with comment about cloning
+  graph = as_graph(graph, clone = FALSE)
 
-# is it acceptable to rename the second argument here? or do we just call it graph?
-#
-# using export instead of exportS3method since we mostly do this in mlr3 packages
-#' @export
-preproc.PipeOp <- function(indata, graph, state = NULL, predict = !is.null(state)) {
   if (nrow(graph$output) != 1) {
     stop("'graph' must have exactly one output channel.")
   }
@@ -61,9 +53,9 @@ preproc.PipeOp <- function(indata, graph, state = NULL, predict = !is.null(state
     # if no state given and predict is true: predict might work
     # do we need any checks on state?
     graph$state = state
-    outtask = graph$predict(list(task))[[1L]]
+    outtask = graph$predict(task)[[1L]]
   } else if (is.null(state)) {
-    outtask = graph$train(list(task))[[1L]]
+    outtask = graph$train(task)[[1L]]
   } else {
     stopf("Giving a state makes no sense if predict=FALSE ...")
   }
@@ -73,22 +65,6 @@ preproc.PipeOp <- function(indata, graph, state = NULL, predict = !is.null(state
   } else {
     outtask
   }
-}
-
-# Should return a task (only allow pipelines that return a single task? but that is not the same as only one output channel, e.g. TargetMutate)
-#' @export
-preproc.Graph <- function(indata, graph, state = NULL, predict = !is.null(state)) {
-
-  if (nrow(graph$output) != 1) {
-    stop("'graph' must have exactly one output channel.")
-  }
-
-  # Construct a Task from data.frame
-  # TODO: see preproc.PipeOp
-  if (is.data.frame(indata)) {
-    task = TaskUnsupervised$new(id = "preproc_task", backend = indata)
-  }
-
 }
 
 # Examples
