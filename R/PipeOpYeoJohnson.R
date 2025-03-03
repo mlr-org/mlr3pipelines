@@ -46,6 +46,9 @@
 #' @section Internals:
 #' Uses the [`bestNormalize::yeojohnson`] function.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'

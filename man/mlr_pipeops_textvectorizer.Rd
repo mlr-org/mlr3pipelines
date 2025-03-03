@@ -10,11 +10,10 @@
 \description{
 Computes a bag-of-word representation from a (set of) columns.
 Columns of type \code{character} are split up into words.
-Uses the \code{\link[quanteda:dfm]{quanteda::dfm()}},
-\code{\link[quanteda:dfm_trim]{quanteda::dfm_trim()}} from the 'quanteda' package.
+Uses the \code{\link[quanteda:dfm]{quanteda::dfm()}} and \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim()}} functions.
 TF-IDF computation works similarly to \code{\link[quanteda:dfm_tfidf]{quanteda::dfm_tfidf()}}
 but has been adjusted for train/test data split using \code{\link[quanteda:docfreq]{quanteda::docfreq()}}
-and \code{\link[quanteda:dfm_weight]{quanteda::dfm_weight()}}
+and \code{\link[quanteda:dfm_weight]{quanteda::dfm_weight()}}.
 
 In short:
 \itemize{
@@ -25,19 +24,19 @@ In short:
 \item The \code{scheme_df} parameter controls the document-frequency (per token, i.e. per-column) weighting.
 }
 
-Parameters specify arguments to quanteda's \code{dfm}, \code{dfm_trim}, \code{docfreq} and \code{dfm_weight}.
-What belongs to what can be obtained from each params \code{tags} where \code{tokenizer} are
+Parameters specify arguments to \code{quanteda}'s \code{dfm}, \code{dfm_trim}, \code{docfreq} and \code{dfm_weight}.
+What belongs to what can be obtained from each parameter's \code{tags} where \code{tokenizer} are
 arguments passed on to \code{\link[quanteda:dfm]{quanteda::dfm()}}.
 Defaults to a bag-of-words representation with token counts as matrix entries.
 
 In order to perform the \emph{default} \code{dfm_tfidf} weighting, set the \code{scheme_df} parameter to \code{"inverse"}.
 The \code{scheme_df} parameter is initialized to \code{"unary"}, which disables document frequency weighting.
 
-The pipeop works as follows:
+The \code{\link{PipeOp}} works as follows:
 \enumerate{
 \item Words are tokenized using \code{\link[quanteda:tokens]{quanteda::tokens}}.
-\item Ngrams are computed using \code{\link[quanteda:tokens_ngrams]{quanteda::tokens_ngrams}}
-\item A document-frequency matrix is computed using \code{\link[quanteda:dfm]{quanteda::dfm}}
+\item Ngrams are computed using \code{\link[quanteda:tokens_ngrams]{quanteda::tokens_ngrams}}.
+\item A document-frequency matrix is computed using \code{\link[quanteda:dfm]{quanteda::dfm}}.
 \item The document-frequency matrix is trimmed using \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}} during train-time.
 \item The document-frequency matrix is re-weighted (similar to \code{\link[quanteda:dfm_tfidf]{quanteda::dfm_tfidf}}) if \code{scheme_df} is not set to \code{"unary"}.
 }
@@ -65,7 +64,15 @@ representation.
 
 \section{State}{
 
-The \verb{$state} is a list with element 'cols': A vector of extracted columns.
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
+\itemize{
+\item \code{colmodels} :: named \code{list}\cr
+Named list with one entry per extracted column. Each entry has two further elements:
+\itemize{
+\item \code{tdm}: sparse document-feature matrix resulting from \code{\link[quanteda:dfm]{quanteda::dfm()}}
+\item \code{docfreq}: (weighted) document frequency resulting from \code{\link[quanteda:docfreq]{quanteda::docfreq()}}
+}
+}
 }
 
 \section{Parameters}{
@@ -73,80 +80,85 @@ The \verb{$state} is a list with element 'cols': A vector of extracted columns.
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{return_type} :: \code{character(1)}\cr
-Whether to return an integer representation ("integer-sequence") or a Bag-of-words ("bow").
-If set to "integer_sequence", tokens are replaced by an integer and padded/truncated to \code{sequence_length}.
-If set to "factor_sequence", tokens are replaced by a factor and padded/truncated to \code{sequence_length}.
-If set to 'bow', a possibly weighted bag-of-words matrix is returned.
+Whether to return an integer representation (\code{"integer-sequence"}) or a Bag-of-words (\code{"bow"}).
+If set to \code{"integer_sequence"}, tokens are replaced by an integer and padded/truncated to \code{sequence_length}.
+If set to \code{"factor_sequence"}, tokens are replaced by a factor and padded/truncated to \code{sequence_length}.
+If set to \code{"bow"}, a possibly weighted bag-of-words matrix is returned.
 Defaults to \code{bow}.
 \item \code{stopwords_language} :: \code{character(1)}\cr
 Language to use for stopword filtering. Needs to be either \code{"none"}, a language identifier listed in
 \code{stopwords::stopwords_getlanguages("snowball")} (\code{"de"}, \code{"en"}, ...) or \code{"smart"}.
 \code{"none"} disables language-specific stopwords.
 \code{"smart"} coresponds to \code{stopwords::stopwords(source = "smart")}, which
-contains \emph{English} stopwords and also removes one-character strings. Initialized to \code{"smart"}.\cr
+contains \emph{English} stopwords and also removes one-character strings. Initialized to \code{"smart"}.
 \item \code{extra_stopwords} :: \code{character}\cr
-Extra stopwords to remove. Must be a \code{character} vector containing individual tokens to remove. Initialized to \code{character(0)}.
-When \code{n} is set to values greater than 1, this can also contain stop-ngrams.
+Extra stopwords to remove. Must be a \code{character} vector containing individual tokens to remove.
+When \code{n} is set to values greater than \code{1}, this can also contain stop-ngrams.
+Initialized to \code{character(0)}.
 \item \code{tolower} :: \code{logical(1)}\cr
-Convert to lower case? See \code{\link[quanteda:dfm]{quanteda::dfm}}. Default: \code{TRUE}.
+Whether to convert to lower case. See \code{\link[quanteda:dfm]{quanteda::dfm}}. Default is \code{TRUE}.
 \item \code{stem} :: \code{logical(1)}\cr
-Perform stemming? See \code{\link[quanteda:dfm]{quanteda::dfm}}. Default: \code{FALSE}.
+Whether to perform stemming. See \code{\link[quanteda:dfm]{quanteda::dfm}}. Default is \code{FALSE}.
 \item \code{what} :: \code{character(1)}\cr
-Tokenization splitter. See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{word}.
+Tokenization splitter. See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default is \code{"word"}.
 \item \code{remove_punct} :: \code{logical(1)}\cr
-See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
+See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default is \code{FALSE}.
 \item \code{remove_url} :: \code{logical(1)}\cr
-See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
+See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default is \code{FALSE}.
 \item \code{remove_symbols} :: \code{logical(1)}\cr
-See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
+See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default is \code{FALSE}.
 \item \code{remove_numbers} :: \code{logical(1)}\cr
-See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
+See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default is \code{FALSE}.
 \item \code{remove_separators} :: \code{logical(1)}\cr
-See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{TRUE}.
+See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default is  \code{TRUE}.
 \item \code{split_hypens} :: \code{logical(1)}\cr
-See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
+See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default is \code{FALSE}.
 \item \code{n} :: \code{integer}\cr
-Vector of ngram lengths. See \code{\link[quanteda:tokens_ngrams]{quanteda::tokens_ngrams}}. Initialized to 1, deviating from the base function's default.
+Vector of ngram lengths. See \code{\link[quanteda:tokens_ngrams]{quanteda::tokens_ngrams}}. Initialized to \code{1}, deviating from the base function's default.
 Note that this can be a \emph{vector} of multiple values, to construct ngrams of multiple orders.
 \item \code{skip} :: \code{integer}\cr
-Vector of skips. See \code{\link[quanteda:tokens_ngrams]{quanteda::tokens_ngrams}}. Default: 0. Note that this can be a \emph{vector} of multiple values.
+Vector of skips. See \code{\link[quanteda:tokens_ngrams]{quanteda::tokens_ngrams}}. Default is \code{0}. Note that this can be a \emph{vector} of multiple values.
 \item \code{sparsity} :: \code{numeric(1)}\cr
-Desired sparsity of the 'tfm' matrix. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default: \code{NULL}.
+Desired sparsity of the 'tfm' matrix. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default is \code{NULL}.
 \item \code{max_termfreq} :: \code{numeric(1)}\cr
-Maximum term frequency in the 'tfm' matrix. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default: \code{NULL}.
+Maximum term frequency in the 'tfm' matrix. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default is \code{NULL}.
 \item \code{min_termfreq} :: \code{numeric(1)}\cr
-Minimum term frequency in the 'tfm' matrix. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default: \code{NULL}.
+Minimum term frequency in the 'tfm' matrix. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default is \code{NULL}.
 \item \code{termfreq_type} :: \code{character(1)}\cr
-How to asess term frequency. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default: \code{"count"}.
+How to asess term frequency. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default is \code{"count"}.
 \item \code{scheme_df} :: \code{character(1)} \cr
-Weighting scheme for document frequency: See \code{\link[quanteda:docfreq]{quanteda::docfreq}}. Initialized to \code{"unary"} (1 for each document, deviating from base function default).
+Weighting scheme for document frequency: See \code{\link[quanteda:docfreq]{quanteda::docfreq}}. Initialized to \code{"unary"} (\code{1} for each document, deviating from base function default).
 \item \code{smoothing_df} :: \code{numeric(1)}\cr
-See \code{\link[quanteda:docfreq]{quanteda::docfreq}}. Default: 0.
+See \code{\link[quanteda:docfreq]{quanteda::docfreq}}. Default is \code{0}.
 \item \code{k_df} :: \code{numeric(1)}\cr
 \code{k} parameter given to \code{\link[quanteda:docfreq]{quanteda::docfreq}} (see there).
-Default is 0.
+Default is \code{0}.
 \item \code{threshold_df} :: \code{numeric(1)}\cr
-See \code{\link[quanteda:docfreq]{quanteda::docfreq}}. Default: 0. Only considered for \code{scheme_df} = \code{"count"}.
+See \code{\link[quanteda:docfreq]{quanteda::docfreq}}. Default is \code{0}. Only considered if \code{scheme_df} is set to \code{"count"}.
 \item \code{base_df} :: \code{numeric(1)}\cr
-The base for logarithms in \code{\link[quanteda:docfreq]{quanteda::docfreq}} (see there). Default: 10.
+The base for logarithms in \code{\link[quanteda:docfreq]{quanteda::docfreq}} (see there). Default is \code{10}.
 \item \code{scheme_tf} :: \code{character(1)} \cr
-Weighting scheme for term frequency: See \code{\link[quanteda:dfm_weight]{quanteda::dfm_weight}}. Default: \code{"count"}.
+Weighting scheme for term frequency: See \code{\link[quanteda:dfm_weight]{quanteda::dfm_weight}}. Default is \code{"count"}.
 \item \code{k_tf} :: \code{numeric(1)}\cr
 \code{k} parameter given to \code{\link[quanteda:dfm_weight]{quanteda::dfm_weight}} (see there).
-Default behaviour is 0.5.
+Default is \code{0.5}.
 \item \code{base_df} :: \code{numeric(1)}\cr
-The base for logarithms in \code{\link[quanteda:dfm_weight]{quanteda::dfm_weight}} (see there). Default: 10.
-}
-
-#' * \code{sequence_length} :: \code{integer(1)}\cr
+The base for logarithms in \code{\link[quanteda:dfm_weight]{quanteda::dfm_weight}} (see there). Default is \code{10}.
+\item \code{sequence_length} :: \code{integer(1)}\cr
 The length of the integer sequence. Defaults to \code{Inf}, i.e. all texts are padded to the length
-of the longest text. Only relevant for "return_type" : "integer_sequence"
+of the longest text. Only relevant for \code{return_type} is set to \code{"integer_sequence"}.
+}
 }
 
 \section{Internals}{
 
 See Description. Internally uses the \code{quanteda} package. Calls \code{\link[quanteda:tokens]{quanteda::tokens}}, \code{\link[quanteda:tokens_ngrams]{quanteda::tokens_ngrams}} and \code{\link[quanteda:dfm]{quanteda::dfm}}. During training,
 \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}} is also called. Tokens not seen during training are dropped during prediction.
+}
+
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
@@ -180,6 +192,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -203,7 +216,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
-\code{\link{mlr_pipeops_encodepl}},
 \code{\link{mlr_pipeops_encodeplquantiles}},
 \code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},

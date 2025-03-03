@@ -9,7 +9,7 @@
 }
 \description{
 Encodes \code{numeric} and \code{integer} feature columns using piecewise lienar encoding. For details, see documentation of
-\code{PipeOpEncodePL} or Gorishniy et al. (2022).
+\code{\link{PipeOpEncodePL}} or Gorishniy et al. (2022).
 
 Bins are constructed by trainig one decision tree \code{\link[mlr3:Learner]{Learner}} per feature column, taking the target
 column into account, and using decision boundaries as bin boundaries.
@@ -71,6 +71,7 @@ Only methods inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskP
 }
 
 \examples{
+\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(mlr3)
 
 # For classification task
@@ -103,8 +104,10 @@ train_out = pop$train(list(task))[[1L]]
 
 # Calculated bin boundaries per feature
 pop$state$bins
-# First feature was split into three encoded features, second into two, using piecewise linear encoding
+# First feature was split into three encoded features,
+# second into two, using piecewise linear encoding
 train_out$head()
+\dontshow{\}) # examplesIf}
 }
 \references{
 Gorishniy Y, Rubachev I, Babenko A (2022).
@@ -117,6 +120,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -140,7 +144,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
-\code{\link{mlr_pipeops_encodepl}},
 \code{\link{mlr_pipeops_encodeplquantiles}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
@@ -200,7 +203,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_yeojohnson}}
 
 Other Piecewise Linear Encoding PipeOps: 
-\code{\link{mlr_pipeops_encodepl}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{mlr_pipeops_encodeplquantiles}}
 }
 \concept{Piecewise Linear Encoding PipeOps}

@@ -17,7 +17,7 @@ Caution: when constructed naively without parameter, the weights are all set to 
 must be adjusted for this \code{\link{PipeOp}} to be useful.
 
 Note this only sets the \code{"weights_learner"} column.
-It therefore influences the behaviour of subsequent \code{Learner}s, but does not influence resampling or evaluation metric weights.
+It therefore influences the behaviour of subsequent \code{\link[mlr3:Learner]{Learner}}s, but does not influence resampling or evaluation metric weights.
 }
 \section{Construction}{
 
@@ -66,7 +66,7 @@ weight column itself.
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
@@ -101,6 +101,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -123,7 +124,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
-\code{\link{mlr_pipeops_encodepl}},
 \code{\link{mlr_pipeops_encodeplquantiles}},
 \code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},

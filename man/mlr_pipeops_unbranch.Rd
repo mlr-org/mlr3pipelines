@@ -35,12 +35,12 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output}{
 
-\code{\link{PipeOpUnbranch}} has multiple input channels depending on the \code{options} construction argument, named \code{"input1"}, \code{"input2"}, ...
+\code{PipeOpUnbranch} has multiple input channels depending on the \code{options} construction argument, named \code{"input1"}, \code{"input2"}, ...
 if \code{options} is a nonzero integer and named after each \code{options} value if \code{options} is a \code{character}; if \code{options} is 0, there is only one
 \emph{vararg} input channel named \code{"..."}.
 All input channels take any argument (\code{"*"}) both during training and prediction.
 
-\code{\link{PipeOpUnbranch}} has one output channel named \code{"output"}, producing the only \code{\link{NO_OP}} object received as input (\code{"*"}),
+\code{PipeOpUnbranch} has one output channel named \code{"output"}, producing the only \code{\link{NO_OP}} object received as input (\code{"*"}),
 both during training and prediction.
 }
 
@@ -51,7 +51,7 @@ The \verb{$state} is left empty (\code{list()}).
 
 \section{Parameters}{
 
-\code{\link{PipeOpUnbranch}} has no parameters.
+\code{PipeOpUnbranch} has no parameters.
 }
 
 \section{Internals}{
@@ -80,6 +80,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -103,7 +104,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
-\code{\link{mlr_pipeops_encodepl}},
 \code{\link{mlr_pipeops_encodeplquantiles}},
 \code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},

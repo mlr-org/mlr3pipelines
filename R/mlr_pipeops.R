@@ -5,7 +5,7 @@
 #'
 #' @description
 #' A simple [`Dictionary`][mlr3misc::Dictionary] storing objects of class [`PipeOp`].
-#' Each `PipeOp` has an associated help page, see `mlr_pipeops_[id]`.
+#' Each [`PipeOp`] has an associated help page, see `mlr_pipeops_[id]`.
 #'
 #' @section Fields:
 #' Fields inherited from [`Dictionary`][mlr3misc::Dictionary], as well as:
@@ -25,9 +25,28 @@
 #' @section S3 methods:
 #' * `as.data.table(dict)`\cr
 #'   [`Dictionary`][mlr3misc::Dictionary] -> [`data.table::data.table`]\cr
-#'   Returns a `data.table` with columns `key` (`character`), `packages` (`character`),
-#'   `input.num` (`integer`), `output.num` (`integer`), `input.type.train` (`character`),
-#'   `input.type.predict` (`character`), `output.type.train` (`character`), `output.type.predict` (`character`).
+#'   Returns a `data.table` with the following columns:
+#'   * `key` :: (`character`)\cr
+#'     Key with which the [`PipeOp`] was registered to the [`Dictionary`][mlr3misc::Dictionary] using the `$add()` method.
+#'   * `label` :: (`character`)\cr
+#'     Description of the [`PipeOp`]'s functionality.
+#'   * `packages` :: (`character`)\cr
+#'     Set of all required packages for the [`PipeOp`]'s train and ⁠predict⁠ methods.
+#'   * `tags` :: (`character`)\cr
+#'     A set of tags associated with the [`PipeOp`] describing its purpose.
+#'   * `feature_types` :: (`character`)\cr
+#'     Feature types the [`PipeOp`] operates on. Is `NA` for [`PipeOp`]s that do not directly operate on a [Task][mlr3::Task].
+#'   * `input.num`, `output.num` :: (`integer`)\cr
+#'     Number of the [`PipeOp`]'s input and output channels. Is `NA` for [`PipeOp`]s which accept a varying number of input
+#'     and/or output channels depending a construction argument.
+#'     See `input` and `output` fields of [`PipeOp`].
+#'   * `input.type.train`, `input.type.predict`, `output.type.train`, `output.type.predict` :: (`character`)\cr
+#'     Types that are allowed as input to or returned as output of the [`PipeOp`]'s `$train()` and `$predict()` methods.\cr
+#'     A value of `NULL` means that a null object, e.g. no data, is taken as input or being returned as output.
+#'     A value of "`*`" means that any type is possible.\cr
+#'     If both `input.type.train` and `output.type.train` or both `input.type.predict` and `output.type.predict` contain
+#'     values enclosed by square brackets ("`[`", "`]`"), then the respective input or channel is
+#'     [`Multiplicity`]-aware. For more information, see [`Multiplicity`].
 #'
 #' @family mlr3pipelines backend related
 #' @family PipeOps

@@ -26,9 +26,9 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpNOP}} has one input channel named \code{"input"}, taking any input (\code{"*"}) both during training and prediction.
+\code{PipeOpNOP} has one input channel named \code{"input"}, taking any input (\code{"*"}) both during training and prediction.
 
-\code{\link{PipeOpNOP}} has one output channel named \code{"output"}, producing the object given as input (\code{"*"}) without changes.
+\code{PipeOpNOP} has one output channel named \code{"output"}, producing the object given as input (\code{"*"}) without changes.
 }
 
 \section{State}{
@@ -38,12 +38,12 @@ The \verb{$state} is left empty (\code{list()}).
 
 \section{Parameters}{
 
-\code{\link{PipeOpNOP}} has no parameters.
+\code{PipeOpNOP} has no parameters.
 }
 
 \section{Internals}{
 
-\code{\link{PipeOpNOP}} is a useful "default" stand-in for a \code{\link{PipeOp}}/\code{\link{Graph}} that does nothing.
+\code{PipeOpNOP} is a useful "default" stand-in for a \code{\link{PipeOp}}/\code{\link{Graph}} that does nothing.
 }
 
 \section{Fields}{
@@ -77,6 +77,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -100,7 +101,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
-\code{\link{mlr_pipeops_encodepl}},
 \code{\link{mlr_pipeops_encodeplquantiles}},
 \code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
