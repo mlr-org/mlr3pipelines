@@ -13,6 +13,8 @@
 * New PipeOps `PipeOpEncodePLQuantiles` and `PipeOpEncodePLTree` that implement piecewise linear encoding with two different binning methods.
 * Compatibility with new `R6` release.
 * Docs: Performed cleanup and standardization.
+* Docs: Performed cleanup of reference index page on website.
+* Docs: Fixed parsing of examples on website for `PipeOpNMF` and `PipeOpLearnerPICVPlus`.
 * Fix: `PipeOpTargetMutate` and `PipeOpTargetTrafoScaleRange` no longer drop unseen factor levels of features or targets during train and predict.
 * Simplified parameter checks and added internal type checking for `PipeOpTargetMutate`.
 
