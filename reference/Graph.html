@@ -81,7 +81,7 @@ dependency structure (although the <code><a href="PipeOp.html">PipeOp</a></code>
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>
 
 
-<p>A <code>Graph</code> is made up of a list of <code><a href="PipeOp.html">PipeOp</a></code>s, and a <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> of edges. Both for training and prediction, the <code>Graph</code>
+<p>A <code>Graph</code> is made up of a list of <code><a href="PipeOp.html">PipeOp</a></code>s, and a <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> of edges. Both for training and prediction, the <code>Graph</code>
 performs topological sorting of the <code><a href="PipeOp.html">PipeOp</a></code>s and executes their respective <code>$train()</code> or <code>$predict()</code> functions in order, moving
 the <code><a href="PipeOp.html">PipeOp</a></code> results along the edges as input to other <code><a href="PipeOp.html">PipeOp</a></code>s.</p>
     </div>
@@ -91,8 +91,8 @@ the <code><a href="PipeOp.html">PipeOp</a></code> results along the edges as inp
 
 <ul><li><p><code>pipeops</code> :: named <code>list</code> of <code><a href="PipeOp.html">PipeOp</a></code> <br>
 Contains all <code><a href="PipeOp.html">PipeOp</a></code>s in the <code>Graph</code>, named by the <code><a href="PipeOp.html">PipeOp</a></code>'s <code>$id</code>s.</p></li>
-<li><p><code>edges</code> :: <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>  with columns <code>src_id</code> (<code>character</code>), <code>src_channel</code> (<code>character</code>), <code>dst_id</code> (<code>character</code>), <code>dst_channel</code> (<code>character</code>)<br>
-Table of connections between the <code><a href="PipeOp.html">PipeOp</a></code>s. A <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>. <code>src_id</code> and <code>dst_id</code> are <code>$id</code>s of <code><a href="PipeOp.html">PipeOp</a></code>s that must be present in
+<li><p><code>edges</code> :: <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>  with columns <code>src_id</code> (<code>character</code>), <code>src_channel</code> (<code>character</code>), <code>dst_id</code> (<code>character</code>), <code>dst_channel</code> (<code>character</code>)<br>
+Table of connections between the <code><a href="PipeOp.html">PipeOp</a></code>s. A <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>. <code>src_id</code> and <code>dst_id</code> are <code>$id</code>s of <code><a href="PipeOp.html">PipeOp</a></code>s that must be present in
 the <code>$pipeops</code> list. <code>src_channel</code> and <code>dst_channel</code> must respectively be <code>$output</code> and <code>$input</code> channel names of the
 respective <code><a href="PipeOp.html">PipeOp</a></code>s.</p></li>
 <li><p><code>is_trained</code> :: <code>logical(1)</code> <br>
@@ -101,10 +101,10 @@ Is the <code>Graph</code>, i.e. are all of its <code><a href="PipeOp.html">PipeO
 Ids of the 'left-hand-side' <code><a href="PipeOp.html">PipeOp</a></code>s that have some unconnected input channels and therefore act as <code>Graph</code> input layer.</p></li>
 <li><p><code>rhs</code> :: <code>character</code> <br>
 Ids of the 'right-hand-side' <code><a href="PipeOp.html">PipeOp</a></code>s that have some unconnected output channels and therefore act as <code>Graph</code> output layer.</p></li>
-<li><p><code>input</code> :: <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>), <code>op.id</code> (<code>character</code>), <code>channel.name</code> (<code>character</code>)<br>
+<li><p><code>input</code> :: <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>), <code>op.id</code> (<code>character</code>), <code>channel.name</code> (<code>character</code>)<br>
 Input channels of the <code>Graph</code>. For each channel lists the name, input type during training, input type during prediction,
 <code><a href="PipeOp.html">PipeOp</a></code> <code>$id</code> of the <code><a href="PipeOp.html">PipeOp</a></code> the channel pertains to, and channel name as the <code><a href="PipeOp.html">PipeOp</a></code> knows it.</p></li>
-<li><p><code>output</code> :: <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>), <code>op.id</code> (<code>character</code>), <code>channel.name</code> (<code>character</code>)<br>
+<li><p><code>output</code> :: <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>), <code>op.id</code> (<code>character</code>), <code>channel.name</code> (<code>character</code>)<br>
 Output channels of the <code>Graph</code>. For each channel lists the name, output type during training, output type during prediction,
 <code><a href="PipeOp.html">PipeOp</a></code> <code>$id</code> of the <code><a href="PipeOp.html">PipeOp</a></code> the channel pertains to, and channel name as the <code><a href="PipeOp.html">PipeOp</a></code> knows it.</p></li>
 <li><p><code>packages</code> :: <code>character</code><br>

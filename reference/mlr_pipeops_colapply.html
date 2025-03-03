@@ -110,7 +110,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 Function to apply to each column of the task.
 The return value should be a <code>vector</code> of the same length as the input, i.e., the function vectorizes over the input.
 A typical example would be <code>as.numeric</code>.<br>
-The return value can also be a <code>matrix</code>, <code>data.frame</code>, or <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>.
+The return value can also be a <code>matrix</code>, <code>data.frame</code>, or <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>.
 In this case, the length of the input must match the number of returned rows.
 The names of the resulting features of the output <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> is based on the (column) name(s) of the return value of the applicator function,
 prefixed with the original feature name separated by a dot (<code>.</code>).
@@ -120,7 +120,7 @@ Use <code><a href="https://rdrr.io/r/base/Vectorize.html" class="external-link">
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>
 
 
-<p>Calls <code><a href="https://mlr3misc.mlr-org.com/reference/compat-map.html" class="external-link">map</a></code> on the data, using the value of <code>applicator</code> as <code>f.</code> and coerces the output via <code><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></code>.</p>
+<p>Calls <code><a href="https://mlr3misc.mlr-org.com/reference/compat-map.html" class="external-link">map</a></code> on the data, using the value of <code>applicator</code> as <code>f.</code> and coerces the output via <code><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>

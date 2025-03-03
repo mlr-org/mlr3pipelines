@@ -78,27 +78,26 @@ prediction phase. This inversion may need info about both the training and the p
 
 
 
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>PipeOpTargetTrafo<span class="sc">$</span><span class="fu">new</span>(id, <span class="at">param_set =</span> <span class="fu">ps</span>(), <span class="at">param_vals =</span> <span class="fu">list</span>() <span class="at">packages =</span> <span class="fu">character</span>(<span class="dv">0</span>), <span class="at">task_type_in =</span> <span class="st">"Task"</span>, <span class="at">task_type_out =</span> task_type_in, <span class="at">tags =</span> <span class="cn">NULL</span>)</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>PipeOpTargetTrafo<span class="sc">$</span><span class="fu">new</span>(id, <span class="at">param_set =</span> <span class="fu">ps</span>(), <span class="at">param_vals =</span> <span class="fu">list</span>(), <span class="at">packages =</span> <span class="fu">character</span>(<span class="dv">0</span>), <span class="at">task_type_in =</span> <span class="st">"Task"</span>, <span class="at">task_type_out =</span> task_type_in, <span class="at">tags =</span> <span class="cn">NULL</span>)</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
 Identifier of resulting object. See <code>$id</code> slot of <code><a href="PipeOp.html">PipeOp</a></code>.</p></li>
 <li><p><code>param_set</code> :: <code><a href="https://paradox.mlr-org.com/reference/ParamSet.html" class="external-link">ParamSet</a></code><br>
-Parameter space description. This should be created by the subclass and given to
-<code>super$initialize()</code>.</p></li>
+Parameter space description. This should be created by the subclass and given to <code>super$initialize()</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br>
 List of hyperparameter settings, overwriting the hyperparameter settings given in <code>param_set</code>.
 The subclass should have its own <code>param_vals</code> parameter and pass it on to <code>super$initialize()</code>.
 Default <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>.</p></li>
 <li><p><code>task_type_in</code> :: <code>character(1)</code><br>
-The class of <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> that should be accepted as input. This
-should generally be a <code>character(1)</code> identifying a type of <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or
-<code>"TaskRegr"</code> (or another subclass introduced by other packages). Default is <code>"Task"</code>.</p></li>
+The class of <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> that should be accepted as input. This should generally be a <code>character(1)</code>
+identifying a type of <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or <code>"TaskRegr"</code> (or another subclass
+introduced by other packages). Default is <code>"Task"</code>.</p></li>
 <li><p><code>task_type_out</code> :: <code>character(1)</code><br>
-The class of <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> that is produced as output. This
-should generally be a <code>character(1)</code> identifying a type of <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or
-<code>"TaskRegr"</code> (or another subclass introduced by other packages). Default is the value of <code>task_type_in</code>.</p></li>
-<li><p>packages :: <code>character</code><br>
+The class of <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> that is produced as output. This should generally be a <code>character(1)</code>
+identifying  a type of <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or <code>"TaskRegr"</code> (or another subclass
+introduced by other packages). Default is the value of <code>task_type_in</code>.</p></li>
+<li><p><code>packages</code> :: <code>character</code><br>
 Set of all required packages for the <code><a href="PipeOp.html">PipeOp</a></code>'s methods. See <code>$packages</code> slot. Default is
 <code>character(0)</code>.</p></li>
-<li><p>tags :: <code>character</code> | <code>NULL</code><br>
+<li><p><code>tags</code> :: <code>character</code> | <code>NULL</code><br>
 Tags of the resulting <code>PipeOp</code>. This is added to the tag <code>"target transform"</code>. Default <code>NULL</code>.</p></li>
 </ul></div>
     <div class="section level2">
@@ -168,14 +167,13 @@ This function is abstract and should be overloaded by inheriting classes.</p></l
 (<code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>) -&gt; <code>any</code><br>
 Called by <code>PipeOpTargetTrafo</code>'s implementation of <code>private$.predict()</code>. Takes a single
 <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> as input and returns an arbitrary value that will be given as
-<code>predict_phase_state</code> to <code>.invert()</code>. This should not modify the input <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> .<br>
+<code>predict_phase_state</code> to <code>.invert()</code>. This should not modify the input <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>.<br>
 The base implementation returns a list with a single element, the <code>$truth</code> column of the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>,
 and should be overloaded if a more training-phase-dependent state is desired.</p></li>
 <li><p><code>.invert(prediction, predict_phase_state)</code><br>
 (<code><a href="https://mlr3.mlr-org.com/reference/Prediction.html" class="external-link">Prediction</a></code>, <code>any</code>) -&gt; <code><a href="https://mlr3.mlr-org.com/reference/Prediction.html" class="external-link">Prediction</a></code><br>
-Takes a <code><a href="https://mlr3.mlr-org.com/reference/Prediction.html" class="external-link">Prediction</a></code> and a <code>predict_phase_state</code>
-object as input and inverts the prediction. This function is sent as <code>"fun"</code> to
-<code><a href="mlr_pipeops_targetinvert.html">PipeOpTargetInvert</a></code>.<br>
+Takes a <code><a href="https://mlr3.mlr-org.com/reference/Prediction.html" class="external-link">Prediction</a></code> and a <code>predict_phase_state</code> object as input and inverts the prediction.
+This function is sent as <code>"fun"</code> to <code><a href="mlr_pipeops_targetinvert.html">PipeOpTargetInvert</a></code>.<br>
 This function is abstract and should be overloaded by inheriting classes. Care should be
 taken that the <code>predict_type</code> of the <code><a href="https://mlr3.mlr-org.com/reference/Prediction.html" class="external-link">Prediction</a></code> being inverted is handled well.</p></li>
 <li><p><code>.invert_help(predict_phase_state)</code><br>

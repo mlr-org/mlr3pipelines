@@ -171,7 +171,7 @@ This method can be overloaded when inheriting from <code>PipeOpTaskPreprocSimple
 alternatively, <code>private$.get_state_dt()</code> (optional) and <code>private$.transform_dt()</code> (and possibly <code>private$.select_cols()</code>, from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>)
 can be overloaded.</p></li>
 <li><p><code>.get_state_dt(dt)</code> <br>
-(<code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>) -&gt; named <code>list</code><br>
+(<code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>) -&gt; named <code>list</code><br>
 Create something that will be stored in <code>$state</code> during training phase of <code>PipeOpTaskPreprocSimple</code>.
 The state can then influence the <code>private$.transform_dt()</code> function. Note that <code>private$.get_state_dt()</code> must <em>return</em> the state, and
 should not store it in <code>$state</code>. If neither <code>private$.get_state()</code> nor <code>private$.get_state_dt()</code> are overloaded, the state will
@@ -180,9 +180,9 @@ This method can optionally be overloaded when inheriting from <code>PipeOpTaskPr
 (and optionally <code>private$.select_cols()</code>, from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>); Alternatively, <code>private$.get_state()</code> (optional) and <code>private$.transform()</code>
 can be overloaded.</p></li>
 <li><p><code>.transform_dt(dt)</code> <br>
-(<code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>) -&gt; <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> | <code>data.frame</code> | <code>matrix</code> <br>
+(<code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>) -&gt; <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> | <code>data.frame</code> | <code>matrix</code> <br>
 Predict on new data in <code>dt</code>, possibly using the stored <code>$state</code>. A transformed object must be returned
-that can be converted to a <code>data.table</code> using <code><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
+that can be converted to a <code>data.table</code> using <code><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
 is possible and encouraged to change it in-place. This method is called both during training and prediction phase,
 and should essentially behave the same independently of phase.
 (If this is incongruent with the functionality to be implemented, then it should inherit from

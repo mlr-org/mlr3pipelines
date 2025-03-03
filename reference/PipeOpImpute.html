@@ -99,10 +99,10 @@ the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external
 Names of features being selected by the <code>affect_columns</code> parameter.</p></li>
 <li><p><code>context_cols</code> :: <code>character</code><br>
 Names of features being selected by the <code>context_columns</code> parameter.</p></li>
-<li><p><code>intasklayout</code> :: <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code><br>
+<li><p><code>intasklayout</code> :: <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code><br>
 Copy of the training <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>'s <code>$feature_types</code> slot. This is used during prediction to ensure that
 the prediction <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> has the same features, feature layout, and feature types as during training.</p></li>
-<li><p><code>outtasklayout</code> :: <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code><br>
+<li><p><code>outtasklayout</code> :: <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code><br>
 Copy of the trained <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>'s <code>$feature_types</code> slot. This is used during prediction to ensure that
 the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> resulting from the prediction operation has the same features, feature layout, and feature types as after training.</p></li>
 <li><p><code>model</code> :: named <code>list</code><br>
@@ -153,17 +153,17 @@ to limit the columns that a <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPre
 This method can optionally be overloaded when inheriting <code>PipeOpImpute</code>;
 If this method is not overloaded, it defaults to selecting the columns of type indicated by the <code>feature_types</code> construction argument.</p></li>
 <li><p><code>.train_imputer(feature, type, context)</code><br>
-(<code>atomic</code>, <code>character(1)</code>, <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>) -&gt; <code>any</code><br>
+(<code>atomic</code>, <code>character(1)</code>, <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>) -&gt; <code>any</code><br>
 Abstract function that must be overloaded when inheriting.
 Called once for each feature selected by <code>affect_columns</code> to create the model entry to be used for <code>private$.impute()</code>. This function
 is only called for features with at least one non-missing value.</p></li>
 <li><p><code>.train_nullmodel(feature, type, context)</code><br>
-(<code>atomic</code>, <code>character(1)</code>, <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>) -&gt; <code>any</code><br>
+(<code>atomic</code>, <code>character(1)</code>, <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>) -&gt; <code>any</code><br>
 Like <code>.train_imputer()</code>, but only called for each feature that only contains missing values. This is not an abstract function
 and, if not overloaded, gives a default response of <code>0</code> (<code>integer</code>, <code>numeric</code>), <code>c(TRUE, FALSE)</code> (<code>logical</code>), all available levels (<code>factor</code>/<code>ordered</code>),
 or the empty  string (<code>character</code>).</p></li>
 <li><p><code>.impute(feature, type, model, context)</code><br>
-(<code>atomic</code>, <code>character(1)</code>, <code>any</code>, <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>) -&gt; <code>atomic</code><br>
+(<code>atomic</code>, <code>character(1)</code>, <code>any</code>, <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>) -&gt; <code>atomic</code><br>
 Imputes the features. <code>model</code> is the model created by <code>private$.train_imputer()</code> Default behaviour is to assume <code>model</code> is an atomic vector
 from which values are sampled to impute missing values of <code>feature</code>. <code>model</code> may have an attribute <code>probabilities</code> for non-uniform sampling.</p></li>
 </ul></div>

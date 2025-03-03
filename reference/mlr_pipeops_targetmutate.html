@@ -88,16 +88,16 @@ Defaults to <code>NULL</code>: no change in task type.</p></li>
     <h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a></h2>
 
 
-<p>The parameters are the parameters inherited from <code><a href="PipeOpTargetTrafo.html">PipeOpTargetTrafo</a></code>, as well as:</p><ul><li><p><code>trafo</code> :: <code>function</code> <code>data.table</code> -&gt; <code>data.table</code><br>
+<p>The parameters are the parameters inherited from <code><a href="PipeOpTargetTrafo.html">PipeOpTargetTrafo</a></code>, as well as:</p><ul><li><p><code>trafo</code> :: <code>function</code> <code>data.table</code> -&gt; <code>data.table</code> | <code>matrix</code><br>
 Transformation function for the target. Should only be a function of the target, i.e., taking a
 single <code>data.table</code> argument, typically with one column. The return value is used as the new
 target of the resulting <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>. To change target names, change the column name of the data
-using e.g. <code><a href="https://rdrr.io/pkg/data.table/man/setattr.html" class="external-link">setnames()</a></code>.<br>
+using e.g. <code><a href="https://rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames()</a></code>.<br>
 Note that this function also gets called during prediction and should thus gracefully handle <code>NA</code> values.<br>
 Initialized to <code><a href="https://rdrr.io/r/base/identity.html" class="external-link">identity()</a></code>.</p></li>
 <li><p><code>inverter</code> :: <code>function</code> <code>data.table</code> -&gt; <code>data.table</code> | named <code>list</code><br>
 Inversion of the transformation function for the target. Called on a <code>data.table</code> created from a <code><a href="https://mlr3.mlr-org.com/reference/Prediction.html" class="external-link">Prediction</a></code>
-using <code><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table()</a></code>, without the <code>$row_ids</code> and <code>$truth</code> columns,
+using <code><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table()</a></code>, without the <code>$row_ids</code> and <code>$truth</code> columns,
 and should return a <code>data.table</code> or named <code>list</code> that contains the new relevant slots of a
 <code><a href="https://mlr3.mlr-org.com/reference/Prediction.html" class="external-link">Prediction</a></code> subclass (e.g., <code>$response</code>, <code>$prob</code>, <code>$se</code>, ...). Initialized to <code><a href="https://rdrr.io/r/base/identity.html" class="external-link">identity()</a></code>.</p></li>
 </ul></div>
@@ -240,8 +240,8 @@ and should return a <code>data.table</code> or named <code>list</code> that cont
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_list(inputs, len = 1L, types = "Prediction")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     list(private$.invert(inputs[[1L]], predict_phase_state))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5598bf35d5b8&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5598bf35ccf8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x556c9f95b810&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x556c9f95af50&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskRegr:boston_housing&gt; (506 x 18): Boston Housing Prices</span>

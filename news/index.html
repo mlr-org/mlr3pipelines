@@ -59,6 +59,8 @@
 <li>Fix: Corrected hash calculation for <code>PipeOpFilter</code>.</li>
 <li>New PipeOps <code>PipeOpEncodePLQuantiles</code> and <code>PipeOpEncodePLTree</code> that implement piecewise linear encoding with two different binning methods.</li>
 <li>Compatibility with new <code>R6</code> release.</li>
+<li>Fix: <code>PipeOpTargetMutate</code> and <code>PipeOpTargetTrafoScaleRange</code> no longer drop unseen factor levels of features or targets during train and predict.</li>
+<li>Simplified parameter checks and added internal type checking for <code>PipeOpTargetMutate</code>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.1" id="mlr3pipelines-071">mlr3pipelines 0.7.1<a class="anchor" aria-label="anchor" href="#mlr3pipelines-071"></a></h2><p class="text-muted">CRAN release: 2024-11-14</p>

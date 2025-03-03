@@ -136,9 +136,9 @@ These <code><a href="https://paradox.mlr-org.com/reference/ParamSet.html" class=
 <li><p><code>param_vals</code> :: named <code>list</code><br>
 List of hyperparameter settings, overwriting the hyperparameter settings given in <code>param_set</code>. The
 subclass should have its own <code>param_vals</code> parameter and pass it on to <code>super$initialize()</code>. Default <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>.</p></li>
-<li><p>input :: <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>)<br>
+<li><p>input :: <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>)<br>
 Sets the <code>$input</code> slot of the resulting object; see description there.</p></li>
-<li><p>output :: <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>)<br>
+<li><p>output :: <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>)<br>
 Sets the <code>$output</code> slot of the resulting object; see description there.</p></li>
 <li><p>packages :: <code>character</code><br>
 Set of all required packages for the <code>PipeOp</code>'s <code>$train</code> and <code>$predict</code> methods. See <code>$packages</code> slot.
@@ -182,7 +182,7 @@ if and only if the <code>PipeOp</code> has not been trained. The <code>$state</c
 <code>$train()</code>, because <code>private$.train()</code> may theoretically be executed in a different <code>R</code>-session (e.g. for parallelization).
 <code>$state</code> should furthermore always be set to something with copy-semantics, since it is never cloned. This is a limitation
 not of <code>PipeOp</code> or <code>mlr3pipelines</code>, but of the way the system as a whole works, together with <code><a href="mlr_learners_graph.html">GraphLearner</a></code> and <code>mlr3</code>.</p></li>
-<li><p>input :: <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>)<br>
+<li><p>input :: <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>)<br>
 Input channels of <code>PipeOp</code>. Column <code>name</code> gives the names (and order) of values in the list given to
 <code>$train()</code> and <code>$predict()</code>. Column <code>train</code> is the (S3) class that an input object must conform to during
 training, column <code>predict</code> is the (S3) class that an input object must conform to during prediction. Types
@@ -194,7 +194,7 @@ is given to the <code>.train()</code> and <code>.predict()</code> functions dire
 unpacked and the <code>.train()</code> and <code>.predict()</code> functions are called multiple times, once for each <code><a href="Multiplicity.html">Multiplicity</a></code> element.
 The type enclosed by square brackets indicates that only a <code><a href="Multiplicity.html">Multiplicity</a></code> containing values of this type are accepted.
 See <code><a href="Multiplicity.html">Multiplicity</a></code> for more information.</p></li>
-<li><p>output :: <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>)<br>
+<li><p>output :: <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>)<br>
 Output channels of <code>PipeOp</code>, in the order in which they will be given in the list returned by <code>$train</code> and
 <code>$predict</code> functions. Column <code>train</code> is the (S3) class that an output object must conform to during training,
 column <code>predict</code> is the (S3) class that an output object must conform to during prediction. The <code>PipeOp</code> checks
@@ -396,9 +396,9 @@ of the class, the id, the <code>$state</code>, and the <code>$param_set$values</
 <span class="r-in"><span>        <span class="co"># declare "input" and "output" during construction here</span></span></span>
 <span class="r-in"><span>        <span class="co"># training takes two 'numeric' and returns a 'numeric';</span></span></span>
 <span class="r-in"><span>        <span class="co"># prediction takes 'NULL' and returns a 'character'.</span></span></span>
-<span class="r-in"><span>        input <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"input1"</span>, <span class="st">"input2"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        input <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"input1"</span>, <span class="st">"input2"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>          train <span class="op">=</span> <span class="st">"numeric"</span>, predict <span class="op">=</span> <span class="st">"NULL"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        output <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"output"</span>,</span></span>
+<span class="r-in"><span>        output <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"output"</span>,</span></span>
 <span class="r-in"><span>          train <span class="op">=</span> <span class="st">"numeric"</span>, predict <span class="op">=</span> <span class="st">"character"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>      <span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">}</span></span></span>

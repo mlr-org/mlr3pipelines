@@ -120,11 +120,11 @@ ordinary prediction made on the data by a <code><a href="https://mlr3.mlr-org.co
 <p>The <code>$state</code> is set to the <code>$state</code> slot of the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> object, together with the <code>$state</code> elements inherited from the
 <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>. It is a named <code>list</code> with the inherited members, as well as:</p><ul><li><p><code>model</code> :: <code>any</code><br>
 Model created by the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>'s <code>$.train()</code> function.</p></li>
-<li><p><code>train_log</code> :: <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> with columns <code>class</code> (<code>character</code>), <code>msg</code> (<code>character</code>)<br>
+<li><p><code>train_log</code> :: <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with columns <code>class</code> (<code>character</code>), <code>msg</code> (<code>character</code>)<br>
 Errors logged during training.</p></li>
 <li><p><code>train_time</code> :: <code>numeric(1)</code><br>
 Training time, in seconds.</p></li>
-<li><p><code>predict_log</code> :: <code>NULL</code> | <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> with columns <code>class</code> (<code>character</code>), <code>msg</code> (<code>character</code>)<br>
+<li><p><code>predict_log</code> :: <code>NULL</code> | <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with columns <code>class</code> (<code>character</code>), <code>msg</code> (<code>character</code>)<br>
 Errors logged during prediction.</p></li>
 <li><p><code>predict_time</code> :: <code>NULL</code> | <code>numeric(1)</code>
 Prediction time, in seconds.</p></li>
