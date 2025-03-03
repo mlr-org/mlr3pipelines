@@ -86,3 +86,13 @@ test_that("PipeOpTargetTrafoScaleRange - row use subsets", {
   expect_equivalent((predict_out1$truth - a) / b, predict_out2[[1L]]$truth)
   expect_equivalent((predict_out1$response - a) / b, predict_out2[[1L]]$response)
 })
+
+test_that("PipeOpTargetTrafoScaleRange - does not drop missing levels, #631", {
+  task = tsk("boston_housing")$filter(1:100)
+  op = po("targettrafoscalerange")
+  train_out = op$train(list(task))[["output"]]
+  predict_out = op$predict(list(task))[["output"]]
+  # train_out and predict_out should also know all levels
+  expect_equal(task$levels(), train_out$levels())
+  expect_equal(task$levels(), predict_out$levels())
+})
