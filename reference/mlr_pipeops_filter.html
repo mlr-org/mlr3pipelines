@@ -33,9 +33,9 @@ this means e.g. that setting nfeat to 0 will only remove features of the type th
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/mlr-org/mlr3pipelines/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/"><span class="fa fa-comments"></span></a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://stackoverflow.com/questions/tagged/mlr3"><span class="fa fab fa-stack-overflow"></span></a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://mlr-org.com/"><span class="fa fa-rss"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/" aria-label="Mattermost chat"><span class="fa fa-comments"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://stackoverflow.com/questions/tagged/mlr3" aria-label="Stack Overflow"><span class="fa fab fa-stack-overflow"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://mlr-org.com/" aria-label="RSS"><span class="fa fa-rss"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch"><li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
@@ -130,7 +130,7 @@ instead the whole <code><a href="https://mlr3.mlr-org.com/reference/Task.html" c
     <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>
 
 
-<p>Fields inherited from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>, as well as:</p><ul><li><p><code>filter</code> :: <code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code><br><code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code> that is being used for feature filtering. Do <em>not</em> use this slot to get to the feature filtering scores
+<p>Fields inherited from <code><a href="PipeOp.html">PipeOp</a></code>, as well as:</p><ul><li><p><code>filter</code> :: <code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code><br><code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code> that is being used for feature filtering. Do <em>not</em> use this slot to get to the feature filtering scores
 after training; instead, use <code>$state$scores</code>. Read-only.</p></li>
 </ul></div>
     <div class="section level2">
@@ -157,6 +157,7 @@ after training; instead, use <code>$state$scores</code>. Read-only.</p></li>
     <div class="dont-index"><p>https://mlr-org.com/pipeops.html</p>
 <p>Other PipeOps:
 <code><a href="PipeOp.html">PipeOp</a></code>,
+<code><a href="PipeOpEncodePL.html">PipeOpEncodePL</a></code>,
 <code><a href="PipeOpEnsemble.html">PipeOpEnsemble</a></code>,
 <code><a href="PipeOpImpute.html">PipeOpImpute</a></code>,
 <code><a href="PipeOpTargetTrafo.html">PipeOpTargetTrafo</a></code>,
@@ -180,7 +181,6 @@ after training; instead, use <code>$state$scores</code>. Read-only.</p></li>
 <code><a href="mlr_pipeops_encode.html">mlr_pipeops_encode</a></code>,
 <code><a href="mlr_pipeops_encodeimpact.html">mlr_pipeops_encodeimpact</a></code>,
 <code><a href="mlr_pipeops_encodelmer.html">mlr_pipeops_encodelmer</a></code>,
-<code><a href="mlr_pipeops_encodepl.html">mlr_pipeops_encodepl</a></code>,
 <code><a href="mlr_pipeops_encodeplquantiles.html">mlr_pipeops_encodeplquantiles</a></code>,
 <code><a href="mlr_pipeops_encodepltree.html">mlr_pipeops_encodepltree</a></code>,
 <code><a href="mlr_pipeops_featureunion.html">mlr_pipeops_featureunion</a></code>,

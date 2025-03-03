@@ -27,9 +27,9 @@ affects non-negative numerical features. See nmf() for details."><meta property=
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/mlr-org/mlr3pipelines/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/"><span class="fa fa-comments"></span></a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://stackoverflow.com/questions/tagged/mlr3"><span class="fa fab fa-stack-overflow"></span></a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://mlr-org.com/"><span class="fa fa-rss"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/" aria-label="Mattermost chat"><span class="fa fa-comments"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://stackoverflow.com/questions/tagged/mlr3" aria-label="Stack Overflow"><span class="fa fab fa-stack-overflow"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://mlr-org.com/" aria-label="RSS"><span class="fa fa-rss"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch"><li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
@@ -145,6 +145,12 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
 <code><a href="https://rdrr.io/pkg/MASS/man/ginv.html" class="external-link">ginv()</a></code>.</p>
     </div>
     <div class="section level2">
+    <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>
+
+
+<p>Only fields inherited from <code><a href="PipeOp.html">PipeOp</a></code>.</p>
+    </div>
+    <div class="section level2">
     <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
 
 
@@ -155,6 +161,7 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
     <div class="dont-index"><p>https://mlr-org.com/pipeops.html</p>
 <p>Other PipeOps:
 <code><a href="PipeOp.html">PipeOp</a></code>,
+<code><a href="PipeOpEncodePL.html">PipeOpEncodePL</a></code>,
 <code><a href="PipeOpEnsemble.html">PipeOpEnsemble</a></code>,
 <code><a href="PipeOpImpute.html">PipeOpImpute</a></code>,
 <code><a href="PipeOpTargetTrafo.html">PipeOpTargetTrafo</a></code>,
@@ -178,7 +185,6 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
 <code><a href="mlr_pipeops_encode.html">mlr_pipeops_encode</a></code>,
 <code><a href="mlr_pipeops_encodeimpact.html">mlr_pipeops_encodeimpact</a></code>,
 <code><a href="mlr_pipeops_encodelmer.html">mlr_pipeops_encodelmer</a></code>,
-<code><a href="mlr_pipeops_encodepl.html">mlr_pipeops_encodepl</a></code>,
 <code><a href="mlr_pipeops_encodeplquantiles.html">mlr_pipeops_encodeplquantiles</a></code>,
 <code><a href="mlr_pipeops_encodepltree.html">mlr_pipeops_encodepltree</a></code>,
 <code><a href="mlr_pipeops_featureunion.html">mlr_pipeops_featureunion</a></code>,
@@ -240,7 +246,62 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"nmf"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa          1.4         0.2          5.1         3.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa          1.4         0.2          4.9         3.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa          1.3         0.2          4.7         3.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa          1.5         0.2          4.6         3.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa          1.4         0.2          5.0         3.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica          5.2         2.3          6.7         3.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica          5.0         1.9          6.3         2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica          5.2         2.0          6.5         3.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica          5.4         2.3          6.2         3.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica          5.1         1.8          5.9         3.0</span>
+<span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Species      NMF1       NMF2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;     &lt;num&gt;      &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa 0.6061689 0.05185076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa 0.5506294 0.07488995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa 0.5557515 0.05112528</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa 0.5315237 0.08018644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa 0.6065945 0.04619412</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica 0.4717777 0.67794397</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica 0.4197866 0.65240758</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica 0.4642176 0.65981482</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica 0.4573080 0.67947109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica 0.4278406 0.63178132</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">state</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Object of class: NMFfit&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  # Model:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;Object of class:NMFstd&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   features: 4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   basis/rank: 2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   samples: 150 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  # Details:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   algorithm:  brunet </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   seed:  random </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   RNG: 10403L, 192L, ..., 581505866L [dde3c2251c21eaecefb3cfbc262707b5]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   distance metric:  'KL' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   residuals:  3.084418 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   miscellaneous: dt_columns=&lt;character&gt;, affected_cols=&lt;character&gt;,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               intasklayout=c("&lt;data.table&gt;", "&lt;data.frame&gt;"),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               outtasklayout=c("&lt;data.table&gt;", "&lt;data.frame&gt;"),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               outtaskshell=c("&lt;data.table&gt;", "&lt;data.frame&gt;") . (use 'misc(object)')</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Iterations: 470 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Timing:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      user  system elapsed </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.073   0.020   0.093 </span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

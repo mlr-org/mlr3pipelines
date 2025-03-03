@@ -37,9 +37,9 @@ out-of-fold residuals and out-of-fold predictions."><meta property="og:image" co
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/mlr-org/mlr3pipelines/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/"><span class="fa fa-comments"></span></a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://stackoverflow.com/questions/tagged/mlr3"><span class="fa fab fa-stack-overflow"></span></a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://mlr-org.com/"><span class="fa fa-rss"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/" aria-label="Mattermost chat"><span class="fa fa-comments"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://stackoverflow.com/questions/tagged/mlr3" aria-label="Stack Overflow"><span class="fa fab fa-stack-overflow"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://mlr-org.com/" aria-label="RSS"><span class="fa fa-rss"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch"><li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
@@ -156,6 +156,7 @@ This can be different to the predict type of the <code><a href="https://mlr3.mlr
     <div class="dont-index"><p>https://mlr-org.com/pipeops.html</p>
 <p>Other PipeOps:
 <code><a href="PipeOp.html">PipeOp</a></code>,
+<code><a href="PipeOpEncodePL.html">PipeOpEncodePL</a></code>,
 <code><a href="PipeOpEnsemble.html">PipeOpEnsemble</a></code>,
 <code><a href="PipeOpImpute.html">PipeOpImpute</a></code>,
 <code><a href="PipeOpTargetTrafo.html">PipeOpTargetTrafo</a></code>,
@@ -179,7 +180,6 @@ This can be different to the predict type of the <code><a href="https://mlr3.mlr
 <code><a href="mlr_pipeops_encode.html">mlr_pipeops_encode</a></code>,
 <code><a href="mlr_pipeops_encodeimpact.html">mlr_pipeops_encodeimpact</a></code>,
 <code><a href="mlr_pipeops_encodelmer.html">mlr_pipeops_encodelmer</a></code>,
-<code><a href="mlr_pipeops_encodepl.html">mlr_pipeops_encodepl</a></code>,
 <code><a href="mlr_pipeops_encodeplquantiles.html">mlr_pipeops_encodeplquantiles</a></code>,
 <code><a href="mlr_pipeops_encodepltree.html">mlr_pipeops_encodepltree</a></code>,
 <code><a href="mlr_pipeops_featureunion.html">mlr_pipeops_featureunion</a></code>,
@@ -245,7 +245,29 @@ This can be different to the predict type of the <code><a href="https://mlr3.mlr
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"mtcars"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">learner</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.rpart"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lrncvplus_po</span> <span class="op">=</span> <span class="va">mlr_pipeops</span><span class="op">$</span><span class="fu">get</span><span class="op">(</span><span class="st">"learner_pi_cvplus"</span>, <span class="va">learner</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">lrncvplus_po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">lrncvplus_po</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionRegr&gt; for 32 observations:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  row_ids truth response     q0.05    q0.95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        1  21.0 18.05385  9.848580 31.38250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        2  21.0 18.05385  9.848580 31.38250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        3  22.8 25.77500 18.111635 34.11857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ---   ---      ---       ---      ---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       30  19.7 16.19333  9.256512 25.70769</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       31  15.0 16.19333  9.256512 25.70769</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       32  21.4 25.77500 18.111635 34.11857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

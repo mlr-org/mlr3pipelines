@@ -25,9 +25,9 @@
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/mlr-org/mlr3pipelines/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/"><span class="fa fa-comments"></span></a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://stackoverflow.com/questions/tagged/mlr3"><span class="fa fab fa-stack-overflow"></span></a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://mlr-org.com/"><span class="fa fa-rss"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/" aria-label="Mattermost chat"><span class="fa fa-comments"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://stackoverflow.com/questions/tagged/mlr3" aria-label="Stack Overflow"><span class="fa fab fa-stack-overflow"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://mlr-org.com/" aria-label="RSS"><span class="fa fa-rss"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch"><li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
@@ -98,12 +98,6 @@
         <dd>Simple Task Preprocessing Base Class</dd>
       </dl><dl><dt>
 
-          <code><a href="PipeOpImpute.html">PipeOpImpute</a></code>
-
-        </dt>
-        <dd>Imputation Base Class</dd>
-      </dl><dl><dt>
-
           <code><a href="Multiplicity.html">Multiplicity()</a></code>
 
         </dt>
@@ -137,6 +131,12 @@
 
         </dt>
         <dd>Create Disjoint Graph Union of Copies of a Graph</dd>
+      </dl><dl><dt>
+
+          <code><a href="chain_graphs.html">chain_graphs()</a></code>
+
+        </dt>
+        <dd>Chain a Series of Graphs</dd>
       </dl></div><div class="section level2">
       <h2 id="pipeops">PipeOps<a class="anchor" aria-label="anchor" href="#pipeops"></a></h2>
 
@@ -262,12 +262,6 @@
 
         </dt>
         <dd>Impact Encoding with Random Intercept Models</dd>
-      </dl><dl><dt>
-
-          <code><a href="mlr_pipeops_encodepl.html">mlr_pipeops_encodepl</a></code> <code><a href="mlr_pipeops_encodepl.html">PipeOpEncodePL</a></code>
-
-        </dt>
-        <dd>Piecewise Linear Encoding Base Class</dd>
       </dl><dl><dt>
 
           <code><a href="mlr_pipeops_encodeplquantiles.html">mlr_pipeops_encodeplquantiles</a></code> <code><a href="mlr_pipeops_encodeplquantiles.html">PipeOpEncodePLQuantiles</a></code>
@@ -630,6 +624,12 @@
         <dd>PipeOp Base Class</dd>
       </dl><dl><dt>
 
+          <code><a href="PipeOpEncodePL.html">PipeOpEncodePL</a></code>
+
+        </dt>
+        <dd>Piecewise Linear Encoding Base Class</dd>
+      </dl><dl><dt>
+
           <code><a href="PipeOpEnsemble.html">PipeOpEnsemble</a></code>
 
         </dt>
@@ -670,6 +670,12 @@
 
 
       <dl><dt>
+
+          <code><a href="mlr_graphs.html">mlr_graphs</a></code>
+
+        </dt>
+        <dd>Dictionary of (sub-)graphs</dd>
+      </dl><dl><dt>
 
           <code><a href="ppl.html">ppl()</a></code> <code><a href="ppl.html">ppls()</a></code>
 
@@ -723,77 +729,6 @@
 
         </dt>
         <dd>Transform and Re-Transform the Target Variable</dd>
-      </dl></div><div class="section level2">
-      <h2 id="graphs">Graphs<a class="anchor" aria-label="anchor" href="#graphs"></a></h2>
-
-
-
-
-    </div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="mlr_graphs.html">mlr_graphs</a></code>
-
-        </dt>
-        <dd>Dictionary of (sub-)graphs</dd>
-      </dl><dl><dt>
-
-          <code><a href="mlr_graphs_bagging.html">pipeline_bagging()</a></code>
-
-        </dt>
-        <dd>Create a bagging learner</dd>
-      </dl><dl><dt>
-
-          <code><a href="mlr_graphs_branch.html">pipeline_branch()</a></code>
-
-        </dt>
-        <dd>Branch Between Alternative Paths</dd>
-      </dl><dl><dt>
-
-          <code><a href="mlr_graphs_convert_types.html">pipeline_convert_types()</a></code>
-
-        </dt>
-        <dd>Convert Column Types</dd>
-      </dl><dl><dt>
-
-          <code><a href="mlr_graphs_greplicate.html">pipeline_greplicate()</a></code>
-
-        </dt>
-        <dd>Create Disjoint Graph Union of Copies of a Graph</dd>
-      </dl><dl><dt>
-
-          <code><a href="mlr_graphs_ovr.html">pipeline_ovr()</a></code>
-
-        </dt>
-        <dd>Create A Graph to Perform "One vs. Rest" classification.</dd>
-      </dl><dl><dt>
-
-          <code><a href="mlr_graphs_robustify.html">pipeline_robustify()</a></code>
-
-        </dt>
-        <dd>Robustify a learner</dd>
-      </dl><dl><dt>
-
-          <code><a href="mlr_graphs_stacking.html">pipeline_stacking()</a></code>
-
-        </dt>
-        <dd>Create A Graph to Perform Stacking.</dd>
-      </dl><dl><dt>
-
-          <code><a href="mlr_graphs_targettrafo.html">pipeline_targettrafo()</a></code>
-
-        </dt>
-        <dd>Transform and Re-Transform the Target Variable</dd>
-      </dl><dl><dt>
-
-          <code><a href="chain_graphs.html">chain_graphs()</a></code>
-
-        </dt>
-        <dd>Chain a Series of Graphs</dd>
       </dl></div><div class="section level2">
       <h2 id="learners">Learners<a class="anchor" aria-label="anchor" href="#learners"></a></h2>
 
@@ -924,10 +859,46 @@
 
       <dl><dt>
 
+          <code><a href="PipeOp.html">PipeOp</a></code>
+
+        </dt>
+        <dd>PipeOp Base Class</dd>
+      </dl><dl><dt>
+
+          <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>
+
+        </dt>
+        <dd>Task Preprocessing Base Class</dd>
+      </dl><dl><dt>
+
+          <code><a href="PipeOpTaskPreprocSimple.html">PipeOpTaskPreprocSimple</a></code>
+
+        </dt>
+        <dd>Simple Task Preprocessing Base Class</dd>
+      </dl><dl><dt>
+
+          <code><a href="PipeOpImpute.html">PipeOpImpute</a></code>
+
+        </dt>
+        <dd>Imputation Base Class</dd>
+      </dl><dl><dt>
+
           <code><a href="PipeOpEnsemble.html">PipeOpEnsemble</a></code>
 
         </dt>
         <dd>Ensembling Base Class</dd>
+      </dl><dl><dt>
+
+          <code><a href="PipeOpTargetTrafo.html">PipeOpTargetTrafo</a></code>
+
+        </dt>
+        <dd>Target Transformation Base Class</dd>
+      </dl><dl><dt>
+
+          <code><a href="PipeOpEncodePL.html">PipeOpEncodePL</a></code>
+
+        </dt>
+        <dd>Piecewise Linear Encoding Base Class</dd>
       </dl></div><div class="section level2">
       <h2 id="pipeop-type-inference">PipeOp Type Inference<a class="anchor" aria-label="anchor" href="#pipeop-type-inference"></a></h2>
 
