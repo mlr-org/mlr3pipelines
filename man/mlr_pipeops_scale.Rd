@@ -43,7 +43,7 @@ The mean / median (depending on \code{robust}) of each numeric feature during tr
 \item \code{scale} :: \code{numeric}\cr
 The value by which features are divided. 1 if \code{scale} is \code{FALSE}\cr
 If \code{robust} is \code{FALSE}, this is the root mean square, defined as \code{sqrt(sum(x^2)/(length(x)-1))}, of each feature, possibly after centering.
-If \code{robust} is \code{TRUE}, this is the mean absolute deviation multiplied by 1.4826 (see \link[stats:mad]{stats::mad} of each feature, possibly after centering.
+If \code{robust} is \code{TRUE}, this is the median absolute deviation multiplied by 1.4826 (see \link[stats:mad]{stats::mad}) of each feature, possibly after centering.
 This is 1 for features that are constant during training if \code{center} is \code{TRUE}, to avoid division-by-zero.
 }
 }

@@ -79,3 +79,14 @@ test_that("PipeOpADAS - handling of feature named 'class'", {
   expect_equal(train_out, adas_out)
 
 })
+
+test_that("PipeOpADAS - handles unseen levels in target, #881", {
+  skip_if_not_installed("smotefamily")
+  op = PipeOpADAS$new()
+  task = tsk("iris")$filter(1:99)
+  train_out = op$train(list(task))[[1L]]
+  expect_equal(task$levels(), train_out$levels())
+})
+# This fails with 1:100 because sum(knct[, 2]) is 0 since all entries are 0 ...
+# is the case because both classes occur the same number of times
+# probably want to catch this as well?

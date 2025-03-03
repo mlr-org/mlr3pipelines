@@ -103,7 +103,8 @@ train_out = pop$train(list(task))[[1L]]
 
 # Calculated bin boundaries per feature
 pop$state$bins
-# First feature was split into three encoded features, second into two, using piecewise linear encoding
+# First feature was split into three encoded features,
+# second into two, using piecewise linear encoding
 train_out$head()
 }
 \references{

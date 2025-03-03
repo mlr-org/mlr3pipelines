@@ -97,7 +97,11 @@ PipeOpADAS = R6Class("PipeOpADAS",
 
       # Calculate synthetic data
       dt = task$data(cols = cols)
-      st = setDT(invoke(smotefamily::ADAS, X = dt, target = task$truth(),
+      # Remove unseen factor levels, see #881
+      # Don't need to re-add them later since we don't touch task here
+      target = droplevels(task$truth())
+
+      st = setDT(invoke(smotefamily::ADAS, X = dt, target = target,
         .args = self$param_set$get_values(tags = "adas"),
         .opts = list(warnPartialMatchArgs = FALSE))$syn_data)  # ADAS uses partial arg matching internally
 
