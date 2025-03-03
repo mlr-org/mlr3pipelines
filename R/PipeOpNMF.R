@@ -102,7 +102,7 @@
 #' pop$state
 #' \dontshow{
 #' # BiocGenerics overwrites printer for our tables mlr-org/mlr3#1112
-#' try(rm("format.list", envir = .BaseNamespaceEnv$.__S3MethodsTable__.), silent = TRUE)
+#' suppressWarnings(try(rm("format.list", envir = .BaseNamespaceEnv$.__S3MethodsTable__.), silent = TRUE))
 #' }
 #' @family PipeOps
 #' @template seealso_pipeopslist
