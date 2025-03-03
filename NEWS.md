@@ -12,6 +12,8 @@
 * Fix: Corrected hash calculation for `PipeOpFilter`.
 * New PipeOps `PipeOpEncodePLQuantiles` and `PipeOpEncodePLTree` that implement piecewise linear encoding with two different binning methods.
 * Compatibility with new `R6` release.
+* Fix: `PipeOpTargetMutate` and `PipeOpTargetTrafoScaleRange` no longer drop unseen factor levels of features or targets during train and predict.
+* Simplified parameter checks and added internal type checking for `PipeOpTargetMutate`.
 
 # mlr3pipelines 0.7.1
 
