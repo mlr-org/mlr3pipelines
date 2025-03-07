@@ -49,7 +49,7 @@ is not intended to be instantiated.'><meta property="og:image" content="https://
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,7 +84,7 @@ is not intended to be instantiated.'><meta property="og:image" content="https://
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>PipeOp Base Class</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOp.R" class="external-link"><code>R/PipeOp.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.7.2/R/PipeOp.R" class="external-link"><code>R/PipeOp.R</code></a></small>
       <div class="d-none name"><code>PipeOp.Rd</code></div>
     </div>
 
@@ -178,7 +178,7 @@ Method-dependent state obtained during training step, and usually required for t
 if and only if the <code>PipeOp</code> has not been trained. The <code>$state</code> is the <em>only</em> slot that can be reliably modified during
 <code>$train()</code>, because <code>private$.train()</code> may theoretically be executed in a different <code>R</code>-session (e.g. for parallelization).
 <code>$state</code> should furthermore always be set to something with copy-semantics, since it is never cloned. This is a limitation
-not of <code>PipeOp</code> or <code>mlr3pipelines</code>, but of the way the system as a whole works, together with <code><a href="mlr_learners_graph.html">GraphLearner</a></code> and <code><a href="https://mlr3.mlr-org.com/reference/mlr3-package.html" class="external-link">mlr3</a></code>.</p></li>
+not of <code>PipeOp</code> or <code>mlr3pipelines</code>, but of the way the system as a whole works, together with <code><a href="mlr_learners_graph.html">GraphLearner</a></code> and <a href="https://CRAN.R-project.org/package=mlr3" class="external-link"><span class="pkg">mlr3</span></a>.</p></li>
 <li><p><code>input</code> :: <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>)<br>
 Input channels of <code>PipeOp</code>. Column <code>name</code> gives the names (and order) of values in the list given to
 <code>$train()</code> and <code>$predict()</code>. Column <code>train</code> is the (S3) class that an input object must conform to during
