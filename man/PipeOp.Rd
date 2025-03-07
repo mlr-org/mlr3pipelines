@@ -97,7 +97,7 @@ Method-dependent state obtained during training step, and usually required for t
 if and only if the \code{PipeOp} has not been trained. The \verb{$state} is the \emph{only} slot that can be reliably modified during
 \verb{$train()}, because \code{private$.train()} may theoretically be executed in a different \code{R}-session (e.g. for parallelization).
 \verb{$state} should furthermore always be set to something with copy-semantics, since it is never cloned. This is a limitation
-not of \code{PipeOp} or \code{mlr3pipelines}, but of the way the system as a whole works, together with \code{\link{GraphLearner}} and \code{\link{mlr3}}.
+not of \code{PipeOp} or \code{mlr3pipelines}, but of the way the system as a whole works, together with \code{\link{GraphLearner}} and \CRANpkg{mlr3}.
 \item \code{input} :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
 Input channels of \code{PipeOp}. Column \code{name} gives the names (and order) of values in the list given to
 \verb{$train()} and \verb{$predict()}. Column \code{train} is the (S3) class that an input object must conform to during

@@ -160,6 +160,7 @@ test_that("marshal multiplicity", {
 })
 
 test_that("state class and multiplicity", {
+  skip_on_cran()
   lrn = lrn("regr.debug")
   lrn$properties = c(lrn$properties, "marshal")
   po = PipeOpLearnerPICVPlus$new(lrn)

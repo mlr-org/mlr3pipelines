@@ -46,7 +46,7 @@ Key with which the \code{\link{PipeOp}} was registered to the \code{\link[mlr3mi
 \item \code{label} :: (\code{character})\cr
 Description of the \code{\link{PipeOp}}'s functionality.
 \item \code{packages} :: (\code{character})\cr
-Set of all required packages for the \code{\link{PipeOp}}'s train and ⁠predict⁠ methods.
+Set of all required packages for the \code{\link{PipeOp}}'s train and predict methods.
 \item \code{tags} :: (\code{character})\cr
 A set of tags associated with the \code{\link{PipeOp}} describing its purpose.
 \item \code{feature_types} :: (\code{character})\cr
