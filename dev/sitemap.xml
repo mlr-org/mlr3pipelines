@@ -14,6 +14,7 @@
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/Multiplicity.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/NO_OP.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpEncodePL.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpEnsemble.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpImpute.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTargetTrafo.html</loc></url>
@@ -60,9 +61,12 @@
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_colroles.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_copy.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_datefeatures.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_decode.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_encode.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_encodeimpact.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_encodelmer.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_encodeplquantiles.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_encodepltree.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_featureunion.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_filter.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_fixfactors.html</loc></url>
@@ -120,6 +124,7 @@
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_updatetarget.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_vtreat.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_yeojohnson.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_tasks_boston_housing.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/po.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/ppl.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/reexports.html</loc></url>
