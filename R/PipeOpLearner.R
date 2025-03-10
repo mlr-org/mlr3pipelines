@@ -206,6 +206,10 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
 
 mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(properties = character(0), id = "learner", task_type = "classif", param_set = ps(), packages = "mlr3pipelines"))$new())) # nolint
 
+# Q: Why do we have two different paths for setting $validate, the set_validate() and the `$validate` AB?
+# A: `$validate` is lower level machinery. `set_validate()` has optional arguments, e.g. `ids = ...`.
+#    `set_validate.PipeOpLearner` might be called by `set_validate.GraphLearner` and allows passing down
+#    further arguments in case the pipeoplearner was another graph learner e.g.
 #' @export
 set_validate.PipeOpLearner = function(learner, validate, ...) {
   assert_po_validate(validate)
