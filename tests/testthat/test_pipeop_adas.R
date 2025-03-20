@@ -87,6 +87,18 @@ test_that("PipeOpADAS - handles unseen levels in target, #881", {
   train_out = op$train(list(task))[[1L]]
   expect_equal(task$levels(), train_out$levels())
 })
-# This fails with 1:100 because sum(knct[, 2]) is 0 since all entries are 0 ...
-# is the case because both classes occur the same number of times
-# probably want to catch this as well?
+
+task = tsk("iris")
+# For whole iris: Fails, since servosa is taken as positive calss, and then there are no K
+# nearest neighbors that are in another class than the instance itself
+smotefamily::ADAS(X = task$data(cols = task$feature_names), target = task$truth(), K = 6)
+# interpretatoin because result of knearest only has values less than 50, i.e. for
+# instances of P only finds neighbors in P
+# test that this is not the case with other data, e.g. from tests aboe
+
+
+task = tsk("sonar")
+smotefamily::ADAS(X = task$data(cols = task$feature_names), target = task$truth(), K = 6)
+# fails because:
+# test this options(error = recover)
+
