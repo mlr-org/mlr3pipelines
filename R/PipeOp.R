@@ -198,6 +198,9 @@
 #' of the class, the id, the `$state`, and the `$param_set$values`. The last point is particularly important: changing the `$param_set$values` should
 #' *not* change the return value of `private$.additional_phash_input()`.
 #'
+#' When you are implementing a `PipeOp` that operates a task (and is not a [`PipeOpTaskPreproc`]), you also need to handle the
+#' `$internal_valid_task` field of the input task, if there is one.
+#'
 #' @examples
 #' # example (bogus) PipeOp that returns the sum of two numbers during $train()
 #' # as well as a letter of the alphabet corresponding to that sum during $predict().

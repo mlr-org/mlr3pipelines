@@ -217,6 +217,9 @@ If the \verb{$initialize()} method has more arguments, then it is necessary to a
 This function should return either all objects, or a hash of all objects, that can change the function or behavior of the \code{PipeOp} and are independent
 of the class, the id, the \verb{$state}, and the \verb{$param_set$values}. The last point is particularly important: changing the \verb{$param_set$values} should
 \emph{not} change the return value of \code{private$.additional_phash_input()}.
+
+When you are implementing a \code{PipeOp} that operates a task (and is not a \code{\link{PipeOpTaskPreproc}}), you also need to handle the
+\verb{$internal_valid_task} field of the input task, if there is one.
 }
 
 \examples{
