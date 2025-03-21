@@ -98,7 +98,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       id = id %??% private$.learner$id
       if (!test_po_validate(get0("validate", private$.learner))) {
         stopf(
-          "Validate field of PipeOp '%s' must either be NULL or 'predefined'.\nTo configure how the validation data is created, set the $validate field of the GraphLearner, e.g. using set_validate().",  # nolint
+          "Validate field of PipeOp '%s' must either be NULL or 'predefined'. We recommend specifying the validation data by calling set_validate(<glrn>, validate = <value>) on a GraphLearner. You can read more about this here: https://mlr3book.mlr-org.com/chapters/chapter15/predsets_valid_inttune.html.",  # nolint
           id
         )
       }
@@ -154,11 +154,9 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
         }
         validate = get0("validate", private$.learner)
         if (!test_po_validate(validate)) {
-          warningf(paste(sep = "\n",
-            "PipeOpLearner '%s' has its validate field set to a value that is neither NULL nor 'predefined'.",
-            "This will likely lead to unexpected behaviour.",
-            "Configure the $validate field of the GraphLearner to define how the validation data is created."
-            ), self$id)
+          warningf(
+            "PipeOpLearner '%s' has its validate field set to a value that is neither NULL nor 'predefined'. This will likely lead to unexpected behaviour. We recommend configuring the validation data by calling set_validate(<glrn>, validate = <value>) on a GraphLearner. You can read more about this here: https://mlr3book.mlr-org.com/chapters/chapter15/predsets_valid_inttune.html", # nolint
+            self$id)
         }
       }
       private$.learner
