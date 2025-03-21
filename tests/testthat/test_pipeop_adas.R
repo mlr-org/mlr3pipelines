@@ -13,6 +13,7 @@ test_that("PipeOpADAS - train works as intended", {
 
   op = PipeOpADAS$new()
 
+  set.seed(1234L)
   df = data.frame(
     target = factor(sample(c("c1", "c2"), size = 200, replace = TRUE, prob = c(0.1, 0.9))),
     x1 = rnorm(200),
@@ -60,6 +61,7 @@ test_that("PipeOpADAS - handling of feature named 'class'", {
 
   op = PipeOpADAS$new()
 
+  set.seed(1234L)
   df = data.frame(
     target = factor(sample(c("c1", "c2"), size = 200, replace = TRUE, prob = c(0.1, 0.9))),
     class = rnorm(200),
@@ -83,22 +85,16 @@ test_that("PipeOpADAS - handling of feature named 'class'", {
 test_that("PipeOpADAS - handles unseen levels in target, #881", {
   skip_if_not_installed("smotefamily")
   op = PipeOpADAS$new()
-  task = tsk("iris")$filter(1:99)
+
+  set.seed(1234L)
+  df = data.frame(
+    target = factor(sample(c("c1", "c2"), size = 200, replace = TRUE, prob = c(0.1, 0.9)), levels = c("c1", "c2", "c3")),
+    x1 = rnorm(200),
+    x2 = rnorm(200)
+  )
+  task = TaskClassif$new(id = "test", backend = df, target = "target")
+
+  set.seed(1234L)
   train_out = op$train(list(task))[[1L]]
   expect_equal(task$levels(), train_out$levels())
 })
-
-task = tsk("iris")
-# For whole iris: Fails, since servosa is taken as positive calss, and then there are no K
-# nearest neighbors that are in another class than the instance itself
-smotefamily::ADAS(X = task$data(cols = task$feature_names), target = task$truth(), K = 6)
-# interpretatoin because result of knearest only has values less than 50, i.e. for
-# instances of P only finds neighbors in P
-# test that this is not the case with other data, e.g. from tests aboe
-
-
-task = tsk("sonar")
-smotefamily::ADAS(X = task$data(cols = task$feature_names), target = task$truth(), K = 6)
-# fails because:
-# test this options(error = recover)
-
