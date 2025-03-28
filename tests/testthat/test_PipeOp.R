@@ -13,6 +13,7 @@ test_that("PipeOp - General functions", {
   expect_equal(po_1$packages, "mlr3pipelines")
   expect_null(po_1$state)
   assert_subset(po_1$tags, mlr_reflections$pipeops$valid_tags)
+  expect_error(po_1$predict(list(tsk("iris"))), "has not been trained yet")
 
   expect_output(expect_equal(po_1$train(list(1)), list(output = 1)), "Training debug.basic")
   expect_equal(po_1$state, list(input = 1))

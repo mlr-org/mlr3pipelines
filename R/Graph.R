@@ -444,6 +444,7 @@ Graph = R6Class("Graph",
       self$edges[, c("src_id", "dst_id") := list(map_values(src_id, old, new), map_values(dst_id, old, new))]
       invisible(self)
     },
+
     update_ids = function(prefix = "", postfix = "") {
       ids = names2(self$pipeops)
       self$set_names(ids, sprintf("%s%s%s", assert_string(prefix), ids, assert_string(postfix)))
@@ -456,9 +457,13 @@ Graph = R6Class("Graph",
     },
 
     predict = function(input, single_input = TRUE) {
+      if (!self$is_trained) {
+        stop("Cannot predict, Graph has not been trained yet")
+      }
       graph_load_namespaces(self, "predict")
       graph_reduce(self, input, "predict", single_input)
     },
+
     help = function(help_type = getOption("help_type")) {
       parts = strsplit(self$man, split = "::", fixed = TRUE)[[1]]
       match.fun("help")(parts[[2]], package = parts[[1]], help_type = help_type)
@@ -717,7 +722,7 @@ graph_load_namespaces = function(self, info) {
 #' @export
 predict.Graph = function(object, newdata, ...) {
   if (!object$is_trained) {
-    stop("Graph is not trained.")
+    stop("Cannot predict, Graph has not been trained yet")
   }
   output = object$output
   if (nrow(output) != 1) {

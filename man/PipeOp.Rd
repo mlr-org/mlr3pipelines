@@ -208,7 +208,7 @@ should not modify the \code{PipeOp} in any way.\cr
 
 \section{Inheriting}{
 
-To create your own \code{PipeOp}, you need to overload the \code{private$.train()} and \code{private$.test()} functions.
+To create your own \code{PipeOp}, you need to overload the \code{private$.train()} and \code{private$.predict()} functions.
 It is most likely also necessary to overload the \verb{$initialize()} function to do additional initialization.
 The \verb{$initialize()} method should have at least the arguments \code{id} and \code{param_vals}, which should be passed on to \code{super$initialize()} unchanged.
 \code{id} should have a useful default value, and \code{param_vals} should have the default value \code{list()}, meaning no initialization of hyperparameters.
