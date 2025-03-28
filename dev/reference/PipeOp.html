@@ -277,7 +277,7 @@ should not modify the <code>PipeOp</code> in any way.<br></p></li>
     <h2 id="inheriting">Inheriting<a class="anchor" aria-label="anchor" href="#inheriting"></a></h2>
 
 
-<p>To create your own <code>PipeOp</code>, you need to overload the <code>private$.train()</code> and <code>private$.test()</code> functions.
+<p>To create your own <code>PipeOp</code>, you need to overload the <code>private$.train()</code> and <code>private$.predict()</code> functions.
 It is most likely also necessary to overload the <code>$initialize()</code> function to do additional initialization.
 The <code>$initialize()</code> method should have at least the arguments <code>id</code> and <code>param_vals</code>, which should be passed on to <code>super$initialize()</code> unchanged.
 <code>id</code> should have a useful default value, and <code>param_vals</code> should have the default value <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>, meaning no initialization of hyperparameters.</p>
