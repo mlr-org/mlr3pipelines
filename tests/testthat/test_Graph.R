@@ -666,3 +666,10 @@ test_that("Graph with vararg input", {
     list(debugvararg.output = 1006, debugvararg2.output = 2006))
 
 })
+
+test_that("Error when predicting with untrained Graph, #893", {
+  g = Graph$new()$
+    add_pipeop(PipeOpDebugBasic$new())
+
+  expect_error(g$predict(tsk("iris")), "Graph has not been trained yet")
+})
