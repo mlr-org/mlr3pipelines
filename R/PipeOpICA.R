@@ -103,7 +103,7 @@ PipeOpICA = R6Class("PipeOpICA",
         verbose = p_lgl(default = FALSE, tags = c("train", "ica")),
         w.init = p_uty(default = NULL, tags = c("train", "ica"))
       )
-      ps$values = list(method = "C")
+      ps$set_values(method = "C")
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "fastICA", feature_types = c("numeric", "integer"))
     }

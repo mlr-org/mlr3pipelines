@@ -107,7 +107,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
           tags = c("train", "predidct", "required")
         )
       )
-      ps$values = list(content = PipeOpFeatureUnion$new(innum = innum))
+      ps$set_values(content = PipeOpFeatureUnion$new(innum = innum))
       super$initialize(id, param_set = ps, param_vals = param_vals,
         input = data.table(name = inname, train = "*", predict = "*"),
         output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*"),

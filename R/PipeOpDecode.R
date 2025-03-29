@@ -142,7 +142,7 @@ PipeOpDecode = R6Class("PipeOpDecode",
         ref_name = p_uty(custom_check = crate(function(x) check_string(x, min.chars = 1)), tags = "train", depends = quote(treatment_encoding == TRUE)),
         ties_method = p_fct(c("first", "last", "random"), tags = c("train", "required"))
       )
-      ps$values = list(treatment_encoding = FALSE, group_pattern = "^([^.]+)\\.", ties_method = "random")
+      ps$set_values(treatment_encoding = FALSE, group_pattern = "^([^.]+)\\.", ties_method = "random")
       super$initialize(id, param_set = ps, param_vals = param_vals, tags = "encode", feature_types = c("integer", "numeric"))
     }
   ),

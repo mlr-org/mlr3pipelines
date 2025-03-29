@@ -62,7 +62,7 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
         applicator = p_uty(custom_check = check_function, tags = c("train", "predict")),
         col_prefix = p_uty(custom_check = check_string, tags = c("train", "predict"))
       )
-      ps$values = list(
+      ps$set_values(
         applicator = identity,
         col_prefix = ""
       )

@@ -90,7 +90,7 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
           tags = "train"
         )
       )
-      ps$values = list(measure = "classif.ce", optimizer = "gensa", log_level = "warn")
+      ps$set_values(measure = "classif.ce", optimizer = "gensa", log_level = "warn")
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "bbotk",
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction"),

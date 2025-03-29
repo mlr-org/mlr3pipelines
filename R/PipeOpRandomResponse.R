@@ -88,7 +88,7 @@ PipeOpRandomResponse = R6Class("PipeOpRandomResponse",
           check_function(x, args = c("n", "mean", "sd"))
         }))
       )
-      ps$values = list(rdistfun = stats::rnorm)
+      ps$set_values(rdistfun = stats::rnorm)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = packages,
         input = data.table(name = "input", train = "NULL", predict = "Prediction"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction")

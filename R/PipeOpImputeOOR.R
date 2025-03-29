@@ -104,7 +104,7 @@ PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
         offset = p_dbl(lower = 0, tags = c("train", "predict")),
         multiplier = p_dbl(lower = 0, tags = c("train", "predict"))
       )
-      ps$values = list(min = TRUE, offset = 1, multiplier = 1)
+      ps$set_values(min = TRUE, offset = 1, multiplier = 1)
       # this is one of the few imputers that handles 'character' features!
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("character", "factor", "integer", "numeric", "ordered"))
     }

@@ -356,7 +356,7 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
       # HOWEVER conditions are broken in paradox, it is a terrible idea to use them in PipeOps,
       # see https://github.com/mlr-org/paradox/issues/216 and related comment in PipeOpLearnerCV
 
-      ps$values = list(trafo = identity, inverter = identity)
+      ps$set_values(trafo = identity, inverter = identity)
       super$initialize(id = id, param_set = ps, param_vals = param_vals)
     }
   ),
@@ -461,7 +461,7 @@ PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
         lower = p_dbl(tags = c("required", "train")),
         upper = p_dbl(tags = c("required", "train"))
       )
-      ps$values = list(lower = 0, upper = 1)
+      ps$set_values(lower = 0, upper = 1)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, task_type_in = "TaskRegr")
     }
   ),
@@ -571,7 +571,7 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
         new_task_type = p_uty(tags = c("train", "predict"), custom_check = crate(function(x) check_choice(x, choices = mlr_reflections$task_types$type), .parent = topenv())),
         drop_original_target = p_lgl(tags = c("train", "predict"))
       )
-      ps$values = list(trafo = identity, drop_original_target = TRUE)
+      ps$set_values(trafo = identity, drop_original_target = TRUE)
       super$initialize(id = id, param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")

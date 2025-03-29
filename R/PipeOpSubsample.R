@@ -86,7 +86,7 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
         use_groups = p_lgl(tags = "train"),
         replace = p_lgl(tags = "train")
       )
-      ps$values = list(frac = 1 - exp(-1), stratify = FALSE, use_groups = TRUE, replace = FALSE)
+      ps$set_values(frac = 1 - exp(-1), stratify = FALSE, use_groups = TRUE, replace = FALSE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
     }
   ),

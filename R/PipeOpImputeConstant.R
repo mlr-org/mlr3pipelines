@@ -73,7 +73,7 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
         constant = p_uty(tags = c("train", "required"), custom_check = check_scalar),
         check_levels = p_lgl(tags = c("train", "required"))
       )
-      ps$values = list(constant = ".MISSING", check_levels = TRUE)
+      ps$set_values(constant = ".MISSING", check_levels = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct"))
     }
   ),

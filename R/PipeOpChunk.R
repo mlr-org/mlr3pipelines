@@ -67,7 +67,7 @@ PipeOpChunk = R6Class("PipeOpChunk",
       ps = ps(
         shuffle = p_lgl(tags = "train")
       )
-      ps$values = list(shuffle = TRUE)
+      ps$set_values(shuffle = TRUE)
       super$initialize(id,
         param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),

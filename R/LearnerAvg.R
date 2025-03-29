@@ -66,7 +66,7 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
           tags = c("train", "required")
         )
       )
-      ps$values = list(measure = "classif.ce", optimizer = "nloptr", log_level = "warn")
+      ps$set_values(measure = "classif.ce", optimizer = "nloptr", log_level = "warn")
       super$initialize(
         id = id,
         param_set = ps,
@@ -140,7 +140,7 @@ LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
         log_level = p_uty(tags = c("train", "required"),
           function(x) check_string(x) %check||% check_integerish(x))
       )
-      ps$values = list(measure = "regr.mse", optimizer = "nloptr", log_level = "warn")
+      ps$set_values(measure = "regr.mse", optimizer = "nloptr", log_level = "warn")
       super$initialize(
         id = id,
         param_set = ps,

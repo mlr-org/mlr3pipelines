@@ -68,7 +68,7 @@ PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
         ),
         ignore_missing = p_lgl(tags = c("train", "predict", "required"))
       )
-      ps$values = list(renaming = character(0), ignore_missing = FALSE)
+      ps$set_values(renaming = character(0), ignore_missing = FALSE)
       super$initialize(id, ps, param_vals = param_vals, can_subset_cols = FALSE)
     }
   ),

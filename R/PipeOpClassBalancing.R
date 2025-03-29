@@ -89,13 +89,13 @@
 #' table(task$truth())
 #'
 #' # double the instances in the minority class (spam)
-#' opb$param_set$values = list(ratio = 2, reference = "minor",
+#' opb$param_set$set_values(ratio = 2, reference = "minor",
 #'   adjust = "minor", shuffle = FALSE)
 #' result = opb$train(list(task))[[1L]]
 #' table(result$truth())
 #'
 #' # up or downsample all classes until exactly 20 per class remain
-#' opb$param_set$values = list(ratio = 20, reference = "one",
+#' opb$param_set$set_values(ratio = 20, reference = "one",
 #'   adjust = "all", shuffle = FALSE)
 #' result = opb$train(list(task))[[1]]
 #' table(result$truth())
@@ -110,7 +110,7 @@ PipeOpClassBalancing = R6Class("PipeOpClassBalancing",
         adjust = p_fct(c("all", "major", "minor", "nonmajor", "nonminor", "upsample", "downsample"), tags = "train"),
         shuffle = p_lgl(tags = "train")
       )
-      ps$values = list(ratio = 1, reference = "all", adjust = "all", shuffle = TRUE)
+      ps$set_values(ratio = 1, reference = "all", adjust = "all", shuffle = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data")
     }
   ),

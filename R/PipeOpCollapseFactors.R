@@ -95,7 +95,7 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
         no_collapse_above_absolute = p_int(0, special_vals = list(Inf), tags = c("train", "predict")),
         target_level_count = p_int(2, tags = c("train", "predict"))
       )
-      ps$values = list(no_collapse_above_prevalence = 1, no_collapse_above_absolute = Inf, target_level_count = 2)
+      ps$set_values(no_collapse_above_prevalence = 1, no_collapse_above_absolute = Inf, target_level_count = 2)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("factor", "ordered"))
     }
   ),

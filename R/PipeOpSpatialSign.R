@@ -59,7 +59,7 @@ PipeOpSpatialSign = R6Class("PipeOpSpatialSign",
         length = p_dbl(tags = c("train", "predict"), lower = 0),
         norm = p_dbl(tags = c("train", "predict"), lower = 0)
       )
-      ps$values = list(norm = 2, length = 1)
+      ps$set_values(norm = 2, length = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     }
   ),

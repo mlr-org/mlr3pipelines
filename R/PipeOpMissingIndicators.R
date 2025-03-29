@@ -83,7 +83,7 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
         which = p_fct(levels = c("missing_train", "all"), tags = c("train", "required")),
         type = p_fct(levels = c("factor", "integer", "logical", "numeric"), tags = c("train", "predict", "required"))
       )
-      ps$values = list(which = "missing_train", type = "factor")
+      ps$set_values(which = "missing_train", type = "factor")
       super$initialize(id, ps, param_vals = param_vals, tags = "missings")
       if ("affect_columns" %nin% names(param_vals)) {
         # can't put this in `ps$values` because it is a PipeOpTaskPreproc param

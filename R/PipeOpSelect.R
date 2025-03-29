@@ -72,7 +72,7 @@ PipeOpSelect = R6Class("PipeOpSelect",
       ps = ps(
         selector = p_uty(custom_check = check_function, tags = c("train", "required"))
       )
-      ps$values = list(selector = selector_all())
+      ps$set_values(selector = selector_all())
       super$initialize(id, ps, param_vals = param_vals, tags = "feature selection")
     }
   ),

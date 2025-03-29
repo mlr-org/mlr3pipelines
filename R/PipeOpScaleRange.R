@@ -63,7 +63,7 @@ PipeOpScaleRange = R6Class("PipeOpScaleRange",
         lower = p_dbl(tags = c("required", "train")),
         upper = p_dbl(tags = c("required", "train"))
       )
-      ps$values = list(lower = 0, upper = 1)
+      ps$set_values(lower = 0, upper = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     }
   ),

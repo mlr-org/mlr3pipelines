@@ -81,7 +81,7 @@ PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",
         smoothing = p_dbl(0, Inf, tags = c("train", "required")),
         impute_zero = p_lgl(tags = c("train", "required"))
       )
-      ps$values = list(smoothing = 1e-4, impute_zero = FALSE)
+      ps$set_values(smoothing = 1e-4, impute_zero = FALSE)
       super$initialize(id, param_set = ps, param_vals = param_vals, tags = "encode", feature_types = c("factor", "ordered"))
     }
   ),
