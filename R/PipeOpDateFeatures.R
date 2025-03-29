@@ -5,8 +5,8 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Based on `POSIXct` or `Date` columns of the data, a set of date related features is computed and added to
-#' the feature set of the output task. If no `POSIXct` or `Date` column is found, the original task is
+#' Based on `POSIXct` columns of the data, a set of date related features is computed and added to
+#' the feature set of the output task. If no `POSIXct` column is found, the original task is
 #' returned unaltered. This functionality is based on the `add_datepart()` and
 #' `add_cyclic_datepart()` functions from the `fastai` library. If operation on only particular
 #' `POSIXct` columns is requested, use the `affect_columns` parameter inherited from
@@ -113,12 +113,10 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
         second = p_lgl(tags = c("train", "predict", "datepart", "required")),
         is_day = p_lgl(tags = c("train", "predict", "datepart", "required"))
       )
-      ps$set_values(
-        keep_date_var = FALSE, cyclic = FALSE, year = TRUE,
+      ps$set_values(keep_date_var = FALSE, cyclic = FALSE, year = TRUE,
         month = TRUE, week_of_year = TRUE, day_of_year = TRUE, day_of_month = TRUE,
-        day_of_week = TRUE, hour = TRUE, minute = TRUE, second = TRUE, is_day = TRUE
-      )
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("POSIXct", "Date"))
+        day_of_week = TRUE, hour = TRUE, minute = TRUE, second = TRUE, is_day = TRUE)
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = "POSIXct")
     }
   ),
   private = list(
@@ -170,10 +168,7 @@ mlr_pipeops$add("datefeatures", PipeOpDateFeatures)
 
 # helper function to compute date features of a vector of dates
 compute_date_features = function(dates, features) {
-  if (inherits(dates, "Date")) {
-    features = setdiff(features, c("hour", "minute", "second"))
-  }
-  lapply(features, function(feature) {
+  lapply(features, FUN = function(feature) {
     formatting = switch(feature,
       year = "%Y",
       month = "%m",
@@ -200,7 +195,7 @@ compute_cyclic_date_features = function(date_features, features, date_var) {
   column_names = colnames(date_features)
   colnames(date_features) = c(column_names[1L],
     gsub(paste0(date_var, "."), replacement = "", x = column_names[-1L]))
-  unlist(lapply(features, function(feature) {
+  unlist(lapply(features, FUN = function(feature) {
     # all values are expected to start at 0 and therefore may be shifted by - 1
     value = if (feature %in% c("month", "week_of_year", "day_of_year", "day_of_month")) {
       date_features[[feature]] - 1L
