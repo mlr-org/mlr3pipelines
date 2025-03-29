@@ -86,7 +86,7 @@ PipeOpBLSmote = R6Class("PipeOpBLSmote",
         method = p_fct(levels = c("type1", "type2"), default = "type1", tags = c("train", "blsmote")),
         quiet = p_lgl(tags = c("train", "required"))
       )
-      ps$values = list(quiet = TRUE)
+      ps$set_values(quiet = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE,
         packages = "smotefamily", task_type = "TaskClassif", tags = "imbalanced data")
     }
