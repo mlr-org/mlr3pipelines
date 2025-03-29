@@ -29,11 +29,14 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `numsplits`  :: `numeric(1)` \cr
+#' * `numsplits`  :: `integer(1)` \cr
 #'   Number of bins to create. Default is `2`.
 #'
 #' @section Internals:
 #' Uses the [`stats::quantile`] function.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].

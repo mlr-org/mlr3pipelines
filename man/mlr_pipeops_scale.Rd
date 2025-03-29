@@ -43,7 +43,7 @@ The mean / median (depending on \code{robust}) of each numeric feature during tr
 \item \code{scale} :: \code{numeric}\cr
 The value by which features are divided. 1 if \code{scale} is \code{FALSE}\cr
 If \code{robust} is \code{FALSE}, this is the root mean square, defined as \code{sqrt(sum(x^2)/(length(x)-1))}, of each feature, possibly after centering.
-If \code{robust} is \code{TRUE}, this is the mean absolute deviation multiplied by 1.4826 (see \link[stats:mad]{stats::mad} of each feature, possibly after centering.
+If \code{robust} is \code{TRUE}, this is the median absolute deviation multiplied by 1.4826 (see \link[stats:mad]{stats::mad}) of each feature, possibly after centering.
 This is 1 for features that are constant during training if \code{center} is \code{TRUE}, to avoid division-by-zero.
 }
 }
@@ -67,6 +67,11 @@ Initialized to \code{FALSE}.
 
 Imitates the \code{\link[base:scale]{scale()}} function for \code{robust = FALSE} and alternatively subtracts the
 \code{median} and divides by \code{\link[stats:mad]{mad}} for \code{robust = TRUE}.
+}
+
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
@@ -93,6 +98,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -116,6 +122,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

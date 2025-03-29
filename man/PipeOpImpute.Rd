@@ -40,10 +40,10 @@ Feature types affected by the \code{PipeOp}. See \code{private$.select_cols()} f
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpImpute}} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}}, or a subclass of
+\code{PipeOpImpute} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}}, or a subclass of
 \code{\link[mlr3:Task]{Task}} if the \code{task_type} construction argument is given as such; both during training and prediction.
 
-\code{\link{PipeOpImpute}} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}}, or a subclass;
+\code{PipeOpImpute} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}}, or a subclass;
 the \code{\link[mlr3:Task]{Task}} type is the same as for input; both during training and prediction.
 
 The output \code{\link[mlr3:Task]{Task}} is the modified input \code{\link[mlr3:Task]{Task}} with features imputed according to the \code{private$.impute()} function.
@@ -76,12 +76,12 @@ Note that features that are imputed during prediction but not during training wi
 
 \itemize{
 \item \code{affect_columns} :: \code{function} | \code{\link{Selector}} | \code{NULL} \cr
-What columns the \code{\link{PipeOpImpute}} should operate on.
+What columns the \code{PipeOpImpute} should operate on.
 The parameter must be a \code{\link{Selector}} function, which takes a \code{\link[mlr3:Task]{Task}} as argument and returns a \code{character}
 of features to use.\cr
 See \code{\link{Selector}} for example functions. Defaults to \code{NULL}, which selects all features.
 \item \code{context_columns} :: \code{function} | \code{\link{Selector}} | \code{NULL} \cr
-What columns the \code{\link{PipeOpImpute}} imputation may depend on. This parameter is only present if the constructor is called with
+What columns the \code{PipeOpImpute} imputation may depend on. This parameter is only present if the constructor is called with
 the \code{whole_task_dependent} argument set to \code{TRUE}.\cr
 The parameter must be a \code{\link{Selector}} function, which takes a \code{\link[mlr3:Task]{Task}} as argument and returns a \code{character}
 of features to use.\cr
@@ -91,7 +91,7 @@ See \code{\link{Selector}} for example functions. Defaults to \code{NULL}, which
 
 \section{Internals}{
 
-\code{\link{PipeOpImpute}} is an abstract class inheriting from \code{\link{PipeOp}} that makes implementing imputer \code{\link{PipeOp}}s simple.
+\code{PipeOpImpute} is an abstract class inheriting from \code{\link{PipeOp}} that makes implementing imputer \code{\link{PipeOp}}s simple.
 }
 
 \section{Fields}{
@@ -109,7 +109,7 @@ Selects which columns the \code{\link{PipeOp}} operates on. In contrast to
 the \code{affect_columns} parameter. \code{private$.select_cols()} is for the \emph{inheriting class} to determine which columns
 the operator should function on, e.g. based on feature type, while \code{affect_columns} is a way for the \emph{user}
 to limit the columns that a \code{\link{PipeOpTaskPreproc}} should operate on.
-This method can optionally be overloaded when inheriting \code{\link{PipeOpImpute}};
+This method can optionally be overloaded when inheriting \code{PipeOpImpute};
 If this method is not overloaded, it defaults to selecting the columns of type indicated by the \code{feature_types} construction argument.
 \item \code{.train_imputer(feature, type, context)}\cr
 (\code{atomic}, \code{character(1)}, \code{\link[data.table:data.table]{data.table}}) -> \code{any}\cr
@@ -133,6 +133,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
@@ -155,6 +156,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

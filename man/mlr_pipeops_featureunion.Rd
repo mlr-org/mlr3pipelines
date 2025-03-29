@@ -53,12 +53,12 @@ the default.
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpFeatureUnion}} has multiple input channels depending on the \code{innum} construction
+\code{PipeOpFeatureUnion} has multiple input channels depending on the \code{innum} construction
 argument, named \code{"input1"}, \code{"input2"}, ... if \code{innum} is nonzero; if \code{innum} is 0, there is
 only one \emph{vararg} input channel named \code{"..."}. All input channels take a \code{\link[mlr3:Task]{Task}}
 both during training and prediction.
 
-\code{\link{PipeOpFeatureUnion}} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}}
+\code{PipeOpFeatureUnion} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}}
 both during training and prediction.
 
 The output is a \code{\link[mlr3:Task]{Task}} constructed by \code{cbind()}ing all features from all input
@@ -72,12 +72,12 @@ The \verb{$state} is left empty (\code{list()}).
 
 \section{Parameters}{
 
-\code{\link{PipeOpFeatureUnion}} has no Parameters.
+\code{PipeOpFeatureUnion} has no Parameters.
 }
 
 \section{Internals}{
 
-\code{\link{PipeOpFeatureUnion}} uses the \code{\link[mlr3:Task]{Task}} \verb{$cbind()} method to bind the input values
+\code{PipeOpFeatureUnion} uses the \code{\link[mlr3:Task]{Task}} \verb{$cbind()} method to bind the input values
 beyond the first input to the first \code{\link[mlr3:Task]{Task}}. This means if the \code{\link[mlr3:Task]{Task}}s
 are database-backed, all of them except the first will be fetched into R memory for this. This
 behaviour may change in the future.
@@ -115,6 +115,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -138,6 +139,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},

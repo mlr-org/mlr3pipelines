@@ -17,6 +17,7 @@
 #' ```
 #' PipeOpEncode$new(id = "decode", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"decode"`.
 #' * `param_vals` :: named `list`\cr
@@ -62,6 +63,9 @@
 #' * `ties_method` :: `character(1)`\cr
 #'   Method for resolving ties if multiple columns have the same value. Specifies the value from which of the columns
 #'   with the same value is to be picked. Options are `"first"`, `"last"`, or `"random"`. Initialized to `"random"`.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -139,7 +143,7 @@ PipeOpDecode = R6Class("PipeOpDecode",
         group_pattern = p_uty(custom_check = check_string, tags = c("train", "required")),
         treatment_encoding = p_lgl(tags = c("train", "required")),
         treatment_cutoff = p_dbl(default = 0, tags = "train", depends = quote(treatment_encoding == TRUE)),
-        ref_name = p_uty(custom_check = crate(function(x) check_string(x, min.chars = 1)), tags = "train", depends = quote(treatment_encoding == TRUE)),
+        ref_name = p_uty(default = "ref", custom_check = crate(function(x) check_string(x, min.chars = 1)), tags = "train", depends = quote(treatment_encoding == TRUE)),
         ties_method = p_fct(c("first", "last", "random"), tags = c("train", "required"))
       )
       ps$set_values(treatment_encoding = FALSE, group_pattern = "^([^.]+)\\.", ties_method = "random")

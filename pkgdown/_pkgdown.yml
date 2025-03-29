@@ -32,6 +32,7 @@ navbar:
     mattermost:
       icon: fa fa-comments
       href: https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/
+      aria-label: Mattermost chat
     book:
       text: mlr3book
       icon: fa fa-link
@@ -39,9 +40,11 @@ navbar:
     stackoverflow:
       icon: fab fa-stack-overflow
       href: https://stackoverflow.com/questions/tagged/mlr3
+      aria-label: Stack Overflow
     rss:
       icon: fa-rss
       href: https://mlr-org.com/
+      aria-label: RSS
     extending:
       text: Extending
       href: extending.html
@@ -56,13 +59,13 @@ reference:
       - Graph
       - PipeOpTaskPreproc
       - PipeOpTaskPreprocSimple
-      - PipeOpImpute
       - Multiplicity
   - title: Graph Tools
     contents:
       - "%>>%"
       - gunion
       - greplicate
+      - chain_graphs
   - title: PipeOps
     contents:
       - mlr_pipeops
@@ -71,12 +74,9 @@ reference:
       - starts_with("PipeOp")
   - title: Pipelines
     contents:
+      - mlr_graphs
       - ppl
       - starts_with("pipeline_")
-  - title: Graphs
-    contents:
-      - starts_with("mlr_graph")
-      - chain_graphs
   - title: Learners
     contents:
       - mlr_learners_graph
@@ -97,10 +97,15 @@ reference:
       - set_validate.GraphLearner
       - starts_with("as.")
       - starts_with("is.")
-      - starts_with("is.")
   - title: Abstract PipeOps
     contents:
+      - PipeOp
+      - PipeOpTaskPreproc
+      - PipeOpTaskPreprocSimple
+      - PipeOpImpute
       - PipeOpEnsemble
+      - PipeOpTargetTrafo
+      - PipeOpEncodePL
   - title: PipeOp Type Inference
     contents:
       - add_class_hierarchy_cache

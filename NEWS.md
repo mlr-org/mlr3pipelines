@@ -1,4 +1,7 @@
-# mlr3pipelines 0.7.1-9000
+# mlr3pipelines 0.7.2-9000
+
+
+# mlr3pipelines 0.7.2
 
 * New parameter `no_collapse_above_absolute` for `PipeOpCollapseFactors` / `po("collapse_factors")`.
 * Fix: `PipeOpCollapseFactors` now correctly collapses levels of ordered factors.
@@ -7,6 +10,16 @@
 * New parameter `new_role_direct` for `PipeOpColRoles` / `po("colroles")` to change column roles by role instead of by column.
 * Dictionary sugar functions `po()` / `pos()` / `ppl()` / `ppls()` now make suggestions for entries in both `mlr_pipeops` as well as `mlr_graphs` when an object by the given name could not be found in the respective dictionary.
 * New PipeOp `PipeOpDecode` / `po("decode")` to reverse one-hot or treatment encoding.
+* Fix: Columns that are `feature` and something else no longer lose the other column role during training or predicting of `PipeOp`s inheriting from `PipeOpTaskPreproc`.
+* Fix: Made tests for `PipeOpBLSmote` deterministic.
+* Fix: Corrected hash calculation for `PipeOpFilter`.
+* New PipeOps `PipeOpEncodePLQuantiles` and `PipeOpEncodePLTree` that implement piecewise linear encoding with two different binning methods.
+* Compatibility with new `R6` release.
+* Docs: Performed cleanup and standardization.
+* Docs: Performed cleanup of reference index page on website.
+* Docs: Fixed parsing of examples on website for `PipeOpNMF` and `PipeOpLearnerPICVPlus`.
+* Fix: `PipeOpTargetMutate` and `PipeOpTargetTrafoScaleRange` no longer drop unseen factor levels of features or targets during train and predict.
+* Simplified parameter checks and added internal type checking for `PipeOpTargetMutate`.
 
 # mlr3pipelines 0.7.1
 

@@ -12,7 +12,7 @@ Wraps an \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{PipeOp}}.
 
 Inherits the \verb{$param_set} (and therefore \verb{$param_set$values}) from the \code{\link[mlr3:Learner]{Learner}} it is constructed from.
 
-Using \code{\link{PipeOpLearner}}, it is possible to embed \code{\link[mlr3:Learner]{mlr3::Learner}}s into \code{\link{Graph}}s, which themselves can be
+Using \code{PipeOpLearner}, it is possible to embed \code{\link[mlr3:Learner]{mlr3::Learner}}s into \code{\link{Graph}}s, which themselves can be
 turned into Learners using \code{\link{GraphLearner}}. This way, preprocessing and ensemble methods can be included
 into a machine learning pipeline which then can be handled as singular object for resampling, benchmarking
 and tuning.
@@ -35,10 +35,10 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpLearner}} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
+\code{PipeOpLearner} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
 type given to \code{learner} during construction; both during training and prediction.
 
-\code{\link{PipeOpLearner}} has one output channel named \code{"output"}, producing \code{NULL} during training and a \code{\link[mlr3:Prediction]{Prediction}} subclass
+\code{PipeOpLearner} has one output channel named \code{"output"}, producing \code{NULL} during training and a \code{\link[mlr3:Prediction]{Prediction}} subclass
 during prediction; this subclass is specific to the \code{\link[mlr3:Learner]{Learner}} type given to \code{learner} during construction.
 
 The output during prediction is the \code{\link[mlr3:Prediction]{Prediction}} on the prediction input data, produced by the \code{\link[mlr3:Learner]{Learner}}
@@ -116,6 +116,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -139,6 +140,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

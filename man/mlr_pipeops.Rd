@@ -9,7 +9,7 @@
 }
 \description{
 A simple \code{\link[mlr3misc:Dictionary]{Dictionary}} storing objects of class \code{\link{PipeOp}}.
-Each \code{PipeOp} has an associated help page, see \code{mlr_pipeops_[id]}.
+Each \code{\link{PipeOp}} has an associated help page, see \code{mlr_pipeops_[id]}.
 }
 \section{Fields}{
 
@@ -39,9 +39,30 @@ when it needs to be constructed for \code{as.data.table} \code{\link{PipeOp}} li
 \itemize{
 \item \code{as.data.table(dict)}\cr
 \code{\link[mlr3misc:Dictionary]{Dictionary}} -> \code{\link[data.table:data.table]{data.table::data.table}}\cr
-Returns a \code{data.table} with columns \code{key} (\code{character}), \code{packages} (\code{character}),
-\code{input.num} (\code{integer}), \code{output.num} (\code{integer}), \code{input.type.train} (\code{character}),
-\code{input.type.predict} (\code{character}), \code{output.type.train} (\code{character}), \code{output.type.predict} (\code{character}).
+Returns a \code{data.table} with the following columns:
+\itemize{
+\item \code{key} :: (\code{character})\cr
+Key with which the \code{\link{PipeOp}} was registered to the \code{\link[mlr3misc:Dictionary]{Dictionary}} using the \verb{$add()} method.
+\item \code{label} :: (\code{character})\cr
+Description of the \code{\link{PipeOp}}'s functionality.
+\item \code{packages} :: (\code{character})\cr
+Set of all required packages for the \code{\link{PipeOp}}'s train and predict methods.
+\item \code{tags} :: (\code{character})\cr
+A set of tags associated with the \code{\link{PipeOp}} describing its purpose.
+\item \code{feature_types} :: (\code{character})\cr
+Feature types the \code{\link{PipeOp}} operates on. Is \code{NA} for \code{\link{PipeOp}}s that do not directly operate on a \link[mlr3:Task]{Task}.
+\item \code{input.num}, \code{output.num} :: (\code{integer})\cr
+Number of the \code{\link{PipeOp}}'s input and output channels. Is \code{NA} for \code{\link{PipeOp}}s which accept a varying number of input
+and/or output channels depending a construction argument.
+See \code{input} and \code{output} fields of \code{\link{PipeOp}}.
+\item \code{input.type.train}, \code{input.type.predict}, \code{output.type.train}, \code{output.type.predict} :: (\code{character})\cr
+Types that are allowed as input to or returned as output of the \code{\link{PipeOp}}'s \verb{$train()} and \verb{$predict()} methods.\cr
+A value of \code{NULL} means that a null object, e.g. no data, is taken as input or being returned as output.
+A value of "\code{*}" means that any type is possible.\cr
+If both \code{input.type.train} and \code{output.type.train} or both \code{input.type.predict} and \code{output.type.predict} contain
+values enclosed by square brackets ("\code{[}", "\verb{]}"), then the respective input or channel is
+\code{\link{Multiplicity}}-aware. For more information, see \code{\link{Multiplicity}}.
+}
 }
 }
 
@@ -70,6 +91,7 @@ Other mlr3pipelines backend related:
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -92,6 +114,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

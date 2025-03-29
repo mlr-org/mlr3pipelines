@@ -15,6 +15,7 @@
 #' ```
 #' PipeOpFixFactors$new(id = "fixfactors", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"fixfactors"`.
 #' * `param_vals` :: named `list`\cr
@@ -37,6 +38,9 @@
 #'
 #' @section Internals:
 #' Changes factor levels of columns and attaches them with a new `data.table` backend and the virtual `cbind()` backend.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].

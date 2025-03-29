@@ -10,7 +10,7 @@
 \description{
 Wraps a \code{\link[mlr3:LearnerRegr]{LearnerRegr}} into a \code{\link{PipeOp}} to predict multiple quantiles.
 
-\code{\link{PipeOpLearnerQuantiles}} only supports \code{\link[mlr3:LearnerRegr]{LearnerRegr}}s that have \code{quantiles} as a possible \code{pedict_type}.
+\code{PipeOpLearnerQuantiles} only supports \code{\link[mlr3:LearnerRegr]{LearnerRegr}}s that have \code{quantiles} as a possible \code{pedict_type}.
 
 It produces quantile-based predictions for multiple quantiles in one \code{\link[mlr3:Prediction]{PredictionRegr}}. This is especially helpful if the \code{\link[mlr3:LearnerRegr]{LearnerRegr}} can only predict one quantile (like for example \code{LearnerRegrGBM} in \code{mlr3extralearners})
 
@@ -35,10 +35,10 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpLearnerQuantiles}} has one input channel named \code{"input"}, taking a \code{\link[mlr3:TaskRegr]{TaskRegr}} specific to the \code{\link[mlr3:Learner]{Learner}}
+\code{PipeOpLearnerQuantiles} has one input channel named \code{"input"}, taking a \code{\link[mlr3:TaskRegr]{TaskRegr}} specific to the \code{\link[mlr3:Learner]{Learner}}
 type given to \code{learner} during construction; both during training and prediction.
 
-\code{\link{PipeOpLearnerQuantiles}} has one output channel named \code{"output"}, producing \code{NULL} during training and a \code{\link[mlr3:Prediction]{PredictionRegr}} object
+\code{PipeOpLearnerQuantiles} has one output channel named \code{"output"}, producing \code{NULL} during training and a \code{\link[mlr3:Prediction]{PredictionRegr}} object
 during prediction.
 
 The output during prediction is a \code{\link[mlr3:PredictionRegr]{PredictionRegr}} on the prediction input data that aggregates all \code{result}s produced by the \code{\link[mlr3:Learner]{Learner}} for each quantile in \code{quantiles}.
@@ -79,11 +79,11 @@ Fields inherited from \code{\link{PipeOp}}, as well as:
 \item \code{learner} :: \code{\link[mlr3:LearnerRegr]{LearnerRegr}}\cr
 \code{\link[mlr3:Learner]{Learner}} that is being wrapped. Read-only.
 \item \code{learner_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
-If \code{\link{PipeOpLearnerQuantiles}} has been trained, this is a \code{list} containing the \code{\link[mlr3:Learner]{Learner}}s for each quantile.
+If \code{PipeOpLearnerQuantiles} has been trained, this is a \code{list} containing the \code{\link[mlr3:Learner]{Learner}}s for each quantile.
 Otherwise, this contains the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
 Read-only.
 \item \code{predict_type} :: \code{character(1)}\cr
-Predict type of the \code{\link{PipeOpLearnerQuantiles}}, which is always \verb{"response"  "quantiles"}.
+Predict type of the \code{PipeOpLearnerQuantiles}, which is always \verb{"response"  "quantiles"}.
 }
 }
 
@@ -107,6 +107,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -130,6 +131,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

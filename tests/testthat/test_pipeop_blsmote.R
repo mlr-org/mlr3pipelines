@@ -13,6 +13,7 @@ test_that("PipeOpBLSmote - train works as intended", {
 
   op = PipeOpBLSmote$new()
 
+  set.seed(1234)
   df = smotefamily::sample_generator(500, 0.8)
   df$result = factor(df$result)
   df = df[, c(3L, 1L, 2L)]  # we do this to avoid reordering later
@@ -75,6 +76,7 @@ test_that("PipeOpBLSmote - handling of feature named 'class'", {
 
   op = PipeOpBLSmote$new()
 
+  set.seed(1234)
   df = smotefamily::sample_generator(500, 0.8)
   df$result = factor(df$result)
   # Rename a column into "class"

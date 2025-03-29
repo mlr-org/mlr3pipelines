@@ -62,7 +62,7 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
         measure = p_uty(custom_check = check_class_or_character("MeasureClassif", mlr_measures), tags = c("train", "required")),
         optimizer = p_uty(custom_check = check_optimizer, tags = c("train", "required")),
         log_level = p_uty(
-          custom_check = crate(function(x) check_string(x) %check||% check_integerish(x), .parent = topenv()),
+          custom_check = crate(function(x) check_string(x) %check||% check_integerish(x)),
           tags = c("train", "required")
         )
       )

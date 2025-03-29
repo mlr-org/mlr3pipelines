@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.7.1
+Version: 0.7.2-9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -78,7 +78,7 @@ Suggests:
     lme4,
     mlbench,
     bbotk (>= 0.3.0),
-    mlr3filters (>= 0.1.1),
+    mlr3filters (>= 0.8.1),
     mlr3learners,
     mlr3measures,
     nloptr,
@@ -145,6 +145,7 @@ Collate:
     'PipeOpEncode.R'
     'PipeOpEncodeImpact.R'
     'PipeOpEncodeLmer.R'
+    'PipeOpEncodePL.R'
     'PipeOpFeatureUnion.R'
     'PipeOpFilter.R'
     'PipeOpFixFactors.R'

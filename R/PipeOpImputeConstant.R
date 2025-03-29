@@ -44,6 +44,9 @@
 #' Adds an explicit new level to `factor` and `ordered` features, but not to `character` features,
 #' if `check_levels` is `FALSE` and the level is not already present.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
 #'

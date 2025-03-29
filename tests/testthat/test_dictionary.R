@@ -15,7 +15,7 @@ test_that("Dictionary contains all PipeOps", {
   }
 
   # abstract pipeops that don't need to be in mlr_pipeops
-  abstracts = c("PipeOp", "PipeOpEnsemble", "PipeOpTaskPreproc", "PipeOpTaskPreprocSimple", "PipeOpImpute", "PipeOpTargetTrafo")
+  abstracts = c("PipeOp", "PipeOpEnsemble", "PipeOpTaskPreproc", "PipeOpTaskPreprocSimple", "PipeOpImpute", "PipeOpTargetTrafo", "PipeOpEncodePL")
 
   # param set values not hashable, because functions
   pval_unhashable = "missind"
@@ -35,7 +35,8 @@ test_that("Dictionary contains all PipeOps", {
     PipeOpRegrAvg = list(innum = 2),
     PipeOpUnbranch = list(options = 2),
     PipeOpFilter = list(filter = mlr3filters::FilterVariance$new(), param_vals = list(filter.nfeat = 1)),
-    PipeOpMultiplicityExply = list(outnum = 2))
+    PipeOpMultiplicityExply = list(outnum = 2),
+    PipeOpEncodePLTree = list(task_type = "TaskClassif"))
 
   # The PipeOps that may have a default ID different from the mlr_pipeops key
   unequal_id = c("PipeOpLearner", "PipeOpLearnerCV",  "PipeOpLearnerPICVPlus","PipeOpLearnerQuantiles", "PipeOpFilter")
@@ -84,8 +85,6 @@ test_that("Dictionary contains all PipeOps", {
 
   # the loop now checks whether we can construct each pipeop from the dictionary *and* by itself
   for (idx in seq_along(dictnames)) {
-    if (dictnames[[idx]] == "filter") next  # TODO: remove this when https://github.com/mlr-org/mlr3filters/issues/162 is solved
-
     pogen = get(pipeops[idx], pkgenv)  # the constructor, as found in the package namespace
     dictname = dictnames[idx]  # the "key" in the mlr_pipeops dictionary
     args = initargs[[pipeops[idx]]] %??% list()  # the required arguments, if any. e.g. 'outnum' for PipeOpCopy.
@@ -183,7 +182,7 @@ test_that("Dictionary contains all PipeOps", {
       )
 
       expect_equal(
-          # use c() to strip all attributes; they indicate the actual help()-call which is obviously different here.
+        # use c() to strip all attributes; they indicate the actual help()-call which is obviously different here.
         c(help(paste0("mlr_pipeops_", dictname), package = "mlr3pipelines")),
         c(test_obj$help()),
         info = paste("help for", dictname, "II")
@@ -248,8 +247,10 @@ test_that("mlr_graphs dictionary", {
 })
 
 test_that("Cannot add pipeops with keys that invalidates the convenience for id incrementation", {
-  copy = mlr_pipeops$clone(deep = TRUE)
-  expect_error(copy$add("name_1", PipeOp), regexp = "grepl")
+  expect_error(mlr_pipeops$add("name_1", PipeOp), regexp = "grepl")
+  if ("name_1" %in% mlr_pipeops$keys()) {
+    mlr_pipeops$remove("name_1")
+  }
 })
 
 test_that("as.data.table(mlr_pipeops) works when a pipeop can not be constructed", {

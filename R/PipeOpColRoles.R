@@ -43,6 +43,9 @@
 #'   If the value is given as `character()` or `NULL`, all columns will be dropped from the role given in the element
 #'   name. The value given for a role overwrites the previous entry in `task$col_roles` for that role, completely.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
@@ -95,7 +98,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
             # A value of character() or NULL is accepted.
             all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
             check_subset(unlist(x), all_col_roles[all_col_roles != "target"])
-          }, .parent = topenv())
+          })
         ),
         # named list, each with a vector of columns, names are column roles
         new_role_direct = p_uty(
@@ -115,7 +118,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
             # A value of character() or NULL is accepted.
             all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
             check_subset(names(x), all_col_roles[all_col_roles != "target"])
-          }, .parent = topenv())
+          })
         )
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)

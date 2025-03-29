@@ -4,11 +4,11 @@
 #' @format [`R6Class`][R6::R6Class].
 #'
 #' @description
-#' A [`Graph`] is a representation of a machine learning pipeline graph. It can be *trained*, and subsequently used for *prediction*.
+#' A `Graph` is a representation of a machine learning pipeline graph. It can be *trained*, and subsequently used for *prediction*.
 #'
-#' A [`Graph`] is most useful when used together with [`Learner`][mlr3::Learner] objects encapsulated as [`PipeOpLearner`]. In this case,
-#' the [`Graph`] produces [`Prediction`][mlr3::Prediction] data during its `$predict()` phase and can be used as a [`Learner`][mlr3::Learner]
-#' itself (using the [`GraphLearner`] wrapper). However, the [`Graph`] can also be used without [`Learner`][mlr3::Learner] objects to simply
+#' A `Graph` is most useful when used together with [`Learner`][mlr3::Learner] objects encapsulated as [`PipeOpLearner`]. In this case,
+#' the `Graph` produces [`Prediction`][mlr3::Prediction] data during its `$predict()` phase and can be used as a [`Learner`][mlr3::Learner]
+#' itself (using the [`GraphLearner`] wrapper). However, the `Graph` can also be used without [`Learner`][mlr3::Learner] objects to simply
 #' perform preprocessing of data, and, in principle, does not even need to handle data at all but can be used for general processes with
 #' dependency structure (although the [`PipeOp`]s for this would need to be written).
 #'
@@ -18,45 +18,45 @@
 #' ```
 #'
 #' @section Internals:
-#' A [`Graph`] is made up of a list of [`PipeOp`]s, and a [`data.table`][data.table::data.table] of edges. Both for training and prediction, the [`Graph`]
+#' A `Graph` is made up of a list of [`PipeOp`]s, and a [`data.table`][data.table::data.table] of edges. Both for training and prediction, the `Graph`
 #' performs topological sorting of the [`PipeOp`]s and executes their respective `$train()` or `$predict()` functions in order, moving
 #' the [`PipeOp`] results along the edges as input to other [`PipeOp`]s.
 #'
 #' @section Fields:
 #' * `pipeops` :: named `list` of [`PipeOp`] \cr
-#'   Contains all [`PipeOp`]s in the [`Graph`], named by the [`PipeOp`]'s `$id`s.
+#'   Contains all [`PipeOp`]s in the `Graph`, named by the [`PipeOp`]'s `$id`s.
 #' * `edges` :: [`data.table`][data.table::data.table]  with columns `src_id` (`character`), `src_channel` (`character`), `dst_id` (`character`), `dst_channel` (`character`)\cr
 #'   Table of connections between the [`PipeOp`]s. A [`data.table`][data.table::data.table]. `src_id` and `dst_id` are `$id`s of [`PipeOp`]s that must be present in
 #'   the `$pipeops` list. `src_channel` and `dst_channel` must respectively be `$output` and `$input` channel names of the
 #'   respective [`PipeOp`]s.
 #' * `is_trained` :: `logical(1)` \cr
-#'   Is the [`Graph`], i.e. are all of its [`PipeOp`]s, trained, and can the [`Graph`] be used for prediction?
+#'   Is the `Graph`, i.e. are all of its [`PipeOp`]s, trained, and can the `Graph` be used for prediction?
 #' * `lhs` :: `character` \cr
-#'   Ids of the 'left-hand-side' [`PipeOp`]s that have some unconnected input channels and therefore act as [`Graph`] input layer.
+#'   Ids of the 'left-hand-side' [`PipeOp`]s that have some unconnected input channels and therefore act as `Graph` input layer.
 #' * `rhs` :: `character` \cr
-#'   Ids of the 'right-hand-side' [`PipeOp`]s that have some unconnected output channels and therefore act as [`Graph`] output layer.
+#'   Ids of the 'right-hand-side' [`PipeOp`]s that have some unconnected output channels and therefore act as `Graph` output layer.
 #' * `input` :: [`data.table`][data.table::data.table] with columns `name` (`character`), `train` (`character`), `predict` (`character`), `op.id` (`character`), `channel.name` (`character`)\cr
-#'   Input channels of the [`Graph`]. For each channel lists the name, input type during training, input type during prediction,
+#'   Input channels of the `Graph`. For each channel lists the name, input type during training, input type during prediction,
 #'   [`PipeOp`] `$id` of the [`PipeOp`] the channel pertains to, and channel name as the [`PipeOp`] knows it.
 #' * `output` :: [`data.table`][data.table::data.table] with columns `name` (`character`), `train` (`character`), `predict` (`character`), `op.id` (`character`), `channel.name` (`character`)\cr
-#'   Output channels of the [`Graph`]. For each channel lists the name, output type during training, output type during prediction,
+#'   Output channels of the `Graph`. For each channel lists the name, output type during training, output type during prediction,
 #'   [`PipeOp`] `$id` of the [`PipeOp`] the channel pertains to, and channel name as the [`PipeOp`] knows it.
 #' * `packages` :: `character`\cr
-#'   Set of all required packages for the various methods in the [`Graph`], a set union of all required packages of all contained
+#'   Set of all required packages for the various methods in the `Graph`, a set union of all required packages of all contained
 #'   [`PipeOp`] objects.
 #' * `state` :: named `list`\cr
 #'   Get / Set the `$state` of each of the members of [`PipeOp`].
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
 #'   Parameters and parameter constraints. Parameter values are in `$param_set$values`. These are the union of `$param_set`s
-#'   of all [`PipeOp`]s in the [`Graph`]. Parameter names
-#'   as seen by the [`Graph`] have the naming scheme `<PipeOp$id>.<PipeOp original parameter name>`.
+#'   of all [`PipeOp`]s in the `Graph`. Parameter names
+#'   as seen by the `Graph` have the naming scheme `<PipeOp$id>.<PipeOp original parameter name>`.
 #'   Changing `$param_set$values` also propagates the changes directly to the contained
 #'   [`PipeOp`]s and is an alternative to changing a [`PipeOp`]s `$param_set$values` directly.
 #' * `hash` :: `character(1)` \cr
-#'   Stores a checksum calculated on the [`Graph`] configuration, which includes all [`PipeOp`] hashes
+#'   Stores a checksum calculated on the `Graph` configuration, which includes all [`PipeOp`] hashes
 #'   (and therefore their `$param_set$values`) and a hash of `$edges`.
 #' * `phash` :: `character(1)` \cr
-#'   Stores a checksum calculated on the [`Graph`] configuration, which includes all [`PipeOp`] hashes
+#'   Stores a checksum calculated on the `Graph` configuration, which includes all [`PipeOp`] hashes
 #'   *except* their `$param_set$values`, and a hash of `$edges`.
 #' * `keep_results` :: `logical(1)`\cr
 #'   Whether to store intermediate results in the [`PipeOp`]'s `$.result` slot, mostly for debugging purposes. Default `FALSE`.
@@ -70,8 +70,8 @@
 #'   `sorted` is `FALSE`, and topologically sorted if `sorted` is `TRUE`.
 #' * `add_pipeop(op, clone = TRUE)` \cr
 #'   ([`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `...`, `logical(1)`) -> `self` \cr
-#'   Mutates [`Graph`] by adding a [`PipeOp`] to the [`Graph`]. This does not add any edges, so the new [`PipeOp`]
-#'   will not be connected within the [`Graph`] at first.\cr
+#'   Mutates `Graph` by adding a [`PipeOp`] to the `Graph`. This does not add any edges, so the new [`PipeOp`]
+#'   will not be connected within the `Graph` at first.\cr
 #'   Instead of supplying a [`PipeOp`] directly, an object that can naturally be converted to a [`PipeOp`] can also
 #'   be supplied, e.g. a [`Learner`][mlr3::Learner] or a [`Filter`][mlr3filters::Filter]; see [`as_pipeop()`].
 #'   The argument given as `op` is cloned if `clone` is `TRUE` (default); to access a `Graph`'s [`PipeOp`]s
@@ -93,16 +93,16 @@
 #'   connecting them using [`%>>%`].
 #' * `plot(html = FALSE, horizontal = FALSE)` \cr
 #'   (`logical(1)`, `logical(1)`) -> `NULL` \cr
-#'   Plot the [`Graph`], using either the \pkg{igraph} package (for `html = FALSE`, default) or
+#'   Plot the `Graph`, using either the \CRANpkg{igraph} package (for `html = FALSE`, default) or
 #'   the `visNetwork` package for `html = TRUE` producing a [`htmlWidget`][htmlwidgets::htmlwidgets].
 #'   The [`htmlWidget`][htmlwidgets::htmlwidgets] can be rescaled using [`visOptions`][visNetwork::visOptions].
 #'   For `html = FALSE`, the orientation of the plotted graph can be controlled through `horizontal`.
 #' * `print(dot = FALSE, dotname = "dot", fontsize = 24L)` \cr
 #'   (`logical(1)`, `character(1)`, `integer(1)`) -> `NULL` \cr
-#'   Print a representation of the [`Graph`] on the console. If `dot` is `FALSE`, output is a table with one row for each contained [`PipeOp`] and
+#'   Print a representation of the `Graph` on the console. If `dot` is `FALSE`, output is a table with one row for each contained [`PipeOp`] and
 #'   columns `ID` (`$id` of `PipeOp`), `State` (short representation of `$state` of [`PipeOp`]), `sccssors` ([`PipeOp`]s that
 #'   take their input directly from the [`PipeOp`] on this line), and `prdcssors` (the [`PipeOp`]s that produce the data
-#'   that is read as input by the [`PipeOp`] on this line). If `dot` is `TRUE`, print a DOT representation of the [`Graph`] on the console.
+#'   that is read as input by the [`PipeOp`] on this line). If `dot` is `TRUE`, print a DOT representation of the `Graph` on the console.
 #'   The DOT output can be named via the argument `dotname` and the `fontsize` can also be specified.
 #' * `set_names(old, new)` \cr
 #'   (`character`, `character`) -> `self` \cr
@@ -113,21 +113,21 @@
 #'   Pre- or postfix [`PipeOp`]'s existing ids. Both `prefix` and `postfix` default to `""`, i.e. no changes.
 #' * `train(input, single_input = TRUE)` \cr
 #'   (`any`, `logical(1)`) -> named `list`\cr
-#'   Train [`Graph`] by traversing the [`Graph`]s' edges and calling all the [`PipeOp`]'s `$train` methods in turn.
+#'   Train `Graph` by traversing the `Graph`s' edges and calling all the [`PipeOp`]'s `$train` methods in turn.
 #'   Return a named `list` of outputs for each unconnected
-#'   [`PipeOp`] out-channel, named according to the [`Graph`]'s `$output` `name` column. During training, the `$state`
+#'   [`PipeOp`] out-channel, named according to the `Graph`'s `$output` `name` column. During training, the `$state`
 #'   member of each [`PipeOp`]s will be set and the `$is_trained` slot of the `Graph` (and each individual `PipeOp`) will
 #'   consequently be set to `TRUE`.\cr
 #'   If `single_input` is `TRUE`, the `input` value will be sent to each unconnected [`PipeOp`]'s input channel
-#'   (as listed in the [`Graph`]'s `$input`). Typically, `input` should be a [`Task`][mlr3::Task], although this is dependent
-#'   on the [`PipeOp`]s in the [`Graph`]. If `single_input` is `FALSE`, then
-#'   `input` should be a `list` with the same length as the [`Graph`]'s `$input` table has rows; each list item will be sent
-#'   to a corresponding input channel of the [`Graph`]. If `input` is a named `list`, names must correspond to input channel
+#'   (as listed in the `Graph`'s `$input`). Typically, `input` should be a [`Task`][mlr3::Task], although this is dependent
+#'   on the [`PipeOp`]s in the `Graph`. If `single_input` is `FALSE`, then
+#'   `input` should be a `list` with the same length as the `Graph`'s `$input` table has rows; each list item will be sent
+#'   to a corresponding input channel of the `Graph`. If `input` is a named `list`, names must correspond to input channel
 #'   names (`$input$name`) and inputs will be sent to the channels by name; otherwise they will be sent to the channels
 #'   in order in which they are listed in `$input`.
 #' * `predict(input, single_input = TRUE)` \cr
 #'   (`any`, `logical(1)`) -> `list` of `any` \cr
-#'   Predict with the [`Graph`] by calling all the [`PipeOp`]'s `$train` methods. Input and output, as well as the function
+#'   Predict with the `Graph` by calling all the [`PipeOp`]'s `$train` methods. Input and output, as well as the function
 #'   of the `single_input` argument, are analogous to `$train()`.
 #' * `help(help_type)` \cr
 #'   (`character(1)`) -> help file\cr

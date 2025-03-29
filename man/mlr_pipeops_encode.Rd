@@ -36,7 +36,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
-The output is the input \code{\link[mlr3:Task]{Task}} with all affected \code{factor} and \code{ordered} parameters encoded according to the \code{method}
+The output is the input \code{\link[mlr3:Task]{Task}} with all affected \code{factor} and \code{ordered} columns encoded according to the \code{method}
 parameter.
 }
 
@@ -69,6 +69,11 @@ Initialized to \code{"one-hot"}. One of:
 \section{Internals}{
 
 Uses the \code{\link[stats:contrasts]{stats::contrasts}} functions. This is relatively inefficient for features with a large number of levels.
+}
+
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
@@ -113,6 +118,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -135,6 +141,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

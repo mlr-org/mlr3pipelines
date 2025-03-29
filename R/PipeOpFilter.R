@@ -16,6 +16,7 @@
 #' ```
 #' PipeOpFilter$new(filter, id = filter$id, param_vals = list())
 #' ```
+#'
 #' * `filter` :: [`Filter`][mlr3filters::Filter]\cr
 #'   [`Filter`][mlr3filters::Filter] used for feature filtering.
 #'  This argument is always cloned; to access the [`Filter`][mlr3filters::Filter] inside `PipeOpFilter` by-reference, use `$filter`.\cr
@@ -64,7 +65,7 @@
 #' instead the whole [`Task`][mlr3::Task] is used by `private$.get_state()` and subset internally.
 #'
 #' @section Fields:
-#' Fields inherited from [`PipeOpTaskPreproc`], as well as:
+#' Fields inherited from [`PipeOp`], as well as:
 #' * `filter` :: [`Filter`][mlr3filters::Filter]\cr
 #'   [`Filter`][mlr3filters::Filter] that is being used for feature filtering. Do *not* use this slot to get to the feature filtering scores
 #'   after training; instead, use `$state$scores`. Read-only.
@@ -191,7 +192,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
     .transform = function(task) {
       task$select(self$state$features)
     },
-    .additional_phash_input = function() class(self$filter)
+    .additional_phash_input = function() self$filter$hash
   )
 )
 

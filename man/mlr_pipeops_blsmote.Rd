@@ -48,7 +48,7 @@ See \code{\link[smotefamily:BLSMOTE]{BLSMOTE()}}.
 \item \code{C} :: \code{numeric(1)} \cr
 The number of nearest neighbors used for classifying sample points as SAFE/DANGER/NOISE. Default is \code{5}.
 See \code{\link[smotefamily:BLSMOTE]{BLSMOTE()}}.
-\item \code{dup_size} :: \code{numeric} \cr
+\item \code{dup_size} :: \code{numeric(1)} \cr
 Desired times of synthetic minority instances over the original number of majority instances. \code{0} leads to balancing minority and majority class.
 Default is \code{0}. See \code{\link[smotefamily:BLSMOTE]{BLSMOTE()}}.
 \item \code{method} :: \code{character(1)} \cr
@@ -61,7 +61,7 @@ Whether to suppress printing status during training. Initialized to \code{TRUE}.
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
@@ -88,9 +88,9 @@ table(bls_result$result)
 \dontshow{\}) # examplesIf}
 }
 \references{
-Han, Hui, Wang, Wen-Yuan, Mao, Bing-Huan (2005).
+Han H, Wang W, Mao B (2005).
 \dQuote{Borderline-SMOTE: A New Over-Sampling Method in Imbalanced Data Sets Learning.}
-In Huang, De-Shuang, Zhang, Xiao-Ping, Huang, Guang-Bin (eds.), \emph{Advances in Intelligent Computing}, 878--887.
+In Huang D, Zhang X, Huang G (eds.), \emph{Advances in Intelligent Computing}, 878--887.
 ISBN 978-3-540-31902-3, \doi{10.1007/11538059_91}.
 }
 \seealso{
@@ -98,6 +98,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -120,6 +121,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
