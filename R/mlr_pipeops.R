@@ -141,7 +141,7 @@ as.data.table.DictionaryPipeOp = function(x, ...) {
   }), "key")[]
 
   # I don't trust 'label' to never be NA, but 'packages' is always a `character` (even if often an empty one).
-  missings = result$key[map_lgl(result$packages, function(x) any(is.na(x)))]
+  missings = result$key[map_lgl(result$packages, anyNA)]
   if (length(missings)) {
     warningf("The following PipeOps could not be constructed, likely due to missing packages: %s\nTheir corresponding information is incomplete.", paste(missings, collapse = ", "))
   }
