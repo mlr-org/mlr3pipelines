@@ -116,7 +116,7 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
         if (all(is.na(d))) {
           return(NULL)
         }
-        if (length(levels(d)) <= target_count) {
+        if (nlevels(d) <= target_count) {
           return(NULL)
         }
 
