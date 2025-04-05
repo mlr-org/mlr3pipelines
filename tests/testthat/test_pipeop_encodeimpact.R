@@ -15,7 +15,6 @@ test_that("PipeOpEncodeImpact", {
   expect_datapreproc_pipeop_class(PipeOpEncodeImpact, task = mlr_tasks$get("iris"))
 
   op = PipeOpEncodeImpact$new()
-  expect_pipeop(op)
 
   nt = train_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names

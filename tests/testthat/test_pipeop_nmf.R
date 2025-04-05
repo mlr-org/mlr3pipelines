@@ -2,10 +2,7 @@ context("PipeOpNMF")
 
 test_that("basic properties", {
   skip_if_not_installed("NMF")
-  op = PipeOpNMF$new()
   task = mlr_tasks$get("iris")
-  expect_pipeop(op)
-
   expect_datapreproc_pipeop_class(PipeOpNMF, task = task, deterministic_train = FALSE)
 })
 

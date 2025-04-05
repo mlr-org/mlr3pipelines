@@ -3,11 +3,6 @@ context("PipeOpRenameColumns")
 test_that("basic properties", {
   task = mlr_tasks$get("iris")
   op = PipeOpRenameColumns$new()
-  expect_pipeop(op)
-  train_out = op$train(list(task))[[1L]]
-  predict_out = op$predict(list(task))[[1L]]
-  expect_equal(train_out, task)
-  expect_equal(predict_out, task)
   expect_datapreproc_pipeop_class(PipeOpRenameColumns, task = task, predict_like_train = TRUE)
 })
 

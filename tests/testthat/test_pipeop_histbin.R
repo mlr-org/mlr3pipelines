@@ -3,13 +3,10 @@ context("PipeOpHistBin")
 test_that("PipeOpHistBin - basic properties", {
   task = mlr_tasks$get("iris")
   op = PipeOpHistBin$new()
-  expect_pipeop(op)
-  result = op$train(list(task))
 
   expect_datapreproc_pipeop_class(PipeOpHistBin, task = task)
-  expect_task(result[[1L]])
-  expect_equal(result[[1L]]$data(), op$predict(list(task))[[1L]]$data())
 
+  result = op$train(list(task))
   a = apply(result[[1L]]$data()[, 2:5], MARGIN = 2L,
     function(x) expect_true(!anyMissing(x)))
 })
