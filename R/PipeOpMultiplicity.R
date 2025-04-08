@@ -263,7 +263,7 @@ PipeOpReplicate = R6Class("PipeOpReplicate",
       ps = ps(
         reps = p_int(lower = 1, tags = c("train", "predict", "required"))
       )
-      ps$values = list(reps = 1)
+      ps$set_values(reps = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = "output", train = "[*]", predict = "[*]"),
