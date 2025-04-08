@@ -151,7 +151,7 @@ test_that("PipeOpImpactEncode on Regression", {
 
   encoded = op$train(list(testtask2))[[1]]$data()
 
-  expect_false(any(is.na(encoded)))
+  expect_false(anyNA(encoded))
   expect_equal(as.numeric(as.matrix(encoded)[c(11, 18)]), c(0, 0))
 
   expectdf3 = expect
