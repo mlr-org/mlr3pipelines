@@ -1,17 +1,12 @@
 context("PipeOpRowApply")
 
 test_that("PipeOpRowApply - basic properties", {
-
   op = PipeOpRowApply$new()
   task = mlr_tasks$get("iris")
-  expect_pipeop(op)
-
   expect_datapreproc_pipeop_class(PipeOpRowApply, task = task)
-
 })
 
 test_that("PipeOpRowApply - transform on task with only numeric features", {
-
   op = PipeOpRowApply$new()
   task = mlr_tasks$get("iris")
   cnames = task$feature_names

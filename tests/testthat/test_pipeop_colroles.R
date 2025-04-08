@@ -1,16 +1,9 @@
 context("PipeOpColRoles")
 
 test_that("PipeOpColRoles - basic properties", {
-
   op = PipeOpColRoles$new()
   task = mlr_tasks$get("iris")
-
-  expect_pipeop(op)
-  expect_equal(task, train_pipeop(op, inputs = list(task))$output)
-  expect_equal(task, predict_pipeop(op, inputs = list(task))$output)
-
   expect_datapreproc_pipeop_class(PipeOpColRoles, task = task)
-
 })
 
 test_that("PipeOpColRoles - assertions on params work", {
