@@ -285,6 +285,8 @@ The <code>$initialize()</code> method should have at least the arguments <code>i
 This function should return either all objects, or a hash of all objects, that can change the function or behavior of the <code>PipeOp</code> and are independent
 of the class, the id, the <code>$state</code>, and the <code>$param_set$values</code>. The last point is particularly important: changing the <code>$param_set$values</code> should
 <em>not</em> change the return value of <code>private$.additional_phash_input()</code>.</p>
+<p>When you are implementing a <code>PipeOp</code> that operates a task (and is not a <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>), you also need to handle the
+<code>$internal_valid_task</code> field of the input task, if there is one.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
