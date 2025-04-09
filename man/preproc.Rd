@@ -13,7 +13,7 @@ probably just write data.table. I think this is our convention.
 If \code{indata} is a \code{data.frame}-like object, it is used to contruct a \code{TaskUnsupervised} internally.}
 
 \item{graph}{\code{Graph} | \code{PipeOp}\cr
-a}
+modified-by-reference}
 
 \item{state}{named \code{list} | \code{NULL}\cr
 a}

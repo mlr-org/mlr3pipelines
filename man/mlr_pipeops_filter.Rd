@@ -18,16 +18,18 @@ this means e.g. that setting \code{nfeat} to 0 will only remove features of the 
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpFilter$new(filter, id = filter$id, param_vals = list())
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpFilter$new(filter, id = filter$id, param_vals = list(), clone = TRUE)
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{filter} :: \code{\link[mlr3filters:Filter]{Filter}}\cr
 \code{\link[mlr3filters:Filter]{Filter}} used for feature filtering.
 This argument is always cloned; to access the \code{\link[mlr3filters:Filter]{Filter}} inside \code{PipeOpFilter} by-reference, use \verb{$filter}.\cr
-\item \code{id} :: \code{character(1)}
+\item \code{id} :: \code{character(1)}\cr
 Identifier of the resulting  object, defaulting to the \code{id} of the \code{\link[mlr3filters:Filter]{Filter}} being used.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
+\item \code{clone} :: \code{logical(1)}\cr
+Whether to deep-clone \code{filter} or modify it by-reference. Default \code{TRUE}.
 }
 }
 

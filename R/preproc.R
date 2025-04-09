@@ -10,7 +10,7 @@
 #'
 #'   If `indata` is a `data.frame`-like object, it is used to contruct a `TaskUnsupervised` internally.
 #' @param graph `Graph` | `PipeOp`\cr
-#'   a
+#'   modified-by-reference
 #' @param state named `list` | `NULL`\cr
 #'   a
 #' @param predict `logical(1)`\cr
@@ -32,12 +32,12 @@ preproc <- function(indata, graph, state = NULL, predict = !is.null(state)) {
   assert_list(state, names = "unique", null.ok = TRUE)  # from Graph
   assert_flag(predict)
 
-  # TODO: check with comment about cloning
   graph = as_graph(graph, clone = FALSE)
 
   if (nrow(graph$output) != 1) {
     stop("'graph' must have exactly one output channel.")
   }
+  # Check: graph accepts task_type in input (if not a task but a df, would need to add class of supervised; or do it later; potentially more expensive)
 
   # Construct a Task from data.frame
   # TODO: Check what pos could potentially not handle targetless graphs

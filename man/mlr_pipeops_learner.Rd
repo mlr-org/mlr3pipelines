@@ -20,16 +20,18 @@ and tuning.
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpLearner$new(learner, id = NULL, param_vals = list())
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpLearner$new(learner, id = NULL, param_vals = list(), clone = TRUE)
 }\if{html}{\out{</div>}}
 \itemize{
-\item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} | \code{character(1)}
+\item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} | \code{character(1)}\cr
 \code{\link[mlr3:Learner]{Learner}} to wrap, or a string identifying a \code{\link[mlr3:Learner]{Learner}} in the \code{\link[mlr3:mlr_learners]{mlr3::mlr_learners}} \code{\link[mlr3misc:Dictionary]{Dictionary}}.
 This argument is always cloned; to access the \code{\link[mlr3:Learner]{Learner}} inside \code{PipeOpLearner} by-reference, use \verb{$learner}.\cr
-\item \code{id} :: \code{character(1)}
+\item \code{id} :: \code{character(1)}\cr
 Identifier of the resulting  object, internally defaulting to the \code{id} of the \code{\link[mlr3:Learner]{Learner}} being wrapped.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
+\item \code{clone} :: \code{logical(1)}\cr
+Whether to deep-clone \code{learner} or modify it by-reference. Default \code{TRUE}.
 }
 }
 
