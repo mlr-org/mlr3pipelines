@@ -7,22 +7,22 @@
 preproc(indata, graph, state = NULL, predict = !is.null(state))
 }
 \arguments{
-\item{indata}{(\code{Task} | \code{data.frame}-like object)\cr
-probably just write data.table. I think this is our convention.
+\item{indata}{(\code{\link[mlr3:Task]{Task}} | \code{\link[data.table:data.table]{data.table}} )\cr
+Data to be pre-processed. If \code{indata} is a \code{data.table}, it is used to
+construct a \code{\link[mlr3:TaskUnsupervised]{TaskUnsupervised}} internally, meaning
+that it would not work with \code{\link{Graph}}s or \code{\link{PipeOp}}s that use the columns
+of role \code{target}.}
 
-If \code{indata} is a \code{data.frame}-like object, it is used to contruct a \code{TaskUnsupervised} internally.}
-
-\item{graph}{\code{Graph} | \code{PipeOp}\cr
+\item{graph}{(\code{\link{Graph}} | \code{\link{PipeOp}})\cr
 modified-by-reference}
 
-\item{state}{named \code{list} | \code{NULL}\cr
+\item{state}{(named \code{list} | \code{NULL})\cr
 a}
 
-\item{predict}{\code{logical(1)}\cr
+\item{predict}{(\code{logical(1)})\cr
 a}
 }
 \value{
-description
 only single output channel
 \itemize{
 \item makes sense for piping and nature of this function to simplify things (i.e. should be used in simple context)
@@ -30,7 +30,7 @@ only single output channel
 }
 }
 \description{
-calling train and predict with single_input = TRUE -> input task is copied and given to each unconnected input channel
+Simple Preprocessing
 }
 \examples{
 # example code

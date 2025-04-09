@@ -116,17 +116,11 @@ as_pipeop.PipeOp = function(x, clone = FALSE) {
 
 #' @export
 as_pipeop.Learner = function(x, clone = FALSE) {
-  if (clone) {
-    x = x$clone(deep = TRUE)
-  }
   PipeOpLearner$new(x)
 }
 
 #' @export
 as_pipeop.Filter = function(x, clone = FALSE) {
-  if (clone) {
-    x = x$clone(deep = TRUE)
-  }
   PipeOpFilter$new(x)
 }
 

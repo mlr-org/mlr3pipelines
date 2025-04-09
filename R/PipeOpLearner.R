@@ -16,7 +16,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpLearner$new(learner, id = NULL, param_vals = list(), clone = TRUE)
+#' PipeOpLearner$new(learner, id = NULL, param_vals = list())
 #' ```
 #'
 #' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`\cr
@@ -26,8 +26,6 @@
 #'   Identifier of the resulting  object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
-#' * `clone` :: `logical(1)`\cr
-#'   Whether to deep-clone `learner` or modify it by-reference. Default `TRUE`.
 #'
 #' @section Input and Output Channels:
 #' [`PipeOpLearner`] has one input channel named `"input"`, taking a [`Task`][mlr3::Task] specific to the [`Learner`][mlr3::Learner]
@@ -94,8 +92,8 @@
 #' lrn_po$predict(list(task))
 PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   public = list(
-    initialize = function(learner, id = NULL, param_vals = list(), clone = TRUE) {
-      private$.learner = if (clone) as_learner(learner, clone = TRUE) else as_learner(learner)
+    initialize = function(learner, id = NULL, param_vals = list()) {
+      private$.learner = as_learner(learner, clone = TRUE)
       id = id %??% private$.learner$id
       if (!test_po_validate(get0("validate", private$.learner))) {
         stopf(

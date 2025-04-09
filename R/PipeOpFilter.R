@@ -14,7 +14,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpFilter$new(filter, id = filter$id, param_vals = list(), clone = TRUE)
+#' PipeOpFilter$new(filter, id = filter$id, param_vals = list())
 #' ```
 #' * `filter` :: [`Filter`][mlr3filters::Filter]\cr
 #'   [`Filter`][mlr3filters::Filter] used for feature filtering.
@@ -23,8 +23,6 @@
 #'   Identifier of the resulting  object, defaulting to the `id` of the [`Filter`][mlr3filters::Filter] being used.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
-#' * `clone` :: `logical(1)`\cr
-#'   Whether to deep-clone `filter` or modify it by-reference. Default `TRUE`.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
@@ -113,9 +111,9 @@ PipeOpFilter = R6Class("PipeOpFilter",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     filter = NULL,
-    initialize = function(filter, id = filter$id, param_vals = list(), clone = TRUE) {
+    initialize = function(filter, id = filter$id, param_vals = list()) {
       assert_class(filter, "Filter")
-      self$filter = if (clone) filter$clone(deep = TRUE) else filter
+      self$filter = filter$clone(deep = TRUE)
       if (paradox_info$is_old) {
         self$filter$param_set$set_id = ""
         map(self$filter$param_set$params, function(p) p$tags = union(p$tags, "train"))

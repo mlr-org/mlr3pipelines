@@ -20,7 +20,7 @@ and tuning.
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpLearner$new(learner, id = NULL, param_vals = list(), clone = TRUE)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpLearner$new(learner, id = NULL, param_vals = list())
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} | \code{character(1)}\cr
@@ -30,8 +30,6 @@ This argument is always cloned; to access the \code{\link[mlr3:Learner]{Learner}
 Identifier of the resulting  object, internally defaulting to the \code{id} of the \code{\link[mlr3:Learner]{Learner}} being wrapped.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
-\item \code{clone} :: \code{logical(1)}\cr
-Whether to deep-clone \code{learner} or modify it by-reference. Default \code{TRUE}.
 }
 }
 
