@@ -230,6 +230,23 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   # 'tolerance = tolerance' argument to `expect_equal`.
 
 
+  # maybe use sth like train_target_independent?
+  # do we need predict_target_independent?
+  #   maybe for preproc()?
+  # apparently we somewhere in here test that predicting w/o target works?
+  #   maybe this is a general assumption so we don't need predict_target_independent
+
+  if (!train_target_independent) {
+    # need to clone beforehand
+    task3 = task$clone(deep = TRUE)
+
+    new_levels = list(c(task3$levels(cols = task3$target_names)[[task3$target_names]], "new_level"))
+    task3$set_levels(
+      set_names(new_levels, task3$target_names)
+    )
+  }
+
+
   original_clone = task$clone(deep = TRUE)
   expect_shallow_clone(task, original_clone)
 
