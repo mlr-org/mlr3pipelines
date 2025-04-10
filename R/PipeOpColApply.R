@@ -26,15 +26,15 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpTaskPreprocSimple`].
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
 #' The output is the input [`Task`][mlr3::Task] with features changed according to the `applicator` parameter.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreprocSimple`].
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`].
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`], as well as:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `applicator` :: `function`\cr
 #'   Function to apply to each column of the task.
 #'   The return value should be a `vector` of the same length as the input, i.e., the function vectorizes over the input.
@@ -49,7 +49,7 @@
 #' Calls [`map`][mlr3misc::map] on the data, using the value of `applicator` as `f.` and coerces the output via [`as.data.table`].
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].

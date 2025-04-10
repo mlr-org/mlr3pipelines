@@ -96,8 +96,13 @@ See \code{\link[NMF:nmf]{nmf()}}.
 
 \section{Internals}{
 
-Uses the \code{\link[NMF:nmf]{nmf()}} function as well as \code{\link[NMF:basis-coef-methods]{basis()}}, \code{\link[NMF:basis-coef-methods]{coef()}} and
+Uses the \code{\link[NMF:nmf]{nmf()}} function as well as \code{\link[NMF:basis]{basis()}}, \code{\link[NMF:coef]{coef()}} and
 \code{\link[MASS:ginv]{ginv()}}.
+}
+
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
@@ -116,7 +121,10 @@ task$data()
 pop$train(list(task))[[1]]$data()
 
 pop$state
-\dontshow{ try(rm("format.list", envir = .BaseNamespaceEnv$.__S3MethodsTable__.), silent = TRUE)  # BiocGenerics overwrites printer for our tables mlr-org/mlr3#1112 }
+\dontshow{
+# BiocGenerics overwrites printer for our tables mlr-org/mlr3#1112
+suppressWarnings(try(rm("format.list", envir = .BaseNamespaceEnv$.__S3MethodsTable__.), silent = TRUE))
+}
 \dontshow{\}) # examplesIf}
 }
 \seealso{
@@ -124,6 +132,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -147,6 +156,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

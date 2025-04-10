@@ -13,7 +13,7 @@ Generates a more balanced data set by creating synthetic instances of the minori
 The algorithm generates for each minority instance new data points based on its \code{K} nearest neighbors and the difficulty of learning for that data point.
 It can only be applied to tasks with numeric features that have no missing values.
 
-See \code{\link[smotefamily:adas]{smotefamily::ADAS}} for details.
+See \code{\link[smotefamily:ADAS]{smotefamily::ADAS}} for details.
 }
 \section{Construction}{
 
@@ -22,7 +22,7 @@ See \code{\link[smotefamily:adas]{smotefamily::ADAS}} for details.
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
-Identifier of resulting object, default \code{"smote"}.
+Identifier of resulting object, default \code{"adas"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
@@ -47,13 +47,13 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \itemize{
 \item \code{K} :: \code{numeric(1)} \cr
 The number of nearest neighbors used for sampling new values. Default is \code{5}.
-See \code{\link[smotefamily:adas]{ADAS()}}.
+See \code{\link[smotefamily:ADAS]{ADAS()}}.
 }
 }
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
@@ -93,6 +93,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -115,6 +116,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

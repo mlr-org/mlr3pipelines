@@ -310,8 +310,8 @@ test_that("More tests for PipeOpImputeMode", {
   task_NA_trained = po_NA$train(list(task_NA))[[1L]]$data()
   expect_equal(levels(task_NA_trained[[4L]]), as.character(1:2))
   expect_equal(levels(task_NA_trained[[5L]]), as.character(1:5))
-  expect_false(any(is.na(task_NA_trained[[4L]])))
-  expect_false(any(is.na(task_NA_trained[[5L]])))
+  expect_false(anyNA(task_NA_trained[[4L]]))
+  expect_false(anyNA(task_NA_trained[[5L]]))
 
   expect_equivalent(sapply(po_NA$state$model, FUN = function(x) class(x)[1L]),
     c("numeric", "character", "character", "integer", "logical"))
@@ -319,8 +319,8 @@ test_that("More tests for PipeOpImputeMode", {
 
   expect_equal(levels(task_NA_predicted[[4L]]), as.character(1:2))
   expect_equal(levels(task_NA_predicted[[5L]]), as.character(1:5))
-  expect_false(any(is.na(task_NA_predicted[[4L]])))
-  expect_false(any(is.na(task_NA_predicted[[5L]])))
+  expect_false(anyNA(task_NA_predicted[[4L]]))
+  expect_false(anyNA(task_NA_predicted[[5L]]))
 })
 
 test_that("More tests for PipeOpImputeConstant", {
@@ -398,7 +398,7 @@ test_that("More tests for Integers", {
     result <- po$train(list(task))[[1]]
 
     expect_integer(result$data()$x, info = po$id)
-    expect_false(any(is.na(result$data()$x)), info = po$id)
+    expect_false(anyNA(result$data()$x), info = po$id)
     expect_equal(result$missings(), c(t = 0, x = 0), info = po$id)
   }
 

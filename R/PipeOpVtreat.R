@@ -7,8 +7,8 @@
 #' @description
 #' Provides an interface to the vtreat package.
 #'
-#' [`PipeOpVtreat`] naturally works for [classification tasks][mlr3::TaskClassif] and [regression tasks][mlr3::TaskRegr].
-#' Internally, [`PipeOpVtreat`] follows the fit/prepare interface of vtreat, i.e., first creating a data treatment transform object via
+#' `PipeOpVtreat` naturally works for [classification tasks][mlr3::TaskClassif] and [regression tasks][mlr3::TaskRegr].
+#' Internally, `PipeOpVtreat` follows the fit/prepare interface of vtreat, i.e., first creating a data treatment transform object via
 #' [vtreat::NumericOutcomeTreatment()], [vtreat::BinomialOutcomeTreatment()], or [vtreat::MultinomialOutcomeTreatment()], followed by calling
 #' [vtreat::fit_prepare()] on the training data and [vtreat::prepare()] during predicton.
 #'
@@ -97,6 +97,9 @@
 #' @section Internals:
 #' Follows vtreat's fit/prepare interface. See [vtreat::NumericOutcomeTreatment()], [vtreat::BinomialOutcomeTreatment()],
 #' [vtreat::MultinomialOutcomeTreatment()], [vtreat::fit_prepare()] and [vtreat::prepare()].
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].

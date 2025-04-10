@@ -15,7 +15,6 @@ test_that("PipeOpEncodeImpact", {
   expect_datapreproc_pipeop_class(PipeOpEncodeImpact, task = mlr_tasks$get("iris"))
 
   op = PipeOpEncodeImpact$new()
-  expect_pipeop(op)
 
   nt = train_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names
@@ -152,7 +151,7 @@ test_that("PipeOpImpactEncode on Regression", {
 
   encoded = op$train(list(testtask2))[[1]]$data()
 
-  expect_false(any(is.na(encoded)))
+  expect_false(anyNA(encoded))
   expect_equal(as.numeric(as.matrix(encoded)[c(11, 18)]), c(0, 0))
 
   expectdf3 = expect

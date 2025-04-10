@@ -104,7 +104,7 @@ Get IDs of all \code{\link{PipeOp}}s. This is in order that \code{\link{PipeOp}}
 \code{sorted} is \code{FALSE}, and topologically sorted if \code{sorted} is \code{TRUE}.
 \item \code{plot(html = FALSE, horizontal = FALSE)} \cr
 (\code{logical(1)}, \code{logical(1)}) -> \code{NULL} \cr
-Plot the \code{\link{Graph}}, using either the \pkg{igraph} package (for \code{html = FALSE}, default) or
+Plot the \code{\link{Graph}}, using either the \CRANpkg{igraph} package (for \code{html = FALSE}, default) or
 the \code{visNetwork} package for \code{html = TRUE} producing a \code{\link[htmlwidgets:htmlwidgets-package]{htmlWidget}}.
 The \code{\link[htmlwidgets:htmlwidgets-package]{htmlWidget}} can be rescaled using \code{\link[visNetwork:visOptions]{visOptions}}.
 For \code{html = FALSE}, the orientation of the plotted graph can be controlled through \code{horizontal}.

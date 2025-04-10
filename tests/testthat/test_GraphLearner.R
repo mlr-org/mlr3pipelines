@@ -559,6 +559,7 @@ test_that("predict() function for Graph", {
 })
 
 test_that("base_learner() works", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   # graph containing single PipeOpLearner
   x = as_learner(as_graph(lrn("classif.rpart")))

@@ -30,10 +30,10 @@ with \code{private$.train_task()}. The \code{private$.select_cols()} function ca
 to operate only on subsets of the \code{\link[mlr3:Task]{Task}}'s data, e.g. only on numerical columns.
 
 If the \code{can_subset_cols} argument of the constructor is \code{TRUE} (the default), then the hyperparameter \code{affect_columns}
-is added, which can limit the columns of the \code{\link[mlr3:Task]{Task}} that is modified by the \code{\link{PipeOpTaskPreproc}}
+is added, which can limit the columns of the \code{\link[mlr3:Task]{Task}} that is modified by the \code{PipeOpTaskPreproc}
 using a \code{\link{Selector}} function. Note this functionality is entirely independent of the \code{private$.select_cols()} functionality.
 
-\code{\link{PipeOpTaskPreproc}} is useful for operations that behave differently during training and prediction. For operations
+\code{PipeOpTaskPreproc} is useful for operations that behave differently during training and prediction. For operations
 that perform essentially the same operation and only need to perform extra work to build a \verb{$state} during training,
 the \code{\link{PipeOpTaskPreprocSimple}} class can be used instead.
 }
@@ -53,16 +53,16 @@ List of hyperparameter settings, overwriting the hyperparameter settings given i
 subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}. Default \code{list()}.
 \item \code{can_subset_cols} :: \code{logical(1)}\cr
 Whether the \code{affect_columns} parameter should be added which lets the user limit the columns that are
-modified by the \code{\link{PipeOpTaskPreproc}}. This should generally be \code{FALSE} if the operation adds or removes
+modified by the \code{PipeOpTaskPreproc}. This should generally be \code{FALSE} if the operation adds or removes
 rows from the \code{\link[mlr3:Task]{Task}}, and \code{TRUE} otherwise. Default is \code{TRUE}.
-\item packages :: \code{character}\cr
+\item \code{packages} :: \code{character}\cr
 Set of all required packages for the \code{\link{PipeOp}}'s \code{private$.train()} and \code{private$.predict()} methods. See \verb{$packages} slot.
 Default is \code{character(0)}.
 \item \code{task_type} :: \code{character(1)}\cr
 The class of \code{\link[mlr3:Task]{Task}} that should be accepted as input and will be returned as output. This
 should generally be a \code{character(1)} identifying a type of \code{\link[mlr3:Task]{Task}}, e.g. \code{"Task"}, \code{"TaskClassif"} or
 \code{"TaskRegr"} (or another subclass introduced by other packages). Default is \code{"Task"}.
-\item tags :: \code{character} | \code{NULL}\cr
+\item \code{tags} :: \code{character} | \code{NULL}\cr
 Tags of the resulting \code{PipeOp}. This is added to the tag \code{"data transform"}. Default \code{NULL}.
 \item \code{feature_types} :: \code{character}\cr
 Feature types affected by the \code{PipeOp}. See \code{private$.select_cols()} for more information.
@@ -72,10 +72,10 @@ Defaults to all available feature types.
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpTaskPreproc}} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}}, or a subclass of
+\code{PipeOpTaskPreproc} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}}, or a subclass of
 \code{\link[mlr3:Task]{Task}} if the \code{task_type} construction argument is given as such; both during training and prediction.
 
-\code{\link{PipeOpTaskPreproc}} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}}, or a subclass;
+\code{PipeOpTaskPreproc} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}}, or a subclass;
 the \code{\link[mlr3:Task]{Task}} type is the same as for input; both during training and prediction.
 
 The output \code{\link[mlr3:Task]{Task}} is the modified input \code{\link[mlr3:Task]{Task}} according to the overloaded
@@ -106,7 +106,7 @@ Feature types affected by the \code{PipeOp}. See \code{private$.select_cols()} f
 
 \itemize{
 \item \code{affect_columns} :: \code{function} | \code{\link{Selector}} | \code{NULL} \cr
-What columns the \code{\link{PipeOpTaskPreproc}} should operate on. This parameter is only present if the constructor is called with
+What columns the \code{PipeOpTaskPreproc} should operate on. This parameter is only present if the constructor is called with
 the \code{can_subset_cols} argument set to \code{TRUE} (the default).\cr
 The parameter must be a \code{\link{Selector}} function, which takes a \code{\link[mlr3:Task]{Task}} as argument and returns a \code{character}
 of features to use.\cr
@@ -116,9 +116,9 @@ See \code{\link{Selector}} for example functions. Defaults to \code{NULL}, which
 
 \section{Internals}{
 
-\code{\link{PipeOpTaskPreproc}} is an abstract class inheriting from \code{\link{PipeOp}}. It implements the \code{private$.train()} and
+\code{PipeOpTaskPreproc} is an abstract class inheriting from \code{\link{PipeOp}}. It implements the \code{private$.train()} and
 \verb{$.predict()} functions. These functions perform checks and go on to call \code{private$.train_task()} and \code{private$.predict_task()}.
-A subclass of \code{\link{PipeOpTaskPreproc}} may implement these functions, or implement \code{private$.train_dt()} and \code{private$.predict_dt()} instead.
+A subclass of \code{PipeOpTaskPreproc} may implement these functions, or implement \code{private$.train_dt()} and \code{private$.predict_dt()} instead.
 This works by having the default implementations of \code{private$.train_task()} and \code{private$.predict_task()} call \code{private$.train_dt()} and \code{private$.predict_dt()},
 respectively.
 
@@ -135,31 +135,31 @@ Fields inherited from \code{\link{PipeOp}}.
 
 Methods inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
-\item \code{.train_task}\cr
+\item \code{.train_task(task)}\cr
 (\code{\link[mlr3:Task]{Task}}) -> \code{\link[mlr3:Task]{Task}}\cr
-Called by the \code{\link{PipeOpTaskPreproc}}'s implementation of \code{private$.train()}. Takes a single \code{\link[mlr3:Task]{Task}} as input
+Called by the \code{PipeOpTaskPreproc}'s implementation of \code{private$.train()}. Takes a single \code{\link[mlr3:Task]{Task}} as input
 and modifies it (ideally in-place without cloning) while storing information in the \verb{$state} slot. Note that unlike
 \verb{$.train()}, the argument is \emph{not} a list but a singular \code{\link[mlr3:Task]{Task}}, and the return object is also \emph{not} a list but
 a singular \code{\link[mlr3:Task]{Task}}. Also, contrary to \code{private$.train()}, the \verb{$state} being generated must be a \code{list}, which
-the \code{\link{PipeOpTaskPreproc}} will add additional slots to (see Section \emph{State}). Care should be taken to avoid name collisions between
-\verb{$state} elements added by \code{private$.train_task()} and \code{\link{PipeOpTaskPreproc}}.\cr
+the \code{PipeOpTaskPreproc} will add additional slots to (see Section \emph{State}). Care should be taken to avoid name collisions between
+\verb{$state} elements added by \code{private$.train_task()} and \code{PipeOpTaskPreproc}.\cr
 By default this function calls the \code{private$.train_dt()} function, but it can be overloaded to perform operations on the \code{\link[mlr3:Task]{Task}}
 directly.
-\item \code{.predict_task}\cr
+\item \code{.predict_task(task)}\cr
 (\code{\link[mlr3:Task]{Task}}) -> \code{\link[mlr3:Task]{Task}}\cr
-Called by the \code{\link{PipeOpTaskPreproc}}'s implementation of \verb{$.predict()}. Takes a single \code{\link[mlr3:Task]{Task}} as input
+Called by the \code{PipeOpTaskPreproc}'s implementation of \verb{$.predict()}. Takes a single \code{\link[mlr3:Task]{Task}} as input
 and modifies it (ideally in-place without cloning) while using information in the \verb{$state} slot. Works analogously to
 \code{private$.train_task()}. If \code{private$.predict_task()} should only be overloaded if \code{private$.train_task()} is overloaded (i.e. \code{private$.train_dt()} is \emph{not} used).
 \item \code{.train_dt(dt, levels, target)} \cr
 (\code{\link[data.table:data.table]{data.table}}, named \code{list}, \code{any}) -> \code{\link[data.table:data.table]{data.table}} | \code{data.frame} | \code{matrix} \cr
-Train \code{\link{PipeOpTaskPreproc}} on \code{dt}, transform it and store a state in \verb{$state}. A transformed object must be returned
+Train \code{PipeOpTaskPreproc} on \code{dt}, transform it and store a state in \verb{$state}. A transformed object must be returned
 that can be converted to a \code{data.table} using \code{\link{as.data.table}}. \code{dt} does not need to be copied deliberately, it
 is possible and encouraged to change it in-place.\cr
 The \code{levels} argument is a named list of factor levels for factorial or character features.
 If the input \code{\link[mlr3:Task]{Task}} inherits from \code{\link[mlr3:TaskSupervised]{TaskSupervised}}, the \code{target} argument
 contains the \verb{$truth()} information of the training \code{\link[mlr3:Task]{Task}}; its type depends on the \code{\link[mlr3:Task]{Task}}
 type being trained on.\cr
-This method can be overloaded when inheriting from \code{\link{PipeOpTaskPreproc}}, together with \code{private$.predict_dt()} and optionally
+This method can be overloaded when inheriting from \code{PipeOpTaskPreproc}, together with \code{private$.predict_dt()} and optionally
 \code{private$.select_cols()}; alternatively, \code{private$.train_task()} and \code{private$.predict_task()} can be overloaded.
 \item \code{.predict_dt(dt, levels)} \cr
 (\code{\link[data.table:data.table]{data.table}}, named \code{list}) -> \code{\link[data.table:data.table]{data.table}} | \code{data.frame} | \code{matrix} \cr
@@ -175,8 +175,8 @@ Selects which columns the \code{\link{PipeOp}} operates on, if \code{private$.tr
 is not called if \code{private$.train_task()} and \code{private$.predict_task()} are overloaded. In contrast to
 the \code{affect_columns} parameter. \code{private$.select_cols()} is for the \emph{inheriting class} to determine which columns
 the operator should function on, e.g. based on feature type, while \code{affect_columns} is a way for the \emph{user}
-to limit the columns that a \code{\link{PipeOpTaskPreproc}} should operate on.\cr
-This method can optionally be overloaded when inheriting \code{\link{PipeOpTaskPreproc}}, together with \code{private$.train_dt()} and
+to limit the columns that a \code{PipeOpTaskPreproc} should operate on.\cr
+This method can optionally be overloaded when inheriting \code{PipeOpTaskPreproc}, together with \code{private$.train_dt()} and
 \code{private$.predict_dt()}; alternatively, \code{private$.train_task()} and \code{private$.predict_task()} can be overloaded.\cr
 If this method is not overloaded, it defaults to selecting of type indicated by the \code{feature_types} construction argument.
 }
@@ -196,6 +196,7 @@ Other mlr3pipelines backend related:
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -218,6 +219,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

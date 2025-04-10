@@ -47,7 +47,7 @@
 #' features are changed, precedence is given to the original ones before the newly constructed ones.
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].

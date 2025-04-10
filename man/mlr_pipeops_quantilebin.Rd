@@ -43,7 +43,7 @@ List of intervals representing the bins for each numeric feature.
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{numsplits}  :: \code{numeric(1)} \cr
+\item \code{numsplits}  :: \code{integer(1)} \cr
 Number of bins to create. Default is \code{2}.
 }
 }
@@ -51,6 +51,11 @@ Number of bins to create. Default is \code{2}.
 \section{Internals}{
 
 Uses the \code{\link[stats:quantile]{stats::quantile}} function.
+}
+
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
@@ -74,6 +79,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -97,6 +103,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

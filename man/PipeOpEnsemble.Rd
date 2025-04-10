@@ -42,11 +42,11 @@ Should be \code{"Prediction"} (default) or one of its subclasses, e.g. \code{"Pr
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpEnsemble}} has multiple input channels depending on the \code{innum} construction argument, named \code{"input1"}, \code{"input2"}, ...
+\code{PipeOpEnsemble} has multiple input channels depending on the \code{innum} construction argument, named \code{"input1"}, \code{"input2"}, ...
 if \code{innum} is nonzero; if \code{innum} is 0, there is only one \emph{vararg} input channel named \code{"..."}.
 All input channels take only \code{NULL} during training and take a \code{\link[mlr3:Prediction]{Prediction}} during prediction.
 
-\code{\link{PipeOpEnsemble}} has one output channel named \code{"output"}, producing \code{NULL} during training and a \code{\link[mlr3:Prediction]{Prediction}} during prediction.
+\code{PipeOpEnsemble} has one output channel named \code{"output"}, producing \code{NULL} during training and a \code{\link[mlr3:Prediction]{Prediction}} during prediction.
 
 The output during prediction is in some way a weighted averaged representation of the input.
 }
@@ -67,12 +67,12 @@ length equal to the number of connected inputs. Initialized to 1 (equal weights)
 
 \section{Internals}{
 
-The commonality of ensemble methods using \code{\link{PipeOpEnsemble}} is that they take a \code{NULL}-input during training and save an empty \verb{$state}. They can be
+The commonality of ensemble methods using \code{PipeOpEnsemble} is that they take a \code{NULL}-input during training and save an empty \verb{$state}. They can be
 used following a set of \code{\link{PipeOpLearner}} \code{\link{PipeOp}}s to perform (possibly weighted) prediction averaging. See e.g.
 \code{\link{PipeOpClassifAvg}} and \code{\link{PipeOpRegrAvg}} which both inherit from this class.
 
 Should it be necessary to use the output of preceding \code{\link[mlr3:Learner]{Learner}}s
-during the "training" phase, then \code{\link{PipeOpEnsemble}} should not be used. In fact, if training time behaviour of a \code{\link[mlr3:Learner]{Learner}} is important, then
+during the "training" phase, then \code{PipeOpEnsemble} should not be used. In fact, if training time behaviour of a \code{\link[mlr3:Learner]{Learner}} is important, then
 one should use a \code{\link{PipeOpLearnerCV}} instead of a \code{\link{PipeOpLearner}}, and the ensemble can be created with a \code{\link[mlr3:Learner]{Learner}} encapsulated by a \code{\link{PipeOpLearner}}.
 See \code{\link{LearnerClassifAvg}} and \code{\link{LearnerRegrAvg}} for examples.
 }
@@ -100,6 +100,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
@@ -122,6 +123,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

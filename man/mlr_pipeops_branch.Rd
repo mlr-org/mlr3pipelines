@@ -8,7 +8,7 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
-Perform alternative path branching: \code{\link{PipeOpBranch}} has multiple output channels
+Perform alternative path branching: \code{PipeOpBranch} has multiple output channels
 that connect to different paths in a \code{\link{Graph}}. At any time, only one of these
 paths will be taken for execution. At the end of the different paths, the
 \code{\link{PipeOpUnbranch}} \code{PipeOp} must be used to indicate the end of alternative paths.
@@ -36,9 +36,9 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpBranch}} has one input channel named \code{"input"}, taking any input (\code{"*"}) both during training and prediction.
+\code{PipeOpBranch} has one input channel named \code{"input"}, taking any input (\code{"*"}) both during training and prediction.
 
-\code{\link{PipeOpBranch}} has multiple output channels depending on the \code{options} construction argument, named \code{"output1"}, \code{"output2"}, ...
+\code{PipeOpBranch} has multiple output channels depending on the \code{options} construction argument, named \code{"output1"}, \code{"output2"}, ...
 if \code{options} is \code{numeric}, and named after each \code{options} value if \code{options} is a \code{character}.
 All output channels produce the object given as input (\code{"*"}) or \code{\link{NO_OP}}, both during training and prediction.
 }
@@ -63,7 +63,7 @@ or the first element of \code{options} (if it is \code{character}).
 \section{Internals}{
 
 Alternative path branching is handled by the \code{\link{PipeOp}} backend. To indicate that
-a path should not be taken, \code{\link{PipeOpBranch}} returns the \code{\link{NO_OP}} object on its
+a path should not be taken, \code{PipeOpBranch} returns the \code{\link{NO_OP}} object on its
 output channel. The \code{\link{PipeOp}} handles each \code{\link{NO_OP}} input by automatically
 returning a \code{\link{NO_OP}} output without calling \code{private$.train()} or \code{private$.predict()},
 until \code{\link{PipeOpUnbranch}} is reached. \code{\link{PipeOpUnbranch}} will then take multiple inputs,
@@ -102,6 +102,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -124,6 +125,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

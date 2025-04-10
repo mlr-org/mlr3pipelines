@@ -9,9 +9,9 @@
 #'
 #' Inherits the `$param_set` (and therefore `$param_set$values`) from the [`Learner`][mlr3::Learner] it is constructed from.
 #'
-#' Using [`PipeOpLearnerPICVPlus`], it is possible to embed a [`mlr3::Learner`] into a [`Graph`].
-#' [`PipeOpLearnerPICVPlus`] can then be used to perform cross validation plus (or jackknife plus).
-#' During training, [`PipeOpLearnerPICVPlus`] performs cross validation on the training data.
+#' Using `PipeOpLearnerPICVPlus`, it is possible to embed a [`mlr3::Learner`] into a [`Graph`].
+#' `PipeOpLearnerPICVPlus` can then be used to perform cross validation plus (or jackknife plus).
+#' During training, `PipeOpLearnerPICVPlus` performs cross validation on the training data.
 #' During prediction, the models from the training stage are used to construct predictive confidence intervals for the prediction data based on
 #' out-of-fold residuals and out-of-fold predictions.
 #'
@@ -30,10 +30,10 @@
 #'   Default is `list()`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpLearnerPICVPlus`] has one input channel named `"input"`, taking a [`Task`][mlr3::Task] specific to the [`Learner`][mlr3::Learner]
+#' `PipeOpLearnerPICVPlus` has one input channel named `"input"`, taking a [`Task`][mlr3::Task] specific to the [`Learner`][mlr3::Learner]
 #' type given to `learner` during construction; both during training and prediction.
 #'
-#' [`PipeOpLearnerPICVPlus`] has one output channel named `"output"`, producing `NULL` during training and a [`PredictionRegr`][mlr3::PredictionRegr]
+#' `PipeOpLearnerPICVPlus` has one output channel named `"output"`, producing `NULL` during training and a [`PredictionRegr`][mlr3::PredictionRegr]
 #' during prediction.
 #'
 #' The output during prediction is a [`PredictionRegr`][mlr3::PredictionRegr] with `predict_type` `quantiles` on the prediction input data.
@@ -65,11 +65,11 @@
 #'   [`Learner`][mlr3::Learner] that is being wrapped.
 #'   Read-only.
 #' * `learner_model` :: [`Learner`][mlr3::Learner] or `list`\cr
-#'   If the [`PipeOpLearnerPICVPlus`] has been trained, this is a `list` containing the [`Learner`][mlr3::Learner]s of the cross validation models.
+#'   If the `PipeOpLearnerPICVPlus` has been trained, this is a `list` containing the [`Learner`][mlr3::Learner]s of the cross validation models.
 #'   Otherwise, this contains the [`Learner`][mlr3::Learner] that is being wrapped.
 #'   Read-only.
 #' * `predict_type`\cr
-#'   Predict type of the [`PipeOpLearnerPICVPlus`], which is always `"response"  "quantiles"`.
+#'   Predict type of the `PipeOpLearnerPICVPlus`, which is always `"response"  "quantiles"`.
 #'   This can be different to the predict type of the [`Learner`][mlr3::Learner] that is being wrapped.
 #'
 #' @section Methods:
@@ -83,8 +83,7 @@
 #' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
 #'
 #' task = tsk("mtcars")
@@ -93,7 +92,6 @@
 #'
 #' lrncvplus_po$train(list(task))
 #' lrncvplus_po$predict(list(task))
-#' \dontshow{ \} }
 PipeOpLearnerPICVPlus = R6Class("PipeOpLearnerPICVPlus",
   inherit = PipeOp,
   public = list(

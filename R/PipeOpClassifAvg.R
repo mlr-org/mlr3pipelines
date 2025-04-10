@@ -6,7 +6,7 @@
 #'
 #' @description
 #' Perform (weighted) majority vote prediction from classification [`Prediction`][mlr3::Prediction]s by connecting
-#' [`PipeOpClassifAvg`] to multiple [`PipeOpLearner`] outputs.
+#' `PipeOpClassifAvg` to multiple [`PipeOpLearner`] outputs.
 #'
 #' Always returns a `"prob"` prediction, regardless of the incoming [`Learner`][mlr3::Learner]'s
 #' `$predict_type`. The label of the class with the highest predicted probability is selected as the
@@ -20,12 +20,11 @@
 #' equal weights for each prediction.
 #' Defaults to equal weights for each model.
 #'
-#' If `
-#'
 #' @section Construction:
 #' ```
 #' PipeOpClassifAvg$new(innum = 0, collect_multiplicity = FALSE, id = "classifavg", param_vals = list())
 #' ```
+#'
 #' * `innum` :: `numeric(1)`\cr
 #'   Determines the number of input channels.
 #'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
@@ -52,10 +51,11 @@
 #' Inherits from [`PipeOpEnsemble`] by implementing the `private$weighted_avg_predictions()` method.
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpEnsemble`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpEnsemble`]/[`PipeOp`].
+#'
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Ensembles

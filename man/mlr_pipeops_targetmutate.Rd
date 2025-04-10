@@ -42,7 +42,7 @@ The \verb{$state} is left empty (\code{list()}).
 
 The parameters are the parameters inherited from \code{\link{PipeOpTargetTrafo}}, as well as:
 \itemize{
-\item \code{trafo} :: \code{function} \code{data.table} -> \code{data.table}\cr
+\item \code{trafo} :: \code{function} \code{data.table} -> \code{data.frame} | \code{data.table} | \code{matrix}\cr
 Transformation function for the target. Should only be a function of the target, i.e., taking a
 single \code{data.table} argument, typically with one column. The return value is used as the new
 target of the resulting \code{\link[mlr3:Task]{Task}}. To change target names, change the column name of the data
@@ -116,6 +116,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -139,6 +140,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

@@ -34,19 +34,19 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpTaskPreprocSimple}}.
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with features changed according to the \code{applicator} parameter.
 }
 
 \section{State}{
 
-The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreprocSimple}}.
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}.
 }
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpTaskPreprocSimple}}, as well as:
+The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{applicator} :: \code{function}\cr
 Function to apply to each column of the task.
@@ -67,7 +67,7 @@ Calls \code{\link[mlr3misc:compat-map]{map}} on the data, using the value of \co
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
@@ -111,6 +111,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -133,6 +134,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

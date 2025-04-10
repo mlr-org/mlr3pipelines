@@ -7,7 +7,7 @@
 #' @description
 #' Wraps a [`LearnerRegr`][mlr3::LearnerRegr] into a [`PipeOp`] to predict multiple quantiles.
 #'
-#' [`PipeOpLearnerQuantiles`] only supports [`LearnerRegr`][mlr3::LearnerRegr]s that have `quantiles` as a possible `pedict_type`.
+#' `PipeOpLearnerQuantiles` only supports [`LearnerRegr`][mlr3::LearnerRegr]s that have `quantiles` as a possible `pedict_type`.
 #'
 #' It produces quantile-based predictions for multiple quantiles in one [`PredictionRegr`][mlr3::Prediction]. This is especially helpful if the [`LearnerRegr`][mlr3::LearnerRegr] can only predict one quantile (like for example `LearnerRegrGBM` in `mlr3extralearners`)
 #'
@@ -28,10 +28,10 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpLearnerQuantiles`] has one input channel named `"input"`, taking a [`TaskRegr`][mlr3::TaskRegr] specific to the [`Learner`][mlr3::Learner]
+#' `PipeOpLearnerQuantiles` has one input channel named `"input"`, taking a [`TaskRegr`][mlr3::TaskRegr] specific to the [`Learner`][mlr3::Learner]
 #' type given to `learner` during construction; both during training and prediction.
 #'
-#' [`PipeOpLearnerQuantiles`] has one output channel named `"output"`, producing `NULL` during training and a [`PredictionRegr`][mlr3::Prediction] object
+#' `PipeOpLearnerQuantiles` has one output channel named `"output"`, producing `NULL` during training and a [`PredictionRegr`][mlr3::Prediction] object
 #' during prediction.
 #'
 #' The output during prediction is a [`PredictionRegr`][mlr3::PredictionRegr] on the prediction input data that aggregates all `result`s produced by the [`Learner`][mlr3::Learner] for each quantile in `quantiles`.
@@ -60,11 +60,11 @@
 #' * `learner` :: [`LearnerRegr`][mlr3::LearnerRegr]\cr
 #'   [`Learner`][mlr3::Learner] that is being wrapped. Read-only.
 #' * `learner_model` :: [`Learner`][mlr3::Learner]\cr
-#'   If [`PipeOpLearnerQuantiles`] has been trained, this is a `list` containing the [`Learner`][mlr3::Learner]s for each quantile.
+#'   If `PipeOpLearnerQuantiles` has been trained, this is a `list` containing the [`Learner`][mlr3::Learner]s for each quantile.
 #'   Otherwise, this contains the [`Learner`][mlr3::Learner] that is being wrapped.
 #'   Read-only.
 #' * `predict_type` :: `character(1)`\cr
-#'   Predict type of the [`PipeOpLearnerQuantiles`], which is always `"response"  "quantiles"`.
+#'   Predict type of the `PipeOpLearnerQuantiles`, which is always `"response"  "quantiles"`.
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].

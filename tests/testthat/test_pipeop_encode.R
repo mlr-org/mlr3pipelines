@@ -10,9 +10,9 @@ test_that("PipeOpEncode", {
 
   check_dat = function(dat) {
     expect_true(all(is.na(dat[1, grep("^town\\.", colnames(dat), value = TRUE), with = FALSE])))
-    expect_true(!any(is.na(dat[-1, grep("^town\\.", colnames(dat), value = TRUE), with = FALSE])))
+    expect_true(!anyNA(dat[-1, grep("^town\\.", colnames(dat), value = TRUE), with = FALSE]))
     expect_true(all(is.na(dat[2, grep("^chas\\.", colnames(dat), value = TRUE), with = FALSE])))
-    expect_true(!any(is.na(dat[-2, grep("^chas\\.", colnames(dat), value = TRUE), with = FALSE])))
+    expect_true(!anyNA(dat[-2, grep("^chas\\.", colnames(dat), value = TRUE), with = FALSE]))
   }
 
   chaslevels = task$levels()$chas

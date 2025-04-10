@@ -18,7 +18,7 @@
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
-#'   Identifier of resulting object, default `"smote"`.
+#'   Identifier of resulting object, default `"adas"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
@@ -38,7 +38,7 @@
 #'   See [`ADAS()`][`smotefamily::ADAS`].
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
