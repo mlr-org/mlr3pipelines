@@ -4,16 +4,15 @@
 \alias{preproc}
 \title{Simple Pre-processing}
 \usage{
-preproc(indata, graph, state = NULL, predict = !is.null(state))
+preproc(indata, processor, state = NULL, predict = !is.null(state))
 }
 \arguments{
 \item{indata}{(\code{\link[mlr3:Task]{Task}} | \code{\link[data.table:data.table]{data.table}} )\cr
-Data to be pre-processed. If \code{indata} is a \code{data.table}, it is used to
-construct a \code{\link[mlr3:TaskUnsupervised]{TaskUnsupervised}} internally, meaning
-that training or prediction with \code{\link{Graph}}s or \code{\link{PipeOp}}s that use the columns
-of role \code{target} will not work.}
+Data to be pre-processed. If \code{indata} is a \code{data.table}, it is used to construct a
+\code{\link[mlr3:TaskUnsupervised]{TaskUnsupervised}} internally, meaning that training or prediction with \code{\link{Graph}}s or
+\code{\link{PipeOp}}s that use the columns of role \code{target} will not work.}
 
-\item{graph}{(\code{\link{Graph}} | \code{\link{PipeOp}})\cr
+\item{processor}{(\code{\link{Graph}} | \code{\link{PipeOp}})\cr
 \code{Graph} or \code{PipeOp} to be converted into a \code{Graph} internally. This gets modified-by-reference during training
 or prediction (depending on the \code{predict} argument).
 
@@ -22,7 +21,7 @@ could also be trained for predict (if state is given, original state gets overwi
 if trained and train is run, state gets overwritten}
 
 \item{state}{(named \code{list} | \code{NULL})\cr
-a}
+passing state also changes graph in-place, having it trained}
 
 \item{predict}{(\code{logical(1)})\cr
 a}
@@ -33,18 +32,17 @@ only single output channel
 \item makes sense for piping and nature of this function to simplify things (i.e. should be used in simple context)
 \item we couldn't identify the proper output channel (e.g. targetmutate)
 }
+
+not only tasks
+if df input, then output open as well, or do we want to return a df for piping and consistency?
 }
 \description{
 Function that offers a simple and direct way to train or predict \code{\link{PipeOp}}s and \code{\link{Graph}}s.
 
 Training happens if \code{predict} is set to \code{FALSE} and if the passed \code{Graph} or \code{PipeOp} is untrained, i.e. its state is \code{NULL}.\cr
-Prediction happens if \code{predict} is set to \code{TRUE} and if the passed \code{Graph} or \code{PipeOp} is either trained or a \code{state} is explicitly passed to this function as well.
+Prediction happens if \code{predict} is set to \code{TRUE} and if the passed \code{Graph} or \code{PipeOp} is either trained or a \code{state} is explicitly passed to this function.
 Should \code{predict} be \code{FALSE},
 }
-\section{Internals}{
-NA
-}
-
 \examples{
 # example code
 

@@ -3,121 +3,101 @@
 #' @description
 #' Function that offers a simple and direct way to train or predict [`PipeOp`]s and [`Graph`]s.
 #'
-#' Training happens if `predict` is set to `FALSE` and if the passed `Graph` or `PipeOp` is untrained, i.e. its state is `NULL`.\cr
-#' Prediction happens if `predict` is set to `TRUE` and if the passed `Graph` or `PipeOp` is either trained or a `state` is explicitly passed to this function as well.
-#' Should `predict` be `FALSE`,
+#' Training happens if `predict` is set to `FALSE` and if the passed `Graph` or `PipeOp` is untrained, i.e. its state
+#' is `NULL`.
+#' Prediction happens if `predict` is set to `TRUE` and if the passed `Graph` or `PipeOp` is either trained or a `state`
+#' is explicitly passed to this function.
+#'
+#' Note, that the passed `Graph` or `PipeOp` is modified-by-reference during training or if a `state` is passed to this
+#' function.
+#'
+#' add different overwritings here or in params
 #'
 #' @param indata ([`Task`][mlr3::Task] | [`data.table`][data.table::data.table] )\cr
-#'   Data to be pre-processed. If `indata` is a `data.table`, it is used to
-#'   construct a [`TaskUnsupervised`][mlr3::TaskUnsupervised] internally, meaning
-#'   that training or prediction with [`Graph`]s or [`PipeOp`]s that use the columns
-#'   of role `target` will not work.
-#' @param graph ([`Graph`] | [`PipeOp`])\cr
+#'   Data to be pre-processed. If `indata` is a `data.table`, it is used to construct a
+#'   [`TaskUnsupervised`][mlr3::TaskUnsupervised] internally, meaning that training or prediction with [`Graph`]s or
+#'   [`PipeOp`]s that use the columns of role `target` will not work.
+#' @param processor ([`Graph`] | [`PipeOp`])\cr
 #'   `Graph` or `PipeOp` to be converted into a `Graph` internally. This gets modified-by-reference during training
-#'   or prediction (depending on the `predict` argument).
-#'
-#'
-#'   modified-by-reference
-#'   could also be trained for predict (if state is given, original state gets overwirrten)
-#'   if trained and train is run, state gets overwritten
+#'   or if `state` is given as non-`NULL`.
+#'   The `processor` must have exactly one output channel to allow piping of `preproc` calls.
 #' @param state (named `list` | `NULL`)\cr
-#'   a
+#'   Optional state to be used for prediction. Must be a complete and correct state for the respective processor, i.e.
+#'   for a `Graph` a list named according to the `Graph`'s `PipeOp`s containing the `PipeOp`'s states.
+#'   Note, that passing a non-`NULL` `state` modifies the `processor` by-reference.
 #' @param predict (`logical(1)`)\cr
-#'   a
-#' @return
+#'   Whether to predict (`TRUE`) or train (`FALSE`). By default, this is `FALSE` if `state` is `NULL` (`state`'s default),
+#'   and `TRUE` otherwise.
+#' @return any
+#'
 #' only single output channel
-#' - makes sense for piping and nature of this function to simplify things (i.e. should be used in simple context)
-#' - we couldn't identify the proper output channel (e.g. targetmutate)
+#' any type
+#' if df input, then output open as well, or do we want to return a df for piping and consistency?
 #'
-#' @section Internals
-#'
+#' @section Internals:
+#' If `processor` is a [`PipeOp`], the S3 method `preproc.PipeOp` gets called first, converting the `PipeOp` into a
+#' [`Graph`] and wrapping the `state` appropriately, before calling the S3 method `preproc.Graph` with the modified objects.
 #'
 #' @export
 #' @examples
 #' # example code
 #'
-preproc <- function(indata, graph, state = NULL, predict = !is.null(state)) {
+preproc = function(indata, processor, state = NULL, predict = !is.null(state)) {
   assert(
     check_data_frame(indata, col.names = "unique"),
     check_class(indata, "Task")  # effectively the only thing assert_task checks with default args
   )
   assert_list(state, names = "unique", null.ok = TRUE)  # from Graph
   assert_flag(predict)
-  assert(
-    check_class(graph, "PipeOp"),
-    check_class(graph, "Graph")
-  )
-  graph = as_graph(graph, clone = FALSE)
 
-  if (nrow(graph$output) != 1) {
-    stop("'graph' must have exactly one output channel.")
+  UseMethod("preproc", processor)
+}
+
+#' @export
+preproc.PipeOp = function(indata, processor, state = NULL, predict = !is.null(state)) {
+  # Wrap PipeOp's state passed by user to look like a Graph's state
+  if (!is.null(state)) state = named_list(processor$id, state)
+  # Convert PipeOp into a Graph
+  processor = as_graph(processor, clone = FALSE)
+  # Call S3 method for Graph
+  preproc(indata, processor, state, predict)
+}
+
+#' @export
+preproc.Graph = function(indata, processor, state = NULL, predict = !is.null(state)) {
+  if (nrow(processor$output) != 1) {
+    stop("'processor' must have exactly one output channel.")
   }
-  # Check: Graph must return a task (see discussion below @return)
 
   # Construct a Task from data.frame
   # TODO: Check what pos could potentially not handle targetless graphs
-  #       can we test this here already?
-  #       probably all POs that don't allow Task, but TaskClassif or TaskRegr specifically? -> also learner
-  #       $task_type only exists for POTaskPreproc, or POImpute
-  #       graph does not have this ...
+  #       probably all POs that don't allow Task, but TaskClassif or TaskRegr specifically, including POLearner
+  #       $task_type only exists for POTaskPreproc, or POImpute, graph does not have this ...
   # Would be good to have a tag / property for PipeOp whether they work without targets
   if (is.data.frame(indata)) {
     task = TaskUnsupervised$new(id = "preproc_task", backend = indata)
-  } else {
-    task = indata
   }
-  # Check: graph accepts task$task_type in graph$input (if not a task but a df, would need to add class of supervised; or do it later; potentially more expensive)
-  # maybe not necessary since graph checks this itself
 
   if (predict) {
-    # Do we need any checks on state? Graph does most checks for us
     # If a state is passed, we overwrite graph's state by assignment, should it already be trained
     if (!is.null(state)) {
-      if (graph$is_trained) warning("'graph' is trained, but 'state' is explicitly given. Using passed 'state' for Prediction.")
-      graph$state = state
+      if (processor$is_trained) warning("'processor' is trained, but 'state' is explicitly given. Using passed 'state' for prediction.")
+      processor$state = state
     }
-    outtask = graph$predict(task)[[1L]]
+    outtask = processor$predict(indata)[[1L]]
   } else if (is.null(state)) {
     # If a trained graph is passed, we overwrite its state by re-training the graph.
-    if (graph$is_trained) warning("'graph' is trained, but preproc re-trains it, overwriting its original state.")
-    outtask = graph$train(task)[[1L]]
+    if (processor$is_trained) warning("'processor' is trained, but preproc re-trains it, overwriting its original state.")
+    outtask = processor$train(indata)[[1L]]
   } else {
     stop("Inconsistent function arguments. 'predict' is given as 'FALSE' while 'state' is given as not-NULL.")
   }
 
-  # What if Graph has a PipeOpLearner in it? Return Prediction?
-  # Or do we want to force a return type Task above?
+  # Conflict: Want to simplify preprocessing, i.e. handle possible extractions for user, but still be open to
+  #           processors that return non-Task objects
   if (is.data.frame(indata)) {
-    # Especially for df-input, PipeOpLearner in graph not possible
     outtask$data()
   } else {
     outtask
   }
 }
-
-# Examples
-# preproc(tsk("iris"), graph = po("histbin")) # extracting infos from po/graph should work since we modify it by-reference
-# preproc(tsk("iris"), graph = po("histbin"), predict = TRUE)
-#
-# preproc(tsk("iris"), graph = ppl("robustify"))
-# preproc(tsk("iris"), graph = ppl("robustify"), predict = TRUE)
-#
-# filter = flt("mim")
-# op = po("filter", filter, filter.nfeat = 2)
-# preproc(tsk("iris"), op)
-# preproc(tsk("iris"), flt("auc"))
-#
-# gr = po("smote") %>>% po("pca")
-# preproc(tsk("iris"), gr)
-#
-# learner = lrn("regr.rpart")
-# preproc(tsk("mtcars"), learner)
-# # works but only returns NULL
-# preproc(tsk("mtcars"), learner, state = state)
-# # learner does not get trained here
-#
-# df = tsk("iris")$data(cols = task$feature_names)
-# op = po("pca")
-# preproc(df, op)
-# state = list(pca = op$state)
-# preproc(df, op, state)
