@@ -2,6 +2,25 @@ context("preproc")
 
 test_that("preproc - basic functionality", {
   task = tsk("iris")
+  op = PipeOpDebugBasic$new()
+  state = list(input = task)
+
+  # Untrained PipeOp, state NULL, predict FALSE -> train
+  train_out = expect_no_error(preproc(task, op, predict = FALSE))
+  expect_equal(train_out, task)
+  op$state = NULL  # Reset PipeOp
+  # Untrained PipeOp, state NULL, predict TRUE -> error: Can't predict untrained PipeOp
+  expect_error(preproc(task, op, predict = TRUE), "")
+  # Untrained PipeOp, state given, predict FALSE -> error: contradictory input
+  preproc(task, op, state = state, predict = FALSE)
+  # Untrained PipeOp, state given, predict TRUE
+  preproc(task, op, state = state, predict = TRUE) # -> predict
+
+  # Trained PipeOp
+  preproc(task, op, predict = FALSE) # -> retrain
+  preproc(task, op, predict = TRUE) # -> predict
+  preproc(task, op, state = state, predict = FALSE) # -> retrain, igrnoring state or error
+  preproc(task, op, state = state, predict = TRUE) # -> predict using passed state or error
 
   # test that:
   # General:
