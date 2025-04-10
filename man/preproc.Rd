@@ -10,40 +10,90 @@ preproc(indata, processor, state = NULL, predict = !is.null(state))
 \item{indata}{(\code{\link[mlr3:Task]{Task}} | \code{\link[data.table:data.table]{data.table}} )\cr
 Data to be pre-processed. If \code{indata} is a \code{data.table}, it is used to construct a
 \code{\link[mlr3:TaskUnsupervised]{TaskUnsupervised}} internally, meaning that training or prediction with \code{\link{Graph}}s or
-\code{\link{PipeOp}}s that use the columns of role \code{target} will not work.}
+\code{\link{PipeOp}}s that use the \code{target} columns will not work.}
 
 \item{processor}{(\code{\link{Graph}} | \code{\link{PipeOp}})\cr
 \code{Graph} or \code{PipeOp} to be converted into a \code{Graph} internally. This gets modified-by-reference during training
-or prediction (depending on the \code{predict} argument).
-
-modified-by-reference
-could also be trained for predict (if state is given, original state gets overwirrten)
-if trained and train is run, state gets overwritten}
+or if \code{state} is given as non-\code{NULL}.
+The \code{processor} must have exactly one output channel to allow piping of calls to \code{preproc()}.
+For simple calls, you may want to use dictionary sugar functions to select a \code{processor} and to set its
+hyperparameters, e.g. \code{\link[=po]{po()}}, or \code{\link[=ppl]{ppl()}}.}
 
 \item{state}{(named \code{list} | \code{NULL})\cr
-passing state also changes graph in-place, having it trained}
+Optional state to be used for prediction, if the \code{precessor} is untrained or if the \code{state} of the \code{processor}
+should be ignored. Must be a complete and correct state for the respective processor, i.e. for a \code{Graph} a list
+named according to the \code{Graph}'s \code{PipeOp}s containing the \code{PipeOp}'s states. Note, that passing a non-\code{NULL}
+\code{state} modifies the \code{processor} by-reference.}
 
 \item{predict}{(\code{logical(1)})\cr
-a}
+Whether to predict (\code{TRUE}) or train (\code{FALSE}). By default, this is \code{FALSE} if \code{state} is \code{NULL} (\code{state}'s default),
+and \code{TRUE} otherwise.}
 }
 \value{
-only single output channel
-\itemize{
-\item makes sense for piping and nature of this function to simplify things (i.e. should be used in simple context)
-\item we couldn't identify the proper output channel (e.g. targetmutate)
-}
+\code{any}
+Returns whatever the \code{processor}'s output channel contains. May be of any type.
 
-not only tasks
 if df input, then output open as well, or do we want to return a df for piping and consistency?
 }
 \description{
-Function that offers a simple and direct way to train or predict \code{\link{PipeOp}}s and \code{\link{Graph}}s.
+Function that offers a simple and direct way to train or predict \code{\link{PipeOp}}s and \code{\link{Graph}}s on \code{\link[mlr3:Task]{Task}}s
+or \code{\link[data.table:data.table]{data.table}}]s.
 
-Training happens if \code{predict} is set to \code{FALSE} and if the passed \code{Graph} or \code{PipeOp} is untrained, i.e. its state is \code{NULL}.\cr
-Prediction happens if \code{predict} is set to \code{TRUE} and if the passed \code{Graph} or \code{PipeOp} is either trained or a \code{state} is explicitly passed to this function.
-Should \code{predict} be \code{FALSE},
+Training happens if \code{predict} is set to \code{FALSE} and no \code{state} is passed to this function. Note that the state of a
+trained \code{Graph} or \code{PipeOp} passed to this function will get overwritten during training.
+Prediction happens if \code{predict} is set to \code{TRUE} and if the passed \code{Graph} or \code{PipeOp} is either trained or a \code{state}
+is explicitly passed to this function.
+
+Be aware that the passed \code{PipeOp} or \code{Graph}is modified-by-reference during training or if a \code{state} is passed to
+this function.
 }
+\section{Internals}{
+
+If \code{processor} is a \code{\link{PipeOp}}, the S3 method \code{preproc.PipeOp} gets called first, converting the \code{PipeOp} into a
+\code{\link{Graph}} and wrapping the \code{state} appropriately, before calling the S3 method \code{preproc.Graph} with the modified objects.
+}
+
 \examples{
-# example code
+task = tsk("iris")
+pop = po("pca")
+
+# Training
+preproc(task, pop)
+
+# Predicting a trained PipeOp (trained through
+# previous call to preproc)
+preproc(task, pop, predict = TRUE)
+
+# Predicting using a given state
+# We use the state of the PipeOp from the last example
+state = pop$state
+pop = po("pca")
+preproc(task, pop, state)
+
+# Note that the PipeOp's state can be overwritten
+pop$is_trained
+pop$state$sdev
+preproc(tsk("wine"), pop)
+pop$state$sdev
+
+# Piping multiple preproc() calls, using dictionary sugar,
+# and setting parameters
+outdata = preproc(tsk("penguins"), po("imputemode", affect_columns = selector_name("sex"))) |>
+  preproc(po("imputemean"))
+outdata$missings()
+
+# Use preproc with a graph
+gr = po("pca", rank. = 4) \%>>\% po("learner", learner = lrn("classif.rpart"))
+preproc(tsk("sonar"), gr) # returns NULL because of the learner
+preproc(tsk("sonar"), gr, predict = TRUE)
+
+# Training with a data.table input
+dt = tsk("iris")$data()
+pop = po("pca")
+preproc(dt, pop)
+# Note that this treats the target column as if it were a feature
+
+# Predicting with a data.table input
+preproc(dt, pop)
 
 }
