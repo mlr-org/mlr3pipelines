@@ -1,14 +1,22 @@
-#' @title Simple Preprocessing
+#' @title Simple Pre-processing
 #'
 #' @description
-#'a
+#' Function that offers a simple and direct way to train or predict [`PipeOp`]s and [`Graph`]s.
+#'
+#' Training happens if `predict` is set to `FALSE` and if the passed `Graph` or `PipeOp` is untrained, i.e. its state is `NULL`.\cr
+#' Prediction happens if `predict` is set to `TRUE` and if the passed `Graph` or `PipeOp` is either trained or a `state` is explicitly passed to this function as well.
+#' Should `predict` be `FALSE`,
 #'
 #' @param indata ([`Task`][mlr3::Task] | [`data.table`][data.table::data.table] )\cr
 #'   Data to be pre-processed. If `indata` is a `data.table`, it is used to
 #'   construct a [`TaskUnsupervised`][mlr3::TaskUnsupervised] internally, meaning
-#'   that it would not work with [`Graph`]s or [`PipeOp`]s that use the columns
-#'   of role `target`.
+#'   that training or prediction with [`Graph`]s or [`PipeOp`]s that use the columns
+#'   of role `target` will not work.
 #' @param graph ([`Graph`] | [`PipeOp`])\cr
+#'   `Graph` or `PipeOp` to be converted into a `Graph` internally. This gets modified-by-reference during training
+#'   or prediction (depending on the `predict` argument).
+#'
+#'
 #'   modified-by-reference
 #'   could also be trained for predict (if state is given, original state gets overwirrten)
 #'   if trained and train is run, state gets overwritten
@@ -65,13 +73,13 @@ preproc <- function(indata, graph, state = NULL, predict = !is.null(state)) {
     # Do we need any checks on state? Graph does most checks for us
     # If a state is passed, we overwrite graph's state by assignment, should it already be trained
     if (!is.null(state)) {
-      if (graph$is_trained) warning("'graph' is trained, but 'state' is explicitly given to preproc. Using passed 'state' for Prediction.")
+      if (graph$is_trained) warning("'graph' is trained, but 'state' is explicitly given. Using passed 'state' for Prediction.")
       graph$state = state
     }
     outtask = graph$predict(task)[[1L]]
   } else if (is.null(state)) {
     # If a trained graph is passed, we overwrite its state by re-training the graph.
-    if (graph$is_trained) warning("'graph' is trained, but preproc re-trains the Graph, overwriting its original state.")
+    if (graph$is_trained) warning("'graph' is trained, but preproc re-trains it, overwriting its original state.")
     outtask = graph$train(task)[[1L]]
   } else {
     stop("Inconsistent function arguments. 'predict' is given as 'FALSE' while 'state' is given as not-NULL.")
@@ -94,22 +102,22 @@ preproc <- function(indata, graph, state = NULL, predict = !is.null(state)) {
 # preproc(tsk("iris"), graph = ppl("robustify"))
 # preproc(tsk("iris"), graph = ppl("robustify"), predict = TRUE)
 #
-filter = flt("mim")
-op = po("filter", filter, filter.nfeat = 2)
-preproc(tsk("iris"), op)
-preproc(tsk("iris"), flt("auc"))
-
-gr = po("smote") %>>% po("pca")
-preproc(tsk("iris"), gr)
-
-learner = lrn("regr.rpart")
-preproc(tsk("mtcars"), learner)
-# works but only returns NULL
-preproc(tsk("mtcars"), learner, state = state)
-# learner does not get trained here
-
-df = tsk("iris")$data(cols = task$feature_names)
-op = po("pca")
-preproc(df, op)
-state = list(pca = op$state)
-preproc(df, op, state)
+# filter = flt("mim")
+# op = po("filter", filter, filter.nfeat = 2)
+# preproc(tsk("iris"), op)
+# preproc(tsk("iris"), flt("auc"))
+#
+# gr = po("smote") %>>% po("pca")
+# preproc(tsk("iris"), gr)
+#
+# learner = lrn("regr.rpart")
+# preproc(tsk("mtcars"), learner)
+# # works but only returns NULL
+# preproc(tsk("mtcars"), learner, state = state)
+# # learner does not get trained here
+#
+# df = tsk("iris")$data(cols = task$feature_names)
+# op = po("pca")
+# preproc(df, op)
+# state = list(pca = op$state)
+# preproc(df, op, state)
