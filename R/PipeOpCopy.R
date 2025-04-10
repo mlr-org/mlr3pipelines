@@ -65,7 +65,7 @@
 #' # >   ))
 #' # Instead, the 'copy' operator makes clear which output gets copied.
 #' gunion(list(
-#'   po("scale") %>>% mlr_pipeops$get("copy", outnum = 2),
+#'   po("scale") %>>% po("copy", outnum = 2),
 #'   po("select")
 #' )) %>>%
 #'   gunion(list(
