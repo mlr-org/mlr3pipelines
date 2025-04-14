@@ -86,18 +86,18 @@
 preproc = function(indata, processor, state = NULL, predict = !is.null(state)) {
   assert(
     check_data_frame(indata, col.names = "unique"),
-    check_class(indata, "Task")  # effectively the only thing assert_task checks with default args
+    check_class(indata, "Task")
   )
-  assert_list(state, names = "unique", null.ok = TRUE)  # from Graph
+  assert_list(state, names = "unique", null.ok = TRUE)
   assert_flag(predict)
 
   UseMethod("preproc", processor)
 }
 
 #' @export
-preproc.PipeOp = function(indata, processor, state = NULL, predict = !is.null(state)) {
+preproc.PipeOp = function(indata, processor, state = NULL, predict = !every(state, is.null)) {
   # Wrap PipeOp's state passed by user to look like a Graph's state
-  if (!is.null(state)) state = named_list(processor$id, state)
+  state = named_list(processor$id, state)
   # Convert PipeOp into a Graph
   processor = as_graph(processor, clone = FALSE)
   # Call S3 method for Graph
@@ -105,7 +105,7 @@ preproc.PipeOp = function(indata, processor, state = NULL, predict = !is.null(st
 }
 
 #' @export
-preproc.Graph = function(indata, processor, state = NULL, predict = !is.null(state)) {
+preproc.Graph = function(indata, processor, state = NULL, predict = !every(state, is.null)) {
   if (nrow(processor$output) != 1) {
     stop("'processor' must have exactly one output channel.")
   }
@@ -116,17 +116,18 @@ preproc.Graph = function(indata, processor, state = NULL, predict = !is.null(sta
   #       $task_type only exists for POTaskPreproc, or POImpute, graph does not have this ...
   # Would be good to have a tag / property for PipeOp whether they work without targets
   if (is.data.frame(indata)) {
-    task = TaskUnsupervised$new(id = "preproc_task", backend = indata)
+    indata = TaskUnsupervised$new(id = "preproc_task", backend = indata)
   }
 
   if (predict) {
     # If a state is passed, we overwrite graph's state by assignment, should it already be trained
-    if (!is.null(state)) {
+    if (!every(state, is.null)) {  # state of untrained Graph is named list of NULLs
       if (processor$is_trained) warning("'processor' is trained, but 'state' is explicitly given. Using passed 'state' for prediction.")
       processor$state = state
+      # TODO: trycatch? don't let state be saved if we throw an error
     }
     outtask = processor$predict(indata)[[1L]]
-  } else if (is.null(state)) {
+  } else if (every(state, is.null)) {
     # If a trained graph is passed, we overwrite its state by re-training the graph.
     if (processor$is_trained) warning("'processor' is trained, but preproc re-trains it, overwriting its original state.")
     outtask = processor$train(indata)[[1L]]
@@ -142,3 +143,10 @@ preproc.Graph = function(indata, processor, state = NULL, predict = !is.null(sta
     outtask
   }
 }
+
+microbenchmark::microbenchmark(
+  cm = {!isTRUE(check_list(state, types = "null"))},
+  misc1 = {!every(state, is.null)},
+  misc2 = {all(map_lgl(state, is.null))},
+  naive = {!all(sapply(state, is.null))}
+)
