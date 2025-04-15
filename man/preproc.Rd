@@ -8,50 +8,50 @@ preproc(indata, processor, state = NULL, predict = !is.null(state))
 }
 \arguments{
 \item{indata}{(\code{\link[mlr3:Task]{Task}} | \code{\link{data.frame}} | \code{\link[data.table:data.table]{data.table}} )\cr
-Data to be pre-processed. If \code{indata} is a \code{data.table} or \code{data.frame}, it is used to construct a
-\code{\link[mlr3:TaskUnsupervised]{TaskUnsupervised}} internally, meaning that training or prediction with a \code{processor}
-which uses \code{target} columns will not work.}
+Data to be pre-processed.}
 
 \item{processor}{(\code{\link{Graph}} | \code{\link{PipeOp}})\cr
-\code{Graph} or \code{PipeOp}, to be converted into a \code{Graph} internally, which has exactly one input channel accepting
-a \code{\link[mlr3:Task]{Task}} and one output channel. If \code{indata} is a \code{data.table} or \code{data.frame}, the \code{processor}'s
-output channel must give a \code{Task} to be converted back into a \code{data.table} or \code{data.frame}.
-The \code{processor} gets modified-by-reference during training or if a non-\code{NULL} \code{state} is passed to this function.\cr
+\code{Graph} or \code{PipeOp} which has exactly one input channel accepting a \code{\link[mlr3:Task]{Task}} and one output channel.\cr
+If \code{indata} is a \code{\link{data.frame}} or \code{\link[data.table:data.table]{data.table}}, the output channel must give a \code{Task} to be converted back into a
+\code{data.frame} or \code{data.table}. Additionally, \code{processor}s which only work on sub-classes of
+\code{\link[mlr3:TaskSupervised]{TaskSupervised}} will not be accepted, as it would be unclear which column was the \code{target}.\cr
+Be aware that the \code{processor} gets modified-by-reference during training or if a \code{state} is passed to
+this function. This especially means that the state of a trained \code{processor} will get overwritten.\cr
 You may want to use dictionary sugar functions to select a \code{processor} and to set its hyperparameters, e.g.
-\code{\link[=po]{po()}}, or \code{\link[=ppl]{ppl()}}.}
+\code{\link[=po]{po()}} or \code{\link[=ppl]{ppl()}}.}
 
 \item{state}{(named \code{list} | \code{NULL})\cr
-Optional state to be used for prediction, if the \code{precessor} is untrained or if the \code{state} of the \code{processor}
-should be ignored. Must be a complete and correct state for the respective processor, i.e. for a \code{Graph} a list
-named according to the \code{Graph}'s \code{PipeOp}s containing the \code{PipeOp}'s states. Note, that passing a non-\code{NULL}
-\code{state} modifies the \code{processor} by-reference.}
+Optional state to be used for prediction, if the \code{processor} is untrained or if the current \code{state} of the \code{processor}
+should be overwritten. Must be a complete and correct state for the respective \code{processor}.}
 
 \item{predict}{(\code{logical(1)})\cr
 Whether to predict (\code{TRUE}) or train (\code{FALSE}). By default, this is \code{FALSE} if \code{state} is \code{NULL} (\code{state}'s default),
 and \code{TRUE} otherwise.}
 }
 \value{
-\code{any} | \code{Task} | \code{data.frame} | \code{data.table}
+(\code{any} | \code{\link{data.frame}} | \code{\link[data.table:data.table]{data.table}})\cr
 If \code{indata} is a \code{Task}, whatever is stored in the \code{processor}'s single output channel is returned.
 If \code{indata} is a \code{\link{data.frame}} or \code{\link[data.table:data.table]{data.table}}, an object of the same class is returned, or
 if the \code{processor}'s output channel does not return a \code{Task}, an error is thrown.
 }
 \description{
-Function that offers a simple and direct way to train or predict \code{\link{PipeOp}}s and \code{\link{Graph}}s on \code{\link[mlr3:Task]{Task}}s
-or \code{\link[data.table:data.table]{data.table}}]s.
+Function that offers a simple and direct way to train or predict \code{\link{PipeOp}}s and \code{\link{Graph}}s on \code{\link[mlr3:Task]{Task}}s,
+\code{\link{data.frame}}s or \code{\link[data.table:data.table]{data.table}}s.
 
-Training happens if \code{predict} is set to \code{FALSE} and no \code{state} is passed to this function. Note that the state of a
-trained \code{Graph} or \code{PipeOp} passed to this function will get overwritten during training.
+Training happens if \code{predict} is set to \code{FALSE} and no \code{state} is passed to this function.
 Prediction happens if \code{predict} is set to \code{TRUE} and if the passed \code{Graph} or \code{PipeOp} is either trained or a \code{state}
 is explicitly passed to this function.
 
-Be aware that the passed \code{PipeOp} or \code{Graph}is modified-by-reference during training or if a \code{state} is passed to
-this function.
+The passed  \code{PipeOp} or \code{Graph} gets modified-by-reference.
 }
 \section{Internals}{
 
 If \code{processor} is a \code{\link{PipeOp}}, the S3 method \code{preproc.PipeOp} gets called first, converting the \code{PipeOp} into a
 \code{\link{Graph}} and wrapping the \code{state} appropriately, before calling the S3 method \code{preproc.Graph} with the modified objects.
+
+If \code{indata} is a \code{\link{data.frame}} or \code{\link[data.table:data.table]{data.table}}, it is used to construct a
+\code{\link[mlr3:TaskUnsupervised]{TaskUnsupervised}} internally. This implies that \code{processor}s which only work on sub-classes
+of \code{\link[mlr3:TaskSupervised]{TaskSupervised}} will not work with these input types for \code{indata}.
 }
 
 \examples{
@@ -60,39 +60,37 @@ pop = po("pca")
 
 # Training
 preproc(task, pop)
+# Note, that the PipeOp gets trained through this
+pop$is_trained
 
-# Predicting a trained PipeOp (trained through
-# previous call to preproc)
+# Predicting a trained PipeOp (trained through previous call to preproc)
 preproc(task, pop, predict = TRUE)
 
 # Predicting using a given state
-# We use the state of the PipeOp from the last example
+# We use the state of the PipeOp from the last example and then reset it
 state = pop$state
-pop = po("pca")
+pop$state = NULL
 preproc(task, pop, state)
 
-# Note that the PipeOp's state can be overwritten
-pop$is_trained
+# Note that the PipeOp's state may get overwritten inadvertently during training or if a state is given
 pop$state$sdev
 preproc(tsk("wine"), pop)
 pop$state$sdev
 
-# Piping multiple preproc() calls, using dictionary sugar,
-# and setting parameters
+# Piping multiple preproc() calls, using dictionary sugar to set parameters
 outdata = preproc(tsk("penguins"), po("imputemode", affect_columns = selector_name("sex"))) |>
   preproc(po("imputemean"))
 outdata$missings()
 
-# Use preproc with a graph
+# Use preproc with a Graph
 gr = po("pca", rank. = 4) \%>>\% po("learner", learner = lrn("classif.rpart"))
 preproc(tsk("sonar"), gr) # returns NULL because of the learner
 preproc(tsk("sonar"), gr, predict = TRUE)
 
 # Training with a data.table input
+# Note that this treats the target column as if it were a feature ...
 dt = tsk("iris")$data()
-pop = po("pca")
 preproc(dt, pop)
-# Note that this treats the target column as if it were a feature
 
 # Predicting with a data.table input
 preproc(dt, pop)
