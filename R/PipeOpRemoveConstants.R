@@ -69,7 +69,7 @@ PipeOpRemoveConstants = R6Class("PipeOpRemoveConstants",
           abs_tol = p_dbl(lower = 0, tags = c("required", "constant_check", "train")),
           na_ignore = p_lgl(tags = c("train", "required", "constant_check"))
       )
-      ps$values = list(ratio = 0, rel_tol = 1e-8, abs_tol = 1e-8, na_ignore = TRUE)
+      ps$set_values(ratio = 0, rel_tol = 1e-8, abs_tol = 1e-8, na_ignore = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, tags = "robustify")
     }
   ),

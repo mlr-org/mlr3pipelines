@@ -214,7 +214,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
           depends = quote(return_type %in% c("integer_sequence", "factor_sequence")))
       )
 
-      ps$values = list(stopwords_language = "smart", extra_stopwords = character(0), n = 1, scheme_df = "unary", return_type = "bow")
+      ps$set_values(stopwords_language = "smart", extra_stopwords = character(0), n = 1, scheme_df = "unary", return_type = "bow")
       super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("quanteda", "stopwords"), feature_types = "character")
     }
   ),
