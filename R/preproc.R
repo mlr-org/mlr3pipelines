@@ -12,16 +12,17 @@
 #' Be aware that the passed `PipeOp` or `Graph`is modified-by-reference during training or if a `state` is passed to
 #' this function.
 #'
-#' @param indata ([`Task`][mlr3::Task] | [`data.table`][data.table::data.table] )\cr
-#'   Data to be pre-processed. If `indata` is a `data.table`, it is used to construct a
-#'   [`TaskUnsupervised`][mlr3::TaskUnsupervised] internally, meaning that training or prediction with [`Graph`]s or
-#'   [`PipeOp`]s that use the `target` columns will not work.
+#' @param indata ([`Task`][mlr3::Task] | [`data.frame`] | [`data.table`][data.table::data.table] )\cr
+#'   Data to be pre-processed. If `indata` is a `data.table` or `data.frame`, it is used to construct a
+#'   [`TaskUnsupervised`][mlr3::TaskUnsupervised] internally, meaning that training or prediction with a `processor`
+#'   which uses `target` columns will not work.
 #' @param processor ([`Graph`] | [`PipeOp`])\cr
-#'   `Graph` or `PipeOp` to be converted into a `Graph` internally. This gets modified-by-reference during training
-#'   or if `state` is given as non-`NULL`.
-#'   The `processor` must have exactly one output channel to allow piping of calls to `preproc()`.
-#'   For simple calls, you may want to use dictionary sugar functions to select a `processor` and to set its
-#'   hyperparameters, e.g. [`po()`][po], or [`ppl()`][ppl].
+#'   `Graph` or `PipeOp`, to be converted into a `Graph` internally, which has exactly one input channel accepting
+#'   a [`Task`][mlr3::Task] and one output channel. If `indata` is a `data.table` or `data.frame`, the `processor`'s
+#'   output channel must give a `Task` to be converted back into a `data.table` or `data.frame`.
+#'   The `processor` gets modified-by-reference during training or if a non-`NULL` `state` is passed to this function.\cr
+#'   You may want to use dictionary sugar functions to select a `processor` and to set its hyperparameters, e.g.
+#'   [`po()`][po], or [`ppl()`][ppl].
 #' @param state (named `list` | `NULL`)\cr
 #'   Optional state to be used for prediction, if the `precessor` is untrained or if the `state` of the `processor`
 #'   should be ignored. Must be a complete and correct state for the respective processor, i.e. for a `Graph` a list
@@ -30,10 +31,10 @@
 #' @param predict (`logical(1)`)\cr
 #'   Whether to predict (`TRUE`) or train (`FALSE`). By default, this is `FALSE` if `state` is `NULL` (`state`'s default),
 #'   and `TRUE` otherwise.
-#' @return `any`
-#' Returns whatever the `processor`'s output channel contains. May be of any type.
-#'
-#' if df input, then output open as well, or do we want to return a df for piping and consistency?
+#' @return `any` | `Task` | `data.frame` | `data.table`
+#' If `indata` is a `Task`, whatever is stored in the `processor`'s single output channel is returned.
+#' If `indata` is a [`data.frame`] or [`data.table`][data.table::data.table], an object of the same class is returned, or
+#' if the `processor`'s output channel does not return a `Task`, an error is thrown.
 #'
 #' @section Internals:
 #' If `processor` is a [`PipeOp`], the S3 method `preproc.PipeOp` gets called first, converting the `PipeOp` into a
@@ -89,13 +90,13 @@ preproc = function(indata, processor, state = NULL, predict = !is.null(state)) {
     check_class(indata, "Task")
   )
   assert_list(state, names = "unique", null.ok = TRUE)
-  assert_flag(predict)
 
   UseMethod("preproc", processor)
 }
 
 #' @export
-preproc.PipeOp = function(indata, processor, state = NULL, predict = !every(state, is.null)) {
+preproc.PipeOp = function(indata, processor, state = NULL, predict = !is.null(state)) {
+  assert_flag(predict)  # to force evaluation since S3 evaluates default arguments in every method call
   # Wrap PipeOp's state passed by user to look like a Graph's state
   state = named_list(processor$id, state)
   # Convert PipeOp into a Graph
@@ -106,47 +107,43 @@ preproc.PipeOp = function(indata, processor, state = NULL, predict = !every(stat
 
 #' @export
 preproc.Graph = function(indata, processor, state = NULL, predict = !every(state, is.null)) {
+  assert_flag(predict)
   if (nrow(processor$output) != 1) {
     stop("'processor' must have exactly one output channel.")
   }
+  # Note: We also expect the processor to only have a single input channel which only accepts Tasks. However, we put the
+  #       burden of checking against this on Graph's check_types.
 
-  # Construct a Task from data.frame
-  # TODO: Check what pos could potentially not handle targetless graphs
-  #       probably all POs that don't allow Task, but TaskClassif or TaskRegr specifically, including POLearner
-  #       $task_type only exists for POTaskPreproc, or POImpute, graph does not have this ...
-  # Would be good to have a tag / property for PipeOp whether they work without targets
+  # Construct a Task from data.frame indata
   if (is.data.frame(indata)) {
-    indata = TaskUnsupervised$new(id = "preproc_task", backend = indata)
+    task = TaskUnsupervised$new(id = "preproc_task", backend = indata)
+  } else {
+    task = indata
   }
 
   if (predict) {
     # If a state is passed, we overwrite graph's state by assignment, should it already be trained
     if (!every(state, is.null)) {  # state of untrained Graph is named list of NULLs
-      if (processor$is_trained) warning("'processor' is trained, but 'state' is explicitly given. Using passed 'state' for prediction.")
       processor$state = state
-      # TODO: trycatch? don't let state be saved if we throw an error
     }
-    outtask = processor$predict(indata)[[1L]]
+    outtask = processor$predict(task)[[1L]]
   } else if (every(state, is.null)) {
     # If a trained graph is passed, we overwrite its state by re-training the graph.
-    if (processor$is_trained) warning("'processor' is trained, but preproc re-trains it, overwriting its original state.")
-    outtask = processor$train(indata)[[1L]]
+    outtask = processor$train(task)[[1L]]
   } else {
     stop("Inconsistent function arguments. 'predict' is given as 'FALSE' while 'state' is given as not-NULL.")
   }
 
-  # Conflict: Want to simplify preprocessing, i.e. handle possible extractions for user, but still be open to
-  #           processors that return non-Task objects
   if (is.data.frame(indata)) {
-    outtask$data()
+    if (!inherits(outtask, "Task")) {
+      stop("Output channel of 'processor' does not contain a Task. For data.frame or data.table inputs to 'indata', training or predicting with 'processor' must return a Task or sub-class thereof.")
+    }
+    if (is.data.table(indata)) {
+      outtask$data()
+    } else {
+      as.data.frame(outtask$data())
+    }
   } else {
     outtask
   }
 }
-
-microbenchmark::microbenchmark(
-  cm = {!isTRUE(check_list(state, types = "null"))},
-  misc1 = {!every(state, is.null)},
-  misc2 = {all(map_lgl(state, is.null))},
-  naive = {!all(sapply(state, is.null))}
-)

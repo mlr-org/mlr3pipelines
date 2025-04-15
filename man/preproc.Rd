@@ -7,17 +7,18 @@
 preproc(indata, processor, state = NULL, predict = !is.null(state))
 }
 \arguments{
-\item{indata}{(\code{\link[mlr3:Task]{Task}} | \code{\link[data.table:data.table]{data.table}} )\cr
-Data to be pre-processed. If \code{indata} is a \code{data.table}, it is used to construct a
-\code{\link[mlr3:TaskUnsupervised]{TaskUnsupervised}} internally, meaning that training or prediction with \code{\link{Graph}}s or
-\code{\link{PipeOp}}s that use the \code{target} columns will not work.}
+\item{indata}{(\code{\link[mlr3:Task]{Task}} | \code{\link{data.frame}} | \code{\link[data.table:data.table]{data.table}} )\cr
+Data to be pre-processed. If \code{indata} is a \code{data.table} or \code{data.frame}, it is used to construct a
+\code{\link[mlr3:TaskUnsupervised]{TaskUnsupervised}} internally, meaning that training or prediction with a \code{processor}
+which uses \code{target} columns will not work.}
 
 \item{processor}{(\code{\link{Graph}} | \code{\link{PipeOp}})\cr
-\code{Graph} or \code{PipeOp} to be converted into a \code{Graph} internally. This gets modified-by-reference during training
-or if \code{state} is given as non-\code{NULL}.
-The \code{processor} must have exactly one output channel to allow piping of calls to \code{preproc()}.
-For simple calls, you may want to use dictionary sugar functions to select a \code{processor} and to set its
-hyperparameters, e.g. \code{\link[=po]{po()}}, or \code{\link[=ppl]{ppl()}}.}
+\code{Graph} or \code{PipeOp}, to be converted into a \code{Graph} internally, which has exactly one input channel accepting
+a \code{\link[mlr3:Task]{Task}} and one output channel. If \code{indata} is a \code{data.table} or \code{data.frame}, the \code{processor}'s
+output channel must give a \code{Task} to be converted back into a \code{data.table} or \code{data.frame}.
+The \code{processor} gets modified-by-reference during training or if a non-\code{NULL} \code{state} is passed to this function.\cr
+You may want to use dictionary sugar functions to select a \code{processor} and to set its hyperparameters, e.g.
+\code{\link[=po]{po()}}, or \code{\link[=ppl]{ppl()}}.}
 
 \item{state}{(named \code{list} | \code{NULL})\cr
 Optional state to be used for prediction, if the \code{precessor} is untrained or if the \code{state} of the \code{processor}
@@ -30,10 +31,10 @@ Whether to predict (\code{TRUE}) or train (\code{FALSE}). By default, this is \c
 and \code{TRUE} otherwise.}
 }
 \value{
-\code{any}
-Returns whatever the \code{processor}'s output channel contains. May be of any type.
-
-if df input, then output open as well, or do we want to return a df for piping and consistency?
+\code{any} | \code{Task} | \code{data.frame} | \code{data.table}
+If \code{indata} is a \code{Task}, whatever is stored in the \code{processor}'s single output channel is returned.
+If \code{indata} is a \code{\link{data.frame}} or \code{\link[data.table:data.table]{data.table}}, an object of the same class is returned, or
+if the \code{processor}'s output channel does not return a \code{Task}, an error is thrown.
 }
 \description{
 Function that offers a simple and direct way to train or predict \code{\link{PipeOp}}s and \code{\link{Graph}}s on \code{\link[mlr3:Task]{Task}}s
