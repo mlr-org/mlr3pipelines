@@ -123,7 +123,7 @@ test_that("preproc - PipeOp processor", {
 
 test_that("preproc - Graph processor", {
   task = tsk("iris")
-  df = task$data(cols = task$feature_names)
+  dt = task$data(cols = task$feature_names)
   op = po("scale")
   processor = as_graph(op)
   expected_train_out_task = processor$train(task)[[1L]]
