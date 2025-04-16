@@ -1,5 +1,6 @@
 # mlr3pipelines 0.7.2-9000
 - Added missing error for predicting with untrained `PipeOp`s / `Graph`s.
+- Added new convenience function `preproc()` for easier training of or prediction with `PipeOp`s or `Graph`s.
 
 # mlr3pipelines 0.7.2
 
