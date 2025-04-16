@@ -72,7 +72,8 @@ state = pop$state
 pop$state = NULL
 preproc(task, pop, state)
 
-# Note that the PipeOp's state may get overwritten inadvertently during training or if a state is given
+# Note that the PipeOp's state may get overwritten inadvertently during
+# training or if a state is given
 pop$state$sdev
 preproc(tsk("wine"), pop)
 pop$state$sdev
