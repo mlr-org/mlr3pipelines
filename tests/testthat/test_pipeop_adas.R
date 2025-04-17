@@ -81,20 +81,3 @@ test_that("PipeOpADAS - handling of feature named 'class'", {
   expect_equal(train_out, adas_out)
 
 })
-
-test_that("PipeOpADAS - handles unseen levels in target, #881", {
-  skip_if_not_installed("smotefamily")
-  op = PipeOpADAS$new()
-
-  set.seed(1234L)
-  df = data.frame(
-    target = factor(sample(c("c1", "c2"), size = 200, replace = TRUE, prob = c(0.1, 0.9)), levels = c("c1", "c2", "c3")),
-    x1 = rnorm(200),
-    x2 = rnorm(200)
-  )
-  task = TaskClassif$new(id = "test", backend = df, target = "target")
-
-  set.seed(1234L)
-  train_out = op$train(list(task))[[1L]]
-  expect_equal(task$levels(), train_out$levels())
-})

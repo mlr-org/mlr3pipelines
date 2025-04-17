@@ -222,30 +222,13 @@ expect_pipeop_class = function(poclass, constargs = list(), check_ps_default_val
 expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   predict_like_train = TRUE, predict_rows_independent = TRUE,
   deterministic_train = TRUE, deterministic_predict = TRUE,
+  train_uses_target = TRUE, predict_uses_target = TRUE,
   affect_context_independent = TRUE,  # whether excluding a column does not change what happens to the other columns
   tolerance = sqrt(.Machine$double.eps),
   check_ps_default_values = TRUE) {
   # NOTE
   # The 'tolerance' parameter is not used in many places yet; if tolerance becomes a problem, add the
   # 'tolerance = tolerance' argument to `expect_equal`.
-
-
-  # maybe use sth like train_target_independent?
-  # do we need predict_target_independent?
-  #   maybe for preproc()?
-  # apparently we somewhere in here test that predicting w/o target works?
-  #   maybe this is a general assumption so we don't need predict_target_independent
-
-  if (!train_target_independent) {
-    # need to clone beforehand
-    task3 = task$clone(deep = TRUE)
-
-    new_levels = list(c(task3$levels(cols = task3$target_names)[[task3$target_names]], "new_level"))
-    task3$set_levels(
-      set_names(new_levels, task3$target_names)
-    )
-  }
-
 
   original_clone = task$clone(deep = TRUE)
   expect_shallow_clone(task, original_clone)
@@ -332,6 +315,28 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   emptytaskfnames = po$train(list(emptytask))[[1]]$feature_names
   expect_task(po$predict(list(emptytask))[[1]])
   expect_equal(emptytaskfnames, po$predict(list(emptytask))[[1]]$feature_names)
+
+  # test that training and prediction works for classification tasks with empty target level
+  if (inherits(task, "TaskClassif")) {
+    if (train_uses_target) {
+      task3 = task$clone(deep = TRUE)
+      new_levels = list(c(task3$levels(cols = task3$target_names)[[task3$target_names]], "empty_level"))
+      task3$set_levels(set_names(new_levels, task3$target_names))
+      train_out = expect_no_error(po$train(list(task3)))
+      # does this even make sense?
+      # - are there preproc POs that change levels?
+      # - is this already tested by checking input and output task?
+      expect_equal(train_out[[1L]]$levels(), task3$levels())
+    }
+    # Are there even any POs that use target during predict if we have a test that checks whether predicting works without target?
+    if (predict_uses_target) {
+      task3 = task$clone(deep = TRUE)
+      new_levels = list(c(task3$levels(cols = task3$target_names)[[task3$target_names]], "empty_level"))
+      task3$set_levels(set_names(new_levels, task3$target_names))
+      predict_out = expect_no_error(po$predict(list(task3)))
+      expect_equal(predict_out[[1L]]$levels(), task3$levels())
+    }
+  }
 
   if ("affect_columns" %in% po$param_set$ids() && affect_context_independent) {
     selector = function(data) data$feature_names[-1]
@@ -422,7 +427,6 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   whichrow = task$row_ids[[sample.int(task$nrow, 1)]]
   onerowtask = task$clone(deep = TRUE)$filter(whichrow)
 
-
   predicted = po$predict(list(norowtask))[[1]]
   if (predict_rows_independent) {
     expect_equal(predicted$nrow, 0)
@@ -473,7 +477,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   taskouttrain = po$train(list(tasktrain))[[1L]]
   taskoutpredict = po$predict(list(taskpredict))[[1L]]
 
-  # other columns like weights are present during traing but not during predict
+  # other columns like weights are present during training but not during predict
   cols = unname(unlist(taskouttrain$col_roles[c("feature", "target")]))
   dtrain = taskouttrain$internal_valid_task$data(cols = cols)
   dpredict = taskoutpredict$data(cols = cols)
