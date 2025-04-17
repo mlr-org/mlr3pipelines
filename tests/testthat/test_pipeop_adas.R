@@ -13,6 +13,7 @@ test_that("PipeOpADAS - train works as intended", {
 
   op = PipeOpADAS$new()
 
+  set.seed(1234L)
   df = data.frame(
     target = factor(sample(c("c1", "c2"), size = 200, replace = TRUE, prob = c(0.1, 0.9))),
     x1 = rnorm(200),
@@ -60,6 +61,7 @@ test_that("PipeOpADAS - handling of feature named 'class'", {
 
   op = PipeOpADAS$new()
 
+  set.seed(1234L)
   df = data.frame(
     target = factor(sample(c("c1", "c2"), size = 200, replace = TRUE, prob = c(0.1, 0.9))),
     class = rnorm(200),
