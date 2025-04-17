@@ -120,7 +120,7 @@ test_that("apply results look as they should", {
 
 test_that("empty task", {
 
-  task = tsk("iris")$filter(0L)
+  task = tsk("iris")$filter(integer(0))
   po = PipeOpColApply$new()
   po$param_set$values$applicator = function(x) as.integer(x)
 
