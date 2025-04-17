@@ -42,6 +42,7 @@
 #'
 #' @export
 #' @examples
+#' library(mlr3)
 #' task = tsk("iris")
 #' pop = po("pca")
 #'

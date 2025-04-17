@@ -55,6 +55,7 @@ of \code{\link[mlr3:TaskSupervised]{TaskSupervised}} will not work with these in
 }
 
 \examples{
+library(mlr3)
 task = tsk("iris")
 pop = po("pca")
 
