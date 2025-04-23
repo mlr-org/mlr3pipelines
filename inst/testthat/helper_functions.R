@@ -322,7 +322,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
       task3 = task$clone(deep = TRUE)
       new_levels = list(c(task3$levels(cols = task3$target_names)[[task3$target_names]], "empty_level"))
       task3$set_levels(set_names(new_levels, task3$target_names))
-      train_out = expect_no_error(po$train(list(task3)))
+      train_out = expect_no_error(op$train(list(task3)))
       # does this even make sense?
       # - are there preproc POs that change levels?
       # - is this already tested by checking input and output task?
@@ -333,7 +333,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
       task3 = task$clone(deep = TRUE)
       new_levels = list(c(task3$levels(cols = task3$target_names)[[task3$target_names]], "empty_level"))
       task3$set_levels(set_names(new_levels, task3$target_names))
-      predict_out = expect_no_error(po$predict(list(task3)))
+      predict_out = expect_no_error(op$predict(list(task3)))
       expect_equal(predict_out[[1L]]$levels(), task3$levels())
     }
   }
