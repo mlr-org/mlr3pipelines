@@ -222,7 +222,7 @@ expect_pipeop_class = function(poclass, constargs = list(), check_ps_default_val
 expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   predict_like_train = TRUE, predict_rows_independent = TRUE,
   deterministic_train = TRUE, deterministic_predict = TRUE,
-  train_uses_target = TRUE, predict_uses_target = TRUE,
+  train_uses_target = TRUE,
   affect_context_independent = TRUE,  # whether excluding a column does not change what happens to the other columns
   tolerance = sqrt(.Machine$double.eps),
   check_ps_default_values = TRUE) {
@@ -316,28 +316,6 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   expect_task(po$predict(list(emptytask))[[1]])
   expect_equal(emptytaskfnames, po$predict(list(emptytask))[[1]]$feature_names)
 
-  # test that training and prediction works for classification tasks with empty target level
-  if (inherits(task, "TaskClassif")) {
-    if (train_uses_target) {
-      task3 = task$clone(deep = TRUE)
-      new_levels = list(c(task3$levels(cols = task3$target_names)[[task3$target_names]], "empty_level"))
-      task3$set_levels(set_names(new_levels, task3$target_names))
-      train_out = expect_no_error(op$train(list(task3)))
-      # does this even make sense?
-      # - are there preproc POs that change levels?
-      # - is this already tested by checking input and output task?
-      expect_equal(train_out[[1L]]$levels(), task3$levels())
-    }
-    # Are there even any POs that use target during predict if we have a test that checks whether predicting works without target?
-    if (predict_uses_target) {
-      task3 = task$clone(deep = TRUE)
-      new_levels = list(c(task3$levels(cols = task3$target_names)[[task3$target_names]], "empty_level"))
-      task3$set_levels(set_names(new_levels, task3$target_names))
-      predict_out = expect_no_error(op$predict(list(task3)))
-      expect_equal(predict_out[[1L]]$levels(), task3$levels())
-    }
-  }
-
   if ("affect_columns" %in% po$param_set$ids() && affect_context_independent) {
     selector = function(data) data$feature_names[-1]
     po2$param_set$values$affect_columns = selector
@@ -419,6 +397,16 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
     expect_equal(halfpredresL0, explicitpredresL0, ignore.col.order = TRUE, tolerance = tolerance)
     expect_equal(halfpredresL0, halfpredres[integer(0), ], ignore.col.order = TRUE, tolerance = tolerance)
 
+  }
+
+  # test that training and prediction works for classification tasks with empty target level, #881
+  if (train_uses_target && inherits(task, "TaskClassif")) {
+    task3 = task$clone(deep = TRUE)
+    new_levels = list(c(task3$levels(cols = task3$target_names)[[task3$target_names]], "empty_level"))
+    task3$set_levels(set_names(new_levels, task3$target_names))
+    train_out = expect_no_error(po$train(list(task3)))
+    # Is this a fair assumption to impose?
+    expect_contains(train_out[[1L]]$levels(cols = task$target_names)[[1L]], "empty_level")
   }
 
   po$train(list(task))
