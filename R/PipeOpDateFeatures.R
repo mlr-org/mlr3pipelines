@@ -113,7 +113,7 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
         second = p_lgl(tags = c("train", "predict", "datepart", "required")),
         is_day = p_lgl(tags = c("train", "predict", "datepart", "required"))
       )
-      ps$values = list(keep_date_var = FALSE, cyclic = FALSE, year = TRUE,
+      ps$set_values(keep_date_var = FALSE, cyclic = FALSE, year = TRUE,
         month = TRUE, week_of_year = TRUE, day_of_year = TRUE, day_of_month = TRUE,
         day_of_week = TRUE, hour = TRUE, minute = TRUE, second = TRUE, is_day = TRUE)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = "POSIXct")
