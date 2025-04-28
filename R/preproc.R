@@ -113,8 +113,8 @@ preproc.Graph = function(indata, processor, state = NULL, predict = !every(state
   if (nrow(processor$output) != 1) {
     stop("'processor' must have exactly one output channel.")
   }
-  # Note: We also expect the processor to only have a single input channel which only accepts Tasks. However, we put the
-  #       burden of checking against this on Graph's check_types.
+  # Note: We do accept graphs with more than one input; indata is sent to all of them,
+  # making use of Graph$train's single_input = TRUE.
 
   # Construct a Task from data.frame indata
   if (is.data.frame(indata)) {
