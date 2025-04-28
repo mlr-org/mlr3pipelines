@@ -120,6 +120,12 @@ Default <code>TRUE</code>.</p></dd>
 <span class="r-in"><span><span class="va">graph_stack</span> <span class="op">=</span> <span class="fu">pipeline_stacking</span><span class="op">(</span><span class="va">base_learners</span>, <span class="va">super_learner</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">graph_learner</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_learner.html" class="external-link">as_learner</a></span><span class="op">(</span><span class="va">graph_stack</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">graph_learner</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"german_credit"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>variable 'credit_risk' is absent, its contrast will be ignored</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> This happened PipeOp classif.kknn's $train()</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>variable 'credit_risk' is absent, its contrast will be ignored</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> This happened PipeOp classif.kknn's $train()</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>variable 'credit_risk' is absent, its contrast will be ignored</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> This happened PipeOp classif.kknn's $train()</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
