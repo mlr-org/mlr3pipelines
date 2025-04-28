@@ -135,7 +135,7 @@ test_that("threshold respects minimization / maximization", {
     po("tunethreshold", measure = msr("classif.bacc"), optimizer = "random_search")
 
   learner1 = as_learner(graph)
-  learner2 = lrn("classif.rpart")
+  learner2 = lrn("classif.rpart", predict_type = "prob")
 
   design = benchmark_grid(
     task,
@@ -221,7 +221,7 @@ test_that("threshold works with cost measure", {
   learner2 = GraphLearner$new(graph2, id = "fpr.minimizer")
   design = benchmark_grid(
     task,
-    list(learner1, learner2, lrn("classif.rpart")),
+    list(learner1, learner2, lrn("classif.rpart", predict_type = "prob")),
     rsmp("cv", folds = 10)
   )
 
