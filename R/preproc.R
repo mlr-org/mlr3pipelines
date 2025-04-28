@@ -8,27 +8,28 @@
 #' Prediction happens if `predict` is set to `TRUE` and if the passed `Graph` or `PipeOp` is either trained or a `state`
 #' is explicitly passed to this function.
 #'
-#' The passed  `PipeOp` or `Graph` gets modified-by-reference.
+#' The passed  `PipeOp` or `Graph` gets modified by-reference.
 #'
 #' @param indata ([`Task`][mlr3::Task] | [`data.frame`] | [`data.table`][data.table::data.table] )\cr
 #'   Data to be pre-processed.
 #' @param processor ([`Graph`] | [`PipeOp`])\cr
-#'   `Graph` or `PipeOp` which has exactly one input channel accepting a [`Task`][mlr3::Task] and one output channel.\cr
-#'   If `indata` is a [`data.frame`] or [`data.table`][data.table::data.table], the output channel must give a `Task` to be converted back into a
+#'   `Graph` or `PipeOp` accepting a [`Task`][mlr3::Task] that has one output channel.\cr
+#'   Whenever `indata` is passed a [`data.frame`] or [`data.table`][data.table::data.table], the output channel must return a `Task` to be converted back into a
 #'   `data.frame` or `data.table`. Additionally, `processor`s which only work on sub-classes of
-#'   [`TaskSupervised`][mlr3::TaskSupervised] will not be accepted, as it would be unclear which column was the `target`.\cr
-#'   Be aware that the `processor` gets modified-by-reference during training or if a `state` is passed to
-#'   this function. This especially means that the state of a trained `processor` will get overwritten.\cr
+#'   [`TaskSupervised`][mlr3::TaskSupervised] will not accept [`data.frame`] or [`data.table`][data.table::data.table], as it would be unclear which column was the `target`.\cr
+#'   Be aware that the `processor` gets modified by-reference both during training, and if a `state` is passed to
+#'   this function. This especially means that the state of a trained `processor` will get overwritten when `state` is passed.\cr
 #'   You may want to use dictionary sugar functions to select a `processor` and to set its hyperparameters, e.g.
-#'   [`po()`][po] or [`ppl()`][ppl].
+#'   [`po()`] or [`ppl()`].
 #' @param state (named `list` | `NULL`)\cr
 #'   Optional state to be used for prediction, if the `processor` is untrained or if the current `state` of the `processor`
 #'   should be overwritten. Must be a complete and correct state for the respective `processor`.
+#'   Default `NULL` (do not overwrite `processor`'s `state`).
 #' @param predict (`logical(1)`)\cr
 #'   Whether to predict (`TRUE`) or train (`FALSE`). By default, this is `FALSE` if `state` is `NULL` (`state`'s default),
 #'   and `TRUE` otherwise.
-#' @return (`any` | [`data.frame`] | [`data.table`][data.table::data.table])\cr
-#' If `indata` is a `Task`, whatever is stored in the `processor`'s single output channel is returned.
+#' @return `any` | [`data.frame`] | [`data.table`][data.table::data.table]:
+#' If `indata` is a `Task`, whatever is returned by the `processor`'s single output channel is returned.
 #' If `indata` is a [`data.frame`] or [`data.table`][data.table::data.table], an object of the same class is returned, or
 #' if the `processor`'s output channel does not return a `Task`, an error is thrown.
 #'
@@ -36,19 +37,19 @@
 #' If `processor` is a [`PipeOp`], the S3 method `preproc.PipeOp` gets called first, converting the `PipeOp` into a
 #' [`Graph`] and wrapping the `state` appropriately, before calling the S3 method `preproc.Graph` with the modified objects.
 #'
-#' If `indata` is a [`data.frame`] or [`data.table`][data.table::data.table], it is used to construct a
-#' [`TaskUnsupervised`][mlr3::TaskUnsupervised] internally. This implies that `processor`s which only work on sub-classes
+#' If `indata` is a [`data.frame`] or [`data.table`][data.table::data.table], a
+#' [`TaskUnsupervised`][mlr3::TaskUnsupervised] is constructed internally. This implies that `processor`s which only work on sub-classes
 #' of [`TaskSupervised`][mlr3::TaskSupervised] will not work with these input types for `indata`.
 #'
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #' task = tsk("iris")
 #' pop = po("pca")
 #'
 #' # Training
 #' preproc(task, pop)
-#' # Note, that the PipeOp gets trained through this
+#' # Note that the PipeOp gets trained through this
 #' pop$is_trained
 #'
 #' # Predicting a trained PipeOp (trained through previous call to preproc)
@@ -67,17 +68,18 @@
 #' pop$state$sdev
 #'
 #' # Piping multiple preproc() calls, using dictionary sugar to set parameters
-#' outdata = preproc(tsk("penguins"), po("imputemode", affect_columns = selector_name("sex"))) |>
-#'   preproc(po("imputemean"))
-#' outdata$missings()
+#' # tsk("penguins") |>
+#' #   preproc(po("imputemode", affect_columns = selector_name("sex"))) |>
+#' #   preproc(po("imputemean"))
 #'
 #' # Use preproc with a Graph
 #' gr = po("pca", rank. = 4) %>>% po("learner", learner = lrn("classif.rpart"))
-#' preproc(tsk("sonar"), gr) # returns NULL because of the learner
+#' preproc(tsk("sonar"), gr)  # returns NULL because of the learner
 #' preproc(tsk("sonar"), gr, predict = TRUE)
 #'
 #' # Training with a data.table input
-#' # Note that this treats the target column as if it were a feature ...
+#' # Note that `$data()` drops the information that "Species" is the target.
+#' # It gets handled like an ordinary feature here.
 #' dt = tsk("iris")$data()
 #' preproc(dt, pop)
 #'
