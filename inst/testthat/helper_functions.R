@@ -217,6 +217,8 @@ expect_pipeop_class = function(poclass, constargs = list(), check_ps_default_val
 #  - training / prediction does not change input task
 #  - is_trained is true
 #  - deep cloning clones the state
+#  - preproc() gives no error with Task indata
+#  - preproc() gives no error with data.frame indata if PipeOp works without target column
 #
 # `task` must have at least two feature columns and at least two rows.
 expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
@@ -467,6 +469,16 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
 
   if (deterministic_predict && deterministic_train) {
     expect_equal(dtrain, dpredict)
+  }
+
+  # Test that preproc() works with PipeOp
+  expect_no_error(preproc(task, po))
+  expect_no_error(preproc(task, po, predict = TRUE))
+  if (po$task_type == "Task") {  # implies that PipeOp does not require target column
+    dtout = expect_no_error(preproc(task$data(cols = task$feature_names), po))
+    expect_data_table(dt_out)
+    dtout = expect_no_error(preproc(task$data(cols = task$feature_names), po, predict = TRUE))
+    expect_data_table(dt_out)
   }
 }
 
