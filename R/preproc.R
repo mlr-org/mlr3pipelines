@@ -138,7 +138,7 @@ preproc.Graph = function(indata, processor, state = NULL, predict = !every(state
 
   if (is.data.frame(indata)) {
     if (!inherits(outtask, "Task")) {
-      stop("Output channel of 'processor' does not contain a Task. For data.frame or data.table inputs to 'indata', training or predicting with 'processor' must return a Task or sub-class thereof.")
+      stop("Output channel of 'processor' does not return a Task. For data.frame or data.table inputs to 'indata', training or predicting with 'processor' must return a Task or sub-class thereof.")
     }
     if (is.data.table(indata)) {
       outtask$data()
