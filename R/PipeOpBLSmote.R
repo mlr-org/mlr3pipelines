@@ -109,14 +109,18 @@ PipeOpBLSmote = R6Class("PipeOpBLSmote",
 
       # Calculate synthetic data
       dt = task$data(cols = cols)
+      # Remove unseen factor levels, see #881
+      # Don't need to re-add them later since we don't touch task here
+      target = droplevels(task$truth())
+
       if (self$param_set$get_values()$quiet) {
         utils::capture.output({
-          st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = task$truth(),
+          st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = target,
                             .args = self$param_set$get_values(tags = "blsmote"),
                             .opts = list(warnPartialMatchArgs = FALSE))$syn_data)  # BLSMOTE uses partial arg matching internally
         })
       } else {
-        st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = task$truth(),
+        st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = target,
                           .args = self$param_set$get_values(tags = "blsmote"),
                           .opts = list(warnPartialMatchArgs = FALSE))$syn_data)
       }

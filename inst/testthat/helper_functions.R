@@ -222,13 +222,13 @@ expect_pipeop_class = function(poclass, constargs = list(), check_ps_default_val
 expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   predict_like_train = TRUE, predict_rows_independent = TRUE,
   deterministic_train = TRUE, deterministic_predict = TRUE,
+  train_uses_target = TRUE,
   affect_context_independent = TRUE,  # whether excluding a column does not change what happens to the other columns
   tolerance = sqrt(.Machine$double.eps),
   check_ps_default_values = TRUE) {
   # NOTE
   # The 'tolerance' parameter is not used in many places yet; if tolerance becomes a problem, add the
   # 'tolerance = tolerance' argument to `expect_equal`.
-
 
   original_clone = task$clone(deep = TRUE)
   expect_shallow_clone(task, original_clone)
@@ -399,12 +399,21 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
 
   }
 
+  # test that training and prediction works for classification tasks with empty target level, #881
+  if (train_uses_target && inherits(task, "TaskClassif")) {
+    task3 = task$clone(deep = TRUE)
+    new_levels = list(c(task3$levels(cols = task3$target_names)[[task3$target_names]], "empty_level"))
+    task3$set_levels(set_names(new_levels, task3$target_names))
+    train_out = expect_no_error(po$train(list(task3)))
+    # Is this a fair assumption to impose?
+    expect_contains(train_out[[1L]]$levels(cols = task$target_names)[[1L]], "empty_level")
+  }
+
   po$train(list(task))
 
   norowtask = task$clone(deep = TRUE)$filter(integer(0))
   whichrow = task$row_ids[[sample.int(task$nrow, 1)]]
   onerowtask = task$clone(deep = TRUE)$filter(whichrow)
-
 
   predicted = po$predict(list(norowtask))[[1]]
   if (predict_rows_independent) {
@@ -456,7 +465,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   taskouttrain = po$train(list(tasktrain))[[1L]]
   taskoutpredict = po$predict(list(taskpredict))[[1L]]
 
-  # other columns like weights are present during traing but not during predict
+  # other columns like weights are present during training but not during predict
   cols = unname(unlist(taskouttrain$col_roles[c("feature", "target")]))
   dtrain = taskouttrain$internal_valid_task$data(cols = cols)
   dpredict = taskoutpredict$data(cols = cols)
