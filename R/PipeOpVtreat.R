@@ -68,7 +68,7 @@
 #'   If `TRUE` use [stats::glm()] linkspace, if FALSE use [stats::lm()] for scaling.
 #' * `verbose` :: `logical(1)`\cr
 #'   If `TRUE` print progress.
-#' * `use_paralell` :: `logical(1)`\cr
+#' * `use_parallel` :: `logical(1)`\cr
 #'   If `TRUE` use parallel methods.
 #' * `missingness_imputation` :: `function`\cr
 #'   Function of signature f(values: numeric, weights: numeric), simple missing value imputer.\cr
@@ -160,7 +160,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         forceSplit = p_lgl(default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
         catScaling = p_lgl(tags = c("train", "regression", "classification", "multinomial")),  # default TRUE for regression, classification, FALSE for multinomial
         verbose = p_lgl(default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
-        use_paralell = p_lgl(default = TRUE, tags = c("train", "regression", "classification", "multinomial")),
+        use_parallel = p_lgl(default = TRUE, tags = c("train", "regression", "classification", "multinomial")),
         missingness_imputation = p_uty(
           default = NULL,
           custom_check = crate(function(x) checkmate::check_function(x, args = c("values", "weights"), null.ok = TRUE)),

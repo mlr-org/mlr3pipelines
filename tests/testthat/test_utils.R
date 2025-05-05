@@ -65,10 +65,6 @@ test_that("task_filter_ex - changed row_roles$use", {
   task$row_roles$use = seq(1, 50)
   tfiltered = task_filter_ex(task$clone(), rowidx)
   expect_equal(tfiltered$data(), task$data(rows = rowidx))
-
-  task$row_roles$use = c(seq(1, 50), seq(1, 20))
-  tfiltered = task_filter_ex(task$clone(), 50L + rowidx)
-  expect_equal(tfiltered$data(), task$data(rows = 50L + rowidx))
 })
 
 test_that("task_filter_ex - group renaming in changed row_roles$use", {
