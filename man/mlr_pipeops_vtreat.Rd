@@ -82,7 +82,7 @@ If \code{TRUE} force cross-validated significance calculations on all variables.
 If \code{TRUE} use \code{\link[stats:glm]{stats::glm()}} linkspace, if FALSE use \code{\link[stats:lm]{stats::lm()}} for scaling.
 \item \code{verbose} :: \code{logical(1)}\cr
 If \code{TRUE} print progress.
-\item \code{use_paralell} :: \code{logical(1)}\cr
+\item \code{use_parallel} :: \code{logical(1)}\cr
 If \code{TRUE} use parallel methods.
 \item \code{missingness_imputation} :: \code{function}\cr
 Function of signature f(values: numeric, weights: numeric), simple missing value imputer.\cr
