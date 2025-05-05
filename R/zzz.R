@@ -1,5 +1,6 @@
 #' @import data.table
 #' @import checkmate
+#' @import cli
 #' @import mlr3
 #' @import paradox
 #' @import mlr3misc

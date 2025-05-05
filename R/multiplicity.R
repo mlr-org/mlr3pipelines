@@ -56,7 +56,7 @@ print.Multiplicity = function(x, ...) {
   if (!length(x)) {
     cat("Empty Multiplicity.\n")
   } else {
-    cat("Multiplicity:\n")
+    cli_h2("Multiplicity:")
     print(unclass(x), ...)
   }
 }
