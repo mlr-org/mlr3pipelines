@@ -474,7 +474,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   # Test that preproc() works with PipeOp
   expect_no_error(preproc(task, po))
   expect_no_error(preproc(task, po, predict = TRUE))
-  if (po$task_type == "Task") {  # implies that PipeOp does not require target column
+  if (po$input$train == "Task") {  # implies that PipeOp does not require target column
     dtout = expect_no_error(preproc(task$data(cols = task$feature_names), po))
     expect_data_table(dt_out)
     dtout = expect_no_error(preproc(task$data(cols = task$feature_names), po, predict = TRUE))
