@@ -46,6 +46,10 @@
 #' * `over_ratio` :: `numeric(1)`\cr
 #'   Ratio of the majority to minority class. Default is `1`. For details, see [`themis::smotenc`].
 #'
+#' @section Internals:
+#' If a target level is unobserved during training, no synthetic data points will be generated for that class.
+#' No error is raised; the unobserved class is simply ignored.
+#'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
@@ -112,9 +116,14 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
         stop("SmoteNC requires at least one numeric or integer feature.")
       }
 
+      # Remove unseen target levels, see #881
+      # Save original levels to re-add them later
+      levels = task$levels()
+      task$droplevels(cols = task$target_names)
+
       # Calculate synthetic data
       snc = setDT(invoke(themis::smotenc, df = task$data(), var = task$target_names,
-                         .args = self$param_set$get_values(tags = "smotenc")))
+        .args = self$param_set$get_values(tags = "smotenc")))
 
       # Filter snc to only contain the generated synthetic data
       snc = utils::tail(snc, n = -task$nrow)
@@ -122,6 +131,9 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
       # Convert originally integer columns back to integer as SMOTENC treats them as numeric
       int_cols = task$feature_names[task$feature_types$type == "integer"]
       snc[, (int_cols) := lapply(.SD, function(x) as.integer(round(x))), .SDcols = int_cols]
+
+      # Re-add empty target levels
+      task$set_levels(levels)
 
       task$rbind(snc)
     }

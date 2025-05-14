@@ -51,6 +51,12 @@ See \code{\link[smotefamily:adas]{ADAS()}}.
 }
 }
 
+\section{Internals}{
+
+If a target level is unobserved during training, no synthetic data points will be generated for that class.
+No error is raised; the unobserved class is simply ignored.
+}
+
 \section{Fields}{
 
 Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.

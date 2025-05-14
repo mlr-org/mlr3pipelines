@@ -5,12 +5,9 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Generates a more balanced data set by creating
-#' synthetic instances of the minority class using the SMOTE algorithm.
-#' The algorithm samples for each minority instance a new data point based on the `K` nearest
-#' neighbors of that data point.
-#' It can only be applied to tasks with purely numeric features.
-#' See [`smotefamily::SMOTE`] for details.
+#' Generates a more balanced data set by creating synthetic instances of the minority class using the SMOTE algorithm.
+#' The algorithm samples for each minority instance a new data point based on the `K` nearest neighbors of that data point.
+#' It can only be applied to tasks with purely numeric features. See [`smotefamily::SMOTE`] for details.
 #'
 #' @section Construction:
 #' ```
@@ -39,6 +36,10 @@
 #' * `dup_size` :: `numeric` \cr
 #'   Desired times of synthetic minority instances over the original number of
 #'   majority instances. See [`SMOTE()`][`smotefamily::SMOTE`].
+#'
+#' @section Internals:
+#' If a target level is unobserved during training, no synthetic data points will be generated for that class.
+#' No error is raised; the unobserved class is simply ignored.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -99,7 +100,7 @@ PipeOpSmote = R6Class("PipeOpSmote",
 
       # Calculate synthetic data
       dt = task$data(cols = cols)
-      # Remove unseen factor levels, see #881
+      # Remove unseen target levels, see #881
       # Don't need to re-add them later since we don't touch task here
       target = droplevels(task$truth())
 

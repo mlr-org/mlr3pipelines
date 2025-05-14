@@ -37,6 +37,10 @@
 #'   The number of nearest neighbors used for sampling new values. Default is `5`.
 #'   See [`ADAS()`][`smotefamily::ADAS`].
 #'
+#' @section Internals:
+#' If a target level is unobserved during training, no synthetic data points will be generated for that class.
+#' No error is raised; the unobserved class is simply ignored.
+#'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
@@ -97,7 +101,7 @@ PipeOpADAS = R6Class("PipeOpADAS",
 
       # Calculate synthetic data
       dt = task$data(cols = cols)
-      # Remove unseen factor levels, see #881
+      # Remove unseen target levels, see #881
       # Don't need to re-add them later since we don't touch task here
       target = droplevels(task$truth())
 

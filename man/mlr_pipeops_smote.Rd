@@ -8,12 +8,9 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Generates a more balanced data set by creating
-synthetic instances of the minority class using the SMOTE algorithm.
-The algorithm samples for each minority instance a new data point based on the \code{K} nearest
-neighbors of that data point.
-It can only be applied to tasks with purely numeric features.
-See \code{\link[smotefamily:SMOTE]{smotefamily::SMOTE}} for details.
+Generates a more balanced data set by creating synthetic instances of the minority class using the SMOTE algorithm.
+The algorithm samples for each minority instance a new data point based on the \code{K} nearest neighbors of that data point.
+It can only be applied to tasks with purely numeric features. See \code{\link[smotefamily:SMOTE]{smotefamily::SMOTE}} for details.
 }
 \section{Construction}{
 
@@ -52,6 +49,12 @@ See \code{\link[smotefamily:SMOTE]{SMOTE()}}.
 Desired times of synthetic minority instances over the original number of
 majority instances. See \code{\link[smotefamily:SMOTE]{SMOTE()}}.
 }
+}
+
+\section{Internals}{
+
+If a target level is unobserved during training, no synthetic data points will be generated for that class.
+No error is raised; the unobserved class is simply ignored.
 }
 
 \section{Fields}{
