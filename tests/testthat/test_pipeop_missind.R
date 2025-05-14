@@ -115,12 +115,12 @@ test_that("union with missing rows", {
   g1 = gunion(list(imp_num, imp_missind)) %>>% po("featureunion")
   g1$train(task_mtcars)
   out = g1$predict(TaskRegr$new("t2", data2, target = "mpg"))[[1]]$data()
-  assert_true(!any(is.na(out)))
+  assert_true(!anyNA(out))
 
   g2= gunion(list(imp_missind, imp_num)) %>>% po("featureunion")
   g2$train(task_mtcars)
   out = g2$predict(TaskRegr$new("t2", data2, target = "mpg"))[[1]]$data()
-  assert_true(!any(is.na(out)))
+  assert_true(!anyNA(out))
 })
 
 # https://stackoverflow.com/questions/60512348/how-to-impute-data-with-mlr3-and-predict-with-na-values

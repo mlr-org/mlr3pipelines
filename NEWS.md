@@ -1,4 +1,9 @@
-# mlr3pipelines 0.7.1-9000
+# mlr3pipelines 0.7.2-9000
+
+* Added missing error for predicting with untrained `PipeOp`s / `Graph`s.
+* Fix: Corrected typo in the hyperparameter name `use_parallel` of `PipeOpVtreat`.
+
+# mlr3pipelines 0.7.2
 
 * New parameter `no_collapse_above_absolute` for `PipeOpCollapseFactors` / `po("collapse_factors")`.
 * Fix: `PipeOpCollapseFactors` now correctly collapses levels of ordered factors.
@@ -12,6 +17,11 @@
 * Fix: Corrected hash calculation for `PipeOpFilter`.
 * New PipeOps `PipeOpEncodePLQuantiles` and `PipeOpEncodePLTree` that implement piecewise linear encoding with two different binning methods.
 * Compatibility with new `R6` release.
+* Docs: Performed cleanup and standardization.
+* Docs: Performed cleanup of reference index page on website.
+* Docs: Fixed parsing of examples on website for `PipeOpNMF` and `PipeOpLearnerPICVPlus`.
+* Fix: `PipeOpTargetMutate` and `PipeOpTargetTrafoScaleRange` no longer drop unseen factor levels of features or targets during train and predict.
+* Simplified parameter checks and added internal type checking for `PipeOpTargetMutate`.
 
 # mlr3pipelines 0.7.1
 

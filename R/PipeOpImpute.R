@@ -33,10 +33,10 @@
 #'   Feature types affected by the `PipeOp`. See `private$.select_cols()` for more information.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpImpute`] has one input channel named `"input"`, taking a [`Task`][mlr3::Task], or a subclass of
+#' `PipeOpImpute` has one input channel named `"input"`, taking a [`Task`][mlr3::Task], or a subclass of
 #' [`Task`][mlr3::Task] if the `task_type` construction argument is given as such; both during training and prediction.
 #'
-#' [`PipeOpImpute`] has one output channel named `"output"`, producing a [`Task`][mlr3::Task], or a subclass;
+#' `PipeOpImpute` has one output channel named `"output"`, producing a [`Task`][mlr3::Task], or a subclass;
 #' the [`Task`][mlr3::Task] type is the same as for input; both during training and prediction.
 #'
 #' The output [`Task`][mlr3::Task] is the modified input [`Task`][mlr3::Task] with features imputed according to the `private$.impute()` function.
@@ -62,19 +62,19 @@
 #'
 #' @section Parameters:
 #' * `affect_columns` :: `function` | [`Selector`] | `NULL` \cr
-#'   What columns the [`PipeOpImpute`] should operate on.
+#'   What columns the `PipeOpImpute` should operate on.
 #'   The parameter must be a [`Selector`] function, which takes a [`Task`][mlr3::Task] as argument and returns a `character`
 #'   of features to use.\cr
 #'   See [`Selector`] for example functions. Defaults to `NULL`, which selects all features.
 #' * `context_columns` :: `function` | [`Selector`] | `NULL` \cr
-#'   What columns the [`PipeOpImpute`] imputation may depend on. This parameter is only present if the constructor is called with
+#'   What columns the `PipeOpImpute` imputation may depend on. This parameter is only present if the constructor is called with
 #'   the `whole_task_dependent` argument set to `TRUE`.\cr
 #'   The parameter must be a [`Selector`] function, which takes a [`Task`][mlr3::Task] as argument and returns a `character`
 #'   of features to use.\cr
 #'   See [`Selector`] for example functions. Defaults to `NULL`, which selects all features.
 #'
 #' @section Internals:
-#' [`PipeOpImpute`] is an abstract class inheriting from [`PipeOp`] that makes implementing imputer [`PipeOp`]s simple.
+#' `PipeOpImpute` is an abstract class inheriting from [`PipeOp`] that makes implementing imputer [`PipeOp`]s simple.
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`].
@@ -87,7 +87,7 @@
 #'   the `affect_columns` parameter. `private$.select_cols()` is for the *inheriting class* to determine which columns
 #'   the operator should function on, e.g. based on feature type, while `affect_columns` is a way for the *user*
 #'   to limit the columns that a [`PipeOpTaskPreproc`] should operate on.
-#'   This method can optionally be overloaded when inheriting [`PipeOpImpute`];
+#'   This method can optionally be overloaded when inheriting `PipeOpImpute`;
 #'   If this method is not overloaded, it defaults to selecting the columns of type indicated by the `feature_types` construction argument.
 #' * `.train_imputer(feature, type, context)`\cr
 #'   (`atomic`, `character(1)`, [`data.table`][data.table::data.table]) -> `any`\cr

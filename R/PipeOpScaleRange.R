@@ -38,6 +38,9 @@
 #' * `upper` :: `numeric(1)`\cr
 #'   Target value of greatest item of input data. Initialized to 1.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
@@ -80,9 +83,9 @@ PipeOpScaleRange = R6Class("PipeOpScaleRange",
     },
 
     .transform_dt = function(dt, levels) {
-      for (i in seq_along(dt)) {
-        trafo = self$state[[i]]
-        dt[[i]] = trafo[["offset"]] + dt[[i]] * trafo[["scale"]]
+      for (j in seq_along(dt)) {
+        trafo = self$state[[j]]
+        set(dt, j = j, value = trafo[["offset"]] + dt[[j]] * trafo[["scale"]])
       }
       dt
     }

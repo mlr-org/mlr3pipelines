@@ -43,6 +43,9 @@
 #'   If the value is given as `character()` or `NULL`, all columns will be dropped from the role given in the element
 #'   name. The value given for a role overwrites the previous entry in `task$col_roles` for that role, completely.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'

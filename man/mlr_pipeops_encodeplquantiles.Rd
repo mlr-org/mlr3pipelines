@@ -9,7 +9,7 @@
 }
 \description{
 Encodes \code{numeric} and \code{integer} feature columns using piecewise lienar encoding. For details, see documentation of
-\code{PipeOpEncodePL} or the paper referenced below.
+\code{\link{PipeOpEncodePL}} or Gorishniy et al. (2022).
 
 Bins are constructed by taking the quantiles of the respective feature column as bin boundaries. The first and
 last boundaries are set to the minimum and maximum value of the feature, respectively. The number of bins can be
@@ -107,6 +107,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -130,7 +131,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
-\code{\link{mlr_pipeops_encodepl}},
 \code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
@@ -190,7 +190,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_yeojohnson}}
 
 Other Piecewise Linear Encoding PipeOps: 
-\code{\link{mlr_pipeops_encodepl}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{mlr_pipeops_encodepltree}}
 }
 \concept{Piecewise Linear Encoding PipeOps}

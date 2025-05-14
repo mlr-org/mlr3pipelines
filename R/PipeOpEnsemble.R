@@ -35,11 +35,11 @@
 #'   `private$.train()` and `private$.predict()`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpEnsemble`] has multiple input channels depending on the `innum` construction argument, named `"input1"`, `"input2"`, ...
+#' `PipeOpEnsemble` has multiple input channels depending on the `innum` construction argument, named `"input1"`, `"input2"`, ...
 #' if `innum` is nonzero; if `innum` is 0, there is only one *vararg* input channel named `"..."`.
 #' All input channels take only `NULL` during training and take a [`Prediction`][mlr3::Prediction] during prediction.
 #'
-#' [`PipeOpEnsemble`] has one output channel named `"output"`, producing `NULL` during training and a [`Prediction`][mlr3::Prediction] during prediction.
+#' `PipeOpEnsemble` has one output channel named `"output"`, producing `NULL` during training and a [`Prediction`][mlr3::Prediction] during prediction.
 #'
 #' The output during prediction is in some way a weighted averaged representation of the input.
 #'
@@ -52,12 +52,12 @@
 #'   length equal to the number of connected inputs. Initialized to 1 (equal weights).
 #'
 #' @section Internals:
-#' The commonality of ensemble methods using [`PipeOpEnsemble`] is that they take a `NULL`-input during training and save an empty `$state`. They can be
+#' The commonality of ensemble methods using `PipeOpEnsemble` is that they take a `NULL`-input during training and save an empty `$state`. They can be
 #' used following a set of [`PipeOpLearner`] [`PipeOp`]s to perform (possibly weighted) prediction averaging. See e.g.
 #' [`PipeOpClassifAvg`] and [`PipeOpRegrAvg`] which both inherit from this class.
 #'
 #' Should it be necessary to use the output of preceding [`Learner`][mlr3::Learner]s
-#' during the "training" phase, then [`PipeOpEnsemble`] should not be used. In fact, if training time behaviour of a [`Learner`][mlr3::Learner] is important, then
+#' during the "training" phase, then `PipeOpEnsemble` should not be used. In fact, if training time behaviour of a [`Learner`][mlr3::Learner] is important, then
 #' one should use a [`PipeOpLearnerCV`] instead of a [`PipeOpLearner`], and the ensemble can be created with a [`Learner`][mlr3::Learner] encapsulated by a [`PipeOpLearner`].
 #' See [`LearnerClassifAvg`] and [`LearnerRegrAvg`] for examples.
 #'

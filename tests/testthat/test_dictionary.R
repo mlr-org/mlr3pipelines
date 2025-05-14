@@ -262,10 +262,10 @@ test_that("as.data.table(mlr_pipeops) works when a pipeop can not be constructed
   dt_before = as.data.table(mlr_pipeops)
 
   # No NAs in the data.table of mlr3pipelines' own PipeOps
-  expect_false(any(is.na(unlist(
+  expect_false(anyNA(unlist(
     dt_before[, c("key", "label", "packages", "tags", "input.type.train", "input.type.predict",
       "output.type.train", "output.type.predict"), with = FALSE])
-  )))
+  ))
 
   mlr_pipeops$add("error_pipeop", PipeOpError)
   expect_warning({dt_after = as.data.table(mlr_pipeops)}, "could not be constructed.*error_pipeop")

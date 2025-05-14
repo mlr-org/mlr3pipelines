@@ -5,7 +5,7 @@
 \alias{PipeOpRenameColumns}
 \title{Rename Columns}
 \format{
-\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Renames the columns of a \code{\link[mlr3:Task]{Task}} both during training and prediction.
@@ -26,19 +26,19 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpTaskPreprocSimple}}.
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with the old column names changed to the new ones.
 }
 
 \section{State}{
 
-The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreprocSimple}}.
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}.
 }
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpTaskPreprocSimple}}, as well as:
+The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{renaming} :: named \code{character}\cr
 Named \code{character} vector. The names of the vector specify the old column names that should be
@@ -58,7 +58,7 @@ Uses the \verb{$rename()} mutator of the \code{\link[mlr3:Task]{Task}} to set th
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
@@ -78,6 +78,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -101,7 +102,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
-\code{\link{mlr_pipeops_encodepl}},
 \code{\link{mlr_pipeops_encodeplquantiles}},
 \code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},

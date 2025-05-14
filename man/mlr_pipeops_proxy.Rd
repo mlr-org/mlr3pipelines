@@ -31,11 +31,11 @@ be set during construction. Default \code{list()}.
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpProxy}} has multiple input channels depending on the \code{innum} construction argument, named
+\code{PipeOpProxy} has multiple input channels depending on the \code{innum} construction argument, named
 \code{"input1"}, \code{"input2"}, ... if \code{innum} is nonzero; if \code{innum} is 0, there is only one \emph{vararg}
 input channel named \code{"..."}.
 
-\code{\link{PipeOpProxy}} has multiple output channels depending on the \code{outnum} construction argument,
+\code{PipeOpProxy} has multiple output channels depending on the \code{outnum} construction argument,
 named \code{"output1"}, \code{"output2"}, ...
 The output is determined by the output of the \code{content} operation (a \code{\link{PipeOp}} or \code{\link{Graph}}).
 }
@@ -100,6 +100,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -123,7 +124,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
-\code{\link{mlr_pipeops_encodepl}},
 \code{\link{mlr_pipeops_encodeplquantiles}},
 \code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},

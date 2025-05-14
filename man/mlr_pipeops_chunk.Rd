@@ -29,9 +29,9 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output}{
 
-\code{\link{PipeOpChunk}} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}} both during training and prediction.
+\code{PipeOpChunk} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}} both during training and prediction.
 
-\code{\link{PipeOpChunk}} has multiple output channels depending on the \code{options} construction argument, named \code{"output1"}, \code{"output2"}, ...
+\code{PipeOpChunk} has multiple output channels depending on the \code{options} construction argument, named \code{"output1"}, \code{"output2"}, ...
 All output channels produce (respectively disjoint, random) subsets of the input \code{\link[mlr3:Task]{Task}} during training, and
 pass on the original \code{\link[mlr3:Task]{Task}} during prediction.
 }
@@ -81,6 +81,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -103,7 +104,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
-\code{\link{mlr_pipeops_encodepl}},
 \code{\link{mlr_pipeops_encodeplquantiles}},
 \code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},

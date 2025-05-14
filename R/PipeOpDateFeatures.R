@@ -25,6 +25,7 @@
 #' ```
 #' PipeOpDateFeatures$new(id = "datefeatures", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"datefeatures"`.
 #' * `param_vals` :: named `list`\cr
@@ -32,7 +33,7 @@
 #'   be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpTaskPreprocSimple`].
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
 #' The output is the input [`Task`][mlr3::Task] with date-related features computed and added to the
 #' feature set of the output task and the `POSIXct` columns of the data removed from the
@@ -40,10 +41,10 @@
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from
-#' [`PipeOpTaskPreprocSimple`].
+#' [`PipeOpTaskPreproc`].
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`], as well as:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `keep_date_var` :: `logical(1)`\cr
 #'   Should the `POSIXct` columns be kept as features? Default FALSE.
 #' * `cyclic` :: `logical(1)`\cr
@@ -74,22 +75,22 @@
 #' The cyclic feature transformation always assumes that values range from 0, so some values
 #' (e.g. day of the month) are shifted before sine/cosine transform.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
-#' @section Fields:
-#' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
-#'
 #' @examples
-#'library("mlr3")
-#'dat = iris
-#'set.seed(1)
-#'dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"),
-#'  size = 150L)
-#'task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-#'pop = po("datefeatures", param_vals = list(cyclic = FALSE, minute = FALSE, second = FALSE))
-#'pop$train(list(task))
-#'pop$state
+#' library("mlr3")
+#' dat = iris
+#' set.seed(1)
+#' dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"),
+#'   size = 150L)
+#' task = TaskClassif$new("iris_date", backend = dat, target = "Species")
+#' pop = po("datefeatures", param_vals = list(cyclic = FALSE, minute = FALSE, second = FALSE))
+#' pop$train(list(task))
+#' pop$state
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R

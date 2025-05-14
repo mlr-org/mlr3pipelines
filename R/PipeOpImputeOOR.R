@@ -60,6 +60,9 @@
 #' For `integer` and `numeric` features uses the `min`, `max`, `diff` and `range` functions.
 #' `integer` and `numeric` features that are entirely `NA` are imputed as `0`.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
 #'

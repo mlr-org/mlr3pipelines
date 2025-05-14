@@ -3,12 +3,7 @@ context("PipeOpRemoveConstants")
 test_that("PipeOpRemoveConstants - basic properties", {
   task = mlr_tasks$get("boston_housing_classic")
   task$cbind(data.table(xx = rep(1, 506), yy = rep("a", 506)))
-
-  op = PipeOpRemoveConstants$new()
-  expect_pipeop(op)
-
   expect_datapreproc_pipeop_class(PipeOpRemoveConstants, task = task)
-
 })
 
 test_that("PipeOpRemoveConstants removes expected cols", {

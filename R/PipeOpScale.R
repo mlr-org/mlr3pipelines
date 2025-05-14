@@ -15,6 +15,7 @@
 #' ```
 #' PipeOpScale$new(id = "scale", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"scale"`.
 #' * `param_vals` :: named `list`\cr
@@ -49,6 +50,9 @@
 #' @section Internals:
 #' Imitates the [`scale()`][base::scale] function for `robust = FALSE` and alternatively subtracts the
 #' `median` and divides by [`mad`][stats::mad] for `robust = TRUE`.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].

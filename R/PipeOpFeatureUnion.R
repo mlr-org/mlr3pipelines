@@ -46,12 +46,12 @@
 #'   the default.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpFeatureUnion`] has multiple input channels depending on the `innum` construction
+#' `PipeOpFeatureUnion` has multiple input channels depending on the `innum` construction
 #' argument, named `"input1"`, `"input2"`, ... if `innum` is nonzero; if `innum` is 0, there is
 #' only one *vararg* input channel named `"..."`. All input channels take a [`Task`][mlr3::Task]
 #' both during training and prediction.
 #'
-#' [`PipeOpFeatureUnion`] has one output channel named `"output"`, producing a [`Task`][mlr3::Task]
+#' `PipeOpFeatureUnion` has one output channel named `"output"`, producing a [`Task`][mlr3::Task]
 #' both during training and prediction.
 #'
 #' The output is a [`Task`][mlr3::Task] constructed by `cbind()`ing all features from all input
@@ -61,10 +61,10 @@
 #' The `$state` is left empty (`list()`).
 #'
 #' @section Parameters:
-#' [`PipeOpFeatureUnion`] has no Parameters.
+#' `PipeOpFeatureUnion` has no Parameters.
 #'
 #' @section Internals:
-#' [`PipeOpFeatureUnion`] uses the [`Task`][mlr3::Task] `$cbind()` method to bind the input values
+#' `PipeOpFeatureUnion` uses the [`Task`][mlr3::Task] `$cbind()` method to bind the input values
 #' beyond the first input to the first [`Task`][mlr3::Task]. This means if the [`Task`][mlr3::Task]s
 #' are database-backed, all of them except the first will be fetched into R memory for this. This
 #' behaviour may change in the future.

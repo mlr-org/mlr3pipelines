@@ -1,7 +1,6 @@
 #' @title Piecewise Linear Encoding Base Class
 #'
 #' @usage NULL
-#' @name mlr_pipeops_encodepl
 #' @format Abstract [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
@@ -145,7 +144,7 @@ encode_piecewise_linear = function(column, bins) {
 #'
 #' @description
 #' Encodes `numeric` and `integer` feature columns using piecewise lienar encoding. For details, see documentation of
-#' `PipeOpEncodePL` or the paper referenced below.
+#' [`PipeOpEncodePL`] or Gorishniy et al. (2022).
 #'
 #' Bins are constructed by taking the quantiles of the respective feature column as bin boundaries. The first and
 #' last boundaries are set to the minimum and maximum value of the feature, respectively. The number of bins can be
@@ -256,7 +255,7 @@ mlr_pipeops$add("encodeplquantiles", PipeOpEncodePLQuantiles)
 #'
 #' @description
 #' Encodes `numeric` and `integer` feature columns using piecewise lienar encoding. For details, see documentation of
-#' `PipeOpEncodePL` or Gorishniy et al. (2022).
+#' [`PipeOpEncodePL`] or Gorishniy et al. (2022).
 #'
 #' Bins are constructed by trainig one decision tree [`Learner`][mlr3::Learner] per feature column, taking the target
 #' column into account, and using decision boundaries as bin boundaries.
@@ -309,7 +308,7 @@ mlr_pipeops$add("encodeplquantiles", PipeOpEncodePLQuantiles)
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
-#' @examples
+#' @examplesIf requireNamespace("rpart")
 #' library(mlr3)
 #'
 #' # For classification task

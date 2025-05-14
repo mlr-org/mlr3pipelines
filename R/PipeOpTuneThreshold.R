@@ -23,6 +23,7 @@
 #' * `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \cr
 #'   (`character(1)`, `list`) -> `self` \cr
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object. Default: "tunethreshold".
 #' * `param_vals` :: named `list`\cr
