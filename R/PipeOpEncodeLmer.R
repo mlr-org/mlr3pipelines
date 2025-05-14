@@ -95,7 +95,8 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
         fast_optim = p_lgl(tags = c("train", "required"))
       )
       ps$values = list(fast_optim = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"), tags = "encode", feature_types = c("factor", "ordered"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"), task_type = "TaskSupervised",
+        tags = "encode", feature_types = c("factor", "ordered"))
     }
   ),
   private = list(
@@ -147,6 +148,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
       }
       dt_new
     },
+
     fit_lmer = function(feature, target, fast_optim, task_type) {
       args = private$get_args_nlopt_lmer(feature, target, fast_optim, task_type)
       if (task_type == "classif") args$family = stats::binomial
@@ -158,8 +160,8 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
       }
       private$get_coefs(mod)
     },
-    get_args_nlopt_lmer = function(feature, target, fast_optim, task_type) {
 
+    get_args_nlopt_lmer = function(feature, target, fast_optim, task_type) {
       # lmer for regr, glmer for classif
       if (task_type == "regr") {
         control_fun = lme4::lmerControl
@@ -178,6 +180,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
         data = data.frame(lvl = feature, y = target),
         na.action = stats::na.omit, control = control)
     },
+
     get_coefs = function(mod) {
       coefs = invoke(stats::coef, mod, .opts = list(warnPartialMatchArgs = FALSE, warnPartialMatchDollar = FALSE))$lvl
       lvls = rownames(coefs)
