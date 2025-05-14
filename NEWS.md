@@ -2,6 +2,7 @@
 
 * Added missing error for predicting with untrained `PipeOp`s / `Graph`s.
 * Fix: Corrected typo in the hyperparameter name `use_parallel` of `PipeOpVtreat`.
+* `PipeOpADAS`, `PipeOpBLSmote`, `PipeOpSmote`, and `PipeOpSmoteNC` now ignore unseen target levels during training instead of throwing obscure errors.
 
 # mlr3pipelines 0.7.2
 
