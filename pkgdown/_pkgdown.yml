@@ -86,6 +86,7 @@ reference:
       - mlr_tasks_boston_housing
   - title: Helpers
     contents:
+      - preproc
       - Selector
       - as_graph
       - assert_graph
