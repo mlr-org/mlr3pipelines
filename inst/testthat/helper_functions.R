@@ -218,7 +218,7 @@ expect_pipeop_class = function(poclass, constargs = list(), check_ps_default_val
 #  - is_trained is true
 #  - deep cloning clones the state
 #  - preproc() gives no error with Task indata
-#  - preproc() gives no error with data.frame indata if PipeOp works without target column
+#  - preproc() gives no error with data.table indata if PipeOp works without target column
 #
 # `task` must have at least two feature columns and at least two rows.
 expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
@@ -475,10 +475,15 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   expect_no_error(mlr3pipelines::preproc(task, po))
   expect_no_error(mlr3pipelines::preproc(task, po, predict = TRUE))
   if (po$input$train == "Task") {  # implies that PipeOp does not require target column
-    dtout = expect_no_error(mlr3pipelines::preproc(task$data(cols = task$feature_names), po))
-    expect_data_table(dtout)
-    dtout = expect_no_error(mlr3pipelines::preproc(task$data(cols = task$feature_names), po, predict = TRUE))
-    expect_data_table(dtout)
+    expect_no_error({
+      # Need to explicitly refer to mlr3pipelines namespace because this is loaded from inst/
+      dtout = mlr3pipelines::preproc(task$data(cols = task$feature_names), po)
+      expect_data_table(dtout)
+      # TODO: Where to put the predict test? We assume that prediction should always work without the target column. However, this would fail
+      #   outside of this condition because of the imposed task_type for predict being the same as for train.
+      dtout = mlr3pipelines::preproc(task$data(cols = task$feature_names), po, predict = TRUE)
+      expect_data_table(dtout)
+    })
   }
 }
 
