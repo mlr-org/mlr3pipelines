@@ -55,17 +55,20 @@
 #'   List of coefficients learned via `glmer`
 #'
 #' @section Parameters:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `fast_optim`  :: `logical(1)` \cr
+#'   If `fast_optim` is `TRUE` (default), a faster (up to 50 percent) optimizer from the `nloptr` package is used when
+#'   fitting the lmer models. This uses additional stopping criteria which can give suboptimal results.
 #'   Initialized to `TRUE`.
-#'   If "fast_optim" is `TRUE` (default), a faster (up to 50 percent)
-#'   optimizer from the nloptr package is used when fitting the lmer models.
-#'   This uses additional stopping criteria which can give suboptimal results.
 #'
 #' @section Internals:
 #' Uses the [`lme4::glmer`]. This is relatively inefficient for features with a large number of levels.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
-#' Only methods inherited [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only methods inherited [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
 #' @template seealso_pipeopslist

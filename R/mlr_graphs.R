@@ -21,6 +21,7 @@
 #' * `as.data.table(dict)`\cr
 #'   [`Dictionary`][mlr3misc::Dictionary] -> [`data.table::data.table`]\cr
 #'   Returns a `data.table` with column `key` (`character`).
+#'
 #' @family mlr3pipelines backend related
 #' @family Dictionaries
 #' @export

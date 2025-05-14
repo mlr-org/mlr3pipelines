@@ -44,10 +44,10 @@
 #'   [`PipeOpRemoveConstants`] can be used with `affect_columns = selector_grep("^missing_")` and `ratio = x`.
 #'
 #' @section Fields:
-#' Fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
-#' Methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Methods inherited from [`PipeOpTaskPreprocSimple`]([`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
 #' @template seealso_pipeopslist

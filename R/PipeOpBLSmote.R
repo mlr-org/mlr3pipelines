@@ -36,7 +36,7 @@
 #' * `C` :: `numeric(1)` \cr
 #'   The number of nearest neighbors used for classifying sample points as SAFE/DANGER/NOISE. Default is `5`.
 #'   See [`BLSMOTE()`][`smotefamily::BLSMOTE`].
-#' * `dup_size` :: `numeric` \cr
+#' * `dup_size` :: `numeric(1)` \cr
 #'   Desired times of synthetic minority instances over the original number of majority instances. `0` leads to balancing minority and majority class.
 #'   Default is `0`. See [`BLSMOTE()`][`smotefamily::BLSMOTE`].
 #' * `method` :: `character(1)` \cr
@@ -46,7 +46,7 @@
 #'   Whether to suppress printing status during training. Initialized to `TRUE`.
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].

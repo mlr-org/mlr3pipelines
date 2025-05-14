@@ -87,18 +87,18 @@ test_that("Test imputation matches, edge cases", {
 
   po = PipeOpImputeLearner$new(learner = lrn("regr.featureless"))
   out = po$train(list(task))[[1]]$data()
-  expect_true(!any(is.na(out$b)))
+  expect_true(!anyNA(out$b))
   expect_true(all(out$b[5:6] == 3))
   out = po$predict(list(task))[[1]]$data()
-  expect_true(!any(is.na(out$b)))
+  expect_true(!anyNA(out$b))
   expect_true(all(out$b[5:6] == 3))
 
   po = PipeOpImputeLearner$new(learner = lrn("classif.featureless"))
   out = po$train(list(task))[[1]]$data()
-  expect_true(!any(is.na(out$d)))
+  expect_true(!anyNA(out$d))
   expect_true(all(out$d[6] == "a"))
   out = po$predict(list(task))[[1]]$data()
-  expect_true(!any(is.na(out$d)))
+  expect_true(!anyNA(out$d))
   expect_true(all(out$d[6] == "a"))
 
   # Full NA
@@ -111,10 +111,10 @@ test_that("Test imputation matches, edge cases", {
   task = TaskClassif$new("mdata", mdata, target = "l")
   po = PipeOpImputeLearner$new(learner = lrn("regr.featureless"))
   out = po$train(list(task))[[1]]$data()
-  expect_true(!any(is.na(out$b)))
+  expect_true(!anyNA(out$b))
   expect_true(all(out$b == 0))
   out = po$predict(list(task))[[1]]$data()
-  expect_true(!any(is.na(out$b)))
+  expect_true(!anyNA(out$b))
   expect_true(all(out$b == 0))
 
   mdata = data.table(
@@ -126,10 +126,10 @@ test_that("Test imputation matches, edge cases", {
   task = TaskClassif$new("mdata", mdata, target = "l")
   po = PipeOpImputeLearner$new(learner = lrn("classif.featureless"))
   out = po$train(list(task))[[1]]$data()
-  expect_true(!any(is.na(out$d)))
+  expect_true(!anyNA(out$d))
   expect_true(all(out$d == "a"))
   out = po$predict(list(task))[[1]]$data()
-  expect_true(!any(is.na(out$d)))
+  expect_true(!anyNA(out$d))
   expect_true(all(out$d == "a"))
 })
 

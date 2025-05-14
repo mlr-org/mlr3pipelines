@@ -13,6 +13,7 @@
 #' ```
 #' PipeOpProxy$new(innum = 0, outnum = 1, id = "proxy", param_vals = list())
 #' ```
+#'
 #' * `innum` :: `numeric(1)\cr
 #'   Determines the number of input channels.
 #'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
@@ -25,11 +26,11 @@
 #'   be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpProxy`] has multiple input channels depending on the `innum` construction argument, named
+#' `PipeOpProxy` has multiple input channels depending on the `innum` construction argument, named
 #' `"input1"`, `"input2"`, ... if `innum` is nonzero; if `innum` is 0, there is only one *vararg*
 #' input channel named `"..."`.
 #'
-#' [`PipeOpProxy`] has multiple output channels depending on the `outnum` construction argument,
+#' `PipeOpProxy` has multiple output channels depending on the `outnum` construction argument,
 #' named `"output1"`, `"output2"`, ...
 #' The output is determined by the output of the `content` operation (a [`PipeOp`] or [`Graph`]).
 #'
@@ -103,7 +104,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
               }
             },
             error = function(error_condition) "`content` must be an object that can be converted to a Graph")
-          }, innum, outnum, .parent = topenv()),
+          }, innum, outnum),
           tags = c("train", "predidct", "required")
         )
       )

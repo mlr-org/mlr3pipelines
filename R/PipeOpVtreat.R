@@ -7,8 +7,8 @@
 #' @description
 #' Provides an interface to the vtreat package.
 #'
-#' [`PipeOpVtreat`] naturally works for [classification tasks][mlr3::TaskClassif] and [regression tasks][mlr3::TaskRegr].
-#' Internally, [`PipeOpVtreat`] follows the fit/prepare interface of vtreat, i.e., first creating a data treatment transform object via
+#' `PipeOpVtreat` naturally works for [classification tasks][mlr3::TaskClassif] and [regression tasks][mlr3::TaskRegr].
+#' Internally, `PipeOpVtreat` follows the fit/prepare interface of vtreat, i.e., first creating a data treatment transform object via
 #' [vtreat::NumericOutcomeTreatment()], [vtreat::BinomialOutcomeTreatment()], or [vtreat::MultinomialOutcomeTreatment()], followed by calling
 #' [vtreat::fit_prepare()] on the training data and [vtreat::prepare()] during predicton.
 #'
@@ -68,7 +68,7 @@
 #'   If `TRUE` use [stats::glm()] linkspace, if FALSE use [stats::lm()] for scaling.
 #' * `verbose` :: `logical(1)`\cr
 #'   If `TRUE` print progress.
-#' * `use_paralell` :: `logical(1)`\cr
+#' * `use_parallel` :: `logical(1)`\cr
 #'   If `TRUE` use parallel methods.
 #' * `missingness_imputation` :: `function`\cr
 #'   Function of signature f(values: numeric, weights: numeric), simple missing value imputer.\cr
@@ -97,6 +97,9 @@
 #' @section Internals:
 #' Follows vtreat's fit/prepare interface. See [vtreat::NumericOutcomeTreatment()], [vtreat::BinomialOutcomeTreatment()],
 #' [vtreat::MultinomialOutcomeTreatment()], [vtreat::fit_prepare()] and [vtreat::prepare()].
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -140,51 +143,51 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         doCollar = p_lgl(default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
         codeRestriction = p_uty(
           default = NULL,
-          custom_check = crate(function(x) checkmate::check_character(x, any.missing = FALSE, null.ok = TRUE), .parent = topenv()),
+          custom_check = crate(function(x) checkmate::check_character(x, any.missing = FALSE, null.ok = TRUE)),
           tags = c("train", "regression", "classification", "multinomial")
         ),
         customCoders = p_uty(
           default = NULL,
-          custom_check = crate(function(x) checkmate::check_list(x, null.ok = TRUE), .parent = topenv()),
+          custom_check = crate(function(x) checkmate::check_list(x, null.ok = TRUE)),
           tags = c("train", "regression", "classification", "multinomial")
         ),
         splitFunction = p_uty(
           default = NULL,
-          custom_check = crate(function(x) checkmate::check_function(x, args = c("nSplits", "nRows", "dframe", "y"), null.ok = TRUE), .parent = topenv()),
+          custom_check = crate(function(x) checkmate::check_function(x, args = c("nSplits", "nRows", "dframe", "y"), null.ok = TRUE)),
           tags = c("train", "regression", "classification", "multinomial")
         ),
         ncross = p_int(lower = 2L, upper = Inf, default = 3L, tags = c("train", "regression", "classification", "multinomial")),
         forceSplit = p_lgl(default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
         catScaling = p_lgl(tags = c("train", "regression", "classification", "multinomial")),  # default TRUE for regression, classification, FALSE for multinomial
         verbose = p_lgl(default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
-        use_paralell = p_lgl(default = TRUE, tags = c("train", "regression", "classification", "multinomial")),
+        use_parallel = p_lgl(default = TRUE, tags = c("train", "regression", "classification", "multinomial")),
         missingness_imputation = p_uty(
           default = NULL,
-          custom_check = crate(function(x) checkmate::check_function(x, args = c("values", "weights"), null.ok = TRUE), .parent = topenv()),
+          custom_check = crate(function(x) checkmate::check_function(x, args = c("values", "weights"), null.ok = TRUE)),
           tags = c("train", "regression", "classification", "multinomial")
         ),
         pruneSig = p_dbl(lower = 0, upper = 1, special_vals = list(NULL), default = NULL, tags = c("train", "regression", "classification")),
         scale = p_lgl(default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
         varRestriction = p_uty(
           default = NULL,
-          custom_check = crate(function(x) checkmate::check_list(x, null.ok = TRUE), .parent = topenv()),
+          custom_check = crate(function(x) checkmate::check_list(x, null.ok = TRUE)),
           tags = c("train", "regression", "classification")
         ),
         trackedValues = p_uty(
           default = NULL,
-          custom_check = crate(function(x) checkmate::check_list(x, null.ok = TRUE), .parent = topenv()),
+          custom_check = crate(function(x) checkmate::check_list(x, null.ok = TRUE)),
           tags = c("train", "regression", "classification")
         ),
         # NOTE: check_for_duplicate_frames not needed
         y_dependent_treatments = p_uty(
           default = "catB",
-          custom_check = crate(function(x) checkmate::check_character(x, any.missing = FALSE), .parent = topenv()),
+          custom_check = crate(function(x) checkmate::check_character(x, any.missing = FALSE)),
           tags = c("train", "multinomial")
         ),
         # NOTE: imputation_map is also in multinomial_parameters(); this is redundant so only include it here
         imputation_map = p_uty(
           default = NULL,
-          custom_check = crate(function(x) checkmate::check_list(x, null.ok = TRUE), .parent = topenv()),
+          custom_check = crate(function(x) checkmate::check_list(x, null.ok = TRUE)),
           tags = c("train", "predict")
         )
         # NOTE: parallelCluster missing intentionally and will be set to NULL

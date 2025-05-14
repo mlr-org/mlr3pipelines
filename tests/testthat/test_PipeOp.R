@@ -13,6 +13,7 @@ test_that("PipeOp - General functions", {
   expect_equal(po_1$packages, "mlr3pipelines")
   expect_null(po_1$state)
   assert_subset(po_1$tags, mlr_reflections$pipeops$valid_tags)
+  expect_error(po_1$predict(list(tsk("iris"))), "has not been trained yet")
 
   expect_output(expect_equal(po_1$train(list(1)), list(output = 1)), "Training debug.basic")
   expect_equal(po_1$state, list(input = 1))
@@ -87,22 +88,24 @@ test_that("Informative error and warning messages", {
 
   # two 'expect_warning', because we want to 'expect' that there is exactly one warning.
   # a function argument for expect_warning that tests exactly this would be a good idea, and has therefore been removed -.-
-  expect_warning(expect_warning(gr$train(tsk("iris")), "This happened PipeOp classif.debug's \\$train\\(\\)$"), NA)
+  expect_no_warning(expect_warning(gr$train(tsk("iris")), "This happened PipeOp classif.debug's \\$train\\(\\)$"))
 
-  expect_warning(suppressWarnings(gr$train(tsk("iris"))), NA)
+  expect_no_warning(suppressWarnings(gr$train(tsk("iris"))))
 
-  expect_warning(expect_warning(gr$predict(tsk("iris")), "This happened PipeOp classif.debug's \\$predict\\(\\)$"), NA)
+  expect_no_warning(expect_warning(gr$predict(tsk("iris")), "This happened PipeOp classif.debug's \\$predict\\(\\)$"))
 
-  expect_warning(suppressWarnings(gr$predict(tsk("iris"))), NA)
-
+  expect_no_warning(suppressWarnings(gr$predict(tsk("iris"))))
 
   gr$param_set$values$classif.debug.warning_train = 0
   gr$param_set$values$classif.debug.warning_predict = 0
+  
   gr$param_set$values$classif.debug.error_train = 1
-  gr$param_set$values$classif.debug.error_predict = 1
-
   expect_error(gr$train(tsk("iris")), "This happened PipeOp classif.debug's \\$train\\(\\)$")
 
+  gr$param_set$values$classif.debug.error_train = 0
+  gr$param_set$values$classif.debug.error_predict = 1
+  # Need to first train the Graph for predict to work
+  gr$train(tsk("iris"))
   expect_error(gr$predict(tsk("iris")), "This happened PipeOp classif.debug's \\$predict\\(\\)$")
 
   potest = R6::R6Class("potest", inherit = PipeOp,
@@ -119,8 +122,8 @@ test_that("Informative error and warning messages", {
     )
   )$new(id = "potest", input = data.table(name = "input", train = "*", predict = "*"), output = data.table(name = "input", train = "*", predict = "*"))
 
-  expect_warning(potest$train(list(1)), NA)
-  expect_warning(potest$predict(list(1)), NA)
+  expect_no_warning(potest$train(list(1)))
+  expect_no_warning(potest$predict(list(1)))
 
 })
 

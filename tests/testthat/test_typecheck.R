@@ -3,7 +3,7 @@ context("Typecheck")
 
 test_that("utility function works", {
   skip_if_not_installed("rpart")
-  expect_equal(get_r6_inheritance("data.table"), NULL)
+  expect_null(get_r6_inheritance("data.table"))
 
   expect_equal(get_r6_inheritance("PipeOp"), "PipeOp")
 

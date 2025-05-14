@@ -84,6 +84,9 @@
 #' Uses the [`nmf()`][NMF::nmf] function as well as [`basis()`][NMF::basis], [`coef()`][NMF::coef] and
 #' [`ginv()`][MASS::ginv].
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
@@ -97,7 +100,10 @@
 #' pop$train(list(task))[[1]]$data()
 #'
 #' pop$state
-#' \dontshow{ try(rm("format.list", envir = .BaseNamespaceEnv$.__S3MethodsTable__.), silent = TRUE)  # BiocGenerics overwrites printer for our tables mlr-org/mlr3#1112 }
+#' \dontshow{
+#' # BiocGenerics overwrites printer for our tables mlr-org/mlr3#1112
+#' suppressWarnings(try(rm("format.list", envir = .BaseNamespaceEnv$.__S3MethodsTable__.), silent = TRUE))
+#' }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R

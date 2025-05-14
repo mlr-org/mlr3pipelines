@@ -7,9 +7,6 @@ test_that("PipeOpDateFeatures - basic properties", {
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
   po = PipeOpDateFeatures$new()
-  expect_pipeop(po)
-  train_pipeop(po, inputs = list(task))
-  predict_pipeop(po, inputs = list(task))
   expect_datapreproc_pipeop_class(PipeOpDateFeatures, task = task)
 })
 
@@ -190,7 +187,7 @@ test_that("PipeOpDateFeatures - only year and cyclic", {
   po$param_set$values$minute = FALSE
   po$param_set$values$second = FALSE
   po$param_set$values$is_day = FALSE
-  expect_true("date.year" %in% train_pipeop(po, inputs = list(task))$output$feature_names)  
+  expect_true("date.year" %in% train_pipeop(po, inputs = list(task))$output$feature_names)
 })
 
 test_that("PipeOpDateFeatures - two POSIXct variables", {
