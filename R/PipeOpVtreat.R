@@ -193,7 +193,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         # NOTE: parallelCluster missing intentionally and will be set to NULL
       )
       ps$values = list(recommended = TRUE, cols_to_copy = selector_none())
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "vtreat", tags = c("encode", "missings"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "vtreat", task_type = "TaskSupervised", tags = c("encode", "missings"))
     }
   ),
   private = list(
