@@ -95,7 +95,6 @@ Suggests:
     evaluate,
     NMF,
     MASS,
-    kknn,
     GenSA,
     methods,
     vtreat,
