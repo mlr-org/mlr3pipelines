@@ -2,6 +2,7 @@
 
 * Added missing error for predicting with untrained `PipeOp`s / `Graph`s.
 * Fix: Corrected typo in the hyperparameter name `use_parallel` of `PipeOpVtreat`.
+* Fix: New hyperparameter of `bbotk::OptimizerBatchNLoptr` does not get overwritten in `LearnerClassifAvg` / `LearnerRegrAvg`'s internal `optimize_weights_learneravg` function.
 
 # mlr3pipelines 0.7.2
 
