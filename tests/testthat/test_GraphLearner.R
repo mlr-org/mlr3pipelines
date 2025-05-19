@@ -10,7 +10,9 @@ test_that("basic graphlearner tests", {
 
   glrn = GraphLearner$new(gr)
   glrn$properties = setdiff(glrn$properties, "weights")  # FIXME: workaround until weights handling does not need to be part of the paramset
-  glrn$use_weights = "error"  # also need to update use_weights now
+  if ("use_weights" %in% names(glrn)) {  # FIXME: condition can be removed when mlr3 weights update, mlr3-org/mlr3#1124 is on CRAN
+    glrn$use_weights = "error"  # also need to update use_weights now
+  }
   expect_true(run_experiment(task, glrn)$ok)
   glrn$properties = c(glrn$properties, "weights")
 
@@ -41,10 +43,14 @@ test_that("basic graphlearner tests", {
   glrn2_clone = glrn2$clone(deep = TRUE)
   expect_learner(glrn2)
   glrn2$properties = setdiff(glrn2$properties, "weights")  # FIXME: see above
-  glrn2$use_weights = "error"  # see above
+  if ("use_weights" %in% names(glrn)) {  # FIXME: see above
+    glrn$use_weights = "error"  # see above
+  }
   expect_true(run_experiment(task, glrn2)$ok)
   glrn2$properties = c(glrn2$properties, "weights")  # reset changes
-  glrn2$use_weights = "use"  # reset changes
+  if ("use_weights" %in% names(glrn)) {  # FIXME: see above
+    glrn$use_weights = "use"  # reset changes
+  }
   glrn2$train(task)
   glrn2_clone$state = glrn2$state
 #  glrn2_clone$state$log = glrn2_clone$state$log$clone(deep = TRUE)  # FIXME: this can go when mlr-org/mlr3#343 is fixed
