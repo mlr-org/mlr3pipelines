@@ -43,13 +43,13 @@ test_that("basic graphlearner tests", {
   glrn2_clone = glrn2$clone(deep = TRUE)
   expect_learner(glrn2)
   glrn2$properties = setdiff(glrn2$properties, "weights")  # FIXME: see above
-  if ("use_weights" %in% names(glrn)) {  # FIXME: see above
-    glrn$use_weights = "error"  # see above
+  if ("use_weights" %in% names(glrn2)) {  # FIXME: see above
+    glrn2$use_weights = "error"  # see above
   }
   expect_true(run_experiment(task, glrn2)$ok)
   glrn2$properties = c(glrn2$properties, "weights")  # reset changes
-  if ("use_weights" %in% names(glrn)) {  # FIXME: see above
-    glrn$use_weights = "use"  # reset changes
+  if ("use_weights" %in% names(glrn2)) {  # FIXME: see above
+    glrn2$use_weights = "use"  # reset changes
   }
   glrn2$train(task)
   glrn2_clone$state = glrn2$state
