@@ -194,7 +194,7 @@ optimize_weights_learneravg = function(self, task, n_weights, data) {
       if (inherits(optimizer, "character")) {
         optimizer = bbotk::opt(optimizer)
         if (inherits(optimizer, "OptimizerNLoptr") || inherits(optimizer, "OptimizerBatchNLoptr")) {
-          optimizer$param_set$values = list(xtol_rel = 1e-8, algorithm = "NLOPT_LN_COBYLA", start_values = "center")
+          optimizer$param_set$set_values(xtol_rel = 1e-8, algorithm = "NLOPT_LN_COBYLA", start_values = "center")
         }
       }
       measure = pars$measure
