@@ -62,7 +62,7 @@ Initialized to \code{"classif.ce"}, i.e. misclassification error.
 If \code{character}, converts to \code{\link[bbotk:Optimizer]{Optimizer}}
 via \code{\link[bbotk:opt]{opt}}. Initialized to \code{OptimizerGenSA}.
 \item \code{log_level} :: \code{character(1)} | \code{integer(1)}\cr
-Set a temporary log-level for \code{lgr::get_logger("bbotk")}. Initialized to: "warn".
+Set a temporary log-level for \code{lgr::get_logger("mlr3/bbotk")}. Initialized to: "warn".
 }
 }
 
