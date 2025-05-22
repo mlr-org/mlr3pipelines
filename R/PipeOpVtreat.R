@@ -209,6 +209,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         checkmate::assert_subset(names(self$param_set$values$imputation_map), choices = var_list, empty.ok = TRUE)
       }
 
+      # FIXME: Handle non-Regr / non-Classif Tasks that inherit from TaskSupervised, #913
       task_type = task$task_type
       transform_design = if (task_type == "regr") {
         mlr3misc::invoke(vtreat::NumericOutcomeTreatment,
