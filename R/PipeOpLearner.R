@@ -19,10 +19,10 @@
 #' PipeOpLearner$new(learner, id = NULL, param_vals = list())
 #' ```
 #'
-#' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`
+#' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`\cr
 #'   [`Learner`][mlr3::Learner] to wrap, or a string identifying a [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
 #'  This argument is always cloned; to access the [`Learner`][mlr3::Learner] inside `PipeOpLearner` by-reference, use `$learner`.\cr
-#' * `id` :: `character(1)`
+#' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting  object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.

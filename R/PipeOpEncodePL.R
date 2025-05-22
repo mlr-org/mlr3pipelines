@@ -275,7 +275,9 @@ mlr_pipeops$add("encodeplquantiles", PipeOpEncodePLQuantiles)
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`]. Instead of a [`Task`][mlr3::Task], a
+#' [`TaskClassif`][mlr3::TaskClassif] or [`TaskRegr`][mlr3::TaskRegr] is used as input and output during training and
+#' prediction, depending on the `task_type` construction argument.
 #'
 #' The output is the input [`Task`][mlr3::Task] with all affected `numeric` and `integer` columns encoded using piecewise
 #' linear encoding with bins being derived from a decision tree [`Learner`][mlr3::Learner] trained on the respective feature column.

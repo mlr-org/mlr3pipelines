@@ -34,7 +34,9 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}. Instead of a \code{\link[mlr3:Task]{Task}}, a
+\code{\link[mlr3:TaskClassif]{TaskClassif}} or \code{\link[mlr3:TaskRegr]{TaskRegr}} is used as input and output during training and
+prediction, depending on the \code{task_type} construction argument.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with all affected \code{numeric} and \code{integer} columns encoded using piecewise
 linear encoding with bins being derived from a decision tree \code{\link[mlr3:Learner]{Learner}} trained on the respective feature column.

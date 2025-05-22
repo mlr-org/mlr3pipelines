@@ -21,7 +21,7 @@ See \code{\link[themis:tomek]{themis::tomek}} for details.
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTOmek$new(id = "tomek", param_vals = list())
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTomek$new(id = "tomek", param_vals = list())
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -33,7 +33,8 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}. Instead of a \code{\link[mlr3:Task]{Task}}, a
+\code{\link[mlr3:TaskClassif]{TaskClassif}} is used as input and output during training and prediction.
 
 The output during training is the input \code{\link[mlr3:Task]{Task}} with removed rows for pairs of observations that form a Tomek link.
 The output during prediction is the unchanged input.

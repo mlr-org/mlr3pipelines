@@ -3,6 +3,9 @@
 * Added missing error for predicting with untrained `PipeOp`s / `Graph`s.
 * Fix: Corrected typo in the hyperparameter name `use_parallel` of `PipeOpVtreat`.
 * Fix: Do not overwrite initial hyperparameter settings of `bbotk::OptimizerBatchNLoptr` in `LearnerClassifAvg` / `LearnerRegrAvg`'s internal `optimize_weights_learneravg` function.
+* Added new convenience function `preproc()` for easier training of or prediction with `PipeOp`s or `Graph`s.
+* Fix: `PipeOpVtreat`, `PipeOpEncodeImpact`, and `PipeOpEncodeLmer` now accept the more precise `TaskSupervised` instead of `Task` as input for training and prediction.
+* Docs: Added missing documentation for the `task_type` of the input and output channels of `PipeOp`s that inherit from `PipeOpTaskPreproc` and set a non-default `task_type`.
 
 # mlr3pipelines 0.7.2
 

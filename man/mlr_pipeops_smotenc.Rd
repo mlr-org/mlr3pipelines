@@ -38,7 +38,8 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}. Instead of a \code{\link[mlr3:Task]{Task}}, a
+\code{\link[mlr3:TaskClassif]{TaskClassif}} is used as input and output during training and prediction.
 
 The output during training is the input \code{\link[mlr3:Task]{Task}} with added synthetic rows for the minority class.
 The output during prediction is the unchanged input.

@@ -49,7 +49,8 @@ otherwise be set during construction. Default \code{list()}.
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}. Instead of a \code{\link[mlr3:Task]{Task}}, a
+\code{\link[mlr3:TaskSupervised]{TaskSupervised}} is used as input and output during training and prediction.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with all affected \code{factor}, \code{character} or
 \code{ordered} parameters encoded according to the \code{method} parameter.

@@ -23,7 +23,8 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`]. Instead of a [`Task`][mlr3::Task], a
+#' [`TaskSupervised`][mlr3::TaskSupervised] is used as input and output during training and prediction.
 #'
 #' The output is the input [`Task`][mlr3::Task] with all affected features "prepared" by vtreat.
 #' If vtreat found "no usable vars", the input [`Task`][mlr3::Task] is returned unaltered.
@@ -193,7 +194,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         # NOTE: parallelCluster missing intentionally and will be set to NULL
       )
       ps$values = list(recommended = TRUE, cols_to_copy = selector_none())
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "vtreat", tags = c("encode", "missings"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "vtreat", task_type = "TaskSupervised", tags = c("encode", "missings"))
     }
   ),
   private = list(
@@ -209,6 +210,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         checkmate::assert_subset(names(self$param_set$values$imputation_map), choices = var_list, empty.ok = TRUE)
       }
 
+      # FIXME: Handle non-Regr / non-Classif Tasks that inherit from TaskSupervised, #913
       task_type = task$task_type
       transform_design = if (task_type == "regr") {
         mlr3misc::invoke(vtreat::NumericOutcomeTreatment,
