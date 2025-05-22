@@ -23,7 +23,8 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`]. Instead of a [`Task`][mlr3::Task], a
+#' [`TaskSupervised`][mlr3::TaskSupervised] is used as input and output during training and prediction.
 #'
 #' The output is the input [`Task`][mlr3::Task] with all affected features "prepared" by vtreat.
 #' If vtreat found "no usable vars", the input [`Task`][mlr3::Task] is returned unaltered.
