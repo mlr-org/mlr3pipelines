@@ -86,12 +86,14 @@ PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",
         impute_zero = p_lgl(tags = c("train", "required"))
       )
       ps$values = list(smoothing = 1e-4, impute_zero = FALSE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, tags = "encode", feature_types = c("factor", "ordered"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, task_type = "TaskSupervised", tags = "encode",
+        feature_types = c("factor", "ordered"))
     }
   ),
   private = list(
 
     .get_state_dt = function(dt, levels, target) {
+      # FIXME: Handle non-Regr / non-Classif Tasks that inherit from TaskSupervised, #913
       task_type = if (is.numeric(target)) "regr" else "classif"
       state = list()
 
