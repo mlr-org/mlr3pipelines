@@ -25,13 +25,13 @@
 #' @return [`Graph`]
 #'
 #' @export
-#' @examplesIf mlr3misc::require_namespaces(c("rpart", "kknn"), quietly = TRUE)
+#' @examplesIf mlr3misc::require_namespaces("rpart", quietly = TRUE)
 #' library(mlr3)
 #' library(mlr3learners)
 #'
 #' base_learners = list(
 #'   lrn("classif.rpart", predict_type = "prob"),
-#'   lrn("classif.kknn", predict_type = "prob")
+#'   lrn("classif.nnet", predict_type = "prob")
 #' )
 #' super_learner = lrn("classif.log_reg")
 #'

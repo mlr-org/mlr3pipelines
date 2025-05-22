@@ -48,7 +48,7 @@
 #'    If `character`, converts to [`Optimizer`][bbotk::Optimizer]
 #'    via [`opt`][bbotk::opt]. Initialized to `OptimizerGenSA`.
 #'  * `log_level` :: `character(1)` | `integer(1)`\cr
-#'    Set a temporary log-level for `lgr::get_logger("bbotk")`. Initialized to: "warn".
+#'    Set a temporary log-level for `lgr::get_logger("mlr3/bbotk")`. Initialized to: "warn".
 #'
 #' @section Internals:
 #' Uses the `optimizer` provided as a `param_val` in order to find an optimal threshold.
@@ -157,9 +157,15 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
         )
       )
       lgr = lgr::get_logger("bbotk")
+      lgr2 = lgr::get_logger("mlr3/bbotk")
       old_threshold = lgr$threshold
-      on.exit(lgr$set_threshold(old_threshold))
+      old_threshold2 = lgr2$threshold
+      on.exit({
+        lgr$set_threshold(old_threshold)
+        lgr2$set_threshold(old_threshold2)
+      })
       lgr$set_threshold(self$param_set$values$log_level)
+      lgr2$set_threshold(self$param_set$values$log_level)
       optimizer$optimize(inst)
       result = unlist(inst$result_x_domain)
       names(result) = paramname_to_column_map[names(result)]
