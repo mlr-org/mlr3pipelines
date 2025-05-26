@@ -24,8 +24,7 @@ in conjunction with \code{\link[mlr3:mlr_resamplings_insample]{ResamplingInsampl
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{* `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \\cr
-  (`character(1)`, `list`) -> `self` \\cr
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -45,7 +44,8 @@ Input and output channels are inherited from \code{\link{PipeOp}}.
 
 The \verb{$state} is a named \code{list} with elements
 \itemize{
-\item \code{thresholds} :: \code{numeric} learned thresholds
+\item \code{thresholds} :: \code{numeric}\cr
+Learned thresholds;
 }
 }
 

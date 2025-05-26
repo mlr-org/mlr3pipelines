@@ -20,8 +20,7 @@
 #'
 #' @section Construction:
 #' ```
-#' * `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \cr
-#'   (`character(1)`, `list`) -> `self` \cr
+#' PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -35,7 +34,8 @@
 #'
 #' @section State:
 #' The `$state` is a named `list` with elements
-#' * `thresholds` :: `numeric` learned thresholds
+#' * `thresholds` :: `numeric`\cr
+#'   Learned thresholds;
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOp`], as well as:
