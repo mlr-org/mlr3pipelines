@@ -93,8 +93,7 @@ in conjunction with <code><a href="https://mlr3.mlr-org.com/reference/mlr_resamp
 
 
 
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="sc">*</span> <span class="st">`</span><span class="at">PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())</span><span class="st">`</span> \cr</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  (<span class="st">`</span><span class="at">character(1)</span><span class="st">`</span>, <span class="st">`</span><span class="at">list</span><span class="st">`</span>) <span class="ot">-&gt;</span> <span class="st">`</span><span class="at">self</span><span class="st">`</span> \cr</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>PipeOpTuneThreshold<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"tunethreshold"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
 Identifier of resulting object. Default: "tunethreshold".</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br>
 List of hyperparameter settings, overwriting the hyperparameter settings
@@ -110,7 +109,8 @@ that would otherwise be set during construction. Default <code><a href="https://
     <h2 id="state">State<a class="anchor" aria-label="anchor" href="#state"></a></h2>
 
 
-<p>The <code>$state</code> is a named <code>list</code> with elements</p><ul><li><p><code>thresholds</code> :: <code>numeric</code> learned thresholds</p></li>
+<p>The <code>$state</code> is a named <code>list</code> with elements</p><ul><li><p><code>thresholds</code> :: <code>numeric</code><br>
+Learned thresholds;</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a></h2>
@@ -286,7 +286,7 @@ no other benefits.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 3 cols): stage,class,msg</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $train_time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.002</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.003</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $task_hash</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "209774f39ea0fcb1"</span>
@@ -357,7 +357,7 @@ no other benefits.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

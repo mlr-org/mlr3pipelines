@@ -89,7 +89,9 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
     <h2 id="input-and-output-channels">Input and Output Channels<a class="anchor" aria-label="anchor" href="#input-and-output-channels"></a></h2>
 
 
-<p>Input and output channels are inherited from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>.</p>
+<p>Input and output channels are inherited from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>. Instead of a <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>, a
+<code><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></code> or <code><a href="https://mlr3.mlr-org.com/reference/TaskRegr.html" class="external-link">TaskRegr</a></code> is used as input and output during training and
+prediction, depending on the <code>task_type</code> construction argument.</p>
 <p>The output is the input <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> with all affected <code>numeric</code> and <code>integer</code> columns encoded using piecewise
 linear encoding with bins being derived from a decision tree <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> trained on the respective feature column.</p>
     </div>
@@ -348,7 +350,7 @@ In <em>Advances in Neural Information Processing Systems</em>, volume 35, 24991â
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

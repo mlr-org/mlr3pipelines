@@ -87,7 +87,8 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
     <h2 id="input-and-output-channels">Input and Output Channels<a class="anchor" aria-label="anchor" href="#input-and-output-channels"></a></h2>
 
 
-<p>Input and output channels are inherited from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>.</p>
+<p>Input and output channels are inherited from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>. Instead of a <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>, a
+<code><a href="https://mlr3.mlr-org.com/reference/TaskSupervised.html" class="external-link">TaskSupervised</a></code> is used as input and output during training and prediction.</p>
 <p>The output is the input <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> with all affected features "prepared" by vtreat.
 If vtreat found "no usable vars", the input <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> is returned unaltered.</p>
     </div>
@@ -305,7 +306,7 @@ Typically, an imputation via a <code><a href="PipeOp.html">PipeOp</a></code> is 
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>
