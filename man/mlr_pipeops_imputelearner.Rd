@@ -104,11 +104,11 @@ new_task$missings()
 po$state$model$mass
 
 library("mlr3learners")
-# to use the "regr.kknn" Learner, prefix it with its own imputation method!
-# The "imputehist" PipeOp is used to train "regr.kknn"; predictions of this
+# To use the "regr.lm" Learner, prefix it with its own imputation method!
+# The "imputehist" PipeOp is used to train "regr.lm"; predictions of this
 # trained Learner are then used to impute the missing values in the Task.
 po = po("imputelearner",
-  po("imputehist") \%>>\% lrn("regr.kknn")
+  po("imputehist") \%>>\% lrn("regr.lm")
 )
 
 new_task = po$train(list(task = task))[[1]]

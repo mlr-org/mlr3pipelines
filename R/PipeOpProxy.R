@@ -57,17 +57,16 @@
 #'
 #' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
-#' library("mlr3learners")
 #'
 #' set.seed(1234)
 #' task = tsk("iris")
 #'
 #' # use a proxy for preprocessing and a proxy for learning, i.e.,
-#' # no preprocessing and classif.kknn
+#' # no preprocessing and classif.rpart
 #' g = po("proxy", id = "preproc", param_vals = list(content = po("nop"))) %>>%
-#'   po("proxy", id = "learner", param_vals = list(content = lrn("classif.kknn")))
-#' rr_kknn = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
-#' rr_kknn$aggregate(msr("classif.ce"))
+#'   po("proxy", id = "learner", param_vals = list(content = lrn("classif.rpart")))
+#' rr_rpart = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
+#' rr_rpart$aggregate(msr("classif.ce"))
 #'
 #' # use pca for preprocessing and classif.rpart as the learner
 #' g$param_set$values$preproc.content = po("pca")

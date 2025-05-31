@@ -43,13 +43,13 @@ features in order to predict the outcome.
 All input arguments are cloned and have no references in common with the returned \code{\link{Graph}}.
 }
 \examples{
-\dontshow{if (mlr3misc::require_namespaces(c("rpart", "kknn"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (mlr3misc::require_namespaces("rpart", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(mlr3)
 library(mlr3learners)
 
 base_learners = list(
   lrn("classif.rpart", predict_type = "prob"),
-  lrn("classif.kknn", predict_type = "prob")
+  lrn("classif.nnet", predict_type = "prob")
 )
 super_learner = lrn("classif.log_reg")
 
