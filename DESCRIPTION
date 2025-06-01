@@ -66,7 +66,7 @@ Imports:
     digest,
     lgr,
     mlr3 (>= 0.20.0),
-    mlr3misc (>= 0.16.0),
+    mlr3misc (>= 0.17.0),
     paradox,
     R6,
     withr
@@ -95,7 +95,6 @@ Suggests:
     evaluate,
     NMF,
     MASS,
-    kknn,
     GenSA,
     methods,
     vtreat,
@@ -216,6 +215,7 @@ Collate:
     'pipeline_targettrafo.R'
     'po.R'
     'ppl.R'
+    'preproc.R'
     'reexports.R'
     'typecheck.R'
     'zzz.R'

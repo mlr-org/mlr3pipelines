@@ -42,7 +42,8 @@
 #'   otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`]. Instead of a [`Task`][mlr3::Task], a
+#' [`TaskSupervised`][mlr3::TaskSupervised] is used as input and output during training and prediction.
 #'
 #' The output is the input [`Task`][mlr3::Task] with all affected `factor`, `character` or
 #' `ordered` parameters encoded according to the `method` parameter.
@@ -102,6 +103,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
   private = list(
 
     .get_state_dt = function(dt, levels, target) {
+      # FIXME: Handle non-Regr / non-Classif Tasks that inherit from TaskSupervised, #913
       task_type = if (is.numeric(target)) "regr" else "classif"
       state = list()
       # for prediction, use complete encoding model

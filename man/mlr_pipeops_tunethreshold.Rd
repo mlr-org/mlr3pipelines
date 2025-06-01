@@ -24,8 +24,7 @@ in conjunction with \code{\link[mlr3:mlr_resamplings_insample]{ResamplingInsampl
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{* `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \\cr
-  (`character(1)`, `list`) -> `self` \\cr
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -45,7 +44,8 @@ Input and output channels are inherited from \code{\link{PipeOp}}.
 
 The \verb{$state} is a named \code{list} with elements
 \itemize{
-\item \code{thresholds} :: \code{numeric} learned thresholds
+\item \code{thresholds} :: \code{numeric}\cr
+Learned thresholds;
 }
 }
 
@@ -62,7 +62,7 @@ Initialized to \code{"classif.ce"}, i.e. misclassification error.
 If \code{character}, converts to \code{\link[bbotk:Optimizer]{Optimizer}}
 via \code{\link[bbotk:opt]{opt}}. Initialized to \code{OptimizerGenSA}.
 \item \code{log_level} :: \code{character(1)} | \code{integer(1)}\cr
-Set a temporary log-level for \code{lgr::get_logger("bbotk")}. Initialized to: "warn".
+Set a temporary log-level for \code{lgr::get_logger("mlr3/bbotk")}. Initialized to: "warn".
 }
 }
 
