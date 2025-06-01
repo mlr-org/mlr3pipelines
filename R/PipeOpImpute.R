@@ -22,7 +22,7 @@
 #'   Whether the `context_columns` parameter should be added which lets the user limit the columns that are
 #'   used for imputation inference. This should generally be `FALSE` if imputation depends only on individual features
 #'   (e.g. mode imputation), and `TRUE` if imputation depends on other features as well (e.g. kNN-imputation).
-#' * packages :: `character`\cr
+#' * `packages` :: `character`\cr
 #'   Set of all required packages for the [`PipeOp`]'s `private$.train` and `private$.predict` methods. See `$packages` slot.
 #'   Default is `character(0)`.
 #' * `task_type` :: `character(1)`\cr
@@ -98,10 +98,10 @@
 #'   (`atomic`, `character(1)`, [`data.table`][data.table::data.table]) -> `any`\cr
 #'   Like `.train_imputer()`, but only called for each feature that only contains missing values. This is not an abstract function
 #'   and, if not overloaded, gives a default response of `0` (`integer`, `numeric`), `c(TRUE, FALSE)` (`logical`), all available levels (`factor`/`ordered`),
-#'   or the empty  string (`character`).
+#'   or the empty string (`character`).
 #' * `.impute(feature, type, model, context)`\cr
 #'   (`atomic`, `character(1)`, `any`, [`data.table`][data.table::data.table]) -> `atomic`\cr
-#'   Imputes the features. `model` is the model created by `private$.train_imputer()` Default behaviour is to assume `model` is an atomic vector
+#'   Imputes the features. `model` is the model created by `private$.train_imputer()`. Default behaviour is to assume `model` is an atomic vector
 #'   from which values are sampled to impute missing values of `feature`. `model` may have an attribute `probabilities` for non-uniform sampling.
 #'
 #' @family PipeOps
