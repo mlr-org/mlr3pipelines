@@ -10,7 +10,7 @@
 \description{
 Encodes columns of type \code{factor}, \code{character} and \code{ordered}.
 
-PipeOpEncodeLmer() converts factor levels of each factorial column to the
+\code{PipeOpEncodeLmer} converts factor levels of each factorial column to the
 estimated coefficients of a simple random intercept model.
 Models are fitted with the glmer function of the lme4 package and are
 of the type \code{target ~ 1 + (1 | factor)}.
@@ -62,7 +62,7 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 \item \code{target_levels} :: \code{character}\cr
 Levels of the target columns.
 \item \code{control} :: a named \code{list}\cr
-List of coefficients learned via \code{glmer}
+List of coefficients learned via \code{glmer}.
 }
 }
 

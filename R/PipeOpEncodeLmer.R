@@ -7,7 +7,7 @@
 #' @description
 #' Encodes columns of type `factor`, `character` and `ordered`.
 #'
-#' PipeOpEncodeLmer() converts factor levels of each factorial column to the
+#' `PipeOpEncodeLmer` converts factor levels of each factorial column to the
 #' estimated coefficients of a simple random intercept model.
 #' Models are fitted with the glmer function of the lme4 package and are
 #' of the type `target ~ 1 + (1 | factor)`.
