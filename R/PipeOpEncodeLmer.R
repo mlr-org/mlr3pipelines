@@ -107,7 +107,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
       # for prediction, use complete encoding model
       # different funs depending on task.type / multi/binaryclass
 
-      state$target_levels = levels(target)
+      state$target_levels = if (task_type == "classif") levels(droplevels(target)) else NULL
 
       # one vs rest for multiclass.
       if (length(state$target_levels) <= 2) {
