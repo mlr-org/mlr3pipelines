@@ -61,6 +61,12 @@ Ratio of the majority to minority class. Default is \code{1}. For details, see \
 }
 }
 
+\section{Internals}{
+
+If a target level is unobserved during training, no synthetic data points will be generated for that class.
+No error is raised; the unobserved class is simply ignored.
+}
+
 \section{Fields}{
 
 Only fields inherited from \code{\link{PipeOp}}.

@@ -80,6 +80,7 @@ Then for each class that is referenced by the \code{adjust} parameter (e.g. if \
 each class that is not the class with the fewest samples), \code{PipeOpClassBalancing} either throws out
 samples (downsampling), or adds additional rows that are equal to randomly chosen samples (upsampling),
 until the number of samples for these classes equals the "target class count".
+No upsampling is performed for classes that were not observed during training (i.e. empty factor levels in the target column).
 
 Uses \code{task$filter()} to remove rows. When identical rows are added during upsampling, then the \code{task$row_roles$use} can \emph{not} be used
 to duplicate rows because of [inaudible]; instead the \code{task$rbind()} function is used, and

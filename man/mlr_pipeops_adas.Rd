@@ -8,7 +8,7 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Generates a more balanced data set by creating synthetic instances of the minority class using the ADASYN algorithm.
+Generates a more balanced data set by creating synthetic instances of the minority classes using the ADASYN algorithm.
 
 The algorithm generates for each minority instance new data points based on its \code{K} nearest neighbors and the difficulty of learning for that data point.
 It can only be applied to tasks with numeric features that have no missing values.
@@ -50,6 +50,12 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 The number of nearest neighbors used for sampling new values. Default is \code{5}.
 See \code{\link[smotefamily:adas]{ADAS()}}.
 }
+}
+
+\section{Internals}{
+
+If a target level is unobserved during training, no synthetic data points will be generated for that class.
+No error is raised; the unobserved class is simply ignored.
 }
 
 \section{Fields}{

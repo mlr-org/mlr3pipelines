@@ -6,6 +6,8 @@
 * Added new convenience function `preproc()` for easier training of or prediction with `PipeOp`s or `Graph`s.
 * Fix: `PipeOpVtreat`, `PipeOpEncodeImpact`, and `PipeOpEncodeLmer` now accept the more precise `TaskSupervised` instead of `Task` as input for training and prediction.
 * Docs: Added missing documentation for the `task_type` of the input and output channels of `PipeOp`s that inherit from `PipeOpTaskPreproc` and set a non-default `task_type`.
+* Fix: `PipeOpEncodeLmer`, `PipeOpADAS`, `PipeOpBLSmote`, `PipeOpSmote`, and `PipeOpSmoteNC` no longer throw an error in case of empty target levels during training. 
+* Fix: `PipeOpClassBalancing` now handles unseen target levels by ignoring them during upsampling instead of producing `NA`s.
 
 # mlr3pipelines 0.7.2
 
