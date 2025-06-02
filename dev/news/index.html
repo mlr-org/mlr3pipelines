@@ -59,6 +59,8 @@
 <li>Added new convenience function <code><a href="../reference/preproc.html">preproc()</a></code> for easier training of or prediction with <code>PipeOp</code>s or <code>Graph</code>s.</li>
 <li>Fix: <code>PipeOpVtreat</code>, <code>PipeOpEncodeImpact</code>, and <code>PipeOpEncodeLmer</code> now accept the more precise <code>TaskSupervised</code> instead of <code>Task</code> as input for training and prediction.</li>
 <li>Docs: Added missing documentation for the <code>task_type</code> of the input and output channels of <code>PipeOp</code>s that inherit from <code>PipeOpTaskPreproc</code> and set a non-default <code>task_type</code>.</li>
+<li>Fix: <code>PipeOpEncodeLmer</code>, <code>PipeOpADAS</code>, <code>PipeOpBLSmote</code>, <code>PipeOpSmote</code>, and <code>PipeOpSmoteNC</code> no longer throw an error in case of empty target levels during training.</li>
+<li>Fix: <code>PipeOpClassBalancing</code> now handles unseen target levels by ignoring them during upsampling instead of producing <code>NA</code>s.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.2" id="mlr3pipelines-072">mlr3pipelines 0.7.2<a class="anchor" aria-label="anchor" href="#mlr3pipelines-072"></a></h2><p class="text-muted">CRAN release: 2025-03-07</p>

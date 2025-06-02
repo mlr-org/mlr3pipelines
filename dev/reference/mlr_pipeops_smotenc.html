@@ -126,6 +126,13 @@ Number of nearest neighbors used for generating new values from the minority cla
 Ratio of the majority to minority class. Default is <code>1</code>. For details, see <code><a href="https://themis.tidymodels.org/reference/smotenc.html" class="external-link">themis::smotenc</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
+    <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>
+
+
+<p>If a target level is unobserved during training, no synthetic data points will be generated for that class.
+No error is raised; the unobserved class is simply ignored.</p>
+    </div>
+    <div class="section level2">
     <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>
 
 

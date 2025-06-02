@@ -132,7 +132,8 @@ class count" is just the value of <code>ratio</code> (i.e. <code>1 * ratio</code
 <p>Then for each class that is referenced by the <code>adjust</code> parameter (e.g. if <code>adjust</code> is <code>"nonminor"</code>:
 each class that is not the class with the fewest samples), <code>PipeOpClassBalancing</code> either throws out
 samples (downsampling), or adds additional rows that are equal to randomly chosen samples (upsampling),
-until the number of samples for these classes equals the "target class count".</p>
+until the number of samples for these classes equals the "target class count".
+No upsampling is performed for classes that were not observed during training (i.e. empty factor levels in the target column).</p>
 <p>Uses <code>task$filter()</code> to remove rows. When identical rows are added during upsampling, then the <code>task$row_roles$use</code> can <em>not</em> be used
 to duplicate rows because of [inaudible]; instead the <code>task$rbind()</code> function is used, and
 a new <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> is attached that contains all rows that are being duplicated exactly as many times as they are being added.</p>
