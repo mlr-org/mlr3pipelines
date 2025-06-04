@@ -26,7 +26,7 @@ subclass should have its own \code{param_vals} parameter and pass it on to \code
 Whether the \code{context_columns} parameter should be added which lets the user limit the columns that are
 used for imputation inference. This should generally be \code{FALSE} if imputation depends only on individual features
 (e.g. mode imputation), and \code{TRUE} if imputation depends on other features as well (e.g. kNN-imputation).
-\item packages :: \code{character}\cr
+\item \code{packages} :: \code{character}\cr
 Set of all required packages for the \code{\link{PipeOp}}'s \code{private$.train} and \code{private$.predict} methods. See \verb{$packages} slot.
 Default is \code{character(0)}.
 \item \code{task_type} :: \code{character(1)}\cr
@@ -120,10 +120,10 @@ is only called for features with at least one non-missing value.
 (\code{atomic}, \code{character(1)}, \code{\link[data.table:data.table]{data.table}}) -> \code{any}\cr
 Like \code{.train_imputer()}, but only called for each feature that only contains missing values. This is not an abstract function
 and, if not overloaded, gives a default response of \code{0} (\code{integer}, \code{numeric}), \code{c(TRUE, FALSE)} (\code{logical}), all available levels (\code{factor}/\code{ordered}),
-or the empty  string (\code{character}).
+or the empty string (\code{character}).
 \item \code{.impute(feature, type, model, context)}\cr
 (\code{atomic}, \code{character(1)}, \code{any}, \code{\link[data.table:data.table]{data.table}}) -> \code{atomic}\cr
-Imputes the features. \code{model} is the model created by \code{private$.train_imputer()} Default behaviour is to assume \code{model} is an atomic vector
+Imputes the features. \code{model} is the model created by \code{private$.train_imputer()}. Default behaviour is to assume \code{model} is an atomic vector
 from which values are sampled to impute missing values of \code{feature}. \code{model} may have an attribute \code{probabilities} for non-uniform sampling.
 }
 }
