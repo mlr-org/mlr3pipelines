@@ -41,5 +41,5 @@ jobs:
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
-        envs:
+        env:
           _R_CHECK_DEPENDS_ONLY_: ${{ matrix.config.depends_only }}
