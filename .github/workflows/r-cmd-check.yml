@@ -24,9 +24,9 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: ubuntu-latest,   r: 'devel',   depends_only: ''}
-          - {os: ubuntu-latest,   r: 'release', depends_only: ''}
-          - {os: ubuntu-latest,   r: 'release', depends_only: 'TRUE'}
+          - {os: ubuntu-latest,   r: 'devel'}
+          - {os: ubuntu-latest,   r: 'release'}
+          - {os: ubuntu-latest,   r: 'release', depends_only: true}
 
     steps:
       - uses: actions/checkout@v4
@@ -42,4 +42,5 @@ jobs:
 
       - uses: r-lib/actions/check-r-package@v2
         env:
-          _R_CHECK_DEPENDS_ONLY_: ${{ matrix.config.depends_only }}
+          _R_CHECK_DEPENDS_ONLY_: ${{ matrix.config.depends_only && 'TRUE' || '' }}
+          NOT_CRAN: ${{ matrix.config.depends_only && 'FALSE' || 'TRUE' }}
