@@ -42,7 +42,7 @@
 #' of [`TaskSupervised`][mlr3::TaskSupervised] will not work with these input types for `indata`.
 #'
 #' @export
-#' @examples
+#' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
 #' task = tsk("iris")
 #' pop = po("pca")

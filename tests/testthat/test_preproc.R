@@ -1,6 +1,7 @@
 context("preproc")
 
 test_that("preproc - basic sanity checks", {
+  skip_if_not_installed("smotefamily")
   task = tsk("iris")
   op = po("scale")
   graph = as_graph(op)

@@ -240,7 +240,8 @@ test_that("threshold works with cost measure", {
 
 
 test_that("threshold graph transparency", {
-
+  skip_if_not_installed("rpart")
+  skip_if_not_installed("bbotk")
   lrn_prob = as_learner(
     po("learner_cv", lrn("classif.rpart", predict_type = "prob")) %>>%
       po("tunethreshold")
