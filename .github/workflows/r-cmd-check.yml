@@ -15,7 +15,7 @@ jobs:
   r-cmd-check:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})${{ matrix.config.depends_only && ' – noSuggests' || '' }}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -24,8 +24,9 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: ubuntu-latest,   r: 'devel'}
-          - {os: ubuntu-latest,   r: 'release'}
+          - {os: ubuntu-latest,   r: 'devel',   depends_only: ''}
+          - {os: ubuntu-latest,   r: 'release', depends_only: ''}
+          - {os: ubuntu-latest,   r: 'release', depends_only: 'TRUE'}
 
     steps:
       - uses: actions/checkout@v4
@@ -40,3 +41,5 @@ jobs:
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
+        envs:
+          _R_CHECK_DEPENDS_ONLY_: ${{ matrix.config.depends_only }}
