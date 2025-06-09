@@ -140,6 +140,8 @@ test_that("marshal", {
 })
 
 test_that("marshal multiplicity", {
+  skip_if_not_installed("rpart")
+  skip_if_not_installed("bbotk")
   po = po("learner_cv", learner = lrn("classif.debug"))
   po$train(list(Multiplicity(tsk("iris"), tsk("sonar"))))
   s = po$state

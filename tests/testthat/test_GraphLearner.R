@@ -938,6 +938,7 @@ test_that("GraphLearner hashes", {
 })
 
 test_that("validation, internal_valid_scores", {
+  skip_if_not_installed("rpart")
   expect_error(as_pipeop(lrn("classif.debug", validate = 0.3)), "must either be")
   # None of the Learners can do validation -> NULL
   glrn1 = as_learner(as_graph(lrn("classif.rpart")))$train(tsk("iris"))
@@ -966,6 +967,7 @@ test_that("validation, internal_valid_scores", {
 })
 
 test_that("internal_tuned_values", {
+  skip_if_not_installed("rpart")
   # no internal tuning support -> NULL
   task = tsk("iris")
   glrn1 = as_learner(as_graph(lrn("classif.rpart")))$train(task)
@@ -1074,6 +1076,7 @@ test_that("marshal", {
 })
 
 test_that("marshal has no effect when nothing needed marshaling", {
+  skip_if_not_installed("rpart")
   task = tsk("iris")
   glrn = as_learner(as_graph(lrn("classif.rpart")))
   glrn$train(task)
