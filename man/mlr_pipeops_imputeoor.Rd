@@ -17,12 +17,17 @@ using \eqn{min(x) - offset - multiplier * diff(range(x))} or
 This type of imputation is especially sensible in the context of tree-based methods, see also
 Ding & Simonoff (2010).
 
-If a factor is missing during prediction, but not during training, this adds an unseen level
-\code{".MISSING"}, which would be a problem for most models. This is why it is recommended to use
+It may occur that a \code{factor} or \code{ordered} feature contains missing values during prediction, but not during training.
+If the hyperparameter \code{create_empty_level} inherited form \code{PipeOpImpute} is set to \code{TRUE}, then an unseen level
+\code{".MISSING"} is added to the feature during training and missing values are imputed as \code{".MISSING"} during prediction.
+However, empty factor levels can be a problem for many \code{\link[mlr3:Learner]{Learners}}, so it is recommended to use
 \code{\link[=mlr_pipeops_fixfactors]{po("fixfactors")}} and
 \code{\link[=mlr_pipeops_imputesample]{po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))}}
-(or some other imputation method) after this imputation method, if missing values are expected during prediction
-in factor columns that had no missing values during training.
+(or some other imputation method) after this imputation method.
+If \code{create_empty_level} is set to \code{FALSE}, then no empty level is introduced during training, but columns that
+have missing values during prediction will \emph{not} be imputed. This is why it may be necessary to use
+\code{\link[=mlr_pipeops_imputesample]{po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))}}
+(or another imputation method) after this imputation method.
 }
 \section{Construction}{
 
@@ -58,14 +63,14 @@ The \verb{$state$model} contains either \code{".MISSING"} used for \code{charact
 The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, as well as:
 \itemize{
 \item \code{min} :: \code{logical(1)} \cr
-Should \code{integer} and \code{numeric} features be shifted below the minimum? Initialized to TRUE. If FALSE
+Should \code{integer} and \code{numeric} features be shifted below the minimum? Initialized to \code{TRUE}. If \code{FALSE}
 they are shifted above the maximum. See also the description above.
 \item \code{offset} :: \code{numeric(1)} \cr
 Numerical non-negative offset as used in the description above for \code{integer} and \code{numeric}
-features. Initialized to 1.
+features. Initialized to \code{1}.
 \item \code{multiplier} :: \code{numeric(1)} \cr
 Numerical non-negative multiplier as used in the description above for \code{integer} and \code{numeric}
-features. Initialized to 1.
+features. Initialized to \code{1}.
 }
 }
 
@@ -73,7 +78,8 @@ features. Initialized to 1.
 
 Adds an explicit new \code{level()} to \code{factor} and \code{ordered} features, but not to \code{character} features.
 For \code{integer} and \code{numeric} features uses the \code{min}, \code{max}, \code{diff} and \code{range} functions.
-\code{integer} and \code{numeric} features that are entirely \code{NA} are imputed as \code{0}.
+\code{integer} and \code{numeric} features that are entirely \code{NA} are imputed as \code{0}. \code{factor} and \code{ordered} features that are
+entirely \code{NA} are imputed as \code{".MISSING"}.
 }
 
 \section{Fields}{

@@ -8,7 +8,8 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpImpute$$new(id, param_set = ps(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task")
+#' PipeOpImpute$$new(id, param_set = ps(), param_vals = list(), whole_task_dependent = FALSE, empty_level_control = FALSE,
+#'   packages = character(0), task_type = "Task")
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -22,6 +23,10 @@
 #'   Whether the `context_columns` parameter should be added which lets the user limit the columns that are
 #'   used for imputation inference. This should generally be `FALSE` if imputation depends only on individual features
 #'   (e.g. mode imputation), and `TRUE` if imputation depends on other features as well (e.g. kNN-imputation).
+#' * `empty_level_control` :: `logical(1)`\cr
+#'   Whether the `create_empty_level` parameter should be added which lets the user control how to handle
+#'   edge cases where `NA`s occur in `factor` or `ordered` features only during prediction but not during training.
+#'   Default is `FALSE`.
 #' * `packages` :: `character`\cr
 #'   Set of all required packages for the [`PipeOp`]'s `private$.train` and `private$.predict` methods. See `$packages` slot.
 #'   Default is `character(0)`.
@@ -72,9 +77,24 @@
 #'   The parameter must be a [`Selector`] function, which takes a [`Task`][mlr3::Task] as argument and returns a `character`
 #'   of features to use.\cr
 #'   See [`Selector`] for example functions. Defaults to `NULL`, which selects all features.
+#' * `create_empty_level` :: `logical(1)`\cr
+#'   Whether an empty level should always be created for `factor` or `ordered` columns during training.
+#'   This parameter is only present if the constructor is called with the `empty_level_control` argument set to `TRUE`.
+#'   If `FALSE`, columns that had no `NA`s during training but have `NA`s during prediction will not be imputed.
+#'   Initialized to `FALSE`.\cr
 #'
 #' @section Internals:
 #' `PipeOpImpute` is an abstract class inheriting from [`PipeOp`] that makes implementing imputer [`PipeOp`]s simple.
+#'
+#' Internally, `create_empty_level` works by controlling in which cases imputation is performed on `factor` or `ordered`
+#' columns. The setting of `create_empty_level` has no impact on columns of other types.\cr
+#' If `create_empty_level` is set to `TRUE`, *during training* `private$.impute()` is called for all `factor` or
+#' `ordered` columns, regardless of whether they have any missing values. For this to lead to the creation of an empty
+#' level for columns with no missing values, `private$.train_imputer()` must return the name of the level to be created
+#' if the feature type is `factor` or `ordered.`\cr
+#' If `create_empty_level` is set to `FALSE`, *during prediction* `private$.impute()` is not called for `factor` or
+#' `ordered` columns which were not modified during training. This means that `NA`s will not be imputed for these
+#' columns.
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`].
@@ -113,24 +133,34 @@ PipeOpImpute = R6Class("PipeOpImpute",
   inherit = PipeOp,
   public = list(
 
-    initialize = function(id, param_set = ps(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task", feature_types = mlr_reflections$task_feature_types) {
-      # add one or two parameters: affect_columns (always) and context_columns (if whole_task_dependent is TRUE)
+    initialize = function(id, param_set = ps(), param_vals = list(), whole_task_dependent = FALSE, empty_level_control = FALSE,
+      packages = character(0), task_type = "Task", feature_types = mlr_reflections$task_feature_types) {
+      # Add one or two parameters: affect_columns (always) and context_columns (if whole_task_dependent is TRUE)
       addparams = list(affect_columns = p_uty(custom_check = check_function_or_null, tags = "train"))
       if (whole_task_dependent) {
         addparams = c(addparams, list(context_columns = p_uty(custom_check = check_function_or_null, tags = "train")))
       }
       affectcols_ps = do.call(ps, addparams)
+
+      # Add parameter 'create_empty_level' if empty_level_control = TRUE
+      emplvls_control_ps = if (empty_level_control) {
+        ps(create_empty_level = p_lgl(init = FALSE, tags = c("train", "predict")))
+      }  # otherwise NULL which works with the concatenation methods below
+
       # ParamSetCollection handles adding of new parameters differently
       if (inherits(param_set, "ParamSet")) {
         if (paradox_info$is_old) {
           lapply(affectcols_ps$params, param_set$add)
+          lapply(emplvls_control_ps$params, param_set$add)
         } else {
-          param_set = c(param_set, affectcols_ps)
+          param_set = c(param_set, affectcols_ps, emplvls_control_ps)
         }
       } else {
         private$.affectcols_ps = affectcols_ps
-        param_set = c(param_set, alist(private$.affectcols_ps))
+        private$.emplvls_control_ps = emplvls_control_ps
+        param_set = c(param_set, alist(private$.affectcols_ps), alist(private$.emplvls_control_ps))
       }
+
       private$.feature_types = assert_subset(feature_types, mlr_reflections$task_feature_types)
       private$.whole_task_dependent = whole_task_dependent
 
@@ -151,12 +181,14 @@ PipeOpImpute = R6Class("PipeOpImpute",
   private = list(
     .feature_types = NULL,
     .affectcols_ps = NULL,
+    .emplvls_control_ps = NULL,
     .whole_task_dependent = NULL,
 
     .train = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
+      pv = self$param_set$get_values(tags = "train")
 
-      affected_cols = (self$param_set$values$affect_columns %??% selector_all())(intask)
+      affected_cols = (pv$affect_columns %??% selector_all())(intask)
       affected_cols = intersect(affected_cols, private$.select_cols(intask))
 
       self$state = list(
@@ -165,15 +197,20 @@ PipeOpImpute = R6Class("PipeOpImpute",
       )
 
       if (private$.whole_task_dependent) {
-        context_cols = (self$param_set$values$context_columns %??% selector_all())(intask)
+        context_cols = (pv$context_columns %??% selector_all())(intask)
         context_data = intask$data(cols = context_cols)
         self$state$context_cols = context_cols
       }
 
-      ..col = NULL  # avoid static checker complaints
-
       imputanda = intask$data(cols = affected_cols)
-      imputanda = imputanda[, map_lgl(imputanda, function(x) anyMissing(x)), with = FALSE]
+      if (isTRUE(pv$create_empty_level)) {  # isTRUE to handle NULL if param doesn't exist
+        # Also rn impute on all factor/ordered columns that don't have any NAs
+        imputanda = imputanda[, map_lgl(imputanda, function(x) anyMissing(x) || is.factor(x)), with = FALSE]
+      } else {
+        imputanda = imputanda[, map_lgl(imputanda, function(x) anyMissing(x)), with = FALSE]
+      }
+
+      ..col = NULL  # avoid static checker complaints
 
       self$state$model = imap(intask$data(cols = affected_cols), function(col, colname) {
         type = intask$feature_types[colname, get("type")]
@@ -217,13 +254,19 @@ PipeOpImpute = R6Class("PipeOpImpute",
         context_data = intask$data(cols = self$state$context_cols)
       }
 
-      ..col = NULL  # avoid static checker complaints
-
       imputanda = intask$data(cols = self$state$affected_cols)
-      imputanda = imputanda[,
-        colnames(imputanda) %in% self$state$imputed_train |
-          map_lgl(imputanda, function(x) anyMissing(x)),
+      if (!isTRUE(self$param_set$values$create_empty_level)) {  # isTRUE to handle NULL if param doesn't exist
+        # Don't run impute for factor/ordered columns that were not imputed during training
+        imputanda = imputanda[,
+          colnames(imputanda) %in% self$state$imputed_train | map_lgl(imputanda, function(x) anyMissing(x) && !is.factor(x)),
         with = FALSE]
+      } else {
+        imputanda = imputanda[,
+          colnames(imputanda) %in% self$state$imputed_train | map_lgl(imputanda, function(x) anyMissing(x)),
+        with = FALSE]
+      }
+
+      ..col = NULL  # avoid static checker complaints
 
       imap(imputanda, function(col, colname) {
         type = intask$feature_types[colname, get("type")]
@@ -263,6 +306,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
     .impute = function(feature, type, model, context) {
       if (type %in% c("factor", "ordered")) {
         # in some edge cases there may be levels during training that are missing during predict.
+        # Adds level to columns with no NAs if create_empty_level = TRUE
         levels(feature) = c(levels(feature), as.character(model))
       }
       nas = which(is.na(feature))

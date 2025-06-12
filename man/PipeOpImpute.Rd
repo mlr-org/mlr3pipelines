@@ -12,7 +12,8 @@ Abstract base class for feature imputation.
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpImpute$$new(id, param_set = ps(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task")
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpImpute$$new(id, param_set = ps(), param_vals = list(), whole_task_dependent = FALSE, empty_level_control = FALSE,
+  packages = character(0), task_type = "Task")
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -26,6 +27,10 @@ subclass should have its own \code{param_vals} parameter and pass it on to \code
 Whether the \code{context_columns} parameter should be added which lets the user limit the columns that are
 used for imputation inference. This should generally be \code{FALSE} if imputation depends only on individual features
 (e.g. mode imputation), and \code{TRUE} if imputation depends on other features as well (e.g. kNN-imputation).
+\item \code{empty_level_control} :: \code{logical(1)}\cr
+Whether the \code{create_empty_level} parameter should be added which lets the user control how to handle
+edge cases where \code{NA}s occur in \code{factor} or \code{ordered} features only during prediction but not during training.
+Default is \code{FALSE}.
 \item \code{packages} :: \code{character}\cr
 Set of all required packages for the \code{\link{PipeOp}}'s \code{private$.train} and \code{private$.predict} methods. See \verb{$packages} slot.
 Default is \code{character(0)}.
@@ -86,12 +91,27 @@ the \code{whole_task_dependent} argument set to \code{TRUE}.\cr
 The parameter must be a \code{\link{Selector}} function, which takes a \code{\link[mlr3:Task]{Task}} as argument and returns a \code{character}
 of features to use.\cr
 See \code{\link{Selector}} for example functions. Defaults to \code{NULL}, which selects all features.
+\item \code{create_empty_level} :: \code{logical(1)}\cr
+Whether an empty level should always be created for \code{factor} or \code{ordered} columns during training.
+This parameter is only present if the constructor is called with the \code{empty_level_control} argument set to \code{TRUE}.
+If \code{FALSE}, columns that had no \code{NA}s during training but have \code{NA}s during prediction will not be imputed.
+Initialized to \code{FALSE}.\cr
 }
 }
 
 \section{Internals}{
 
 \code{PipeOpImpute} is an abstract class inheriting from \code{\link{PipeOp}} that makes implementing imputer \code{\link{PipeOp}}s simple.
+
+Internally, \code{create_empty_level} works by controlling in which cases imputation is performed on \code{factor} or \code{ordered}
+columns. The setting of \code{create_empty_level} has no impact on columns of other types.\cr
+If \code{create_empty_level} is set to \code{TRUE}, \emph{during training} \code{private$.impute()} is called for all \code{factor} or
+\code{ordered} columns, regardless of whether they have any missing values. For this to lead to the creation of an empty
+level for columns with no missing values, \code{private$.train_imputer()} must return the name of the level to be created
+if the feature type is \code{factor} or \code{ordered.}\cr
+If \code{create_empty_level} is set to \code{FALSE}, \emph{during prediction} \code{private$.impute()} is not called for \code{factor} or
+\code{ordered} columns which were not modified during training. This means that \code{NA}s will not be imputed for these
+columns.
 }
 
 \section{Fields}{
