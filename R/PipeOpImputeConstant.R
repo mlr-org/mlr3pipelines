@@ -32,12 +32,12 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpImpute`], as well as:
 #' * `constant` :: `atomic(1)`\cr
-#'   The constant value that should be used for the imputation, atomic vector of length 1. The
+#'   The constant value that should be used for the imputation, atomic vector of length `1`. The
 #'   atomic mode must match the type of the features that will be selected by the `affect_columns`
 #'   parameter and this will be checked during imputation. Initialized to `".MISSING"`.
 #' * `check_levels` :: `logical(1)`\cr
 #'   Should be checked whether the `constant` value is a valid level of factorial features (i.e., it
-#'   already is a level)? Raises an error if unsuccesful. This check is only performed for factorial
+#'   already is a level)? Raises an error if unsuccessful. This check is only performed for factorial
 #'   features (i.e., `factor`, `ordered`; skipped for `character`). Initialized to `TRUE`.
 #'
 #' @section Internals:
@@ -77,7 +77,8 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
         check_levels = p_lgl(tags = c("train", "required"))
       )
       ps$values = list(constant = ".MISSING", check_levels = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, empty_level_control = TRUE,
+        feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct"))
     }
   ),
   private = list(

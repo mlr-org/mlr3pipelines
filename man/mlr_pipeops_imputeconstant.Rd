@@ -44,12 +44,12 @@ The \verb{$state$model} contains the value of the \code{constant} parameter that
 The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, as well as:
 \itemize{
 \item \code{constant} :: \code{atomic(1)}\cr
-The constant value that should be used for the imputation, atomic vector of length 1. The
+The constant value that should be used for the imputation, atomic vector of length \code{1}. The
 atomic mode must match the type of the features that will be selected by the \code{affect_columns}
 parameter and this will be checked during imputation. Initialized to \code{".MISSING"}.
 \item \code{check_levels} :: \code{logical(1)}\cr
 Should be checked whether the \code{constant} value is a valid level of factorial features (i.e., it
-already is a level)? Raises an error if unsuccesful. This check is only performed for factorial
+already is a level)? Raises an error if unsuccessful. This check is only performed for factorial
 features (i.e., \code{factor}, \code{ordered}; skipped for \code{character}). Initialized to \code{TRUE}.
 }
 }
