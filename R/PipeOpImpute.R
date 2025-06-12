@@ -145,7 +145,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
       # Add parameter 'create_empty_level' if empty_level_control = TRUE
       emplvls_control_ps = if (empty_level_control) {
         ps(create_empty_level = p_lgl(init = FALSE, tags = c("train", "predict")))
-      }  # otherwise NULL which works with the concatenation methods below
+      } else ps()  # Set to ps() to avoid need for conditions after this
 
       # ParamSetCollection handles adding of new parameters differently
       if (inherits(param_set, "ParamSet")) {
