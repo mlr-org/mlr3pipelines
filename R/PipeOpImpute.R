@@ -255,7 +255,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
       }
 
       imputanda = intask$data(cols = self$state$affected_cols)
-      if (!isTRUE(self$param_set$values$create_empty_level)) {  # isTRUE to handle NULL if param doesn't exist
+      if (isFALSE(self$param_set$values$create_empty_level)) {  # isFALSE to handle NULL if param doesn't exist
         # Don't run impute for factor/ordered columns that were not imputed during training
         imputanda = imputanda[,
           colnames(imputanda) %in% self$state$imputed_train | map_lgl(imputanda, function(x) anyMissing(x) && !is.factor(x)),
