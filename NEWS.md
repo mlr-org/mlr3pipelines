@@ -1,4 +1,4 @@
-# mlr3pipelines 0.7.2-9000
+# mlr3pipelines 0.8.0
 
 * Added missing error for predicting with untrained `PipeOp`s / `Graph`s.
 * Fix: Corrected typo in the hyperparameter name `use_parallel` of `PipeOpVtreat`.
