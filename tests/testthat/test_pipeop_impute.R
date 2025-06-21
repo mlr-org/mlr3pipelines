@@ -566,63 +566,32 @@ test_that("Parameter 'create_empty_level' in POImputeOOR and POImputeConstant", 
   # With parameter set to default value, other types should already get tested in other tests
 
   # PipeOpImputeConstant with parameter set
-  # Type: factor
-  op$param_set$set_values(create_empty_level = TRUE, affect_columns = selector_type("factor"))
+  # Also test that other feature types are still treated as we would expect (the as if create_empty_level were FALSE)
+  # Types: factor, ordered
+  op$param_set$set_values(create_empty_level = TRUE, affect_columns = selector_type(c("factor", "ordered", "character")))
 
   train_out = op$train(list(task_train))[[1L]]
   dt_train_out = data.table(
     target = factor(c("a", "b", "a")),
-    fct1 = fct_comp_missing, fct2 = fct_missing, fct3 = fct_comp_missing, fct4 = fct_missing
+    fct1 = fct_comp_missing, fct2 = fct_missing, fct3 = fct_comp_missing, fct4 = fct_missing,
+    ord1 = ord_comp_missing, ord2 = ord_missing, ord3 = ord_comp_missing, ord4 = ord_missing,
+    chr = c("a", "b", ".MISSING")
   )
   expect_identical(train_out$data(cols = names(dt_train_out)), dt_train_out)
 
   predict_out = op$predict(list(task_pred))[[1L]]
   dt_pred_out = data.table(
     target = factor(c("a", "b", "a")),
-    fct1 = fct_missing, fct2 = fct_comp_missing, fct3 = fct_comp_missing, fct4 = fct_missing
+    fct1 = fct_missing, fct2 = fct_comp_missing, fct3 = fct_comp_missing, fct4 = fct_missing,
+    ord1 = ord_missing, ord2 = ord_comp_missing, ord3 = ord_comp_missing, ord4 = ord_missing,
+    chr = c("a", "b", ".MISSING")
   )
   expect_identical(predict_out$data(cols = names(dt_pred_out)), dt_pred_out)
 
-  # Type: ordered
-  op$param_set$set_values(affect_columns = selector_type("ordered"))
+  # Types: numeric, integer
+  op$param_set$set_values(constant = 0, affect_columns = selector_type(c("numeric", "integer")))
 
-  train_out = op$train(list(task_train))[[1L]]
-  dt_train_out = data.table(
-    target = factor(c("a", "b", "a")),
-    ord1 = ord_comp_missing, ord2 = ord_missing, ord3 = ord_comp_missing, ord4 = ord_missing
-  )
-  expect_identical(train_out$data(cols = names(dt_train_out)), dt_train_out)
-
-  predict_out = op$predict(list(task_pred))[[1L]]
-  dt_pred_out = data.table(
-    target = factor(c("a", "b", "a")),
-    ord1 = ord_missing, ord2 = ord_comp_missing, ord3 = ord_comp_missing, ord4 = ord_missing
-  )
-  expect_identical(predict_out$data(cols = names(dt_pred_out)), dt_pred_out)
-
-  # Test that other feature types are still treated as we would expect
-  # Type: character
-  op$param_set$set_values(affect_columns = selector_type("character"))
-
-  dt_out = data.table(target = factor(c("a", "b", "a")), chr = c("a", "b", ".MISSING"))
-  train_out = op$train(list(task_train))[[1L]]
-  expect_identical(train_out$data(cols = names(dt_out)), dt_out)
-  predict_out = op$predict(list(task_pred))[[1L]]
-  expect_identical(predict_out$data(cols = names(dt_out)), dt_out)
-
-  # Type: numeric
-  op$param_set$set_values(constant = 0, affect_columns = selector_type("numeric"))
-
-  dt_out = data.table(target = factor(c("a", "b", "a")), dbl = c(1, 2, 0))
-  train_out = op$train(list(task_train))[[1L]]
-  expect_identical(train_out$data(cols = names(dt_out)), dt_out)
-  predict_out = op$predict(list(task_pred))[[1L]]
-  expect_identical(predict_out$data(cols = names(dt_out)), dt_out)
-
-  # Type: integer
-  op$param_set$set_values(affect_columns = selector_type("integer"))
-
-  dt_out = data.table(target = factor(c("a", "b", "a")), int = c(1L, 2L, 0L))
+  dt_out = data.table(target = factor(c("a", "b", "a")), dbl = c(1, 2, 0), int = c(1L, 2L, 0L))
   train_out = op$train(list(task_train))[[1L]]
   expect_identical(train_out$data(cols = names(dt_out)), dt_out)
   predict_out = op$predict(list(task_pred))[[1L]]
