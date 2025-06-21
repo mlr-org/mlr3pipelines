@@ -440,7 +440,9 @@ test_that("imputeoor keeps missing level even if no missing data in predict task
 test_that("create_empty_level", {
   # TODO:
   # - add logical var to tasks and out dts
-  # - write tests
+  # - same with POSIXct
+  # - find problem in ImputeConstant
+  # - rest of the tests
 
   # Construct variables to be reused
   fct_na = factor(c("a", "b", NA), levels = c("a", "b", "c"))
@@ -506,7 +508,7 @@ test_that("create_empty_level", {
   )
 
 
-  # PipeOpImputeOOR with parameter set
+  # PipeOpImputeOOR with behavior enabled
   op$param_set$set_values(create_empty_level = TRUE)
 
   train_out = op$train(list(task_train))[[1L]]
@@ -561,22 +563,21 @@ test_that("create_empty_level", {
     discard(map(dt_pred_out, levels), is.null)
   )
 
-  # TODO: also set constant to different value here since default is character
-
   # Type: ordered
   op$param_set$set_values(affect_columns = selector_type("ordered"))
-
-  # Type: numeric
-  op$param_set$set_values(affect_columns = selector_type("numeric"))
-
-  # Type: integer
-  op$param_set$set_values(affect_columns = selector_type("integer"))
 
   # Type: character
   op$param_set$set_values(affect_columns = selector_type("character"))
 
+  # Type: numeric
+  op$param_set$set_values(constant = 0, affect_columns = selector_type("numeric"))
+
+  # Type: integer
+  op$param_set$set_values(affect_columns = selector_type("integer"))
+
   # Type: logical
-  op$param_set$set_values(affect_columns = selector_type("logical"))
+  op$param_set$set_values(constant = FALSE, affect_columns = selector_type("logical"))
+
 
   # PipeOpImputeConstant with parameter set
   # Type: factor
@@ -598,8 +599,3 @@ test_that("create_empty_level", {
   op$param_set$set_values(constant = FALSE, affect_columns = selector_type("logical"))
 
 })
-
-# Test with col that already has .MISSING level
-
-# Check Docs of (1) PipeOpImpute and (2) OOR and Constant
-# Add examples to OOR and Constant
