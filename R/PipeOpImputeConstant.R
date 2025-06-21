@@ -73,10 +73,9 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
   public = list(
     initialize = function(id = "imputeconstant", param_vals = list()) {
       ps = ps(
-        constant = p_uty(tags = c("train", "required"), custom_check = check_scalar),
-        check_levels = p_lgl(tags = c("train", "required"))
+        constant = p_uty(init = ".MISSING", tags = c("train", "required"), custom_check = check_scalar),
+        check_levels = p_lgl(init = TRUE, tags = c("train", "required"))
       )
-      ps$values = list(constant = ".MISSING", check_levels = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, empty_level_control = TRUE,
         feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct"))
     }
