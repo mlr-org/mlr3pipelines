@@ -435,3 +435,171 @@ test_that("imputeoor keeps missing level even if no missing data in predict task
   )
 
 })
+
+
+test_that("create_empty_level", {
+  # TODO:
+  # - add logical var to tasks and out dts
+  # - write tests
+
+  # Construct variables to be reused
+  fct_na = factor(c("a", "b", NA), levels = c("a", "b", "c"))
+  fct_missing = factor(c("a", "b", ".MISSING"), levels = c("a", "b", "c", ".MISSING"))
+  fct_comp = factor(c("a", "b", "c"))
+  fct_comp_missing = factor(c("a", "b", "c"), levels = c("a", "b", "c", ".MISSING"))
+  ord_na = ordered(c("a", "b", NA), levels = c("a", "b", "c"))
+  ord_missing = ordered(c("a", "b", ".MISSING"), levels = c("a", "b", "c", ".MISSING"))
+  ord_comp = ordered(c("a", "b", "c"))
+  ord_comp_missing = ordered(c("a", "b", "c"), levels = c("a", "b", "c", ".MISSING"))
+
+  # Construct data with all possible combinations of NAs accross training/prediction
+  # We only make sure that all factors have the same levels during train and predict for easier testing. In general,
+  # different levels during train and predict are acceptable within the pipeline as long as its fixed before a Learner.
+  dt_train = data.table(
+    target = factor(c("a", "b", "a")),
+    fct1 = fct_comp, fct2 = fct_na, fct3 = fct_comp, fct4 = fct_na,
+    ord1 = ord_comp, ord2 = ord_na, ord3 = ord_comp, ord4 = ord_na,
+    dbl = c(1, 2, NA), int = c(1L, 2L, NA), chr = c("a", "b", NA)
+  )
+  task_train = TaskClassif$new(id = "testtask", backend = dt_train, target = "target")
+
+  dt_pred = data.table(
+    target = factor(c("a", "b", "a")),
+    fct1 = fct_na, fct2 = fct_comp, fct3 = fct_comp, fct4 = fct_na,
+    ord1 = ord_na, ord2 = ord_comp, ord3 = ord_comp, ord4 = ord_na,
+    dbl = c(1, 2, NA), int = c(1L, 2L, NA), chr = c("a", "b", NA)
+  )
+  task_pred = TaskClassif$new(id = "testtask", backend = dt_pred, target = "target")
+
+  # Extract column order to impose on train_out / predict_out since we don't want to assume a specific column order
+  cnames = names(dt_train)
+  cnames_fctord = cnames[1:9]
+
+
+  # PipeOpImputeOOR with default setting
+  op = po("imputeoor", create_empty_level = FALSE)
+
+  train_out = op$train(list(task_train))[[1L]]
+  dt_train_out = data.table(
+    target = factor(c("a", "b", "a")),
+    fct1 = fct_comp, fct2 = fct_missing, fct3 = fct_comp, fct4 = fct_missing,
+    ord1 = ord_comp, ord2 = ord_missing, ord3 = ord_comp, ord4 = ord_missing,
+    dbl = c(1, 2, -1), int = c(1L, 2L, -1L), chr = c("a", "b", ".MISSING")
+  )
+  expect_identical(train_out$data(cols = cnames), dt_train_out)
+  expect_identical(
+    train_out$levels()[cnames_fctord],
+    discard(map(dt_train_out, levels), is.null)
+  )
+
+  predict_out = op$predict(list(task_pred))[[1L]]
+  dt_pred_out = data.table(
+    target = factor(c("a", "b", "a")),
+    fct1 = fct_na, fct2 = fct_comp_missing, fct3 = fct_comp, fct4 = fct_missing,
+    ord1 = ord_na, ord2 = ord_comp_missing, ord3 = ord_comp, ord4 = ord_missing,
+    dbl = c(1, 2, -1), int = c(1L, 2L, -1L), chr = c("a", "b", ".MISSING")
+  )
+  expect_identical(predict_out$data(cols = cnames), dt_pred_out)
+  expect_identical(
+    predict_out$levels()[cnames_fctord],
+    discard(map(dt_pred_out, levels), is.null)
+  )
+
+
+  # PipeOpImputeOOR with parameter set
+  op$param_set$set_values(create_empty_level = TRUE)
+
+  train_out = op$train(list(task_train))[[1L]]
+  dt_train_out = data.table(
+    target = factor(c("a", "b", "a")),
+    fct1 = fct_comp_missing, fct2 = fct_missing, fct3 = fct_comp_missing, fct4 = fct_missing,
+    ord1 = ord_comp_missing, ord2 = ord_missing, ord3 = ord_comp_missing, ord4 = ord_missing,
+    dbl = c(1, 2, -1), int = c(1L, 2L, -1L), chr = c("a", "b", ".MISSING")
+  )
+  expect_identical(train_out$data(cols = cnames), dt_train_out)
+  expect_identical(
+    train_out$levels()[cnames_fctord],
+    discard(map(dt_train_out, levels), is.null)
+  )
+
+  predict_out = op$predict(list(task_pred))[[1L]]
+  dt_pred_out = data.table(
+    target = factor(c("a", "b", "a")),
+    fct1 = fct_missing, fct2 = fct_comp_missing, fct3 = fct_comp_missing, fct4 = fct_missing,
+    ord1 = ord_missing, ord2 = ord_comp_missing, ord3 = ord_comp_missing, ord4 = ord_missing,
+    dbl = c(1, 2, -1), int = c(1L, 2L, -1L), chr = c("a", "b", ".MISSING")
+  )
+  expect_identical(predict_out$data(cols = cnames), dt_pred_out)
+  expect_identical(
+    predict_out$levels()[cnames_fctord],
+    discard(map(dt_pred_out, levels), is.null)
+  )
+
+  # PipeOpImputeConstant with default setting
+  # Type: factor
+  op = po("imputeconstant", create_empty_level = FALSE, affect_columns = selector_type("factor"))
+
+  train_out = op$train(list(task_train))[[1L]]
+  dt_train_out = data.table(
+    target = factor(c("a", "b", "a")),
+    fct1 = fct_comp, fct2 = fct_missing, fct3 = fct_comp, fct4 = fct_missing
+  )
+  expect_identical(train_out$data(cols = cnames), dt_train_out)
+  expect_identical(
+    train_out$levels()[cnames_fctord],
+    discard(map(dt_train_out, levels), is.null)
+  )
+
+  predict_out = op$predict(list(task_pred))[[1L]]
+  dt_pred_out = data.table(
+    target = factor(c("a", "b", "a")),
+    fct1 = fct_na, fct2 = fct_comp_missing, fct3 = fct_comp, fct4 = fct_missing
+  )
+  expect_identical(predict_out$data(cols = cnames), dt_pred_out)
+  expect_identical(
+    predict_out$levels()[cnames_fctord],
+    discard(map(dt_pred_out, levels), is.null)
+  )
+
+  # TODO: also set constant to different value here since default is character
+
+  # Type: ordered
+  op$param_set$set_values(affect_columns = selector_type("ordered"))
+
+  # Type: numeric
+  op$param_set$set_values(affect_columns = selector_type("numeric"))
+
+  # Type: integer
+  op$param_set$set_values(affect_columns = selector_type("integer"))
+
+  # Type: character
+  op$param_set$set_values(affect_columns = selector_type("character"))
+
+  # Type: logical
+  op$param_set$set_values(affect_columns = selector_type("logical"))
+
+  # PipeOpImputeConstant with parameter set
+  # Type: factor
+  op$param_set$set_values(create_empty_level = TRUE, constant = ".MISSING", affect_columns = selector_type("factor"))
+
+  # Type: ordered
+  op$param_set$set_values(affect_columns = selector_type("ordered"))
+
+  # Type: character
+  op$param_set$set_values(affect_columns = selector_type("character"))
+
+  # Type: numeric
+  op$param_set$set_values(constant = 0, affect_columns = selector_type("numeric"))
+
+  # Type: integer
+  op$param_set$set_values(affect_columns = selector_type("integer"))
+
+  # Type: logical
+  op$param_set$set_values(constant = FALSE, affect_columns = selector_type("logical"))
+
+})
+
+# Test with col that already has .MISSING level
+
+# Check Docs of (1) PipeOpImpute and (2) OOR and Constant
+# Add examples to OOR and Constant
