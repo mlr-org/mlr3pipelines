@@ -204,7 +204,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
 
       imputanda = intask$data(cols = affected_cols)
       if (isTRUE(pv$create_empty_level)) {  # isTRUE to handle NULL if param doesn't exist
-        # Also rn impute on all factor/ordered columns that don't have any NAs
+        # Also run impute on all factor/ordered columns that don't have any NAs
         imputanda = imputanda[, map_lgl(imputanda, function(x) anyMissing(x) || is.factor(x)), with = FALSE]
       } else {
         imputanda = imputanda[, map_lgl(imputanda, function(x) anyMissing(x)), with = FALSE]

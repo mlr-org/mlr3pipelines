@@ -437,14 +437,11 @@ test_that("imputeoor keeps missing level even if no missing data in predict task
 })
 
 
-test_that("create_empty_level", {
-  # TODO:
-  # - add logical var to tasks and out dts
-  # - same with POSIXct
-  # - find problem in ImputeConstant
-  # - rest of the tests
+test_that("Parameter 'create_empty_level' in POImputeOOR and POImputeConstant", {
 
   # Construct variables to be reused
+  # We only make sure that all factors have the same levels during train and predict for easier testing. In general,
+  # different levels during train and predict are acceptable within the pipeline as long as its fixed before a Learner.
   fct_na = factor(c("a", "b", NA), levels = c("a", "b", "c"))
   fct_missing = factor(c("a", "b", ".MISSING"), levels = c("a", "b", "c", ".MISSING"))
   fct_comp = factor(c("a", "b", "c"))
@@ -455,13 +452,11 @@ test_that("create_empty_level", {
   ord_comp_missing = ordered(c("a", "b", "c"), levels = c("a", "b", "c", ".MISSING"))
 
   # Construct data with all possible combinations of NAs accross training/prediction
-  # We only make sure that all factors have the same levels during train and predict for easier testing. In general,
-  # different levels during train and predict are acceptable within the pipeline as long as its fixed before a Learner.
   dt_train = data.table(
     target = factor(c("a", "b", "a")),
     fct1 = fct_comp, fct2 = fct_na, fct3 = fct_comp, fct4 = fct_na,
     ord1 = ord_comp, ord2 = ord_na, ord3 = ord_comp, ord4 = ord_na,
-    dbl = c(1, 2, NA), int = c(1L, 2L, NA), chr = c("a", "b", NA)
+    chr = c("a", "b", NA), int = c(1L, 2L, NA), dbl = c(1, 2, NA)
   )
   task_train = TaskClassif$new(id = "testtask", backend = dt_train, target = "target")
 
@@ -469,7 +464,7 @@ test_that("create_empty_level", {
     target = factor(c("a", "b", "a")),
     fct1 = fct_na, fct2 = fct_comp, fct3 = fct_comp, fct4 = fct_na,
     ord1 = ord_na, ord2 = ord_comp, ord3 = ord_comp, ord4 = ord_na,
-    dbl = c(1, 2, NA), int = c(1L, 2L, NA), chr = c("a", "b", NA)
+    chr = c("a", "b", NA), int = c(1L, 2L, NA), dbl = c(1, 2, NA)
   )
   task_pred = TaskClassif$new(id = "testtask", backend = dt_pred, target = "target")
 
@@ -486,26 +481,18 @@ test_that("create_empty_level", {
     target = factor(c("a", "b", "a")),
     fct1 = fct_comp, fct2 = fct_missing, fct3 = fct_comp, fct4 = fct_missing,
     ord1 = ord_comp, ord2 = ord_missing, ord3 = ord_comp, ord4 = ord_missing,
-    dbl = c(1, 2, -1), int = c(1L, 2L, -1L), chr = c("a", "b", ".MISSING")
+    chr = c("a", "b", ".MISSING"), int = c(1L, 2L, -1L), dbl = c(1, 2, -1)
   )
-  expect_identical(train_out$data(cols = cnames), dt_train_out)
-  expect_identical(
-    train_out$levels()[cnames_fctord],
-    discard(map(dt_train_out, levels), is.null)
-  )
+  expect_identical(train_out$data(cols = cnames), dt_train_out)  # also tests levels because of use of identical()
 
   predict_out = op$predict(list(task_pred))[[1L]]
   dt_pred_out = data.table(
     target = factor(c("a", "b", "a")),
     fct1 = fct_na, fct2 = fct_comp_missing, fct3 = fct_comp, fct4 = fct_missing,
     ord1 = ord_na, ord2 = ord_comp_missing, ord3 = ord_comp, ord4 = ord_missing,
-    dbl = c(1, 2, -1), int = c(1L, 2L, -1L), chr = c("a", "b", ".MISSING")
+    chr = c("a", "b", ".MISSING"), int = c(1L, 2L, -1L), dbl = c(1, 2, -1)
   )
   expect_identical(predict_out$data(cols = cnames), dt_pred_out)
-  expect_identical(
-    predict_out$levels()[cnames_fctord],
-    discard(map(dt_pred_out, levels), is.null)
-  )
 
 
   # PipeOpImputeOOR with behavior enabled
@@ -516,86 +503,150 @@ test_that("create_empty_level", {
     target = factor(c("a", "b", "a")),
     fct1 = fct_comp_missing, fct2 = fct_missing, fct3 = fct_comp_missing, fct4 = fct_missing,
     ord1 = ord_comp_missing, ord2 = ord_missing, ord3 = ord_comp_missing, ord4 = ord_missing,
-    dbl = c(1, 2, -1), int = c(1L, 2L, -1L), chr = c("a", "b", ".MISSING")
+    chr = c("a", "b", ".MISSING"), int = c(1L, 2L, -1L), dbl = c(1, 2, -1)
   )
   expect_identical(train_out$data(cols = cnames), dt_train_out)
-  expect_identical(
-    train_out$levels()[cnames_fctord],
-    discard(map(dt_train_out, levels), is.null)
-  )
 
   predict_out = op$predict(list(task_pred))[[1L]]
   dt_pred_out = data.table(
     target = factor(c("a", "b", "a")),
     fct1 = fct_missing, fct2 = fct_comp_missing, fct3 = fct_comp_missing, fct4 = fct_missing,
     ord1 = ord_missing, ord2 = ord_comp_missing, ord3 = ord_comp_missing, ord4 = ord_missing,
-    dbl = c(1, 2, -1), int = c(1L, 2L, -1L), chr = c("a", "b", ".MISSING")
+    chr = c("a", "b", ".MISSING"), int = c(1L, 2L, -1L), dbl = c(1, 2, -1)
   )
   expect_identical(predict_out$data(cols = cnames), dt_pred_out)
-  expect_identical(
-    predict_out$levels()[cnames_fctord],
-    discard(map(dt_pred_out, levels), is.null)
-  )
+
 
   # PipeOpImputeConstant with default setting
+  # Add logical and POSIXct features
+  task_train$cbind(data.table(
+    lgl = c(TRUE, FALSE, NA),
+    pxc = as.POSIXct(c("2025/01/01", "2025/02/02", NA))
+  ))
+  task_pred$cbind(data.table(
+    lgl = c(TRUE, FALSE, NA),
+    pxc = as.POSIXct(c("2025/01/01", "2025/02/02", NA))
+  ))
+
   # Type: factor
-  op = po("imputeconstant", create_empty_level = FALSE, affect_columns = selector_type("factor"))
+  op = po("imputeconstant", create_empty_level = FALSE, affect_columns = selector_type("factor"), check_levels = FALSE)
 
   train_out = op$train(list(task_train))[[1L]]
   dt_train_out = data.table(
     target = factor(c("a", "b", "a")),
     fct1 = fct_comp, fct2 = fct_missing, fct3 = fct_comp, fct4 = fct_missing
   )
-  expect_identical(train_out$data(cols = cnames), dt_train_out)
-  expect_identical(
-    train_out$levels()[cnames_fctord],
-    discard(map(dt_train_out, levels), is.null)
-  )
+  expect_identical(train_out$data(cols = names(dt_train_out)), dt_train_out)
 
   predict_out = op$predict(list(task_pred))[[1L]]
   dt_pred_out = data.table(
     target = factor(c("a", "b", "a")),
     fct1 = fct_na, fct2 = fct_comp_missing, fct3 = fct_comp, fct4 = fct_missing
   )
-  expect_identical(predict_out$data(cols = cnames), dt_pred_out)
-  expect_identical(
-    predict_out$levels()[cnames_fctord],
-    discard(map(dt_pred_out, levels), is.null)
-  )
+  expect_identical(predict_out$data(cols = names(dt_pred_out)), dt_pred_out)
 
   # Type: ordered
   op$param_set$set_values(affect_columns = selector_type("ordered"))
 
-  # Type: character
-  op$param_set$set_values(affect_columns = selector_type("character"))
+  train_out = op$train(list(task_train))[[1L]]
+  dt_train_out = data.table(
+    target = factor(c("a", "b", "a")),
+    ord1 = ord_comp, ord2 = ord_missing, ord3 = ord_comp, ord4 = ord_missing
+  )
+  expect_identical(train_out$data(cols = names(dt_train_out)), dt_train_out)
 
-  # Type: numeric
-  op$param_set$set_values(constant = 0, affect_columns = selector_type("numeric"))
+  predict_out = op$predict(list(task_pred))[[1L]]
+  dt_pred_out = data.table(
+    target = factor(c("a", "b", "a")),
+    ord1 = ord_na, ord2 = ord_comp_missing, ord3 = ord_comp, ord4 = ord_missing
+  )
+  expect_identical(predict_out$data(cols = names(dt_pred_out)), dt_pred_out)
 
-  # Type: integer
-  op$param_set$set_values(affect_columns = selector_type("integer"))
 
-  # Type: logical
-  op$param_set$set_values(constant = FALSE, affect_columns = selector_type("logical"))
-
+  # With parameter set to default value, other types should already get tested in other tests
 
   # PipeOpImputeConstant with parameter set
   # Type: factor
-  op$param_set$set_values(create_empty_level = TRUE, constant = ".MISSING", affect_columns = selector_type("factor"))
+  op$param_set$set_values(create_empty_level = TRUE, affect_columns = selector_type("factor"))
+
+  train_out = op$train(list(task_train))[[1L]]
+  dt_train_out = data.table(
+    target = factor(c("a", "b", "a")),
+    fct1 = fct_comp_missing, fct2 = fct_missing, fct3 = fct_comp_missing, fct4 = fct_missing
+  )
+  expect_identical(train_out$data(cols = names(dt_train_out)), dt_train_out)
+
+  predict_out = op$predict(list(task_pred))[[1L]]
+  dt_pred_out = data.table(
+    target = factor(c("a", "b", "a")),
+    fct1 = fct_missing, fct2 = fct_comp_missing, fct3 = fct_comp_missing, fct4 = fct_missing
+  )
+  expect_identical(predict_out$data(cols = names(dt_pred_out)), dt_pred_out)
 
   # Type: ordered
   op$param_set$set_values(affect_columns = selector_type("ordered"))
 
+  train_out = op$train(list(task_train))[[1L]]
+  dt_train_out = data.table(
+    target = factor(c("a", "b", "a")),
+    ord1 = ord_comp_missing, ord2 = ord_missing, ord3 = ord_comp_missing, ord4 = ord_missing
+  )
+  expect_identical(train_out$data(cols = names(dt_train_out)), dt_train_out)
+
+  predict_out = op$predict(list(task_pred))[[1L]]
+  dt_pred_out = data.table(
+    target = factor(c("a", "b", "a")),
+    ord1 = ord_missing, ord2 = ord_comp_missing, ord3 = ord_comp_missing, ord4 = ord_missing
+  )
+  expect_identical(predict_out$data(cols = names(dt_pred_out)), dt_pred_out)
+
+  # Test that other feature types are still treated as we would expect
   # Type: character
   op$param_set$set_values(affect_columns = selector_type("character"))
+
+  dt_out = data.table(target = factor(c("a", "b", "a")), chr = c("a", "b", ".MISSING"))
+  train_out = op$train(list(task_train))[[1L]]
+  expect_identical(train_out$data(cols = names(dt_out)), dt_out)
+  predict_out = op$predict(list(task_pred))[[1L]]
+  expect_identical(predict_out$data(cols = names(dt_out)), dt_out)
 
   # Type: numeric
   op$param_set$set_values(constant = 0, affect_columns = selector_type("numeric"))
 
+  dt_out = data.table(target = factor(c("a", "b", "a")), dbl = c(1, 2, 0))
+  train_out = op$train(list(task_train))[[1L]]
+  expect_identical(train_out$data(cols = names(dt_out)), dt_out)
+  predict_out = op$predict(list(task_pred))[[1L]]
+  expect_identical(predict_out$data(cols = names(dt_out)), dt_out)
+
   # Type: integer
   op$param_set$set_values(affect_columns = selector_type("integer"))
 
+  dt_out = data.table(target = factor(c("a", "b", "a")), int = c(1L, 2L, 0L))
+  train_out = op$train(list(task_train))[[1L]]
+  expect_identical(train_out$data(cols = names(dt_out)), dt_out)
+  predict_out = op$predict(list(task_pred))[[1L]]
+  expect_identical(predict_out$data(cols = names(dt_out)), dt_out)
+
   # Type: logical
   op$param_set$set_values(constant = FALSE, affect_columns = selector_type("logical"))
+
+  dt_out = data.table(target = factor(c("a", "b", "a")), lgl = c(TRUE, FALSE, FALSE))
+  train_out = op$train(list(task_train))[[1L]]
+  expect_identical(train_out$data(cols = names(dt_out)), dt_out)
+  predict_out = op$predict(list(task_pred))[[1L]]
+  expect_identical(predict_out$data(cols = names(dt_out)), dt_out)
+
+  # Type: POSIXct
+  op$param_set$set_values(constant = as.POSIXct("2024/01/01"), affect_columns = selector_type("POSIXct"))
+
+  dt_out = data.table(
+    target = factor(c("a", "b", "a")),
+    pxc = as.POSIXct(c("2025/01/01", "2025/02/02", "2024/01/01"))
+  )
+  train_out = op$train(list(task_train))[[1L]]
+  expect_identical(train_out$data(cols = names(dt_out)), dt_out)
+  predict_out = op$predict(list(task_pred))[[1L]]
+  expect_identical(predict_out$data(cols = names(dt_out)), dt_out)
 
 })
