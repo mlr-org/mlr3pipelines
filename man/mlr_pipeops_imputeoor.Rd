@@ -25,7 +25,7 @@ However, empty factor levels can be a problem for many \code{\link[mlr3:Learner]
 \code{\link[=mlr_pipeops_imputesample]{po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))}}
 (or some other imputation method) after this imputation method.
 If \code{create_empty_level} is set to \code{FALSE}, then no empty level is introduced during training, but columns that
-have missing values during prediction will \emph{not} be imputed. This is why it may be necessary to use
+have missing values during prediction will \emph{not} be imputed. This is why it may still be necessary to use
 \code{\link[=mlr_pipeops_imputesample]{po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))}}
 (or another imputation method) after this imputation method.
 }
@@ -107,8 +107,7 @@ new_task$data()
 
 # recommended use when missing values are expected during prediction on
 # factor columns that had no missing values during training
-gr = po("imputeoor") \%>>\%
-  po("fixfactors") \%>>\%
+gr = po("imputeoor", create_empty_level = TRUE) \%>>\%
   po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))
 t1 = as_task_classif(data.frame(l = as.ordered(letters[1:3]), t = letters[1:3]), target = "t")
 t2 = as_task_classif(data.frame(l = as.ordered(c("a", NA, NA)), t = letters[1:3]), target = "t")

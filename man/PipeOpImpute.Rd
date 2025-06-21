@@ -103,13 +103,13 @@ Initialized to \code{FALSE}.\cr
 
 \code{PipeOpImpute} is an abstract class inheriting from \code{\link{PipeOp}} that makes implementing imputer \code{\link{PipeOp}}s simple.
 
-Internally, \code{create_empty_level} works by controlling in which cases imputation is performed on \code{factor} or \code{ordered}
+Internally, \code{create_empty_level} works by controlling for which cases imputation is performed on \code{factor} or \code{ordered}
 columns. The setting of \code{create_empty_level} has no impact on columns of other types.\cr
-If \code{create_empty_level} is set to \code{TRUE}, \emph{during training} \code{private$.impute()} is called for all \code{factor} or
-\code{ordered} columns, regardless of whether they have any missing values. For this to lead to the creation of an empty
-level for columns with no missing values, \code{private$.train_imputer()} must return the name of the level to be created
-if the feature type is \code{factor} or \code{ordered.}\cr
-If \code{create_empty_level} is set to \code{FALSE}, \emph{during prediction} \code{private$.impute()} is not called for \code{factor} or
+If \code{create_empty_level} is set to \code{TRUE}, \code{private$.impute()} is called for all \code{factor} or \code{ordered} columns \emph{during
+training} , regardless of whether they have any missing values. For this to lead to the creation of an empty level
+for columns with no missing values, \code{private$.train_imputer()} must return the name of the level to be created if the
+feature type is \code{factor} or \code{ordered.}\cr
+If \code{create_empty_level} is set to \code{FALSE}, \code{private$.impute()} is not called \emph{during prediction} for \code{factor} or
 \code{ordered} columns which were not modified during training. This means that \code{NA}s will not be imputed for these
 columns.
 }
