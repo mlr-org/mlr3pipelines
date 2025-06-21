@@ -567,7 +567,7 @@ test_that("Parameter 'create_empty_level' in POImputeOOR and POImputeConstant", 
 
   # PipeOpImputeConstant with parameter set
   # Also test that other feature types are still treated as we would expect (the as if create_empty_level were FALSE)
-  # Types: factor, ordered
+  # Types: factor, ordered, character
   op$param_set$set_values(create_empty_level = TRUE, affect_columns = selector_type(c("factor", "ordered", "character")))
 
   train_out = op$train(list(task_train))[[1L]]
