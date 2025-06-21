@@ -9,6 +9,19 @@
 }
 \description{
 Impute features by a constant value.
+
+It may occur that a \code{factor} or \code{ordered} feature contains missing values during prediction, but not during training.
+If the hyperparameter \code{create_empty_level} inherited form \code{PipeOpImpute} is set to \code{TRUE}, then an unseen level given
+by the hyperparameter \code{constant} is added to the feature during training and missing values are imputed as that value
+during prediction.
+However, empty factor levels can be a problem for many \code{\link[mlr3:Learner]{Learners}}, so it is recommended to use
+\code{\link[=mlr_pipeops_fixfactors]{po("fixfactors")}} and
+\code{\link[=mlr_pipeops_imputesample]{po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))}}
+(or some other imputation method) after this imputation method.
+If \code{create_empty_level} is set to \code{FALSE}, then no empty level is introduced during training, but columns that
+have missing values during prediction will \emph{not} be imputed. This is why it may still be necessary to use
+\code{\link[=mlr_pipeops_imputesample]{po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))}}
+(or another imputation method) after this imputation method.
 }
 \section{Construction}{
 
@@ -83,6 +96,19 @@ po = po("imputeconstant", param_vals = list(
 new_task = po$train(list(task = task))[[1]]
 new_task$missings()
 new_task$data(cols = "glucose")[[1]]
+
+# recommended use when missing values are expected during prediction on
+# factor columns that had no missing values during training
+gr = po("imputeconstant", create_empty_level = TRUE, check_levels = FALSE) \%>>\%
+  po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))
+
+t1 = as_task_classif(data.frame(l = as.ordered(letters[1:3]), t = letters[1:3]), target = "t")
+t2 = as_task_classif(data.frame(l = as.ordered(c("a", NA, NA)), t = letters[1:3]), target = "t")
+gr$train(t1)[[1]]$data()
+
+# missing values during prediction are sampled randomly
+gr$predict(t2)[[1]]$data()
+
 }
 \seealso{
 https://mlr-org.com/pipeops.html

@@ -7,6 +7,19 @@
 #' @description
 #' Impute features by a constant value.
 #'
+#' It may occur that a `factor` or `ordered` feature contains missing values during prediction, but not during training.
+#' If the hyperparameter `create_empty_level` inherited form `PipeOpImpute` is set to `TRUE`, then an unseen level given
+#' by the hyperparameter `constant` is added to the feature during training and missing values are imputed as that value
+#' during prediction.
+#' However, empty factor levels can be a problem for many [`Learners`][mlr3::Learner], so it is recommended to use
+#' [`po("fixfactors")`][mlr_pipeops_fixfactors] and
+#' [`po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))`][mlr_pipeops_imputesample]
+#' (or some other imputation method) after this imputation method.
+#' If `create_empty_level` is set to `FALSE`, then no empty level is introduced during training, but columns that
+#' have missing values during prediction will *not* be imputed. This is why it may still be necessary to use
+#' [`po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))`][mlr_pipeops_imputesample]
+#' (or another imputation method) after this imputation method.
+#'
 #' @section Construction:
 #' ```
 #' PipeOpImputeConstant$new(id = "imputeconstant", param_vals = list())
@@ -63,6 +76,19 @@
 #' new_task = po$train(list(task = task))[[1]]
 #' new_task$missings()
 #' new_task$data(cols = "glucose")[[1]]
+#'
+#' # recommended use when missing values are expected during prediction on
+#' # factor columns that had no missing values during training
+#' gr = po("imputeconstant", create_empty_level = TRUE, check_levels = FALSE) %>>%
+#'   po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))
+#'
+#' t1 = as_task_classif(data.frame(l = as.ordered(letters[1:3]), t = letters[1:3]), target = "t")
+#' t2 = as_task_classif(data.frame(l = as.ordered(c("a", NA, NA)), t = letters[1:3]), target = "t")
+#' gr$train(t1)[[1]]$data()
+#'
+#' # missing values during prediction are sampled randomly
+#' gr$predict(t2)[[1]]$data()
+#'
 #' @family PipeOps
 #' @family Imputation PipeOps
 #' @template seealso_pipeopslist
