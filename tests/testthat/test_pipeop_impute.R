@@ -528,29 +528,14 @@ test_that("Parameter 'create_empty_level' in POImputeOOR and POImputeConstant", 
     pxc = as.POSIXct(c("2025/01/01", "2025/02/02", NA))
   ))
 
-  # Type: factor
-  op = po("imputeconstant", create_empty_level = FALSE, affect_columns = selector_type("factor"), check_levels = FALSE)
+  # Types: factor, ordered
+  # With parameter set to default value, other types should already get tested in other tests
+  op = po("imputeconstant", create_empty_level = FALSE, affect_columns = selector_type(c("factor", "ordered")), check_levels = FALSE)
 
   train_out = op$train(list(task_train))[[1L]]
   dt_train_out = data.table(
     target = factor(c("a", "b", "a")),
-    fct1 = fct_comp, fct2 = fct_missing, fct3 = fct_comp, fct4 = fct_missing
-  )
-  expect_identical(train_out$data(cols = names(dt_train_out)), dt_train_out)
-
-  predict_out = op$predict(list(task_pred))[[1L]]
-  dt_pred_out = data.table(
-    target = factor(c("a", "b", "a")),
-    fct1 = fct_na, fct2 = fct_comp_missing, fct3 = fct_comp, fct4 = fct_missing
-  )
-  expect_identical(predict_out$data(cols = names(dt_pred_out)), dt_pred_out)
-
-  # Type: ordered
-  op$param_set$set_values(affect_columns = selector_type("ordered"))
-
-  train_out = op$train(list(task_train))[[1L]]
-  dt_train_out = data.table(
-    target = factor(c("a", "b", "a")),
+    fct1 = fct_comp, fct2 = fct_missing, fct3 = fct_comp, fct4 = fct_missing,
     ord1 = ord_comp, ord2 = ord_missing, ord3 = ord_comp, ord4 = ord_missing
   )
   expect_identical(train_out$data(cols = names(dt_train_out)), dt_train_out)
@@ -558,12 +543,11 @@ test_that("Parameter 'create_empty_level' in POImputeOOR and POImputeConstant", 
   predict_out = op$predict(list(task_pred))[[1L]]
   dt_pred_out = data.table(
     target = factor(c("a", "b", "a")),
+    fct1 = fct_na, fct2 = fct_comp_missing, fct3 = fct_comp, fct4 = fct_missing,
     ord1 = ord_na, ord2 = ord_comp_missing, ord3 = ord_comp, ord4 = ord_missing
   )
   expect_identical(predict_out$data(cols = names(dt_pred_out)), dt_pred_out)
 
-
-  # With parameter set to default value, other types should already get tested in other tests
 
   # PipeOpImputeConstant with parameter set
   # Also test that other feature types are still treated as we would expect (the as if create_empty_level were FALSE)
