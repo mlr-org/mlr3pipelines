@@ -1,7 +1,7 @@
 # mlr3pipelines 0.8.0-9000
 +* Added `empty_level_control` argument to `PipeOpImpute` to enable the `create_empty_level` hyperparameter, allowing control over edge cases for `factor`/`ordered` columns.
 +* Set new construction argument `empty_level_control` to `TRUE` for `PipeOpImputeOOR` and `PipeOpImputeConstant`.
-+* Fix: `PipeOpImputeOOR` now imputes `".MISSING"` for `factor´/`ordered` features with only `NA`s instead of sampling from the feature's levels.
++* Fix: `PipeOpImputeOOR` now imputes `".MISSING"` for `factor`/`ordered` features with only `NA`s instead of sampling from the feature's levels.
 
 # mlr3pipelines 0.8.0
 
