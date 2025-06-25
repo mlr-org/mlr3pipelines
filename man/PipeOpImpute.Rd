@@ -28,8 +28,8 @@ Whether the \code{context_columns} parameter should be added which lets the user
 used for imputation inference. This should generally be \code{FALSE} if imputation depends only on individual features
 (e.g. mode imputation), and \code{TRUE} if imputation depends on other features as well (e.g. kNN-imputation).
 \item \code{empty_level_control} :: \code{logical(1)}\cr
-Whether the \code{create_empty_level} parameter should be added which lets the user control how to handle
-edge cases where \code{NA}s occur in \code{factor} or \code{ordered} features only during prediction but not during training.
+Whether the \code{create_empty_level} parameter should be added. This lets the user control how to handle edge cases
+where \code{NA}s occur in \code{factor} or \code{ordered} features only during prediction but not during training.
 Default is \code{FALSE}.
 \item \code{packages} :: \code{character}\cr
 Set of all required packages for the \code{\link{PipeOp}}'s \code{private$.train} and \code{private$.predict} methods. See \verb{$packages} slot.
@@ -105,11 +105,11 @@ Initialized to \code{FALSE}.\cr
 
 Internally, \code{create_empty_level} works by controlling for which cases imputation is performed on \code{factor} or \code{ordered}
 columns. The setting of \code{create_empty_level} has no impact on columns of other types.\cr
-If \code{create_empty_level} is set to \code{TRUE}, \code{private$.impute()} is called for all \code{factor} or \code{ordered} columns \emph{during
-training} , regardless of whether they have any missing values. For this to lead to the creation of an empty level
+If \code{create_empty_level} is set to \code{TRUE}, \code{private$.impute()} is called for all \code{factor} or \code{ordered} columns during
+training, regardless of whether they have any missing values. For this to lead to the creation of an empty level
 for columns with no missing values, \code{private$.train_imputer()} must return the name of the level to be created if the
 feature type is \code{factor} or \code{ordered.}\cr
-If \code{create_empty_level} is set to \code{FALSE}, \code{private$.impute()} is not called \emph{during prediction} for \code{factor} or
+If \code{create_empty_level} is set to \code{FALSE}, \code{private$.impute()} is not called during prediction for \code{factor} or
 \code{ordered} columns which were not modified during training. This means that \code{NA}s will not be imputed for these
 columns.
 }

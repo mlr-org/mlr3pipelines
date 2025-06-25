@@ -8,13 +8,17 @@
 #' Impute features by a constant value.
 #'
 #' It may occur that a `factor` or `ordered` feature contains missing values during prediction, but not during training.
-#' If the hyperparameter `create_empty_level` inherited form `PipeOpImpute` is set to `TRUE`, then an unseen level given
-#' by the hyperparameter `constant` is added to the feature during training and missing values are imputed as that value
-#' during prediction.
-#' However, empty factor levels can be a problem for many [`Learners`][mlr3::Learner], so it is recommended to use
+#' To control how the `PipeOp` should handle this, use the `create_empty_level` hyperparameter inherited from
+#' `PipeOpImpute`.\cr
+#' If `create_empty_level` is set to `TRUE` (and `check_levels` is `FALSE`), then the value of the hyperparameter
+#' `constant` is added as a new level to the feature during training, should it not already exist. Missing values are
+#' then imputed as that value during prediction.
+#' However, note that in this case [`PipeOpImputeOOR`] would be the preferred option, since it is designed to impute
+#' out-of-range values.
+#' Additionally, empty factor levels can be a problem for many [`Learners`][mlr3::Learner], so it is recommended to use
 #' [`po("fixfactors")`][mlr_pipeops_fixfactors] and
 #' [`po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))`][mlr_pipeops_imputesample]
-#' (or some other imputation method) after this imputation method.
+#' (or some other imputation method) after this imputation method.\cr
 #' If `create_empty_level` is set to `FALSE`, then no empty level is introduced during training, but columns that
 #' have missing values during prediction will *not* be imputed. This is why it may still be necessary to use
 #' [`po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))`][mlr_pipeops_imputesample]
@@ -79,7 +83,7 @@
 #'
 #' # recommended use when missing values are expected during prediction on
 #' # factor columns that had no missing values during training
-#' gr = po("imputeconstant", create_empty_level = TRUE, check_levels = FALSE) %>>%
+#' gr = po("imputeconstant", create_empty_level = TRUE, constant = "a") %>>%
 #'   po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))
 #'
 #' t1 = as_task_classif(data.frame(l = as.ordered(letters[1:3]), t = letters[1:3]), target = "t")

@@ -15,12 +15,14 @@
 #' Ding & Simonoff (2010).
 #'
 #' It may occur that a `factor` or `ordered` feature contains missing values during prediction, but not during training.
-#' If the hyperparameter `create_empty_level` inherited form `PipeOpImpute` is set to `TRUE`, then an unseen level
-#' `".MISSING"` is added to the feature during training and missing values are imputed as `".MISSING"` during prediction.
+#' To control how the `PipeOp` should handle this, use the `create_empty_level` hyperparameter inherited from
+#' `PipeOpImpute`.\cr
+#' If `create_empty_level` is set to `TRUE`, then an unseen level `".MISSING"` is added to the feature during
+#' training and missing values are imputed as `".MISSING"` during prediction.
 #' However, empty factor levels can be a problem for many [`Learners`][mlr3::Learner], so it is recommended to use
 #' [`po("fixfactors")`][mlr_pipeops_fixfactors] and
 #' [`po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))`][mlr_pipeops_imputesample]
-#' (or some other imputation method) after this imputation method.
+#' (or some other imputation method) after this imputation method.\cr
 #' If `create_empty_level` is set to `FALSE`, then no empty level is introduced during training, but columns that
 #' have missing values during prediction will *not* be imputed. This is why it may still be necessary to use
 #' [`po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))`][mlr_pipeops_imputesample]

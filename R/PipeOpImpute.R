@@ -24,8 +24,8 @@
 #'   used for imputation inference. This should generally be `FALSE` if imputation depends only on individual features
 #'   (e.g. mode imputation), and `TRUE` if imputation depends on other features as well (e.g. kNN-imputation).
 #' * `empty_level_control` :: `logical(1)`\cr
-#'   Whether the `create_empty_level` parameter should be added which lets the user control how to handle
-#'   edge cases where `NA`s occur in `factor` or `ordered` features only during prediction but not during training.
+#'   Whether the `create_empty_level` parameter should be added. This lets the user control how to handle edge cases
+#'   where `NA`s occur in `factor` or `ordered` features only during prediction but not during training.
 #'   Default is `FALSE`.
 #' * `packages` :: `character`\cr
 #'   Set of all required packages for the [`PipeOp`]'s `private$.train` and `private$.predict` methods. See `$packages` slot.
@@ -88,11 +88,11 @@
 #'
 #' Internally, `create_empty_level` works by controlling for which cases imputation is performed on `factor` or `ordered`
 #' columns. The setting of `create_empty_level` has no impact on columns of other types.\cr
-#' If `create_empty_level` is set to `TRUE`, `private$.impute()` is called for all `factor` or `ordered` columns *during
-#' training* , regardless of whether they have any missing values. For this to lead to the creation of an empty level
+#' If `create_empty_level` is set to `TRUE`, `private$.impute()` is called for all `factor` or `ordered` columns during
+#' training, regardless of whether they have any missing values. For this to lead to the creation of an empty level
 #' for columns with no missing values, `private$.train_imputer()` must return the name of the level to be created if the
 #' feature type is `factor` or `ordered.`\cr
-#' If `create_empty_level` is set to `FALSE`, `private$.impute()` is not called *during prediction* for `factor` or
+#' If `create_empty_level` is set to `FALSE`, `private$.impute()` is not called during prediction for `factor` or
 #' `ordered` columns which were not modified during training. This means that `NA`s will not be imputed for these
 #' columns.
 #'
