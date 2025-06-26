@@ -310,10 +310,10 @@ PipeOp = R6Class("PipeOp",
       withCallingHandlers({
         output = private$.train(input)
       }, error = function(e) {
-        e$message = sprintf("%s\nThis happened PipeOp %s's $train()", e$message, self$id)
+        e$message = sprintf("%s\nThis happened in PipeOp %s's $train()", e$message, self$id)
         stop(e)
       }, warning = function(w) {
-        w$message = sprintf("%s\nThis happened PipeOp %s's $train()", w$message, self$id)
+        w$message = sprintf("%s\nThis happened in PipeOp %s's $train()", w$message, self$id)
         warning(w)
         invokeRestart("muffleWarning")
       })
@@ -349,10 +349,10 @@ PipeOp = R6Class("PipeOp",
       withCallingHandlers({
         output = private$.predict(input)
       }, error = function(e) {
-        e$message = sprintf("%s\nThis happened PipeOp %s's $predict()", e$message, self$id)
+        e$message = sprintf("%s\nThis happened in PipeOp %s's $predict()", e$message, self$id)
         stop(e)
       }, warning = function(w) {
-        w$message = sprintf("%s\nThis happened PipeOp %s's $predict()", w$message, self$id)
+        w$message = sprintf("%s\nThis happened in PipeOp %s's $predict()", w$message, self$id)
         warning(w)
         invokeRestart("muffleWarning")
       })

@@ -88,11 +88,11 @@ test_that("Informative error and warning messages", {
 
   # two 'expect_warning', because we want to 'expect' that there is exactly one warning.
   # a function argument for expect_warning that tests exactly this would be a good idea, and has therefore been removed -.-
-  expect_no_warning(expect_warning(gr$train(tsk("iris")), "This happened PipeOp classif.debug's \\$train\\(\\)$"))
+  expect_no_warning(expect_warning(gr$train(tsk("iris")), "This happened in PipeOp classif.debug's \\$train\\(\\)$"))
 
   expect_no_warning(suppressWarnings(gr$train(tsk("iris"))))
 
-  expect_no_warning(expect_warning(gr$predict(tsk("iris")), "This happened PipeOp classif.debug's \\$predict\\(\\)$"))
+  expect_no_warning(expect_warning(gr$predict(tsk("iris")), "This happened in PipeOp classif.debug's \\$predict\\(\\)$"))
 
   expect_no_warning(suppressWarnings(gr$predict(tsk("iris"))))
 
@@ -100,13 +100,13 @@ test_that("Informative error and warning messages", {
   gr$param_set$values$classif.debug.warning_predict = 0
   
   gr$param_set$values$classif.debug.error_train = 1
-  expect_error(gr$train(tsk("iris")), "This happened PipeOp classif.debug's \\$train\\(\\)$")
+  expect_error(gr$train(tsk("iris")), "This happened in PipeOp classif.debug's \\$train\\(\\)$")
 
   gr$param_set$values$classif.debug.error_train = 0
   gr$param_set$values$classif.debug.error_predict = 1
   # Need to first train the Graph for predict to work
   gr$train(tsk("iris"))
-  expect_error(gr$predict(tsk("iris")), "This happened PipeOp classif.debug's \\$predict\\(\\)$")
+  expect_error(gr$predict(tsk("iris")), "This happened in PipeOp classif.debug's \\$predict\\(\\)$")
 
   potest = R6::R6Class("potest", inherit = PipeOp,
     private = list(
