@@ -186,8 +186,8 @@ PipeOpLearnerQuantiles = R6Class("PipeOpLearnerQuantiles",
 
       quantiles = as.matrix(map_dtc(prds, "response"))
       unname(quantiles)
-      attr(quantiles, "probs") = pv$q_vals
-      attr(quantiles, "response") = pv$q_response
+      setattr(quantiles, "probs", pv$q_vals)
+      setattr(quantiles, "response", pv$q_response)
 
       # return quantile PredictionRegr with all requested quantiles
       list(as_prediction(as_prediction_data(list(quantiles = quantiles), task = task)))
