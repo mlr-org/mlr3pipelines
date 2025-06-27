@@ -75,9 +75,7 @@ PipeOpImputeSample = R6Class("PipeOpImputeSample",
         # memory usage of count table is larger than memory usage of just the values
         return(fvals)
       }
-      model = tab$fvals
-      attr(model, "probabilities") = tab$N / sum(tab$N)
-      model
+      setattr(tab$fvals, "probabilities", tab$N / sum(tab$N))
     }
   )
 )
