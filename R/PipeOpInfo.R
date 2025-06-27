@@ -57,13 +57,14 @@ library(R6)
 library(mlr3pipelines)
 library(mlr3misc)
 library(lgr)
+library(checkmate)
 
 # (.. 2 Spaces nach der Klammer
 # wenn () auf der gleichen Zeile dann auch 2 Spaces nach (..
 # Fehler wenn Objektklasse keine definierte Printer-Funktion
 # Style Code mlr3 angucken und übernehmen
 # environment(function) -- environment gibt uns die festgelegten Variablen und Funktionen in dem Environment als Liste wieder
-# environment(function)$x <- 99 Variable in der höheren Ebene anfassen
+# environment(function)$x = 99 Variable in der höheren Ebene anfassen
 # wichtig wenn Funktion in der Funktion generiert wird, überlebt as environment ==> crate funktion verhindert dass das environment überlebt
 # crate(function(y) x + y, x) -- somit wird x in nen container gepackt und wird nicht verloren gehen
 
@@ -75,15 +76,11 @@ PipeOpInfo = R6Class("PipeOpInfo",
                        original_printer = NULL,
                        printer = NULL,
                        collect_multiplicity = NULL,
-                       logger = NULL,
-                       log_level = NULL,
-                       log_target_func = NULL,
-                       inprefix = NULL,
                        # Initialisierung
                        initialize = function(id = "info", printer = NULL, collect_multiplicity = FALSE, log_target = "lgr::mlr3/mlr3pipelines::info",
                                              param_vals = list()) {
                          browser()
-                         #assertString(logtarget)
+                         assertString(log_target)
                          # String definieren der nix bedeutet zB "none"
                          intype = "*"
                          outtype = "*"
@@ -101,9 +98,6 @@ PipeOpInfo = R6Class("PipeOpInfo",
                          #browser()
                          original_printer = list(
                            Task = crate(function(x) {
-                             #oldOption = getOption("datatable.print.topn")
-                             #options(datatable.print.topn = 10)
-                             #on.exit(options(datatable.print.topn = oldOption))
                              list(task = x, data = x$data()[, 1:min(10, ncol(x$data()))])
                            }),
                            Prediction = crate(function(x) {list(prediction = x, score = tryCatch(x$score(), error = function(e) {}))}),
@@ -114,50 +108,46 @@ PipeOpInfo = R6Class("PipeOpInfo",
                          # Collect multiplicity
                          self$collect_multiplicity = collect_multiplicity
                          # Log Target
-                         if (!is.null(log_target)) {
-                           split = strsplit(log_target, "::")[[1]]
-                         } else {
-                           split = "print"
-                         }
-                         if (split[1] == "lgr") {
-                           #logger_file <- tempfile(fileext = ".info")
+                         split = strsplit(log_target, "::")[[1]]
+                         if (split[[1]] == "lgr") {
+                           assertString(log_target, pattern = "^(cat|warning|message|[^:]+::[^:]+::[^:]+)$")
                            # assert --- es gibt 2x"::"  ".*::.*"
-                           logger = lgr::get_logger(split[2])
-                           #if (!is.null(logger$appenders$logfile)) {
-                           #  logger$remove_appender("logfile")
-                           #}
-                           #logger$add_appender(AppenderFile$new(logger_file), name = "logfile")
-                           log_level = split[3]
-                           log_target_func = crate(function(x) self$logger$log(log_level, msg = capture.output(x)), log_level)
+                           logger = lgr::get_logger(split[[2]])
+                           log_level = split[[3]]
+                           print_type = crate(function(x) logger$log(log_level, msg = capture.output(x)), log_level, logger)
                          } else if (log_target == "cat") { ## so umformulieren mit log_target
-                           log_target_func = crate(function(x) cat(capture.output(x)))
+                           print_type = crate(function(x) cat(capture.output(x)))
                          } else if (split[[1]] == "message") {
-                           log_target_func = function(x) message(capture.output(x))
+                           print_type = crate(function(x) message(capture.output(x)))
                          } else if (split[[1]] == "warning") {
-                           log_target_func = function(x) warning(capture.output(x))
+                           print_type = crate(function(x) warning(capture.output(x)))
                          } else if (split == "print") {
-                           log_target_func = function(x) print(x)
+                           print_type = crate(function(x) print(x))
                          } else {stop("log_target is wrong")} ## sprintf(log target was given as -- but has to look like this: --)
-                         self$log_target_func = log_target_func
-                         #private$.log_target_func = log_target_func # private field damit der User nicht draufzugreift
+                         private$.print_type = print_type
                        }
                      ),
                      # Training und Prediction
                      private = list(
+                       .print_type = NULL,
+                       .output = NULL,
                        .train = function(inputs) {
                          browser()
-                         #class(inputs[[1]]) als Hilfsvariable
+                         input_class = class(inputs[[1]])
                          specific_class =
-                           if (any(class(inputs[[1]]) %in% names(self$printer))) {
-                             class(inputs[[1]])[class(inputs[[1]]) %in% names(self$printer)][[1]]
+                           if (any(input_class %in% names(self$printer))) {
+                             Input_class[input_class %in% names(self$printer)][[1]]
                            } else {
                              "default"
                            }
-                         # fehlermeldung wenn es den default-printer nicht gibt ---> class nicht gefunden & kein Default printer
-                         do.call(self$log_target_func, list(self$printer[[specific_class]](inputs[[1]])))
+                         #stop()
+                         # Fehlermeldung wenn es den default-printer nicht gibt ---> class nicht gefunden & kein Default printer
+                         private$.output = function(x) do.call(private$.print_type, list(self$printer[[specific_class]](x[[1]])))
+                         private$.output(inputs)
                          inputs
                        },
                        .predict = function(inputs) {
+                         private$.output(inputs)
                          inputs
                        }
                      )
@@ -171,12 +161,12 @@ mlr_pipeops$add("info", PipeOpInfo)
 # Default Printer für Task
 # Da wir print(list(Task = x, Data = print.data.table(...))) haben fallen die in print.data.table(...) spezifizierten Einstellungen
 # auf den default zurück, also man kann zBsp topn nicht spezifizieren
-taskiris <- tsk("iris")
+taskiris = tsk("iris")
 print(taskiris$data(), topn = 5)
 print(list(Task = taskiris, Data = taskiris$data()), topn = 5) ## diese Darstellung für Print-Task verwenen
 
 # Beispiel - "printer that returns a list works"
-poinfo_nrow_ncol_table_mtcars <- po("info", printer = list(
+poinfo_nrow_ncol_table_mtcars = po("info", printer = list(
   Task = function(x) {list(nrow = x$nrow, ncol = x$ncol, distr = table(x$data()[, "mpg"]))},
   TaskClassif = function(x) {list(nrow = x$nrow, ncol = x$ncol, distr = table(x$data()[, "mpg"]))})
 )
@@ -187,36 +177,37 @@ poinfo_nrow_ncol_table_mtcars$train(list(tsk("mtcars")))
 
 # Print Outputs Beispiele
 # Default
-poinfo_default <- po("info")
+poinfo_default = po("info")
 resultat = poinfo_default$train(list(tsk("iris")))
+prediction = poinfo_default$predict(list(tsk("iris")))
 
 # default sollte "lgr::mlr3/mlr3pipelines::info" sein
 
 # Log Levels
-poinfo_log_fatal <- po("info", log_target = "lgr::mlr3/mlr3pipelines::fatal")
+poinfo_log_fatal = po("info", log_target = "lgr::mlr3/mlr3pipelines::fatal")
 poinfo_log_fatal$train(list(tsk("iris")))
-poinfo_log_error <- po("info", log_target = "lgr::mlr3/mlr3pipelines::error")
+poinfo_log_error = po("info", log_target = "lgr::mlr3/mlr3pipelines::error")
 poinfo_log_error$train(list(tsk("iris")))
-poinfo_log_warn <- po("info", log_target = "lgr::mlr3/mlr3pipelines::warn")
+poinfo_log_warn = po("info", log_target = "lgr::mlr3/mlr3pipelines::warn")
 poinfo_log_warn$train(list(tsk("iris")))
 
 
-poinfo_log_info <- po("info", log_target = "lgr::mlr3/mlr3pipelines::info")
+poinfo_log_info = po("info", log_target = "lgr::mlr3/mlr3pipelines::info")
 poinfo_log_info$train(list(tsk("mtcars")))
 
 
-poinfo_log_debug <- po("info", log_target = "lgr::mlr3/mlr3pipelines::debug")
+poinfo_log_debug = po("info", log_target = "lgr::mlr3/mlr3pipelines::debug")
 poinfo_log_debug$train(list(tsk("iris")))
-poinfo_log_trace <- po("info", log_target = "lgr::mlr3/mlr3pipelines::debug")
+poinfo_log_trace = po("info", log_target = "lgr::mlr3/mlr3pipelines::debug")
 poinfo_log_trace$train(list(tsk("iris")))
 
 # Nicht-Log Szenarien
-poinfo_cat <- po("info", log_target = "cat")
-poinfo_cat$train(list(tsk("iris")))
-poinfo_message <- po("info", log_target = "message")
-poinfo_message$train(list(tsk("iris")))
-poinfo_warning <- po("info", log_target = "warning")
-poinfo_warning$train(list(tsk("iris")))
+poinfo_cat = po("info", log_target = "cat")
+resultat_cat = poinfo_cat$train(list(tsk("iris")))
+poinfo_message = po("info", log_target = "message")
+resultat_message = poinfo_message$train(list(tsk("iris")))
+poinfo_warning = po("info", log_target = "warning")
+resultat_warning = poinfo_warning$train(list(tsk("iris")))
 
 # Frage - Line 110ff. soll capture.output(x) verwendet werden oder nicht?
 
@@ -249,17 +240,17 @@ poinfo_nrow_ncol$train(OVR)
 
 
 # Standard
-poinfo <- po("info")
+poinfo = po("info")
 poinfo$train(list(tsk("iris")))
 
 # Printer that returns a list works
-poinfo_nrow_ncol <- po("info", printer = list(
+poinfo_nrow_ncol = po("info", printer = list(
   Task = function(x) {list(nrow = x$nrow, ncol = x$ncol, distr = table(x$data()[, "Species"]))},
   TaskClassif = function(x) {list(nrow = x$nrow, ncol = x$ncol, distr = table(x$data()[, "Species"]))})
 )
 poinfo_nrow_ncol$train(list(tsk("iris")))
 
-poinfo <- po("info", printer = list(
+poinfo = po("info", printer = list(
   Task = function(x) {list(a = "Task not be printed; THIS IS A TASK")},
   TaskClassif = function(x) {list(a = "TaskClassif not be printed. THIS IS A TASK CLASSIF")
   }
@@ -283,11 +274,11 @@ poinfo$train(list("abc"))
 
 # Prediction Object
 na.omit(data(PimaIndiansDiabetes2, package = "mlbench"))
-tsk1 <- as_task_classif(PimaIndiansDiabetes2, target = "diabetes", positive = "pos")
-splits <- partition(tsk1, ratio = 0.8)
-lrn_classif <- lrn("classif.rpart", predict_type = "prob")
+tsk1 = as_task_classif(PimaIndiansDiabetes2, target = "diabetes", positive = "pos")
+splits = partition(tsk1, ratio = 0.8)
+lrn_classif = lrn("classif.rpart", predict_type = "prob")
 lrn_classif$train(tsk1, row_ids = splits$train)
-prediction <- lrn_classif$predict(tsk1, row_ids = splits$test)
+prediction = lrn_classif$predict(tsk1, row_ids = splits$test)
 prediction$score(msr("classif.ce"))
 
 
@@ -295,10 +286,10 @@ prediction$score(msr("classif.ce"))
 library("mlr3")
 task = tsk("iris")
 po = po("replicate", param_vals = list(reps = 3))
-multiplicity_object <- po$train(list(task))
+multiplicity_object = po$train(list(task))
 class(multiplicity_object)
 
-poinfo <- po("info", collect_multiplicity = TRUE)
+poinfo = po("info", collect_multiplicity = TRUE)
 poinfo$train(multiplicity_object)
 
 
