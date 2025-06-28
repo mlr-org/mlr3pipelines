@@ -7,6 +7,23 @@
 #' @description
 #' Impute features by a constant value.
 #'
+#' It may occur that a `factor` or `ordered` feature contains missing values during prediction, but not during training.
+#' To control how the `PipeOp` should handle this, use the `create_empty_level` hyperparameter inherited from
+#' [`PipeOpImpute`].\cr
+#' If `create_empty_level` is set to `TRUE` (and `check_levels` is `FALSE`), then the value of the hyperparameter
+#' `constant` is added as a new level to the feature during training, should it not already exist. Missing values are
+#' then imputed as that value during prediction.
+#' However, note that in this case [`PipeOpImputeOOR`] would be the preferred option, since it is designed to impute
+#' out-of-range values.
+#' Additionally, empty factor levels can be a problem for many [`Learners`][mlr3::Learner], so it is recommended to use
+#' [`po("fixfactors")`][mlr_pipeops_fixfactors] and
+#' [`po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))`][mlr_pipeops_imputesample]
+#' (or some other imputation method) after this imputation method.\cr
+#' If `create_empty_level` is set to `FALSE`, then no empty level is introduced during training, but columns that
+#' have missing values only during prediction will *not* be imputed. This is why it may still be necessary to use
+#' [`po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))`][mlr_pipeops_imputesample]
+#' (or another imputation method) after this imputation method.
+#'
 #' @section Construction:
 #' ```
 #' PipeOpImputeConstant$new(id = "imputeconstant", param_vals = list())
@@ -32,12 +49,12 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpImpute`], as well as:
 #' * `constant` :: `atomic(1)`\cr
-#'   The constant value that should be used for the imputation, atomic vector of length 1. The
+#'   The constant value that should be used for the imputation, atomic vector of length `1`. The
 #'   atomic mode must match the type of the features that will be selected by the `affect_columns`
 #'   parameter and this will be checked during imputation. Initialized to `".MISSING"`.
 #' * `check_levels` :: `logical(1)`\cr
 #'   Should be checked whether the `constant` value is a valid level of factorial features (i.e., it
-#'   already is a level)? Raises an error if unsuccesful. This check is only performed for factorial
+#'   already is a level)? Raises an error if unsuccessful. This check is only performed for factorial
 #'   features (i.e., `factor`, `ordered`; skipped for `character`). Initialized to `TRUE`.
 #'
 #' @section Internals:
@@ -63,6 +80,19 @@
 #' new_task = po$train(list(task = task))[[1]]
 #' new_task$missings()
 #' new_task$data(cols = "glucose")[[1]]
+#'
+#' # recommended use when missing values are expected during prediction on
+#' # factor columns that had no missing values during training
+#' gr = po("imputeconstant", create_empty_level = TRUE, constant = "a") %>>%
+#'   po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))
+#'
+#' t1 = as_task_classif(data.frame(l = as.ordered(letters[1:3]), t = letters[1:3]), target = "t")
+#' t2 = as_task_classif(data.frame(l = as.ordered(c("a", NA, NA)), t = letters[1:3]), target = "t")
+#' gr$train(t1)[[1]]$data()
+#'
+#' # missing values during prediction are sampled randomly
+#' gr$predict(t2)[[1]]$data()
+#'
 #' @family PipeOps
 #' @family Imputation PipeOps
 #' @template seealso_pipeopslist
@@ -73,11 +103,11 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
   public = list(
     initialize = function(id = "imputeconstant", param_vals = list()) {
       ps = ps(
-        constant = p_uty(tags = c("train", "required"), custom_check = check_scalar),
-        check_levels = p_lgl(tags = c("train", "required"))
+        constant = p_uty(init = ".MISSING", tags = c("train", "required"), custom_check = check_scalar),
+        check_levels = p_lgl(init = TRUE, tags = c("train", "required"))
       )
-      ps$values = list(constant = ".MISSING", check_levels = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, empty_level_control = TRUE,
+        feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct"))
     }
   ),
   private = list(

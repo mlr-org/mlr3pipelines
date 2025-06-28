@@ -76,33 +76,25 @@ PipeOpFixFactors = R6Class("PipeOpFixFactors",
       dt = task$data(cols = names(self$state$levels))
 
       # check which levels are actually different during training and prediction
-      needs_adjustment = as.logical(imap(self$state$levels, function(lvx, id) {
+      needs_adjustment = imap_lgl(self$state$levels, function(lvx, id) {
         !identical(lvx, levels(dt[[id]]))
-      }))
+      })
 
       if (!any(needs_adjustment)) {
         return(task)
       }
 
-      changed_cols = as.data.table(imap(self$state$levels[needs_adjustment], function(lvx, id) {
+      changed_cols = imap_dtc(self$state$levels[needs_adjustment], function(lvx, id) {
         x = dt[[id]]
         if (is.ordered(x)) {
           ordered(x, levels = lvx)
         } else {
           factor(x, levels = lvx)
         }
-      }))
+      })
       task$select(setdiff(task$feature_names, colnames(changed_cols)))$cbind(changed_cols)
     }
   )
 )
 
 mlr_pipeops$add("fixfactors", PipeOpFixFactors)
-
-# FIXME: from mlr3; should probably go to mlr3misc
-ujoin = function (x, y, key) {
-  cn = setdiff(intersect(names(x), names(y)), key)
-  expr = parse(text = paste0("`:=`(", paste0(sprintf("%1$s=i.%1$s",
-    cn), collapse = ","), ")"))
-  x[y, eval(expr), on = key]
-}
