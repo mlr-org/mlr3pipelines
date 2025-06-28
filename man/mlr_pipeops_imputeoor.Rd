@@ -19,7 +19,7 @@ Ding & Simonoff (2010).
 
 It may occur that a \code{factor} or \code{ordered} feature contains missing values during prediction, but not during training.
 To control how the \code{PipeOp} should handle this, use the \code{create_empty_level} hyperparameter inherited from
-\code{PipeOpImpute}.\cr
+\code{\link{PipeOpImpute}}.\cr
 If \code{create_empty_level} is set to \code{TRUE}, then an unseen level \code{".MISSING"} is added to the feature during
 training and missing values are imputed as \code{".MISSING"} during prediction.
 However, empty factor levels can be a problem for many \code{\link[mlr3:Learner]{Learners}}, so it is recommended to use

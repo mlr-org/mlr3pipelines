@@ -16,7 +16,7 @@
 #'
 #' It may occur that a `factor` or `ordered` feature contains missing values during prediction, but not during training.
 #' To control how the `PipeOp` should handle this, use the `create_empty_level` hyperparameter inherited from
-#' `PipeOpImpute`.\cr
+#' [`PipeOpImpute`].\cr
 #' If `create_empty_level` is set to `TRUE`, then an unseen level `".MISSING"` is added to the feature during
 #' training and missing values are imputed as `".MISSING"` during prediction.
 #' However, empty factor levels can be a problem for many [`Learners`][mlr3::Learner], so it is recommended to use

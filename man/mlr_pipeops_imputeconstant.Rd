@@ -12,7 +12,7 @@ Impute features by a constant value.
 
 It may occur that a \code{factor} or \code{ordered} feature contains missing values during prediction, but not during training.
 To control how the \code{PipeOp} should handle this, use the \code{create_empty_level} hyperparameter inherited from
-\code{PipeOpImpute}.\cr
+\code{\link{PipeOpImpute}}.\cr
 If \code{create_empty_level} is set to \code{TRUE} (and \code{check_levels} is \code{FALSE}), then the value of the hyperparameter
 \code{constant} is added as a new level to the feature during training, should it not already exist. Missing values are
 then imputed as that value during prediction.

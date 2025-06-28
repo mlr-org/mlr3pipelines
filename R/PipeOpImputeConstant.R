@@ -9,7 +9,7 @@
 #'
 #' It may occur that a `factor` or `ordered` feature contains missing values during prediction, but not during training.
 #' To control how the `PipeOp` should handle this, use the `create_empty_level` hyperparameter inherited from
-#' `PipeOpImpute`.\cr
+#' [`PipeOpImpute`].\cr
 #' If `create_empty_level` is set to `TRUE` (and `check_levels` is `FALSE`), then the value of the hyperparameter
 #' `constant` is added as a new level to the feature during training, should it not already exist. Missing values are
 #' then imputed as that value during prediction.
