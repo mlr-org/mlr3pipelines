@@ -20,7 +20,7 @@
 #' [`po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))`][mlr_pipeops_imputesample]
 #' (or some other imputation method) after this imputation method.\cr
 #' If `create_empty_level` is set to `FALSE`, then no empty level is introduced during training, but columns that
-#' have missing values during prediction will *not* be imputed. This is why it may still be necessary to use
+#' have missing values only during prediction will *not* be imputed. This is why it may still be necessary to use
 #' [`po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))`][mlr_pipeops_imputesample]
 #' (or another imputation method) after this imputation method.
 #'

@@ -23,7 +23,7 @@ Additionally, empty factor levels can be a problem for many \code{\link[mlr3:Lea
 \code{\link[=mlr_pipeops_imputesample]{po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))}}
 (or some other imputation method) after this imputation method.\cr
 If \code{create_empty_level} is set to \code{FALSE}, then no empty level is introduced during training, but columns that
-have missing values during prediction will \emph{not} be imputed. This is why it may still be necessary to use
+have missing values only during prediction will \emph{not} be imputed. This is why it may still be necessary to use
 \code{\link[=mlr_pipeops_imputesample]{po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))}}
 (or another imputation method) after this imputation method.
 }
