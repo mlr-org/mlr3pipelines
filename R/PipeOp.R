@@ -329,7 +329,12 @@ PipeOp = R6Class("PipeOp",
       assert_list(input, .var.name = sprintf("input to PipeOp %s's $predict()", self$id))
 
       if (!self$is_trained) {
-        stopf("Cannot predict, PipeOp '%s' has not been trained yet", self$id)
+        # If the PipeOp would only need NULLs in training anyways (e.g. PipeOpsClassifAvg), we can train the PipeOp for the user automatically.
+        if (all(op$input$train %in% c("NULL", "[NULL]"))) {
+          self$train(vector("list", length(input)))
+        } else {
+          stopf("Cannot predict, PipeOp '%s' has not been trained yet", self$id)
+        }
       }
 
       # need to load packages in train *and* predict, because they might run in different R instances
