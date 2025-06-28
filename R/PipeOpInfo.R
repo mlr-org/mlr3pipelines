@@ -36,6 +36,12 @@
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`], as well as:
+#' * `òriginal_printer` :: `list(4)` \cr
+#'   The default printer, which is used when the user does not override it with customized printer settings.
+#'   Printer settings are pre-defined for Objects of the class `Task`, `Prediction` and `NULL`.
+#'   If the object on question does not belong to one of these classes, then the printer command labeled as `Default`
+#'   will be utilized.
+#' * `printer` ::
 #'
 #' @section Methods:
 #'
@@ -95,7 +101,6 @@ PipeOpInfo = R6Class("PipeOpInfo",
                                           output = data.table(name = "output", train = outtype, predict = outtype),
                                           tags = "ensemble")
                          # Überschreiben des Default Printers mit Eingabe des Users
-                         #browser()
                          original_printer = list(
                            Task = crate(function(x) {
                              list(task = x, data = x$data()[, 1:min(10, ncol(x$data()))])
@@ -110,7 +115,7 @@ PipeOpInfo = R6Class("PipeOpInfo",
                          # Log Target
                          split = strsplit(log_target, "::")[[1]]
                          if (split[[1]] == "lgr") {
-                           assertString(log_target, pattern = "^(cat|warning|message|[^:]+::[^:]+::[^:]+)$")
+                           assertString(log_target, pattern = "^[^:]+::[^:]+::[^:]+$")
                            # assert --- es gibt 2x"::"  ".*::.*"
                            logger = lgr::get_logger(split[[2]])
                            log_level = split[[3]]
@@ -123,7 +128,9 @@ PipeOpInfo = R6Class("PipeOpInfo",
                            print_type = crate(function(x) warning(capture.output(x)))
                          } else if (split == "print") {
                            print_type = crate(function(x) print(x))
-                         } else {stop("log_target is wrong")} ## sprintf(log target was given as -- but has to look like this: --)
+                         } else {stop(paste0("User-specified log_target is wrong",
+                           sprintf("log_target was given as '%s'. But must have the form of either 'lgr::logger::level', 'cat', 'message' or 'warning'", log_target)))}
+                         ## sprintf(log target was given as -- but has to look like this: --)
                          private$.print_type = print_type
                        }
                      ),
@@ -136,11 +143,13 @@ PipeOpInfo = R6Class("PipeOpInfo",
                          input_class = class(inputs[[1]])
                          specific_class =
                            if (any(input_class %in% names(self$printer))) {
-                             Input_class[input_class %in% names(self$printer)][[1]]
+                            input_class[input_class %in% names(self$printer)][[1]]
                            } else {
-                             "default"
+                            "default"
                            }
-                         #stop()
+                          if (!("default" %in% names(self$printer))) {
+                            stop("Object-class was not found and no default printer is available.")
+                          }
                          # Fehlermeldung wenn es den default-printer nicht gibt ---> class nicht gefunden & kein Default printer
                          private$.output = function(x) do.call(private$.print_type, list(self$printer[[specific_class]](x[[1]])))
                          private$.output(inputs)
