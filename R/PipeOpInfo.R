@@ -15,6 +15,8 @@
 #'
 #' * `ìd` :: `character(1)`\cr
 #'   Identifier of resulting object, default "info"
+#' * `printer` :: `list(???)` \cr
+#'   User input, specified printer-functions defined for a new object-classes or used to override their counterparts in the `original_printer`
 #' * `collect_multiplicity` :: `logical(1)`\cr
 #'   If `TRUE`, the input is a [`Multiplicity`] collecting channel. This means, a
 #'   [`Multiplicity`] input/output, instead of multiple normal inputs/outputs, is accepted and the members are aggregated.
@@ -43,9 +45,18 @@
 #'   Printer settings are pre-defined for Objects of the class `Task`, `Prediction` and `NULL`.
 #'   If the object on question does not belong to one of these classes, then the printer command labeled as `Default`
 #'   will be utilized.
-#' * `printer` ::
+#'
+#'
+#'
 #'
 #' @section Methods:
+#'
+#'
+#' @examples
+#' library("mlr3")
+#' poinfo = po("info")
+#' poinfo$train(list(tsk("mtcars")))
+#' poinfo$predict(list(tsk("penguins")))
 #'
 #'
 #' @references
@@ -120,7 +131,6 @@ PipeOpInfo = R6Class("PipeOpInfo",
                      # Training
                      private = list(
                        .original_printer = NULL,
-                       .print_type = NULL,
                        .output = NULL,
                        .train = function(inputs) {
                          #browser()
@@ -136,7 +146,6 @@ PipeOpInfo = R6Class("PipeOpInfo",
                          }
                          specific_printer = self$printer[[leftmost_class]]
                          log_target_split = strsplit(self$log_target, "::")[[1]]
-
                          # actual printer function
                          private$.output = crate(function(inputs) {
                            if (log_target_split[[1]] == "lgr") {
