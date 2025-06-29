@@ -91,7 +91,8 @@ PipeOpInfo = R6Class("PipeOpInfo",
                        initialize = function(id = "info", printer = NULL, collect_multiplicity = FALSE, log_target = "lgr::mlr3/mlr3pipelines::info",
                                              param_vals = list()) {
                          #browser()
-                         assertString(log_target)
+                         # Entscheidung den assert so früh zu verorten (also unter initialize direkt) damit dem User direkt klar wird, wenn das log_target nicht konform ist
+                         assertString(log_target, pattern = "(cat|none|warning|message|^[^:]+::[^:]+::[^:]+$)")
                          # String definieren der nix bedeutet zB "none"
                          intype = "*"
                          outtype = "*"
@@ -132,11 +133,11 @@ PipeOpInfo = R6Class("PipeOpInfo",
                            } else {
                              "default"
                            }
+                         ##################### ist das notwendig, original_printer wurde nach private verlegt und somit sollte ein default-printer immer verfügbar sein
                          if (!("default" %in% names(self$printer))) {
                            stop("Object-class was not found and no default printer is available.")
                          }
                          specific_printer = self$printer[[leftmost_class]]
-                         assertString(self$log_target, pattern = "(cat|none|warning|message|^[^:]+::[^:]+::[^:]+$)")
                          log_target_split = strsplit(self$log_target, "::")[[1]]
                          if (log_target_split[[1]] == "lgr") {
                            logger = lgr::get_logger(log_target_split[[2]])
