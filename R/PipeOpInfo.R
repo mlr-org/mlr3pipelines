@@ -19,11 +19,13 @@
 #'   If `TRUE`, the input is a [`Multiplicity`] collecting channel. This means, a
 #'   [`Multiplicity`] input/output, instead of multiple normal inputs/outputs, is accepted and the members are aggregated.
 #' * `log_target` :: `character(1)`\cr
-#'   Has the form of <output>::<argument1>::<argument2>
+#'   Specifies how the output is printed, can either be assigned to a logger with a specified level, or can be printer in the
+#'   format "message", "warning" or "cat". When the log_target is specified as "none", the input will be printed as is.
+#'   Has either he form <output>::<argument1>::<argument2> for logger output otherwise "message", "warning", "cat" or none.
 #'
 #' @section Input and Output Channels:
-#' `PipeOpInfo` has one input channel called "input", it can take any type of input
-#' `PipeOpInfo` has one output channel called "output", it can take any type of output
+#' `PipeOpInfo` has one input channel called "input", it can take any type of input (*)
+#' `PipeOpInfo` has one output channel called "output", it can take any type of output (*)
 #'
 #' @section State:
 #' NULL
@@ -79,15 +81,14 @@ PipeOpInfo = R6Class("PipeOpInfo",
                      inherit = PipeOp,
                      public = list(
                        # Felder, die zu Beginn definiert werden
-                       original_printer = NULL,
                        printer = NULL,
                        collect_multiplicity = NULL,
                        log_target = NULL,
                        # Initialisierung
                        initialize = function(id = "info", printer = NULL, collect_multiplicity = FALSE, log_target = "lgr::mlr3/mlr3pipelines::info",
                                              param_vals = list()) {
-                         browser()
-                         assertString(log_target)
+                         #browser()
+                         assertString(log_target, pattern = "^[^:]+::[^:]+::[^:]+$")
                          # String definieren der nix bedeutet zB "none"
                          intype = "*"
                          outtype = "*"
@@ -101,7 +102,7 @@ PipeOpInfo = R6Class("PipeOpInfo",
                                           output = data.table(name = "output", train = outtype, predict = outtype),
                                           tags = "ensemble")
                          # Überschreiben des Default Printers mit Eingabe des Users
-                         original_printer = list(
+                         private$.original_printer = list(
                            Task = crate(function(x) {
                              print(list(task = x, data = x$data()[, 1:min(10, ncol(x$data()))]), topn = 5)
                            }),
@@ -109,7 +110,7 @@ PipeOpInfo = R6Class("PipeOpInfo",
                            `NULL` = crate(function(x) "NULL"),
                            default = crate(function(x) print(x))
                          )
-                         self$printer = insert_named(original_printer, printer)
+                         self$printer = insert_named(private$.original_printer, printer)
                          # Collect multiplicity
                          self$collect_multiplicity = collect_multiplicity
                          # Log Target
@@ -118,10 +119,11 @@ PipeOpInfo = R6Class("PipeOpInfo",
                      ),
                      # Training
                      private = list(
+                       .original_printer = NULL,
                        .print_type = NULL,
                        .output = NULL,
                        .train = function(inputs) {
-                         browser()
+                         #browser()
                          input_class = class(inputs[[1]])
                          leftmost_class =
                            if (any(input_class %in% names(self$printer))) {
@@ -133,27 +135,27 @@ PipeOpInfo = R6Class("PipeOpInfo",
                            stop("Object-class was not found and no default printer is available.")
                          }
                          specific_printer = self$printer[[leftmost_class]]
-                         # Log Target
-                         private$.output = function(inputs) {
-                           split = strsplit(self$log_target, "::")[[1]]
-                           if (split[[1]] == "lgr") {
-                             assertString(self$log_target, pattern = "^[^:]+::[^:]+::[^:]+$")
-                             logger = lgr::get_logger(split[[2]])
-                             log_level = split[[3]]
+                         log_target_split = strsplit(self$log_target, "::")[[1]]
+
+                         # actual printer function
+                         private$.output = crate(function(inputs) {
+                           if (log_target_split[[1]] == "lgr") {
+                             logger = lgr::get_logger(log_target_split[[2]])
+                             log_level = log_target_split[[3]]
                              logger$log(log_level, msg = capture.output(specific_printer(inputs[[1]])))
-                           } else if (self$log_target == "cat") {
+                           } else if (identical(log_target_split, "cat")) {
                              cat(capture.output(specific_printer(inputs[[1]])))
-                           } else if (self$log_target == "message") {
+                           } else if (identical(log_target_split, "message")) {
                              message(capture.output(specific_printer(inputs[[1]])))
-                           } else if (self$log_target == "warning") {
+                           } else if (identical(log_target_split, "warning")) {
                              warning(capture.output(specific_printer(inputs[[1]])))
-                           } else if (self$log_target == "none") {
-                             print(specific_printer(inputs[[1]]))
+                           } else if (identical(log_target_split, "none")) {
+                             print(inputs[[1]])
                            } else {
                              stop(paste0("User-specified log_target is wrong",
                              sprintf("log_target was given as '%s'. But must have the form of either 'lgr::logger::level', 'cat', 'message' or 'warning'", log_target)))
                            }
-                         }
+                         }, log_target_split, specific_printer)
                          private$.output(inputs)
                          inputs
                        },
@@ -180,22 +182,22 @@ prediction = poinfo_none$predict(list(tsk("penguins")))
 
 # Log Levels
 poinfo_log_fatal = po("info", log_target = "lgr::mlr3/mlr3pipelines::fatal")
-poinfo_log_fatal$train(list(tsk("iris")))
+resultat = poinfo_log_fatal$train(list(tsk("iris")))
 
 poinfo_log_error = po("info", log_target = "lgr::mlr3/mlr3pipelines::error")
-poinfo_log_error$train(list(tsk("iris")))
+resultat = poinfo_log_error$train(list(tsk("iris")))
 
 poinfo_log_warn = po("info", log_target = "lgr::mlr3/mlr3pipelines::warn")
-poinfo_log_warn$train(list(tsk("iris")))
+resultat = poinfo_log_warn$train(list(tsk("iris")))
 
 poinfo_log_info = po("info", log_target = "lgr::mlr3/mlr3pipelines::info")
-poinfo_log_info$train(list(tsk("mtcars")))
+resultat = poinfo_log_info$train(list(tsk("mtcars")))
 
 poinfo_log_debug = po("info", log_target = "lgr::mlr3/mlr3pipelines::debug")
-poinfo_log_debug$train(list(tsk("iris")))
+resultat = poinfo_log_debug$train(list(tsk("iris")))
 
 poinfo_log_trace = po("info", log_target = "lgr::mlr3/mlr3pipelines::debug")
-poinfo_log_trace$train(list(tsk("iris")))
+resultat = poinfo_log_trace$train(list(tsk("iris")))
 
 # Nicht-Log
 poinfo_cat = po("info", log_target = "cat")
@@ -218,11 +220,14 @@ class(OVR[[1]])
 # Collect Multiplicity
 poinfo_multiplicity_true = po("info", collect_multiplicity = TRUE,
                               printer = list(Multiplicity = function(x) lapply(x, FUN = function(y) {print(list(task = y, data = y$data()[, 1:min(10, ncol(y$data()))]), topn = 5)})))
+poinfo_multiplicity_true
 resultat = poinfo_multiplicity_true$train(OVR)
+
 poinfo_multiplicity_false = po("info", collect_multiplicity = FALSE,
                                printer = list(Multiplicity = function(x) lapply(x, FUN = function(y) {print(list(task = y, data = y$data()[, 1:min(10, ncol(y$data()))]), topn = 5)})))
-resultat = poinfo_multiplicity_false$train(OVR)
 poinfo_multiplicity_false
+resultat = poinfo_multiplicity_false$train(OVR)
+
 
 
 
