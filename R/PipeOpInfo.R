@@ -5,14 +5,14 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`]
 #'
 #' @description
-#' ...
+#' Prints the given input in a customized way.
 #'
 #' [additional information]
 #'
 #' @section Construction:
 #' ```
-#' PipeOpInfo$new(id = "info", collect_multiplicity = FALSE, log_target = ?WasistderDefault?)
-#'
+#' PipeOpInfo$new(id = "info", collect_multiplicity = FALSE, log_target = "lgr::mlr3/mlr3pipelines::info")
+#' ```
 #' * `ìd` :: `character(1)`\cr
 #'   Identifier of resulting object, default "info"
 #' * `printer` :: `list(???)` \cr
@@ -36,7 +36,8 @@
 #' NULL
 #'
 #' @section Internals:
-#' ...
+#' Was wird hier genau beschrieben? Also was ist der Zweck dieses Abschnitts
+#' https://github.com/mlr-org/mlr3pipelines/blob/0b5c4b766995334369d423ab337462843d5a4b30/R/PipeOpSmoteNC.R#L50
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`], as well as:
@@ -50,6 +51,7 @@
 #'
 #'
 #' @section Methods:
+#' Only methods inherited from [`PipeOp`]
 #'
 #'
 #' @examples
@@ -62,10 +64,9 @@
 #' @references
 #'
 #' @family PipeOps
-#'
-#'
-#'
-#'
+#' @template
+#' @include
+#' @export
 #'
 #'
 
@@ -77,15 +78,6 @@ library(mlr3pipelines)
 library(mlr3misc)
 library(lgr)
 library(checkmate)
-
-# (.. 2 Spaces nach der Klammer
-# wenn () auf der gleichen Zeile dann auch 2 Spaces nach (..
-# Fehler wenn Objektklasse keine definierte Printer-Funktion
-# Style Code mlr3 angucken und übernehmen
-# environment(function) -- environment gibt uns die festgelegten Variablen und Funktionen in dem Environment als Liste wieder
-# environment(function)$x = 99 Variable in der höheren Ebene anfassen
-# wichtig wenn Funktion in der Funktion generiert wird, überlebt as environment ==> crate funktion verhindert dass das environment überlebt
-# crate(function(y) x + y, x) -- somit wird x in nen container gepackt und wird nicht verloren gehen
 
 
 PipeOpInfo = R6Class("PipeOpInfo",
@@ -99,7 +91,7 @@ PipeOpInfo = R6Class("PipeOpInfo",
                        initialize = function(id = "info", printer = NULL, collect_multiplicity = FALSE, log_target = "lgr::mlr3/mlr3pipelines::info",
                                              param_vals = list()) {
                          #browser()
-                         assertString(log_target, pattern = "^[^:]+::[^:]+::[^:]+$")
+                         assertString(log_target)
                          # String definieren der nix bedeutet zB "none"
                          intype = "*"
                          outtype = "*"
@@ -131,8 +123,7 @@ PipeOpInfo = R6Class("PipeOpInfo",
                      # Training
                      private = list(
                        .original_printer = NULL,
-                       .output = NULL,
-                       .train = function(inputs) {
+                       .output = function(inputs) {
                          #browser()
                          input_class = class(inputs[[1]])
                          leftmost_class =
@@ -145,26 +136,27 @@ PipeOpInfo = R6Class("PipeOpInfo",
                            stop("Object-class was not found and no default printer is available.")
                          }
                          specific_printer = self$printer[[leftmost_class]]
+                         assertString(self$log_target, pattern = "(cat|none|warning|message|^[^:]+::[^:]+::[^:]+$)")
                          log_target_split = strsplit(self$log_target, "::")[[1]]
-                         # actual printer function
-                         private$.output = crate(function(inputs) {
-                           if (log_target_split[[1]] == "lgr") {
-                             logger = lgr::get_logger(log_target_split[[2]])
-                             log_level = log_target_split[[3]]
-                             logger$log(log_level, msg = capture.output(specific_printer(inputs[[1]])))
-                           } else if (identical(log_target_split, "cat")) {
-                             cat(capture.output(specific_printer(inputs[[1]])))
-                           } else if (identical(log_target_split, "message")) {
-                             message(capture.output(specific_printer(inputs[[1]])))
-                           } else if (identical(log_target_split, "warning")) {
-                             warning(capture.output(specific_printer(inputs[[1]])))
-                           } else if (identical(log_target_split, "none")) {
-                             print(inputs[[1]])
-                           } else {
-                             stop(paste0("User-specified log_target is wrong",
-                             sprintf("log_target was given as '%s'. But must have the form of either 'lgr::logger::level', 'cat', 'message' or 'warning'", log_target)))
-                           }
-                         }, log_target_split, specific_printer)
+                         if (log_target_split[[1]] == "lgr") {
+                           logger = lgr::get_logger(log_target_split[[2]])
+                           log_level = log_target_split[[3]]
+                           logger$log(log_level, msg = capture.output(specific_printer(inputs[[1]])))
+                         } else if (identical(log_target_split, "cat")) {
+                           cat(capture.output(specific_printer(inputs[[1]])))
+                         } else if (identical(log_target_split, "message")) {
+                           message(capture.output(specific_printer(inputs[[1]])))
+                         } else if (identical(log_target_split, "warning")) {
+                           warning(capture.output(specific_printer(inputs[[1]])))
+                         } else if (identical(log_target_split, "none")) {
+                           print(inputs[[1]])
+                         } else {
+                           stop(paste0("User-specified log_target is wrong",
+                             sprintf("log_target was given as '%s'. But must have the form of either 'lgr::logger::level', 'cat', 'message' or 'warning'", log_target))
+                           )
+                         }
+                       },
+                       .train = function(inputs) {
                          private$.output(inputs)
                          inputs
                        },
@@ -218,6 +210,15 @@ resultat_message = poinfo_message$train(list(tsk("iris")))
 poinfo_warning = po("info", log_target = "warning")
 resultat_warning = poinfo_warning$train(list(tsk("iris")))
 
+# PipeOp, der einen String zurückgibt
+poinfo_string = po("info", printer = list(Task = function(x) "Hello"))
+resultat = poinfo_string$train(list(tsk("iris")))
+
+# Log falsch spezifiziert
+poinfo_wrong = po("info", log_target = "wrongtextwrongtextwrong")
+resultat = poinfo_wrong$train(list(tsk("iris")))
+
+
 # Multiplicity Object - OVR
 library(mlr3)
 task = tsk("iris")
@@ -238,14 +239,25 @@ poinfo_multiplicity_false
 resultat = poinfo_multiplicity_false$train(OVR)
 
 
+# Logger einrichten
+logger = lgr::get_logger("mlr3/mlr3pipelines")
+logger_file = tempfile(fileext = ".info")
+logger$add_appender(AppenderFile$new(logger_file), name = "logfile")
+logger$remove_appender("logfile")
+
+# Fragen zur Dokumentation
+#https://github.com/mlr-org/mlr3pipelines/blob/0b5c4b766995334369d423ab337462843d5a4b30/R/PipeOpTuneThreshold.R#L57
+#Was sind hier genau die Methoden, es sind ja zusätzliche Funktionen in private außer train/predict definiert
+
+# Fragen zu Prediction-Objekt
+# wie kreiert man ein Prediction Objekt wo die truth spalte fehlt
 
 
 
-# Block 4 - Fragen zur Dokumentation
-# $state bleibt bei NULL?
-# internals
-# fields ==> printer, collect_multiplicity, log_target?
-# parameters ==> NULL
+
+
+
+
 
 
 # Standard
