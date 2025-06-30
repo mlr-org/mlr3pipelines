@@ -230,14 +230,14 @@ and should return a <code>data.table</code> or named <code>list</code> that cont
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskRegr:boston_housing&gt; (506 x 18): Boston Housing Prices</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Target: cmedv</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: -</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Features (17):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (12): age, b, crim, dis, indus, lat, lon, lstat, nox, ptratio,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     rm, zn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - int (3): rad, tax, tract</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - fct (2): chas, town</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskRegr&gt;</span><span style="font-weight: bold;"> (506x18): Boston Housing Prices</span> <span style="color: #00BBBB;">──────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target: cmedv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: -</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Features (17):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (12): age, b, crim, dis, indus, lat, lon, lstat, nox, ptratio, rm, zn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • int (3): rad, tax, tract</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • fct (2): chas, town</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fun</span>
@@ -246,18 +246,18 @@ and should return a <code>data.table</code> or named <code>list</code> that cont
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_list(inputs, len = 1L, types = "Prediction")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     list(private$.invert(inputs[[1L]], predict_phase_state))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5594e0aca080&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5594e0ac97c0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5615ed883a28&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5615ed87de18&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskRegr:boston_housing&gt; (506 x 18): Boston Housing Prices</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Target: cmedv</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: -</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Features (17):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (12): age, b, crim, dis, indus, lat, lon, lstat, nox, ptratio,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     rm, zn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - int (3): rad, tax, tract</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - fct (2): chas, town</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskRegr&gt;</span><span style="font-weight: bold;"> (506x18): Boston Housing Prices</span> <span style="color: #00BBBB;">──────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target: cmedv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: -</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Features (17):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (12): age, b, crim, dis, indus, lat, lon, lstat, nox, ptratio, rm, zn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • int (3): rad, tax, tract</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • fct (2): chas, town</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">g</span> <span class="op">=</span> <span class="va"><a href="Graph.html">Graph</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></span>
@@ -277,7 +277,8 @@ and should return a <code>data.table</code> or named <code>list</code> that cont
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="va">g</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $targetinvert.output</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionRegr&gt; for 506 observations:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;PredictionRegr&gt;</span><span style="font-weight: bold;"> for </span><span style="color: #0000BB; font-weight: bold;">506</span><span style="font-weight: bold;"> observations:</span> <span style="color: #00BBBB;">──────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  row_ids truth response</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        1  24.0 22.97871</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        2  21.6 22.97871</span>

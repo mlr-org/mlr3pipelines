@@ -241,33 +241,39 @@ argument, named <code>"output1"</code>, <code>"output2"</code> returning the ele
 <span class="r-in"><span><span class="va">po</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"multiplicityexply"</span>, outnum <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="Multiplicity.html">Multiplicity</a></span><span class="op">(</span><span class="va">task1</span>, <span class="va">task2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $output1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskClassif:iris&gt; (150 x 5): Iris Flowers</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Target: Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: multiclass</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Features (4):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (150x5): Iris Flowers</span> <span style="color: #00BBBB;">─────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target: Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: setosa (33%), versicolor (33%), virginica (33%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Features (4):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $output2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskRegr:mtcars&gt; (32 x 11): Motor Trends</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Target: mpg</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: -</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Features (10):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (10): am, carb, cyl, disp, drat, gear, hp, qsec, vs, wt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskRegr&gt;</span><span style="font-weight: bold;"> (32x11): Motor Trends</span> <span style="color: #00BBBB;">────────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target: mpg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: -</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Features (10):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (10): am, carb, cyl, disp, drat, gear, hp, qsec, vs, wt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="Multiplicity.html">Multiplicity</a></span><span class="op">(</span><span class="va">task1</span>, <span class="va">task2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $output1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskClassif:iris&gt; (150 x 5): Iris Flowers</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Target: Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: multiclass</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Features (4):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (150x5): Iris Flowers</span> <span style="color: #00BBBB;">─────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target: Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: setosa (33%), versicolor (33%), virginica (33%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Features (4):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $output2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskRegr:mtcars&gt; (32 x 11): Motor Trends</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Target: mpg</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: -</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Features (10):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (10): am, carb, cyl, disp, drat, gear, hp, qsec, vs, wt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskRegr&gt;</span><span style="font-weight: bold;"> (32x11): Motor Trends</span> <span style="color: #00BBBB;">────────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target: mpg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: -</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Features (10):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (10): am, carb, cyl, disp, drat, gear, hp, qsec, vs, wt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
