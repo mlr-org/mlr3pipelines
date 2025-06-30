@@ -1,4 +1,5 @@
 # mlr3pipelines 0.8.0-9000
+* Fixed a grammatical error in `PipeOp`'s error message wrapper: now correctly says "This happened *in* ...".
 
 # mlr3pipelines 0.8.0
 
