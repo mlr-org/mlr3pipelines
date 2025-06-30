@@ -215,6 +215,15 @@ resultat_warning = poinfo_warning$train(list(tsk("iris")))
 poinfo_string = po("info", printer = list(Task = function(x) "Hello"))
 resultat = poinfo_string$train(list(tsk("iris")))
 
+# PipeOp der eine Liste zurückgibt
+poinfo_customized_printer = po("info", printer = list(
+  Task = function(x) {list(nrow = x$nrow, ncol = x$ncol, distr = table(x$data()[, x$target_names]))},
+  TaskClassif = function(x) {list(nrow = x$nrow, ncol = x$ncol, distr = table(x$data()[, x$target_names]))})
+)
+resultat = poinfo_customized_printer$train(list(tsk("penguins")))
+tsk("penguins")$data()[, tsk("penguins")$target_names]
+
+
 # Log falsch spezifiziert
 poinfo_wrong = po("info", log_target = "wrongtextwrongtextwrong")
 resultat = poinfo_wrong$train(list(tsk("iris")))
@@ -252,61 +261,18 @@ logger$remove_appender("logfile")
 
 # Fragen zu Prediction-Objekt
 # wie kreiert man ein Prediction Objekt wo die truth spalte fehlt
-
-
-
-
-
-
-
-
-
-# Standard
-poinfo = po("info")
-poinfo$train(list(tsk("iris")))
-
-# Printer that returns a list works
-poinfo_nrow_ncol = po("info", printer = list(
-  Task = function(x) {list(nrow = x$nrow, ncol = x$ncol, distr = table(x$data()[, "Species"]))},
-  TaskClassif = function(x) {list(nrow = x$nrow, ncol = x$ncol, distr = table(x$data()[, "Species"]))})
-)
-poinfo_nrow_ncol$train(list(tsk("iris")))
-
-poinfo = po("info", printer = list(
-  Task = function(x) {list(a = "Task not be printed; THIS IS A TASK")},
-  TaskClassif = function(x) {list(a = "TaskClassif not be printed. THIS IS A TASK CLASSIF")
-  }
-))
-
-
-
-#Examples
-poinfo$train(list(tsk("iris")))
-poinfo$train(list(tsk("mtcars")))
-poinfo$train(list(prediction))
-poinfo$train(list(NULL))
-poinfo$train(list("abc"))
-
-# Fragen
-
-
-# Beispiel - "printer that returns a list works"
-poinfo_nrow_ncol_table_mtcars = po("info", printer = list(
-  Task = function(x) {list(nrow = x$nrow, ncol = x$ncol, distr = table(x$data()[, x$target_names]))},
-  TaskClassif = function(x) {list(nrow = x$nrow, ncol = x$ncol, distr = table(x$data()[, x$target_names]))})
-)
-resultat = poinfo_nrow_ncol_table_mtcars$train(list(tsk("mtcars")))
-
-
-
-
-# Prediction Object
 na.omit(data(PimaIndiansDiabetes2, package = "mlbench"))
-tsk1 = as_task_classif(PimaIndiansDiabetes2, target = "diabetes", positive = "pos")
-splits = partition(tsk1, ratio = 0.8)
-lrn_classif = lrn("classif.rpart", predict_type = "prob")
+tsk1 <- as_task_classif(PimaIndiansDiabetes2, target = "diabetes", positive = "pos")
+splits <- partition(tsk1)
+lrn_classif <- lrn("classif.rpart", predict_type = "prob")
 lrn_classif$train(tsk1, row_ids = splits$train)
-prediction = lrn_classif$predict(tsk1, row_ids = splits$test)
+prediction <- lrn_classif$predict(tsk1, row_ids = splits$test)
+class(prediction$truth)
+
+PimaIndiansDiabetes2$diabetes = NULL
+tsk3 = as_task_classif(PimaIndiansDiabetes2, target = "diabetes", positive = "pos")
+
+prediction$score()
 prediction$score(msr("classif.ce"))
 
 
