@@ -98,7 +98,7 @@ test_that("Informative error and warning messages", {
 
   gr$param_set$values$classif.debug.warning_train = 0
   gr$param_set$values$classif.debug.warning_predict = 0
-  
+
   gr$param_set$values$classif.debug.error_train = 1
   expect_error(gr$train(tsk("iris")), "This happened PipeOp classif.debug's \\$train\\(\\)$")
 
@@ -140,4 +140,32 @@ test_that("properties", {
   expect_error(f("abc"))
   po1 = f("validation")
   expect_equal(po1$properties, "validation")
+})
+
+test_that("PipeOp - auto-train untrained PipeOps during predict that have input type NULL", {
+  PipeOpTestTrainOnNULL = R6Class("PipeOpTestTrainOnNULL",
+    inherit = PipeOp,
+    public = list(
+      initialize = function(id = "test_train_on_null", param_set = ps()) {
+        super$initialize(id = id, param_set = param_set,
+          input = data.table(name = "input", train = "NULL", predict = "*"),
+          output = data.table(name = "output", train = "*", predict = "*")
+        )
+      }),
+    private = list(
+      .train = function(inputs) {
+        catf("Training %s", self$id)
+        self$state = inputs
+      },
+      .predict = function(inputs) {
+        catf("Predicting %s", self$id)
+        self$state = c(self$state, inputs)
+      }
+    )
+  )
+
+  op = PipeOpTestTrainOnNULL$new()
+
+  op$predict(list("test"))
+
 })
