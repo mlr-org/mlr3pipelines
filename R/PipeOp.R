@@ -330,7 +330,7 @@ PipeOp = R6Class("PipeOp",
 
       if (!self$is_trained) {
         # If the PipeOp would only need NULLs in training anyways (e.g. PipeOpsClassifAvg), we can train the PipeOp for the user automatically.
-        if (all(op$input$train %in% c("NULL", "[NULL]"))) {
+        if (all(self$input$train %in% c("NULL", "[NULL]"))) {
           self$train(vector("list", length(input)))
         } else {
           stopf("Cannot predict, PipeOp '%s' has not been trained yet", self$id)
