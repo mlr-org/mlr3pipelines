@@ -84,84 +84,85 @@ PipeOpInfo = R6Class("PipeOpInfo",
                      inherit = PipeOp,
                      public = list(
                        # Felder, die zu Beginn definiert werden
-                       printer = NULL,
-                       collect_multiplicity = NULL,
-                       log_target = NULL,
                        # Initialisierung
                        initialize = function(id = "info", printer = NULL, collect_multiplicity = FALSE, log_target = "lgr::mlr3/mlr3pipelines::info",
                                              param_vals = list()) {
                          #browser()
                          # Entscheidung den assert so früh zu verorten (also unter initialize direkt) damit dem User direkt klar wird, wenn das log_target nicht konform ist
-                         assertString(log_target, pattern = "(cat|none|warning|message|^[^:]+::[^:]+::[^:]+$)")
-                         # String definieren der nix bedeutet zB "none"
-                         intype = "*"
-                         outtype = "*"
+                         assertString(log_target, pattern = "^(cat|none|warning|message|lgr::[^:]+::[^:]+)$")
+                         inouttype = "*"
                          if (collect_multiplicity) {
-                           intype = sprintf("[%s]", intype)
-                           outtype = sprintf("[%s]", outtype)
+                           inouttype = sprintf("[%s]", inouttype)
                          }
                          # Initialisierung der Parameter aus PipeOp
                          super$initialize(id, param_vals = param_vals,
-                                          input = data.table(name = "input", train = intype, predict = intype),
-                                          output = data.table(name = "output", train = outtype, predict = outtype),
+                                          input = data.table(name = "input", train = inouttype, predict = inouttype),
+                                          output = data.table(name = "output", train = inouttype, predict = inouttype),
                                           tags = "ensemble")
                          # Überschreiben des Default Printers mit Eingabe des Users
-                         private$.original_printer = list(
+                         original_printer = list(
                            Task = crate(function(x) {
                              print(list(task = x, data = x$data()[, 1:min(10, ncol(x$data()))]), topn = 5)
                            }),
-                           Prediction = crate(function(x) {list(prediction = x, score = tryCatch(x$score(), error = function(e) {}))}),
+                           Prediction = crate(function(x) {
+                             list(prediction = x, score = tryCatch(x$score(), error = function(e) {}))
+                           }),
                            `NULL` = crate(function(x) "NULL"),
                            default = crate(function(x) print(x))
                          )
-                         self$printer = insert_named(private$.original_printer, printer)
-                         # Collect multiplicity
-                         self$collect_multiplicity = collect_multiplicity
+                         private$.printer = insert_named(original_printer, printer)
                          # Log Target
-                         self$log_target = log_target
+                         private$.log_target = log_target
                        }
                      ),
-                     # Training
+                     active = list(
+                       printer = function(rhs) {
+                         if (!missing(rhs)) stop("printer is read only.")
+                         private$.printer
+                       },
+                       log_target = function(rhs) {
+                         if (!missing(rhs)) stop("log_target is read only.")
+                         private$.log_target
+                       }
+                     ),
                      private = list(
-                       .original_printer = NULL,
+                       .printer = NULL,
+                       .log_target = NULL,
                        .output = function(inputs) {
                          #browser()
                          input_class = class(inputs[[1]])
                          leftmost_class =
-                           if (any(input_class %in% names(self$printer))) {
-                             input_class[input_class %in% names(self$printer)][[1]]
+                           if (any(input_class %in% names(private$.printer))) {
+                             input_class[input_class %in% names(private$.printer)][[1]]
                            } else {
                              "default"
                            }
-                         ##################### ist das notwendig, original_printer wurde nach private verlegt und somit sollte ein default-printer immer verfügbar sein
-                         if (!("default" %in% names(self$printer))) {
+                         if (!("default" %in% names(private$.printer))) {
                            stop("Object-class was not found and no default printer is available.")
                          }
-                         specific_printer = self$printer[[leftmost_class]]
-                         log_target_split = strsplit(self$log_target, "::")[[1]]
+                         specific_printer = private$.printer[[leftmost_class]]
+                         log_target_split = strsplit(private$.log_target, "::")[[1]]
+                         browser()
                          if (log_target_split[[1]] == "lgr") {
                            logger = lgr::get_logger(log_target_split[[2]])
                            log_level = log_target_split[[3]]
                            logger$log(log_level, msg = capture.output(specific_printer(inputs[[1]])))
-                         } else if (identical(log_target_split, "cat")) {
-                           cat(capture.output(specific_printer(inputs[[1]])))
+                         } else if (identical(log_target_split, "cat")) {  # private$.log_target == "cat"
+                           specific_printer(inputs[[1]])
                          } else if (identical(log_target_split, "message")) {
-                           message(capture.output(specific_printer(inputs[[1]])))
+                           message(paste(capture.output(specific_printer(inputs[[1]])), collapse = "\n"))
                          } else if (identical(log_target_split, "warning")) {
-                           warning(capture.output(specific_printer(inputs[[1]])))
+                           warning(paste(capture.output(specific_printer(inputs[[1]])), collapse = "\n"))
                          } else if (identical(log_target_split, "none")) {
-                           print(inputs[[1]])
+                           print(inputs[[1]]) # dont print anything (quasi invisible // operator ausgeschaltet)
                          } else {
-                           stop(paste0("User-specified log_target is wrong",
-                             sprintf("log_target was given as '%s'. But must have the form of either 'lgr::logger::level', 'cat', 'message' or 'warning'", log_target))
-                           )
+                           stopf("Invalid log_target '%s'.", log_target)
                          }
                        },
                        .train = function(inputs) {
                          private$.output(inputs)
                          inputs
                        },
-                       # Prediction
                        .predict = function(inputs) {
                          private$.output(inputs)
                          inputs
@@ -198,7 +199,7 @@ resultat = poinfo_log_info$train(list(tsk("mtcars")))
 poinfo_log_debug = po("info", log_target = "lgr::mlr3/mlr3pipelines::debug")
 resultat = poinfo_log_debug$train(list(tsk("iris")))
 
-poinfo_log_trace = po("info", log_target = "lgr::mlr3/mlr3pipelines::debug")
+poinfo_log_trace = po("info", log_target = "lgr::mlr3/mlr3pipelines::trace")
 resultat = poinfo_log_trace$train(list(tsk("iris")))
 
 # Nicht-Log
@@ -243,21 +244,19 @@ poinfo_multiplicity_true = po("info", collect_multiplicity = TRUE,
 poinfo_multiplicity_true
 resultat = poinfo_multiplicity_true$train(OVR)
 
-poinfo_multiplicity_false = po("info", collect_multiplicity = FALSE,
-                               printer = list(Multiplicity = function(x) lapply(x, FUN = function(y) {print(list(task = y, data = y$data()[, 1:min(10, ncol(y$data()))]), topn = 5)})))
+poinfo_multiplicity_false = po("info", collect_multiplicity = FALSE)
 poinfo_multiplicity_false
 resultat = poinfo_multiplicity_false$train(OVR)
 
-
+# id des PipeOps ausgeben zu Beginn jedes geprinteten Output
 # Logger einrichten
 logger = lgr::get_logger("mlr3/mlr3pipelines")
+logger
 logger_file = tempfile(fileext = ".info")
 logger$add_appender(AppenderFile$new(logger_file), name = "logfile")
-logger$remove_appender("logfile")
+logger
 
-# Fragen zur Dokumentation
-#https://github.com/mlr-org/mlr3pipelines/blob/0b5c4b766995334369d423ab337462843d5a4b30/R/PipeOpTuneThreshold.R#L57
-#Was sind hier genau die Methoden, es sind ja zusätzliche Funktionen in private außer train/predict definiert
+logger$remove_appender("logfile")
 
 # Fragen zu Prediction-Objekt
 # wie kreiert man ein Prediction Objekt wo die truth spalte fehlt
