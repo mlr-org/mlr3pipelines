@@ -81,93 +81,83 @@ library(checkmate)
 
 
 PipeOpInfo = R6Class("PipeOpInfo",
-                     inherit = PipeOp,
-                     public = list(
-                       # Felder, die zu Beginn definiert werden
-                       # Initialisierung
-                       initialize = function(id = "info", printer = NULL, collect_multiplicity = FALSE, log_target = "lgr::mlr3/mlr3pipelines::info",
-                                             param_vals = list()) {
-                         #browser()
-                         # Entscheidung den assert so früh zu verorten (also unter initialize direkt) damit dem User direkt klar wird, wenn das log_target nicht konform ist
-                         assertString(log_target, pattern = "^(cat|none|warning|message|lgr::[^:]+::[^:]+)$")
-                         inouttype = "*"
-                         if (collect_multiplicity) {
-                           inouttype = sprintf("[%s]", inouttype)
-                         }
-                         # Initialisierung der Parameter aus PipeOp
-                         super$initialize(id, param_vals = param_vals,
-                                          input = data.table(name = "input", train = inouttype, predict = inouttype),
-                                          output = data.table(name = "output", train = inouttype, predict = inouttype),
-                                          tags = "ensemble")
-                         # Überschreiben des Default Printers mit Eingabe des Users
-                         original_printer = list(
-                           Task = crate(function(x) {
-                             print(list(task = x, data = x$data()[, 1:min(10, ncol(x$data()))]), topn = 5)
-                           }),
-                           Prediction = crate(function(x) {
-                             list(prediction = x, score = tryCatch(x$score(), error = function(e) {}))
-                           }),
-                           `NULL` = crate(function(x) "NULL"),
-                           default = crate(function(x) print(x))
-                         )
-                         private$.printer = insert_named(original_printer, printer)
-                         # Log Target
-                         private$.log_target = log_target
-                       }
-                     ),
-                     active = list(
-                       printer = function(rhs) {
-                         if (!missing(rhs)) stop("printer is read only.")
-                         private$.printer
-                       },
-                       log_target = function(rhs) {
-                         if (!missing(rhs)) stop("log_target is read only.")
-                         private$.log_target
-                       }
-                     ),
-                     private = list(
-                       .printer = NULL,
-                       .log_target = NULL,
-                       .output = function(inputs) {
-                         #browser()
-                         input_class = class(inputs[[1]])
-                         leftmost_class =
-                           if (any(input_class %in% names(private$.printer))) {
-                             input_class[input_class %in% names(private$.printer)][[1]]
-                           } else {
-                             "default"
-                           }
-                         if (!("default" %in% names(private$.printer))) {
-                           stop("Object-class was not found and no default printer is available.")
-                         }
-                         specific_printer = private$.printer[[leftmost_class]]
-                         log_target_split = strsplit(private$.log_target, "::")[[1]]
-                         browser()
-                         if (log_target_split[[1]] == "lgr") {
-                           logger = lgr::get_logger(log_target_split[[2]])
-                           log_level = log_target_split[[3]]
-                           logger$log(log_level, msg = capture.output(specific_printer(inputs[[1]])))
-                         } else if (identical(log_target_split, "cat")) {  # private$.log_target == "cat"
-                           specific_printer(inputs[[1]])
-                         } else if (identical(log_target_split, "message")) {
-                           message(paste(capture.output(specific_printer(inputs[[1]])), collapse = "\n"))
-                         } else if (identical(log_target_split, "warning")) {
-                           warning(paste(capture.output(specific_printer(inputs[[1]])), collapse = "\n"))
-                         } else if (identical(log_target_split, "none")) {
-                           print(inputs[[1]]) # dont print anything (quasi invisible // operator ausgeschaltet)
-                         } else {
-                           stopf("Invalid log_target '%s'.", log_target)
-                         }
-                       },
-                       .train = function(inputs) {
-                         private$.output(inputs)
-                         inputs
-                       },
-                       .predict = function(inputs) {
-                         private$.output(inputs)
-                         inputs
-                       }
-                     )
+  inherit = PipeOp,
+  public = list(
+    initialize = function(id = "info", printer = NULL, collect_multiplicity = FALSE, log_target = "lgr::mlr3/mlr3pipelines::info", param_vals = list()) {
+      assertString(log_target, pattern = "^(cat|none|warning|message|lgr::[^:]+::[^:]+)$")
+      inouttype = "*"
+      if (collect_multiplicity) {
+        inouttype = sprintf("[%s]", inouttype)
+      }
+      super$initialize(id, param_vals = param_vals,
+        input = data.table(name = "input", train = inouttype, predict = inouttype),
+        output = data.table(name = "output", train = inouttype, predict = inouttype),
+        tags = "info?")
+      original_printer = list(
+        Task = crate(function(x) {
+          print(list(task = x, data = x$data()[, 1:min(10, ncol(x$data()))]), topn = 5)
+        }),
+        Prediction = crate(function(x) {
+          list(prediction = x, score = tryCatch(x$score(), error = function(e) {}))
+        }),
+        `NULL` = crate(function(x) "NULL"),
+        default = crate(function(x) print(x))
+      )
+      private$.printer = insert_named(original_printer, printer)
+      private$.log_target = log_target
+    }
+  ),
+  active = list(
+    printer = function(rhs) {
+      if (!missing(rhs)) stop("printer is read only.")
+      private$.printer
+    },
+    log_target = function(rhs) {
+      if (!missing(rhs)) stop("log_target is read only.")
+      private$.log_target
+    }
+  ),
+  private = list(
+    .printer = NULL,
+    .log_target = NULL,
+    .output = function(inputs, stage) {
+      input_class = class(inputs[[1]])
+      leftmost_class =
+        if (any(input_class %in% names(private$.printer))) {
+          input_class[input_class %in% names(private$.printer)][[1]]
+        } else {
+          "default"
+        }
+        if (!("default" %in% names(private$.printer))) {
+          stop("Object-class was not found and no default printer is available.")
+        }
+      specific_printer = private$.printer[[leftmost_class]]
+      log_target_split = strsplit(private$.log_target, "::")[[1]]
+      stage_string = sprintf("PipeOp passing through PipeOp Infoprint - %s", stage)
+      if (log_target_split[[1]] == "lgr") {
+        logger = lgr::get_logger(log_target_split[[2]])
+        log_level = log_target_split[[3]]
+        logger$log(log_level, msg = capture.output({cat(stage_string, "\n\n"); specific_printer(inputs[[1]])}))
+      } else if (private$.log_target == "cat") {  # private$.log_target == "cat"
+        {cat(stage_string, "\n\n"); specific_printer(inputs[[1]])}
+      } else if (private$.log_target == "message") {
+        message(paste(capture.output({cat(stage_string, "\n\n"); specific_printer(inputs[[1]])}), collapse = "\n"))
+      } else if (private$.log_target == "warning") {
+        warning(paste(capture.output({cat(stage_string, "\n\n"); specific_printer(inputs[[1]])}), collapse = "\n"))
+      } else if (private$.log_target == "none") {
+      } else {
+        stopf("Invalid log_target '%s'.", log_target)
+      }
+    },
+    .train = function(inputs, stage = "Training") {
+      private$.output(inputs, stage)
+      inputs
+    },
+    .predict = function(inputs, stage = "Prediction") {
+      private$.output(inputs, stage)
+      inputs
+    }
+  )
 )
 
 mlr_pipeops$add("info", PipeOpInfo)
@@ -177,6 +167,7 @@ poinfo_default = po("info")
 
 resultat = poinfo_default$train(list(tsk("mtcars")))
 prediction = poinfo_default$predict(list(tsk("penguins")))
+
 
 # None
 poinfo_none = po("info", log_target = "none")
@@ -258,21 +249,18 @@ logger
 
 logger$remove_appender("logfile")
 
-# Fragen zu Prediction-Objekt
-# wie kreiert man ein Prediction Objekt wo die truth spalte fehlt
-na.omit(data(PimaIndiansDiabetes2, package = "mlbench"))
-tsk1 <- as_task_classif(PimaIndiansDiabetes2, target = "diabetes", positive = "pos")
-splits <- partition(tsk1)
-lrn_classif <- lrn("classif.rpart", predict_type = "prob")
-lrn_classif$train(tsk1, row_ids = splits$train)
-prediction <- lrn_classif$predict(tsk1, row_ids = splits$test)
-class(prediction$truth)
-
-PimaIndiansDiabetes2$diabetes = NULL
-tsk3 = as_task_classif(PimaIndiansDiabetes2, target = "diabetes", positive = "pos")
-
-prediction$score()
-prediction$score(msr("classif.ce"))
+# Prediction - Objekt
+tsk_mtcars = tsk("mtcars")
+lrn_rpart = lrn("regr.rpart")
+lrn_rpart$train(tsk_mtcars)
+lrn_rpart$model
+mtcars_new = data.table(cyl = c(5, 6, 3), disp = c(100, 120, 140),
+                        hp = c(100, 150, 200), drat = c(4, 3.9, 5.3), wt = c(3.8, 4.1, 4.3),
+                        qsec = c(18, 19.5, 20), vs = c(1, 0, 1), am = c(1, 1, 0),
+                        gear = c(6, 4, 6), carb = c(3, 5, 4))
+prediction_new = lrn_rpart$predict_newdata(mtcars_new)
+prediction_new
+prediction_new$score()
 
 
 ## Cursor anschauen
