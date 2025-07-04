@@ -85,6 +85,7 @@ PipeOpInfo = R6Class("PipeOpInfo",
   public = list(
     initialize = function(id = "info", printer = NULL, collect_multiplicity = FALSE, log_target = "lgr::mlr3/mlr3pipelines::info", param_vals = list()) {
       assertString(log_target, pattern = "^(cat|none|warning|message|lgr::[^:]+::[^:]+)$")
+      #browser()
       inouttype = "*"
       if (collect_multiplicity) {
         inouttype = sprintf("[%s]", inouttype)
@@ -92,13 +93,13 @@ PipeOpInfo = R6Class("PipeOpInfo",
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = inouttype, predict = inouttype),
         output = data.table(name = "output", train = inouttype, predict = inouttype),
-        tags = "info?")
+        tags = "ensemble")
       original_printer = list(
         Task = crate(function(x) {
           print(list(task = x, data = x$data()[, 1:min(10, ncol(x$data()))]), topn = 5)
         }),
         Prediction = crate(function(x) {
-          list(prediction = x, score = tryCatch(x$score(), error = function(e) {}))
+          print(tryCatch(list(prediction = x, score = x$score()), error = function(e) {list(prediction = x)}), topn = 5)
         }),
         `NULL` = crate(function(x) "NULL"),
         default = crate(function(x) print(x))
@@ -121,6 +122,7 @@ PipeOpInfo = R6Class("PipeOpInfo",
     .printer = NULL,
     .log_target = NULL,
     .output = function(inputs, stage) {
+      #browser()
       input_class = class(inputs[[1]])
       leftmost_class =
         if (any(input_class %in% names(private$.printer))) {
@@ -161,6 +163,8 @@ PipeOpInfo = R6Class("PipeOpInfo",
 )
 
 mlr_pipeops$add("info", PipeOpInfo)
+
+poinfo_default = po("info")
 
 # Default
 poinfo_default = po("info")
@@ -221,6 +225,29 @@ poinfo_wrong = po("info", log_target = "wrongtextwrongtextwrong")
 resultat = poinfo_wrong$train(list(tsk("iris")))
 
 
+# Prediction - Objekt
+tsk_mtcars = tsk("mtcars")
+lrn_rpart = lrn("regr.rpart")
+lrn_rpart$train(tsk_mtcars)
+lrn_rpart$model
+mtcars_new = data.table(cyl = c(5, 6, 3), disp = c(100, 120, 140),
+                        hp = c(100, 150, 200), drat = c(4, 3.9, 5.3), wt = c(3.8, 4.1, 4.3),
+                        qsec = c(18, 19.5, 20), vs = c(1, 0, 1), am = c(1, 1, 0),
+                        gear = c(6, 4, 6), carb = c(3, 5, 4))
+
+prediction = lrn_rpart$predict_newdata(mtcars)
+prediction$score()
+
+prediction_new = lrn_rpart$predict_newdata(mtcars_new)
+prediction_new$score()
+
+resultat_prediction = poinfo_default$train(list(prediction))
+
+resultat_prediction_new = poinfo_default$train(list(prediction_new))
+
+
+
+
 # Multiplicity Object - OVR
 library(mlr3)
 task = tsk("iris")
@@ -249,18 +276,7 @@ logger
 
 logger$remove_appender("logfile")
 
-# Prediction - Objekt
-tsk_mtcars = tsk("mtcars")
-lrn_rpart = lrn("regr.rpart")
-lrn_rpart$train(tsk_mtcars)
-lrn_rpart$model
-mtcars_new = data.table(cyl = c(5, 6, 3), disp = c(100, 120, 140),
-                        hp = c(100, 150, 200), drat = c(4, 3.9, 5.3), wt = c(3.8, 4.1, 4.3),
-                        qsec = c(18, 19.5, 20), vs = c(1, 0, 1), am = c(1, 1, 0),
-                        gear = c(6, 4, 6), carb = c(3, 5, 4))
-prediction_new = lrn_rpart$predict_newdata(mtcars_new)
-prediction_new
-prediction_new$score()
+
 
 
 ## Cursor anschauen
