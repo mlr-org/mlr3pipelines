@@ -331,7 +331,13 @@ PipeOp = R6Class("PipeOp",
       if (!self$is_trained) {
         # If the PipeOp would only need NULLs in training anyways (e.g. PipeOpsClassifAvg), we can train the PipeOp for the user automatically.
         if (all(self$input$train %in% c("NULL", "[NULL]"))) {
-          self$train(vector("list", length(input)))
+          # Evaluates to NULL if x is not a Multiplicity
+          null_multiplicity <- function(x) {
+            if (is.Multiplicity(x)) {
+              as.Multiplicity(lapply(x, null_multiplicity))
+            }
+          }
+          self$train(lapply(input, null_multiplicity))
         } else {
           stopf("Cannot predict, PipeOp '%s' has not been trained yet", self$id)
         }

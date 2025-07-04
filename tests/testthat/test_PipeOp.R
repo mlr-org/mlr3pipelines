@@ -143,29 +143,67 @@ test_that("properties", {
 })
 
 test_that("PipeOp - auto-train untrained PipeOps during predict that have input type NULL", {
-  PipeOpTestTrainOnNULL = R6Class("PipeOpTestTrainOnNULL",
+  PipeOpTestAutotrain = R6Class("PipeOpTestAutotrain",
     inherit = PipeOp,
     public = list(
-      initialize = function(id = "test_train_on_null", param_set = ps()) {
+      # Add argument innum
+      initialize = function(innum = 1, id = "test_autotrain", param_set = ps()) {
         super$initialize(id = id, param_set = param_set,
-          input = data.table(name = "input", train = "NULL", predict = "*"),
+          input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "*"),
           output = data.table(name = "output", train = "*", predict = "*")
         )
       }),
     private = list(
       .train = function(inputs) {
         catf("Training %s", self$id)
-        self$state = inputs
+        self$state = list(length(inputs))
+        inputs[1L]
       },
       .predict = function(inputs) {
         catf("Predicting %s", self$id)
-        self$state = c(self$state, inputs)
+        inputs[1L]
       }
     )
   )
 
-  op = PipeOpTestTrainOnNULL$new()
+  # Normal input
+  op = PipeOpTestAutotrain$new()
+  predict_out = op$predict(list("test"))
+  expect_equal(op$state, list(1))
+  expect_equal(predict_out, list(output = "test"))
 
-  op$predict(list("test"))
+  # single Multiplicity input
+  op$state = NULL  # reset PipeOp
+  predict_out = op$predict(list(Multiplicity("test", "test")))
+  expect_equal(op$state, Multiplicity(list(1), list(1)))
+  expect_equal(predict_out, list(output = Multiplicity("test", "test")))
+
+  # nested Multiplicity input
+  op$state = NULL  # reset PipeOp
+  predict_out = op$predict(list(Multiplicity("test", Multiplicity("test", "test"))))
+  expect_equal(op$state, Multiplicity(list(1), Multiplicity(list(1), list(1))))
+  expect_equal(predict_out, list(output = Multiplicity("test", Multiplicity("test", "test"))))
+
+  # Same tests with pseudo-Multiplicity-aware PipeOp (having "[NULL]" as input type)
+
+  # Tests with PipeOp that has multiple input channel
+  op = PipeOpTestAutotrain$new(innum = 2)
+
+  # Normal input
+  predict_out = op$predict(list("test", "test"))
+  expect_equal(op$state, list(2))
+  expect_equal(predict_out, list(output = c("test")))
+
+  # single Multiplicity input
+  op$state = NULL  # reset PipeOp
+  predict_out = op$predict(list(Multiplicity(list("test", "test"), list("test", "test"))))
+  expect_equal(op$state, Multiplicity(list(1), list(1)))
+  expect_equal(predict_out, list(output = Multiplicity("test", "test")))
+
+  # nested Multiplicity input
+  op$state = NULL  # reset PipeOp
+  predict_out = op$predict(list(Multiplicity("test", Multiplicity("test", "test"))))
+  expect_equal(op$state, Multiplicity(list(1), Multiplicity(list(1), list(1))))
+  expect_equal(predict_out, list(output = Multiplicity("test", Multiplicity("test", "test"))))
 
 })
