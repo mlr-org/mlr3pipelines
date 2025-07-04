@@ -165,6 +165,7 @@ PipeOpInfo = R6Class("PipeOpInfo",
 mlr_pipeops$add("info", PipeOpInfo)
 
 poinfo_default = po("info")
+poinfo_default_clone = poinfo_default$clone(deep = TRUE)
 
 # Default
 poinfo_default = po("info")
@@ -244,8 +245,6 @@ prediction_new$score()
 resultat_prediction = poinfo_default$train(list(prediction))
 
 resultat_prediction_new = poinfo_default$train(list(prediction_new))
-
-
 
 
 # Multiplicity Object - OVR
