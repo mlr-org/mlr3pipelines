@@ -2,13 +2,65 @@ library("testthat")
 
 context("PipeOpInfo") # deprecated in 3rd edition
 
+source("~/01_Universität/06_Hiwi_SLDS/mlr3pipelines/R/PipeOpInfo.R")
+source("~/01_Universität/06_Hiwi_SLDS/mlr3pipelines/inst/testthat/helper_functions.R")
+source("~/01_Universität/06_Hiwi_SLDS/mlr3pipelines/inst/testthat/helper_test_pipeops.R")
+
 # here we check whether the PipeOpInfo po inherits from PipeOp
+# this actully does not work rn --> check
 test_that("basic properties", {
   po = PipeOpInfo$new("info")
-  expect_pipeop(po)
+  expect_pipeop(po) # redundant?
   browser()
   expect_pipeop_class(PipeOpInfo, list(id = "info"))
 })
+
+
+# loop form with lapply
+test_that("output behavior is appropriate", {
+  # Creation of Prediction Object
+  lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
+  mtcars_new = subset(mtcars[sample(nrow(mtcars), size = 10), ], select = -mpg)
+  prediction = lrn_rpart$predict_newdata(mtcars)
+  prediction_new = lrn_rpart$predict_newdata(mtcars_new)
+  # Actual Test
+  inputs = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
+  lapply(inputs, function(inputs) {
+    mapply(function(output, expect_func) {
+      po = PipeOpInfo$new(id = "info", log_target = output)
+      expect_func(invisible(po$train(list(inputs)))) # wrap invisible around it?
+      expect_func(invisible(po$predict(list(inputs))))},
+      output = c("lgr::mlr3/mlr3pipelines::info", "cat", "warning", "message", "none"),
+      expect_func = list(expect_output, expect_output, expect_warning, expect_message, expect_silent)
+    )
+  })
+})
+
+# Test necessary?
+test_that("check, if collect_multiplicity works", {
+  # Prepare Multiplicity Object
+  po_prepare = po("ovrsplit")
+  OVR = po_prepare$train(list(tsk("iris")))
+  mapply(function(output, expect_func) {
+    browser()
+    po = PipeOpInfo$new(id = "info", collect_multiplicity = TRUE, printer = list(Multiplicity = function(x) lapply(x, FUN = function(y) {print(list(task = y, data = y$data()[, 1:min(10, ncol(y$data()))]), topn = 5)})), log_target = output)
+    expect_silent(expect_func(po$train(OVR)))   # check silent with Martin
+    expect_silent(expect_func(po$predict(OVR)))},
+    output = c("lgr::mlr3/mlr3pipelines::info", "cat", "warning", "message", "none"),
+    expect_func = list(expect_output, expect_output, expect_warning, expect_message, expect_silent)
+  )
+})
+
+
+test_that("malformed log_target handled accordingly", {
+  malformed_log_target = c("malformed", "::", "::::::", "log::", "log::log_level", "log::log_level::", "log::log_level::message::", "::log")
+  lapply(malformed_log_target, function(x) expect_error(PipeOpInfo$new("info", log_target = x)))
+})
+
+
+
+
+
 
 
 # Structure of the test
@@ -43,44 +95,4 @@ mapply(function(output, func_list) {
 }})
 
 
-# loop form with lapply
-test_that("output behavior is appropriate", {
-  # Creation of Prediction Object
-  lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
-  mtcars_new = subset(mtcars[sample(nrow(mtcars), size = 10), ], select = -mpg)
-  prediction = lrn_rpart$predict_newdata(mtcars)
-  prediction_new = lrn_rpart$predict_newdata(mtcars_new)
-  # Actual Test
-  inputs = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
-  lapply(inputs, function(inputs) {
-    mapply(function(output, func_list) {
-      po = PipeOpInfo$new(id = "info", log_target = output)
-      func_list(po$train(list(inputs)))
-      func_list(po$predict(list(inputs)))},
-      output = c("cat", "warning", "message", "none"),
-      func_list = list(expect_output, expect_warning, expect_message, expect_silent)
-    )
-  })
-})
-
-# Test not necessary?
-test_that("collect_multiplicity works", {
-  # Prepare Multiplicity Object
-  po_prepare = po("ovrsplit")
-  OVR = po_prepare$train(list(tsk("iris")))
-  mapply(function(output, func_list) {
-    po = PipeOpInfo$new(id = "info", collect_multiplicity = TRUE, printer = list(Multiplicity = function(x) lapply(x, FUN = function(y) {print(list(task = y, data = y$data()[, 1:min(10, ncol(y$data()))]), topn = 5)})), log_target = output)
-    func_list(po$train(OVR))
-    func_list(po$predict(OVR))},
-    output = c("cat", "warning", "message", "none"),
-    func_list = list(expect_output, expect_warning, expect_message, expect_silent)
-  )
-})
-
-
-test_that("malformed log_target handled accordingly", {
-  malformed_log_target = c("malformed", "::", "::::::", "log::", "log::log_level", "log::log_level::", "log::log_level::message::")
-  lapply(malformed_log_target,
-    function(x) expect_error(PipeOpInfo$new("info", log_target = x)))
-})
 
