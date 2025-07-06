@@ -227,10 +227,9 @@ resultat = poinfo_wrong$train(list(tsk("iris")))
 
 
 # Prediction - Objekt
-tsk_mtcars = tsk("mtcars")
-lrn_rpart = lrn("regr.rpart")
-lrn_rpart$train(tsk_mtcars)
-lrn_rpart$model
+
+lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
+
 mtcars_new = data.table(cyl = c(5, 6, 3), disp = c(100, 120, 140),
                         hp = c(100, 150, 200), drat = c(4, 3.9, 5.3), wt = c(3.8, 4.1, 4.3),
                         qsec = c(18, 19.5, 20), vs = c(1, 0, 1), am = c(1, 1, 0),

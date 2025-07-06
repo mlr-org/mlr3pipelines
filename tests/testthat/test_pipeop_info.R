@@ -11,8 +11,7 @@ test_that("basic properties", {
 })
 
 
-# Works with Task as input
-# expect_output
+# Structure of the test
 test_that("output behavior is appropriate", {
   po_cat = PipeOpInfo$new(id = "info", log_target = "cat")
   expect_output(invisible(poinfo_cat$train(list(tsk("iris"))))) # expect output quite generic - is there a way to check cat() more specifically,
@@ -29,9 +28,8 @@ test_that("output behavior is appropriate", {
   expect_silent(po_none$predict(list(tsk("iris"))))
 }
 )
-# could be condensed into a loop
-# formulate the same for $predict?
 
+# Looped Versions
 # loop form with for
 test_that("output behavior is appropriate", {
 for (input in c(tsk("iris"), prediction)) {
@@ -47,7 +45,13 @@ mapply(function(output, func_list) {
 
 # loop form with lapply
 test_that("output behavior is appropriate", {
-  inputs = c(tsk("iris"), prediction, prediction_new, NULL, "default_string")
+  # Creation of Prediction Object
+  lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
+  mtcars_new = subset(mtcars[sample(nrow(mtcars), size = 10), ], select = -mpg)
+  prediction = lrn_rpart$predict_newdata(mtcars)
+  prediction_new = lrn_rpart$predict_newdata(mtcars_new)
+  # Actual Test
+  inputs = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
   lapply(inputs, function(inputs) {
     mapply(function(output, func_list) {
       po = PipeOpInfo$new(id = "info", log_target = output)
@@ -61,11 +65,11 @@ test_that("output behavior is appropriate", {
 
 # Test not necessary?
 test_that("collect_multiplicity works", {
+  # Prepare Multiplicity Object
   po_prepare = po("ovrsplit")
   OVR = po_prepare$train(list(tsk("iris")))
   mapply(function(output, func_list) {
-    po = PipeOpInfo$new(id = "info", collect_multiplicity = TRUE,
-                        printer = list(Multiplicity = function(x) lapply(x, FUN = function(y) {print(list(task = y, data = y$data()[, 1:min(10, ncol(y$data()))]), topn = 5)})), log_target = output)
+    po = PipeOpInfo$new(id = "info", collect_multiplicity = TRUE, printer = list(Multiplicity = function(x) lapply(x, FUN = function(y) {print(list(task = y, data = y$data()[, 1:min(10, ncol(y$data()))]), topn = 5)})), log_target = output)
     func_list(po$train(OVR))
     func_list(po$predict(OVR))},
     output = c("cat", "warning", "message", "none"),
@@ -74,6 +78,9 @@ test_that("collect_multiplicity works", {
 })
 
 
-test_that("wrong log_target handled accordingly", {
+test_that("malformed log_target handled accordingly", {
+  malformed_log_target = c("malformed", "::", "::::::", "log::", "log::log_level", "log::log_level::", "log::log_level::message::")
+  lapply(malformed_log_target,
+    function(x) expect_error(PipeOpInfo$new("info", log_target = x)))
+})
 
-}
