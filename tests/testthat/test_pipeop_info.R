@@ -32,28 +32,48 @@ test_that("output behavior is appropriate", {
 # could be condensed into a loop
 # formulate the same for $predict?
 
-
-for (i in c("cat", "warning", "message", "none")) {
-
-}
+# loop form with for
 test_that("output behavior is appropriate", {
 for (input in c(tsk("iris"), prediction)) {
 mapply(function(output, func_list) {
   po = PipeOpInfo$new(id = "info", log_target = output)
-  func_list(po$train(list(input)))},
+  func_list(po$train(list(inputs)))
+  func_list(po$predict(list(inputs)))},
   output = c("cat", "warning", "message", "none"),
   func_list = list(expect_output, expect_warning, expect_message, expect_silent)
 )
 }})
 
+
+# loop form with lapply
 test_that("output behavior is appropriate", {
-  inputs = c(tsk("iris"), prediction)
+  inputs = c(tsk("iris"), prediction, prediction_new, NULL, "default_string")
   lapply(inputs, function(inputs) {
     mapply(function(output, func_list) {
       po = PipeOpInfo$new(id = "info", log_target = output)
-      func_list(po$train(list(inputs)))},
+      func_list(po$train(list(inputs)))
+      func_list(po$predict(list(inputs)))},
       output = c("cat", "warning", "message", "none"),
       func_list = list(expect_output, expect_warning, expect_message, expect_silent)
     )
   })
 })
+
+# Test not necessary?
+test_that("collect_multiplicity works", {
+  po_prepare = po("ovrsplit")
+  OVR = po_prepare$train(list(tsk("iris")))
+  mapply(function(output, func_list) {
+    po = PipeOpInfo$new(id = "info", collect_multiplicity = TRUE,
+                        printer = list(Multiplicity = function(x) lapply(x, FUN = function(y) {print(list(task = y, data = y$data()[, 1:min(10, ncol(y$data()))]), topn = 5)})), log_target = output)
+    func_list(po$train(OVR))
+    func_list(po$predict(OVR))},
+    output = c("cat", "warning", "message", "none"),
+    func_list = list(expect_output, expect_warning, expect_message, expect_silent)
+  )
+})
+
+
+test_that("wrong log_target handled accordingly", {
+
+}
