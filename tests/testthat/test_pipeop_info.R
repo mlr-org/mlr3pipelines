@@ -1,7 +1,5 @@
 library("testthat")
 
-context("PipeOpInfo") # deprecated in 3rd edition
-
 # here we check whether the PipeOpInfo po inherits from PipeOp
 # this actully does not work rn --> check
 test_that("basic properties", {
@@ -25,9 +23,8 @@ test_that("output behavior is appropriate", {
   # mapply auch durch for-Schleife ersetzen - Länge von output und expect_func ist identisch ==> als Iteration verwenden
   lapply(inputs, function(inputs) {
     mapply(function(output, expect_func) {
+      browser()
       po = PipeOpInfo$new(id = "info", log_target = output)
-      result = expect_func()
-      expect_identical(result, input[]) #result === output; input[] === input
       expect_func(invisible(po$train(list(inputs)))) # wrap invisible around it?
       expect_func(invisible(po$predict(list(inputs))))
     },
