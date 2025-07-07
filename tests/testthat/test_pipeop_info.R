@@ -2,9 +2,9 @@ library("testthat")
 
 context("PipeOpInfo") # deprecated in 3rd edition
 
-source("~/01_Universität/06_Hiwi_SLDS/mlr3pipelines/R/PipeOpInfo.R")
-source("~/01_Universität/06_Hiwi_SLDS/mlr3pipelines/inst/testthat/helper_functions.R")
-source("~/01_Universität/06_Hiwi_SLDS/mlr3pipelines/inst/testthat/helper_test_pipeops.R")
+source("R/PipeOpInfo.R")
+source("inst/testthat/helper_functions.R")
+#source("~/01_Universität/06_Hiwi_SLDS/mlr3pipelines/inst/testthat/helper_test_pipeops.R")
 
 # here we check whether the PipeOpInfo po inherits from PipeOp
 # this actully does not work rn --> check
@@ -25,16 +25,25 @@ test_that("output behavior is appropriate", {
   prediction_new = lrn_rpart$predict_newdata(mtcars_new)
   # Actual Test
   inputs = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
+  # for Schleife statt lapply verwenden -- einfacher zu debuggen etc.
+  # mapply auch durch for-Schleife ersetzen - Länge von output und expect_func ist identisch ==> als Iteration verwenden
   lapply(inputs, function(inputs) {
     mapply(function(output, expect_func) {
       po = PipeOpInfo$new(id = "info", log_target = output)
+      result = expect_func()
+      expect_identical(result, input[]) #result === output; input[] === input
       expect_func(invisible(po$train(list(inputs)))) # wrap invisible around it?
-      expect_func(invisible(po$predict(list(inputs))))},
-      output = c("lgr::mlr3/mlr3pipelines::info", "cat", "warning", "message", "none"),
-      expect_func = list(expect_output, expect_output, expect_warning, expect_message, expect_silent)
+      expect_func(invisible(po$predict(list(inputs))))
+    },
+    output = c("lgr::mlr3/mlr3pipelines::info", "cat", "warning", "message", "none"),
+    expect_func = list(expect_output, expect_output, expect_warning, expect_message, expect_silent)
     )
   })
 })
+
+# Notiz @myself: mapply/lapply geben output zurück; für Transformation verwenden; in solchen Fällen lieber for
+# mlr3misc: map Funktionen existieren (walk-Funktion); lapply mit Ergebnis weggeschmissen; walk kommuniziert an andere Codeleser was ich genau will
+
 
 # Test necessary?
 test_that("check, if collect_multiplicity works", {
@@ -43,7 +52,7 @@ test_that("check, if collect_multiplicity works", {
   OVR = po_prepare$train(list(tsk("iris")))
   mapply(function(output, expect_func) {
     browser()
-    po = PipeOpInfo$new(id = "info", collect_multiplicity = TRUE, printer = list(Multiplicity = function(x) lapply(x, FUN = function(y) {print(list(task = y, data = y$data()[, 1:min(10, ncol(y$data()))]), topn = 5)})), log_target = output)
+    po = PipeOpInfo$new(id = "info", collect_multiplicity = FALSE, printer = list(Multiplicity = function(x) lapply(x, FUN = function(y) {print(list(task = y, data = y$data()[, 1:min(10, ncol(y$data()))]), topn = 5)})), log_target = output)
     expect_silent(expect_func(po$train(OVR)))   # check silent with Martin
     expect_silent(expect_func(po$predict(OVR)))},
     output = c("lgr::mlr3/mlr3pipelines::info", "cat", "warning", "message", "none"),
@@ -84,15 +93,15 @@ test_that("output behavior is appropriate", {
 # Looped Versions
 # loop form with for
 test_that("output behavior is appropriate", {
-for (input in c(tsk("iris"), prediction)) {
-mapply(function(output, func_list) {
-  po = PipeOpInfo$new(id = "info", log_target = output)
-  func_list(po$train(list(inputs)))
-  func_list(po$predict(list(inputs)))},
-  output = c("cat", "warning", "message", "none"),
-  func_list = list(expect_output, expect_warning, expect_message, expect_silent)
-)
-}})
+  for (input in c(tsk("iris"), prediction)) {
+    mapply(function(output, func_list) {
+      po = PipeOpInfo$new(id = "info", log_target = output)
+      func_list(po$train(list(inputs)))
+      func_list(po$predict(list(inputs)))},
+      output = c("cat", "warning", "message", "none"),
+      func_list = list(expect_output, expect_warning, expect_message, expect_silent)
+    )
+  }})
 
 
 
