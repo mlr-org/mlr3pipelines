@@ -2,10 +2,6 @@ library("testthat")
 
 context("PipeOpInfo") # deprecated in 3rd edition
 
-source("R/PipeOpInfo.R")
-source("inst/testthat/helper_functions.R")
-#source("~/01_Universität/06_Hiwi_SLDS/mlr3pipelines/inst/testthat/helper_test_pipeops.R")
-
 # here we check whether the PipeOpInfo po inherits from PipeOp
 # this actully does not work rn --> check
 test_that("basic properties", {
