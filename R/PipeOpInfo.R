@@ -76,7 +76,6 @@ PipeOpInfo = R6Class("PipeOpInfo",
   public = list(
     initialize = function(id = "info", printer = NULL, collect_multiplicity = FALSE, log_target = "lgr::mlr3/mlr3pipelines::info", param_vals = list()) {
       assertString(log_target, pattern = "^(cat|none|warning|message|lgr::[^:]+::[^:]+)$")
-      #browser()
       inouttype = "*"
       if (collect_multiplicity) {
         inouttype = sprintf("[%s]", inouttype)
@@ -87,13 +86,13 @@ PipeOpInfo = R6Class("PipeOpInfo",
       ) # which tag is appropriate
       original_printer = list(
         Task = crate(function(x) {
-          print(list(task = x, data = x$data()[, 1:min(10, ncol(x$data()))]), topn = 5)
+          list(task = x, data = x$data()[, 1:min(10, ncol(x$data()))])
         }),
         Prediction = crate(function(x) {
-          print(tryCatch(list(prediction = x, score = x$score()), error = function(e) {list(prediction = x)}), topn = 5)
+          tryCatch(list(prediction = x, score = x$score()), error = function(e) {list(prediction = x)})
         }),
         `NULL` = crate(function(x) "NULL"),
-        default = crate(function(x) print(x))
+        default = crate(function(x) x)
       )
       private$.printer = insert_named(original_printer, printer)
       private$.log_target = log_target
@@ -126,22 +125,21 @@ PipeOpInfo = R6Class("PipeOpInfo",
     }
     specific_printer = private$.printer[[leftmost_class]]
     log_target_split = strsplit(private$.log_target, "::")[[1]]
-    stage_string = sprintf("Object passing through PipeOp Infoprint - %s", stage) #Infoprint stattdessen self$id mit %s
-     #capture.output({cat(stage_string, "\n\n"); specific_printer(inputs[[1]])}), collapse = "\n") -- als Variable deklarieren
+    stage_string = sprintf("Object passing through PipeOp %s - %s", self$id, stage) #Infoprint stattdessen self$id mit %s
+    print_string = {
+        invisible(cat(stage_string, "\n\n"))   #statt invisible capture output verwenden
+        specific_printer(inputs[[1]])
+      }
     if (log_target_split[[1]] == "lgr") {
-      logger = get_logger(log_target_split[[2]])
+      logger = lgr::get_logger(log_target_split[[2]])
       log_level = log_target_split[[3]]
-      logger$log(log_level, msg = capture.output({cat(stage_string, "\n\n"); specific_printer(inputs[[1]])}))
-      } else if (private$.log_target == "cat") {  # private$.log_target == "cat"
-      cat(stage_string, "\n\n")
-      specific_printer(inputs[[1]])
-      } else if (private$.log_target == "message") {
-        message(paste(capture.output({
-          cat(stage_string, "\n\n")
-          specific_printer(inputs[[1]])
-        }), collapse = "\n"))
+      logger$log(log_level, msg = capture.output(print_string))
+    } else if (private$.log_target == "cat") {
+      print_string
+    } else if (private$.log_target == "message") {
+        message(paste(capture.output(print_string, collapse = "\n")))
       } else if (private$.log_target == "warning") {
-        warning(paste(capture.output({cat(stage_string, "\n\n"); specific_printer(inputs[[1]])}), collapse = "\n"))
+        warning(paste(capture.output(print_string, collapse = "\n")))
       } else if (private$.log_target == "none") {
       } else {
         stopf("Invalid log_target '%s'.", log_target)
@@ -161,10 +159,5 @@ PipeOpInfo = R6Class("PipeOpInfo",
 
 mlr_pipeops$add("info", PipeOpInfo)
 
-poinfo = PipeOpInfo$new(id = "info")
-poinfo$train(list(tsk("iris")))
-poinfo$state
-poscale = PipeOpScale$new(id = "scale")
-poscale$train(list(tsk("iris")))
-poscale$state <- 1
-
+po = PipeOpInfo$new(id = "info")
+po$train(list(tsk("iris")))
