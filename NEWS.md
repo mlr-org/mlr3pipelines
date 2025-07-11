@@ -1,4 +1,5 @@
 # mlr3pipelines 0.8.0-9000
+* Fixed a grammatical error in `PipeOp`'s error message wrapper: now correctly says "This happened *in* ...".
 * Added `empty_level_control` argument to `PipeOpImpute` allowing control over edge cases for `factor`/`ordered` columns.
 * Set new construction argument `empty_level_control` to `"param"` for `PipeOpImputeOOR` and to `"always"` for `PipeOpImputeConstant`.
 * Removed initialization of `PipeOpImputeConstant`'s `constant` hyperparameter since it was incompatible with other defaults and would lead to not recommended usage (creating an empty level).

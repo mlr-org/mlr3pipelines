@@ -14,7 +14,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpVreat$new(id = "vtreat", param_vals = list())
+#' PipeOpVtreat$new(id = "vtreat", param_vals = list())
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
