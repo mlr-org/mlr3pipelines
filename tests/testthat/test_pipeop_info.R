@@ -1,5 +1,5 @@
-# here we check whether the PipeOpInfo po inherits from PipeOp
-# this actully does not work rn --> check
+context("PipeOpInfo")
+
 test_that("basic properties", {
   po = PipeOpInfo$new("info")
   expect_pipeop(po) # redundant?

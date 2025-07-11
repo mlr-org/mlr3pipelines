@@ -112,7 +112,6 @@ PipeOpInfo = R6Class("PipeOpInfo",
     .printer = NULL,
     .log_target = NULL,
     .output = function(inputs, stage) {
-     #browser()
     input_class = class(inputs[[1]])
     leftmost_class =
       if (any(input_class %in% names(private$.printer))) {
@@ -126,28 +125,32 @@ PipeOpInfo = R6Class("PipeOpInfo",
     specific_printer = private$.printer[[leftmost_class]]
     log_target_split = strsplit(private$.log_target, "::")[[1]]
     stage_string = sprintf("Object passing through PipeOp %s - %s", self$id, stage) #Infoprint stattdessen self$id mit %s
-    print_string = {
-        invisible(cat(stage_string, "\n\n"))   #statt invisible capture output verwenden
+    print_string = capture.output({
+        cat(stage_string, "\n\n")
         specific_printer(inputs[[1]])
-      }
+      })
     if (log_target_split[[1]] == "lgr") {
-      logger = lgr::get_logger(log_target_split[[2]])
+      logger = get_logger(log_target_split[[2]])
       log_level = log_target_split[[3]]
-      logger$log(log_level, msg = capture.output(print_string))
+      logger$log(log_level, msg = print_string)
     } else if (private$.log_target == "cat") {
-      print_string
+      print({
+      cat(stage_string, "\n\n")
+      specific_printer(inputs[[1]])
+      })
     } else if (private$.log_target == "message") {
-        message(paste(capture.output(print_string, collapse = "\n")))
+        message(paste(print_string, collapse = "\n"))
       } else if (private$.log_target == "warning") {
-        warning(paste(capture.output(print_string, collapse = "\n")))
+        warning(paste(print_string, collapse = "\n"))
       } else if (private$.log_target == "none") {
       } else {
         stopf("Invalid log_target '%s'.", log_target)
       }
     },
     .train = function(inputs, stage = "Training") {
-      private$.output(inputs, stage)
       self$state = list()
+      #browser()
+      private$.output(inputs, stage)+
       inputs
     },
     .predict = function(inputs, stage = "Prediction") {
@@ -158,6 +161,3 @@ PipeOpInfo = R6Class("PipeOpInfo",
 )
 
 mlr_pipeops$add("info", PipeOpInfo)
-
-po = PipeOpInfo$new(id = "info")
-po$train(list(tsk("iris")))
