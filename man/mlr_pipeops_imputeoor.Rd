@@ -17,9 +17,13 @@ using \eqn{min(x) - offset - multiplier * diff(range(x))} or
 This type of imputation is especially sensible in the context of tree-based methods, see also
 Ding & Simonoff (2010).
 
-It may occur that a \code{factor} or \code{ordered} feature contains missing values during prediction, but not during training.
-To control how the \code{PipeOp} should handle this, use the \code{create_empty_level} hyperparameter inherited from
-\code{\link{PipeOpImpute}}.\cr
+ expect input  to have the same \code{factor} (or \code{ordered}) levels during
+training as well as prediction. This \code{PipeOp} modifies the levels of \code{factor} and \code{ordered} features,
+and since it may occur that a \code{factor} or \code{ordered} feature contains missing values only during prediction, but not
+during training, the output \code{Task} could also have different levels during the two stages.
+
+To avoid problems with the \code{Learner}s' expectation, controlling the \code{PipeOp}s' handling of this edge-case is necessary.
+For this, use the \code{create_empty_level} hyperparameter inherited from \code{\link{PipeOpImpute}}.\cr
 If \code{create_empty_level} is set to \code{TRUE}, then an unseen level \code{".MISSING"} is added to the feature during
 training and missing values are imputed as \code{".MISSING"} during prediction.
 However, empty factor levels can be a problem for many \code{\link[mlr3:Learner]{Learners}}, so it is recommended to use
@@ -30,6 +34,8 @@ If \code{create_empty_level} is set to \code{FALSE}, then no empty level is intr
 have missing values only during prediction will \emph{not} be imputed. This is why it may still be necessary to use
 \code{\link[=mlr_pipeops_imputesample]{po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))}}
 (or another imputation method) after this imputation method.
+Note that setting \code{create_empty_level} to \code{FALSE} is the same as setting it to \code{TRUE} and using \code{\link{PipeOpFixFactors}}
+after this \code{PipeOp}.
 }
 \section{Construction}{
 
@@ -109,7 +115,7 @@ new_task$data()
 
 # recommended use when missing values are expected during prediction on
 # factor columns that had no missing values during training
-gr = po("imputeoor", create_empty_level = TRUE) \%>>\%
+gr = po("imputeoor", create_empty_level = FALSE) \%>>\%
   po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))
 t1 = as_task_classif(data.frame(l = as.ordered(letters[1:3]), t = letters[1:3]), target = "t")
 t2 = as_task_classif(data.frame(l = as.ordered(c("a", NA, NA)), t = letters[1:3]), target = "t")

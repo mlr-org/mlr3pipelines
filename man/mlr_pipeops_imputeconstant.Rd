@@ -9,23 +9,6 @@
 }
 \description{
 Impute features by a constant value.
-
-It may occur that a \code{factor} or \code{ordered} feature contains missing values during prediction, but not during training.
-To control how the \code{PipeOp} should handle this, use the \code{create_empty_level} hyperparameter inherited from
-\code{\link{PipeOpImpute}}.\cr
-If \code{create_empty_level} is set to \code{TRUE} (and \code{check_levels} is \code{FALSE}), then the value of the hyperparameter
-\code{constant} is added as a new level to the feature during training, should it not already exist. Missing values are
-then imputed as that value during prediction.
-However, note that in this case \code{\link{PipeOpImputeOOR}} would be the preferred option, since it is designed to impute
-out-of-range values.
-Additionally, empty factor levels can be a problem for many \code{\link[mlr3:Learner]{Learners}}, so it is recommended to use
-\code{\link[=mlr_pipeops_fixfactors]{po("fixfactors")}} and
-\code{\link[=mlr_pipeops_imputesample]{po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))}}
-(or some other imputation method) after this imputation method.\cr
-If \code{create_empty_level} is set to \code{FALSE}, then no empty level is introduced during training, but columns that
-have missing values only during prediction will \emph{not} be imputed. This is why it may still be necessary to use
-\code{\link[=mlr_pipeops_imputesample]{po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))}}
-(or another imputation method) after this imputation method.
 }
 \section{Construction}{
 
@@ -61,20 +44,25 @@ The \verb{$state$model} contains the value of the \code{constant} parameter that
 The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, as well as:
 \itemize{
 \item \code{constant} :: \code{atomic(1)}\cr
-The constant value that should be used for the imputation, atomic vector of length \code{1}. The
-atomic mode must match the type of the features that will be selected by the \code{affect_columns}
-parameter and this will be checked during imputation. Initialized to \code{".MISSING"}.
+The constant value that should be used for the imputation, atomic vector of length \code{1}. The atomic mode must match
+the type of the features that will be selected by the \code{affect_columns} parameter and this will be checked during
+imputation. This is a required hyperparameter and needs to be set by the user.
 \item \code{check_levels} :: \code{logical(1)}\cr
-Should be checked whether the \code{constant} value is a valid level of factorial features (i.e., it
-already is a level)? Raises an error if unsuccessful. This check is only performed for factorial
-features (i.e., \code{factor}, \code{ordered}; skipped for \code{character}). Initialized to \code{TRUE}.
+Should be checked whether the \code{constant} value is a valid level of factorial features (i.e., it already is a
+level)? Raises an error if unsuccessful. This check is only performed for factorial features (i.e., \code{factor},
+\code{ordered}; skipped for \code{character}). Initialized to \code{TRUE}.\cr
+Note that empty factor levels can be a problem for many \code{\link[mlr3:Learner]{Learners}}. Thus, \code{\link{PipeOpImputeOOR}} is
+the preferred choice for creating new levels, since it is designed to impute out-of-range values and offers a more
+explicit control for handling potentially problematic behavior.
 }
 }
 
 \section{Internals}{
 
-Adds an explicit new level to \code{factor} and \code{ordered} features, but not to \code{character} features,
-if \code{check_levels} is \code{FALSE} and the level is not already present.
+The constructor is called with \code{empty_level_control} set to \code{"always"}, to allow the creation of a new empty level
+for \code{factor} and \code{ordered} (but not \code{character}) features during training, if \code{constant} is not an already existing
+level and \code{check_levels} is set to \code{FALSE}. This has no impact if \code{check_levels} is \code{TRUE}, since in that case an
+error would be raised before imputation.
 }
 
 \section{Fields}{
@@ -100,18 +88,6 @@ po = po("imputeconstant", param_vals = list(
 new_task = po$train(list(task = task))[[1]]
 new_task$missings()
 new_task$data(cols = "glucose")[[1]]
-
-# recommended use when missing values are expected during prediction on
-# factor columns that had no missing values during training
-gr = po("imputeconstant", create_empty_level = TRUE, constant = "a") \%>>\%
-  po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))
-
-t1 = as_task_classif(data.frame(l = as.ordered(letters[1:3]), t = letters[1:3]), target = "t")
-t2 = as_task_classif(data.frame(l = as.ordered(c("a", NA, NA)), t = letters[1:3]), target = "t")
-gr$train(t1)[[1]]$data()
-
-# missing values during prediction are sampled randomly
-gr$predict(t2)[[1]]$data()
 
 }
 \seealso{
