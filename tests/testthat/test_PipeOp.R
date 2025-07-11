@@ -220,7 +220,7 @@ test_that("PipeOp - auto-train untrained PipeOps during predict that have input 
   op = po("classifavg")
   task = tsk("iris")
   # Get a PredictionClassif object
-  learner = lrn("classif.rpart")
+  learner = lrn("classif.featureless")
   learner$train(task)
   predict_out = learner$predict(task)
   expect_no_error(op$predict(list(predict_out)))
