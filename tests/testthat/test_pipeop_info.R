@@ -7,7 +7,6 @@ test_that("basic properties", {
 })
 
 
-# loop form with lapply
 test_that("output behavior is appropriate", {
   # Creation of Prediction Object
   lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
@@ -28,8 +27,28 @@ test_that("output behavior is appropriate", {
 })
 
 
-# Notiz @myself: mapply/lapply geben output zurück; für Transformation verwenden; in solchen Fällen lieber for
-# mlr3misc: map Funktionen existieren (walk-Funktion); lapply mit Ergebnis weggeschmissen; walk kommuniziert an andere Codeleser was ich genau will
+#test_that("logger is addressed", {
+#  browser()
+#  logger = lgr::get_logger("mlr3/mlr3pipelines")
+#  logger_file = (tempfile(fileext = ".info", tmpdir = fs::path_temp()))
+#  logger$add_appender(lgr::AppenderFile$new(logger_file), name = "test_logger")
+
+  # Creation of Prediction Object
+#  lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
+#  mtcars_new = subset(mtcars[sample(nrow(mtcars), size = 10), ], select = -mpg)
+#  prediction = lrn_rpart$predict_newdata(mtcars)
+#  prediction_new = lrn_rpart$predict_newdata(mtcars_new)
+  # Actual Test
+#  poinfo = PipeOpInfo$new(id = "info")
+#  inputs = c(tsk("iris"), prediction, prediction_new, NULL, "default_string")
+#  for (j in inputs) {
+#      poinfo = PipeOpInfo$new(id = "info")
+#      poinfo$train(list(j))
+#      poinfo$predict(list(j))
+#    }
+#  logger$remove_appender("logfile")
+#})
+
 
 test_that("check whether input and output are equal", {
   # Creation of Prediction Object
@@ -48,11 +67,6 @@ test_that("check whether input and output are equal", {
     }
   }
 })
-
-test_that("regex test - placeholder name") {
-
-}
-
 
 test_that("malformed log_target handled accordingly", {
   malformed_log_target = c("malformed", "::", "::::::", "log::", "log::log_level", "log::log_level::", "log::log_level::message::", "::log")

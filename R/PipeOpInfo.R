@@ -112,6 +112,7 @@ PipeOpInfo = R6Class("PipeOpInfo",
     .printer = NULL,
     .log_target = NULL,
     .output = function(inputs, stage) {
+     # browser()
     input_class = class(inputs[[1]])
     leftmost_class =
       if (any(input_class %in% names(private$.printer))) {
@@ -130,14 +131,11 @@ PipeOpInfo = R6Class("PipeOpInfo",
         specific_printer(inputs[[1]])
       })
     if (log_target_split[[1]] == "lgr") {
-      logger = get_logger(log_target_split[[2]])
+      logger = lgr::get_logger(log_target_split[[2]])
       log_level = log_target_split[[3]]
       logger$log(log_level, msg = print_string)
     } else if (private$.log_target == "cat") {
-      print({
-      cat(stage_string, "\n\n")
-      specific_printer(inputs[[1]])
-      })
+        cat(paste(print_string, collapse = "\n"))
     } else if (private$.log_target == "message") {
         message(paste(print_string, collapse = "\n"))
       } else if (private$.log_target == "warning") {
@@ -150,7 +148,7 @@ PipeOpInfo = R6Class("PipeOpInfo",
     .train = function(inputs, stage = "Training") {
       self$state = list()
       #browser()
-      private$.output(inputs, stage)+
+      private$.output(inputs, stage)
       inputs
     },
     .predict = function(inputs, stage = "Prediction") {
