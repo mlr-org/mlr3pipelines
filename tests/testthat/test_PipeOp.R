@@ -200,15 +200,29 @@ test_that("PipeOp - auto-train untrained PipeOps during predict that have input 
 
   # nested Multiplicity input
   op$state = NULL  # reset PipeOp
-  predict_out = op$predict(list(Multiplicity("test", Multiplicity("test", "test")), Multiplicity("test", Multiplicity("test", "test"))))
+  predict_out = op$predict(
+    list(Multiplicity("test", Multiplicity("test", "test")), Multiplicity("test", Multiplicity("test", "test")))
+  )
   expect_equal(op$state, Multiplicity(list(2), Multiplicity(list(2), list(2))))
   expect_equal(predict_out, list(output = Multiplicity("test", Multiplicity("test", "test"))))
 
   # Simple test that pseudo-Multiplicity-aware PipeOp (having "[NULL]" as input type) works
+  op = PipeOpTestAutotrain$new(innum = 1)
   op$input$train = "[NULL]"
-  op$state = NULL  # reset PipeOp
-  predict_out = op$predict(list(Multiplicity("test", "test"), Multiplicity("test", "test")))
-  expect_equal(op$state, Multiplicity(list(2), list(2)))
-  expect_equal(predict_out, list)
+  op$input$predict = "[*]"
+  op$output$train = "[*]"
+  op$output$predict = "[*]"
+  predict_out = op$predict(list(Multiplicity("test", "test")))
+  expect_equal(op$state, list(1))
+  expect_equal(predict_out, list(output = Multiplicity("test", "test")))
+
+  # Test with real PipeOp: PipeOpClassifAvg
+  op = po("classifavg")
+  task = tsk("iris")
+  # Get a PredictionClassif object
+  learner = lrn("classif.rpart")
+  learner$train(task)
+  predict_out = learner$predict(task)
+  expect_no_error(op$predict(list(predict_out)))
 
 })
