@@ -279,6 +279,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
 
       # If the hyperparameter exists, we overwrite the private field here, and can simply check the private field after
       # this without having to check conditions on both the hyperparameter and the private field
+      pv = self$param_set$get_values(tags = "predict")
       if (!is.null(pv$create_empty_level)) {
         private$.create_empty_level = pv$create_empty_level
       }
