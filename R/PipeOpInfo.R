@@ -112,7 +112,6 @@ PipeOpInfo = R6Class("PipeOpInfo",
     .printer = NULL,
     .log_target = NULL,
     .output = function(inputs, stage) {
-     # browser()
     input_class = class(inputs[[1]])
     leftmost_class =
       if (any(input_class %in% names(private$.printer))) {

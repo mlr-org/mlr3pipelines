@@ -15,6 +15,52 @@ test_that("output behavior is appropriate", {
   prediction_new = lrn_rpart$predict_newdata(mtcars_new)
   # Actual Test
   inputs = c(tsk("iris"), prediction, prediction_new, NULL, "default_string")
+  output = c("lgr::mlr3/mlr3pipelines::info", "cat", "warning", "message", "none")
+  expect_func = list(expect_output, expect_output, expect_warning, expect_message, expect_silent)
+  for (j in inputs) {
+    for (i in seq_len(length(output))) {
+      poinfo = PipeOpInfo$new(id = "info", log_target = output[i])
+      expect_func[[i]](poinfo$train(list(j)))
+      expect_func[[i]](poinfo$predict(list(j)))
+    }
+  }
+})
+
+test_that("logger is addressed", {
+  logger = lgr::get_logger("mlr3/mlr3pipelines")
+  appender_buffer = lgr::AppenderBuffer$new()
+  logger$add_appender(appender_buffer, name = "appender")
+  # Creation of Prediction Object
+  lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
+  mtcars_new = subset(mtcars[sample(nrow(mtcars), size = 10), ], select = -mpg)
+  prediction = lrn_rpart$predict_newdata(mtcars)
+  prediction_new = lrn_rpart$predict_newdata(mtcars_new)
+  # Actual Test
+  poinfo = PipeOpInfo$new(id = "info")
+  inputs = c(tsk("iris"), prediction, prediction_new, NULL, "default_string")
+  browser()
+  for (j in inputs) {
+      poinfo = PipeOpInfo$new(id = "info")
+      logfile_prior = logger$appenders$appender$buffer_dt
+      poinfo$train(list(j))
+      logfile_posttrain = logger$appenders$appender$buffer_dt
+      expect_false(identical(data.table(), logfile_posttrain))
+      poinfo$predict(list(j))
+      logfile_postprediction = logger$appenders$appender$buffer_dt
+      expect_false(identical(logfile_posttrain, logfile_postprediction))
+      appender_buffer$flush()
+  }
+  logger$remove_appender(1)
+})
+
+test_that("pattern - check", {
+  # Creation of Prediction Object
+  lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
+  mtcars_new = subset(mtcars[sample(nrow(mtcars), size = 10), ], select = -mpg)
+  prediction = lrn_rpart$predict_newdata(mtcars)
+  prediction_new = lrn_rpart$predict_newdata(mtcars_new)
+  # Actual Test
+  inputs = c(tsk("iris"), prediction, prediction_new, NULL, "default_string")
   output = c("cat", "warning", "message", "none")
   expect_func = list(expect_output, expect_warning, expect_message, expect_silent)
   for (j in inputs) {
@@ -25,30 +71,6 @@ test_that("output behavior is appropriate", {
     }
   }
 })
-
-
-#test_that("logger is addressed", {
-#  browser()
-#  logger = lgr::get_logger("mlr3/mlr3pipelines")
-#  logger_file = (tempfile(fileext = ".info", tmpdir = fs::path_temp()))
-#  logger$add_appender(lgr::AppenderFile$new(logger_file), name = "test_logger")
-
-  # Creation of Prediction Object
-#  lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
-#  mtcars_new = subset(mtcars[sample(nrow(mtcars), size = 10), ], select = -mpg)
-#  prediction = lrn_rpart$predict_newdata(mtcars)
-#  prediction_new = lrn_rpart$predict_newdata(mtcars_new)
-  # Actual Test
-#  poinfo = PipeOpInfo$new(id = "info")
-#  inputs = c(tsk("iris"), prediction, prediction_new, NULL, "default_string")
-#  for (j in inputs) {
-#      poinfo = PipeOpInfo$new(id = "info")
-#      poinfo$train(list(j))
-#      poinfo$predict(list(j))
-#    }
-#  logger$remove_appender("logfile")
-#})
-
 
 test_that("check whether input and output are equal", {
   # Creation of Prediction Object
