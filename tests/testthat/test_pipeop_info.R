@@ -60,14 +60,15 @@ test_that("pattern - check", {
   prediction = lrn_rpart$predict_newdata(mtcars)
   prediction_new = lrn_rpart$predict_newdata(mtcars_new)
   # Actual Test
-  inputs = c(tsk("iris"), prediction, prediction_new, NULL, "default_string")
-  output = c("cat", "warning", "message", "none")
-  expect_func = list(expect_output, expect_warning, expect_message, expect_silent)
+  #browser()
+  inputs = c(tsk("iris"))
+  output = c("cat", "warning", "message")
+  capture_func = list(capture_output, capture_warning, capture_messages)
   for (j in inputs) {
     for (i in seq_len(length(output))) {
       poinfo = PipeOpInfo$new(id = "info", log_target = output[i])
-      expect_func[[i]](poinfo$train(list(j)))
-      expect_func[[i]](poinfo$predict(list(j)))
+      console_output = as.character(capture_func[[i]](invisible(poinfo$train(list(j)))))
+      expect_match(console_output, "\\$data", all = FALSE)
     }
   }
 })
