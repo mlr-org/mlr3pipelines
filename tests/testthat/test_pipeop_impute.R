@@ -46,7 +46,7 @@ test_that("PipeOpImpute", {
           po("select", id = "num_select", selector = selector_type(c("integer", "numeric"))) %>>% numimputer,
           po("select", id = "fct_select", selector = selector_type(c("factor", "ordered"))) %>>% fctimputer,
           po("select", id = "lgl_select", selector = selector_type("logical")) %>>% po("imputesample", id = "lgl_sample"),
-          po("select", id = "chr_select", selector = selector_type("character")) %>>% po("imputeconstant", id = "chr_const"),
+          po("select", id = "chr_select", selector = selector_type("character")) %>>% po("imputeconstant", id = "chr_const", constant = ".MISSING"),
           po("select", id = "dummyselector", selector = dummyselector) %>>% po("missind", type = "logical", affect_columns = NULL,
             which = switch(self$param_set$values$add_dummy, none = "all", self$param_set$values$add_dummy))
         ) %>>% if (is.null(self$param_set$values$innum)) po("featureunion") else po("featureunion", innum = self$param_set$values$innum)
@@ -331,8 +331,12 @@ test_that("More tests for PipeOpImputeConstant", {
   dat[1L, ] = NA
   task = TaskRegr$new("task", backend = dat, target = "y")
 
-  po = PipeOpImputeConstant$new(param_vals = list(constant = "test"))
+  po = PipeOpImputeConstant$new()
 
+  expect_error(po$train(list(task)), "Missing required parameters: constant")
+
+  po$param_set$set_values(constant = "test")
+  # wrong type
   expect_error(po$train(list(task)))
 
   po$param_set$values$affect_columns = selector_type("character")
@@ -437,7 +441,7 @@ test_that("imputeoor keeps missing level even if no missing data in predict task
 })
 
 
-test_that("Parameter 'create_empty_level' in POImputeOOR and POImputeConstant", {
+test_that("'empty_level_control' in POImputeOOR and POImputeConstant", {
 
   # Construct variables to be reused
   # We only make sure that all factors have the same levels during train and predict for easier testing. In general,
@@ -517,7 +521,7 @@ test_that("Parameter 'create_empty_level' in POImputeOOR and POImputeConstant", 
   expect_identical(predict_out$data(cols = cnames), dt_pred_out)
 
 
-  # PipeOpImputeConstant with default setting
+  # PipeOpImputeConstant
   # Add logical and POSIXct features
   task_train$cbind(data.table(
     lgl = c(TRUE, FALSE, NA),
@@ -528,31 +532,10 @@ test_that("Parameter 'create_empty_level' in POImputeOOR and POImputeConstant", 
     pxc = as.POSIXct(c("2025/01/01", "2025/02/02", NA))
   ))
 
-  # Types: factor, ordered
-  # With parameter set to default value, other types should already get tested in other tests
-  op = po("imputeconstant", create_empty_level = FALSE, affect_columns = selector_type(c("factor", "ordered")), check_levels = FALSE)
-
-  train_out = op$train(list(task_train))[[1L]]
-  dt_train_out = data.table(
-    target = factor(c("a", "b", "a")),
-    fct1 = fct_comp, fct2 = fct_missing, fct3 = fct_comp, fct4 = fct_missing,
-    ord1 = ord_comp, ord2 = ord_missing, ord3 = ord_comp, ord4 = ord_missing
-  )
-  expect_identical(train_out$data(cols = names(dt_train_out)), dt_train_out)
-
-  predict_out = op$predict(list(task_pred))[[1L]]
-  dt_pred_out = data.table(
-    target = factor(c("a", "b", "a")),
-    fct1 = fct_na, fct2 = fct_comp_missing, fct3 = fct_comp, fct4 = fct_missing,
-    ord1 = ord_na, ord2 = ord_comp_missing, ord3 = ord_comp, ord4 = ord_missing
-  )
-  expect_identical(predict_out$data(cols = names(dt_pred_out)), dt_pred_out)
-
-
-  # PipeOpImputeConstant with parameter set
-  # Also test that other feature types are still treated as we would expect (the as if create_empty_level were FALSE)
+  # Also test that other types still behave as expected
   # Types: factor, ordered, character
-  op$param_set$set_values(create_empty_level = TRUE, affect_columns = selector_type(c("factor", "ordered", "character")))
+  op = po("imputeconstant", affect_columns = selector_type(c("factor", "ordered", "character")),
+          constant = ".MISSING", check_levels = FALSE)
 
   train_out = op$train(list(task_train))[[1L]]
   dt_train_out = data.table(
