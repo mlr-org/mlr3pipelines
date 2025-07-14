@@ -2,10 +2,27 @@ context("PipeOpInfo")
 
 test_that("basic properties", {
   po = PipeOpInfo$new("info")
-  expect_pipeop(po) # redundant?
+  expect_pipeop(po)
   expect_pipeop_class(PipeOpInfo, list(id = "info"))
 })
 
+test_that("check whether input and output are equal", {
+  # Creation of Prediction Object
+  lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
+  mtcars_new = subset(mtcars[sample(nrow(mtcars), size = 10), ], select = -mpg)
+  prediction = lrn_rpart$predict_newdata(mtcars)
+  prediction_new = lrn_rpart$predict_newdata(mtcars_new)
+  # Actual Test
+  inputs = c(tsk("iris"), prediction, prediction_new, NULL, "default_string")
+  output = c("lgr::mlr3/mlr3pipelines::info", "cat", "warning", "message", "none")
+  for (j in inputs) {
+    for (i in seq_len(length(output))) {
+      poinfo = PipeOpInfo$new(id = "info", log_target = output[i])
+      suppressMessages(suppressWarnings(invisible(capture.output(expect_identical(poinfo$train(list(j))[[1]], j)))))
+      suppressMessages(suppressWarnings(invisible(capture.output(expect_identical(poinfo$predict(list(j))[[1]], j)))))
+    }
+  }
+})
 
 test_that("output behavior is appropriate", {
   # Creation of Prediction Object
@@ -38,15 +55,14 @@ test_that("logger is addressed", {
   # Actual Test
   poinfo = PipeOpInfo$new(id = "info")
   inputs = c(tsk("iris"), prediction, prediction_new, NULL, "default_string")
-  browser()
   for (j in inputs) {
       poinfo = PipeOpInfo$new(id = "info")
-      logfile_prior = logger$appenders$appender$buffer_dt
+      logfile_prior = appender_buffer$data
       poinfo$train(list(j))
-      logfile_posttrain = logger$appenders$appender$buffer_dt
+      logfile_posttrain = appender_buffer$data
       expect_false(identical(data.table(), logfile_posttrain))
       poinfo$predict(list(j))
-      logfile_postprediction = logger$appenders$appender$buffer_dt
+      logfile_postprediction = appender_buffer$data
       expect_false(identical(logfile_posttrain, logfile_postprediction))
       appender_buffer$flush()
   }
@@ -61,32 +77,17 @@ test_that("pattern - check", {
   prediction_new = lrn_rpart$predict_newdata(mtcars_new)
   # Actual Test
   #browser()
-  inputs = c(tsk("iris"))
+  inputs = c(tsk("iris"), prediction, prediction_new)
   output = c("cat", "warning", "message")
   capture_func = list(capture_output, capture_warning, capture_messages)
-  for (j in inputs) {
-    for (i in seq_len(length(output))) {
-      poinfo = PipeOpInfo$new(id = "info", log_target = output[i])
-      console_output = as.character(capture_func[[i]](invisible(poinfo$train(list(j)))))
-      expect_match(console_output, "\\$data", all = FALSE)
-    }
-  }
-})
-
-test_that("check whether input and output are equal", {
-  # Creation of Prediction Object
-  lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
-  mtcars_new = subset(mtcars[sample(nrow(mtcars), size = 10), ], select = -mpg)
-  prediction = lrn_rpart$predict_newdata(mtcars)
-  prediction_new = lrn_rpart$predict_newdata(mtcars_new)
-  # Actual Test
-  inputs = c(tsk("iris"), prediction, prediction_new, NULL, "default_string")
-  output = c("lgr::mlr3/mlr3pipelines::info", "cat", "warning", "message", "none")
-  for (j in inputs) {
-    for (i in seq_len(length(output))) {
-      poinfo = PipeOpInfo$new(id = "info", log_target = output[i])
-      suppressMessages(suppressWarnings(invisible(capture.output(expect_identical(poinfo$train(list(j))[[1]], j)))))
-      suppressMessages(suppressWarnings(invisible(capture.output(expect_identical(poinfo$predict(list(j))[[1]], j)))))
+  regex_list = list(c("*\\$data*"), c("*\\$score*"), c("*truth*", "*response*"))
+  for (j in seq_along(inputs)) {
+    for (i in seq_along(output)) {
+      for (r in seq_along(regex_list[j])) {
+        poinfo = PipeOpInfo$new(id = "info", log_target = output[i])
+        console_output = as.character(capture_func[[i]](invisible(poinfo$train(list(inputs[[j]])))))
+        expect_match(console_output, regex_list[[j]][r], all = FALSE)
+      }
     }
   }
 })
