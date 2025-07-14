@@ -536,7 +536,7 @@ check_types = function(self, data, direction, operation) {
       return(data_element)
     }
     if (is.Multiplicity(data_element)) {
-      stopf("Problem with %s: %s contained Multiplicity when it shouldn't have.", varname, data_element)
+      stopf("Problem with %s: Contained Multiplicity when it shouldn't have.", varname)
     }
     if (typereq == "*") return(data_element)
     if (typereq %in% class(data_element)) return(data_element)
