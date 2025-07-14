@@ -198,7 +198,8 @@ or the empty string (<code>character</code>).</p></li>
 <li><p><code>.impute(feature, type, model, context)</code><br>
 (<code>atomic</code>, <code>character(1)</code>, <code>any</code>, <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>) -&gt; <code>atomic</code><br>
 Imputes the features. <code>model</code> is the model created by <code>private$.train_imputer()</code>. Default behaviour is to assume <code>model</code> is an atomic vector
-from which values are sampled to impute missing values of <code>feature</code>. <code>model</code> may have an attribute <code>probabilities</code> for non-uniform sampling.</p></li>
+from which values are sampled to impute missing values of <code>feature</code>. <code>model</code> may have an attribute <code>probabilities</code> for non-uniform sampling.
+If <code>model</code> has length zero, <code>feature</code> is returned unchanged.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
