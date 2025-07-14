@@ -133,6 +133,7 @@
 #'   (`atomic`, `character(1)`, `any`, [`data.table`][data.table::data.table]) -> `atomic`\cr
 #'   Imputes the features. `model` is the model created by `private$.train_imputer()`. Default behaviour is to assume `model` is an atomic vector
 #'   from which values are sampled to impute missing values of `feature`. `model` may have an attribute `probabilities` for non-uniform sampling.
+#'   If `model` has length zero, `feature` is returned unchanged.
 #'
 #' @family PipeOps
 #' @family Imputation PipeOps
@@ -324,11 +325,11 @@ PipeOpImpute = R6Class("PipeOpImpute",
 
     .train_nullmodel = function(feature, type, context) {
       switch(type,
-        factor = levels(feature),
+        factor = levels(feature),  # Note that this can be character(0) in case of zero level factors created by FixFactors
         integer = 0L, # see PipeOpImputeMean and PipeOpImputeMedian
         logical = c(TRUE, FALSE),
         numeric = 0, # see PipeOpImputeMean and PipeOpImputeMedian
-        ordered = levels(feature),
+        ordered = levels(feature),  # see above
         character = ""
       )
     },
@@ -342,7 +343,9 @@ PipeOpImpute = R6Class("PipeOpImpute",
       nas = which(is.na(feature))
       if (!length(nas)) return(feature)
 
-      if (length(model) == 1) {
+      if (!length(model)) {
+        return(feature)
+      } else if (length(model) == 1) {
         feature[nas] = model
       } else {
         outlen = count_missing(feature)

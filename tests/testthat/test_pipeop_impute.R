@@ -440,6 +440,76 @@ test_that("imputeoor keeps missing level even if no missing data in predict task
 
 })
 
+test_that("Imputing zero level factors", {
+  dt_na = data.table(
+    target = factor(c("C1", "C1", "C2", "C2", "C1")),
+    fct = factor(rep(NA, 5), levels = "lvl"),
+    ord = ordered(rep(NA, 5), levels = "lvl")
+  )
+  # Tasks with zero levels cannot be directly created. However, they can occur within pipelines using FixFactors.
+  base_task = TaskClassif$new("test", target = "target", backend = dt_na)
+  task = po("fixfactors")$train(list(base_task))[[1L]]
+
+  # For more robust tests, in case of possible changes to FixFactors in the future, since our usage here is a bit hacky
+  expect_equal(task$levels(), list(fct = character(0), ord = character(0), target = c("C1", "C2")))
+
+  # PipeOpImputeMode
+  op = po("imputemode")
+  expect_no_error({
+    expect_equal(op$train(list(task))[[1L]]$data(), task$data())
+  })
+  expect_no_error({
+    expect_equal(op$predict(list(task))[[1L]]$data(), task$data())
+  })
+
+  # PipeOpImputeConstant
+  op = po("imputeconstant", constant = "new_lvl", check_levels = FALSE)
+  dt_new_lvl = data.table(
+    target = factor(c("C1", "C1", "C2", "C2", "C1")),
+    fct = factor(rep("new_lvl", 5)),
+    ord = ordered(rep("new_lvl", 5))
+  )
+  expect_no_error({
+    expect_equal(op$train(list(task))[[1L]]$data(), dt_new_lvl)
+  })
+  expect_no_error({
+    expect_equal(op$predict(list(task))[[1L]]$data(), dt_new_lvl)
+  })
+  op$param_set$set_values(check_levels = TRUE)
+  expect_error(op$train(list(task)), "Assertion.*failed.*element of set \\{\\}.*is 'new_lvl'")
+
+  # PipeOpImputeSample
+  op = po("imputesample")
+  expect_no_error({
+    expect_equal(op$train(list(task))[[1L]]$data(), task$data())
+  })
+  expect_no_error({
+    expect_equal(op$predict(list(task))[[1L]]$data(), task$data())
+  })
+
+  # PipeOpImputeOOR
+  op = po("imputeoor", create_empty_level = FALSE)
+  dt_missing_lvl = data.table(
+    target = factor(c("C1", "C1", "C2", "C2", "C1")),
+    fct = factor(rep(".MISSING", 5)),
+    ord = ordered(rep(".MISSING", 5))
+  )
+  expect_no_error({
+    expect_equal(op$train(list(task))[[1L]]$data(), dt_missing_lvl)
+  })
+  expect_no_error({
+    expect_equal(op$predict(list(task))[[1L]]$data(), dt_missing_lvl)
+  })
+
+  op$param_set$set_values(create_empty_level = TRUE)
+  expect_no_error({
+    expect_equal(op$train(list(task))[[1L]]$data(), dt_missing_lvl)
+  })
+  expect_no_error({
+    expect_equal(op$predict(list(task))[[1L]]$data(), dt_missing_lvl)
+  })
+
+})
 
 test_that("'empty_level_control' in POImputeOOR and POImputeConstant", {
 

@@ -157,6 +157,7 @@ or the empty string (\code{character}).
 (\code{atomic}, \code{character(1)}, \code{any}, \code{\link[data.table:data.table]{data.table}}) -> \code{atomic}\cr
 Imputes the features. \code{model} is the model created by \code{private$.train_imputer()}. Default behaviour is to assume \code{model} is an atomic vector
 from which values are sampled to impute missing values of \code{feature}. \code{model} may have an attribute \code{probabilities} for non-uniform sampling.
+If \code{model} has length zero, \code{feature} is returned unchanged.
 }
 }
 
