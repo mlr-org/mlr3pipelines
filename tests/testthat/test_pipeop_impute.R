@@ -489,19 +489,19 @@ test_that("Imputing zero level factors", {
 
   # PipeOpImputeOOR
   op = po("imputeoor", create_empty_level = FALSE)
-  expect_no_error({
-    expect_equal(op$train(list(task))[[1L]]$data(), dt_na)
-  })
-  expect_no_error({
-    expect_equal(op$predict(list(task))[[1L]]$data(), dt_na)
-  })
-
-  op$param_set$set_values(create_empty_level = TRUE)
   dt_missing_lvl = data.table(
     target = factor(c("C1", "C1", "C2", "C2", "C1")),
     fct = factor(rep(".MISSING", 5)),
     ord = ordered(rep(".MISSING", 5))
   )
+  expect_no_error({
+    expect_equal(op$train(list(task))[[1L]]$data(), dt_missing_lvl)
+  })
+  expect_no_error({
+    expect_equal(op$predict(list(task))[[1L]]$data(), dt_missing_lvl)
+  })
+
+  op$param_set$set_values(create_empty_level = TRUE)
   expect_no_error({
     expect_equal(op$train(list(task))[[1L]]$data(), dt_missing_lvl)
   })
