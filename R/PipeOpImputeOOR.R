@@ -14,12 +14,22 @@
 #' This type of imputation is especially sensible in the context of tree-based methods, see also
 #' Ding & Simonoff (2010).
 #'
-#' If a factor is missing during prediction, but not during training, this adds an unseen level
-#' `".MISSING"`, which would be a problem for most models. This is why it is recommended to use
-#' [`po("fixfactors")`][mlr_pipeops_fixfactors] and
+#' [`Learner`s][mlr3::Learner] expect input [`Task`s][mlr3::Task] to have the same `factor` (or `ordered`) levels during
+#' training as well as prediction. This `PipeOp` modifies the levels of `factor` and `ordered` features,
+#' and since it may occur that a `factor` or `ordered` feature contains missing values only during prediction, but not
+#' during training, the output `Task` could also have different levels during the two stages.
+#'
+#' To avoid problems with the `Learner`s' expectation, controlling the `PipeOp`s' handling of this edge-case is necessary.
+#' For this, use the `create_empty_level` hyperparameter inherited from [`PipeOpImpute`].\cr
+#' If `create_empty_level` is set to `TRUE`, then an unseen level `".MISSING"` is added to the feature during
+#' training and missing values are imputed as `".MISSING"` during prediction.
+#' However, empty factor levels during training can be a problem for many [`Learners`][mlr3::Learner].\cr
+#' If `create_empty_level` is set to `FALSE`, then no empty level is introduced during training, but columns that
+#' have missing values only during prediction will *not* be imputed. This is why it may still be necessary to use
 #' [`po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))`][mlr_pipeops_imputesample]
-#' (or some other imputation method) after this imputation method, if missing values are expected during prediction
-#' in factor columns that had no missing values during training.
+#' (or another imputation method) after this imputation method.
+#' Note that setting `create_empty_level` to `FALSE` is the same as setting it to `TRUE` and using [`PipeOpFixFactors`]
+#' after this `PipeOp`.
 #'
 #' @section Construction:
 #' ```
@@ -46,19 +56,20 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpImpute`], as well as:
 #' * `min` :: `logical(1)` \cr
-#'   Should `integer` and `numeric` features be shifted below the minimum? Initialized to TRUE. If FALSE
+#'   Should `integer` and `numeric` features be shifted below the minimum? Initialized to `TRUE`. If `FALSE`
 #'   they are shifted above the maximum. See also the description above.
 #' * `offset` :: `numeric(1)` \cr
 #'   Numerical non-negative offset as used in the description above for `integer` and `numeric`
-#'   features. Initialized to 1.
+#'   features. Initialized to `1`.
 #' * `multiplier` :: `numeric(1)` \cr
 #'   Numerical non-negative multiplier as used in the description above for `integer` and `numeric`
-#'   features. Initialized to 1.
+#'   features. Initialized to `1`.
 #'
 #' @section Internals:
 #' Adds an explicit new `level()` to `factor` and `ordered` features, but not to `character` features.
 #' For `integer` and `numeric` features uses the `min`, `max`, `diff` and `range` functions.
-#' `integer` and `numeric` features that are entirely `NA` are imputed as `0`.
+#' `integer` and `numeric` features that are entirely `NA` are imputed as `0`. `factor` and `ordered` features that are
+#' entirely `NA` are imputed as `".MISSING"`.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -84,8 +95,7 @@
 #'
 #' # recommended use when missing values are expected during prediction on
 #' # factor columns that had no missing values during training
-#' gr = po("imputeoor") %>>%
-#'   po("fixfactors") %>>%
+#' gr = po("imputeoor", create_empty_level = FALSE) %>>%
 #'   po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))
 #' t1 = as_task_classif(data.frame(l = as.ordered(letters[1:3]), t = letters[1:3]), target = "t")
 #' t2 = as_task_classif(data.frame(l = as.ordered(c("a", NA, NA)), t = letters[1:3]), target = "t")
@@ -103,13 +113,13 @@ PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
   public = list(
     initialize = function(id = "imputeoor", param_vals = list()) {
       ps = ps(
-        min = p_lgl(tags = c("train", "predict")),
-        offset = p_dbl(lower = 0, tags = c("train", "predict")),
-        multiplier = p_dbl(lower = 0, tags = c("train", "predict"))
+        min = p_lgl(init = TRUE, tags = c("train", "predict")),
+        offset = p_dbl(init = 1, lower = 0, tags = c("train", "predict")),
+        multiplier = p_dbl(init = 1, lower = 0, tags = c("train", "predict"))
       )
-      ps$values = list(min = TRUE, offset = 1, multiplier = 1)
       # this is one of the few imputers that handles 'character' features!
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("character", "factor", "integer", "numeric", "ordered"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, empty_level_control = "param",
+        feature_types = c("character", "factor", "integer", "numeric", "ordered"))
     }
   ),
   private = list(
@@ -134,6 +144,17 @@ PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
       }
 
       oor
+    },
+
+    .train_nullmodel = function(feature, type, context) {
+      switch(type,
+        factor = ".MISSING",
+        integer = 0L,
+        logical = c(TRUE, FALSE),
+        numeric = 0,
+        ordered = ".MISSING",
+        character = ""
+      )
     }
   )
 )
