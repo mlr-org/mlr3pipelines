@@ -5,29 +5,47 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Out of Range Imputation — mlr_pipeops_imputeoor"><meta name="description" content='Impute factorial features by adding a new level ".MISSING".
+</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Out of Range Imputation — mlr_pipeops_imputeoor"><meta name="description" content="Impute factorial features by adding a new level &quot;.MISSING&quot;.
 Impute numerical features by constant values shifted below the minimum or above the maximum by
 using \(min(x) - offset - multiplier * diff(range(x))\) or
 \(max(x) + offset + multiplier * diff(range(x))\).
 This type of imputation is especially sensible in the context of tree-based methods, see also
 Ding &amp;amp; Simonoff (2010).
-If a factor is missing during prediction, but not during training, this adds an unseen level
-".MISSING", which would be a problem for most models. This is why it is recommended to use
-po("fixfactors") and
-po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))
-(or some other imputation method) after this imputation method, if missing values are expected during prediction
-in factor columns that had no missing values during training.'><meta property="og:description" content='Impute factorial features by adding a new level ".MISSING".
+expect input  to have the same factor (or ordered) levels during
+training as well as prediction. This PipeOp modifies the levels of factor and ordered features,
+and since it may occur that a factor or ordered feature contains missing values only during prediction, but not
+during training, the output Task could also have different levels during the two stages.
+To avoid problems with the Learners' expectation, controlling the PipeOps' handling of this edge-case is necessary.
+For this, use the create_empty_level hyperparameter inherited from PipeOpImpute.
+If create_empty_level is set to TRUE, then an unseen level &quot;.MISSING&quot; is added to the feature during
+training and missing values are imputed as &quot;.MISSING&quot; during prediction.
+However, empty factor levels during training can be a problem for many Learners.
+If create_empty_level is set to FALSE, then no empty level is introduced during training, but columns that
+have missing values only during prediction will not be imputed. This is why it may still be necessary to use
+po(&quot;imputesample&quot;, affect_columns = selector_type(types = c(&quot;factor&quot;, &quot;ordered&quot;)))
+(or another imputation method) after this imputation method.
+Note that setting create_empty_level to FALSE is the same as setting it to TRUE and using PipeOpFixFactors
+after this PipeOp."><meta property="og:description" content="Impute factorial features by adding a new level &quot;.MISSING&quot;.
 Impute numerical features by constant values shifted below the minimum or above the maximum by
 using \(min(x) - offset - multiplier * diff(range(x))\) or
 \(max(x) + offset + multiplier * diff(range(x))\).
 This type of imputation is especially sensible in the context of tree-based methods, see also
 Ding &amp;amp; Simonoff (2010).
-If a factor is missing during prediction, but not during training, this adds an unseen level
-".MISSING", which would be a problem for most models. This is why it is recommended to use
-po("fixfactors") and
-po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))
-(or some other imputation method) after this imputation method, if missing values are expected during prediction
-in factor columns that had no missing values during training.'><meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png"><meta name="robots" content="noindex"></head><body>
+expect input  to have the same factor (or ordered) levels during
+training as well as prediction. This PipeOp modifies the levels of factor and ordered features,
+and since it may occur that a factor or ordered feature contains missing values only during prediction, but not
+during training, the output Task could also have different levels during the two stages.
+To avoid problems with the Learners' expectation, controlling the PipeOps' handling of this edge-case is necessary.
+For this, use the create_empty_level hyperparameter inherited from PipeOpImpute.
+If create_empty_level is set to TRUE, then an unseen level &quot;.MISSING&quot; is added to the feature during
+training and missing values are imputed as &quot;.MISSING&quot; during prediction.
+However, empty factor levels during training can be a problem for many Learners.
+If create_empty_level is set to FALSE, then no empty level is introduced during training, but columns that
+have missing values only during prediction will not be imputed. This is why it may still be necessary to use
+po(&quot;imputesample&quot;, affect_columns = selector_type(types = c(&quot;factor&quot;, &quot;ordered&quot;)))
+(or another imputation method) after this imputation method.
+Note that setting create_empty_level to FALSE is the same as setting it to TRUE and using PipeOpFixFactors
+after this PipeOp."><meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png"><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -81,12 +99,21 @@ using \(min(x) - offset - multiplier * diff(range(x))\) or
 \(max(x) + offset + multiplier * diff(range(x))\).</p>
 <p>This type of imputation is especially sensible in the context of tree-based methods, see also
 Ding &amp; Simonoff (2010).</p>
-<p>If a factor is missing during prediction, but not during training, this adds an unseen level
-<code>".MISSING"</code>, which would be a problem for most models. This is why it is recommended to use
-<code><a href="mlr_pipeops_fixfactors.html">po("fixfactors")</a></code> and
+<p>expect input  to have the same <code>factor</code> (or <code>ordered</code>) levels during
+training as well as prediction. This <code>PipeOp</code> modifies the levels of <code>factor</code> and <code>ordered</code> features,
+and since it may occur that a <code>factor</code> or <code>ordered</code> feature contains missing values only during prediction, but not
+during training, the output <code>Task</code> could also have different levels during the two stages.</p>
+<p>To avoid problems with the <code>Learner</code>s' expectation, controlling the <code>PipeOp</code>s' handling of this edge-case is necessary.
+For this, use the <code>create_empty_level</code> hyperparameter inherited from <code><a href="PipeOpImpute.html">PipeOpImpute</a></code>.<br>
+If <code>create_empty_level</code> is set to <code>TRUE</code>, then an unseen level <code>".MISSING"</code> is added to the feature during
+training and missing values are imputed as <code>".MISSING"</code> during prediction.
+However, empty factor levels during training can be a problem for many <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learners</a></code>.<br>
+If <code>create_empty_level</code> is set to <code>FALSE</code>, then no empty level is introduced during training, but columns that
+have missing values only during prediction will <em>not</em> be imputed. This is why it may still be necessary to use
 <code><a href="mlr_pipeops_imputesample.html">po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))</a></code>
-(or some other imputation method) after this imputation method, if missing values are expected during prediction
-in factor columns that had no missing values during training.</p>
+(or another imputation method) after this imputation method.
+Note that setting <code>create_empty_level</code> to <code>FALSE</code> is the same as setting it to <code>TRUE</code> and using <code><a href="mlr_pipeops_fixfactors.html">PipeOpFixFactors</a></code>
+after this <code>PipeOp</code>.</p>
     </div>
 
 
@@ -125,14 +152,14 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 
 <p>The parameters are the parameters inherited from <code><a href="PipeOpImpute.html">PipeOpImpute</a></code>, as well as:</p><ul><li><p><code>min</code> :: <code>logical(1)</code> <br>
-Should <code>integer</code> and <code>numeric</code> features be shifted below the minimum? Initialized to TRUE. If FALSE
+Should <code>integer</code> and <code>numeric</code> features be shifted below the minimum? Initialized to <code>TRUE</code>. If <code>FALSE</code>
 they are shifted above the maximum. See also the description above.</p></li>
 <li><p><code>offset</code> :: <code>numeric(1)</code> <br>
 Numerical non-negative offset as used in the description above for <code>integer</code> and <code>numeric</code>
-features. Initialized to 1.</p></li>
+features. Initialized to <code>1</code>.</p></li>
 <li><p><code>multiplier</code> :: <code>numeric(1)</code> <br>
 Numerical non-negative multiplier as used in the description above for <code>integer</code> and <code>numeric</code>
-features. Initialized to 1.</p></li>
+features. Initialized to <code>1</code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>
@@ -140,7 +167,8 @@ features. Initialized to 1.</p></li>
 
 <p>Adds an explicit new <code>level()</code> to <code>factor</code> and <code>ordered</code> features, but not to <code>character</code> features.
 For <code>integer</code> and <code>numeric</code> features uses the <code>min</code>, <code>max</code>, <code>diff</code> and <code>range</code> functions.
-<code>integer</code> and <code>numeric</code> features that are entirely <code>NA</code> are imputed as <code>0</code>.</p>
+<code>integer</code> and <code>numeric</code> features that are entirely <code>NA</code> are imputed as <code>0</code>. <code>factor</code> and <code>ordered</code> features that are
+entirely <code>NA</code> are imputed as <code>".MISSING"</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>
@@ -308,8 +336,7 @@ For <code>integer</code> and <code>numeric</code> features uses the <code>min</c
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># recommended use when missing values are expected during prediction on</span></span></span>
 <span class="r-in"><span><span class="co"># factor columns that had no missing values during training</span></span></span>
-<span class="r-in"><span><span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputeoor"</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"fixfactors"</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputeoor"</span>, create_empty_level <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputesample"</span>, affect_columns <span class="op">=</span> <span class="fu"><a href="Selector.html">selector_type</a></span><span class="op">(</span>types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"factor"</span>, <span class="st">"ordered"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">t1</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_task_classif.html" class="external-link">as_task_classif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>l <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.ordered</a></span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, t <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, target <span class="op">=</span> <span class="st">"t"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">t2</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_task_classif.html" class="external-link">as_task_classif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>l <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.ordered</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>, t <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, target <span class="op">=</span> <span class="st">"t"</span><span class="op">)</span></span></span>
@@ -325,8 +352,8 @@ For <code>integer</code> and <code>numeric</code> features uses the <code>min</c
 <span class="r-out co"><span class="r-pr">#&gt;</span>         t     l</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt; &lt;ord&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      a     a</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      b     c</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      c     c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      b  &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      c  &lt;NA&gt;</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
