@@ -82,9 +82,9 @@ preproc(tsk("wine"), pop)
 pop$state$sdev
 
 # Piping multiple preproc() calls, using dictionary sugar to set parameters
-# tsk("penguins") |>
-#   preproc(po("imputemode", affect_columns = selector_name("sex"))) |>
-#   preproc(po("imputemean"))
+tsk("penguins") |>
+  preproc(po("imputemode", affect_columns = selector_name("sex"))) |>
+  preproc(po("imputemean"))
 
 # Use preproc with a Graph
 gr = po("pca", rank. = 4) \%>>\% po("learner", learner = lrn("classif.rpart"))
