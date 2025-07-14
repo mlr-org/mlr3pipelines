@@ -100,7 +100,7 @@
 #' If `private$.create_empty_level` is set to `TRUE`, `private$.impute()` is called for all `factor` or `ordered`
 #' columns during training, regardless of whether they have any missing values. For this to lead to the creation of an
 #' empty level for columns with no missing values, inheriting `PipeOp`s must implement `private$.train_imputer()` in
-#' such a way that it returns the name of the level to be created for the feature types `factor` and `ordered.`\cr
+#' such a way that it returns the name of the level to be created for the feature types `factor` and `ordered`.\cr
 #' If `private$.create_empty_level` is set to `FALSE`, `private$.impute()` is not called during prediction for `factor`
 #' or `ordered` columns which were not modified during training. This means that `NA`s will not be imputed for these
 #' columns.\cr

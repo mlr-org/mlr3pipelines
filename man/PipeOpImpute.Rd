@@ -119,7 +119,7 @@ setting has no impact on columns of other types.\cr
 If \code{private$.create_empty_level} is set to \code{TRUE}, \code{private$.impute()} is called for all \code{factor} or \code{ordered}
 columns during training, regardless of whether they have any missing values. For this to lead to the creation of an
 empty level for columns with no missing values, inheriting \code{PipeOp}s must implement \code{private$.train_imputer()} in
-such a way that it returns the name of the level to be created for the feature types \code{factor} and \code{ordered.}\cr
+such a way that it returns the name of the level to be created for the feature types \code{factor} and \code{ordered}.\cr
 If \code{private$.create_empty_level} is set to \code{FALSE}, \code{private$.impute()} is not called during prediction for \code{factor}
 or \code{ordered} columns which were not modified during training. This means that \code{NA}s will not be imputed for these
 columns.\cr
