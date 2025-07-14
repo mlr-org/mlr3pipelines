@@ -32,17 +32,22 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpImpute`], as well as:
 #' * `constant` :: `atomic(1)`\cr
-#'   The constant value that should be used for the imputation, atomic vector of length 1. The
-#'   atomic mode must match the type of the features that will be selected by the `affect_columns`
-#'   parameter and this will be checked during imputation. Initialized to `".MISSING"`.
+#'   The constant value that should be used for the imputation, atomic vector of length `1`. The atomic mode must match
+#'   the type of the features that will be selected by the `affect_columns` parameter and this will be checked during
+#'   imputation. This is a required hyperparameter and needs to be set by the user.
 #' * `check_levels` :: `logical(1)`\cr
-#'   Should be checked whether the `constant` value is a valid level of factorial features (i.e., it
-#'   already is a level)? Raises an error if unsuccesful. This check is only performed for factorial
-#'   features (i.e., `factor`, `ordered`; skipped for `character`). Initialized to `TRUE`.
+#'   Should be checked whether the `constant` value is a valid level of factorial features (i.e., it already is a
+#'   level)? Raises an error if unsuccessful. This check is only performed for factorial features (i.e., `factor`,
+#'   `ordered`; skipped for `character`). Initialized to `TRUE`.\cr
+#'   Note that empty factor levels can be a problem for many [`Learners`][mlr3::Learner]. Thus, [`PipeOpImputeOOR`] is
+#'   the preferred choice for creating new levels, since it is designed to impute out-of-range values and offers a more
+#'   explicit control for handling potentially problematic behavior.
 #'
 #' @section Internals:
-#' Adds an explicit new level to `factor` and `ordered` features, but not to `character` features,
-#' if `check_levels` is `FALSE` and the level is not already present.
+#' The constructor is called with `empty_level_control` set to `"always"`, to allow the creation of a new empty level
+#' for `factor` and `ordered` (but not `character`) features during training, if `constant` is not an already existing
+#' level and `check_levels` is set to `FALSE`. This has no impact if `check_levels` is `TRUE`, since in that case an
+#' error would be raised before imputation.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -63,6 +68,7 @@
 #' new_task = po$train(list(task = task))[[1]]
 #' new_task$missings()
 #' new_task$data(cols = "glucose")[[1]]
+#'
 #' @family PipeOps
 #' @family Imputation PipeOps
 #' @template seealso_pipeopslist
@@ -74,10 +80,10 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
     initialize = function(id = "imputeconstant", param_vals = list()) {
       ps = ps(
         constant = p_uty(tags = c("train", "required"), custom_check = check_scalar),
-        check_levels = p_lgl(tags = c("train", "required"))
+        check_levels = p_lgl(init = TRUE, tags = c("train", "required"))
       )
-      ps$values = list(constant = ".MISSING", check_levels = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, empty_level_control = "always",
+        feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct"))
     }
   ),
   private = list(
