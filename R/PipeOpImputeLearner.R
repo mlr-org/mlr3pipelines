@@ -169,7 +169,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
 
       if (type %in% c("factor", "ordered")) {
         # in some edge cases there may be levels during training that are missing during predict.
-        levels(feature) = c(levels(feature), as.character(type))
+        levels(feature) = c(levels(feature), levels(imp_vals))
       }
 
       feature[nas] = imp_vals

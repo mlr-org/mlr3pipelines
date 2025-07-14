@@ -329,7 +329,18 @@ PipeOp = R6Class("PipeOp",
       assert_list(input, .var.name = sprintf("input to PipeOp %s's $predict()", self$id))
 
       if (!self$is_trained) {
-        stopf("Cannot predict, PipeOp '%s' has not been trained yet", self$id)
+        # If the PipeOp would only need NULLs in training anyways (e.g. PipeOpsClassifAvg), we can train the PipeOp for the user automatically.
+        if (all(self$input$train %in% c("NULL", "[NULL]"))) {
+          # Evaluates to NULL if x is not a Multiplicity
+          null_multiplicity <- function(x) {
+            if (is.Multiplicity(x)) {
+              as.Multiplicity(lapply(x, null_multiplicity))
+            }
+          }
+          self$train(lapply(input, null_multiplicity))
+        } else {
+          stopf("Cannot predict, PipeOp '%s' has not been trained yet", self$id)
+        }
       }
 
       # need to load packages in train *and* predict, because they might run in different R instances
@@ -525,7 +536,7 @@ check_types = function(self, data, direction, operation) {
       return(data_element)
     }
     if (is.Multiplicity(data_element)) {
-      stopf("Problem with %s: %s contained Multiplicity when it shouldn't have.", varname, data_element)
+      stopf("Problem with %s: Contained Multiplicity when it shouldn't have.", varname)
     }
     if (typereq == "*") return(data_element)
     if (typereq %in% class(data_element)) return(data_element)

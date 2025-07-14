@@ -4,6 +4,9 @@
 * Set new construction argument `empty_level_control` to `"param"` for `PipeOpImputeOOR` and to `"always"` for `PipeOpImputeConstant`.
 * Removed initialization of `PipeOpImputeConstant`'s `constant` hyperparameter since it was incompatible with other defaults and would lead to not recommended usage (creating an empty level).
 * Fix: `PipeOpImputeOOR` now imputes `".MISSING"` for `factor`/`ordered` features with only `NA`s instead of sampling from the feature's levels.
+* Fix: `PipeOpImputeLearner` no longer adds `"factor"` or `"ordered"` levels for these feature types arbitrarily and instead updates levels correctly in certain edge-cases.
+* Fixed the error message for unexpected Multiplicities in the input and output type checking during `PipeOp`s training and prediction.
+* Untrained `PipeOp`s that take `NULL` as input during training now automatically perform training during prediction.
 
 # mlr3pipelines 0.8.0
 
