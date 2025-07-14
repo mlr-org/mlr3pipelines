@@ -24,8 +24,8 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: ubuntu-latest,   r: 'devel'}
-          - {os: ubuntu-latest,   r: 'release'}
+          - {os: ubuntu-latest,   r: 'devel', depends_only: false}
+          - {os: ubuntu-latest,   r: 'release', depends_only: false}
           - {os: ubuntu-latest,   r: 'release', depends_only: true}
 
     steps:
