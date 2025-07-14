@@ -655,5 +655,4 @@ test_that("'empty_level_control' in POImputeOOR and POImputeConstant", {
   predict_out = op$predict(list(task_pred))[[1L]]
   expect_identical(predict_out$data(cols = names(dt_out)), dt_out)
 
-
 })

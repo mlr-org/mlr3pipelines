@@ -210,5 +210,4 @@ test_that("PipeOpImputeLearner - correct levels, #691", {
     list(x1 = c("a", "b"), x2 = c("a", "b"))
   )
 
-
 })
