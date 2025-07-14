@@ -172,3 +172,21 @@ test_that("marshal", {
   expect_equal(s, su)
 })
 
+test_that("PipeOpImputeLearner - correct levels, #691", {
+  op = po("imputelearner", learner = lrn("classif.featureless"))
+  task = TaskRegr$new("test", target = "y", backend = data.table(
+    y = seq(1:5),
+    x1 = factor(c(NA, "a", "a", "b", "b")),
+    x2 = ordered(c(NA, "a", "a", "b", "b"))
+  ))
+
+  expect_equal(
+    op$train(list(task))[[1L]]$levels(),
+    list(x1 = c("a", "b"), x2 = c("a", "b"))
+  )
+  expect_equal(
+    op$predict(list(task))[[1L]]$levels(),
+    list(x1 = c("a", "b"), x2 = c("a", "b"))
+  )
+
+})

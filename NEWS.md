@@ -1,7 +1,7 @@
 # mlr3pipelines 0.8.0-9000
 * Fixed a grammatical error in `PipeOp`'s error message wrapper: now correctly says "This happened *in* ...".
+* Fix: `PipeOpImputeLearner` no longer adds `"factor"` or `"ordered"` levels for these feature types arbitrarily and instead updates levels correctly in certain edge-cases.
 * Fixed the error message for unexpected Multiplicities in the input and output type checking during `PipeOp`s training and prediction.
-
 * Untrained `PipeOp`s that take `NULL` as input during training now automatically perform training during prediction.
 
 # mlr3pipelines 0.8.0
