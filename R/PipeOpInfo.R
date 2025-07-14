@@ -82,7 +82,8 @@ PipeOpInfo = R6Class("PipeOpInfo",
       }
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = inouttype, predict = inouttype),
-        output = data.table(name = "output", train = inouttype, predict = inouttype)
+        output = data.table(name = "output", train = inouttype, predict = inouttype),
+        tag = "debug"
       ) # which tag is appropriate
       original_printer = list(
         Task = crate(function(x) {
@@ -113,29 +114,29 @@ PipeOpInfo = R6Class("PipeOpInfo",
     .log_target = NULL,
     .output = function(inputs, stage) {
     input_class = class(inputs[[1]])
-    leftmost_class =
-      if (any(input_class %in% names(private$.printer))) {
-        input_class[input_class %in% names(private$.printer)][[1]]
-      } else {
-        "default"
+      leftmost_class =
+        if (any(input_class %in% names(private$.printer))) {
+          input_class[input_class %in% names(private$.printer)][[1]]
+        } else {
+          "default"
+        }
+      if (!("default" %in% names(private$.printer))) {
+        stop("Object-class was not found and no default printer is available.")
       }
-    if (!("default" %in% names(private$.printer))) {
-      stop("Object-class was not found and no default printer is available.")
-    }
-    specific_printer = private$.printer[[leftmost_class]]
-    log_target_split = strsplit(private$.log_target, "::")[[1]]
-    stage_string = sprintf("Object passing through PipeOp %s - %s", self$id, stage) #Infoprint stattdessen self$id mit %s
-    print_string = capture.output({
+      specific_printer = private$.printer[[leftmost_class]]
+      log_target_split = strsplit(private$.log_target, "::")[[1]]
+      stage_string = sprintf("Object passing through PipeOp %s - %s", self$id, stage)
+      print_string = capture.output({
         cat(stage_string, "\n\n")
         specific_printer(inputs[[1]])
       })
-    if (log_target_split[[1]] == "lgr") {
-      logger = lgr::get_logger(log_target_split[[2]])
-      log_level = log_target_split[[3]]
-      logger$log(log_level, msg = print_string)
-    } else if (private$.log_target == "cat") {
+      if (log_target_split[[1]] == "lgr") {
+        logger = lgr::get_logger(log_target_split[[2]])
+        log_level = log_target_split[[3]]
+        logger$log(log_level, msg = print_string)
+      } else if (private$.log_target == "cat") {
         cat(paste(print_string, collapse = "\n"))
-    } else if (private$.log_target == "message") {
+      } else if (private$.log_target == "message") {
         message(paste(print_string, collapse = "\n"))
       } else if (private$.log_target == "warning") {
         warning(paste(print_string, collapse = "\n"))
