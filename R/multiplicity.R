@@ -36,7 +36,7 @@
 #'
 #' If a [`PipeOp`] is trained on a [`Multiplicity`], the `$state` slot is set to a [`Multiplicity`]
 #' as well; this [`Multiplicity`] contains the "original" `$state` resulting from each individual
-#' call of the [`PipeOP`] with the input [`Multiplicity`]'s content. If a [`PipeOp`] was trained
+#' call of the [`PipeOp`] with the input [`Multiplicity`]'s content. If a [`PipeOp`] was trained
 #' with a [`Multiplicity`], then the `predict()` argument must be a [`Multiplicity`] with the same
 #' number of elements.
 #'

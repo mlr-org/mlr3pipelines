@@ -1,6 +1,8 @@
 # mlr3pipelines 0.8.0-9000
 * Fixed a grammatical error in `PipeOp`'s error message wrapper: now correctly says "This happened *in* ...".
 
+* Untrained `PipeOp`s that take `NULL` as input during training now automatically perform training during prediction.
+
 # mlr3pipelines 0.8.0
 
 * Added missing error for predicting with untrained `PipeOp`s / `Graph`s.
