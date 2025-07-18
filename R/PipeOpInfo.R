@@ -83,7 +83,7 @@ PipeOpInfo = R6Class("PipeOpInfo",
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = inouttype, predict = inouttype),
         output = data.table(name = "output", train = inouttype, predict = inouttype),
-        tag = "debug"
+        #tag = "debug"
       ) # which tag is appropriate
       original_printer = list(
         Task = crate(function(x) {
@@ -147,7 +147,6 @@ PipeOpInfo = R6Class("PipeOpInfo",
     },
     .train = function(inputs, stage = "Training") {
       self$state = list()
-      #browser()
       private$.output(inputs, stage)
       inputs
     },

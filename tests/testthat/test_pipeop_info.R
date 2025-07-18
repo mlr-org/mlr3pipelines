@@ -1,7 +1,3 @@
-pipeop = PipeOpInfo$new(id = "info", printer = list(Task = function(x) {x$nrow}))
-pipeop$train(list(tsk("iris")))
-
-
 context("PipeOpInfo")
 
 test_that("basic properties", {
@@ -51,11 +47,6 @@ test_that("output behavior is appropriate", {
   lg$set_threshold(old_threshold)
 })
 
-# Code Example
-#tsk("iris")
-#expect_output(list(tsk("iris")))
-
-
 test_that("logger is addressed", {
   logger = lgr::get_logger("debug_logger")
   logger$set_propagate(FALSE)
@@ -70,35 +61,17 @@ test_that("logger is addressed", {
   poinfo = PipeOpInfo$new(id = "info", log_target = "lgr::debug_logger::info")
   inputs = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
   for (j in inputs) {
-    logfile_prior = appender_buffer$data
     poinfo$train(list(j))
-    logfile_posttrain = appender_buffer$data
-    expect_false(identical(logfile_prior, logfile_posttrain)) #checke ob Obh passing thr PipeOp info - Training vorkommt
+    logfile_posttrain = appender_buffer$data$msg
+    expect_match(logfile_posttrain, "Object passing through PipeOp info - Training", all = FALSE)
+    appender_buffer$flush()
     poinfo$predict(list(j))
-    logfile_postprediction = appender_buffer$data
-    expect_false(identical(logfile_posttrain, logfile_postprediction))
+    logfile_postprediction = appender_buffer$data$msg
+    expect_match(logfile_postprediction, "Object passing through PipeOp info - Prediction", all = FALSE)
     appender_buffer$flush()
   }
   logger$remove_appender(1)
 })
-# propGte = FALSE in Line 6
-
-
-# Code Examples
-logger = lgr::get_logger("mlr3/mlr3pipelines")
-appender_buffer = lgr::AppenderBuffer$new()
-logger$add_appender(appender_buffer, name = "appender")
-appender_buffer$data
-
-logger$log(level = 400, msg = "HELLO")
-appender_buffer$data
-
-appender_buffer$flush()
-appender_buffer$data
-
-logger$remove_appender(1)
-logger
-
 
 test_that("pattern - check", {
   # Creation of Prediction Object
@@ -107,14 +80,15 @@ test_that("pattern - check", {
   prediction = lrn_rpart$predict_newdata(mtcars)
   prediction_new = lrn_rpart$predict_newdata(mtcars_new)
   # Actual Test
-  inputs = list(tsk("iris"), prediction, prediction_new)
+  inputs = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
   output = c("cat", "warning", "message")
   capture_func = list(capture_output, capture_warning, capture_messages)
-  regex_list = list("\\$data", "\\$score", "truth.*response")
+  regex_list = list("\\$task.*\\$data", "\\$prediction.*\\$score", "\\$prediction", "NULL", "default_string")
   for (j in seq_along(inputs)) {
     for (i in seq_along(output)) {
       poinfo = PipeOpInfo$new(id = "info", log_target = output[i])
-      console_output = capture_func[[i]](poinfo$train(list(inputs[[j]])))
+      console_output = as.character(capture_func[[i]](poinfo$train(list(inputs[[j]]))))
+      #as.character() transformiert warning in character der gecheckt werden kann
       expect_match(console_output, regex_list[[j]], all = FALSE)
     }
   }
@@ -127,7 +101,46 @@ test_that("malformed log_target handled accordingly", {
   }
 })
 
+test_that("printer can be overwritten", {
+  # Creation of Prediction Object
+  logger = lgr::get_logger("debug_logger")
+  logger$set_propagate(FALSE)
+  lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
+  prediction = lrn_rpart$predict_newdata(mtcars)
+  # Actual Test
+  inputs = list(tsk("iris"), prediction, NULL, "default_string")
+  output = c("cat", "warning", "message")
+  capture_func = list(capture_output, capture_warnings, capture_messages)
+  regex_list = list("azbycxdw", "azbycxdwev", "azbycxdwevfu", "azbycxdwevfugt")
+  for (j in seq_along(inputs)) {
+    for (i in seq_along(output)) {
+      browser()
+      poinfo = PipeOpInfo$new(id = "info", log_target = output[i],
+      printer = list(Task = function(x) {"azbycxdw"},
+                     Prediction = function(x) {"azbycxdwev"},
+                     `NULL` = function(x) {"azbycxdwevfu"},
+                     default= function(x) {"azbycxdwevfugt"}
+                    ))
+      console_output_train = as.character(capture_func[[i]](poinfo$train(list(inputs[[j]]))))
+      expect_match(console_output_train, regex_list[[j]], all = FALSE)
+      console_output_predict = as.character(capture_func[[i]](poinfo$predict(list(inputs[[j]]))))
+      expect_match(console_output_predict, regex_list[[j]], all = FALSE)
+    }
+  }
+})
 
-# Test der testet dass printer überschrieben werden kann
-#   pipeop = PipeOpInfo$new(id = "info", printer = list(Task = function(x) {x$nrow})) --- gucken das zB sowas durchgeht oder sogar simpler print("ddsjsjssikadn")
-# collect multiplicity - verhalten checkt cm = TRUE/FALSE ==> default/Task printer wird verwendet; checken ob der dann auch wirklich verwendet wird
+# Frage - sollen hier die verschiedenen Output-Typen getestet werden?
+
+test_that("collect multiplicity works", {
+  poovr = po("ovrsplit")
+  OVR = poovr$train(list(tsk("iris")))
+  # Actual Test
+  output = c("cat", "warning", "message")
+  capture_func = list(capture_output, capture_warnings, capture_messages)
+  for (i in seq_along(output)) {
+    po_cm_false = PipeOpInfo$new(id = "info", collect_multiplicity = FALSE, log_target = output[i], printer = list(default = function(x) "abc",  Multiplicity = function(x) "xyz"))
+    expect_match(capture_func[[i]](po_cm_false$train(list(OVR))), "abc", all = FALSE)
+    po_cm_true = PipeOpInfo$new(id = "info", collect_multiplicity = TRUE, log_target = output[i], printer = list(default = function(x) "abc",  Multiplicity = function(x) "xyz"))
+    expect_match(capture_func[[i]](po_cm_true$train(OVR)), "xyz", all = FALSE)
+    }
+})
