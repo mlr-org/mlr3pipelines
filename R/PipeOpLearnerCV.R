@@ -118,9 +118,6 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   public = list(
     initialize = function(learner, id = NULL, param_vals = list()) {
       private$.learner = as_learner(learner, clone = TRUE)
-      if (paradox_info$is_old) {
-        private$.learner$param_set$set_id = ""
-      }
       id = id %??% private$.learner$id
       # FIXME: can be changed when mlr-org/mlr3#470 has an answer
       type = private$.learner$task_type
@@ -132,9 +129,6 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         keep_response = p_lgl(tags = c("train", "required"))
       )
       private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
-      if (paradox_info$is_old) {
-        private$.crossval_param_set$set_id = "resampling"
-      }
       # Dependencies in paradox have been broken from the start and this is known since at least a year:
       # https://github.com/mlr-org/paradox/issues/216
       # The following would make it _impossible_ to set "method" to "insample", because then "folds"

@@ -115,13 +115,8 @@ PipeOpFilter = R6Class("PipeOpFilter",
     initialize = function(filter, id = filter$id, param_vals = list()) {
       assert_class(filter, "Filter")
       self$filter = filter$clone(deep = TRUE)
-      if (paradox_info$is_old) {
-        self$filter$param_set$set_id = ""
-        map(self$filter$param_set$params, function(p) p$tags = union(p$tags, "train"))
-      } else {
-        for (pn in self$filter$param_set$ids()) {
-          self$filter$param_set$tags[[pn]] = union(self$filter$param_set$tags[[pn]] , "train")
-        }
+      for (pn in self$filter$param_set$ids()) {
+        self$filter$param_set$tags[[pn]] = union(self$filter$param_set$tags[[pn]] , "train")
       }
       private$.outer_param_set = ps(
         nfeat = p_int(lower = 0, tags = "train"),
@@ -129,9 +124,6 @@ PipeOpFilter = R6Class("PipeOpFilter",
         cutoff = p_dbl(tags = "train"),
         permuted = p_int(lower = 1, tags = "train")
       )
-      if (paradox_info$is_old) {
-        private$.outer_param_set$set_id = "filter"
-      }
       super$initialize(id, alist(filter = private$.outer_param_set, self$filter$param_set), param_vals = param_vals, tags = "feature selection")
     }
   ),

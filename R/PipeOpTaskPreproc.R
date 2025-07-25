@@ -172,11 +172,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       if (can_subset_cols) {
         affectcols_ps = ps(affect_columns = p_uty(custom_check = check_function_or_null, default = selector_all(), tags = "train"))
         if (inherits(param_set, "ParamSet")) {
-          if (paradox_info$is_old) {
-            lapply(affectcols_ps$params, param_set$add)
-          } else {
-            param_set = c(param_set, affectcols_ps)
-          }
+          param_set = c(param_set, affectcols_ps)
         } else {
           private$.affectcols_ps = affectcols_ps
           param_set = c(param_set, alist(private$.affectcols_ps))

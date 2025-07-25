@@ -166,12 +166,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
 
       # ParamSetCollection handles adding of new parameters differently
       if (inherits(param_set, "ParamSet")) {
-        if (paradox_info$is_old) {
-          lapply(affectcols_ps$params, param_set$add)
-          lapply(emplvls_control_ps$params, param_set$add)
-        } else {
-          param_set = c(param_set, affectcols_ps, emplvls_control_ps)
-        }
+        param_set = c(param_set, affectcols_ps, emplvls_control_ps)
       } else {
         private$.affectcols_ps = affectcols_ps
         private$.emplvls_control_ps = emplvls_control_ps
