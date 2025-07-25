@@ -334,12 +334,10 @@ test_that("More tests for PipeOpImputeConstant", {
   po = PipeOpImputeConstant$new()
 
   expect_error(po$train(list(task)), "Missing required parameters: constant")
-
   po$param_set$set_values(constant = "test")
-  # wrong type
-  expect_error(po$train(list(task)))
-
+  expect_error(po$train(list(task)), "Assertion .* failed: Must be of type 'number', not 'character'.")
   po$param_set$values$affect_columns = selector_type("character")
+
   train_out = po$train(list(task))[[1L]]
   expect_equal(train_out$feature_types, task$feature_types)
   expect_equal(sum(train_out$missings()), 7L)
@@ -352,7 +350,7 @@ test_that("More tests for PipeOpImputeConstant", {
   expect_equal(train_out$data(cols = "x2")[[1L]][1L], -999)
 
   po$param_set$values = list(constant = "test", check_levels = TRUE, affect_columns = selector_type("factor"))
-  expect_error(po$train(list(task))[[1L]])
+  expect_error(po$train(list(task))[[1L]], "Constant .* not an existing level of feature .*")
   po$param_set$values$check_levels = FALSE
   train_out = po$train(list(task))[[1L]]
   expect_equal(train_out$feature_types, task$feature_types)
@@ -362,7 +360,7 @@ test_that("More tests for PipeOpImputeConstant", {
   expect_equal(po$train(list(task))[[1L]]$data(cols = "x3")[[1L]][1L], factor("test", levels = c("1", "2", "test")))
 
   po$param_set$values = list(constant = "test", check_levels = TRUE, affect_columns = selector_type("ordered"))
-  expect_error(po$train(list(task))[[1L]])
+  expect_error(po$train(list(task))[[1L]], "Constant .* not an existing level of feature .*")
   po$param_set$values$check_levels = FALSE
   train_out = po$train(list(task))[[1L]]
   expect_equal(train_out$feature_types, task$feature_types)
@@ -476,7 +474,7 @@ test_that("Imputing zero level factors", {
     expect_equal(op$predict(list(task))[[1L]]$data(), dt_new_lvl)
   })
   op$param_set$set_values(check_levels = TRUE)
-  expect_error(op$train(list(task)), "Assertion.*failed.*element of set \\{\\}.*is 'new_lvl'")
+  expect_error(op$train(list(task)), "Constant .* not an existing level .* with levels \\{''\\}.*")
 
   # PipeOpImputeSample
   op = po("imputesample")
