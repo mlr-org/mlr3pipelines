@@ -197,7 +197,7 @@ PipeOpLearnerPICVPlus = R6Class("PipeOpLearnerPICVPlus",
 
       quantiles = as.matrix(map_dtr(seq_len(task$nrow), get_quantiles))
       quantiles = unname(quantiles)
-      attr(quantiles, "probs") = c(pv$alpha, 1 - pv$alpha)
+      setattr(quantiles, "probs", c(pv$alpha, 1 - pv$alpha))
 
       response = map_dbl(seq_len(task$nrow), function(observation) {
         stats::quantile(map_dbl(mu_hat, function(fold) {fold[observation, response]}), probs = 0.5)
