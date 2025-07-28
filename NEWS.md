@@ -9,6 +9,7 @@
 * Untrained `PipeOp`s that take `NULL` as input during training now automatically perform training during prediction.
 * `PipeOpImputeConstant`, `PipeOpImputeMode`, `PipeOpImputeOOR`, and `PipeOpImputeLearner` can now handle `factor` or `ordered` features with zero levels.
 * `PipeOpImputeConstant` now gives a more informative error message if `check_levels` is `TRUE` and a new level would be created through imputation.
+* Removed compatibility for old `paradox` versions pre-1.0.0.
 
 # mlr3pipelines 0.8.0
 
