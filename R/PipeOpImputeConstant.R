@@ -99,7 +99,10 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
         "POSIXct"   = assert_posixct(constant, any.missing = FALSE, len = 1L)
       )
       if (type %in% c("ordered", "factor") && self$param_set$values$check_levels) {
-        assert_choice(as.character(constant), levels(feature))
+        if (!isTRUE(check_choice(as.character(constant), levels(feature)))) {
+          stopf("Constant '%s' is not an existing level of feature with levels {%s}, but hyperparameter 'check_levels' is TRUE.",
+                constant, str_collapse(levels(feature), quote = "'"))
+        }
       }
       if (type == "integer") {
         constant = as.integer(constant)
