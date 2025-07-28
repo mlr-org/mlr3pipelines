@@ -44,6 +44,10 @@
 #' @export
 #' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
+#'
+#' print(preproc)
+#' find("preproc")
+#'
 #' task = tsk("iris")
 #' pop = po("pca")
 #'
