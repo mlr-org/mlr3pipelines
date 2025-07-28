@@ -58,10 +58,6 @@ of \code{\link[mlr3:TaskSupervised]{TaskSupervised}} will not work with these in
 \examples{
 \dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
-
-print(preproc)
-find("preproc")
-
 task = tsk("iris")
 pop = po("pca")
 
