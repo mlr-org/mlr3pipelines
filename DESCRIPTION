@@ -67,7 +67,7 @@ Imports:
     lgr,
     mlr3 (>= 0.20.0),
     mlr3misc (>= 0.17.0),
-    paradox,
+    paradox (>= 1.0.0),
     R6,
     withr
 Suggests:
