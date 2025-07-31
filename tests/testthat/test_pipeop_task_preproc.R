@@ -37,7 +37,7 @@ test_that("Wrong affect_columns errors", {
 })
 
 test_that("PipeOpTaskPreproc - fix for #864 works", {
-  # Fixes #864: A column that is a feature and something else does not loose the other role during training or prediction
+  # Fixes #864: A column that is a feature and something else does not loose the other role during training or prediction of PipeOps with affect_columns set to non-NULL
   POPP = R6Class("POPP",
     inherit = PipeOpTaskPreproc,
     private = list(
