@@ -1,4 +1,4 @@
-#' @title Wrap a Learner into a PipeOp to to predict multiple Quantiles
+#' @title Wrap a Learner into a PipeOp to predict multiple Quantiles
 #'
 #' @usage NULL
 #' @name mlr_pipeops_learner_quantiles
