@@ -109,27 +109,31 @@ test_that("printer can be overwritten", {
   prediction = lrn_rpart$predict_newdata(mtcars)
   # Actual Test
   inputs = list(tsk("iris"), prediction, NULL, "default_string")
-  output = c("cat", "warning", "message")
+  output = list("cat", "warning", "message")
   capture_func = list(capture_output, capture_warnings, capture_messages)
   regex_list = list("azbycxdw", "azbycxdwev", "azbycxdwevfu", "azbycxdwevfugt")
   for (j in seq_along(inputs)) {
     for (i in seq_along(output)) {
-      browser()
-      poinfo = PipeOpInfo$new(id = "info", log_target = output[i],
+      poinfo = PipeOpInfo$new(id = "info", log_target = output[[i]],
       printer = list(Task = function(x) {"azbycxdw"},
                      Prediction = function(x) {"azbycxdwev"},
                      `NULL` = function(x) {"azbycxdwevfu"},
                      default= function(x) {"azbycxdwevfugt"}
                     ))
-      console_output_train = as.character(capture_func[[i]](poinfo$train(list(inputs[[j]]))))
+      console_output_train = tryCatch(capture.output(poinfo$train(list(output[[i]]))),
+                                      warning = function(w) {conditionMessage(w)},
+                                      message = function(m) {conditionMessage(m)})
       expect_match(console_output_train, regex_list[[j]], all = FALSE)
-      console_output_predict = as.character(capture_func[[i]](poinfo$predict(list(inputs[[j]]))))
+      console_output_predict = tryCatch({
+        capture.output(poinfo$train(list(output[[i]])))
+        capture.output(poinfo$predict(list(output[[i]])))
+        },
+        warning = function(w) conditionMessage(w),
+        message = function(m) conditionMessage(m))
       expect_match(console_output_predict, regex_list[[j]], all = FALSE)
     }
   }
 })
-
-# Frage - sollen hier die verschiedenen Output-Typen getestet werden?
 
 test_that("collect multiplicity works", {
   poovr = po("ovrsplit")
