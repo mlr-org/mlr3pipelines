@@ -31,7 +31,7 @@ deviation (sampling is done observation-wise).'><meta property="og:image" conten
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,7 @@ deviation (sampling is done observation-wise).'><meta property="og:image" conten
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Generate a Randomized Response Prediction</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.8.0/R/PipeOpRandomResponse.R" class="external-link"><code>R/PipeOpRandomResponse.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpRandomResponse.R" class="external-link"><code>R/PipeOpRandomResponse.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_randomresponse.Rd</code></div>
     </div>
 
@@ -249,7 +249,8 @@ and <code>sd</code>. Default is <code><a href="https://rdrr.io/r/stats/Normal.ht
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2409</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">g1</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $randomresponse.output</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionClassif&gt; for 150 observations:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;PredictionClassif&gt;</span><span style="font-weight: bold;"> for </span><span style="color: #0000BB; font-weight: bold;">150</span><span style="font-weight: bold;"> observations:</span> <span style="color: #00BBBB;">───────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  row_ids     truth  response</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        1    setosa    setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        2    setosa    setosa</span>
@@ -270,7 +271,8 @@ and <code>sd</code>. Default is <code><a href="https://rdrr.io/r/stats/Normal.ht
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2906</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">g2</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $randomresponse.output</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionRegr&gt; for 32 observations:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;PredictionRegr&gt;</span><span style="font-weight: bold;"> for </span><span style="color: #0000BB; font-weight: bold;">32</span><span style="font-weight: bold;"> observations:</span> <span style="color: #00BBBB;">───────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  row_ids truth response</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        1  21.0 23.76570</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        2  21.0 21.28602</span>

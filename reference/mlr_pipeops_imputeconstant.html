@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Impute Features by a Constant</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.8.0/R/PipeOpImputeConstant.R" class="external-link"><code>R/PipeOpImputeConstant.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpImputeConstant.R" class="external-link"><code>R/PipeOpImputeConstant.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_imputeconstant.Rd</code></div>
     </div>
 
@@ -92,20 +92,25 @@ the value of the <code>constant</code> parameter.</p>
 
 
 <p>The parameters are the parameters inherited from <code><a href="PipeOpImpute.html">PipeOpImpute</a></code>, as well as:</p><ul><li><p><code>constant</code> :: <code>atomic(1)</code><br>
-The constant value that should be used for the imputation, atomic vector of length 1. The
-atomic mode must match the type of the features that will be selected by the <code>affect_columns</code>
-parameter and this will be checked during imputation. Initialized to <code>".MISSING"</code>.</p></li>
+The constant value that should be used for the imputation, atomic vector of length <code>1</code>. The atomic mode must match
+the type of the features that will be selected by the <code>affect_columns</code> parameter and this will be checked during
+imputation. This is a required hyperparameter and needs to be set by the user.</p></li>
 <li><p><code>check_levels</code> :: <code>logical(1)</code><br>
-Should be checked whether the <code>constant</code> value is a valid level of factorial features (i.e., it
-already is a level)? Raises an error if unsuccesful. This check is only performed for factorial
-features (i.e., <code>factor</code>, <code>ordered</code>; skipped for <code>character</code>). Initialized to <code>TRUE</code>.</p></li>
+Should be checked whether the <code>constant</code> value is a valid level of factorial features (i.e., it already is a
+level)? Raises an error if unsuccessful. This check is only performed for factorial features (i.e., <code>factor</code>,
+<code>ordered</code>; skipped for <code>character</code>). Initialized to <code>TRUE</code>.<br>
+Note that empty factor levels can be a problem for many <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learners</a></code>. Thus, <code><a href="mlr_pipeops_imputeoor.html">PipeOpImputeOOR</a></code> is
+the preferred choice for creating new levels, since it is designed to impute out-of-range values and offers a more
+explicit control for handling potentially problematic behavior.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>
 
 
-<p>Adds an explicit new level to <code>factor</code> and <code>ordered</code> features, but not to <code>character</code> features,
-if <code>check_levels</code> is <code>FALSE</code> and the level is not already present.</p>
+<p>The constructor is called with <code>empty_level_control</code> set to <code>"always"</code>, to allow the creation of a new empty level
+for <code>factor</code> and <code>ordered</code> (but not <code>character</code>) features during training, if <code>constant</code> is not an already existing
+level and <code>check_levels</code> is set to <code>FALSE</code>. This has no impact if <code>check_levels</code> is <code>TRUE</code>, since in that case an
+error would be raised before imputation.</p>
     </div>
     <div class="section level2">
     <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>
@@ -290,6 +295,7 @@ if <code>check_levels</code> is <code>FALSE</code> and the level is not already 
 <span class="r-out co"><span class="r-pr">#&gt;</span> [736]   95  126   65   99  102  120  102  109  140  153  100  147   81  187  162</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [751]  136  121  108  181  154  128  137  123  106  190   88  170   89  101  122</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [766]  121  126   93</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

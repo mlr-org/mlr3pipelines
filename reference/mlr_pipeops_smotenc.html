@@ -33,7 +33,7 @@ See themis::smotenc for details."><meta property="og:image" content="https://mlr
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@ See themis::smotenc for details."><meta property="og:image" content="https://mlr
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>SMOTENC Balancing</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.8.0/R/PipeOpSmoteNC.R" class="external-link"><code>R/PipeOpSmoteNC.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpSmoteNC.R" class="external-link"><code>R/PipeOpSmoteNC.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_smotenc.Rd</code></div>
     </div>
 
@@ -253,26 +253,26 @@ No error is raised; the unobserved class is simply ignored.</p>
 <span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">head</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    target    feature</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt;      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     c2 -1.0084861</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     c2 -0.2084793</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     c2 -0.2704835</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     c2 -0.7940955</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     c1 -0.9476550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     c2 -1.5796010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     c2  0.9923314</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     c2 -1.5280368</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     c2 -1.0506843</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     c2  0.9256427</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     c2 -1.0820668</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     c2 -0.9316755</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="st">"target"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> target</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  c1  c2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  28 172 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  18 182 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Generate synthetic data for minority class</span></span></span>
 <span class="r-in"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"smotenc"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">smotenc_result</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">smotenc_result</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 344</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 364</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">smotenc_result</span><span class="op">$</span><span class="va">target</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  c1  c2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 172 172 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 182 182 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

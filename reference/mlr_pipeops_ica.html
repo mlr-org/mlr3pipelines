@@ -15,7 +15,7 @@ See fastICA::fastICA for details."><meta property="og:image" content="https://ml
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@ See fastICA::fastICA for details."><meta property="og:image" content="https://ml
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Independent Component Analysis</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.8.0/R/PipeOpICA.R" class="external-link"><code>R/PipeOpICA.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpICA.R" class="external-link"><code>R/PipeOpICA.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_ica.Rd</code></div>
     </div>
 
@@ -258,17 +258,17 @@ Default is <code>NULL</code>.</p></li>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species          V1          V2         V3         V4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;       &lt;num&gt;       &lt;num&gt;      &lt;num&gt;      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa  0.37497949  0.02935523  1.3924582 -0.2614993</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa -0.97228998 -0.08172060  1.3294560 -0.3856955</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa -0.34912983 -0.15932196  1.3492064  0.3573154</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa -0.38000252  0.31178162  1.2048981  0.8805972</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa  0.73635602  0.10785387  1.3728567  0.2002271</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa  0.37500059  0.02943659  1.3924519 -0.2614936</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa -0.97225996 -0.08167029  1.3294610 -0.3857646</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa -0.34913589 -0.15929558  1.3492190  0.3572738</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa -0.38004875  0.31177235  1.2048972  0.8805817</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa  0.73635117  0.10791837  1.3728500  0.2002559</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica -0.31609066 -2.59269117 -0.8293227 -1.2708441</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica -1.36047203 -1.05406904 -0.7570740 -0.7270719</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica  0.09329427 -0.98341851 -0.8278155 -0.3431739</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica  1.39426025 -1.76929688 -1.0486373  1.2490073</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica  0.57303344  0.04244287 -0.8751971  1.5511214</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica -0.31596226 -2.59266317 -0.8292284 -1.2709946</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica -1.36041153 -1.05409554 -0.7570305 -0.7271920</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica  0.09333273 -0.98343101 -0.8277795 -0.3432144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica  1.39423603 -1.76937234 -1.0485595  1.2489928</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica  0.57294721  0.04233626 -0.8751853  1.5511628</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $K</span>
@@ -280,17 +280,17 @@ Default is <code>NULL</code>.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $W</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]         [,2]        [,3]      [,4]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] -0.06938814 -0.012623632  0.98684551 0.1454712</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -0.79802551  0.003143572 -0.14238779 0.5855520</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  0.47948716 -0.596435444 -0.06826898 0.6400751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  0.35837498  0.802555620 -0.03465536 0.4756794</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] -0.06938934 -0.012593052  0.98684804 0.1454561</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -0.79805659  0.003084436 -0.14237669 0.5855126</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  0.47946944 -0.596461056 -0.06824042 0.6400676</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  0.35832924  0.802537295 -0.03468520 0.4757426</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $A</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]        [,2]        [,3]        [,4]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  0.09054204  0.05276487  0.21346458  0.37160212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.06901202 -0.17442333  0.06613437 -0.06322895</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -1.74869818 -0.73626414 -0.67222587  0.20890430</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] -0.15683378 -0.04289965 -0.42343090 -0.05464287</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  0.09053775  0.05276721  0.21348058  0.37160785</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.06895140 -0.17444975  0.06613582 -0.06320762</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -1.74870327 -0.73625778 -0.67223450  0.20890405</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] -0.15680615 -0.04289852 -0.42340889 -0.05462953</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $center</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Length  Petal.Width Sepal.Length  Sepal.Width </span>

@@ -19,7 +19,7 @@ See smotefamily::ADAS for details."><meta property="og:image" content="https://m
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@ See smotefamily::ADAS for details."><meta property="og:image" content="https://m
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>ADAS Balancing</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.8.0/R/PipeOpADAS.R" class="external-link"><code>R/PipeOpADAS.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpADAS.R" class="external-link"><code>R/PipeOpADAS.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_adas.Rd</code></div>
     </div>
 
@@ -230,28 +230,28 @@ In <em>2008 IEEE International Joint Conference on Neural Networks (IEEE World C
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"example"</span>, backend <span class="op">=</span> <span class="va">data</span>, target <span class="op">=</span> <span class="st">"target"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">head</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    target         x1         x2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt;      &lt;num&gt;      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     c2 -0.3002703  0.1054926</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     c2 -0.3084548  0.8072830</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     c2  0.5561903 -0.1168897</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     c2  0.6400171 -1.4728225</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     c1 -1.8017986  0.4839497</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     c2 -0.7361059  0.1665491</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    target          x1         x2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt;       &lt;num&gt;      &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     c2 -1.80179859  0.4839497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     c2 -0.73610585  0.1665491</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     c2  1.57174231 -1.1888893</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     c2  1.43272699  1.2162566</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     c2 -1.62214871 -1.3224060</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     c2 -0.04208987 -0.1837415</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="st">"target"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> target</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  c1  c2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  26 274 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  25 275 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Generate synthetic data for minority class</span></span></span>
 <span class="r-in"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"adas"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">adas_result</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">adas_result</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 546</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 558</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">adas_result</span><span class="op">$</span><span class="va">target</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  c1  c2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 272 274 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 283 275 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

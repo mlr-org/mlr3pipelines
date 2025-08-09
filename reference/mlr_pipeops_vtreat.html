@@ -21,7 +21,7 @@ vtreat::fit_prepare() on the training data and vtreat::prepare() during predicto
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +56,7 @@ vtreat::fit_prepare() on the training data and vtreat::prepare() during predicto
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Interface to the vtreat Package</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.8.0/R/PipeOpVtreat.R" class="external-link"><code>R/PipeOpVtreat.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpVtreat.R" class="external-link"><code>R/PipeOpVtreat.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_vtreat.Rd</code></div>
     </div>
 
@@ -78,7 +78,7 @@ Internally, <code>PipeOpVtreat</code> follows the fit/prepare interface of vtrea
 
 
 
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>PipeOpVreat<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"vtreat"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>PipeOpVtreat<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"vtreat"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
 Identifier of resulting object, default <code>"vtreat"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br>
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>.</p></li>
@@ -288,12 +288,13 @@ Typically, an imputation via a <code><a href="PipeOp.html">PipeOp</a></code> is 
 <span class="r-in"><span><span class="va">pop</span> <span class="op">=</span> <span class="va">PipeOpVtreat</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskRegr:vtreat_regr&gt; (100 x 8)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Target: y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: -</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Features (7):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (7): xc_catD, xc_catN, xc_catP, xc_lev_NA, xc_lev_x_level_0_5,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     xc_lev_x_level_1, xc_lev_x_level_minus_0_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskRegr&gt;</span><span style="font-weight: bold;"> (100x8)</span> <span style="color: #00BBBB;">──────────────────────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target: y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: -</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Features (7):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (7): xc_catD, xc_catN, xc_catP, xc_lev_NA, xc_lev_x_level_0_5,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   xc_lev_x_level_1, xc_lev_x_level_minus_0_5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>

@@ -23,7 +23,7 @@ determined as the name of the column with the maximum value in the group."><meta
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@ determined as the name of the column with the maximum value in the group."><meta
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Reverse Factor Encoding</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.8.0/R/PipeOpDecode.R" class="external-link"><code>R/PipeOpDecode.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpDecode.R" class="external-link"><code>R/PipeOpDecode.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_decode.Rd</code></div>
     </div>
 
@@ -253,12 +253,12 @@ with the same value is to be picked. Options are <code>"first"</code>, <code>"la
 <span class="r-in"><span><span class="va">train_out</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task_one_hot</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="co"># x.1 and x.2 are collapsed into x, same for y; a is ignored.</span></span></span>
 <span class="r-in"><span><span class="va">train_out</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       target          a      x      y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;num&gt;      &lt;num&gt; &lt;fctr&gt; &lt;fctr&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.2779660 0.06445754      1      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 0.7875405 0.75470562      2      2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 0.7024625 0.62041003      1      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 0.1650276 0.16957677      2      2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        target          a      x      y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;num&gt;      &lt;num&gt; &lt;fctr&gt; &lt;fctr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.70246251 0.62041003      1      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 0.16502764 0.16957677      2      2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 0.06445754 0.06221405      1      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 0.75470562 0.10902927      2      2</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Reverse treatment encoding from PipeOpEncode</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
@@ -270,28 +270,28 @@ with the same value is to be picked. Options are <code>"first"</code>, <code>"la
 <span class="r-in"><span><span class="va">po_enc</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"encode"</span>, method <span class="op">=</span> <span class="st">"treatment"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">task_encoded</span> <span class="op">=</span> <span class="va">po_enc</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">task_encoded</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        target fct.b fct.c</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;num&gt; &lt;num&gt; &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.06221405     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 0.10902927     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 0.38171635     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 0.16931091     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5: 0.29865254     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6: 0.19220954     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       target fct.b fct.c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;num&gt; &lt;num&gt; &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.3817164     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 0.1693109     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 0.2986525     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 0.1922095     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5: 0.2571700     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: 0.1812318     0     1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">po_dec</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"decode"</span>, treatment_encoding <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">task_decoded</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="co"># x.1 and x.2 are collapsed into x. All rows where all values</span></span></span>
 <span class="r-in"><span><span class="co"># are smaller or equal to 0, the level is set to the reference level.</span></span></span>
 <span class="r-in"><span><span class="va">task_decoded</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        target    fct</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;num&gt; &lt;fctr&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.06221405      a</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 0.10902927      b</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 0.38171635      c</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 0.16931091      a</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5: 0.29865254      b</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6: 0.19220954      c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       target    fct</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;num&gt; &lt;fctr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.3817164      a</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 0.1693109      b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 0.2986525      c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 0.1922095      a</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5: 0.2571700      b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: 0.1812318      c</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Different group_pattern</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
@@ -308,12 +308,12 @@ with the same value is to be picked. Options are <code>"first"</code>, <code>"la
 <span class="r-in"><span><span class="va">train_out</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="co"># x_1 and x_2 are collapsed into x, same for y</span></span></span>
 <span class="r-in"><span><span class="va">train_out</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       target      x      y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;num&gt; &lt;fctr&gt; &lt;fctr&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.2571700      1      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 0.1812318      2      2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 0.4773137      1      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 0.7707370      2      2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        target      x      y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;num&gt; &lt;fctr&gt; &lt;fctr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.47731371      1      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 0.77073704      2      2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 0.02778712      1      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 0.52731078      2      2</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Empty string to collapse all matches into one factor column.</span></span></span>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="fu">set_values</span><span class="op">(</span>group_pattern <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></span>
@@ -322,12 +322,12 @@ with the same value is to be picked. Options are <code>"first"</code>, <code>"la
 <span class="r-in"><span><span class="co"># The level for each row is determined by the column with the largest value in that row.</span></span></span>
 <span class="r-in"><span><span class="co"># By default, ties are resolved randomly.</span></span></span>
 <span class="r-in"><span><span class="va">train_out</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       target pipeop.decoded</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;num&gt;         &lt;fctr&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.2571700            y_1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 0.1812318            y_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 0.4773137            y_1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 0.7707370            x_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        target pipeop.decoded</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;num&gt;         &lt;fctr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.47731371            y_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 0.77073704            x_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 0.02778712            y_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 0.52731078            y_2</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

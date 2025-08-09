@@ -33,7 +33,7 @@ single time to the output task."><meta property="og:image" content="https://mlr3
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@ single time to the output task."><meta property="og:image" content="https://mlr3
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Aggregate Features from Multiple Inputs</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.8.0/R/PipeOpFeatureUnion.R" class="external-link"><code>R/PipeOpFeatureUnion.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpFeatureUnion.R" class="external-link"><code>R/PipeOpFeatureUnion.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_featureunion.Rd</code></div>
     </div>
 
@@ -272,12 +272,14 @@ behaviour may change in the future.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">gr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $featureunion.output</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskClassif:iris&gt; (150 x 9): Iris Flowers</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Target: Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: multiclass</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Features (8):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (8): PC1, PC2, PC3, PC4, Petal.Length, Petal.Width,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Sepal.Length, Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (150x9): Iris Flowers</span> <span style="color: #00BBBB;">─────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target: Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: setosa (33%), versicolor (33%), virginica (33%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Features (8):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (8): PC1, PC2, PC3, PC4, Petal.Length, Petal.Width, Sepal.Length,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Width</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">task2</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span></span></span>
@@ -286,13 +288,14 @@ behaviour may change in the future.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task2</span>, <span class="va">task3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskClassif:iris&gt; (150 x 9): Iris Flowers</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Target: Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: multiclass</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Features (8):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (8): a.Petal.Length, a.Petal.Width, a.Sepal.Length,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     a.Sepal.Width, b.Petal.Length, b.Petal.Width, b.Sepal.Length,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     b.Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (150x9): Iris Flowers</span> <span style="color: #00BBBB;">─────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target: Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: setosa (33%), versicolor (33%), virginica (33%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Features (8):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (8): a.Petal.Length, a.Petal.Width, a.Sepal.Length, a.Sepal.Width,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   b.Petal.Length, b.Petal.Width, b.Sepal.Length, b.Sepal.Width</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
