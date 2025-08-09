@@ -11,7 +11,7 @@ using \(min(x) - offset - multiplier * diff(range(x))\) or
 \(max(x) + offset + multiplier * diff(range(x))\).
 This type of imputation is especially sensible in the context of tree-based methods, see also
 Ding &amp;amp; Simonoff (2010).
-expect input  to have the same factor (or ordered) levels during
+Learners expect input Tasks to have the same factor (or ordered) levels during
 training as well as prediction. This PipeOp modifies the levels of factor and ordered features,
 and since it may occur that a factor or ordered feature contains missing values only during prediction, but not
 during training, the output Task could also have different levels during the two stages.
@@ -31,7 +31,7 @@ using \(min(x) - offset - multiplier * diff(range(x))\) or
 \(max(x) + offset + multiplier * diff(range(x))\).
 This type of imputation is especially sensible in the context of tree-based methods, see also
 Ding &amp;amp; Simonoff (2010).
-expect input  to have the same factor (or ordered) levels during
+Learners expect input Tasks to have the same factor (or ordered) levels during
 training as well as prediction. This PipeOp modifies the levels of factor and ordered features,
 and since it may occur that a factor or ordered feature contains missing values only during prediction, but not
 during training, the output Task could also have different levels during the two stages.
@@ -53,7 +53,7 @@ after this PipeOp."><meta property="og:image" content="https://mlr3pipelines.mlr
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0-9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.0-9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,7 +99,7 @@ using \(min(x) - offset - multiplier * diff(range(x))\) or
 \(max(x) + offset + multiplier * diff(range(x))\).</p>
 <p>This type of imputation is especially sensible in the context of tree-based methods, see also
 Ding &amp; Simonoff (2010).</p>
-<p>expect input  to have the same <code>factor</code> (or <code>ordered</code>) levels during
+<p><code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>s expect input <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>s to have the same <code>factor</code> (or <code>ordered</code>) levels during
 training as well as prediction. This <code>PipeOp</code> modifies the levels of <code>factor</code> and <code>ordered</code> features,
 and since it may occur that a <code>factor</code> or <code>ordered</code> feature contains missing values only during prediction, but not
 during training, the output <code>Task</code> could also have different levels during the two stages.</p>

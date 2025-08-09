@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0-9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.0-9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,20 +52,23 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.8.0-9000" id="mlr3pipelines-080-9000">mlr3pipelines 0.8.0-9000<a class="anchor" aria-label="anchor" href="#mlr3pipelines-080-9000"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.9.0-9000" id="mlr3pipelines-090-9000">mlr3pipelines 0.9.0-9000<a class="anchor" aria-label="anchor" href="#mlr3pipelines-090-9000"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.9.0" id="mlr3pipelines-090">mlr3pipelines 0.9.0<a class="anchor" aria-label="anchor" href="#mlr3pipelines-090"></a></h2><p class="text-muted">CRAN release: 2025-07-31</p>
 <ul><li>Breaking change: Removed initialization of <code>PipeOpImputeConstant</code>’s <code>constant</code> hyperparameter since it was incompatible with other defaults and would lead to not recommended usage (creating an empty level).</li>
-<li>Fixed a grammatical error in <code>PipeOp</code>’s error message wrapper: now correctly says “This happened <em>in</em> …”.</li>
+<li>Removed compatibility for old <code>paradox</code> versions pre-1.0.0.</li>
 <li>Added <code>empty_level_control</code> argument to <code>PipeOpImpute</code> allowing control over edge cases for <code>factor</code>/<code>ordered</code> columns.</li>
 <li>Set new construction argument <code>empty_level_control</code> to <code>"param"</code> for <code>PipeOpImputeOOR</code> and to <code>"always"</code> for <code>PipeOpImputeConstant</code>.</li>
-<li>Fix: <code>PipeOpImputeOOR</code> now imputes <code>".MISSING"</code> for <code>factor</code>/<code>ordered</code> features with only <code>NA</code>s instead of sampling from the feature’s levels.</li>
-<li>Fix: <code>PipeOpImputeLearner</code> no longer adds <code>"factor"</code> or <code>"ordered"</code> levels for these feature types arbitrarily and instead updates levels correctly in certain edge-cases.</li>
-<li>Fixed the error message for unexpected Multiplicities in the input and output type checking during <code>PipeOp</code>s training and prediction.</li>
 <li>Untrained <code>PipeOp</code>s that take <code>NULL</code> as input during training now automatically perform training during prediction.</li>
 <li>
 <code>PipeOpImputeConstant</code>, <code>PipeOpImputeMode</code>, <code>PipeOpImputeOOR</code>, and <code>PipeOpImputeLearner</code> can now handle <code>factor</code> or <code>ordered</code> features with zero levels.</li>
 <li>
 <code>PipeOpImputeConstant</code> now gives a more informative error message if <code>check_levels</code> is <code>TRUE</code> and a new level would be created through imputation.</li>
-<li>Removed compatibility for old <code>paradox</code> versions pre-1.0.0.</li>
+<li>Fix: <code>PipeOpImputeOOR</code> now imputes <code>".MISSING"</code> for <code>factor</code>/<code>ordered</code> features with only <code>NA</code>s instead of sampling from the feature’s levels.</li>
+<li>Fix: <code>PipeOpImputeLearner</code> no longer adds <code>"factor"</code> or <code>"ordered"</code> levels for these feature types arbitrarily and instead updates levels correctly in certain edge-cases.</li>
+<li>Fixed the error message for unexpected Multiplicities in the input and output type checking during <code>PipeOp</code>s training and prediction.</li>
+<li>Fixed a grammatical error in <code>PipeOp</code>’s error message wrapper: now correctly says “This happened <em>in</em> …”.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.8.0" id="mlr3pipelines-080">mlr3pipelines 0.8.0<a class="anchor" aria-label="anchor" href="#mlr3pipelines-080"></a></h2><p class="text-muted">CRAN release: 2025-06-17</p>
