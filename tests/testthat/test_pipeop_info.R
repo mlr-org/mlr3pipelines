@@ -14,10 +14,10 @@ test_that("check whether input and output are equal", {
   prediction_new = lrn_rpart$predict_newdata(mtcars_new)
   # Actual Test
   inputs = c(tsk("iris"), prediction, prediction_new, NULL, "default_string")
-  output = c("lgr::mlr3/mlr3pipelines::info", "cat", "warning", "message", "none")
+  output = list("lgr::mlr3/mlr3pipelines::info", "cat", "warning", "message", "none")
   for (j in inputs) {
     for (i in seq_along(output)) {
-      poinfo = PipeOpInfo$new(id = "info", log_target = output[i])
+      poinfo = PipeOpInfo$new(id = "info", log_target = output[[i]])
       suppressMessages(suppressWarnings(invisible(capture.output(expect_identical(poinfo$train(list(j))[[1]], j)))))
       suppressMessages(suppressWarnings(invisible(capture.output(expect_identical(poinfo$predict(list(j))[[1]], j)))))
     }
