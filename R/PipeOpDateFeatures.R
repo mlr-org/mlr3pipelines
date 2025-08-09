@@ -171,9 +171,10 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
           c("month", "week_of_year", "day_of_year", "day_of_month", "day_of_week", "hour", "minute", "second")
       ]
 
-      nms = names(copy(dt))
+      nms = copy(names(dt))
       for (nm in nms) {
-        dt[, (paste0(nm, ".", features)) := compute_date_features(get(nm), features)]
+        x = compute_date_features(dt[[nm]], date_features)
+        set(dt, j = paste0(nm, ".", names(x)), value = x)
       }
 
       # if cyclic = TRUE for month, week_of_year, day_of_year, day_of_month, day_of_week, hour,
@@ -182,16 +183,16 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
       if (pv$cyclic && length(cyclic_features) > 0L) {
         for (date_var in nms) {
           nm = paste0(date_var, ".", rep(cyclic_features, each = 2L), "_", c("sin", "cos"))
-          dt[, (nm) := compute_cyclic_date_features(.SD, cyclic_features, date_var)]
+          set(dt, j = nm, value = compute_cyclic_date_features(dt, cyclic_features, date_var))
         }
       }
 
       if (!pv$keep_date_var) {
-        dt[, (nms) := NULL]
+        set(dt, j = nms, value = NULL)
       }
 
       if (drop_year) {
-        dt[, paste0(nms, ".", "year") := NULL]
+        set(dt, j = paste0(nms, ".", "year"), value = NULL)
       }
 
       dt
@@ -230,8 +231,8 @@ is_day = function(x) {
 # sine and cosine transformations of 2 * pi * x / max_x
 compute_cyclic_date_features = function(date_features, features, date_var) {
   # drop the date_var-specific colnames here, this makes it easier in lapply
-  column_names = names(date_features)
-  names(date_features) = c(column_names[1L], gsub(paste0(date_var, "."), "", column_names[-1L], fixed = TRUE))
+  cn = names(date_features)
+  names(date_features) = c(cn[1L], gsub(paste0(date_var, "."), "", cn[-1L], fixed = TRUE))
   unlist(
     lapply(features, function(feature) {
       # all values are expected to start at 0 and therefore may be shifted by - 1

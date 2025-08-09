@@ -3,7 +3,8 @@ context("PipeOpDateFeatures")
 test_that("PipeOpDateFeatures - basic properties", {
   dat = iris
   set.seed(1)
-  dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"), size = 150L)
+  dat$datetime = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"), size = 150L)
+  dat$date = seq(as.Date("2020-01-31"), length.out = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
   po = PipeOpDateFeatures$new()
   expect_datapreproc_pipeop_class(PipeOpDateFeatures, task = task)
@@ -12,7 +13,8 @@ test_that("PipeOpDateFeatures - basic properties", {
 test_that("PipeOpDateFeatures - finds POSIXct column", {
   dat = iris
   set.seed(1)
-  dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"), size = 150L)
+  dat$datetime = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"), size = 150L)
+  dat$date = seq(as.Date("2020-01-31"), length.out = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
   po = PipeOpDateFeatures$new()
   train_pipeop(po, inputs = list(task))
