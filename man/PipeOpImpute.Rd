@@ -35,7 +35,7 @@ during training. Can be one of \code{"never"}, \code{"always"}, or \code{"param"
 during prediction will \emph{not} be imputed.
 \item If set to \code{"always"}, an unseen level is added to the feature during training and missing values are imputed as
 that value during prediction.
-\item Finally, if set to \code{"param"}, the hyperparameter \code{create_empty_levels} is added and control over this behavior is
+\item Finally, if set to \code{"param"}, the hyperparameter \code{create_empty_level} is added and control over this behavior is
 left to the user.
 }
 

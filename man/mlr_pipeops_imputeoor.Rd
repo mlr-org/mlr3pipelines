@@ -17,7 +17,7 @@ using \eqn{min(x) - offset - multiplier * diff(range(x))} or
 This type of imputation is especially sensible in the context of tree-based methods, see also
 Ding & Simonoff (2010).
 
- expect input  to have the same \code{factor} (or \code{ordered}) levels during
+\code{\link[mlr3:Learner]{Learner}}s expect input \code{\link[mlr3:Task]{Task}}s to have the same \code{factor} (or \code{ordered}) levels during
 training as well as prediction. This \code{PipeOp} modifies the levels of \code{factor} and \code{ordered} features,
 and since it may occur that a \code{factor} or \code{ordered} feature contains missing values only during prediction, but not
 during training, the output \code{Task} could also have different levels during the two stages.
