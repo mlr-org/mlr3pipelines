@@ -223,7 +223,7 @@ compute_date_features = function(x, features) {
 }
 
 is_day = function(x) {
-  hours = as.integer(format(x, "%H"))
+  hours = hour(x)
   (6L <= hours) & (hours <= 20L)
 }
 
