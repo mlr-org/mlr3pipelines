@@ -60,16 +60,16 @@ test_that("PipeOpDateFeatures - correct basic features", {
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
   po = PipeOpDateFeatures$new()
   trained_data = train_pipeop(po, inputs = list(task))$output$data()
-  expect_true(all(trained_data$date.year == as.integer(format(dat$date, "%Y"))))
-  expect_true(all(trained_data$date.month == as.integer(format(dat$date, "%m"))))
-  expect_true(all(trained_data$date.week_of_year == as.integer(format(dat$date, "%U"))))
-  expect_true(all(trained_data$date.day_of_year == as.integer(format(dat$date, "%j"))))
-  expect_true(all(trained_data$date.day_of_month == as.integer(format(dat$date, "%d"))))
-  expect_true(all(trained_data$date.day_of_week == as.integer(format(dat$date, "%w"))))
-  expect_true(all(trained_data$date.hour == as.integer(format(dat$date, "%H"))))
-  expect_true(all(trained_data$date.minute == as.integer(format(dat$date, "%M"))))
-  expect_true(all(trained_data$date.second == as.integer(format(dat$date, "%S"))))
-  hours = as.integer(format(dat$date, "%H"))
+  expect_true(all(trained_data$date.year == year(dat$date)))
+  expect_true(all(trained_data$date.month == month(dat$date)))
+  expect_true(all(trained_data$date.week_of_year == isoweek(dat$date)))
+  expect_true(all(trained_data$date.day_of_year == yday(dat$date)))
+  expect_true(all(trained_data$date.day_of_month == mday(dat$date)))
+  expect_true(all(trained_data$date.day_of_week == wday(dat$date)))
+  expect_true(all(trained_data$date.hour == hour(dat$date)))
+  expect_true(all(trained_data$date.minute == minute(dat$date)))
+  expect_true(all(trained_data$date.second == second(dat$date)))
+  hours = hour(dat$date)
   expect_true(all(trained_data$date.is_day == (6 <= hours & hours <= 20)))
 })
 
@@ -81,35 +81,35 @@ test_that("PipeOpDateFeatures - correct cyclic features", {
   po = PipeOpDateFeatures$new(param_vals = list(cyclic = TRUE))
   trained_data = train_pipeop(po, inputs = list(task))$output$data()
 
-  month = as.integer(format(dat$date, "%m")) - 1L
+  month = month(dat$date) - 1L
   value_scaled_month = 2L * pi * month / 12L
   expect_identical(trained_data$date.month_sin, sin(value_scaled_month))
 
-  week_of_year = as.integer(format(dat$date, "%U")) - 1L
+  week_of_year = isoweek(dat$date) - 1L
   value_scaled_woy = 2L * pi * week_of_year / 52L
   expect_identical(trained_data$date.week_of_year_sin, sin(value_scaled_woy))
 
-  day_of_year = as.integer(format(dat$date, "%j")) - 1L
+  day_of_year = yday(dat$date) - 1L
   value_scaled_doy = 2L * pi * day_of_year / (365L + 1L)
   expect_identical(trained_data$date.day_of_year_sin, sin(value_scaled_doy))
 
-  day_of_month = as.integer(format(dat$date, "%d")) - 1L
+  day_of_month = mday(dat$date) - 1L
   value_scaled_dom = 2L * pi * day_of_month / 29L
   expect_identical(trained_data$date.day_of_month_sin, sin(value_scaled_dom))
 
-  day_of_week = as.integer(format(dat$date, "%w"))
+  day_of_week = wday(dat$date)
   value_scaled_dow = 2L * pi * day_of_week / 7L
   expect_identical(trained_data$date.day_of_week_sin, sin(value_scaled_dow))
 
-  hour = as.integer(format(dat$date, "%H"))
+  hour = hour(dat$date)
   value_scaled_hour = 2L * pi * hour / 24L
   expect_identical(trained_data$date.hour_sin, sin(value_scaled_hour))
 
-  minute = as.integer(format(dat$date, "%M"))
+  minute = minute(dat$date)
   value_scaled_minute = 2L * pi * minute / 60L
   expect_identical(trained_data$date.minute_sin, sin(value_scaled_minute))
 
-  second = as.integer(format(dat$date, "%S"))
+  second = second(dat$date)
   value_scaled_second = 2L * pi * second / 60L
   expect_identical(trained_data$date.second_sin, sin(value_scaled_second))
 })
