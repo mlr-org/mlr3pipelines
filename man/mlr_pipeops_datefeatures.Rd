@@ -8,7 +8,7 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Based on \code{POSIXct} and  columns of the data, a set of date related features is computed and added to
+Based on \code{POSIXct}/\code{Date} columns of the data, a set of date related features is computed and added to
 the feature set of the output task. If no \code{POSIXct} or \code{Date} column is found, the original task is
 returned unaltered. This functionality is based on the \code{add_datepart()} and
 \code{add_cyclic_datepart()} functions from the \code{fastai} library. If operation on only particular

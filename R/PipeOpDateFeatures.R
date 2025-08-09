@@ -5,7 +5,7 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Based on `POSIXct` and  columns of the data, a set of date related features is computed and added to
+#' Based on `POSIXct`/`Date` columns of the data, a set of date related features is computed and added to
 #' the feature set of the output task. If no `POSIXct` or `Date` column is found, the original task is
 #' returned unaltered. This functionality is based on the `add_datepart()` and
 #' `add_cyclic_datepart()` functions from the `fastai` library. If operation on only particular
