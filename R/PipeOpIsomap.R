@@ -19,25 +19,26 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
     .keep_org_data = NULL,
     .diag = NULL,
     .make_knn_graph = function(x) {
+
       pv = self$param_set$get_values(tags = "train")
-      INF_VAL <- 1.340781e+15
-      NA_IDX  <- 0
+      INF_VAL = 1.340781e+15
+      NA_IDX  = 0
       ## select parameters
-      M <- nrow(x)
-      searchtype <- if (pv$eps == 0) "standard" else "priority"
+      M = nrow(x)
+      searchtype = if (pv$eps == 0) "standard" else "priority"
       ## RANN::nn2 returns the points in data with respect to query
       ## e.g. the rows in the output are the points in query and the
       ## columns the points in data.
-      nn2res <- RANN::nn2(data = x, query = x, k = pv$k + 1, treetype = "kd",
+      nn2res = RANN::nn2(data = x, query = x, k = pv$k + 1, treetype = "kd",
                           searchtype = searchtype, eps = pv$eps)
       ## create graph: the first ny nodes will be y, the last nx nodes
       ## will be x, if x != y
-      g <- igraph::make_empty_graph(M, directed = TRUE)
+      g = igraph::make_empty_graph(M, directed = TRUE)
       g[from = if (private$.diag) rep(seq_len(M), times = pv$k + 1)
         else      rep(seq_len(M), times = pv$k),
         to   = if (private$.diag) as.vector(nn2res$nn.idx)
         else      as.vector(nn2res$nn.idx[, -1]),
-        attr = "weight"] <-
+        attr = "weight"] =
         if (private$.diag)  as.vector(nn2res$nn.dists)
       else as.vector(nn2res$nn.dists[, -1])
       return(igraph::as_undirected(g, mode = "collapse", edge.attr.comb = "first"))
@@ -47,55 +48,72 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
       pv = self$param_set$get_values(tags = "train")
       knn_graph = private$.make_knn_graph(dt)
       geodist = igraph::distances(knn_graph, algorithm = "dijkstra")
-      k <- geodist ^ 2
-      k <- .Call(stats:::C_DoubleCentre, k)
-      k <- - k / 2
+      k = geodist ^ 2
+      k = .Call(stats:::C_DoubleCentre, k)
+      k = - k / 2
       ## TODO: explicit symmetrizing
       ## TODO: return eigenvectors?
-      e <- RSpectra::eigs_sym(k, pv$ndim, which = "LA",
+      e = RSpectra::eigs_sym(k, pv$ndim, which = "LA",
                               opts = list(retvec = TRUE))
-      e_values <- e$values
-      e_vectors <- e$vectors
-      neig <- sum(e_values > 0)
+      e_values = e$values
+      e_vectors = e$vectors
+      neig = sum(e_values > 0)
       if (neig < pv$ndim) {
         warning("Isomap: eigenvalues < 0, returning less dimensions!")
-        e_values <- e_values[seq_len(neig)]
-        e_vectors <- e_vectors[, seq_len(neig), drop = FALSE]
+        e_values = e_values[seq_len(neig)]
+        e_vectors = e_vectors[, seq_len(neig), drop = FALSE]
       }
-
-      e_vectors <- e_vectors * rep(sqrt(e_values), each = nrow(e_vectors))
-      colnames(e_vectors) <- paste("iso", seq_len(neig))
-      self$state = list(geodist = geodist, e_vectors = e_vectors, e_values = e_values)
+      e_vectors = e_vectors * rep(sqrt(e_values), each = nrow(e_vectors))
+      colnames(e_vectors) = paste("iso", seq_len(neig))
+      self$state = list(geodist = geodist, e_vectors = e_vectors, e_values = e_values, orgdata = dt)
       dt
+    },
+    .predict_dt = function(dt, ndim) {
+        browser()
+      pv = self$param_set$get_values(tags = "train")
+      if (ncol(po$state$orgdata) != ncol(dt))
+        stop("x must have the same number of dimensions as the original data")
+      nindata = nrow(dt)
+      norg = nrow(self$state$orgdata)
+      lknng <- makeKNNgraph(rbind(dt, self$state$orgdata),
+                            k = pars$knn, eps = pars$eps)
+      lgeodist <- igraph::distances(lknng,
+                                    seq_len(nindata),
+                                    nindata + seq_len(norg))
+      dammu <- sweep(lgeodist ^ 2, 2, colMeans(geodist ^ 2), "-")
+      Lsharp <- sweep(e_vectors, 2, e_values, "/")
+      out <- -0.5 * (dammu %*% Lsharp)
+      out
     }
-    #.predict_dt = function() {}
   )
 )
 
-mlr_pipeops$add("isomap", PipeOpIsomap)
-po = PipeOpIsomap$new("isomap")
+#mlr_pipeops$add("isomap", PipeOpIsomap)
+#po = PipeOpIsomap$new("isomap")
+#po$train(list(tsk("iris")))
+#po$predict(list(tsk("iris")))
 
 # if (pars$eps) pars$eps$value =
 
-makeKNNgraph <- function (x, k, eps = 0, diag = FALSE){
-  INF_VAL <- 1.340781e+15
-  NA_IDX  <- 0
+makeKNNgraph = function (x, k, eps = 0, diag = FALSE){
+  INF_VAL = 1.340781e+15
+  NA_IDX  = 0
   ## select parameters
-  M <- nrow(x)
-  searchtype <- if (eps == 0) "standard" else "priority"
+  M = nrow(x)
+  searchtype = if (eps == 0) "standard" else "priority"
   ## RANN::nn2 returns the points in data with respect to query
   ## e.g. the rows in the output are the points in query and the
   ## columns the points in data.
-  nn2res <- RANN::nn2(data = x, query = x, k = k + 1, treetype = "kd",
+  nn2res = RANN::nn2(data = x, query = x, k = k + 1, treetype = "kd",
                       searchtype = searchtype, eps = eps)
   ## create graph: the first ny nodes will be y, the last nx nodes
   ## will be x, if x != y
-  g <- igraph::make_empty_graph(M, directed = TRUE)
+  g = igraph::make_empty_graph(M, directed = TRUE)
   g[from = if (diag) rep(seq_len(M), times = k + 1)
     else      rep(seq_len(M), times = k),
     to   = if (diag) as.vector(nn2res$nn.idx)
     else      as.vector(nn2res$nn.idx[, -1]),
-    attr = "weight"] <-
+    attr = "weight"] =
     if (diag)  as.vector(nn2res$nn.dists)
   else as.vector(nn2res$nn.dists[, -1])
   return(igraph::as_undirected(g, mode = "collapse", edge.attr.comb = "first"))
