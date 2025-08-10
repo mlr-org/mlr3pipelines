@@ -171,28 +171,28 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
           c("month", "week_of_year", "day_of_year", "day_of_month", "day_of_week", "hour", "minute", "second")
       ]
 
-      nms = copy(names(dt))
-      for (nm in nms) {
-        x = compute_date_features(dt[[nm]], date_features)
-        set(dt, j = paste0(nm, ".", names(x)), value = x)
+      cols = copy(names(dt))
+      for (j in cols) {
+        x = compute_date_features(dt[[j]], date_features)
+        set(dt, j = paste0(j, ".", names(x)), value = x)
       }
 
       # if cyclic = TRUE for month, week_of_year, day_of_year, day_of_month, day_of_week, hour,
       # minute and second, two columns are additionally added, each consisting of their sine and
       # cosine transformation of in general 2 * pi * x / max_x (x starting from 0)
       if (pv$cyclic && length(cyclic_features) > 0L) {
-        for (date_var in nms) {
-          nm = paste0(date_var, ".", rep(cyclic_features, each = 2L), "_", c("sin", "cos"))
-          set(dt, j = nm, value = compute_cyclic_date_features(dt, cyclic_features, date_var))
+        for (j in cols) {
+          nm = paste0(j, ".", rep(cyclic_features, each = 2L), "_", c("sin", "cos"))
+          set(dt, j = nm, value = compute_cyclic_date_features(dt, cyclic_features, j))
         }
       }
 
       if (!pv$keep_date_var) {
-        set(dt, j = nms, value = NULL)
+        set(dt, j = cols, value = NULL)
       }
 
       if (drop_year) {
-        set(dt, j = paste0(nms, ".", "year"), value = NULL)
+        set(dt, j = paste0(cols, ".", "year"), value = NULL)
       }
 
       dt
