@@ -3,7 +3,7 @@
 \name{mlr_pipeops_learner_quantiles}
 \alias{mlr_pipeops_learner_quantiles}
 \alias{PipeOpLearnerQuantiles}
-\title{Wrap a Learner into a PipeOp to to predict multiple Quantiles}
+\title{Wrap a Learner into a PipeOp to predict multiple Quantiles}
 \format{
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }

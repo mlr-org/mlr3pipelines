@@ -5,11 +5,11 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Based on `POSIXct` columns of the data, a set of date related features is computed and added to
-#' the feature set of the output task. If no `POSIXct` column is found, the original task is
+#' Based on `POSIXct`/`Date` columns of the data, a set of date related features is computed and added to
+#' the feature set of the output task. If no `POSIXct` or `Date` column is found, the original task is
 #' returned unaltered. This functionality is based on the `add_datepart()` and
 #' `add_cyclic_datepart()` functions from the `fastai` library. If operation on only particular
-#' `POSIXct` columns is requested, use the `affect_columns` parameter inherited from
+#' `POSIXct`/`Date` columns is requested, use the `affect_columns` parameter inherited from
 #' [`PipeOpTaskPreprocSimple`].
 #'
 #' If `cyclic = TRUE`, cyclic features are computed for the features `"month"`, `"week_of_year"`,
@@ -46,30 +46,32 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `keep_date_var` :: `logical(1)`\cr
-#'   Should the `POSIXct` columns be kept as features? Default FALSE.
+#'   Should the `POSIXct` columns be kept as features? Default `FALSE`.
 #' * `cyclic` :: `logical(1)`\cr
-#'   Should cyclic features be computed? See Internals. Default FALSE.
+#'   Should cyclic features be computed? See Internals. Default `FALSE`.
 #' * `year` :: `logical(1)`\cr
-#'   Should the year be extracted as a feature? Default TRUE.
+#'   Should the year be extracted as a feature? Default `TRUE`.
+#' * `quarter` :: `logical(1)`\cr
+#'   Should the quarter be extracted as a feature? Default `TRUE`.
 #' * `month` :: `logical(1)`\cr
-#'   Should the month be extracted as a feature? Default TRUE.
+#'   Should the month be extracted as a feature? Default `TRUE`.
 #' * `week_of_year` :: `logical(1)`\cr
-#'   Should the week of the year be extracted as a feature? Default TRUE.
+#'   Should the week of the year be extracted as a feature? Default `TRUE`.
 #' * `day_of_year` :: `logical(1)`\cr
-#'   Should the day of the year be extracted as a feature? Default TRUE.
+#'   Should the day of the year be extracted as a feature? Default `TRUE`.
 #' * `day_of_month` :: `logical(1)`\cr
-#'   Should the day of the month be extracted as a feature? Default TRUE.
+#'   Should the day of the month be extracted as a feature? Default `TRUE`.
 #' * `day_of_week` :: `logical(1)`\cr
-#'   Should the day of the week be extracted as a feature? Default TRUE.
+#'   Should the day of the week (ISO 8601) be extracted as a feature? Default `TRUE`.
 #' * `hour` :: `logical(1)`\cr
-#'   Should the hour be extracted as a feature? Default TRUE.
+#'   Should the hour be extracted as a feature? Default `TRUE`.
 #' * `minute` :: `logical(1)`\cr
-#'   Should the minute be extracted as a feature? Default TRUE.
+#'   Should the minute be extracted as a feature? Default `TRUE`.
 #' * `second` :: `logical(1)`\cr
-#'   Should the second be extracted as a feature? Default TRUE.
+#'   Should the second be extracted as a feature? Default `TRUE`.
 #' * `is_day` :: `logical(1)`\cr
 #'   Should a feature be extracted indicating whether it is day time (06:00am - 08:00pm)?
-#'   Default TRUE.
+#'   Default `TRUE`.
 #'
 #' @section Internals:
 #' The cyclic feature transformation always assumes that values range from 0, so some values
@@ -85,8 +87,9 @@
 #' library("mlr3")
 #' dat = iris
 #' set.seed(1)
-#' dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"),
-#'   size = 150L)
+#' dat$date = sample(
+#'   seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"), size = 150L
+#' )
 #' task = TaskClassif$new("iris_date", backend = dat, target = "Species")
 #' pop = po("datefeatures", param_vals = list(cyclic = FALSE, minute = FALSE, second = FALSE))
 #' pop$train(list(task))
@@ -103,6 +106,7 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
         keep_date_var = p_lgl(tags = c("train", "predict", "required")),
         cyclic = p_lgl(tags = c("train", "predict", "required")),
         year = p_lgl(tags = c("train", "predict", "datepart", "required")),
+        quarter = p_lgl(tags = c("train", "predict", "datepart", "required")),
         month = p_lgl(tags = c("train", "predict", "datepart", "required")),
         week_of_year = p_lgl(tags = c("train", "predict", "datepart", "required")),
         day_of_year = p_lgl(tags = c("train", "predict", "datepart", "required")),
@@ -113,16 +117,33 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
         second = p_lgl(tags = c("train", "predict", "datepart", "required")),
         is_day = p_lgl(tags = c("train", "predict", "datepart", "required"))
       )
-      ps$values = list(keep_date_var = FALSE, cyclic = FALSE, year = TRUE,
-        month = TRUE, week_of_year = TRUE, day_of_year = TRUE, day_of_month = TRUE,
-        day_of_week = TRUE, hour = TRUE, minute = TRUE, second = TRUE, is_day = TRUE)
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = "POSIXct")
+      ps$values = list(
+        keep_date_var = FALSE,
+        cyclic = FALSE,
+        year = TRUE,
+        quarter = TRUE,
+        month = TRUE,
+        week_of_year = TRUE,
+        day_of_year = TRUE,
+        day_of_month = TRUE,
+        day_of_week = TRUE,
+        hour = TRUE,
+        minute = TRUE,
+        second = TRUE,
+        is_day = TRUE
+      )
+      super$initialize(
+        id = id,
+        param_set = ps,
+        param_vals = param_vals,
+        feature_types = c("POSIXct", "Date")
+      )
     }
   ),
   private = list(
     .transform_dt = function(dt, levels) {
+      pv = self$param_set$get_values(tags = "train")
       features = names(which(unlist(self$param_set$get_values(tags = "datepart"))))
-      # early exit if no features are to be computed
       if (length(features) == 0L) {
         return(dt)
       }
@@ -131,32 +152,47 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
       drop_year = "year" %nin% features
       features = unique(c("year", features))
 
-      cyclic_features = features[features %in% c("month", "week_of_year", "day_of_year",
-        "day_of_month", "day_of_week", "hour", "minute", "second")]
+      date_features = c(
+        "year",
+        "quarter",
+        "month",
+        "hour",
+        "minute",
+        "second",
+        "week_of_year",
+        "day_of_year",
+        "day_of_month",
+        "day_of_week",
+        "is_day"
+      )
+      date_features = features[features %in% date_features]
+      cyclic_features = features[
+        features %in%
+          c("month", "week_of_year", "day_of_year", "day_of_month", "day_of_week", "hour", "minute", "second")
+      ]
 
-      date_vars = colnames(copy(dt))
-
-      for (date_var in date_vars) {
-        dt[, paste0(date_var, ".", features) :=
-          compute_date_features(get(date_var), features = features)]
+      cols = copy(names(dt))
+      for (j in cols) {
+        x = compute_date_features(dt[[j]], date_features)
+        set(dt, j = paste0(j, ".", names(x)), value = x)
       }
 
       # if cyclic = TRUE for month, week_of_year, day_of_year, day_of_month, day_of_week, hour,
       # minute and second, two columns are additionally added, each consisting of their sine and
       # cosine transformation of in general 2 * pi * x / max_x (x starting from 0)
-      if (self$param_set$values$cyclic && (length(cyclic_features) > 0L)) {
-        for (date_var in date_vars) {
-          dt[, paste0(date_var, ".", rep(cyclic_features, each = 2L), "_", c("sin", "cos")) :=
-            compute_cyclic_date_features(.SD, features = cyclic_features, date_var = date_var)]
+      if (pv$cyclic && length(cyclic_features) > 0L) {
+        for (j in cols) {
+          nm = paste0(j, ".", rep(cyclic_features, each = 2L), "_", c("sin", "cos"))
+          set(dt, j = nm, value = compute_cyclic_date_features(dt, cyclic_features, j))
         }
       }
 
-      if (self$param_set$values$keep_date_var == FALSE) {
-        dt[, (date_vars) := NULL]
+      if (!pv$keep_date_var) {
+        set(dt, j = cols, value = NULL)
       }
 
       if (drop_year) {
-        dt[, paste0(date_vars, ".", "year") := NULL]
+        set(dt, j = paste0(cols, ".", "year"), value = NULL)
       }
 
       dt
@@ -164,71 +200,74 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
   )
 )
 
-mlr_pipeops$add("datefeatures", PipeOpDateFeatures)
-
-# helper function to compute date features of a vector of dates
-compute_date_features = function(dates, features) {
-  lapply(features, FUN = function(feature) {
-    formatting = switch(feature,
-      year = "%Y",
-      month = "%m",
-      week_of_year = "%U", # starting on Sunday
-      day_of_year = "%j",
-      day_of_month = "%d",
-      day_of_week = "%w", # 0 = Sunday
-      hour = "%H",
-      minute = "%M",
-      second = "%S",
-      is_day = "%H")
-    if (feature == "is_day") {
-      hours = as.numeric(format(dates, formatting))
-      return((6L <= hours) & (hours <= 20L)) # early exit
-    }
-    as.numeric(format(dates, formatting))
+compute_date_features = function(x, features) {
+  if (inherits(x, "Date")) {
+    features = features[features %nin% c("hour", "minute", "second", "is_day")]
+  }
+  res = map(features, function(feature, nm) {
+    switch(feature,
+      year = year(x),
+      quarter = quarter(x),
+      month = month(x),
+      week_of_year = isoweek(x),
+      day_of_year = yday(x),
+      day_of_month = mday(x),
+      day_of_week = wday(x),
+      hour = hour(x),
+      minute = minute(x),
+      second = second(x),
+      is_day = is_day(x)
+    )
   })
+  set_names(res, features)
+}
+
+is_day = function(x) {
+  hours = hour(x)
+  (6L <= hours) & (hours <= 20L)
 }
 
 # helper function to compute cyclic date features of date features, i.e.,
 # sine and cosine transformations of 2 * pi * x / max_x
 compute_cyclic_date_features = function(date_features, features, date_var) {
   # drop the date_var-specific colnames here, this makes it easier in lapply
-  column_names = colnames(date_features)
-  colnames(date_features) = c(column_names[1L],
-    gsub(paste0(date_var, "."), replacement = "", x = column_names[-1L]))
-  unlist(lapply(features, FUN = function(feature) {
-    # all values are expected to start at 0 and therefore may be shifted by - 1
-    value = if (feature %in% c("month", "week_of_year", "day_of_year", "day_of_month")) {
-      date_features[[feature]] - 1L
-    } else {
-      date_features[[feature]]
-    }
-    maximum = switch(feature,
-      month = 12L,
-      week_of_year = get_weeks_per_year(date_features[["year"]]),
-      day_of_year = (365L + as.integer(is_leap_year(date_features[["year"]]))),
-      day_of_month = get_days_per_month(date_features[["year"]], month = date_features[["month"]]),
-      day_of_week = 7L,
-      hour = 24L,
-      minute = 60L,
-      second = 60L)
-    value_scaled = 2L * pi * value / maximum
-    list(sin(value_scaled), cos(value_scaled))
-  }), recursive = FALSE)
+  cn = names(date_features)
+  names(date_features) = c(cn[1L], gsub(paste0(date_var, "."), "", cn[-1L], fixed = TRUE))
+  unlist(
+    lapply(features, function(feature) {
+      # all values are expected to start at 0 and therefore may be shifted by - 1
+      value = if (feature %in% c("month", "week_of_year", "day_of_year", "day_of_month")) {
+        date_features[[feature]] - 1L
+      } else {
+        date_features[[feature]]
+      }
+      maximum = switch(feature,
+        month = 12L,
+        week_of_year = get_weeks_per_year(date_features[["year"]]),
+        day_of_year = 365L + as.integer(is_leap_year(date_features[["year"]])),
+        day_of_month = get_days_per_month(date_features[["year"]], month = date_features[["month"]]),
+        day_of_week = 7L,
+        hour = 24L,
+        minute = 60L,
+        second = 60L
+      )
+      value_scaled = 2L * pi * value / maximum
+      list(sin(value_scaled), cos(value_scaled))
+    }),
+    recursive = FALSE
+  )
 }
 
-# helper function to get the number of weeks per year, this can sometimes be 53 instead of 52 (works
-# also vectorized)
 get_weeks_per_year = function(year) {
-  as.numeric(format(as.POSIXct(paste0(year, "-12-31"), format = c("%Y-%m-%d")), "%U"))
+  as.integer(format(as.POSIXct(paste0(year, "-12-31"), format = c("%Y-%m-%d")), "%U"))
 }
 
-# helper function to check whether the year is a leap year (works also vectorized)
 is_leap_year = function(year) {
   (year %% 4L == 0L & year %% 100L != 0L) | (year %% 400L == 0L)
 }
 
-# helper function to get the number of days per month respecting leap years
 get_days_per_month = function(year, month) {
-    c(31L, 28L, 31L, 30L, 31L, 30L, 31L, 31L, 30L, 31L, 30L, 31L)[month] +
-      ((month == 2L) & is_leap_year(year))
+  c(31L, 28L, 31L, 30L, 31L, 30L, 31L, 31L, 30L, 31L, 30L, 31L)[month] + (month == 2L & is_leap_year(year))
 }
+
+mlr_pipeops$add("datefeatures", PipeOpDateFeatures)
