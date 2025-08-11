@@ -3,9 +3,9 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
   public = list(
     initialize = function(id = "isomap", param_vals = list(), get_geod = FALSE, keep_org_data = TRUE, diag = FALSE) {
       ps = ps(
-        k = p_int(lower = 1, upper = Inf, tags = c("train", "isomap")),
-        ndim = p_int(lower = 1, upper = Inf, tags = c("train", "isomap")),
-        eps = p_dbl(default = 0, tags = c("train", "isomap")))
+        k = p_int(lower = 1, upper = Inf, tags = "data transform"), # tag isomap?
+        ndim = p_int(lower = 1, upper = Inf, tags = "data transform"), #tag isomap?
+        eps = p_dbl(default = 0, tags = "data transform")) # tag isomap?
       ps$values = list(k = 50, ndim = 2, eps = 0)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
       private$.get_geod = get_geod
@@ -19,13 +19,12 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
     .keep_org_data = NULL,
     .diag = NULL,
     .make_knn_graph = function(x) {
-
-      pv = self$param_set$get_values(tags = "train")
+      pv = self$param_set$get_values()
       INF_VAL = 1.340781e+15
       NA_IDX  = 0
       ## select parameters
       M = nrow(x)
-      searchtype = if (pv$eps == 0) "standard" else "priority"
+      if (pv$eps == 0) searchtype = "standard" else searchtype = "priority"
       ## RANN::nn2 returns the points in data with respect to query
       ## e.g. the rows in the output are the points in query and the
       ## columns the points in data.
@@ -41,11 +40,10 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
         attr = "weight"] =
         if (private$.diag)  as.vector(nn2res$nn.dists)
       else as.vector(nn2res$nn.dists[, -1])
-      return(igraph::as_undirected(g, mode = "collapse", edge.attr.comb = "first"))
+      igraph::as_undirected(g, mode = "collapse", edge.attr.comb = "first")
     },
     .train_dt = function(dt, ndim, get_geod, keep_org_data) {
-      browser()
-      pv = self$param_set$get_values(tags = "train")
+      pv = self$param_set$get_values()
       knn_graph = private$.make_knn_graph(dt)
       geodist = igraph::distances(knn_graph, algorithm = "dijkstra")
       k = geodist ^ 2
@@ -69,52 +67,30 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
       dt
     },
     .predict_dt = function(dt, ndim) {
-        browser()
-      pv = self$param_set$get_values(tags = "train")
-      if (ncol(po$state$orgdata) != ncol(dt))
+      browser()
+      pv = self$param_set$get_values()
+      if (ncol(self$state$orgdata) != ncol(dt))
         stop("x must have the same number of dimensions as the original data")
       nindata = nrow(dt)
       norg = nrow(self$state$orgdata)
-      lknng <- makeKNNgraph(rbind(dt, self$state$orgdata),
-                            k = pars$knn, eps = pars$eps)
-      lgeodist <- igraph::distances(lknng,
-                                    seq_len(nindata),
-                                    nindata + seq_len(norg))
-      dammu <- sweep(lgeodist ^ 2, 2, colMeans(geodist ^ 2), "-")
-      Lsharp <- sweep(e_vectors, 2, e_values, "/")
-      out <- -0.5 * (dammu %*% Lsharp)
-      out
+      lknng = private$.make_knn_graph(rbind(dt, self$state$orgdata))
+      lgeodist = igraph::distances(lknng,
+                                    v = seq_len(nindata),
+                                   to = nindata + seq_len(norg))
+      dammu = sweep(lgeodist ^ 2, 2, colMeans(self$state$geodist ^ 2), "-")
+      Lsharp = sweep(self$state$e_vectors, 2, self$state$e_values, "/")
+      out = -0.5 * (dammu %*% Lsharp)
+      dt
     }
   )
 )
 
-#mlr_pipeops$add("isomap", PipeOpIsomap)
-#po = PipeOpIsomap$new("isomap")
-#po$train(list(tsk("iris")))
-#po$predict(list(tsk("iris")))
 
-# if (pars$eps) pars$eps$value =
+mlr_pipeops$add("isomap", PipeOpIsomap)
+po = PipeOpIsomap$new("isomap")
+few_lines_iris = tsk("iris")$filter(samp)
+po$train(list(tsk("iris")))[[1]]$data()
+po$state
+po$predict(list(tsk("iris")))[[1]]$data()
 
-makeKNNgraph = function (x, k, eps = 0, diag = FALSE){
-  INF_VAL = 1.340781e+15
-  NA_IDX  = 0
-  ## select parameters
-  M = nrow(x)
-  searchtype = if (eps == 0) "standard" else "priority"
-  ## RANN::nn2 returns the points in data with respect to query
-  ## e.g. the rows in the output are the points in query and the
-  ## columns the points in data.
-  nn2res = RANN::nn2(data = x, query = x, k = k + 1, treetype = "kd",
-                      searchtype = searchtype, eps = eps)
-  ## create graph: the first ny nodes will be y, the last nx nodes
-  ## will be x, if x != y
-  g = igraph::make_empty_graph(M, directed = TRUE)
-  g[from = if (diag) rep(seq_len(M), times = k + 1)
-    else      rep(seq_len(M), times = k),
-    to   = if (diag) as.vector(nn2res$nn.idx)
-    else      as.vector(nn2res$nn.idx[, -1]),
-    attr = "weight"] =
-    if (diag)  as.vector(nn2res$nn.dists)
-  else as.vector(nn2res$nn.dists[, -1])
-  return(igraph::as_undirected(g, mode = "collapse", edge.attr.comb = "first"))
-}
+tsk("iris")$data()[samp]
