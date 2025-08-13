@@ -13,7 +13,7 @@ test_that("check whether input and output are equal", {
   prediction = lrn_rpart$predict_newdata(mtcars)
   prediction_new = lrn_rpart$predict_newdata(mtcars_new)
   # Actual Test
-  inputs = c(tsk("iris"), prediction, prediction_new, NULL, "default_string")
+  inputs = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
   output = list("lgr::mlr3/mlr3pipelines::info", "cat", "warning", "message", "none")
   for (j in inputs) {
     for (i in seq_along(output)) {

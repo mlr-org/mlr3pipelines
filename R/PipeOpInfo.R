@@ -82,8 +82,8 @@ PipeOpInfo = R6Class("PipeOpInfo",
       }
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = inouttype, predict = inouttype),
-        output = data.table(name = "output", train = inouttype, predict = inouttype),
-        tag = "debug"
+        output = data.table(name = "output", train = inouttype, predict = inouttype)
+        #tag = "debug"
       )
       original_printer = list(
         Task = crate(function(x) {
