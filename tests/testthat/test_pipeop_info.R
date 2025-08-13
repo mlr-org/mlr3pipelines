@@ -24,7 +24,7 @@ test_that("check whether input and output are equal", {
   }
 })
 
-test_that("output behavior is appropriate", {
+test_that("output type depending on log_target is appropriate", {
   # Creation of Prediction Object
   lg = lgr::get_logger("mlr3")
   old_threshold = lg$threshold
@@ -47,7 +47,7 @@ test_that("output behavior is appropriate", {
   lg$set_threshold(old_threshold)
 })
 
-test_that("logger is addressed", {
+test_that("logger is addressed when log_target is an output logger", {
   logger = lgr::get_logger("debug_logger")
   logger$set_propagate(FALSE)
   appender_buffer = lgr::AppenderBuffer$new()
@@ -87,12 +87,26 @@ test_that("pattern - check", {
   for (j in seq_along(inputs)) {
     for (i in seq_along(output)) {
       poinfo = PipeOpInfo$new(id = "info", log_target = output[[i]])
+      console_output_train = tryCatch(capture.output(poinfo$train(list(inputs[[j]]))),
+                                      warning = function(w) {as.character(conditionMessage(w))},
+                                      message = function(m) {as.character(conditionMessage(m))})
+      expect_match(paste0(console_output_train, collapse = ""), regex_list[[j]], all = FALSE)
       console_output = as.character(capture_func[[i]](poinfo$train(list(inputs[[j]]))))
       #as.character() transformiert warning in character der gecheckt werden kann
-      expect_match(console_output, regex_list[[j]], all = FALSE)
+      #expect_match(console_output, regex_list[[j]], all = FALSE)
     }
   }
 })
+
+
+console_output_predict = tryCatch({
+  capture.output(poinfo$train(list(output[[i]])))
+  capture.output(poinfo$predict(list(output[[i]])))
+},
+warning = function(w) conditionMessage(w),
+message = function(m) conditionMessage(m))
+expect_match(console_output_predict, regex_list[[j]], all = FALSE)
+
 
 test_that("malformed log_target handled accordingly", {
   malformed_log_target = list("malformed", "::", "::::::", "log::", "log::log_level", "log::log_level::", "log::log_level::message::", "::log")
@@ -101,7 +115,7 @@ test_that("malformed log_target handled accordingly", {
   }
 })
 
-test_that("printer can be overwritten", {
+test_that("original printer can be overwritten", {
   # Creation of Prediction Object
   logger = lgr::get_logger("debug_logger")
   logger$set_propagate(FALSE)
