@@ -91,6 +91,10 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examplesIf mlr3misc::require_namespaces(c("NMF", "MASS"), quietly = TRUE)
+#' \dontshow{
+#' # NMF attaches these packages to search path #929
+#' lapply(c("package:Biobase", "package:BiocGenerics", "package:generics"), detach, character.only = TRUE)
+#' }
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -102,6 +106,7 @@
 #' pop$state
 #' \dontshow{
 #' # BiocGenerics overwrites printer for our tables mlr-org/mlr3#1112
+#' # Still necessary as detaching packages does not remove registered S3 methods
 #' suppressWarnings(try(rm("format.list", envir = .BaseNamespaceEnv$.__S3MethodsTable__.), silent = TRUE))
 #' }
 #' @family PipeOps
