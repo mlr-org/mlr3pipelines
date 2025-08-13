@@ -133,12 +133,27 @@ PipeOpNMF = R6Class("PipeOpNMF",
         callback = p_uty(tags = c("train", "nmf"), depends = quote(keep.all == TRUE))  # .callback
       )
       ps$values = list(rank = 2L, method = "brunet", parallel = FALSE, parallel.required = FALSE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), packages = c("MASS", "NMF"))
+      # "NMF" is not in packages so that it does not get loaded by PipeOp's train or predict. See note in private$.train_dt().
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"),
+        packages = "MASS")
     }
   ),
   private = list(
 
     .train_dt = function(dt, levels, target) {
+      # NOTE: NMF indirectly attaches Biobase which attaches BiocGenerics which attaches generics to the search path on
+      # load. If NMF was not loaded prior to this, we detach packages on exit that were not originally attached. If it
+      # was, we leave the search path as it was. Necessary because of mlr-org/mlr3#1112, #751, and #929.
+      if ("package:NMF" %nin% loadedNamespaces()) {
+        pkgs = c("package:Biobase", "package:BiocGenerics", "package:generics")  # order is important due to depends
+        to_be_detached = pkgs[pkgs %nin% search()]
+        if (length(to_be_detached)) {
+          # Load namespace here as "NMF" is not in self$packages and thus does not get loaded by PipeOp's $train() or $predict()
+          require_namespaces("NMF")
+          on.exit(map(to_be_detached, detach, character.only = TRUE))
+        }
+      }
+
       x = t(as.matrix(dt))  # nmf expects a matrix with the rows holding the features
 
       # handling of parameters
@@ -164,6 +179,16 @@ PipeOpNMF = R6Class("PipeOpNMF",
     },
 
     .predict_dt = function(dt, levels) {
+      # See note in private$.train_dt().
+      if ("package:NMF" %nin% loadedNamespaces()) {
+        pkgs = c("package:Biobase", "package:BiocGenerics", "package:generics")  # order is important due to depends
+        to_be_detached = pkgs[pkgs %nin% search()]
+        if (length(to_be_detached)) {
+          require_namespaces("NMF")
+          on.exit(map(to_be_detached, detach, character.only = TRUE))
+        }
+      }
+
       x = t(as.matrix(dt))
       w = mlr3misc::invoke(NMF::basis, object = self$state)
       h_ = t(mlr3misc::invoke(MASS::ginv, X = w) %*% x)
