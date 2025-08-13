@@ -144,13 +144,13 @@ test_that("doublearrow with many output to vararg input works as expected", {
 
 test_that("vararg passes args through as it should", {
 
-  nullgraph = gunion(list(mlr_pipeops$get("nop", id = "nop1"), mlr_pipeops$get("nop", id = "nop2"))) %>>% VarargPipeop$new()
+  nullgraph = gunion(list(po("nop", id = "nop1"), po("nop", id = "nop2"))) %>>% VarargPipeop$new()
 
   expect_equal(nullgraph$train(1)[[1]], list(`...` = 1, `...` = 1))
 
   graph = gunion(list(
-    mlr_pipeops$get("scale", id = "s1", param_vals = list(scale = TRUE, center = FALSE)),
-    mlr_pipeops$get("scale", id = "s2", param_vals = list(scale = FALSE, center = TRUE)))) %>>%
+    po("scale", id = "s1", param_vals = list(scale = TRUE, center = FALSE)),
+    po("scale", id = "s2", param_vals = list(scale = FALSE, center = TRUE)))) %>>%
     VarargPipeop$new()
 
   tsk0 = tsk1 = mlr_tasks$get("iris")

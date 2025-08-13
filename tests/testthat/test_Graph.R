@@ -197,8 +197,8 @@ test_that("input / output lists and naming", {
 
 test_that("edges that introduce loops cannot be added", {
   g = Graph$new()$
-    add_pipeop(PipeOpNOP$new("p1"))$
-    add_pipeop(PipeOpNOP$new("p2"))
+    add_pipeop(po("nop", id = "p1"))$
+    add_pipeop(po("nop", id = "p2"))
 
   gclone = g$clone(deep = TRUE)
   expect_deep_clone(g, gclone)

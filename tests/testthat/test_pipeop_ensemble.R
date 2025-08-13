@@ -1,7 +1,7 @@
 context("PipeOpEnsemble")
 
 test_that("PipeOpEnsemble - basic properties", {
-  op = PipeOpEnsemble$new(4, id = "ensemble", param_vals = list())
+  op = PipeOpEnsemble$new(4, id = "ensemble")
   expect_pipeop(op)
   expect_pipeop_class(PipeOpEnsemble, list(3, id = "ensemble"), param_vals = list())
   expect_pipeop_class(PipeOpEnsemble, list(1, id = "ensemble"), param_vals = list())

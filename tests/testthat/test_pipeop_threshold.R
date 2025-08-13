@@ -6,7 +6,7 @@ test_that("threshold general", {
   expect_true(po_thr$id == "threshold")
   expect_equal(po_thr$param_set$values$thresholds, 0.5)
 
-  po_thr = po("threshold", param_vals = list(thresholds = c(0.3, 0.5)))
+  po_thr = po("threshold", thresholds = c(0.3, 0.5))
   expect_pipeop(po_thr)
   expect_true(po_thr$id == "threshold")
   expect_true(all(po_thr$param_set$values$thresholds == c(0.3, 0.5)))
@@ -95,7 +95,7 @@ test_that("thresholding works for multiclass", {
 
   # works with named args
   po_thr = po("threshold",
-    list(thresholds = c("virginica" = 0.3, "versicolor" = 0.4, "setosa" = 0.3)))
+    thresholds = c("virginica" = 0.3, "versicolor" = 0.4, "setosa" = 0.3))
   expect_pipeop(po_thr)
   gr = po_lrn %>>% po_thr
   gr$train(t)
@@ -110,7 +110,7 @@ test_that("thresholding works for multiclass", {
   expect_error(gr$predict(t), "must have length one or length equal to number of outcome levels")
 
   po_thr = po("threshold",
-    list(thresholds = c("foo" = 0.3, "versicolor" = 0.4, "setosa" = 0.3)))
+    thresholds = c("foo" = 0.3, "versicolor" = 0.4, "setosa" = 0.3))
   gr = po_lrn %>>% po_thr
   gr$train(t)
   expect_error(gr$predict(t))
