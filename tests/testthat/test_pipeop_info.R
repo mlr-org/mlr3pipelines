@@ -139,16 +139,26 @@ test_that("original printer can be overwritten", {
   }
 })
 
-test_that("collect multiplicity works", {
+test_that("handling of multiplicity objects controlled via field collect_multiplicity", {
   poovr = po("ovrsplit")
   OVR = poovr$train(list(tsk("iris")))
   # Actual Test
   output = list("cat", "warning", "message")
-  capture_func = list(capture_output, capture_warnings, capture_messages)
+  collect_multiplicity = list(TRUE, FALSE)
+  test_string = list("xyz", "abc")
+  input = list(OVR, list(OVR))
   for (i in seq_along(output)) {
-    po_cm_false = PipeOpInfo$new(id = "info", collect_multiplicity = FALSE, log_target = output[[i]], printer = list(default = function(x) "abc",  Multiplicity = function(x) "xyz"))
-    expect_match(capture_func[[i]](po_cm_false$train(list(OVR))), "abc", all = FALSE)
-    po_cm_true = PipeOpInfo$new(id = "info", collect_multiplicity = TRUE, log_target = output[[i]], printer = list(default = function(x) "abc",  Multiplicity = function(x) "xyz"))
-    expect_match(capture_func[[i]](po_cm_true$train(OVR)), "xyz", all = FALSE)
+    for (j in seq_along(collect_multiplicity)) {
+      poinfo = PipeOpInfo$new(id = "info", collect_multiplicity = collect_multiplicity[[j]], log_target = output[[i]], printer = list(default = function(x) "abc",  Multiplicity = function(x) "xyz"))
+      console_output_train = tryCatch(capture.output(poinfo$train(input[[j]])),
+                                      warning = function(w) {conditionMessage(w)},
+                                      message = function(m) {conditionMessage(m)})
+      expect_match(paste0(console_output_train, collapse = ""), test_string[[j]], all = FALSE)
+      suppressMessages(suppressWarnings(capture.output(poinfo$train(input[[j]]))))
+      console_output_predict = tryCatch(capture.output(poinfo$predict(input[[j]])),
+                                      warning = function(w) {conditionMessage(w)},
+                                      message = function(m) {conditionMessage(m)})
+      expect_match(paste0(console_output_predict, collapse = ""), test_string[[j]], all = FALSE)
     }
+  }
 })
