@@ -2,7 +2,8 @@ context("PipeOpUpdateTarget")
 
 test_that("update target multi to binary", {
   trafo_fun = function(x) {factor(ifelse(x == "setosa", "setosa", "other"))}
-  pom = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "setosa"))
+  pom = PipeOpUpdateTarget$new()
+  pom$param_set$set_values(.values = list(trafo = trafo_fun, new_target_name = "setosa"))
   expect_pipeop(pom)
   newtsk = pom$train(list(tsk("iris")))[[1]]
   expect_task(newtsk)
@@ -18,7 +19,8 @@ test_that("update target multi to binary", {
 
 test_that("update target regr to classif", {
   trafo_fun = function(x) {factor(ifelse(x < 25, "<25", ">=25"))}
-  pom = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "threshold_25", new_task_type = "classif"))
+  pom = PipeOpUpdateTarget$new()
+  pom$param_set$set_values(.values = list(trafo = trafo_fun, new_target_name = "threshold_25", new_task_type = "classif"))
   expect_pipeop(pom)
   newtsk = pom$train(list(tsk("boston_housing_classic")))[[1]]
   expect_task(newtsk)
@@ -36,7 +38,8 @@ test_that("update target classif to regr", {
   # this is e.g. used in mlr3ordinal for casting
   # orginal to regr
   trafo_fun = function(x) {map_dtc(x, as.numeric)}
-  pom = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "quality", new_task_type = "regr"))
+  pom = PipeOpUpdateTarget$new()
+  pom$param_set$set_values(.values = list(trafo = trafo_fun, new_target_name = "quality", new_task_type = "regr"))
   expect_pipeop(pom)
   newtsk = pom$train(list(tsk("wine")))[[1]]
   expect_true(inherits(newtsk, "TaskRegr"))
@@ -54,7 +57,8 @@ test_that("update target classif to regr", {
 test_that("update target same target", {
   # this is e.g. used in mlr3ordinal for casting
   # orginal to classif
-  pom = PipeOpUpdateTarget$new(param_vals = list(new_target_name = "type", new_task_type = "classif"))
+  pom = PipeOpUpdateTarget$new()
+  pom$param_set$set_values(.values = list(new_target_name = "type", new_task_type = "classif"))
   expect_pipeop(pom)
   newtsk = pom$train(list(tsk("wine")))[[1]]
   expect_task(newtsk)
@@ -69,7 +73,8 @@ test_that("update target same target", {
 })
 
 test_that("rename target", {
-  pom = PipeOpUpdateTarget$new(param_vals = list(new_target_name = "new_type"))
+  pom = PipeOpUpdateTarget$new()
+  pom$param_set$set_values(.values = list(new_target_name = "new_type"))
   expect_pipeop(pom)
   newtsk = pom$train(list(tsk("wine")))[[1]]
   expect_task(newtsk)
@@ -88,7 +93,8 @@ test_that("update resample and predict_newdata", {
   skip_if_not_installed("rpart")
   skip_on_cran()
   t = tsk("wine")
-  pom = PipeOpUpdateTarget$new(param_vals = list(new_target_name = "type", new_task_type = "classif"))
+  pom = PipeOpUpdateTarget$new()
+  pom$param_set$set_values(.values = list(new_target_name = "type", new_task_type = "classif"))
   g = GraphLearner$new(pom %>>% lrn("classif.rpart"))
   r = resample(t, g, rsmp("holdout"))
   expect_numeric(r$score()$classif.ce)
@@ -97,7 +103,8 @@ test_that("update resample and predict_newdata", {
 })
 
 test_that("make an existing feature a target", {
-  pom = PipeOpUpdateTarget$new(param_vals = list(new_target_name = "ash", new_task_type = "regr", drop_original_target = FALSE))
+  pom = PipeOpUpdateTarget$new()
+  pom$param_set$set_values(.values = list(new_target_name = "ash", new_task_type = "regr", drop_original_target = FALSE))
   expect_pipeop(pom)
   newtsk = pom$train(list(tsk("wine")))[[1]]
   expect_task(newtsk)

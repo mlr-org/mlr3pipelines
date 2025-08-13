@@ -12,12 +12,21 @@ test_that("mlr_pipeops access works", {
 
   expect_equal(
     po("scale", center = FALSE),
-    mlr_pipeops$get("scale", param_vals = list(center = FALSE))
+    {
+      x = mlr_pipeops$get("scale")
+      x$param_set$set_values(.values = list(center = FALSE))
+      x
+    }
   )
 
   expect_equal(
     po("scale", id = "sx", center = FALSE),
-    PipeOpScale$new(id = "sx", param_vals = list(center = FALSE))
+    {
+      x = PipeOpScale$new()
+      x$id = "sx"
+      x$param_set$set_values(.values = list(center = FALSE))
+      x
+    }
   )
 
   expect_equal(
@@ -37,17 +46,38 @@ test_that("mlr_pipeops access works", {
 
   expect_equal(
     po("learner", mlr_learners$get("classif.rpart"), xval = 1),
-    mlr_pipeops$get("learner", mlr_learners$get("classif.rpart"), param_vals = list(xval = 1))
+    {
+      x = mlr_pipeops$get("learner", mlr_learners$get("classif.rpart"))
+      x$param_set$set_values(.values = list(xval = 1))
+      x
+    }
   )
 
   expect_equal(
-    po("learner", mlr_learners$get("classif.rpart"), xval = 1, param_vals = list(cp = 0.5)),
-    mlr_pipeops$get("learner", mlr_learners$get("classif.rpart"), param_vals = list(xval = 1, cp = 0.5))
+    {
+      x = po("learner", mlr_learners$get("classif.rpart"), xval = 1)
+      x$param_set$set_values(.values = list(cp = 0.5))
+      x
+    },
+    {
+      x = mlr_pipeops$get("learner", mlr_learners$get("classif.rpart"))
+      x$param_set$set_values(.values = list(xval = 1, cp = 0.5))
+      x
+    }
   )
 
   expect_equal(
-    po("learner", mlr_learners$get("classif.rpart"), xval = 1, param_vals = list(cp = 0.5), id = "blabla"),
-    mlr_pipeops$get("learner", mlr_learners$get("classif.rpart"), param_vals = list(xval = 1, cp = 0.5), id = "blabla")
+    {
+      x = po("learner", mlr_learners$get("classif.rpart"), xval = 1, id = "blabla")
+      x$param_set$set_values(.values = list(cp = 0.5))
+      x
+    },
+    {
+      x = mlr_pipeops$get("learner", mlr_learners$get("classif.rpart"))
+      x$param_set$set_values(.values = list(xval = 1, cp = 0.5))
+      x$id = "blabla"
+      x
+    }
   )
 
   expect_error(po("learnerx"), "'learner'")
@@ -63,12 +93,16 @@ test_that("mlr_pipeops access works", {
 
   expect_equal(
     po("learner", dblrn$new(), key = 99),
-    mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99))
+    {
+      x = mlr_pipeops$get("learner", dblrn$new())
+      x$param_set$set_values(.values = list(key = 99))
+      x
+    }
   )
 
 
   expect_equal(
-    po("select", param_vals = list(selector = selector_all())),
+    po("select", selector = selector_all()),
     po(selector_all())
   )
 
@@ -79,7 +113,11 @@ test_that("mlr_pipeops access works", {
 
   expect_equal(
     po(dblrn$new(), key = 99),
-    mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99))
+    {
+      x = mlr_pipeops$get("learner", dblrn$new())
+      x$param_set$set_values(.values = list(key = 99))
+      x
+    }
   )
 
   polrn = po(dblrn$new(), key = 99)
@@ -119,7 +157,13 @@ test_that("mlr_pipeops multi-access works", {
 
   expect_equal(
     unname(pos("scale", center = FALSE)),
-    list(mlr_pipeops$get("scale", param_vals = list(center = FALSE)))
+    list(
+      {
+        x = mlr_pipeops$get("scale")
+        x$param_set$set_values(.values = list(center = FALSE))
+        x
+      }
+    )
   )
 
   expect_error(
@@ -129,13 +173,31 @@ test_that("mlr_pipeops multi-access works", {
 
   expect_equal(
     unname(pos(c("scale", "pca"), center = FALSE)),
-    list(mlr_pipeops$get("scale", param_vals = list(center = FALSE)), mlr_pipeops$get("pca", param_vals = list(center = FALSE)))
+    list(
+      {
+        x = mlr_pipeops$get("scale")
+        x$param_set$set_values(.values = list(center = FALSE))
+        x
+      },
+      {
+        x = mlr_pipeops$get("pca")
+        x$param_set$set_values(.values = list(center = FALSE))
+        x
+      }
+    )
   )
 
 
   expect_equal(
     unname(pos("scale", id = "sx", center = FALSE)),
-    list(PipeOpScale$new(id = "sx", param_vals = list(center = FALSE)))
+    list(
+      {
+        x = PipeOpScale$new()
+        x$id = "sx"
+        x$param_set$set_values(.values = list(center = FALSE))
+        x
+      }
+    )
   )
 
   expect_equal(
@@ -167,12 +229,22 @@ test_that("mlr_pipeops multi-access works", {
 
   expect_equal(
     unname(pos("learner", dblrn$new(), key = 99)),
-    list(mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99)))
+    list(
+      {
+        x = mlr_pipeops$get("learner", dblrn$new())
+        x$param_set$set_values(.values = list(key = 99))
+        x
+      }
+    )
   )
 
 
   expect_equal(
-    po("select", param_vals = list(selector = selector_all())),
+    {
+      x = po("select")
+      x$param_set$set_values(.values = list(selector = selector_all()))
+      x
+    },
     po(selector_all())
   )
 
@@ -183,7 +255,18 @@ test_that("mlr_pipeops multi-access works", {
 
   expect_equal(
     unname(pos(list(dblrn$new(), dblrn$new()), key = 99)),
-    list(mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99)), mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99)))
+    list(
+      {
+        x = mlr_pipeops$get("learner", dblrn$new())
+        x$param_set$set_values(.values = list(key = 99))
+        x
+      },
+      {
+        x = mlr_pipeops$get("learner", dblrn$new())
+        x$param_set$set_values(.values = list(key = 99))
+        x
+      }
+    )
   )
 
   expect_equal(unname(pos(character(0))), list())

@@ -263,7 +263,8 @@ PipeOp = R6Class("PipeOp",
       ## ------ deprecating id and param_vals
       sc = sys.calls()
       found = 0
-      for (i in rev(seq_along(sc))) {
+      # exclude the last (i.e., current) and second-tolast frame, these are PipeOp$new() directly.
+      for (i in rev(seq_along(sc))[-c(1, 2)]) {
         if (identical(sc[[i]], quote(initialize(...)))) {
           found = i
           break

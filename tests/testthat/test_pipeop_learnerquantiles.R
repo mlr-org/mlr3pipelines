@@ -63,20 +63,20 @@ test_that("PipeOpLearnerQuantiles - param set and values", {
   po$param_set$values$quantiles.q_response = 0.05
   expect_equal(po$param_set$values, list(quantiles.q_vals = c(0.05, 0.5, 0.95), quantiles.q_response = 0.05, robust = TRUE))
 
-  # Anfang der Error messages
-  expect_error(PipeOpLearnerQuantiles$new(lrn, param_vals = list(quantiles.q_vals = c(0.75, 0.25, 0.5))), "sorted")
-  expect_error(PipeOpLearnerQuantiles$new(lrn, param_vals = list(quantiles.q_vals = c(0.75, 0.25, NA))), "missing values")
-  expect_error(PipeOpLearnerQuantiles$new(lrn, param_vals = list(quantiles.q_vals = -0.1)), ">= 0")
-  expect_error(PipeOpLearnerQuantiles$new(lrn, param_vals = list(quantiles.q_vals = 1.1)), "<= 1")
-  expect_error(PipeOpLearnerQuantiles$new(lrn, param_vals = list(quantiles.q_response = -1)))
+  # Beginning of error messages
+  expect_error(po("learner_quantiles", lrn, quantiles.q_vals = c(0.75, 0.25, 0.5)), "sorted")
+  expect_error(po("learner_quantiles", lrn, quantiles.q_vals = c(0.75, 0.25, NA)), "missing values")
+  expect_error(po("learner_quantiles", lrn, quantiles.q_vals = -0.1), ">= 0")
+  expect_error(po("learner_quantiles", lrn, quantiles.q_vals = 1.1), "<= 1")
+  expect_error(po("learner_quantiles", lrn, quantiles.q_response = -1))
 
   # q_response %in% q_vals
   task = mlr_tasks$get("mtcars")
-  po_response = PipeOpLearnerQuantiles$new(lrn, param_vals = list(quantiles.q_vals = c(0.25, 0.75), quantiles.q_response = 0.5))
+  po_response = po("learner_quantiles", lrn, quantiles.q_vals = c(0.25, 0.75), quantiles.q_response = 0.5)
   expect_error(train_pipeop(po_response, list(task)), "additional elements")
 
   lrn_classif = mlr_learners$get("classif.featureless")
-  expect_error(PipeOpLearnerQuantiles$new(lrn_classif), "only supports regression")
+  expect_error(po("learner_quantiles", lrn_classif), "only supports regression")
 })
 
 test_that("PipeOpLearnerQuantiles - graph but no id", {

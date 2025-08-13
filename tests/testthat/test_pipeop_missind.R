@@ -109,7 +109,7 @@ test_that("union with missing rows", {
   data2[1:1, cyl:=NA]
 
   imp_missind = po("missind")
-  imp_num =  po("imputehist", param_vals = list(affect_columns = selector_type("numeric")))
+  imp_num =  po("imputehist", affect_columns = selector_type("numeric"))
   learner = lrn("regr.rpart")
 
   g1 = gunion(list(imp_num, imp_missind)) %>>% po("featureunion")
