@@ -35,11 +35,11 @@ test_that("output behavior is appropriate", {
   prediction_new = lrn_rpart$predict_newdata(mtcars_new)
   # Actual Test
   inputs = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
-  output = c("lgr::mlr3/mlr3pipelines::info", "cat", "warning", "message", "none")
+  output = list("lgr::mlr3/mlr3pipelines::info", "cat", "warning", "message", "none")
   expect_func = list(expect_output, expect_output, expect_warning, expect_message, expect_silent)
   for (j in inputs) {
     for (i in seq_along(output)) {
-      poinfo = PipeOpInfo$new(id = "info", log_target = output[i])
+      poinfo = PipeOpInfo$new(id = "info", log_target = output[[i]])
       expect_func[[i]](poinfo$train(list(j)))
       expect_func[[i]](poinfo$predict(list(j)))
     }
@@ -81,12 +81,12 @@ test_that("pattern - check", {
   prediction_new = lrn_rpart$predict_newdata(mtcars_new)
   # Actual Test
   inputs = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
-  output = c("cat", "warning", "message")
+  output = list("cat", "warning", "message")
   capture_func = list(capture_output, capture_warning, capture_messages)
   regex_list = list("\\$task.*\\$data", "\\$prediction.*\\$score", "\\$prediction", "NULL", "default_string")
   for (j in seq_along(inputs)) {
     for (i in seq_along(output)) {
-      poinfo = PipeOpInfo$new(id = "info", log_target = output[i])
+      poinfo = PipeOpInfo$new(id = "info", log_target = output[[i]])
       console_output = as.character(capture_func[[i]](poinfo$train(list(inputs[[j]]))))
       #as.character() transformiert warning in character der gecheckt werden kann
       expect_match(console_output, regex_list[[j]], all = FALSE)
@@ -95,9 +95,9 @@ test_that("pattern - check", {
 })
 
 test_that("malformed log_target handled accordingly", {
-  malformed_log_target = c("malformed", "::", "::::::", "log::", "log::log_level", "log::log_level::", "log::log_level::message::", "::log")
+  malformed_log_target = list("malformed", "::", "::::::", "log::", "log::log_level", "log::log_level::", "log::log_level::message::", "::log")
   for (i in seq_along(malformed_log_target)) {
-    expect_error(PipeOpInfo$new("info", log_target = malformed_log_target[i]))
+    expect_error(PipeOpInfo$new("info", log_target = malformed_log_target[[i]]))
   }
 })
 
@@ -139,12 +139,12 @@ test_that("collect multiplicity works", {
   poovr = po("ovrsplit")
   OVR = poovr$train(list(tsk("iris")))
   # Actual Test
-  output = c("cat", "warning", "message")
+  output = list("cat", "warning", "message")
   capture_func = list(capture_output, capture_warnings, capture_messages)
   for (i in seq_along(output)) {
-    po_cm_false = PipeOpInfo$new(id = "info", collect_multiplicity = FALSE, log_target = output[i], printer = list(default = function(x) "abc",  Multiplicity = function(x) "xyz"))
+    po_cm_false = PipeOpInfo$new(id = "info", collect_multiplicity = FALSE, log_target = output[[i]], printer = list(default = function(x) "abc",  Multiplicity = function(x) "xyz"))
     expect_match(capture_func[[i]](po_cm_false$train(list(OVR))), "abc", all = FALSE)
-    po_cm_true = PipeOpInfo$new(id = "info", collect_multiplicity = TRUE, log_target = output[i], printer = list(default = function(x) "abc",  Multiplicity = function(x) "xyz"))
+    po_cm_true = PipeOpInfo$new(id = "info", collect_multiplicity = TRUE, log_target = output[[i]], printer = list(default = function(x) "abc",  Multiplicity = function(x) "xyz"))
     expect_match(capture_func[[i]](po_cm_true$train(OVR)), "xyz", all = FALSE)
     }
 })
