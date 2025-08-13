@@ -5,11 +5,11 @@ test_that("utility function works", {
   skip_if_not_installed("rpart")
   expect_null(get_r6_inheritance("data.table"))
 
-  expect_equal(get_r6_inheritance("PipeOp"), "PipeOp")
+  expect_equal(get_r6_inheritance("PipeOp"), c("PipeOp", "Mlr3Component"))
 
-  expect_equal(get_r6_inheritance("PipeOpEncode"), c("PipeOpEncode", "PipeOpTaskPreprocSimple", "PipeOpTaskPreproc", "PipeOp"))
+  expect_equal(get_r6_inheritance("PipeOpEncode"), c("PipeOpEncode", "PipeOpTaskPreprocSimple", "PipeOpTaskPreproc", "PipeOp", "Mlr3Component"))
 
-  expect_equal(get_r6_inheritance("LearnerClassifDebug"), c("LearnerClassifDebug", "LearnerClassif", "Learner"))
+  expect_equal(get_r6_inheritance("LearnerClassifDebug"), c("LearnerClassifDebug", "LearnerClassif", "Learner", "Mlr3Component"))
 
   expect_equal(get_class_hierarchy("data.table"), c("data.table", "data.frame"))
 
@@ -19,11 +19,11 @@ test_that("utility function works", {
 
   expect_equal(oldcache, class_hierarchy_cache)
 
-  expect_equal(get_class_hierarchy("LearnerClassifDebug"), c("LearnerClassifDebug", "LearnerClassif", "Learner"))
+  expect_equal(get_class_hierarchy("LearnerClassifDebug"), c("LearnerClassifDebug", "LearnerClassif", "Learner", "Mlr3Component"))
 
-  expect_equal(class_hierarchy_cache[["LearnerClassifDebug"]], c("LearnerClassifDebug", "LearnerClassif", "Learner"))
-  expect_equal(class_hierarchy_cache[["LearnerClassif"]], c("LearnerClassif", "Learner"))
-  expect_equal(class_hierarchy_cache[["Learner"]], "Learner")
+  expect_equal(class_hierarchy_cache[["LearnerClassifDebug"]], c("LearnerClassifDebug", "LearnerClassif", "Learner", "Mlr3Component"))
+  expect_equal(class_hierarchy_cache[["LearnerClassif"]], c("LearnerClassif", "Learner", "Mlr3Component"))
+  expect_equal(class_hierarchy_cache[["Learner"]], c("Learner", "Mlr3Component"))
 
   expect_false(isTRUE(all.equal(oldcache, class_hierarchy_cache)))
 

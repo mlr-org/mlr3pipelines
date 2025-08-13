@@ -28,11 +28,13 @@ test_that("Wrong affect_columns errors", {
     )
   )
   tsk = tsk("boston_housing_classic")
-  po = POPP$new("foo", param_vals = list(affect_columns = is.factor))
+  po = POPP$new(id = "foo")
+  po$param_set$set_values(.values = list(affect_columns = is.factor))
   expect_pipeop(po)
   expect_error(po$train(list(tsk)), "affected_cols")
 
-  po = POPP$new("foo", param_vals = list(affect_columns = function(x) x$target_names))
+  po = POPP$new(id = "foo")
+  po$param_set$set_values(.values = list(affect_columns = function(x) x$target_names))
   expect_error(po$train(list(tsk)), "affected_cols")
 })
 
@@ -45,7 +47,8 @@ test_that("PipeOpTaskPreproc - fix for #864 works", {
       .predict_dt = function(dt, levels) dt
     )
   )
-  po = POPP$new("test", param_vals = list(affect_columns = selector_name("Petal.Length")))
+  po = POPP$new(id = "test")
+  po$param_set$set_values(.values = list(affect_columns = selector_name("Petal.Length")))
   expect_pipeop(po)
   task = mlr_tasks$get("iris")
   task$col_roles$order = "Petal.Width"
