@@ -13,9 +13,9 @@ test_that("check whether input and output are equal", {
   prediction = lrn_rpart$predict_newdata(mtcars)
   prediction_new = lrn_rpart$predict_newdata(mtcars_new)
   # Actual Test
-  inputs = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
+  input = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
   output = list("lgr::mlr3/mlr3pipelines::info", "cat", "warning", "message", "none")
-  for (j in inputs) {
+  for (j in input) {
     for (i in seq_along(output)) {
       poinfo = PipeOpInfo$new(id = "info", log_target = output[[i]])
       suppressMessages(suppressWarnings(invisible(capture.output(expect_identical(poinfo$train(list(j))[[1]], j)))))
@@ -34,10 +34,10 @@ test_that("output type depending on log_target is appropriate", {
   prediction = lrn_rpart$predict_newdata(mtcars)
   prediction_new = lrn_rpart$predict_newdata(mtcars_new)
   # Actual Test
-  inputs = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
+  input = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
   output = list("lgr::mlr3/mlr3pipelines::info", "cat", "warning", "message", "none")
   expect_func = list(expect_output, expect_output, expect_warning, expect_message, expect_silent)
-  for (j in inputs) {
+  for (j in input) {
     for (i in seq_along(output)) {
       poinfo = PipeOpInfo$new(id = "info", log_target = output[[i]])
       expect_func[[i]](poinfo$train(list(j)))
@@ -59,8 +59,8 @@ test_that("logger is addressed when log_target is an output logger", {
   prediction_new = lrn_rpart$predict_newdata(mtcars_new)
   # Actual Test
   poinfo = PipeOpInfo$new(id = "info", log_target = "lgr::debug_logger::info")
-  inputs = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
-  for (j in inputs) {
+  input = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
+  for (j in input) {
     poinfo$train(list(j))
     logfile_posttrain = appender_buffer$data$msg
     expect_match(logfile_posttrain, "Object passing through PipeOp info - Training", all = FALSE)
@@ -73,27 +73,28 @@ test_that("logger is addressed when log_target is an output logger", {
   logger$remove_appender(1)
 })
 
-test_that("pattern - check", {
+test_that("PipeOp recognizes which class of objects and prints information accordingly", {
   # Creation of Prediction Object
   lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
   mtcars_new = subset(mtcars[sample(nrow(mtcars), size = 10), ], select = -mpg)
   prediction = lrn_rpart$predict_newdata(mtcars)
   prediction_new = lrn_rpart$predict_newdata(mtcars_new)
   # Actual Test
-  inputs = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
+  input = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
   output = list("cat", "warning", "message")
-  capture_func = list(capture_output, capture_warning, capture_messages)
   regex_list = list("\\$task.*\\$data", "\\$prediction.*\\$score", "\\$prediction", "NULL", "default_string")
-  for (j in seq_along(inputs)) {
+  for (j in seq_along(input)) {
     for (i in seq_along(output)) {
       poinfo = PipeOpInfo$new(id = "info", log_target = output[[i]])
-      console_output_train = tryCatch(capture.output(poinfo$train(list(inputs[[j]]))),
+      console_output_train = tryCatch(capture.output(poinfo$train(list(input[[j]]))),
                                       warning = function(w) {as.character(conditionMessage(w))},
                                       message = function(m) {as.character(conditionMessage(m))})
       expect_match(paste0(console_output_train, collapse = ""), regex_list[[j]], all = FALSE)
-      console_output = as.character(capture_func[[i]](poinfo$train(list(inputs[[j]]))))
-      #as.character() transformiert warning in character der gecheckt werden kann
-      #expect_match(console_output, regex_list[[j]], all = FALSE)
+      suppressMessages(suppressWarnings(capture.output(poinfo$train(list(input[[j]])))))
+      console_output_predict = tryCatch(capture.output(poinfo$predict(list(input[[j]]))),
+                                      warning = function(w) {as.character(conditionMessage(w))},
+                                      message = function(m) {as.character(conditionMessage(m))})
+      expect_match(paste0(console_output_predict, collapse = ""), regex_list[[j]], all = FALSE)
     }
   }
 })
@@ -112,11 +113,10 @@ test_that("original printer can be overwritten", {
   lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
   prediction = lrn_rpart$predict_newdata(mtcars)
   # Actual Test
-  inputs = list(tsk("iris"), prediction, NULL, "default_string")
+  input = list(tsk("iris"), prediction, NULL, "default_string")
   output = list("cat", "warning", "message")
-  capture_func = list(capture_output, capture_warnings, capture_messages)
   regex_list = list("azbycxdw", "azbycxdwev", "azbycxdwevfu", "azbycxdwevfugt")
-  for (j in seq_along(inputs)) {
+  for (j in seq_along(input)) {
     for (i in seq_along(output)) {
       poinfo = PipeOpInfo$new(id = "info", log_target = output[[i]],
       printer = list(Task = function(x) {"azbycxdw"},
