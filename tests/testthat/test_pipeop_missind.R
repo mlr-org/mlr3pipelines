@@ -28,19 +28,19 @@ test_that("PipeOpMissInd", {
   task_no_lgl = TaskClassif$new("mdata", as_data_backend(mdata), target = "l")
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "missing_train", type = "logical", affect_columns = NULL)))
+    constargs = list(), param_vals = list(which = "missing_train", type = "logical", affect_columns = NULL))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "logical", affect_columns = NULL)))
+    constargs = list(), param_vals = list(which = "all", type = "logical", affect_columns = NULL))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "factor", affect_columns = NULL)))
+    constargs = list(), param_vals = list(which = "all", type = "factor", affect_columns = NULL))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "integer", affect_columns = NULL)))
+    constargs = list(), param_vals = list(which = "all", type = "integer", affect_columns = NULL))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "numeric", affect_columns = NULL)))
+    constargs = list(), param_vals = list(which = "all", type = "numeric", affect_columns = NULL))
 
   po = po("missind", which = "all", type = "logical", affect_columns = NULL)
 

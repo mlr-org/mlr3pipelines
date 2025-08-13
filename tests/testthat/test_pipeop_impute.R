@@ -79,9 +79,9 @@ test_that("PipeOpImpute", {
   task = mlr_tasks$get("pima")
 
 
-  expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(param_vals = list(innum = c("a", "b", "c", "d", "e"))), task = task)
+  expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(), param_vals = list(innum = c("a", "b", "c", "d", "e")), task = task)
 
-  expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(param_vals = list(innum = c("a", "b", "c", "d", "e"))), task = mlr_tasks$get("iris"))
+  expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(), param_vals = list(innum = c("a", "b", "c", "d", "e")), task = mlr_tasks$get("iris"))
 
 
 
@@ -107,79 +107,79 @@ test_that("PipeOpImpute", {
   task_no_lgl = TaskClassif$new("mdata", as_data_backend(mdata), target = "l")
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task_no_lgl,
-    constargs = list(param_vals = list(
+    constargs = list(), param_vals = list(
       method_num = "median",
       method_fct = "oor",
-      add_dummy = "none")))
+      add_dummy = "none"))
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
     deterministic_train = FALSE, deterministic_predict = FALSE,
-    constargs = list(param_vals = list(
+    constargs = list(), param_vals = list(
       method_num = "median",
       method_fct = "oor",
-      add_dummy = "none")))
+      add_dummy = "none"))
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task_no_lgl,
-    constargs = list(param_vals = list(
+    constargs = list(), param_vals = list(
       method_num = "mean",
       method_fct = "oor",
-      add_dummy = "missing_train")))
+      add_dummy = "missing_train"))
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
     deterministic_train = FALSE, deterministic_predict = FALSE,
-    constargs = list(param_vals = list(
+    constargs = list(), param_vals = list(
       method_num = "mean",
       method_fct = "oor",
-      add_dummy = "missing_train")))
+      add_dummy = "missing_train"))
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task_no_lgl,
     deterministic_train = FALSE, deterministic_predict = FALSE,
-    constargs = list(param_vals = list(
+    constargs = list(), param_vals = list(
       method_num = "mode",
       method_fct = "mode",
-      add_dummy = "missing_train")))
+      add_dummy = "missing_train"))
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
     deterministic_train = FALSE, deterministic_predict = FALSE,
-    constargs = list(param_vals = list(
+    constargs = list(), param_vals = list(
       method_num = "mode",
       method_fct = "mode",
-      add_dummy = "missing_train")))
+      add_dummy = "missing_train"))
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
     deterministic_train = FALSE, deterministic_predict = FALSE,
-    constargs = list(param_vals = list(
+    constargs = list(), param_vals = list(
       method_num = "sample",
       method_fct = "sample",
-      add_dummy = "all")))
+      add_dummy = "all"))
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
     deterministic_train = FALSE, deterministic_predict = FALSE,
-    constargs = list(param_vals = list(
+    constargs = list(), param_vals = list(
       method_num = "hist",
       method_fct = "sample",
-      add_dummy = "all")))
+      add_dummy = "all"))
 
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
   deterministic_train = FALSE, deterministic_predict = FALSE,
-  constargs = list(param_vals = list(
+  constargs = list(), param_vals = list(
     method_num = "constant",
     method_fct = "constant",
-    add_dummy = "all")))
+    add_dummy = "all"))
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task_no_lgl,
     deterministic_train = FALSE, deterministic_predict = FALSE,
-    constargs = list(param_vals = list(
+    constargs = list(), param_vals = list(
       method_num = "oor",
       method_fct = "oor",
-      add_dummy = "missing_train")))
+      add_dummy = "missing_train"))
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
     deterministic_train = FALSE, deterministic_predict = FALSE,
-    constargs = list(param_vals = list(
+    constargs = list(), param_vals = list(
       method_num = "oor",
       method_fct = "oor",
-      add_dummy = "missing_train")))
+      add_dummy = "missing_train"))
 
   po = PipeOpTestImpute$new(param_vals = list(
     method_num = "sample", method_fct = "sample", add_dummy = "all"))

@@ -3,9 +3,9 @@ context("PipeOpEnsemble")
 test_that("PipeOpEnsemble - basic properties", {
   op = PipeOpEnsemble$new(4, id = "ensemble", param_vals = list())
   expect_pipeop(op)
-  expect_pipeop_class(PipeOpEnsemble, list(3, id = "ensemble", param_vals = list()))
-  expect_pipeop_class(PipeOpEnsemble, list(1, id = "ensemble", param_vals = list()))
-  expect_pipeop_class(PipeOpEnsemble, list(0, id = "ensemble", param_vals = list()))
+  expect_pipeop_class(PipeOpEnsemble, list(3, id = "ensemble"), param_vals = list())
+  expect_pipeop_class(PipeOpEnsemble, list(1, id = "ensemble"), param_vals = list())
+  expect_pipeop_class(PipeOpEnsemble, list(0, id = "ensemble"), param_vals = list())
 
   truth = rnorm(70)
   prds = replicate(4, PredictionRegr$new(row_ids = seq_len(70), truth = truth, response = truth + rnorm(70, sd = 0.1)))

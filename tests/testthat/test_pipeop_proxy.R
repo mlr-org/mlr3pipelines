@@ -11,7 +11,7 @@ test_that("PipeOpProxy - basic properties", {
 
 test_that("PipeOpProxy - datapreproc", {
   pop = po("scale")
-  expect_datapreproc_pipeop_class(PipeOpProxy, constargs = list(param_vals = list(content = pop)), task = mlr_tasks$get("iris"))
+  expect_datapreproc_pipeop_class(PipeOpProxy, constargs = list(), param_vals = list(content = pop), task = mlr_tasks$get("iris"))
 })
 
 test_that("PipeOpProxy - content error handling", {

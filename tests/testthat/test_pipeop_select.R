@@ -9,7 +9,7 @@ test_that("select", {
   expect_datapreproc_pipeop_class(PipeOpSelect, task = mlr_tasks$get("iris"))
 
   expect_datapreproc_pipeop_class(PipeOpSelect, task = mlr_tasks$get("iris"),
-    constargs = list(param_vals = list(selector = selector_grep("^Petal"))))
+    constargs = list(), param_vals = list(selector = selector_grep("^Petal")))
 
 
   # Selects the columns we expect it to select

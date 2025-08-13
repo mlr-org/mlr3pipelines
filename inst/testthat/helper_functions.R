@@ -155,9 +155,10 @@ expect_valid_pipeop_param_set = function(po, check_ps_default_values = TRUE) {
 # - deep clone works
 # - *_internal checks for classes
 # - *_internal handles NO_OP as it should
-expect_pipeop_class = function(poclass, constargs = list(), check_ps_default_values = TRUE) {
+expect_pipeop_class = function(poclass, constargs = list(), param_vals = list(), check_ps_default_values = TRUE) {
   skip_on_cran()
   po = do.call(poclass$new, constargs)
+  po$param_set$set_values(.values = param_vals)
 
   expect_pipeop(po, check_ps_default_values = check_ps_default_values)
 
@@ -209,7 +210,7 @@ expect_pipeop_class = function(poclass, constargs = list(), check_ps_default_val
 #  - preproc() gives no error with data.table indata if PipeOp works without target column
 #
 # `task` must have at least two feature columns and at least two rows.
-expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
+expect_datapreproc_pipeop_class = function(poclass, constargs = list(), param_vals = list(), task,
   predict_like_train = TRUE, predict_rows_independent = TRUE,
   deterministic_train = TRUE, deterministic_predict = TRUE,
   affect_context_independent = TRUE,  # whether excluding a column does not change what happens to the other columns
@@ -222,10 +223,12 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   original_clone = task$clone(deep = TRUE)
   expect_shallow_clone(task, original_clone)
 
-  expect_pipeop_class(poclass, constargs, check_ps_default_values = check_ps_default_values)
+  expect_pipeop_class(poclass, constargs, param_vals = param_vals, check_ps_default_values = check_ps_default_values)
 
   po = do.call(poclass$new, constargs)
+  po$param_set$set_values(.values = param_vals)
   po2 = do.call(poclass$new, constargs)
+  po2$param_set$set_values(.values = param_vals)
 
   expect_equal(po$innum, 1)
   expect_equal(po$outnum, 1)
@@ -437,6 +440,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   # test that predict on test rows during train is the same as predict on the rows
 
   po = do.call(poclass$new, constargs)
+  po$param_set$set_values(.values = param_vals)
 
   tasktrain = original_clone$clone(deep = TRUE)
   n_use = length(tasktrain$row_roles$use)

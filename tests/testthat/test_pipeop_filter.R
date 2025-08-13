@@ -5,12 +5,12 @@ test_that("PipeOpFilter", {
   task = mlr_tasks$get("boston_housing_classic")
 
   expect_datapreproc_pipeop_class(PipeOpFilter,
-    list(filter = mlr3filters::FilterVariance$new(), param_vals = list(filter.frac = 0.5)), task = task,
-    check_ps_default_values = FALSE)
+    list(filter = mlr3filters::FilterVariance$new()), task = task,
+    check_ps_default_values = FALSE, param_vals = list(filter.frac = 0.5))
 
   expect_datapreproc_pipeop_class(PipeOpFilter,
-    list(filter = mlr3filters::FilterVariance$new(), param_vals = list(filter.frac = 0.5)), task = mlr_tasks$get("iris"),
-    check_ps_default_values = FALSE)
+    list(filter = mlr3filters::FilterVariance$new()), task = mlr_tasks$get("iris"),
+    check_ps_default_values = FALSE, param_vals = list(filter.frac = 0.5))
 
   po = po("filter", filter = mlr3filters::FilterVariance$new())
 

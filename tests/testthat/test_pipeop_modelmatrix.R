@@ -5,7 +5,7 @@ test_that("PipeOpModelMatrix - basic properties", {
   task = mlr_tasks$get("iris")
   # General
   expect_datapreproc_pipeop_class(PipeOpModelMatrix,
-    constargs = list(param_vals = list(formula = ~ . ^ 2)), task = task)
+    param_vals = list(formula = ~ . ^ 2), task = task)
 
   # Intercept
   op = po("modelmatrix", formula = ~ . ^ 2)
@@ -40,10 +40,8 @@ test_that("PipeOpModelMatrix - basic properties", {
 
   # other formula
   expect_datapreproc_pipeop_class(PipeOpModelMatrix,
-    constargs = list(param_vals = list(formula = ~ 0 + Sepal.Length +
-        log(Sepal.Length))), task = task)
-  op = po("modelmatrix", formula = ~ 0 + Sepal.Length +
-      log(Sepal.Length))
+    param_vals = list(formula = ~ 0 + Sepal.Length + log(Sepal.Length)), task = task)
+  op = po("modelmatrix", formula = ~ 0 + Sepal.Length + log(Sepal.Length))
   expect_pipeop(op)
   nt = train_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names
