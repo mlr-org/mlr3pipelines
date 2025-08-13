@@ -15,7 +15,7 @@ test_that("PipeOpDecode - basic properties", {
 })
 
 test_that("PipeOpDecode - one-hot-encoding", {
-  op = PipeOpDecode$new()
+  op = po("decode")
 
   dt = data.table(
     target = runif(10),
@@ -95,7 +95,7 @@ test_that("PipeOpDecode - one-hot-encoding", {
 })
 
 test_that("PipeOpDecode - treatment encoding", {
-  op = PipeOpDecode$new()
+  op = po("decode")
   op$param_set$values$treatment_encoding = TRUE
 
   dt = data.table(
@@ -144,7 +144,7 @@ test_that("PipeOpDecode - treatment encoding", {
 })
 
 test_that("PipOpDecode - collapse all into one", {
-  op = PipeOpDecode$new()
+  op = po("decode")
   op$param_set$values$group_pattern = ""
 
   dt = data.table(
@@ -164,7 +164,7 @@ test_that("PipOpDecode - collapse all into one", {
 })
 
 test_that("PipeOpDecode - errors", {
-  op = PipeOpDecode$new()
+  op = po("decode")
   dt = data.table(
     target = runif(20),
     x.1 = rep(c(1, 0), 10),

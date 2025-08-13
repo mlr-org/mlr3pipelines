@@ -29,26 +29,26 @@ test_that("PipeOpWeightedRegrAvg - train and predict", {
   truth = rnorm(70)
   prds = replicate(4, PredictionRegr$new(row_ids = seq_len(70), truth = truth, response = truth + rnorm(70, sd = 0.1)), simplify = FALSE)
 
-  po = PipeOpRegrAvg$new(4)
+  po = po("regravg", innum = 4)
   expect_pipeop(po)
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
 
   # Returns the same if weights are 1, rest 0
-  po = PipeOpRegrAvg$new(4)
+  po = po("regravg", innum = 4)
   po$param_set$values$weights = c(0, 0, 1, 0)
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
   expect_equal(out, list(output = prds[[3]]))
 
 
-  po = PipeOpRegrAvg$new()
+  po = po("regravg")
   expect_pipeop(po)
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
 
   # Returns the same if weights are 1, rest 0
-  po = PipeOpRegrAvg$new()
+  po = po("regravg")
   po$param_set$values$weights = c(0, 0, 1, 0)
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
@@ -75,26 +75,26 @@ test_that("PipeOpWeightedClassifAvg - response - train and predict", {
     simplify = FALSE
   )
   lapply(prds, function(x) x$data$tab$truth = prds[[1]]$data$tab$truth)  # works because of R6 reference semantics
-  po = PipeOpClassifAvg$new(4)
+  po = po("classifavg", innum = 4)
   expect_pipeop(po)
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
 
-  po = PipeOpClassifAvg$new(4)
+  po = po("classifavg", innum = 4)
   po$param_set$values$weights = c(0, 0, 0, 1)
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
   expect_equal(out[[1]]$data$tab, prds[[4]]$data$tab)
 
-  po = PipeOpClassifAvg$new()
+  po = po("classifavg")
   expect_pipeop(po)
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
 
-  po = PipeOpClassifAvg$new()
+  po = po("classifavg")
   po$param_set$values$weights = c(0, 0, 0, 1)
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)

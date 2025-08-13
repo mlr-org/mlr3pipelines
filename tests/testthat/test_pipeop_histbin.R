@@ -2,7 +2,7 @@ context("PipeOpHistBin")
 
 test_that("PipeOpHistBin - basic properties", {
   task = mlr_tasks$get("iris")
-  op = PipeOpHistBin$new()
+  op = po("histbin")
 
   expect_datapreproc_pipeop_class(PipeOpHistBin, task = task)
 
@@ -14,7 +14,7 @@ test_that("PipeOpHistBin - basic properties", {
 test_that("PipeOpHistBin - change breaks", {
   task = mlr_tasks$get("iris")
   # 5 breaks --> 7 groups
-  op5 = PipeOpHistBin$new(param_vals = list(breaks = 5L))
+  op5 = po("histbin", breaks = 5L)
   expect_pipeop(op5)
   result = op5$train(list(task))
   b = apply(result[[1L]]$data(cols = result[[1L]]$feature_names), MARGIN = 2L,
@@ -28,7 +28,7 @@ test_that("PipeOpHistBin - numerics out of range of training data", {
   dat$Sepal.Width[1L] = 5
   task2 = TaskClassif$new("iris2", backend = dat, target = "Species")
 
-  op = PipeOpHistBin$new()
+  op = po("histbin")
   result1 = op$train(list(task1))
   ranges = sapply(op$state$breaks, FUN = range)
   expect_equal(ranges[1L, ], rep.int(-Inf, times = 4L))
@@ -50,7 +50,7 @@ test_that("PipeOpHistBin - not all bins present", {
   dat$Sepal.Width[[1L]] = 2.13
   task2 = TaskClassif$new("iris2", backend = dat, target = "Species")
 
-  op = PipeOpHistBin$new(param_vals = list(breaks = seq(0, 10, by = 0.05)))
+  op = po("histbin", breaks = seq(0, 10, by = 0.05))
   expect_pipeop(op)
 
   # task1 does not have a Sepal.Width value within the interval (2.10, 2.15]

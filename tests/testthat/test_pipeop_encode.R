@@ -24,7 +24,7 @@ test_that("PipeOpEncode", {
 
   expect_datapreproc_pipeop_class(PipeOpEncode, task = mlr_tasks$get("iris"))
 
-  op = PipeOpEncode$new()
+  op = po("encode")
   expect_pipeop(op)
 
   nt = train_pipeop(op, inputs = list(task))[[1L]]
@@ -60,7 +60,7 @@ test_that("PipeOpEncode", {
 
 
   # repeat with method == reference
-  op = PipeOpEncode$new()
+  op = po("encode")
   op$param_set$values = list(method = "treatment")
   nt = train_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names
@@ -78,7 +78,7 @@ test_that("PipeOpEncode", {
   expect_true(all(make.names(sprintf("town.%s", tail(townlevels, -1L)), unique = TRUE) %in% fn))
   expect_true(all(make.names(sprintf("town.%s", head(townlevels, 1L)), unique = TRUE) %nin% fn))
 
-  op = PipeOpEncode$new()
+  op = po("encode")
   op$param_set$values$method = "helmert"
   nt = train_pipeop(op, inputs = list(task))[[1L]]
 
@@ -91,7 +91,7 @@ test_that("PipeOpEncode", {
   check_dat(op$train(list(natask))[[1]]$data())
   check_dat(op$predict(list(natask))[[1]]$data())
 
-  op = PipeOpEncode$new()
+  op = po("encode")
   op$param_set$values$method = "sum"
   nt = train_pipeop(op, inputs = list(task))[[1L]]
 
@@ -104,7 +104,7 @@ test_that("PipeOpEncode", {
   check_dat(op$train(list(natask))[[1]]$data())
   check_dat(op$predict(list(natask))[[1]]$data())
 
-  op = PipeOpEncode$new()
+  op = po("encode")
   op$param_set$values$method = "poly"
   nt = train_pipeop(op, inputs = list(task))[[1L]]
 

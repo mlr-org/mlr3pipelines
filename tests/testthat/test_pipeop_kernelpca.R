@@ -9,7 +9,7 @@ test_that("PipeOpKernelPCA - basic properties", {
   expect_datapreproc_pipeop_class(PipeOpKernelPCA, task = task,
     deterministic_train = TRUE, deterministic_predict = TRUE, tolerance = 1e-4)
 
-  op = PipeOpKernelPCA$new()
+  op = po("kernelpca")
   expect_pipeop(op)
   set.seed(1234)
   result = op$train(list(task))
@@ -22,7 +22,7 @@ test_that("PipeOpKernelPCA - compare to kernlab::kpca", {
   skip_if_not_installed("kernlab")
 
   task = mlr_tasks$get("iris")
-  op = PipeOpKernelPCA$new()
+  op = po("kernelpca")
   expect_pipeop(op)
   set.seed(1234)
   result = op$train(list(task))
@@ -35,7 +35,7 @@ test_that("PipeOpKernelPCA - compare to kernlab::kpca", {
   expect_equal(result[[1]]$data()[, -1], as.data.table(kernlab::rotated(pca)))
 
   # Change some parameters
-  op2 = PipeOpKernelPCA$new(param_vals = list(kpar = list(sigma = 0.4), features = 4))
+  op2 = po("kernelpca", kpar = list(sigma = 0.4), features = 4)
   expect_pipeop(op2)
   set.seed(1234)
   result2 = op2$train(list(task))

@@ -12,7 +12,7 @@ test_that("PipeOpFilter", {
     list(filter = mlr3filters::FilterVariance$new(), param_vals = list(filter.frac = 0.5)), task = mlr_tasks$get("iris"),
     check_ps_default_values = FALSE)
 
-  po = PipeOpFilter$new(mlr3filters::FilterVariance$new())
+  po = po("filter", filter = mlr3filters::FilterVariance$new())
 
   expect_equal(po$id, mlr3filters::FilterVariance$new()$id)
 
@@ -49,7 +49,7 @@ test_that("PipeOpFilter", {
 test_that("PipeOpFilter parameters", {
   skip_if_not_installed("mlr3filters")
 
-  po = PipeOpFilter$new(mlr3filters::FilterVariance$new())
+  po = po("filter", filter = mlr3filters::FilterVariance$new())
 
   expect_set_equal(c("filter.nfeat", "filter.frac", "filter.cutoff", "filter.permuted"),
     grep("^filter\\.", po$param_set$ids(), value = TRUE))

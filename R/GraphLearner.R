@@ -185,6 +185,9 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       graph$state = NULL
 
       id = assert_string(id, null.ok = TRUE) %??% paste(graph$ids(sorted = TRUE), collapse = ".")
+      if (".has_id" %in% names(private)) {
+        private$.has_id = TRUE
+      }
       self$id = id  # init early so 'base_learner()' can use it in error messages
       private$.graph = graph
 
@@ -216,7 +219,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         intersect(c("importance", "oob_error", "loglik"), blproperties)
       )
 
-      super$initialize(id = id, dict_entry = NULL, task_type = task_type,
+      super$initialize(id = id, task_type = task_type,
         param_set = alist(private$.graph$param_set),
         feature_types = mlr_reflections$task_feature_types,
         predict_types = names(mlr_reflections$learner_predict_types[[task_type]]),

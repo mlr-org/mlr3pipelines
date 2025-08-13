@@ -108,7 +108,8 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       out_type = mlr_reflections$task_types[type, mult = "first"]$prediction
       properties = c("validation", "internal_tuning")
       properties = properties[properties %in% private$.learner$properties]
-      super$initialize(id = "learner", param_set = alist(private$.learner$param_set), param_vals = param_vals,
+      super$initialize(id = id, dict_entry = "learner",
+        param_set = alist(private$.learner$param_set), param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = "NULL", predict = out_type),
         tags = "learner", packages = learner$packages, properties = properties
