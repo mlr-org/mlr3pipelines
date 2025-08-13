@@ -1,13 +1,13 @@
 context("PipeOpRowApply")
 
 test_that("PipeOpRowApply - basic properties", {
-  op = PipeOpRowApply$new()
+  op = po("rowapply")
   task = mlr_tasks$get("iris")
   expect_datapreproc_pipeop_class(PipeOpRowApply, task = task)
 })
 
 test_that("PipeOpRowApply - transform on task with only numeric features", {
-  op = PipeOpRowApply$new()
+  op = po("rowapply")
   task = mlr_tasks$get("iris")
   cnames = task$feature_names
   iris = task$data(cols = cnames)
@@ -99,7 +99,7 @@ test_that("PipeOpRowApply - transform on task with only numeric features", {
 
 test_that("PipeOpRowApply - transform works on task with only integer features", {
 
-  op = PipeOpRowApply$new()
+  op = po("rowapply")
   task = mlr_tasks$get("german_credit")$select(c("age", "amount", "duration"))
   cnames = task$feature_names
   german_credit = task$data(cols = cnames)
@@ -191,7 +191,7 @@ test_that("PipeOpRowApply - transform works on task with only integer features",
 
 test_that("PipeOpRowApply - transform works on task with both numeric and integer features", {
 
-  op = PipeOpRowApply$new()
+  op = po("rowapply")
   task = mlr_tasks$get("wine")
   cnames = task$feature_names
   wine = task$data(cols = cnames)
@@ -289,7 +289,7 @@ test_that("PipeOpRowApply - transform works on task with both numeric and intege
 
 test_that("PipeOpRowApply - transform works on task with only one row", {
 
-  op = PipeOpRowApply$new()
+  op = po("rowapply")
   task = mlr_tasks$get("wine")$filter(1)
   cnames = task$feature_names
   wine = task$data(cols = cnames)
@@ -353,7 +353,7 @@ test_that("PipeOpRowApply - transform works on task with only one row", {
 
 test_that("PipeOpRowApply - transform works on empty task (no rows)", {
 
-  op = PipeOpRowApply$new()
+  op = po("rowapply")
   task = mlr_tasks$get("wine")$clone(deep = TRUE)$filter(integer(0))
   cnames = task$feature_names
 
@@ -424,7 +424,7 @@ test_that("PipeOpRowApply - transform works on empty task (no rows)", {
 
 test_that("PipeOpRowApply - transform works for empty predict task (no rows)", {
 
-  op = PipeOpRowApply$new()
+  op = po("rowapply")
   task_train = mlr_tasks$get("wine")
   task_predict = task_train$clone(deep = TRUE)$filter(integer(0))
   cnames = task_train$feature_names
@@ -479,7 +479,7 @@ test_that("PipeOpRowApply - transform works for empty predict task (no rows)", {
 
 test_that("PipeOpRowApply - transform works on task with no numeric or integer columns", {
 
-  op = PipeOpRowApply$new()
+  op = po("rowapply")
   task = mlr_tasks$get("penguins")$select(c("island", "sex"))
   cnames = task$feature_names
 

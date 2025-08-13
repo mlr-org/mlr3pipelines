@@ -107,7 +107,7 @@ test_that("preproc - basic sanity checks", {
 test_that("preproc - PipeOp processor", {
   task = tsk("iris")
   dt = task$data(cols = task$feature_names)
-  processor = PipeOpScale$new()
+  processor = po("scale")
   expected_train_out_task = processor$train(list(task))[[1L]]
   expected_predict_out_task = processor$predict(list(task))[[1L]]
   expected_train_out_dt = expected_train_out_task$data(cols = task$feature_names)

@@ -1,7 +1,7 @@
 context("PipeOpScale")
 
 test_that("PipeOpScale - basic properties", {
-  op = PipeOpScale$new()
+  op = po("scale")
   task = mlr_tasks$get("iris")
   expect_datapreproc_pipeop_class(PipeOpScale, task = task)
 })
@@ -31,7 +31,7 @@ test_that("basic properties", {
   task = TaskClassif$new(id = "test", target = "class",
     as_data_backend(data))
 
-  po = PipeOpScale$new()
+  po = po("scale")
 
   po$param_set$values[c("center", "scale")] = c(FALSE, FALSE)
 

@@ -21,7 +21,7 @@ test_graph = function(g, n_nodes, n_edges) {
 test_that("linear: scale + pca + learn", {
   skip_if_not_installed("rpart")
   skip_if_not_installed("rpart")
-  g = PipeOpScale$new() %>>% PipeOpPCA$new() %>>% PipeOpLrnRP
+  g = po("scale") %>>% po("pca") %>>% PipeOpLrnRP
   z = test_graph(g, n_nodes = 3L, n_edges = 2L)
 
   expect_equal(z$g.trained$pipeops$scale$.result[[1]]$data(cols = colnames(iris)[1:4]),
@@ -47,8 +47,8 @@ test_that("linear: scale + pca + learn", {
 
 test_that("featureunion", {
   skip_if_not_installed("rpart")
-  g = gunion(list(PipeOpPCA$new(), PipeOpNOP$new())) %>>%
-    PipeOpFeatureUnion$new(2L) %>>% PipeOpLrnRP
+  g = gunion(list(po("pca"), po("nop"))) %>>%
+    po("featureunion", innum = 2L) %>>% PipeOpLrnRP
   z = test_graph(g, n_nodes = 4L, n_edges = 3L)
 
   expect_equal(abs(as.matrix(z$g.trained$pipeops$pca$.result[[1]]$data(cols = paste0("PC", 1:4)))),
@@ -65,7 +65,7 @@ test_that("featureunion", {
 test_that("bagging", {
   skip_if_not_installed("rpart")
   skip_if_not_installed("rpart")
-  g = pipeline_greplicate(PipeOpSubsample$new() %>>% PipeOpLrnRP, 2L) %>>% PipeOpClassifAvg$new(innum = 2L)
+  g = pipeline_greplicate(po("subsample") %>>% PipeOpLrnRP, 2L) %>>% po("classifavg", innum = 2L)
   g$pipeops$subsample_1$param_set$values$frac = .5
   g$pipeops$subsample_2$param_set$values$frac = .5
   z = test_graph(g, n_nodes = 5L, n_edges = 4L)
@@ -86,7 +86,7 @@ test_that("branching", {
   # c) we need a delayed init of the pipeop, which is triggered when the pipeop is
   # connected. this  would help a lot when we connect the PipeOp to its neighbor and
   # need some info from the nieghbor to decide some poperties of the PO
-  g = PipeOpBranch$new(2L) %>>% gunion(list(PipeOpLrnRP, PipeOpLrnFL)) %>>% PipeOpUnbranch$new(2L)
+  g = po("branch", options = 2L) %>>% gunion(list(PipeOpLrnRP, PipeOpLrnFL)) %>>% po("unbranch", options = 2L)
   z = test_graph(g, n_nodes = 4L, n_edges = 4L)
 
   expect_equal(z$g.trained$pipeops$classif.rpart$.result, list(output = NULL))
@@ -96,7 +96,7 @@ test_that("branching", {
   expect_equal(z$g.predicted$pipeops$classif.rpart$.result[[1]], z$g.predicted$pipeops$unbranch$.result[[1]])
   expect_equal(z$g.predicted$pipeops$classif.featureless$.result, list(output = NO_OP))
 
-  g = PipeOpBranch$new(2L) %>>% gunion(list(PipeOpLrnRP, PipeOpLrnFL)) %>>% PipeOpUnbranch$new(2L)
+  g = po("branch", options = 2L) %>>% gunion(list(PipeOpLrnRP, PipeOpLrnFL)) %>>% po("unbranch", options = 2L)
   task = mlr_tasks$get("iris")
   res = g$train(task)
   expect_true(g$is_trained)
@@ -109,7 +109,7 @@ test_that("branching", {
 test_that("branching with varargs", {
   skip_if_not_installed("rpart")
   skip_if_not_installed("rpart")
-  g = PipeOpBranch$new(2L) %>>% gunion(list(PipeOpLrnRP, PipeOpLrnFL)) %>>% PipeOpUnbranch$new()
+  g = po("branch", options = 2L) %>>% gunion(list(PipeOpLrnRP, PipeOpLrnFL)) %>>% po("unbranch")
   z = test_graph(g, n_nodes = 4L, n_edges = 4L)
 
   expect_equal(z$g.trained$pipeops$classif.rpart$.result, list(output = NULL))
@@ -119,7 +119,7 @@ test_that("branching with varargs", {
   expect_equal(z$g.predicted$pipeops$classif.rpart$.result[[1]], z$g.predicted$pipeops$unbranch$.result[[1]])
   expect_equal(z$g.predicted$pipeops$classif.featureless$.result, list(output = NO_OP))
 
-  g = PipeOpBranch$new(2L) %>>% gunion(list(PipeOpLrnRP, PipeOpLrnFL)) %>>% PipeOpUnbranch$new()
+  g = po("branch", options = 2L) %>>% gunion(list(PipeOpLrnRP, PipeOpLrnFL)) %>>% po("unbranch")
   task = mlr_tasks$get("iris")
   res = g$train(task)
   expect_true(g$is_trained)
@@ -133,7 +133,7 @@ test_that("branching with varargs", {
 
 test_that("task chunking", {
   skip_if_not_installed("rpart")
-  g = PipeOpChunk$new(2L) %>>% pipeline_greplicate(PipeOpLrnRP, 2L) %>>% PipeOpClassifAvg$new(2L)
+  g = po("chunk", outnum = 2L) %>>% pipeline_greplicate(PipeOpLrnRP, 2L) %>>% po("classifavg", innum = 2L)
   z = test_graph(g, n_nodes = 4L, n_edges = 4L)
 })
 
@@ -145,10 +145,10 @@ test_that("stacking", {
   lrn1 = mlr_learners$get("classif.rpart")
   lrn2 = mlr_learners$get("classif.featureless")
   pipe = gunion(list(
-    PipeOpLearnerCV$new(lrn1),
-    PipeOpLearnerCV$new(lrn2),
-    PipeOpNOP$new()))
-  pipe = pipe %>>% PipeOpFeatureUnion$new(3)
+    po("learner_cv", lrn1),
+    po("learner_cv", lrn2),
+    po("nop")))
+  pipe = pipe %>>% po("featureunion", innum = 3)
 
   result = pipe$train(task)[[1]]
 

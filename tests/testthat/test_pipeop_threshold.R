@@ -21,7 +21,7 @@ test_that("thresholding works for binary", {
   t = tsk("german_credit")$filter(rows = 1:100)
 
   # works with no args
-  po_thr = PipeOpThreshold$new()
+  po_thr = po("threshold")
   expect_pipeop(po_thr)
   gr = po_lrn %>>% po_thr
   gr$train(t)
@@ -71,7 +71,7 @@ test_that("thresholding works for multiclass", {
   t = tsk("iris")
 
   # works with no args
-  po_thr = PipeOpThreshold$new()
+  po_thr = po("threshold")
   expect_pipeop(po_thr)
   gr = po_lrn %>>% po_thr
   gr$train(t)
@@ -85,7 +85,7 @@ test_that("thresholding works for multiclass", {
   expect_prediction(prd[[1]])
 
   # works with args
-  po_thr = PipeOpThreshold$new(param_vals = list(thresholds = c(0.3, 0.4, 0.3)))
+  po_thr = po("threshold", thresholds = c(0.3, 0.4, 0.3))
   expect_pipeop(po_thr)
   gr = po_lrn %>>% po_thr
   gr$train(t)
@@ -94,7 +94,7 @@ test_that("thresholding works for multiclass", {
   expect_true(all(gr$param_set$values$threshold.thresholds == c(0.3, 0.4, 0.3)))
 
   # works with named args
-  po_thr = PipeOpThreshold$new(param_vals =
+  po_thr = po("threshold",
     list(thresholds = c("virginica" = 0.3, "versicolor" = 0.4, "setosa" = 0.3)))
   expect_pipeop(po_thr)
   gr = po_lrn %>>% po_thr
@@ -104,12 +104,12 @@ test_that("thresholding works for multiclass", {
   expect_true(all(gr$param_set$values$threshold.thresholds == c(0.3, 0.4, 0.3)))
 
   # errors with wrong args
-  po_thr = PipeOpThreshold$new(param_vals = list(thresholds = c(0.3, 0.4)))
+  po_thr = po("threshold", thresholds = c(0.3, 0.4))
   gr = po_lrn %>>% po_thr
   gr$train(t)
   expect_error(gr$predict(t), "must have length one or length equal to number of outcome levels")
 
-  po_thr = PipeOpThreshold$new(param_vals =
+  po_thr = po("threshold",
     list(thresholds = c("foo" = 0.3, "versicolor" = 0.4, "setosa" = 0.3)))
   gr = po_lrn %>>% po_thr
   gr$train(t)

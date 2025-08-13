@@ -2,13 +2,13 @@ context("RandomProjection")
 
 test_that("basic properties", {
   task = mlr_tasks$get("iris")
-  op = PipeOpRandomProjection$new()
+  op = po("randomprojection")
   expect_datapreproc_pipeop_class(PipeOpRandomProjection, task = task, deterministic_train = FALSE)
 })
 
 test_that("projection properties", {
   task = mlr_tasks$get("iris")
-  op = PipeOpRandomProjection$new()
+  op = po("randomprojection")
   set.seed(1234)
   result = op$train(list(task))
   resdt = result[[1]]$data()

@@ -6,7 +6,7 @@ test_that("PipeOpDateFeatures - basic properties", {
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-  po = PipeOpDateFeatures$new()
+  po = po("datefeatures")
   expect_datapreproc_pipeop_class(PipeOpDateFeatures, task = task)
 })
 
@@ -16,7 +16,7 @@ test_that("PipeOpDateFeatures - finds POSIXct column", {
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-  po = PipeOpDateFeatures$new()
+  po = po("datefeatures")
   train_pipeop(po, inputs = list(task))
 })
 
@@ -37,7 +37,7 @@ test_that("PipeOpDateFeatures - unaltered if no features specified", {
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-  po = PipeOpDateFeatures$new(param_vals = list(cyclic = TRUE, year = FALSE,
+  po = po("datefeatures", cyclic = TRUE, year = FALSE,
     month = FALSE, week_of_year = FALSE, day_of_year = FALSE, day_of_month = FALSE,
     day_of_week = FALSE, hour = FALSE, minute = FALSE, second = FALSE, is_day = FALSE))
   train_pipeop(po, inputs = list(task))
@@ -50,7 +50,7 @@ test_that("PipeOpDateFeatures - correct basic features", {
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-  po = PipeOpDateFeatures$new()
+  po = po("datefeatures")
   trained_data = train_pipeop(po, inputs = list(task))$output$data()
   expect_true(all(trained_data$date.year == as.numeric(format(dat$date, "%Y"))))
   expect_true(all(trained_data$date.month == as.numeric(format(dat$date, "%m"))))
@@ -71,7 +71,7 @@ test_that("PipeOpDateFeatures - correct cyclic features", {
   dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-  po = PipeOpDateFeatures$new(param_vals = list(cyclic = TRUE))
+  po = po("datefeatures", cyclic = TRUE)
   trained_data = train_pipeop(po, inputs = list(task))$output$data()
 
   month = as.numeric(format(dat$date, "%m")) - 1L
@@ -146,7 +146,7 @@ test_that("PipeOpDateFeatures - automatic NA handling", {
     size = 150L)
   dat$date[1L] = NA
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-  po = PipeOpDateFeatures$new(param_vals = list(cyclic = TRUE))
+  po = po("datefeatures", cyclic = TRUE)
   output = train_pipeop(po, inputs = list(task))$output
   expect_true(all(is.na(output$data(rows = 1L, cols = output$feature_names[- (1L:4L)]))))
 })
@@ -166,7 +166,7 @@ test_that("PipeOpDateFeatures - no year but day_of_year and day_of_month", {
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-  po = PipeOpDateFeatures$new(param_vals = list(cyclic = TRUE, year = FALSE))
+  po = po("datefeatures", cyclic = TRUE, year = FALSE)
   expect_true("date.year" %nin% train_pipeop(po, inputs = list(task))$output$feature_names)
 })
 
@@ -176,7 +176,7 @@ test_that("PipeOpDateFeatures - only year and cyclic", {
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-  po = PipeOpDateFeatures$new()
+  po = po("datefeatures")
   po$param_set$values$month = TRUE
   po$param_set$values$month = FALSE
   po$param_set$values$week_of_year = FALSE

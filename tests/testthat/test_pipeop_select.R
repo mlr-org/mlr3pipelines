@@ -1,7 +1,7 @@
 context("PipeOpSelect")
 
 test_that("select", {
-  op = PipeOpSelect$new()
+  op = po("select")
   expect_pipeop(op)
 
   # Generic tests
@@ -13,7 +13,7 @@ test_that("select", {
 
 
   # Selects the columns we expect it to select
-  po = PipeOpSelect$new()
+  po = po("select")
   expect_equal(po$train(list(tsk("iris")))[[1]]$data(), mlr_tasks$get("iris")$data())
 
   po$param_set$values$selector = selector_grep("^Petal")

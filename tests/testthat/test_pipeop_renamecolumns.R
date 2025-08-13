@@ -2,14 +2,14 @@ context("PipeOpRenameColumns")
 
 test_that("basic properties", {
   task = mlr_tasks$get("iris")
-  op = PipeOpRenameColumns$new()
+  op = po("renamecolumns")
   expect_datapreproc_pipeop_class(PipeOpRenameColumns, task = task, predict_like_train = TRUE)
 })
 
 test_that("renaming works", {
   task = mlr_tasks$get("iris")
   task$cbind(data.table(Petal.Width = as.character(1:150)))  # need a char column that we can turn into the 'name'-col
-  op = PipeOpRenameColumns$new(param_vals = list(renaming = c("Petal.Length" = "PL")))
+  op = po("renamecolumns", renaming = c("Petal.Length" = "PL"))
   train_out1 = op$train(list(task))[[1L]]
   predict_out1 = op$predict(list(task))[[1L]]
   expect_equal(train_out1, predict_out1)
@@ -34,7 +34,7 @@ test_that("renaming works", {
 
 test_that("error handling", {
   task = mlr_tasks$get("iris")
-  op = PipeOpRenameColumns$new(param_vals = list(renaming = c("Test" = "Newtest")))
+  op = po("renamecolumns", renaming = c("Test" = "Newtest"))
   expect_error(op$train(list(task)), "The names Test from.*were not found in the Task")
   op$param_set$values$ignore_missing = TRUE
   expect_equal(task$data(), op$train(list(task))[[1]]$data())

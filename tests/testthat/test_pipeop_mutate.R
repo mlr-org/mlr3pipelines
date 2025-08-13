@@ -1,7 +1,7 @@
 context("PipeOpMutate")
 
 test_that("mutate", {
-  op = PipeOpMutate$new()
+  op = po("mutate")
   expect_pipeop(op)
 
   # Generic tests

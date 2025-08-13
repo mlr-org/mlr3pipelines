@@ -3,7 +3,7 @@ context("PipeOpVtreat")
 test_that("PipeOpVtreat - basic properties", {
   skip_if_not_installed("vtreat")
 
-  expect_pipeop(PipeOpVtreat$new())
+  expect_pipeop(po("vtreat"))
 
   task_regr = mlr_tasks$get("boston_housing_classic")
   expect_datapreproc_pipeop_class(PipeOpVtreat, task = task_regr, deterministic_train = FALSE, deterministic_predict = FALSE)
@@ -18,7 +18,7 @@ test_that("PipeOpVtreat - basic properties", {
 test_that("PipeOpVtreat - Regression", {
   skip_if_not_installed("vtreat")
 
-  op = PipeOpVtreat$new()
+  op = po("vtreat")
 
   # clean task simply passes through
   clean_task = TaskRegr$new("vtreat_regr_clean", backend = data.frame(y = c(-1, 0, 1), x = c(1, 1, 1)), target = "y")
@@ -67,7 +67,7 @@ test_that("PipeOpVtreat - Regression", {
 test_that("PipeOpVtreat - Binary Classification", {
   skip_if_not_installed("vtreat")
 
-  op = PipeOpVtreat$new()
+  op = po("vtreat")
 
   # clean task simply passes through
   clean_task = TaskClassif$new("vtreat_binary_clean", backend = data.frame(y = as.factor(c(0, 0, 1, 1, 0)), x = c(1, 1, 1, 1, 1)), target = "y")
@@ -117,7 +117,7 @@ test_that("PipeOpVtreat - Binary Classification", {
 test_that("PipeOpVtreat - Multiclass Classification", {
   skip_if_not_installed("vtreat")
 
-  op = PipeOpVtreat$new()
+  op = po("vtreat")
 
   # clean task simply passes through
   clean_task = TaskClassif$new("vtreat_multiclass_clean", backend = data.frame(y = as.factor(c(-1, 0, 1)), x = c(1, 1, 1)), target = "y")
@@ -167,7 +167,7 @@ test_that("PipeOpVtreat - Multiclass Classification", {
 test_that("PipeOpVtreat - Edge Cases", {
   skip_if_not_installed("vtreat")
 
-  op = PipeOpVtreat$new()
+  op = po("vtreat")
 
   set.seed(3)
   dat = data.table(y = rnorm(12), x = as.factor(rep(c("a", "b", "c"), 4L)),
@@ -178,7 +178,7 @@ test_that("PipeOpVtreat - Edge Cases", {
   task$col_roles[[if ("weights_learner" %in% names(task)) "weights_learner" else "weight"]] = "weights"
   task$col_roles$feature = "x"
 
-  po = PipeOpVtreat$new()
+  po = po("vtreat")
   train_out1 = po$train(list(task))[[1L]]
   predict_out1 = po$predict(list(task))[[1L]]
 

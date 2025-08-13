@@ -11,7 +11,7 @@ test_that("PipeOpTomek - basic properties", {
 test_that("PipeOpTomek - train works as intended", {
   skip_if_not_installed("themis")
 
-  op = PipeOpTomek$new()
+  op = po("tomek")
 
   # Compare to themis::tomek for task with only numeric features
   task = mlr_tasks$get("iris")

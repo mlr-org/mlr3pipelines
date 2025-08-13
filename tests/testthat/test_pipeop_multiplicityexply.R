@@ -1,7 +1,7 @@
 context("PipeOpMultiplicityExply")
 
 test_that("multiplicityexply - basic properties", {
-  po = PipeOpMultiplicityExply$new(3)
+  po = po("multiplicityexply", outnum = 3)
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 1)
   expect_data_table(po$output, nrows = 3)
@@ -17,7 +17,7 @@ test_that("multiplicityexply - train and predict", {
   t1 = tsk$clone()$select(keep1)
   t2 = tsk$clone()$select(keep2)
 
-  po = PipeOpMultiplicityExply$new(2)
+  po = po("multiplicityexply", outnum = 2)
   tout = train_pipeop(po, list(as.Multiplicity(list(t1, t2))))
   expect_list(po$state, len = 0)
   expect_list(tout, len = 2)

@@ -4,7 +4,7 @@ test_that("PipeOpTargetTrafoScaleRange - basic properties", {
   skip_if_not_installed("rpart")
   expect_pipeop_class(PipeOpTargetTrafoScaleRange, list(id = "po"))
 
-  po = PipeOpTargetTrafoScaleRange$new()
+  po = po("targettrafoscalerange")
 
   expect_pipeop(po)
 
@@ -30,7 +30,7 @@ test_that("PipeOpTargetTrafoScaleRange - basic properties", {
   g = Graph$new()
   g$add_pipeop(po)
   g$add_pipeop(LearnerRegrRpart$new())
-  g$add_pipeop(PipeOpTargetInvert$new())
+  g$add_pipeop(po("targetinvert"))
   g$add_edge(src_id = "targettrafoscalerange", dst_id = "targetinvert", src_channel = 1L, dst_channel = 1L)
   g$add_edge(src_id = "targettrafoscalerange", dst_id = "regr.rpart", src_channel = 2L, dst_channel = 1L)
   g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert", src_channel = 1L, dst_channel = 2L)
@@ -50,7 +50,7 @@ test_that("PipeOpTargetTrafoScaleRange - basic properties", {
 
 test_that("PipeOpTargetTrafoScaleRange - row use subsets", {
   skip_if_not_installed("rpart")
-  po = PipeOpTargetTrafoScaleRange$new()
+  po = po("targettrafoscalerange")
 
   task = mlr_tasks$get("boston_housing_classic")
 
@@ -71,9 +71,9 @@ test_that("PipeOpTargetTrafoScaleRange - row use subsets", {
 
   predict_out1 = learner$predict(taskfull)
 
-  g = PipeOpFixFactors$new() %>>% po
+  g = po("fixfactors") %>>% po
   g$add_pipeop(LearnerRegrRpart$new())
-  g$add_pipeop(PipeOpTargetInvert$new())
+  g$add_pipeop(po("targetinvert"))
   g$add_edge(src_id = "targettrafoscalerange", dst_id = "targetinvert", src_channel = 1L, dst_channel = 1L)
   g$add_edge(src_id = "targettrafoscalerange", dst_id = "regr.rpart", src_channel = 2L, dst_channel = 1L)
   g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert", src_channel = 1L, dst_channel = 2L)

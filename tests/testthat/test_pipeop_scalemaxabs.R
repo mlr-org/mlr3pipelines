@@ -2,7 +2,7 @@ context("PipeOpScaleMaxAbs")
 
 test_that("PipeOpScaleMaxAbs - basic properties", {
   task = mlr_tasks$get("iris")
-  op = PipeOpScaleMaxAbs$new()
+  op = po("scalemaxabs")
   expect_datapreproc_pipeop_class(PipeOpScaleMaxAbs, task = task)
 
   set.seed(1234)
@@ -15,7 +15,7 @@ test_that("PipeOpScaleMaxAbs - basic properties", {
 test_that("Other maxabs", {
   task = mlr_tasks$get("iris")
 
-  op = PipeOpScaleMaxAbs$new(param_vals = list(maxabs = 0.6))
+  op = po("scalemaxabs", maxabs = 0.6)
   set.seed(1234)
   resdt = op$train(list(task))[[1L]]$data()
   expect_true(all(sapply(resdt[, 2:5], max) == 0.6))

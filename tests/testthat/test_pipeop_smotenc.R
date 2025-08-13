@@ -12,7 +12,7 @@ test_that("PipeOpSmoteNC - basic properties", {
 test_that("PipeOpSmoteNC - train works as intended", {
   skip_if_not_installed("themis")
 
-  op = PipeOpSmoteNC$new()
+  op = po("smotenc")
   df_unbalanced = data.frame(
     class = factor(rep(c("pos", "neg"), times = c(150, 50))),
     x1 = rnorm(200),

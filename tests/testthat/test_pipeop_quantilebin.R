@@ -7,7 +7,7 @@ test_that("PipeOpQuantileBin - basic properties", {
 
 test_that("PipeOpQuantileBin - see if expected result is returned", {
   task = mlr_tasks$get("iris")
-  op = PipeOpQuantileBin$new()
+  op = po("quantilebin")
   expect_pipeop(op)
   result = op$train(list(task))
 
@@ -16,7 +16,7 @@ test_that("PipeOpQuantileBin - see if expected result is returned", {
     function(x) expect_equal(length(unique(x)), 2))
 
   # 5 bins
-  op5 = PipeOpQuantileBin$new(param_vals = list(numsplits = 5))
+  op5 = po("quantilebin", numsplits = 5)
   expect_pipeop(op5)
   result = op5$train(list(task))
   b = apply(as.data.frame(result[[1]]$data()[, 2:5]), MARGIN = 2,

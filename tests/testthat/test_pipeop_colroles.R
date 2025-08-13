@@ -1,7 +1,7 @@
 context("PipeOpColRoles")
 
 test_that("PipeOpColRoles - basic properties", {
-  op = PipeOpColRoles$new()
+  op = po("colroles")
   task = mlr_tasks$get("iris")
   expect_datapreproc_pipeop_class(PipeOpColRoles, task = task)
 })
@@ -37,10 +37,10 @@ test_that("PipeOpColRoles - only existing columns are accepted", {
   task = mlr_tasks$get("iris")
   task$cbind(data.table(rn = sprintf("%03d", 1:150)))
 
-  op = PipeOpColRoles$new(param_vals = list(new_role = list(rn = "name", wrong = "feature")))
+  op = po("colroles", new_role = list(rn = "name", wrong = "feature"))
   expect_error(train_pipeop(op, inputs = list(task)), regexp = "subset")
 
-  op = PipeOpColRoles$new(param_vals = list(new_role_direct = list(name = "rn", feature = "wrong")))
+  op = po("colroles", new_role_direct = list(name = "rn", feature = "wrong"))
   expect_error(train_pipeop(op, inputs = list(task)), regexp = "subset")
 
 })
@@ -49,10 +49,10 @@ test_that("PipeOpColRoles - changing the role of a target fails", {
 
   task = mlr_tasks$get("iris")
 
-  op = PipeOpColRoles$new(param_vals = list(new_role = list(Species = "feature")))
+  op = po("colroles", new_role = list(Species = "feature"))
   expect_error(train_pipeop(op, inputs = list(task)), regexp = "role of a target")
 
-  op = PipeOpColRoles$new(param_vals = list(new_role_direct = list(feature = "Species")))
+  op = po("colroles", new_role_direct = list(feature = "Species"))
   expect_error(train_pipeop(op, inputs = list(task)), regexp = "role of a target")
 
 })
@@ -62,7 +62,7 @@ test_that("PipeOpColRoles - new_role works", {
   task = mlr_tasks$get("iris")
   task$cbind(data.table(rn = sprintf("%03d", 1:150)))
 
-  op = PipeOpColRoles$new(param_vals = list(new_role = list(
+  op = po("colroles", new_role = list(
     rn = "name", Petal.Length = c("feature", "order"), Petal.Width = character(0), Sepal.Width = NULL))
   )
 
@@ -92,7 +92,7 @@ test_that("PipeOpColRoles - new_role_direct works", {
   task$cbind(data.table(rn = sprintf("%03d", 1:150)))
   task$col_roles$group = "Species"
 
-  op = PipeOpColRoles$new(param_vals = list(new_role_direct = list(
+  op = po("colroles", new_role_direct = list(
     name = "rn", order = c("Petal.Length", "Sepal.Length"), feature = character(0), group = NULL))
   )
 

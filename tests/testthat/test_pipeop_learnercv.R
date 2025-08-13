@@ -2,7 +2,7 @@ context("PipeOpLearnerCV")
 
 test_that("PipeOpLearnerCV - basic properties", {
   lrn = mlr_learners$get("classif.featureless")
-  po = PipeOpLearnerCV$new(lrn)
+  po = po("learner_cv", lrn)
   expect_pipeop(po$clone(), check_ps_default_values = FALSE)
   expect_data_table(po$input, nrows = 1)
   expect_data_table(po$output, nrows = 1)
@@ -41,7 +41,7 @@ test_that("PipeOpLearnerCV - basic properties", {
 test_that("PipeOpLearnerCV - param values", {
   skip_if_not_installed("rpart")
   lrn = mlr_learners$get("classif.rpart")
-  polrn = PipeOpLearnerCV$new(lrn)
+  polrn = po("learner_cv", lrn)
   expect_subset(c("minsplit", "resampling.method", "resampling.folds"), polrn$param_set$ids())
   expect_equal(polrn$param_set$values, list(resampling.method = "cv", resampling.folds = 3, resampling.keep_response = FALSE, xval = 0))
   polrn$param_set$values$minsplit = 2
@@ -53,7 +53,7 @@ test_that("PipeOpLearnerCV - param values", {
 test_that("PipeOpLearnerCV - within resampling", {
   skip_if_not_installed("rpart")
   lrn = mlr_learners$get("classif.rpart")
-  gr = GraphLearner$new(PipeOpLearnerCV$new(lrn) %>>% po(id = "l2", lrn))
+  gr = GraphLearner$new(po("learner_cv", lrn) %>>% po(id = "l2", lrn))
   rr = resample(tsk("iris"), gr, rsmp("holdout"))
   expect_class(rr, "ResampleResult")
 })
@@ -63,13 +63,13 @@ test_that("PipeOpLearnerCV - insample resampling", {
   lrn = mlr_learners$get("classif.featureless")
   iris_with_unambiguous_mode = mlr_tasks$get("iris")$filter(c(1:30, 70:150))  # want featureless learner without randomness
 
-  polrn = PipeOpLearnerCV$new(lrn, param_vals = list(resampling.method = "insample"))
+  polrn = po("learner_cv", lrn, resampling.method = "insample")
   expect_equal(polrn$train(list(iris_with_unambiguous_mode))[[1]]$data(),
     cbind(iris_with_unambiguous_mode$data(cols = "Species"),
       classif.featureless.response = factor("virginica", levels = levels(iris[[5]]))))
 
   lrn = mlr_learners$get("classif.rpart")
-  polrn = PipeOpLearnerCV$new(lrn, param_vals = list(resampling.method = "insample"))
+  polrn = po("learner_cv", lrn, resampling.method = "insample")
   expect_equal(polrn$train(list(iris_with_unambiguous_mode))[[1]],
     polrn$predict(list(iris_with_unambiguous_mode))[[1]])
 })
@@ -83,7 +83,7 @@ test_that("PipeOpLearnerCV - graph but no id", {
 
 test_that("PipeOpLearnerCV - model active binding to state", {
   lrn = mlr_learners$get("classif.featureless")
-  po = PipeOpLearnerCV$new(lrn)
+  po = po("learner_cv", lrn)
   task = mlr_tasks$get("iris")
 
   # before training states are NULL

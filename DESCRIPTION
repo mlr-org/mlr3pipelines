@@ -102,6 +102,9 @@ Suggests:
     htmlwidgets,
     ranger,
     themis
+Remotes:
+    mlr-org/mlr3misc@common_baseclass,
+    mlr-org/mlr3@common_baseclass
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
