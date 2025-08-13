@@ -19,6 +19,7 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
     .keep_org_data = NULL,
     .diag = NULL,
     .make_knn_graph = function(x) {
+
       pv = self$param_set$get_values()
       INF_VAL = 1.340781e+15
       NA_IDX  = 0
@@ -75,8 +76,8 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
       norg = nrow(self$state$orgdata)
       lknng = private$.make_knn_graph(rbind(dt, self$state$orgdata))
       lgeodist = igraph::distances(lknng,
-                                    v = seq_len(nindata),
-                                   to = nindata + seq_len(norg))
+                                    seq_len(nindata),
+                                    nindata + seq_len(norg))
       dammu = sweep(lgeodist ^ 2, 2, colMeans(self$state$geodist ^ 2), "-")
       Lsharp = sweep(self$state$e_vectors, 2, self$state$e_values, "/")
       out = -0.5 * (dammu %*% Lsharp)
@@ -85,12 +86,7 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
   )
 )
 
-
 mlr_pipeops$add("isomap", PipeOpIsomap)
-po = PipeOpIsomap$new("isomap")
-few_lines_iris = tsk("iris")$filter(samp)
-po$train(list(tsk("iris")))[[1]]$data()
-po$state
-po$predict(list(tsk("iris")))[[1]]$data()
-
-tsk("iris")$data()[samp]
+#po = PipeOpIsomap$new("isomap")
+#po$train(list(tsk("iris")))
+#po$predict(list(tsk("iris")))
