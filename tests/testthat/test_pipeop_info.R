@@ -98,16 +98,6 @@ test_that("pattern - check", {
   }
 })
 
-
-console_output_predict = tryCatch({
-  capture.output(poinfo$train(list(output[[i]])))
-  capture.output(poinfo$predict(list(output[[i]])))
-},
-warning = function(w) conditionMessage(w),
-message = function(m) conditionMessage(m))
-expect_match(console_output_predict, regex_list[[j]], all = FALSE)
-
-
 test_that("malformed log_target handled accordingly", {
   malformed_log_target = list("malformed", "::", "::::::", "log::", "log::log_level", "log::log_level::", "log::log_level::message::", "::log")
   for (i in seq_along(malformed_log_target)) {
