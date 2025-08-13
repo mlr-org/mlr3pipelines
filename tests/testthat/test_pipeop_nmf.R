@@ -66,6 +66,7 @@ test_that("PipeOpNMF - does not modify search path when NMF is loaded, fix for #
 
 test_that("PipeOpNMF - does not modify search path when BiocGenerics is loaded, fix for #929", {
   skip_if_not_installed("NMF")
+  skip_if_not_installed("BiocGenerics")
 
   library("BiocGenerics")
   orig_attached = search()
