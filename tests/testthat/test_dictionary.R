@@ -11,7 +11,7 @@ test_that("Dictionary contains all PipeOps", {
   inflate = function(x) {
     x$label
     x$param_set$values$content$label
-    lapply(x$.__enclos_env__$private, function(x) if (inherits(x, "Mlr3Component")) inflate(x))
+    lapply(as.list(x$.__enclos_env__$private, all.names = TRUE), function(x) if (inherits(x, "Mlr3Component")) inflate(x))
     x
   }
 
