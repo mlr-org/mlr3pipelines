@@ -149,7 +149,7 @@ PipeOpNMF = R6Class("PipeOpNMF",
       # NOTE: NMF indirectly attaches Biobase which attaches BiocGenerics which attaches generics to the search path on
       # load. If NMF was not loaded prior to this, we detach packages on exit that were not originally attached. If it
       # was, we leave the search path as it was. Necessary because of mlr-org/mlr3#1112, #751, and #929.
-      if ("package:NMF" %nin% loadedNamespaces()) {
+      if ("NMF" %nin% loadedNamespaces()) {
         pkgs = c("package:Biobase", "package:BiocGenerics", "package:generics")  # order is important due to depends
         to_be_detached = pkgs[pkgs %nin% search()]
         if (length(to_be_detached)) {
@@ -185,8 +185,8 @@ PipeOpNMF = R6Class("PipeOpNMF",
 
     .predict_dt = function(dt, levels) {
       # See note in private$.train_dt().
-      if ("package:NMF" %nin% loadedNamespaces()) {
-        pkgs = c("package:Biobase", "package:BiocGenerics", "package:generics")  # order is important due to depends
+      if ("NMF" %nin% loadedNamespaces()) {
+        pkgs = c("package:Biobase", "package:BiocGenerics", "package:generics")
         to_be_detached = pkgs[pkgs %nin% search()]
         if (length(to_be_detached)) {
           require_namespaces("NMF")

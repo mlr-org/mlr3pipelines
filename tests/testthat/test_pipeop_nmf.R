@@ -51,7 +51,7 @@ test_that("PipeOpNMF - does not modify search path when NMF is not loaded, fix f
   expect_equal(search(), orig_attached)
 })
 
-test_that("PipeOpNMF - does not modify search path when NMF is loaded, fix for #929", {
+test_that("PipeOpNMF - does not modify search path when NMF or its dependencies are loaded, fix for #929", {
   skip_if_not_installed("NMF")
 
   library("NMF")
@@ -62,19 +62,17 @@ test_that("PipeOpNMF - does not modify search path when NMF is loaded, fix for #
   expect_equal(search(), orig_attached)
   op$predict(list(tsk("iris")))
   expect_equal(search(), orig_attached)
-})
 
-test_that("PipeOpNMF - does not modify search path when BiocGenerics is loaded, fix for #929", {
-  skip_if_not_installed("NMF")
-  skip_if_not_installed("BiocGenerics")
-
-  library("BiocGenerics")
+  # Test when only (some of) NMF's dependencies are loaded (e.g. through other packages)
+  unloadNamespace("NMF")
+  unloadNamespace("Biobase")
   orig_attached = search()
 
   op = po("nmf")
   op$train(list(tsk("iris")))
   expect_equal(search(), orig_attached)
   unloadNamespace("NMF")
+  unloadNamespace("Biobase")
   op$predict(list(tsk("iris")))
   expect_equal(search(), orig_attached)
 })

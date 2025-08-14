@@ -14,7 +14,7 @@
 #' This type of imputation is especially sensible in the context of tree-based methods, see also
 #' Ding & Simonoff (2010).
 #'
-#' [`Learners`][mlr3::Learner] expect input [`Tasks`][mlr3::Task] to have the same `factor` (or `ordered`) levels during
+#' [`Learner`][mlr3::Learner]s expect input [`Task`][mlr3::Task]s to have the same `factor` (or `ordered`) levels during
 #' training as well as prediction. This `PipeOp` modifies the levels of `factor` and `ordered` features,
 #' and since it may occur that a `factor` or `ordered` feature contains missing values only during prediction, but not
 #' during training, the output `Task` could also have different levels during the two stages.
