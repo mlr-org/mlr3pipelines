@@ -51,3 +51,4 @@ vignettes/*.pdf
 docs/
 /Meta/
 logger_file
+.DS_Store
