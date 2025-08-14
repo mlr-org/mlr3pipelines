@@ -47,9 +47,7 @@
 #'   Printer settings are pre-defined for Objects of the class `Task`, `Prediction` and `NULL`.
 #'   If the object on question does not belong to one of these classes, then the printer command labeled as `Default`
 #'   will be utilized.
-#'
-#'
-#'
+#'   should it be deleted???????????
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].

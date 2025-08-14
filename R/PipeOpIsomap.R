@@ -1,4 +1,44 @@
-#PipeOpIsomap - test - test
+#' @title Algorithm for Dimensionality Reduction
+#'
+#' @usage
+#' @name mlr_pipeops_isomap
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]
+#'
+#' @description
+#'
+#'
+#' [additional information]
+#'
+#' @section Construction:
+#' ```
+#' PipeOpIsomap$new(id = "isomap", ...)
+#' ```
+#' * `ìd` :: `character(1)`\cr
+#'   Identifier of resulting object, default "isomap"
+#'
+#' @section Input and Output Channels:
+#'
+#' @section State:
+#'
+#' @section Parameters:
+#'
+#' @section Internals:
+#'
+#' @section Fields:
+#'
+#' @section Methods:
+#'
+#' @examples
+#'
+#'
+#' @references
+#'
+#' @family PipeOps
+#' @template
+#' @include
+#' @export
+#'
+#'
 
 PipeOpIsomap = R6Class("PipeOpIsomap",
   inherit = PipeOpTaskPreproc,
