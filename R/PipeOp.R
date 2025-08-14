@@ -50,6 +50,7 @@
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`. The
 #'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #' * `input` :: [`data.table`][data.table::data.table] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
 #'   Sets the `$input` slot of the resulting object; see description there.
 #' * `output` :: [`data.table`][data.table::data.table] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr

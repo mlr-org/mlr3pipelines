@@ -26,8 +26,9 @@
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
 #'   Parameter space description. This should be created by the subclass and given to `super$initialize()`.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`. The
-#'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`.
+#'   The subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
+#'   Deprecated, will be removed in the future.
 #' * `packages` :: `character`\cr
 #'   Set of all required packages for the [`PipeOp`]'s `private$.train()` and `private$.predict()` methods. See `$packages` slot.
 #'   Default is `character(0)`.

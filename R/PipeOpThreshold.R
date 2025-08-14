@@ -18,7 +18,6 @@
 #'   Identifier of the resulting  object, default `"threshold"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction.
-#'   Defaults to `numeric(0)`.
 #'
 #' @section Input and Output Channels:
 #' During training, the input and output are `NULL`.

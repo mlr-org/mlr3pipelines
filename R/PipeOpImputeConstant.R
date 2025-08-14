@@ -15,8 +15,7 @@
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"imputeconstant"`.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-#'   be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpImpute`].

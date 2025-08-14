@@ -31,6 +31,7 @@
 #'   Identifier of the resulting [`Learner`][mlr3::Learner].
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings . Default `list()`.
+#'   Deprecated, will be removed in the future.
 #' * `task_type` :: `character(1)`\cr
 #'   What `task_type` the `GraphLearner` should have; usually automatically inferred for [`Graph`]s that are simple enough.
 #' * `predict_type` :: `character(1)`\cr

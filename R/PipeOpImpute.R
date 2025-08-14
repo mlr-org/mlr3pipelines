@@ -17,8 +17,9 @@
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
 #'   Parameter space description. This should be created by the subclass and given to `super$initialize()`.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`. The
-#'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`.
+#'   The subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
+#'   Deprecated, will be removed in the future.
 #' * `whole_task_dependent` :: `logical(1)`\cr
 #'   Whether the `context_columns` parameter should be added which lets the user limit the columns that are
 #'   used for imputation inference. This should generally be `FALSE` if imputation depends only on individual features

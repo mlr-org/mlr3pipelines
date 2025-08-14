@@ -27,8 +27,7 @@
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting object, default `"multiplicityimply"`.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-#'   be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
 #' [`PipeOpMultiplicityImply`] has multiple input channels depending on the `innum` construction
@@ -135,8 +134,7 @@ mlr_pipeops$add("multiplicityimply", PipeOpMultiplicityImply)
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting object, default `"multiplicityexply"`.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-#'   be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
 #' [`PipeOpMultiplicityExply`] has a single input channel named `"input"`, collecting a
@@ -222,8 +220,7 @@ mlr_pipeops$add("multiplicityexply", PipeOpMultiplicityExply, list("N"))
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting object, default `"replicate"`.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-#'   be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
 #' [`PipeOpReplicate`] has one input channel named `"input"`, taking any input (`"*"`) both during training and prediction.

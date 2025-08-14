@@ -26,6 +26,7 @@
 #'   ("Hyper"-)Parameters in form of a [`ParamSet`][paradox::ParamSet] for the resulting [`PipeOp`].
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future.
 #' * `packages` :: `character`\cr
 #'   Set of packages required for this `PipeOp`. These packages are loaded during `$train()` and `$predict()`, but not attached.
 #'   Default `character(0)`.

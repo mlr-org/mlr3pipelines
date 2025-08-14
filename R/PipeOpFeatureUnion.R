@@ -38,8 +38,8 @@
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting object, default `"featureunion"`.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-#'   be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #' * `assert_targets_equal` :: `logical(1)`\cr
 #'   If `assert_targets_equal` is `TRUE` (Default), task target column names are checked for
 #'   agreement. Disagreeing target column names are usually a bug, so this should often be left at

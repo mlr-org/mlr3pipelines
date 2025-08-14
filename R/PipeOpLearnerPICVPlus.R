@@ -26,8 +26,7 @@
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction.
-#'   Default is `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default is `list()`.
 #'
 #' @section Input and Output Channels:
 #' `PipeOpLearnerPICVPlus` has one input channel named `"input"`, taking a [`Task`][mlr3::Task] specific to the [`Learner`][mlr3::Learner]
