@@ -277,7 +277,7 @@ PipeOp = R6Class("PipeOp",
         if (identical(class(self), sf$classes)) {
           newcall = match.call(sys.function(found), sc[[found]], envir = sf)
           passes_param_vals = !is.null(newcall$param_vals)
-          dots = evalq(list(...), envir = sf)
+          dots = (function(...) evalq(list(...), envir = sf))()  # function(...) is here to pacify R CMD check static checks
           unnamed_dots = dots[is.na(names2(dots))]
           passes_id = length(unnamed_dots) && !is.null(newcall$id) && identical(newcall$id, unnamed_dots[[1]])
           if (passes_param_vals || passes_id) {
