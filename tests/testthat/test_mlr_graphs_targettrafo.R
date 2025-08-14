@@ -11,10 +11,9 @@ test_that("Target Trafo Pipeline", {
   expect_true(length(tt$pipeops) == 1 + 1 + 1)
 
   g = Graph$new()
-  g$add_pipeop(PipeOpTargetMutate$new(param_vals = list(
+  g$add_pipeop(PipeOpTargetMutate$new()$configure(
     trafo = function(x) log(x, base = 2),
     inverter = function(x) list(response = 2 ^ x$response))
-    )
   )
   g$add_pipeop(LearnerRegrRpart$new())
   g$add_pipeop(PipeOpTargetInvert$new())

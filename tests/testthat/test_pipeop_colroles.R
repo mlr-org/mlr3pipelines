@@ -93,7 +93,7 @@ test_that("PipeOpColRoles - new_role_direct works", {
   task$col_roles$group = "Species"
 
   op = po("colroles", new_role_direct = list(
-    name = "rn", order = c("Petal.Length", "Sepal.Length"), feature = character(0), group = NULL))
+    name = "rn", order = c("Petal.Length", "Sepal.Length"), feature = character(0), group = NULL)
   )
 
   train_out = train_pipeop(op, inputs = list(task))[[1L]]
