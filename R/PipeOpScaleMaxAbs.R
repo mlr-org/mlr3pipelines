@@ -58,7 +58,7 @@ PipeOpScaleMaxAbs = R6Class("PipeOpScaleMaxAbs",
         maxabs = p_dbl(lower = 0, tags = c("required", "train", "predict"))
       )
       ps$values = list(maxabs = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), dict_entry = "scalemaxabs")
     }
   ),
   private = list(

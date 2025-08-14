@@ -69,7 +69,7 @@ PipeOpTomek = R6Class("PipeOpTomek",
   public = list(
     initialize = function(id = "tomek", param_vals = list()) {
       super$initialize(id, param_set = ps(), param_vals = param_vals, packages = "themis", can_subset_cols = FALSE,
-                       task_type = "TaskClassif", tags = "imbalanced data")
+        task_type = "TaskClassif", tags = "imbalanced data", dict_entry = "tomek")
     }
   ),
   private = list(

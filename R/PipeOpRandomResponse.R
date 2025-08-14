@@ -91,7 +91,7 @@ PipeOpRandomResponse = R6Class("PipeOpRandomResponse",
       ps$values = list(rdistfun = stats::rnorm)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = packages,
         input = data.table(name = "input", train = "NULL", predict = "Prediction"),
-        output = data.table(name = "output", train = "NULL", predict = "Prediction")
+        output = data.table(name = "output", train = "NULL", predict = "Prediction"), dict_entry = "randomresponse"
       )
     }
   ),

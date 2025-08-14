@@ -81,7 +81,7 @@ PipeOpADAS = R6Class("PipeOpADAS",
         K = p_int(lower = 1, default = 5, tags = c("train", "adas"))
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE,
-        packages = "smotefamily", task_type = "TaskClassif", tags = "imbalanced data")
+        packages = "smotefamily", task_type = "TaskClassif", tags = "imbalanced data", dict_entry = "adas")
     }
   ),
   private = list(

@@ -77,7 +77,7 @@ PipeOpYeoJohnson = R6Class("PipeOpYeoJohnson",
         upper = p_dbl(tags = c("train", "yj"))
       )
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "bestNormalize", feature_types = c("numeric", "integer"))
+        packages = "bestNormalize", feature_types = c("numeric", "integer"), dict_entry = "yeojohnson")
     }
   ),
   private = list(

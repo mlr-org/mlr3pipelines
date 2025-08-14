@@ -78,9 +78,9 @@
 PipeOpEncodePL = R6Class("PipeOpEncodePL",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
-    initialize = function(id, param_set = ps(), param_vals = list(), packages = character(0), task_type = "Task") {
+    initialize = function(id, param_set = ps(), param_vals = list(), packages = character(0), task_type = "Task", dict_entry = id) {
       super$initialize(id = id, param_set = param_set, param_vals = param_vals, packages = packages,
-        task_type = task_type, tags = "encode", feature_types = c("numeric", "integer"))
+        task_type = task_type, tags = "encode", feature_types = c("numeric", "integer"), dict_entry = dict_entry)
     }
   ),
   private = list(
@@ -228,7 +228,7 @@ PipeOpEncodePLQuantiles = R6Class("PipeOpEncodePLQuantiles",
         numsplits = p_int(lower = 2, init = 2, tags = c("train", "predict", "required")),
         type = p_int(lower = 1, upper = 9, default = 7, tags = c("train", "predict"))
       )
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats")
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats", dict_entry = "encodeplquantiles")
     }
   ),
   private = list(
@@ -360,7 +360,7 @@ PipeOpEncodePLTree = R6Class("PipeOpEncodePLTree",
       }
 
       super$initialize(id, param_set = alist(private$.tree_learner$param_set), param_vals = param_vals,
-        packages = private$.tree_learner$packages, task_type = task_type)
+        packages = private$.tree_learner$packages, task_type = task_type, dict_entry = "encodepltree")
     }
   ),
   private = list(

@@ -93,7 +93,7 @@ PipeOpBLSmote = R6Class("PipeOpBLSmote",
       )
       ps$values = list(quiet = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE,
-        packages = "smotefamily", task_type = "TaskClassif", tags = "imbalanced data")
+        packages = "smotefamily", task_type = "TaskClassif", tags = "imbalanced data", dict_entry = "blsmote")
     }
   ),
   private = list(

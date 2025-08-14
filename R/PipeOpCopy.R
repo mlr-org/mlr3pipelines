@@ -86,7 +86,7 @@ PipeOpCopy = R6Class("PipeOpCopy",
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*"),
-        tags = "meta"
+        tags = "meta", dict_entry = "copy"
       )
     }
   ),

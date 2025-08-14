@@ -59,7 +59,7 @@ PipeOpImputeMean = R6Class("PipeOpImputeMean",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputemean", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals, feature_types= c("numeric", "integer"))
+      super$initialize(id, param_vals = param_vals, feature_types= c("numeric", "integer"), dict_entry = "imputemean")
     }
   ),
   private = list(

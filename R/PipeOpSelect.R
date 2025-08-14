@@ -74,7 +74,7 @@ PipeOpSelect = R6Class("PipeOpSelect",
         selector = p_uty(custom_check = check_function, tags = c("train", "required"))
       )
       ps$values = list(selector = selector_all())
-      super$initialize(id, ps, param_vals = param_vals, tags = "feature selection")
+      super$initialize(id, ps, param_vals = param_vals, tags = "feature selection", dict_entry = "select")
     }
   ),
   private = list(

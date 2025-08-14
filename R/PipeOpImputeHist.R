@@ -66,7 +66,7 @@ PipeOpImputeHist = R6Class("PipeOpImputeHist",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputehist", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals, packages = "graphics", feature_types = c("integer", "numeric"))
+      super$initialize(id, param_vals = param_vals, packages = "graphics", feature_types = c("integer", "numeric"), dict_entry = "imputehist")
     }
   ),
   private = list(

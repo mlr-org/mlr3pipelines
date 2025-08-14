@@ -108,7 +108,7 @@ PipeOpICA = R6Class("PipeOpICA",
       )
       ps$values = list(method = "C")
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "fastICA", feature_types = c("numeric", "integer"))
+        packages = "fastICA", feature_types = c("numeric", "integer"), dict_entry = "ica")
     }
   ),
   private = list(

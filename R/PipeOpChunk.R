@@ -72,7 +72,7 @@ PipeOpChunk = R6Class("PipeOpChunk",
         param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = rep_suffix("output", outnum), train = "Task", predict = "Task"),
-        tags = "meta"
+        tags = "meta", dict_entry = "chunk"
       )
     }
   ),

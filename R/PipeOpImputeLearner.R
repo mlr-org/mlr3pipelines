@@ -112,7 +112,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
         # with generative text models, but by the time R/mlr3 can do that it is probably post-singularity.
       )
       super$initialize(id, param_set = alist(private$.learner$param_set), param_vals = param_vals,
-        whole_task_dependent = TRUE, feature_types = feature_types)
+        whole_task_dependent = TRUE, feature_types = feature_types, dict_entry = "imputelearner")
     }
   ),
   active = list(

@@ -116,11 +116,11 @@
 PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
   inherit = PipeOp,
   public = list(
-    initialize = function(id, param_set = ps(), param_vals = list(), packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL) {
+    initialize = function(id, param_set = ps(), param_vals = list(), packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL, dict_entry = id) {
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = task_type_in, predict = task_type_in),
         output = data.table(name = c("fun", "output"), train = c("NULL", task_type_out), predict = c("function", task_type_out)),
-        packages = packages, tags = c(tags, "target transform")
+        packages = packages, tags = c(tags, "target transform"), dict_entry = dict_entry
       )
     }
   ),
@@ -231,7 +231,7 @@ PipeOpTargetInvert = R6Class("PipeOpTargetInvert",
     initialize = function(id = "targetinvert", param_vals = list()) {
       super$initialize(id = id, param_vals = param_vals,
         input = data.table(name = c("fun", "prediction"), train = c("NULL", "NULL"), predict = c("function", "Prediction")),
-        output = data.table(name = "output", train = "NULL", predict = "Prediction"), tags = "target transform"
+        output = data.table(name = "output", train = "NULL", predict = "Prediction"), tags = "target transform", dict_entry = "targetinvert"
       )
     }
   ),
@@ -355,7 +355,7 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
       # see https://github.com/mlr-org/paradox/issues/216 and related comment in PipeOpLearnerCV
 
       ps$values = list(trafo = identity, inverter = identity)
-      super$initialize(id = id, param_set = ps, param_vals = param_vals)
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, dict_entry = "targetmutate")
     }
   ),
   active = list(
@@ -466,7 +466,7 @@ PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
         upper = p_dbl(tags = c("required", "train"))
       )
       ps$values = list(lower = 0, upper = 1)
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, task_type_in = "TaskRegr")
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, task_type_in = "TaskRegr", dict_entry = "targettrafoscalerange")
     }
   ),
   private = list(

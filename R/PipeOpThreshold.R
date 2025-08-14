@@ -67,7 +67,7 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = character(0),
         input = data.table(name = "input", train = "NULL", predict = "PredictionClassif"),
         output = data.table(name = "output", train = "NULL", predict = "PredictionClassif"),
-        tags = "target transform")
+        tags = "target transform", dict_entry = "threshold")
     }
   ),
   active = list(

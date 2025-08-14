@@ -70,7 +70,7 @@ PipeOpRemoveConstants = R6Class("PipeOpRemoveConstants",
           na_ignore = p_lgl(tags = c("train", "required", "constant_check"))
       )
       ps$values = list(ratio = 0, rel_tol = 1e-8, abs_tol = 1e-8, na_ignore = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, tags = "robustify")
+      super$initialize(id, param_set = ps, param_vals = param_vals, tags = "robustify", dict_entry = "removeconstants")
     }
   ),
   private = list(

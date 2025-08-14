@@ -90,7 +90,7 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
         over_ratio = p_dbl(lower = 0, default = 1, tags = c("train", "smotenc"))
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "themis", can_subset_cols = FALSE,
-                       task_type = "TaskClassif", tags = "imbalanced data")
+                       task_type = "TaskClassif", tags = "imbalanced data", dict_entry = "smotenc")
     }
   ),
   private = list(

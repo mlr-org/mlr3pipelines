@@ -103,7 +103,7 @@ PipeOpBranch = R6Class("PipeOpBranch",
       super$initialize(id, ps, param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = options, train = "*", predict = "*"),
-        tags = "meta"
+        tags = "meta", dict_entry = "branch"
       )
     }
   ),

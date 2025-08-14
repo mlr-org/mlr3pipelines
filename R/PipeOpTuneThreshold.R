@@ -95,7 +95,7 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "bbotk",
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction"),
-        tags = "target transform"
+        tags = "target transform", dict_entry = "tunethreshold"
       )
     }
   ),

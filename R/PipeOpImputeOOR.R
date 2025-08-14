@@ -119,7 +119,7 @@ PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
       )
       # this is one of the few imputers that handles 'character' features!
       super$initialize(id, param_set = ps, param_vals = param_vals, empty_level_control = "param",
-        feature_types = c("character", "factor", "integer", "numeric", "ordered"))
+        feature_types = c("character", "factor", "integer", "numeric", "ordered"), dict_entry = "imputeoor")
     }
   ),
   private = list(

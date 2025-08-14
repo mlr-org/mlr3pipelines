@@ -96,7 +96,7 @@ PipeOpColApply = R6Class("PipeOpColApply",
         applicator = p_uty(custom_check = check_function, tags = c("train", "predict"))
       )
       ps$values = list(applicator = identity)
-      super$initialize(id, ps, param_vals = param_vals)
+      super$initialize(id, ps, param_vals = param_vals, dict_entry = "colapply")
     }
   ),
   private = list(

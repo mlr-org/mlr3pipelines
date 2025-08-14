@@ -87,7 +87,7 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
         minor_weight = p_dbl(lower = 0, upper = Inf, tags = "train")
       )
       ps$values = list(minor_weight = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data")
+      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data", dict_entry = "classweights")
     }
   ),
   private = list(

@@ -77,7 +77,7 @@ PipeOpRandomProjection = R6Class("PipeOpRandomProjection",
         rank = p_int(lower = 0, tags = "train")
       )
       ps$values = list(rank = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), dict_entry = "randomprojection")
     }
   ),
   private = list(

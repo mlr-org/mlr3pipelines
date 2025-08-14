@@ -77,7 +77,7 @@ PipeOpBoxCox = R6Class("PipeOpBoxCox",
         upper = p_dbl(tags = c("train", "boxcox"))
       )
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "bestNormalize", feature_types = c("numeric", "integer"))
+        packages = "bestNormalize", feature_types = c("numeric", "integer"), dict_entry = "boxcox")
     }
   ),
   private = list(

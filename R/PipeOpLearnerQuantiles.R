@@ -109,10 +109,10 @@ PipeOpLearnerQuantiles = R6Class("PipeOpLearnerQuantiles",
       private$.quantiles_param_set$values = list(q_vals = c(0.05, 0.5, 0.95), q_response = 0.5)  # default
 
       super$initialize(id, param_set = alist(quantiles = private$.quantiles_param_set, private$.learner$param_set),
-                       param_vals = param_vals,
-                       input = data.table(name = "input", train = task_type, predict = task_type),
-                       output = data.table(name = "output", train = "NULL", predict = out_type),
-                       packages = learner$packages, tags = c("learner", "ensemble")
+        param_vals = param_vals,
+        input = data.table(name = "input", train = task_type, predict = task_type),
+        output = data.table(name = "output", train = "NULL", predict = out_type),
+        packages = learner$packages, tags = c("learner", "ensemble"), dict_entry = "learner_quantiles"
       )
     }
   ),

@@ -84,7 +84,7 @@ PipeOpScale = R6Class("PipeOpScale",
         robust = p_lgl(tags = c("train", "required"))
       )
       ps$values = list(robust = FALSE)
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), dict_entry = "scale")
     }
   ),
   private = list(

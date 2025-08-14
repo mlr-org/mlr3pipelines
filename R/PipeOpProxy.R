@@ -111,7 +111,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
       super$initialize(id, param_set = ps, param_vals = param_vals,
         input = data.table(name = inname, train = "*", predict = "*"),
         output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*"),
-        tags = "meta"
+        tags = "meta", dict_entry = "proxy"
       )
     }
   ),

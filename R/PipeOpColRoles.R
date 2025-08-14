@@ -121,7 +121,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
           })
         )
       )
-      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
+      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, dict_entry = "colroles")
     }
   ),
   private = list(

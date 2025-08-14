@@ -124,7 +124,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
         cutoff = p_dbl(tags = "train"),
         permuted = p_int(lower = 1, tags = "train")
       )
-      super$initialize(id, alist(filter = private$.outer_param_set, self$filter$param_set), param_vals = param_vals, tags = "feature selection")
+      super$initialize(id, alist(filter = private$.outer_param_set, self$filter$param_set), param_vals = param_vals, tags = "feature selection", dict_entry = "filter")
     }
   ),
   private = list(

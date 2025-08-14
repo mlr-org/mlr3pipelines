@@ -78,7 +78,7 @@ PipeOpMutate = R6Class("PipeOpMutate",
         delete_originals = p_lgl(tags = c("train", "predict", "required"))
       )
       ps$values = list(mutation = list(), delete_originals = FALSE)
-      super$initialize(id, ps, param_vals = param_vals)
+      super$initialize(id, ps, param_vals = param_vals, dict_entry = "mutate")
     }
   ),
   private = list(

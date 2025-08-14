@@ -9,7 +9,7 @@ test_that("basic graphlearner tests", {
   gr = PipeOpLearner$new(lrn)
 
   glrn = GraphLearner$new(gr)
-  glrn$properties = setdiff(glrn$properties, "weights")  # FIXME: workaround until weights handling does not need to be part of the paramset
+  glrn$.__enclos_env__$private$.properties = setdiff(glrn$properties, "weights")  # FIXME: workaround until weights handling does not need to be part of the paramset
   if ("use_weights" %in% names(glrn)) {  # FIXME: condition can be removed when mlr3 weights update, mlr3-org/mlr3#1124 is on CRAN
     glrn$use_weights = "error"  # also need to update use_weights now
   }
@@ -42,12 +42,13 @@ test_that("basic graphlearner tests", {
   glrn2 = GraphLearner$new(gr2)
   glrn2_clone = glrn2$clone(deep = TRUE)
   expect_learner(glrn2)
-  glrn2$properties = setdiff(glrn2$properties, "weights")  # FIXME: see above
+  properties_temp = glrn2$properties
+  glrn2$.__enclos_env__$private$.properties = setdiff(glrn2$properties, "weights")  # FIXME: see above
   if ("use_weights" %in% names(glrn2)) {  # FIXME: see above
     glrn2$use_weights = "error"  # see above
   }
   expect_true(run_experiment(task, glrn2)$ok)
-  glrn2$properties = c(glrn2$properties, "weights")  # reset changes
+  glrn2$.__enclos_env__$private$.properties = properties_temp  # reset changes
   if ("use_weights" %in% names(glrn2)) {  # FIXME: see above
     glrn2$use_weights = "use"  # reset changes
   }
@@ -55,6 +56,7 @@ test_that("basic graphlearner tests", {
   glrn2_clone$state = glrn2$state
 #  glrn2_clone$state$log = glrn2_clone$state$log$clone(deep = TRUE)  # FIXME: this can go when mlr-org/mlr3#343 is fixed
 #  glrn2_clone$state$model$classif.rpart$log = glrn2_clone$state$model$classif.rpart$log$clone(deep = TRUE)  # FIXME: this can go when mlr-org/mlr3#343 is fixed
+  glrn2_clone$label ; glrn2$label  # trigger private$.label cache
   expect_deep_clone(glrn2_clone, glrn2$clone(deep = TRUE))
   expect_prediction_classif({
     graphpred2 = glrn2$predict(task)
@@ -180,9 +182,11 @@ test_that("graphlearner parameters behave as they should", {
   dblrn$param_set$values$warning_train = 1
   dblrn$param_set$values$warning_predict = 1
 
-  pol = PipeOpLearner$new(dblrn, param_vals = list(message_predict = 0, warning_train = 0, warning_predict = 0))
+  pol = PipeOpLearner$new(dblrn)
+  pol$param_set$set_values(.values = list(message_predict = 0, warning_train = 0, warning_predict = 0))
 
-  gl = GraphLearner$new(pol, param_vals = list(classif.debug.warning_train = 1, classif.debug.warning_predict = 1))
+  gl = GraphLearner$new(pol)
+  gl$param_set$set_values(.values = list(classif.debug.warning_train = 1, classif.debug.warning_predict = 1))
 
   gl$param_set$values$classif.debug.warning_predict = 0
 
@@ -511,12 +515,16 @@ test_that("GraphLearner model", {
 
   lr = GraphLearner$new(graph)
 
+  lr$param_set ; graph$param_set  # trigger .param_set cache
+
   expect_equal(lr$graph, graph)
   expect_equal(lr$graph_model, graph)
 
   graph2$train(tsk("iris"))
 
   lr$train(tsk("iris"))
+
+  graph$param_set ; graph_orig$param_set  # trigger .param_set cache
 
   expect_equal(graph, graph_orig)
   expect_null(graph$state$pca)
@@ -534,7 +542,6 @@ test_that("GraphLearner model", {
   imp = graph2$pipeops$classif.rpart$learner_model$importance()
 
   expect_equal(lr$graph_model$pipeops$classif.rpart$learner_model$importance(), imp)
-
 
 })
 
@@ -822,7 +829,7 @@ test_that("base_learner() works", {
 
   # double-channel pipeop cascade: see there is no exponential explosion
   gchain = chain_graphs(
-    lapply(1:20, function(i) ppl("branch", pos(paste0("nop_", c(2 * i, 2 * i + 1))), prefix_branchops = as.character(i))),
+    lapply(1:20, function(i) ppl("branch", pos(paste0("nop_", c(2 * i, 2 * i + 1))), prefix_branchops = sprintf("x%02d", i))),
     in_place = TRUE
   )
 

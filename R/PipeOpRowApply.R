@@ -67,7 +67,7 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
         applicator = identity,
         col_prefix = ""
       )
-      super$initialize(id, ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+      super$initialize(id, ps, param_vals = param_vals, feature_types = c("numeric", "integer"), dict_entry = "rowapply")
     }
   ),
   private = list(

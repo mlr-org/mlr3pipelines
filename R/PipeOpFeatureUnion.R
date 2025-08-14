@@ -127,7 +127,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = inname, train = intype, predict = intype),
         output = data.table(name = "output", train = "Task", predict = "Task"),
-        tags = "ensemble"
+        tags = "ensemble", dict_entry = "featureunion"
       )
     }
   ),

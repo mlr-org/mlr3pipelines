@@ -97,7 +97,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
       )
       ps$values = list(fast_optim = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"),
-        task_type = "TaskSupervised", tags = "encode", feature_types = c("factor", "ordered"))
+        task_type = "TaskSupervised", tags = "encode", feature_types = c("factor", "ordered"), dict_entry = "encodelmer")
     }
   ),
   private = list(

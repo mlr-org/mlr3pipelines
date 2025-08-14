@@ -80,7 +80,7 @@ PipeOpSmote = R6Class("PipeOpSmote",
         dup_size = p_int(lower = 1, default = 0, special_vals = list(0), tags = c("train", "smote"))
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE,
-        packages = "smotefamily", task_type = "TaskClassif", tags = "imbalanced data")
+        packages = "smotefamily", task_type = "TaskClassif", tags = "imbalanced data", dict_entry = "smote")
     }
   ),
   private = list(

@@ -133,7 +133,7 @@ PipeOpNMF = R6Class("PipeOpNMF",
         callback = p_uty(tags = c("train", "nmf"), depends = quote(keep.all == TRUE))  # .callback
       )
       ps$values = list(rank = 2L, method = "brunet", parallel = FALSE, parallel.required = FALSE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), packages = c("MASS", "NMF"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), packages = c("MASS", "NMF"), dict_entry = "nmf")
     }
   ),
   private = list(
