@@ -11,6 +11,7 @@ test_that("Dictionary contains all PipeOps", {
   inflate = function(x) {
     x$label
     x$param_set$values$content$label
+    lapply(x$.__enclos_env__$private, function(x) if (inherits(x, "Mlr3Component")) inflate(x))
     x
   }
 
@@ -114,7 +115,7 @@ test_that("Dictionary contains all PipeOps", {
     expect_false(isTRUE(all.equal(other_obj$phash, test_obj$phash)), info = paste(dictname, "$new id test"))
     test_obj$id = "TESTID"
     other_obj = inflate(do.call(mlr_pipeops$get, c(list(dictname), args)))
-    all.equal(other_obj, other_obj$clone(deep = TRUE))  # realize all cache items
+
     expect_equal(other_obj, test_obj, info = paste(dictname, "$new id test 2"))
     if (!dictname %in% pval_unhashable) {
       expect_equal(other_obj$hash, test_obj$hash, info = paste(dictname, "$new id test 2"))
