@@ -61,9 +61,9 @@ test_that("complex graph", {
   biggraph = PipeOpDebugBasic$new() %>>%
     PipeOpDebugMulti$new(1, 2) %>>%
     pipeline_greplicate(PipeOpDebugMulti$new(1, 2, "debug2"), 2) %>>%
-    gunion(list(PipeOpDebugBasic$new("basictop"),
+    gunion(list(PipeOpDebugBasic$new(id = "basictop"),
       PipeOpDebugMulti$new(2, 1, "debug2"),
-      PipeOpDebugBasic$new("basicbottom"))) %>>%
+      PipeOpDebugBasic$new(id = "basicbottom"))) %>>%
     PipeOpDebugMulti$new(3, 1, "debug3")
 
   lines = strsplit(capture_output(biggraph$train(1)), "\n")[[1]]

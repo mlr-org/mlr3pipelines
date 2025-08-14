@@ -3,7 +3,7 @@ context("PipeOpTaskPreproc")
 test_that("PipeOpTaskPreproc - basic properties", {
   expect_pipeop_class(PipeOpTaskPreproc, list(id = "potask"))
 
-  po = PipeOpTaskPreproc$new("potask")
+  po = PipeOpTaskPreproc$new(id = "potask")
 
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 1)

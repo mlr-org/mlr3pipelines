@@ -12,11 +12,11 @@ test_that("PipeOpEnsemble - basic properties", {
   expect_list(train_pipeop(op, rep(list(NULL), 4)), len = 1)
   expect_error(predict_pipeop(op, prds), "Abstract")
 
-  op = PipeOpEnsemble$new(0, id = "ensemble", param_vals = list())
+  op = PipeOpEnsemble$new(0, id = "ensemble")
   expect_pipeop(op)
 
   # collect_multiplicity = TRUE
-  op = PipeOpEnsemble$new(0, collect_multiplicity = TRUE, id = "ensemble", param_vals = list())
+  op = PipeOpEnsemble$new(0, collect_multiplicity = TRUE, id = "ensemble")
   expect_pipeop(op)
   expect_list(train_pipeop(op, list(as.Multiplicity(rep(list(NULL), 4)))), len = 1)
   expect_error(predict_pipeop(op, list(as.Multiplicity(prds))), "Abstract")

@@ -114,6 +114,7 @@ test_that("Dictionary contains all PipeOps", {
     expect_false(isTRUE(all.equal(other_obj$phash, test_obj$phash)), info = paste(dictname, "$new id test"))
     test_obj$id = "TESTID"
     other_obj = inflate(do.call(mlr_pipeops$get, c(list(dictname), args)))
+    all.equal(other_obj, other_obj$clone(deep = TRUE))  # realize all cache items
     expect_equal(other_obj, test_obj, info = paste(dictname, "$new id test 2"))
     if (!dictname %in% pval_unhashable) {
       expect_equal(other_obj$hash, test_obj$hash, info = paste(dictname, "$new id test 2"))
@@ -150,13 +151,15 @@ test_that("Dictionary contains all PipeOps", {
       val = setdiff(candidates, origval)[1]
 
       # construct the `param_vals = list(PARNAME = PARVAL)` construction argument
-      args$param_vals = list(val)
-      names(args$param_vals) = testingparam
+      parvals = list(val)
+      names(parvals) = testingparam
 
       # check that the constructed object is different from the test_obj, but setting the test_obj's parameter
       # makes them equal again.
       dict_constructed = do.call(mlr_pipeops$get, c(list(dictname), args))
+      dict_constructed$param_set$set_values(.values = parvals)
       gen_constructed = do.call(pogen$new, args)
+      gen_constructed$param_set$set_values(.values = parvals)
       expect_false(isTRUE(all.equal(dict_constructed, test_obj)), dictname)
       expect_false(isTRUE(all.equal(dict_constructed$hash, test_obj$hash)), dictname)
       # phash should be independent of this!
@@ -172,7 +175,7 @@ test_that("Dictionary contains all PipeOps", {
 
     # $label can be retrieved
     expect_string(test_obj$label)
-    help_metainfo = paste(capture.output(print(str(test_obj$help()))), sep = "\n")
+    help_metainfo = paste(capture.output(print(str(test_obj$help()))), collapse = "\n")
     expect_false(grepl("^LABEL COULD NOT BE RETRIEVED$", test_obj$label), info = paste(dictname, help_metainfo, sep = "\n"))
 
     if (identical(help, utils::help)) {  # different behaviour if pkgload / devtools are doing help vs. vanilla R help()

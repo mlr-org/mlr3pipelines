@@ -63,8 +63,9 @@ test_that("PipeOpLearnerPICVPlus - param set and values", {
   po$param_set$values$picvplus.folds = 5
   expect_equal(po$param_set$values, list(picvplus.folds = 5, picvplus.alpha = 0.05, minsplit = 2, xval = 0))
 
-  expect_error(PipeOpLearnerPICVPlus$new(lrn, param_vals = list(picvplus.folds = 1)), "is not >= 1")
-  expect_error(PipeOpLearnerPICVPlus$new(lrn, param_vals = list(picvplus.alpha = -1)), "is not >= -")
+  po1 = PipeOpLearnerPICVPlus$new(lrn)
+  expect_error(po1$param_set$set_values(.values = list(picvplus.folds = 1)), "is not >= 1")
+  expect_error(po1$param_set$set_values(.values = list(picvplus.alpha = -1)), "is not >= -")
 
   lrn_classif = mlr_learners$get("classif.featureless")
   expect_error(PipeOpLearnerPICVPlus$new(lrn_classif), "only supports regression")
