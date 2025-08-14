@@ -101,7 +101,11 @@ test_that("Dictionary contains all PipeOps", {
     }
 
     # check that mlr_pipeops$get() gives the same object as PipeOpXXX$new() does
-    other_obj = do.call(mlr_pipeops$get, c(list(dictname), args))
+    other_obj = do.call(mlr_pipeops$get, c(list(dictname), args[names(args) != "param_vals"]))
+    if ("param_vals" %in% names(args)) {
+      other_obj$param_set$set_values(.values = args$param_vals)
+    }
+
     expect_equal(other_obj, test_obj, info = paste(dictname, "$new test"))
     if (!dictname %in% pval_unhashable) {
       expect_equal(other_obj$hash, test_obj$hash, info = paste(dictname, "$new test"))
@@ -110,12 +114,19 @@ test_that("Dictionary contains all PipeOps", {
 
     # check that ID can be changed
     args$id = "TESTID"
-    other_obj = do.call(mlr_pipeops$get, c(list(dictname), args))
+    other_obj = do.call(mlr_pipeops$get, c(list(dictname), args[names(args) != "param_vals"]))
+    if ("param_vals" %in% names(args)) {
+      other_obj$param_set$set_values(.values = args$param_vals)
+    }
+
     expect_false(isTRUE(all.equal(other_obj, test_obj)), info = paste(dictname, "$new id test"))
     expect_false(isTRUE(all.equal(other_obj$hash, test_obj$hash)), info = paste(dictname, "$new id test"))
     expect_false(isTRUE(all.equal(other_obj$phash, test_obj$phash)), info = paste(dictname, "$new id test"))
     test_obj$id = "TESTID"
-    other_obj = inflate(do.call(mlr_pipeops$get, c(list(dictname), args)))
+    other_obj = inflate(do.call(mlr_pipeops$get, c(list(dictname), args[names(args) != "param_vals"])))
+    if ("param_vals" %in% names(args)) {
+      other_obj$param_set$set_values(.values = args$param_vals)
+    }
 
     expect_equal(other_obj, test_obj, info = paste(dictname, "$new id test 2"))
     if (!dictname %in% pval_unhashable) {

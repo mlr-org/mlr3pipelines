@@ -281,7 +281,7 @@ PipeOp = R6Class("PipeOp",
           unnamed_dots = dots[is.na(names2(dots))]
           passes_id = length(unnamed_dots) && !is.null(newcall$id) && identical(newcall$id, unnamed_dots[[1]])
           if (passes_param_vals || passes_id) {
-            warning("passing param_vals, and unnamed id, for PipeOp construction directly is deprecated and will be removed in the future.
+            deprecated_component("passing param_vals, and unnamed id, for PipeOp construction directly is deprecated and will be removed in the future.
 Use the po()-syntax to set these, instead:
 po(\"pipeop\", \"newid\", param_vals = list(a = 1)) --> po(\"pipeop\", id = \"newid\", a = 1)")
           }
