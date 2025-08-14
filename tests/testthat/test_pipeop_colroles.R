@@ -63,7 +63,7 @@ test_that("PipeOpColRoles - new_role works", {
   task$cbind(data.table(rn = sprintf("%03d", 1:150)))
 
   op = po("colroles", new_role = list(
-    rn = "name", Petal.Length = c("feature", "order"), Petal.Width = character(0), Sepal.Width = NULL))
+    rn = "name", Petal.Length = c("feature", "order"), Petal.Width = character(0), Sepal.Width = NULL)
   )
 
   train_out = train_pipeop(op, inputs = list(task))[[1L]]

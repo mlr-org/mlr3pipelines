@@ -90,9 +90,10 @@ test_that("Dictionary contains all PipeOps", {
     dictname = dictnames[idx]  # the "key" in the mlr_pipeops dictionary
     args = initargs[[pipeops[idx]]] %??% list()  # the required arguments, if any. e.g. 'outnum' for PipeOpCopy.
 
-    test_obj = do.call(pogen$new, args)  # test_obj: PipeOp object, constructed from constructor
-
-
+    test_obj = do.call(pogen$new, args[names(args) != "param_vals"])  # test_obj: PipeOp object, constructed from constructor
+    if ("param_vals" %in% names(args)) {
+      test_obj$param_set$set_values(.values = args$param_vals)
+    }
 
     # check that mlr_pipeops key is the default ID
     if (pipeops[idx] %nin% unequal_id) {
