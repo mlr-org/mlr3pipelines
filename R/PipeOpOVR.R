@@ -28,6 +28,7 @@
 #'   Identifier of the resulting object, default `"ovrsplit"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' [`PipeOpOVRSplit`] has one input channel named `"input"` taking a [`TaskClassif`][mlr3::TaskClassif]
@@ -144,6 +145,7 @@ mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 #'   Identifier of the resulting object, default `"ovrunite"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpEnsemble`]. Instead of a

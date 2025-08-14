@@ -198,6 +198,7 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
 #'   Identifier of resulting object, default `"targetinvert"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' `PipeOpTargetInvert` has two input channels named `"fun"` and `"prediction"`. During
@@ -415,6 +416,7 @@ mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 #'   Identifier of resulting object, default `"targettrafoscalerange"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTargetTrafo`].

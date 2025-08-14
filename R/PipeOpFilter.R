@@ -24,6 +24,7 @@
 #'   Identifier of the resulting  object, defaulting to the `id` of the [`Filter`][mlr3filters::Filter] being used.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].

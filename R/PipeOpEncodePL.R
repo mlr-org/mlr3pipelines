@@ -160,6 +160,7 @@ encode_piecewise_linear = function(column, bins) {
 #'   Identifier of resulting object, default `"encodeplquantiles"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
@@ -274,6 +275,7 @@ mlr_pipeops$add("encodeplquantiles", PipeOpEncodePLQuantiles)
 #'   Identifier of resulting object, default `"encodeplquantiles"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`]. Instead of a [`Task`][mlr3::Task], a
