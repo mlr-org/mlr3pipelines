@@ -36,6 +36,7 @@ This argument is usually cloned, unless \code{clone_graph} is \code{FALSE}; to a
 Identifier of the resulting \code{\link[mlr3:Learner]{Learner}}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings . Default \code{list()}.
+Deprecated, will be removed in the future.
 \item \code{task_type} :: \code{character(1)}\cr
 What \code{task_type} the \code{GraphLearner} should have; usually automatically inferred for \code{\link{Graph}}s that are simple enough.
 \item \code{predict_type} :: \code{character(1)}\cr

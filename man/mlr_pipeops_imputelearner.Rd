@@ -28,6 +28,7 @@ own imputation (see examples).
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"impute."}, followed by the \code{id} of the \code{Learner}.
+Deprecated, will be removed in the future. Use the \code{\link[=po]{po()}} syntax to set a custom ID on construction.
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} | \code{character(1)}
 \code{\link[mlr3:Learner]{Learner}} to wrap, or a string identifying a \code{\link[mlr3:Learner]{Learner}} in the \code{\link[mlr3:mlr_learners]{mlr3::mlr_learners}} \code{\link[mlr3misc:Dictionary]{Dictionary}}.
 The \code{\link[mlr3:Learner]{Learner}} usually needs to be able to handle missing values, i.e. have the \code{missings} property, unless care is taken
@@ -35,6 +36,7 @@ that \code{context_columns} do not contain missings; see examples.\cr
 This argument is always cloned; to access the \code{\link[mlr3:Learner]{Learner}} inside \code{PipeOpImputeLearner} by-reference, use \verb{$learner}.\cr
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
+Deprecated, will be removed in the future. Use the \code{\link[=po]{po()}} syntax to set hyperparameters on construction.
 }
 }
 

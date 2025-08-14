@@ -20,9 +20,10 @@ Internally calls \code{PredictionClassif$set_threshold}.
 \itemize{
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting  object, default \code{"threshold"}.
+Deprecated, will be removed in the future. Use the \code{\link[=po]{po()}} syntax to set a custom ID on construction.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction.
-Defaults to \code{numeric(0)}.
+Deprecated, will be removed in the future. Use the \code{\link[=po]{po()}} syntax to set hyperparameters on construction.
 }
 }
 

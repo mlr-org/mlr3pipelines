@@ -18,11 +18,13 @@ Abstract base class for feature imputation.
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object. See \verb{$id} slot of \code{\link{PipeOp}}.
+Deprecated, will be removed in the future.
 \item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}}\cr
 Parameter space description. This should be created by the subclass and given to \code{super$initialize()}.
 \item \code{param_vals} :: named \code{list}\cr
-List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}. The
-subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}. Default \code{list()}.
+List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}.
+The subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}. Default \code{list()}.
+Deprecated, will be removed in the future.
 \item \code{whole_task_dependent} :: \code{logical(1)}\cr
 Whether the \code{context_columns} parameter should be added which lets the user limit the columns that are
 used for imputation inference. This should generally be \code{FALSE} if imputation depends only on individual features

@@ -30,6 +30,7 @@ Parameter space description. This should be created by the subclass and given to
 List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}.
 The subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}.
 Default \code{list()}.
+Deprecated, will be removed in the future.
 \item \code{task_type_in} :: \code{character(1)}\cr
 The class of \code{\link[mlr3:Task]{Task}} that should be accepted as input. This should generally be a \code{character(1)}
 identifying a type of \code{\link[mlr3:Task]{Task}}, e.g. \code{"Task"}, \code{"TaskClassif"} or \code{"TaskRegr"} (or another subclass

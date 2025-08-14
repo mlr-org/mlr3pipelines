@@ -28,8 +28,10 @@ and tuning.
 This argument is always cloned; to access the \code{\link[mlr3:Learner]{Learner}} inside \code{PipeOpLearner} by-reference, use \verb{$learner}.\cr
 \item \code{id} :: \code{character(1)}\cr
 Identifier of the resulting  object, internally defaulting to the \code{id} of the \code{\link[mlr3:Learner]{Learner}} being wrapped.
+Deprecated, will be removed in the future.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
+Deprecated, will be removed in the future. Use the \code{\link[=po]{po()}} syntax to set hyperparameters on construction.
 }
 }
 

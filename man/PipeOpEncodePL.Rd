@@ -33,8 +33,9 @@ Identifier of resulting object. See \verb{$id} slot of \code{\link{PipeOp}}.
 \item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}}\cr
 Parameter space description. This should be created by the subclass and given to \code{super$initialize()}.
 \item \code{param_vals} :: named \code{list}\cr
-List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}. The
-subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}. Default \code{list()}.
+List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}.
+The subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}. Default \code{list()}.
+Deprecated, will be removed in the future.
 \item \code{packages} :: \code{character}\cr
 Set of all required packages for the \code{\link{PipeOp}}'s \code{private$.train()} and \code{private$.predict()} methods. See \verb{$packages} slot.
 Default is \code{character(0)}.

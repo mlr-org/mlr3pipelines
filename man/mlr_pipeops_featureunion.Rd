@@ -41,9 +41,10 @@ If \code{TRUE}, the input is a \code{\link{Multiplicity}} collecting channel. Th
 Default is \code{FALSE}.
 \item \code{id} :: \code{character(1)}\cr
 Identifier of the resulting object, default \code{"featureunion"}.
+Deprecated, will be removed in the future. Use the \code{\link[=po]{po()}} syntax to set a custom ID on construction.
 \item \code{param_vals} :: named \code{list}\cr
-List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-be set during construction. Default \code{list()}.
+List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
+Deprecated, will be removed in the future. Use the \code{\link[=po]{po()}} syntax to set hyperparameters on construction.
 \item \code{assert_targets_equal} :: \code{logical(1)}\cr
 If \code{assert_targets_equal} is \code{TRUE} (Default), task target column names are checked for
 agreement. Disagreeing target column names are usually a bug, so this should often be left at

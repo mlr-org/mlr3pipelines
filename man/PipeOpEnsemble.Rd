@@ -26,10 +26,12 @@ If \code{TRUE}, the input is a \code{\link{Multiplicity}} collecting channel. Th
 Default is \code{FALSE}.
 \item \code{id} :: \code{character(1)}\cr
 Identifier of the resulting  object.
+Deprecated, will be removed in the future.
 \item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}}\cr
 ("Hyper"-)Parameters in form of a \code{\link[paradox:ParamSet]{ParamSet}} for the resulting \code{\link{PipeOp}}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
+Deprecated, will be removed in the future.
 \item \code{packages} :: \code{character}\cr
 Set of packages required for this \code{PipeOp}. These packages are loaded during \verb{$train()} and \verb{$predict()}, but not attached.
 Default \code{character(0)}.
