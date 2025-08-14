@@ -42,6 +42,7 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object. See `$id` slot.
+#'   Deprecated, will be removed in the future.
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet] | `list` of `expression`\cr
 #'   Parameter space description. This should be created by the subclass and given to `super$initialize()`.
 #'   If this is a [`ParamSet`][paradox::ParamSet], it is used as the `PipeOp`'s [`ParamSet`][paradox::ParamSet]

@@ -22,6 +22,7 @@
 #'   Default is `FALSE`.
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting  object.
+#'   Deprecated, will be removed in the future.
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
 #'   ("Hyper"-)Parameters in form of a [`ParamSet`][paradox::ParamSet] for the resulting [`PipeOp`].
 #' * `param_vals` :: named `list`\cr

@@ -24,6 +24,7 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"impute."`, followed by the `id` of the `Learner`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`
 #'   [`Learner`][mlr3::Learner] to wrap, or a string identifying a [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
 #'   The [`Learner`][mlr3::Learner] usually needs to be able to handle missing values, i.e. have the `missings` property, unless care is taken

@@ -24,6 +24,7 @@
 #'  This argument is always cloned; to access the [`Learner`][mlr3::Learner] inside `PipeOpLearner` by-reference, use `$learner`.\cr
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting  object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
+#'   Deprecated, will be removed in the future.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.

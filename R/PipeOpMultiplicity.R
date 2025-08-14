@@ -26,6 +26,7 @@
 #'   `innum`.
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting object, default `"multiplicityimply"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
@@ -134,6 +135,7 @@ mlr_pipeops$add("multiplicityimply", PipeOpMultiplicityImply)
 #'   Determines the number of output channels.
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting object, default `"multiplicityexply"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
@@ -221,6 +223,7 @@ mlr_pipeops$add("multiplicityexply", PipeOpMultiplicityExply, list("N"))
 #'
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting object, default `"replicate"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.

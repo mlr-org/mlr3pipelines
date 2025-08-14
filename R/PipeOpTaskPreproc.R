@@ -328,6 +328,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object. See `$id` slot of [`PipeOp`].
+#'   Deprecated, will be removed in the future.
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
 #'   Parameter space description. This should be created by the subclass and given to `super$initialize()`.
 #' * `param_vals` :: named `list`\cr
