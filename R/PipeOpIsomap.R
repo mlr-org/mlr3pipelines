@@ -44,12 +44,13 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "isomap", param_vals = list(), get_geod = FALSE, keep_org_data = TRUE, diag = FALSE) {
-      ps = ps(
-        k = p_int(default = 50, lower = 1, upper = Inf, tags = "data transform"), # tag isomap?
-        ndim = p_int(default = 2, lower = 1, upper = Inf, tags = "data transform"), #tag isomap?
-        eps = p_dbl(default = 0, tags = "data transform")) # tag isomap?
       #ps$values = list(k = 50, ndim = 2, eps = 0)
+      ps = ps(
+        k = p_int(default = 50, lower = 1, upper = Inf, tags = "train"), # tag isomap?
+        ndim = p_int(default = 2, lower = 1, upper = Inf, tags = "train"), #tag isomap?
+        eps = p_dbl(default = 0, tags = "train")) # tag isomap?
       super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+      if(length(self$param_set$values) == 0) self$param_set$values = self$param_set$default
       private$.get_geod = get_geod
       private$.keep_org_data = keep_org_data
       private$.diag = diag
@@ -61,7 +62,7 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
     .keep_org_data = NULL,
     .diag = NULL,
     .make_knn_graph = function(x) {
-      pv = self$param_set$get_values(tags = "data transform")
+      pv = self$param_set$get_values(tags = "train")
       INF_VAL = 1.340781e+15
       NA_IDX  = 0
       ## select parameters
@@ -86,7 +87,7 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
     },
     .train_dt = function(dt, levels, target) {
       browser()
-      pv = self$param_set$get_values(tags = "data transform")
+      pv = self$param_set$get_values(tags = "train")
       knn_graph = private$.make_knn_graph(dt)
       geodist = igraph::distances(knn_graph, algorithm = "dijkstra")
       k = geodist ^ 2
@@ -110,8 +111,8 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
       dt
     },
     .predict_dt = function(dt, levels) {
-      #browser()
-      pv = self$param_set$get_values(tags = "data transform")
+      browser()
+      pv = self$param_set$get_values(tags = "train")
       if (ncol(self$state$orgdata) != ncol(dt))
         stop("x must have the same number of dimensions as the original data")
       nindata = nrow(dt)
@@ -123,7 +124,6 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
       dammu = sweep(lgeodist ^ 2, 2, colMeans(self$state$geodist ^ 2), "-")
       Lsharp = sweep(self$state$e_vectors, 2, self$state$e_values, "/")
       out = -0.5 * (dammu %*% Lsharp)
-      self$out = out
       dt
     }
   )
