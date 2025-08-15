@@ -166,12 +166,13 @@ test_that("Dictionary contains all PipeOps", {
       # construct the `param_vals = list(PARNAME = PARVAL)` construction argument
       parvals = list(val)
       names(parvals) = testingparam
+      parvals = insert_named(parvals, args$param_vals)
 
       # check that the constructed object is different from the test_obj, but setting the test_obj's parameter
       # makes them equal again.
-      dict_constructed = do.call(mlr_pipeops$get, c(list(dictname), args))
+      dict_constructed = do.call(mlr_pipeops$get, c(list(dictname), args[names(args) != "param_vals"]))
       dict_constructed$param_set$set_values(.values = parvals)
-      gen_constructed = do.call(pogen$new, args)
+      gen_constructed = do.call(pogen$new, args[names(args) != "param_vals"])
       gen_constructed$param_set$set_values(.values = parvals)
       expect_false(isTRUE(all.equal(dict_constructed, test_obj)), dictname)
       expect_false(isTRUE(all.equal(dict_constructed$hash, test_obj$hash)), dictname)
