@@ -113,10 +113,9 @@
 PipeOpFilter = R6Class("PipeOpFilter",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
-    filter = NULL,
     initialize = function(filter, id = filter$id, param_vals = list()) {
       assert_class(filter, "Filter")
-      self$filter = filter$clone(deep = TRUE)
+      private$.filter = filter$clone(deep = TRUE)
       for (pn in self$filter$param_set$ids()) {
         self$filter$param_set$tags[[pn]] = union(self$filter$param_set$tags[[pn]] , "train")
       }
@@ -127,6 +126,12 @@ PipeOpFilter = R6Class("PipeOpFilter",
         permuted = p_int(lower = 1, tags = "train")
       )
       super$initialize(id, alist(filter = private$.outer_param_set, self$filter$param_set), param_vals = param_vals, tags = "feature selection", dict_entry = "filter")
+    }
+  ),
+  active = list(
+    filter = function(rhs) {
+      if (!missing(rhs) && !identical(rhs, private$.filter)) stop("filter is read-only")
+      private$.filter
     }
   ),
   private = list(
@@ -186,7 +191,8 @@ PipeOpFilter = R6Class("PipeOpFilter",
     .transform = function(task) {
       task$select(self$state$features)
     },
-    .additional_phash_input = function() self$filter$hash
+    .additional_phash_input = function() self$filter$hash,
+    .filter = NULL
   )
 )
 

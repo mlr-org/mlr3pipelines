@@ -169,7 +169,7 @@ test_that("Dictionary contains all PipeOps", {
       # construct the `param_vals = list(PARNAME = PARVAL)` construction argument
       parvals = list(val)
       names(parvals) = testingparam
-      parvals = insert_named(parvals, args$param_vals)
+      parvals = insert_named(args$param_vals, parvals)
 
       # check that the constructed object is different from the test_obj, but setting the test_obj's parameter
       # makes them equal again.
