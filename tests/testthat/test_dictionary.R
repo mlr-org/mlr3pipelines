@@ -134,9 +134,10 @@ test_that("Dictionary contains all PipeOps", {
     }
     expect_equal(other_obj$phash, test_obj$phash, info = paste(dictname, "$new id test 2"))
     other_obj = inflate(do.call(pogen$new, args[names(args) != "param_vals"]))
-    other_obj$param_set$set_values(.values = args$param_vals)
+    if ("param_vals" %in% names(args)) {
+      other_obj$param_set$set_values(.values = args$param_vals)
+    }
     expect_equal(other_obj, test_obj, info = dictname)
-
 
     tops = test_obj$param_set
     # we now check if hyperparameters can be changed through construction
