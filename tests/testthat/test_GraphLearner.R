@@ -14,7 +14,7 @@ test_that("basic graphlearner tests", {
     glrn$use_weights = "error"  # also need to update use_weights now
   }
   expect_true(run_experiment(task, glrn)$ok)
-  glrn$properties = c(glrn$properties, "weights")
+  glrn$.__enclos_env__$private$.properties = c(glrn$properties, "weights")
 
   glrn = GraphLearner$new(gr)
   expect_learner(glrn)
@@ -1099,7 +1099,7 @@ DebugBasic = R6Class("DebugBasic", inherit = LearnerClassifDebug,
   public = list(
     initialize = function(...) {
       super$initialize(...)
-      self$properties = setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error"))
+      private$.properties = setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error"))
     },
     importance = function() {
       return(sapply(self$state$feature_names, function(i) 1))
@@ -1112,7 +1112,7 @@ test_that("GraphLearner Importance", {
     public = list(
       initialize = function(...) {
         super$initialize(...)
-        self$properties = c(setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error")), "importance")
+        private$.properties = c(setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error")), "importance")
       },
       importance = function() {
         return(sapply(self$state$feature_names, function(i) 1))
@@ -1182,7 +1182,7 @@ test_that("GraphLearner Selected Features", {
     public = list(
       initialize = function(...) {
         super$initialize(...)
-        self$properties = c(setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error")), "selected_features")
+        private$.properties = c(setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error")), "selected_features")
       },
       selected_features = function() {
         return(self$state$feature_names[[1]])
@@ -1287,7 +1287,7 @@ test_that("GraphLearner other properties", {
     public = list(
       initialize = function(...) {
         super$initialize(...)
-        self$properties = c(
+        private$.properties = c(
           setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error")),
           "loglik", "oob_error")
       },
