@@ -7,7 +7,7 @@ options(warnPartialMatchArgs = TRUE)
 options(warnPartialMatchAttr = TRUE)
 options(warnPartialMatchDollar = TRUE)
 options(mlr3.warn_deprecated = FALSE)  # avoid triggers when expect_identical() accesses deprecated fields
-options(mlr3.on_deprecated = "error")
+options(mlr3.on_deprecated_mlr3component = "error")
 
 # simulate packages that extend existing task type
 x = mlr3::mlr_reflections
