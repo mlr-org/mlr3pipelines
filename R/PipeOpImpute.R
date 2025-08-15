@@ -14,11 +14,13 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object. See `$id` slot of [`PipeOp`].
+#'   Deprecated, will be removed in the future.
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
 #'   Parameter space description. This should be created by the subclass and given to `super$initialize()`.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`. The
-#'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`.
+#'   The subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
+#'   Deprecated, will be removed in the future.
 #' * `whole_task_dependent` :: `logical(1)`\cr
 #'   Whether the `context_columns` parameter should be added which lets the user limit the columns that are
 #'   used for imputation inference. This should generally be `FALSE` if imputation depends only on individual features
@@ -145,7 +147,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
   public = list(
 
     initialize = function(id, param_set = ps(), param_vals = list(), whole_task_dependent = FALSE, empty_level_control = "never",
-      packages = character(0), task_type = "Task", feature_types = mlr_reflections$task_feature_types) {
+      packages = character(0), task_type = "Task", feature_types = mlr_reflections$task_feature_types, dict_entry = id) {
       # Add one or two parameters: affect_columns (always) and context_columns (if whole_task_dependent is TRUE)
       addparams = list(affect_columns = p_uty(custom_check = check_function_or_null, tags = "train"))
       if (whole_task_dependent) {
@@ -180,7 +182,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = task_type, predict = task_type),
-        packages = packages, tags = "missings"
+        packages = packages, tags = "missings", dict_entry = dict_entry
       )
     }
 

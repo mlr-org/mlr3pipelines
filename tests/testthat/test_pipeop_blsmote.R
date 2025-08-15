@@ -11,7 +11,7 @@ test_that("PipeOpBLSmote - basic properties", {
 test_that("PipeOpBLSmote - train works as intended", {
   skip_if_not_installed("smotefamily")
 
-  op = PipeOpBLSmote$new()
+  op = po("blsmote")
 
   set.seed(1234)
   df = smotefamily::sample_generator(500, 0.8)
@@ -74,7 +74,7 @@ test_that("PipeOpBLSmote - train works as intended", {
 test_that("PipeOpBLSmote - handling of feature named 'class'", {
   skip_if_not_installed("smotefamily")
 
-  op = PipeOpBLSmote$new()
+  op = po("blsmote")
 
   set.seed(1234)
   df = smotefamily::sample_generator(500, 0.8)

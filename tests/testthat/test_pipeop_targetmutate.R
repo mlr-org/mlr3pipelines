@@ -2,16 +2,16 @@ context("PipeOpTargetMutate")
 
 test_that("PipeOpTargetMutate - basic properties", {
   skip_if_not_installed("rpart")
-  expect_pipeop_class(PipeOpTargetMutate, list(id = "po"))
+  expect_pipeop_class(PipeOpTargetMutate, list())
 
-  po = PipeOpTargetMutate$new("po")
+  po = PipeOpTargetMutate$new()
 
   expect_pipeop(po)
 
   g = Graph$new()
   g$add_pipeop(PipeOpTargetMutate$new())
   g$add_pipeop(LearnerRegrRpart$new())
-  g$add_pipeop(PipeOpTargetInvert$new())
+  g$add_pipeop(po("targetinvert"))
   g$add_edge(src_id = "targetmutate", dst_id = "targetinvert", src_channel = 1L, dst_channel = 1L)
   g$add_edge(src_id = "targetmutate", dst_id = "regr.rpart", src_channel = 2L, dst_channel = 1L)
   g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert", src_channel = 1L, dst_channel = 2L)
@@ -41,14 +41,14 @@ test_that("PipeOpTargetMutate - basic properties", {
 test_that("PipeOpTargetMutate - log base 2 trafo", {
   skip_if_not_installed("rpart")
   g = Graph$new()
-  g$add_pipeop(PipeOpTargetMutate$new("logtrafo",
-    param_vals = list(
-      trafo = function(x) log(x, base = 2),
-      inverter = function(x) list(response = 2 ^ x$response))
-    )
+  g$add_pipeop(PipeOpTargetMutate$new()$configure(
+    id = "logtrafo",
+    trafo = function(x) log(x, base = 2),
+    inverter = function(x) list(response = 2 ^ x$response))
   )
+
   g$add_pipeop(LearnerRegrRpart$new())
-  g$add_pipeop(PipeOpTargetInvert$new())
+  g$add_pipeop(po("targetinvert"))
   g$add_edge(src_id = "logtrafo", dst_id = "targetinvert", src_channel = 1L, dst_channel = 1L)
   g$add_edge(src_id = "logtrafo", dst_id = "regr.rpart", src_channel = 2L, dst_channel = 1L)
   g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert", src_channel = 1L, dst_channel = 2L)

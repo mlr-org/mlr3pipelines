@@ -18,8 +18,10 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"scalerange"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
@@ -67,7 +69,7 @@ PipeOpScaleRange = R6Class("PipeOpScaleRange",
         upper = p_dbl(tags = c("required", "train"))
       )
       ps$values = list(lower = 0, upper = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), dict_entry = "scalerange")
     }
   ),
   private = list(

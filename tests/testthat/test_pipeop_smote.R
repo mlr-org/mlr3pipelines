@@ -10,7 +10,7 @@ test_that("PipeOpSmote - basic properties", {
   expect_datapreproc_pipeop_class(PipeOpSmote,
     task = task, predict_like_train = FALSE, deterministic_train = FALSE)
 
-  op = PipeOpSmote$new(param_vals = list(K = 3))
+  op = po("smote", K = 3)
   set.seed(1234)
   result = train_pipeop(op, inputs = list(task))
 
@@ -24,7 +24,7 @@ test_that("compare to smotefamily::SMOTE", {
   data = smotefamily::sample_generator(1000, ratio = 0.80)
   data$result = as.factor(data$result)
   task = TaskClassif$new(id = "unbalanced", backend = data, target = "result")
-  op = PipeOpSmote$new(param_vals = list(K = 3))
+  op = po("smote", K = 3)
   set.seed(1234)
   result = train_pipeop(op, inputs = list(task))
 
@@ -37,7 +37,7 @@ test_that("compare to smotefamily::SMOTE", {
 test_that("PipeOpSmote - handling of feature named 'class'", {
   skip_if_not_installed("smotefamily")
 
-  op = PipeOpSmote$new()
+  op = po("smote")
 
   df = data.frame(
     target = factor(sample(c("c1", "c2"), size = 200, replace = TRUE, prob = c(0.1, 0.9))),

@@ -28,21 +28,21 @@ test_that("PipeOpMissInd", {
   task_no_lgl = TaskClassif$new("mdata", as_data_backend(mdata), target = "l")
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "missing_train", type = "logical", affect_columns = NULL)))
+    constargs = list(), param_vals = list(which = "missing_train", type = "logical", affect_columns = NULL))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "logical", affect_columns = NULL)))
+    constargs = list(), param_vals = list(which = "all", type = "logical", affect_columns = NULL))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "factor", affect_columns = NULL)))
+    constargs = list(), param_vals = list(which = "all", type = "factor", affect_columns = NULL))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "integer", affect_columns = NULL)))
+    constargs = list(), param_vals = list(which = "all", type = "integer", affect_columns = NULL))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "numeric", affect_columns = NULL)))
+    constargs = list(), param_vals = list(which = "all", type = "numeric", affect_columns = NULL))
 
-  po = PipeOpMissInd$new(param_vals = list(which = "all", type = "logical", affect_columns = NULL))
+  po = po("missind", which = "all", type = "logical", affect_columns = NULL)
 
   task_trained = po$train(list(task$clone(deep = TRUE)$filter(5:6)))[[1]]$data()
 
@@ -109,7 +109,7 @@ test_that("union with missing rows", {
   data2[1:1, cyl:=NA]
 
   imp_missind = po("missind")
-  imp_num =  po("imputehist", param_vals = list(affect_columns = selector_type("numeric")))
+  imp_num =  po("imputehist", affect_columns = selector_type("numeric"))
   learner = lrn("regr.rpart")
 
   g1 = gunion(list(imp_num, imp_missind)) %>>% po("featureunion")

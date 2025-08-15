@@ -11,6 +11,7 @@ test_that("Dictionary contains all PipeOps", {
   inflate = function(x) {
     x$label
     x$param_set$values$content$label
+    lapply(as.list(x$.__enclos_env__$private, all.names = TRUE), function(x) if (inherits(x, "Mlr3Component")) inflate(x))
     x
   }
 
@@ -89,9 +90,10 @@ test_that("Dictionary contains all PipeOps", {
     dictname = dictnames[idx]  # the "key" in the mlr_pipeops dictionary
     args = initargs[[pipeops[idx]]] %??% list()  # the required arguments, if any. e.g. 'outnum' for PipeOpCopy.
 
-    test_obj = do.call(pogen$new, args)  # test_obj: PipeOp object, constructed from constructor
-
-
+    test_obj = do.call(pogen$new, args[names(args) != "param_vals"])  # test_obj: PipeOp object, constructed from constructor
+    if ("param_vals" %in% names(args)) {
+      test_obj$param_set$set_values(.values = args$param_vals)
+    }
 
     # check that mlr_pipeops key is the default ID
     if (pipeops[idx] %nin% unequal_id) {
@@ -99,7 +101,11 @@ test_that("Dictionary contains all PipeOps", {
     }
 
     # check that mlr_pipeops$get() gives the same object as PipeOpXXX$new() does
-    other_obj = do.call(mlr_pipeops$get, c(list(dictname), args))
+    other_obj = do.call(mlr_pipeops$get, c(list(dictname), args[names(args) != "param_vals"]))
+    if ("param_vals" %in% names(args)) {
+      other_obj$param_set$set_values(.values = args$param_vals)
+    }
+
     expect_equal(other_obj, test_obj, info = paste(dictname, "$new test"))
     if (!dictname %in% pval_unhashable) {
       expect_equal(other_obj$hash, test_obj$hash, info = paste(dictname, "$new test"))
@@ -108,19 +114,30 @@ test_that("Dictionary contains all PipeOps", {
 
     # check that ID can be changed
     args$id = "TESTID"
-    other_obj = do.call(mlr_pipeops$get, c(list(dictname), args))
+    other_obj = do.call(mlr_pipeops$get, c(list(dictname), args[names(args) != "param_vals"]))
+    if ("param_vals" %in% names(args)) {
+      other_obj$param_set$set_values(.values = args$param_vals)
+    }
+
     expect_false(isTRUE(all.equal(other_obj, test_obj)), info = paste(dictname, "$new id test"))
     expect_false(isTRUE(all.equal(other_obj$hash, test_obj$hash)), info = paste(dictname, "$new id test"))
     expect_false(isTRUE(all.equal(other_obj$phash, test_obj$phash)), info = paste(dictname, "$new id test"))
     test_obj$id = "TESTID"
-    other_obj = inflate(do.call(mlr_pipeops$get, c(list(dictname), args)))
+    other_obj = inflate(do.call(mlr_pipeops$get, c(list(dictname), args[names(args) != "param_vals"])))
+    if ("param_vals" %in% names(args)) {
+      other_obj$param_set$set_values(.values = args$param_vals)
+    }
+
     expect_equal(other_obj, test_obj, info = paste(dictname, "$new id test 2"))
     if (!dictname %in% pval_unhashable) {
       expect_equal(other_obj$hash, test_obj$hash, info = paste(dictname, "$new id test 2"))
     }
     expect_equal(other_obj$phash, test_obj$phash, info = paste(dictname, "$new id test 2"))
-    expect_equal(inflate(do.call(pogen$new, args)), test_obj, info = dictname)
-
+    other_obj = inflate(do.call(pogen$new, args[names(args) != "param_vals"]))
+    if ("param_vals" %in% names(args)) {
+      other_obj$param_set$set_values(.values = args$param_vals)
+    }
+    expect_equal(other_obj, test_obj, info = dictname)
 
     tops = test_obj$param_set
     # we now check if hyperparameters can be changed through construction
@@ -150,13 +167,16 @@ test_that("Dictionary contains all PipeOps", {
       val = setdiff(candidates, origval)[1]
 
       # construct the `param_vals = list(PARNAME = PARVAL)` construction argument
-      args$param_vals = list(val)
-      names(args$param_vals) = testingparam
+      parvals = list(val)
+      names(parvals) = testingparam
+      parvals = insert_named(args$param_vals, parvals)
 
       # check that the constructed object is different from the test_obj, but setting the test_obj's parameter
       # makes them equal again.
-      dict_constructed = do.call(mlr_pipeops$get, c(list(dictname), args))
-      gen_constructed = do.call(pogen$new, args)
+      dict_constructed = do.call(mlr_pipeops$get, c(list(dictname), args[names(args) != "param_vals"]))
+      dict_constructed$param_set$set_values(.values = parvals)
+      gen_constructed = do.call(pogen$new, args[names(args) != "param_vals"])
+      gen_constructed$param_set$set_values(.values = parvals)
       expect_false(isTRUE(all.equal(dict_constructed, test_obj)), dictname)
       expect_false(isTRUE(all.equal(dict_constructed$hash, test_obj$hash)), dictname)
       # phash should be independent of this!
@@ -172,7 +192,7 @@ test_that("Dictionary contains all PipeOps", {
 
     # $label can be retrieved
     expect_string(test_obj$label)
-    help_metainfo = paste(capture.output(print(str(test_obj$help()))), sep = "\n")
+    help_metainfo = paste(capture.output(print(str(test_obj$help()))), collapse = "\n")
     expect_false(grepl("^LABEL COULD NOT BE RETRIEVED$", test_obj$label), info = paste(dictname, help_metainfo, sep = "\n"))
 
     if (identical(help, utils::help)) {  # different behaviour if pkgload / devtools are doing help vs. vanilla R help()

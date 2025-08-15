@@ -1,14 +1,14 @@
 context("gunion")
 
 test_that("gunion", {
-  g1 = PipeOpPCA$new() %>>% PipeOpScale$new(param_vals = list(scale = FALSE))
-  g2 = PipeOpPCA$new(id = "pca2") %>>% PipeOpPCA$new(id = "xx")
-  g3 = PipeOpScale$new(id = "blub") %>>% PipeOpScale$new(id = "foo")
+  g1 = po("pca") %>>% po("scale", scale = FALSE)
+  g2 = po("pca", id = "pca2") %>>% po("pca", id = "xx")
+  g3 = po("scale", id = "blub") %>>% po("scale", id = "foo")
   g4 = gunion(list(g1, g2, g3))
   expect_graph(g4)
   expect_set_equal(g4$ids(), c("pca", "pca2", "scale", "xx", "blub", "foo"))
 
-  expect_deep_clone(g1, PipeOpPCA$new() %>>% PipeOpScale$new(param_vals = list(scale = FALSE)))
+  expect_deep_clone(g1, po("pca") %>>% po("scale", scale = FALSE))
 
   params = g4$param_set$params
 
@@ -21,16 +21,16 @@ test_that("gunion", {
   expect_deep_clone(params, g4_2$param_set$params)
 
 
-  g0 = PipeOpNOP$new()
+  g0 = po("nop")
   g4 = gunion(list(g0, g2, g3))
 
   expect_set_equal(g4$ids(), c("nop", "pca2", "xx", "blub", "foo"))
 
-  expect_deep_clone(g0, PipeOpNOP$new())
+  expect_deep_clone(g0, po("nop"))
 
   g4_2 = gunion(list(g0, g2, g3), in_place = TRUE)
 
-  expect_deep_clone(g0, PipeOpNOP$new())
+  expect_deep_clone(g0, po("nop"))
   expect_deep_clone(touch(g4_2), touch(g4))
 
 
@@ -65,9 +65,9 @@ test_that("named gunion", {
   expect_equal(
     touch(gunion(list(a = po("scale"), b = po("pca"), po("subsample")))),
     touch(Graph$new()$
-      add_pipeop(PipeOpScale$new(id = "a.scale"))$
-      add_pipeop(PipeOpPCA$new(id = "b.pca"))$
-      add_pipeop(PipeOpSubsample$new()))
+      add_pipeop(po("scale", id = "a.scale"))$
+      add_pipeop(po("pca", id = "b.pca"))$
+      add_pipeop(po("subsample")))
   )
 
   expect_equal(
@@ -103,8 +103,8 @@ test_that("named gunion", {
 
   expect_equal(gg,
     Graph$new()$
-    add_pipeop(po("nop", id = "op1"))$
-    add_pipeop(po("scale", id = "op2"))
+      add_pipeop(po("nop", id = "op1"))$
+      add_pipeop(po("scale", id = "op2"))
   )
 
 

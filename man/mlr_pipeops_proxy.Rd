@@ -23,9 +23,10 @@ The \code{content} hyperparameter can be changed during tuning, this is useful a
 Determines the number of output channels.
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object. See \verb{$id} slot of \code{\link{PipeOp}}.
+Deprecated, will be removed in the future.
 \item \code{param_vals} :: named \code{list}\cr
-List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-be set during construction. Default \code{list()}.
+List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
+Deprecated, will be removed in the future. Use the \code{\link[=po]{po()}} syntax to set hyperparameters on construction.
 }
 }
 

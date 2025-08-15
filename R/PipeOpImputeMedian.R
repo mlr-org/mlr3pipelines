@@ -14,8 +14,10 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"imputemedian"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpImpute`].
@@ -59,7 +61,7 @@ PipeOpImputeMedian = R6Class("PipeOpImputeMedian",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputemedian", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals, packages = "stats", feature_types = c("numeric", "integer"))
+      super$initialize(id, param_vals = param_vals, packages = "stats", feature_types = c("numeric", "integer"), dict_entry = "imputemedian")
     }
   ),
   private = list(

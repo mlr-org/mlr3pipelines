@@ -61,9 +61,9 @@ test_that("complex graph", {
   biggraph = PipeOpDebugBasic$new() %>>%
     PipeOpDebugMulti$new(1, 2) %>>%
     pipeline_greplicate(PipeOpDebugMulti$new(1, 2, "debug2"), 2) %>>%
-    gunion(list(PipeOpDebugBasic$new("basictop"),
+    gunion(list(PipeOpDebugBasic$new(id = "basictop"),
       PipeOpDebugMulti$new(2, 1, "debug2"),
-      PipeOpDebugBasic$new("basicbottom"))) %>>%
+      PipeOpDebugBasic$new(id = "basicbottom"))) %>>%
     PipeOpDebugMulti$new(3, 1, "debug3")
 
   lines = strsplit(capture_output(biggraph$train(1)), "\n")[[1]]
@@ -197,8 +197,8 @@ test_that("input / output lists and naming", {
 
 test_that("edges that introduce loops cannot be added", {
   g = Graph$new()$
-    add_pipeop(PipeOpNOP$new("p1"))$
-    add_pipeop(PipeOpNOP$new("p2"))
+    add_pipeop(po("nop", id = "p1"))$
+    add_pipeop(po("nop", id = "p2"))
 
   gclone = g$clone(deep = TRUE)
   expect_deep_clone(g, gclone)
@@ -334,13 +334,15 @@ test_that("Intermediate results are saved to Graph if requested", {
 })
 
 test_that("Namespaces get loaded", {
-  g = PipeOpPCA$new() %>>% PipeOpCopy$new(2) %>>%
-    gunion(list(PipeOpScale$new(), PipeOpNOP$new()))
+  g = po("pca") %>>% po("copy", 2) %>>%
+    gunion(list(po("scale"), po("nop")))
 
   g$train(mlr_tasks$get("iris"))
 
-  g$pipeops$scale$packages = c("4rfjfw", "324r32")
-  g$pipeops$nop$packages = c("4rfjfw", "9422228u")
+  sprivate = g$pipeops$scale$.__enclos_env__$private
+  sprivate$.packages = c("4rfjfw", "324r32")
+  nprivate = g$pipeops$nop$.__enclos_env__$private
+  nprivate$.packages = c("4rfjfw", "9422228u")
 
   res = try(g$train(mlr_tasks$get("iris")), silent = TRUE)
 
@@ -353,8 +355,8 @@ test_that("Namespaces get loaded", {
 })
 
 test_that("Graph State", {
-  g = PipeOpPCA$new() %>>% PipeOpCopy$new(2) %>>%
-    gunion(list(PipeOpScale$new(), PipeOpNOP$new()))
+  g = po("pca") %>>% po("copy", 2) %>>%
+    gunion(list(po("scale"), po("nop")))
 
   g_clone = g$clone(deep = TRUE)
   task = mlr_tasks$get("iris")
@@ -370,9 +372,9 @@ test_that("Graph State", {
 
 test_that("Graph with vararg input", {
   t1 = tsk("iris")
-  t2 = PipeOpPCA$new()$train(list(t1))[[1]]
-  tcombined = PipeOpFeatureUnion$new()$train(list(t1, t2))[[1]]
-  gr = as_graph(PipeOpFeatureUnion$new())
+  t2 = po("pca")$train(list(t1))[[1]]
+  tcombined = po("featureunion")$train(list(t1, t2))[[1]]
+  gr = as_graph(po("featureunion"))
   expect_equal(tcombined, gr$train(list(t1, t2), single_input = FALSE)[[1]])
   expect_equal(tcombined, gr$predict(list(t1, t2), single_input = FALSE)[[1]])
 

@@ -17,8 +17,10 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"boxcox"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
@@ -77,7 +79,7 @@ PipeOpBoxCox = R6Class("PipeOpBoxCox",
         upper = p_dbl(tags = c("train", "boxcox"))
       )
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "bestNormalize", feature_types = c("numeric", "integer"))
+        packages = "bestNormalize", feature_types = c("numeric", "integer"), dict_entry = "boxcox")
     }
   ),
   private = list(

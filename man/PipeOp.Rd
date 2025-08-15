@@ -43,6 +43,7 @@ is not intended to be instantiated.
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object. See \verb{$id} slot.
+Deprecated, will be removed in the future.
 \item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}} | \code{list} of \code{expression}\cr
 Parameter space description. This should be created by the subclass and given to \code{super$initialize()}.
 If this is a \code{\link[paradox:ParamSet]{ParamSet}}, it is used as the \code{PipeOp}'s \code{\link[paradox:ParamSet]{ParamSet}}
@@ -51,6 +52,7 @@ These \code{\link[paradox:ParamSet]{ParamSet}} are combined using a \code{\link[
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}. The
 subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}. Default \code{list()}.
+Deprecated, will be removed in the future. Use the \code{\link[=po]{po()}} syntax to set hyperparameters on construction.
 \item \code{input} :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
 Sets the \verb{$input} slot of the resulting object; see description there.
 \item \code{output} :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr

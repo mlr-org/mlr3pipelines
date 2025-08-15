@@ -17,8 +17,10 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"histbin"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
@@ -70,7 +72,7 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
       ps = ps(
         breaks = p_uty(default = "Sturges", tags = c("train", "hist"))
       )
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "graphics", feature_types = c("numeric", "integer"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "graphics", feature_types = c("numeric", "integer"), dict_entry = "histbin")
     }
   ),
   private = list(

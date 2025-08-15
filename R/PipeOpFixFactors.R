@@ -18,8 +18,10 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"fixfactors"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
@@ -59,7 +61,7 @@ PipeOpFixFactors = R6Class("PipeOpFixFactors",
         droplevels = p_lgl(tags = c("train", "predict"))
       )
       ps$values = list(droplevels = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, tags = "robustify", feature_types = c("factor", "ordered"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, tags = "robustify", feature_types = c("factor", "ordered"), dict_entry = "fixfactors")
     }
   ),
   private = list(

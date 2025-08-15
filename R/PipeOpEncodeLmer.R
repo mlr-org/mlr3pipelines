@@ -37,9 +37,10 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"encodelmer"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would
-#'   otherwise be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`]. Instead of a [`Task`][mlr3::Task], a
@@ -97,7 +98,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
       )
       ps$values = list(fast_optim = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"),
-        task_type = "TaskSupervised", tags = "encode", feature_types = c("factor", "ordered"))
+        task_type = "TaskSupervised", tags = "encode", feature_types = c("factor", "ordered"), dict_entry = "encodelmer")
     }
   ),
   private = list(

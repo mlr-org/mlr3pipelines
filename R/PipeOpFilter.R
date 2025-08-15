@@ -22,8 +22,10 @@
 #'  This argument is always cloned; to access the [`Filter`][mlr3filters::Filter] inside `PipeOpFilter` by-reference, use `$filter`.\cr
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting  object, defaulting to the `id` of the [`Filter`][mlr3filters::Filter] being used.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
@@ -111,10 +113,9 @@
 PipeOpFilter = R6Class("PipeOpFilter",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
-    filter = NULL,
     initialize = function(filter, id = filter$id, param_vals = list()) {
       assert_class(filter, "Filter")
-      self$filter = filter$clone(deep = TRUE)
+      private$.filter = filter$clone(deep = TRUE)
       for (pn in self$filter$param_set$ids()) {
         self$filter$param_set$tags[[pn]] = union(self$filter$param_set$tags[[pn]] , "train")
       }
@@ -124,7 +125,13 @@ PipeOpFilter = R6Class("PipeOpFilter",
         cutoff = p_dbl(tags = "train"),
         permuted = p_int(lower = 1, tags = "train")
       )
-      super$initialize(id, alist(filter = private$.outer_param_set, self$filter$param_set), param_vals = param_vals, tags = "feature selection")
+      super$initialize(id, alist(filter = private$.outer_param_set, self$filter$param_set), param_vals = param_vals, tags = "feature selection", dict_entry = "filter")
+    }
+  ),
+  active = list(
+    filter = function(rhs) {
+      if (!missing(rhs) && !identical(rhs, private$.filter)) stop("filter is read-only")
+      private$.filter
     }
   ),
   private = list(
@@ -184,7 +191,8 @@ PipeOpFilter = R6Class("PipeOpFilter",
     .transform = function(task) {
       task$select(self$state$features)
     },
-    .additional_phash_input = function() self$filter$hash
+    .additional_phash_input = function() self$filter$hash,
+    .filter = NULL
   )
 )
 

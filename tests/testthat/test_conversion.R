@@ -97,7 +97,8 @@ test_that("po for Filter", {
   flt = mlr3filters::FilterVariance$new()
   flt$param_set$values$na.rm = TRUE
 
-  fpo1 = PipeOpFilter$new(flt, param_vals = list(na.rm = FALSE))
+  fpo1 = PipeOpFilter$new(flt)
+  fpo1$param_set$set_values(.values = list(na.rm = FALSE))
 
   fpo2 = po("filter", flt, na.rm = FALSE)
 
@@ -113,7 +114,8 @@ test_that("po for Learner", {
   lrn = LearnerClassifRpart$new()
   lrn$param_set$values$xval = 9
 
-  lpo1 = touch(PipeOpLearner$new(lrn, param_vals = list(xval = 1)))
+  lpo1 = touch(PipeOpLearner$new(lrn))
+  lpo1$param_set$set_values(.values = list(xval = 1))
 
   lpo2 = po("learner", lrn, xval = 1)
 
@@ -150,7 +152,7 @@ test_that("Graph to GraphLearner", {
 test_that("PipeOp to GraphLearner", {
   skip_if_not_installed("rpart")
 
-  po = po("proxy", param_vals = list(content = lrn("classif.rpart")))
+  po = po("proxy", content = lrn("classif.rpart"))
 
   glrn1 = GraphLearner$new(po)
 
@@ -167,7 +169,8 @@ test_that("PipeOp to GraphLearner", {
 
   expect_equal(r1, r3)
 
-  po_cv = po("learner_cv", learner = po, param_vals = list(resampling.method = "insample"))
+  po_cv = po("learner_cv", learner = po)
+  po_cv$param_set$set_values(.values = list(resampling.method = "insample"))
   expect_true("GraphLearner" %in% class(po_cv$learner))
 
   train_out = po_cv$train(list(task))

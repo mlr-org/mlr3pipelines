@@ -2,7 +2,7 @@ context("PipeOpUnbranch")
 
 
 test_that("PipeOpUnbranch - basic properties", {
-  po = PipeOpUnbranch$new(3)
+  po = po("unbranch", options = 3)
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 3)
   expect_data_table(po$output, nrows = 1)
@@ -10,7 +10,7 @@ test_that("PipeOpUnbranch - basic properties", {
   expect_pipeop_class(PipeOpUnbranch, list(1))
   expect_pipeop_class(PipeOpUnbranch, list(3))
 
-  po = PipeOpUnbranch$new()
+  po = po("unbranch")
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 1)
 })
@@ -20,7 +20,7 @@ test_that("PipeOpUnbranch - train and predict", {
   t1 = mlr_tasks$get("iris")
   t2 = mlr_tasks$get("pima")
 
-  ubranch = PipeOpUnbranch$new(2)
+  ubranch = po("unbranch", options = 2)
   expect_true(ubranch$innum == 2L)
 
   tout = train_pipeop(ubranch, (list(t1, NO_OP)))
@@ -34,7 +34,7 @@ test_that("PipeOpUnbranch - train and predict", {
   expect_error(ubranch$train(list(t1, t2)))
   expect_error(ubranch$train(list(t1)))
 
-  ubranch = PipeOpUnbranch$new()
+  ubranch = po("unbranch")
   expect_true(ubranch$innum == 1)
 
   tout = train_pipeop(ubranch, (list(t1, NO_OP)))
@@ -45,7 +45,7 @@ test_that("PipeOpUnbranch - train and predict", {
   expect_true(length(pout) == 1)
   expect_equal(pout[[1]], t2)
 
-  ubranch = PipeOpUnbranch$new()
+  ubranch = po("unbranch")
   tout = train_pipeop(ubranch, (list(t1)))
   expect_class(tout[[1]], "Task")
   expect_true(length(tout) == 1L)

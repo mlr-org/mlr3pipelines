@@ -5,14 +5,14 @@ test_that("PipeOpFilter", {
   task = mlr_tasks$get("boston_housing_classic")
 
   expect_datapreproc_pipeop_class(PipeOpFilter,
-    list(filter = mlr3filters::FilterVariance$new(), param_vals = list(filter.frac = 0.5)), task = task,
-    check_ps_default_values = FALSE)
+    list(filter = mlr3filters::FilterVariance$new()), task = task,
+    check_ps_default_values = FALSE, param_vals = list(filter.frac = 0.5))
 
   expect_datapreproc_pipeop_class(PipeOpFilter,
-    list(filter = mlr3filters::FilterVariance$new(), param_vals = list(filter.frac = 0.5)), task = mlr_tasks$get("iris"),
-    check_ps_default_values = FALSE)
+    list(filter = mlr3filters::FilterVariance$new()), task = mlr_tasks$get("iris"),
+    check_ps_default_values = FALSE, param_vals = list(filter.frac = 0.5))
 
-  po = PipeOpFilter$new(mlr3filters::FilterVariance$new())
+  po = po("filter", filter = mlr3filters::FilterVariance$new())
 
   expect_equal(po$id, mlr3filters::FilterVariance$new()$id)
 
@@ -49,7 +49,7 @@ test_that("PipeOpFilter", {
 test_that("PipeOpFilter parameters", {
   skip_if_not_installed("mlr3filters")
 
-  po = PipeOpFilter$new(mlr3filters::FilterVariance$new())
+  po = po("filter", filter = mlr3filters::FilterVariance$new())
 
   expect_set_equal(c("filter.nfeat", "filter.frac", "filter.cutoff", "filter.permuted"),
     grep("^filter\\.", po$param_set$ids(), value = TRUE))

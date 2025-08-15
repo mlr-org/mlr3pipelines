@@ -1,7 +1,7 @@
 context("PipeOpOVRSplit")
 
 test_that("PipeOpOVRSplit - basic properties", {
-  po = PipeOpOVRSplit$new()
+  po = po("ovrsplit")
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 1)
   expect_data_table(po$output, nrows = 1)
@@ -13,7 +13,7 @@ test_that("PipeOpOVRSplit - train and predict", {
   # toy task to split
   dat = data.table(target = as.factor(rep(c("a", "b", "rest"), each = 10)), feature = rnorm(30))
   tsk = TaskClassif$new("test", backend = dat, target = "target")
-  po = PipeOpOVRSplit$new()
+  po = po("ovrsplit")
 
   tout = train_pipeop(po, list(tsk))
   expect_equal(po$state$levels, tsk$class_names)
@@ -40,7 +40,7 @@ test_that("PipeOpOVRSplit - train and predict", {
 context("PipeOpOVRUnite")
 
 test_that("PipeOpOVRUnite - basic properties", {
-  po = PipeOpOVRUnite$new()
+  po = po("ovrunite")
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 1)
   expect_data_table(po$output, nrows = 1)
@@ -58,7 +58,7 @@ test_that("PipeOpOVRUnite- train and predict", {
   tsk1 = TaskClassif$new("t1", backend = dat1, target = "target", positive = "a")
   tsk2 = TaskClassif$new("t2", backend = dat2, target = "target", positive = "b")
   tsk3 = TaskClassif$new("t3", backend = dat3, target = "target", positive = "c")
-  po = PipeOpOVRUnite$new()
+  po = po("ovrunite")
   lrn = LearnerClassifRpart$new()
 
   # predict_type "prob"
@@ -108,7 +108,7 @@ test_that("PipeOpOVRSplit and PipeOpOVRUnite - train and predict", {
   tsk1 = TaskClassif$new("t1", backend = dat1, target = "target", positive = "a")
   tsk2 = TaskClassif$new("t2", backend = dat2, target = "target", positive = "b")
   tsk3 = TaskClassif$new("t3", backend = dat3, target = "target", positive = "c")
-  po = PipeOpOVRUnite$new()
+  po = po("ovrunite")
   lrn = LearnerClassifRpart$new()
   tin = map(list(tsk1, tsk2, tsk3), .f = function(task) {
     lrn$train(task)
@@ -118,7 +118,7 @@ test_that("PipeOpOVRSplit and PipeOpOVRUnite - train and predict", {
   po$train(list(as.Multiplicity(NULL)))
   pout_ref = po$predict(list(as.Multiplicity(tin)))
 
-  gr = PipeOpOVRSplit$new() %>>% LearnerClassifRpart$new() %>>% PipeOpOVRUnite$new()
+  gr = po("ovrsplit") %>>% LearnerClassifRpart$new() %>>% po("ovrunite")
   expect_graph(gr)
   tout = gr$train(tsk0)
   expect_list(gr$state$ovrunite, len = 0)
@@ -134,7 +134,7 @@ test_that("PipeOpOVRSplit and PipeOpOVRUnite - train and predict", {
 
 test_that("PipeOpOVRSplit and PipeOpOVRUnite - task size", {
   skip_if_not_installed("rpart")
-  gr = PipeOpOVRSplit$new() %>>% LearnerClassifRpart$new() %>>% PipeOpOVRUnite$new()
+  gr = po("ovrsplit") %>>% LearnerClassifRpart$new() %>>% po("ovrunite")
   gr$train(tsk("iris")$filter(c(1:30, 51:80, 101:130)))
   prd = gr$predict(tsk("iris")$filter(c(1:30, 51:80, 101:130)))[[1]]
   expect_prediction_classif(prd)

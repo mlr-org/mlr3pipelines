@@ -18,8 +18,10 @@
 #'
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, defaulting to `"missind"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section State:
 #' `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
@@ -84,7 +86,7 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
         type = p_fct(levels = c("factor", "integer", "logical", "numeric"), tags = c("train", "predict", "required"))
       )
       ps$values = list(which = "missing_train", type = "factor")
-      super$initialize(id, ps, param_vals = param_vals, tags = "missings")
+      super$initialize(id, ps, param_vals = param_vals, tags = "missings", dict_entry = "missind")
       if ("affect_columns" %nin% names(param_vals)) {
         # can't put this in `ps$values` because it is a PipeOpTaskPreproc param
         self$param_set$values$affect_columns = selector_invert(selector_type(c("factor", "ordered", "character")))

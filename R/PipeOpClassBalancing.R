@@ -18,8 +18,10 @@
 #'
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, default `"classbalancing"`
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`]. Instead of a [`Task`][mlr3::Task], a
@@ -113,7 +115,7 @@ PipeOpClassBalancing = R6Class("PipeOpClassBalancing",
         shuffle = p_lgl(tags = "train")
       )
       ps$values = list(ratio = 1, reference = "all", adjust = "all", shuffle = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data")
+      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data", dict_entry = "classbalancing")
     }
   ),
   private = list(

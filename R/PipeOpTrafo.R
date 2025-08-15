@@ -26,6 +26,7 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`.
 #'   The subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`.
 #'   Default `list()`.
+#'   Deprecated, will be removed in the future.
 #' * `task_type_in` :: `character(1)`\cr
 #'   The class of [`Task`][mlr3::Task] that should be accepted as input. This should generally be a `character(1)`
 #'   identifying a type of [`Task`][mlr3::Task], e.g. `"Task"`, `"TaskClassif"` or `"TaskRegr"` (or another subclass
@@ -116,11 +117,11 @@
 PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
   inherit = PipeOp,
   public = list(
-    initialize = function(id, param_set = ps(), param_vals = list(), packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL) {
+    initialize = function(id, param_set = ps(), param_vals = list(), packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL, dict_entry = id) {
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = task_type_in, predict = task_type_in),
         output = data.table(name = c("fun", "output"), train = c("NULL", task_type_out), predict = c("function", task_type_out)),
-        packages = packages, tags = c(tags, "target transform")
+        packages = packages, tags = c(tags, "target transform"), dict_entry = dict_entry
       )
     }
   ),
@@ -195,8 +196,10 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"targetinvert"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' `PipeOpTargetInvert` has two input channels named `"fun"` and `"prediction"`. During
@@ -231,7 +234,7 @@ PipeOpTargetInvert = R6Class("PipeOpTargetInvert",
     initialize = function(id = "targetinvert", param_vals = list()) {
       super$initialize(id = id, param_vals = param_vals,
         input = data.table(name = c("fun", "prediction"), train = c("NULL", "NULL"), predict = c("function", "Prediction")),
-        output = data.table(name = "output", train = "NULL", predict = "Prediction"), tags = "target transform"
+        output = data.table(name = "output", train = "NULL", predict = "Prediction"), tags = "target transform", dict_entry = "targetinvert"
       )
     }
   ),
@@ -266,9 +269,10 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"targetmutate"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-#'   be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #' * `new_task_type` :: `character(1)` | `NULL`\cr
 #'   The task type to which the output is converted, must be one of `mlr_reflections$task_types$type`.
 #'   Defaults to `NULL`: no change in task type.
@@ -355,7 +359,7 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
       # see https://github.com/mlr-org/paradox/issues/216 and related comment in PipeOpLearnerCV
 
       ps$values = list(trafo = identity, inverter = identity)
-      super$initialize(id = id, param_set = ps, param_vals = param_vals)
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, dict_entry = "targetmutate")
     }
   ),
   active = list(
@@ -412,9 +416,10 @@ mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"targettrafoscalerange"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-#'   be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTargetTrafo`].
@@ -466,7 +471,7 @@ PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
         upper = p_dbl(tags = c("required", "train"))
       )
       ps$values = list(lower = 0, upper = 1)
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, task_type_in = "TaskRegr")
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, task_type_in = "TaskRegr", dict_entry = "targettrafoscalerange")
     }
   ),
   private = list(
@@ -529,6 +534,7 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`.
 #'   The subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`.
 #'   Default `list()`.
+#'   Deprecated, will be removed in the future.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTargetTrafo`], as well as:

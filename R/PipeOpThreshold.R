@@ -16,9 +16,10 @@
 #'
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, default `"threshold"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction.
-#'   Defaults to `numeric(0)`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' During training, the input and output are `NULL`.
@@ -67,7 +68,7 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = character(0),
         input = data.table(name = "input", train = "NULL", predict = "PredictionClassif"),
         output = data.table(name = "output", train = "NULL", predict = "PredictionClassif"),
-        tags = "target transform")
+        tags = "target transform", dict_entry = "threshold")
     }
   ),
   active = list(

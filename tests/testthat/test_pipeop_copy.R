@@ -6,7 +6,7 @@ test_that("PipeOpCopy - basic properties", {
   expect_pipeop_class(PipeOpCopy, list(3))
   expect_error(PipeOpCopy$new(0))
 
-  po = PipeOpCopy$new(3)
+  po = po("copy", outnum = 3)
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 1)
   expect_data_table(po$output, nrows = 3)
@@ -14,7 +14,7 @@ test_that("PipeOpCopy - basic properties", {
 
 
 test_that("PipeOpCopy - train and predict", {
-  copy = PipeOpCopy$new(2)
+  copy = po("copy", outnum = 2)
   task = mlr_tasks$get("iris")
 
   tout = train_pipeop(copy, list(task))

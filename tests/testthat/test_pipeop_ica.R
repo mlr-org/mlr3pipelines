@@ -30,7 +30,7 @@ test_that("PipeOpICA - compare to fastICA", {
   expect_equal(dtres, fica$S)
 
   # Change some parameters
-  op2 = PipeOpICA$new(param_vals = list(method = "R", alpha = 2))
+  op2 = po("ica", method = "R", alpha = 2)
   expect_pipeop(op2, check_ps_default_values = FALSE)
   set.seed(1234)
   result2 = op2$train(list(task))

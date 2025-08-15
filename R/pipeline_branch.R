@@ -78,10 +78,10 @@ pipeline_branch = function(graphs, prefix_branchops = "", prefix_paths = FALSE) 
     poname_prefix = ""
   }
 
-  graph = gunion(graphs) %>>!% PipeOpUnbranch$new(branches, id = paste0(prefix_branchops, "unbranch"))
+  graph = gunion(graphs) %>>!% po("unbranch", branches, id = paste0(prefix_branchops, "unbranch"))
 
   branch_id = paste0(prefix_branchops, "branch")
-  po_branch = PipeOpBranch$new(branches, id = branch_id)
+  po_branch = po("branch", branches, id = branch_id)
   graph$add_pipeop(po_branch)
 
   pmap(list(graphs, poname_prefix, po_branch$output$name), function(gr, pnp, branch_chan) {

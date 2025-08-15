@@ -17,8 +17,10 @@
 #' ```
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, default `"subsample"`
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
@@ -87,7 +89,7 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
         replace = p_lgl(tags = "train")
       )
       ps$values = list(frac = 1 - exp(-1), stratify = FALSE, use_groups = TRUE, replace = FALSE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
+      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, dict_entry = "subsample")
     }
   ),
   private = list(

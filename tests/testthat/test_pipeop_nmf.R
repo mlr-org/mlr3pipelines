@@ -8,7 +8,7 @@ test_that("basic properties", {
 
 test_that("feature selector", {
   skip_if_not_installed("NMF")
-  op = PipeOpNMF$new()
+  op = po("nmf")
   dat = iris
   dat$Sepal.Length[1L] <- -999
   dat$test <- rep.int(c(TRUE, FALSE), times = 75L)
@@ -20,7 +20,7 @@ test_that("feature selector", {
 
 test_that("parameters", {
   skip_if_not_installed("NMF")
-  op = PipeOpNMF$new()
+  op = po("nmf")
   op$param_set$values$rank = 3L
   op$param_set$values$nrun = 2L
   op$param_set$values$seed = 999

@@ -24,6 +24,7 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"impute."`, followed by the `id` of the `Learner`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`
 #'   [`Learner`][mlr3::Learner] to wrap, or a string identifying a [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
 #'   The [`Learner`][mlr3::Learner] usually needs to be able to handle missing values, i.e. have the `missings` property, unless care is taken
@@ -31,6 +32,7 @@
 #'  This argument is always cloned; to access the [`Learner`][mlr3::Learner] inside `PipeOpImputeLearner` by-reference, use `$learner`.\cr
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpImpute`].
@@ -112,7 +114,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
         # with generative text models, but by the time R/mlr3 can do that it is probably post-singularity.
       )
       super$initialize(id, param_set = alist(private$.learner$param_set), param_vals = param_vals,
-        whole_task_dependent = TRUE, feature_types = feature_types)
+        whole_task_dependent = TRUE, feature_types = feature_types, dict_entry = "imputelearner")
     }
   ),
   active = list(

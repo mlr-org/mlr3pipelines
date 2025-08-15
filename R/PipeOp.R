@@ -42,6 +42,7 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object. See `$id` slot.
+#'   Deprecated, will be removed in the future.
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet] | `list` of `expression`\cr
 #'   Parameter space description. This should be created by the subclass and given to `super$initialize()`.
 #'   If this is a [`ParamSet`][paradox::ParamSet], it is used as the `PipeOp`'s [`ParamSet`][paradox::ParamSet]
@@ -50,6 +51,7 @@
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`. The
 #'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #' * `input` :: [`data.table`][data.table::data.table] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
 #'   Sets the `$input` slot of the resulting object; see description there.
 #' * `output` :: [`data.table`][data.table::data.table] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
@@ -249,30 +251,52 @@
 #' @template seealso_pipeopslist
 #' @export
 PipeOp = R6Class("PipeOp",
+  inherit = Mlr3Component,
   public = list(
-    packages = NULL,
     state = NULL,
     input = NULL,
     output = NULL,
     .result = NULL,
     tags = NULL,
-    properties = NULL,
 
-    initialize = function(id, param_set = ps(), param_vals = list(), input, output, packages = character(0), tags = "abstract", properties = character(0)) {
-      if (inherits(param_set, "ParamSet")) {
-        private$.param_set = assert_param_set(param_set)
-        private$.param_set_source = NULL
-      } else {
-        lapply(param_set, function(x) assert_param_set(eval(x)))
-        private$.param_set_source = param_set
+    initialize = function(id, param_set = ps(), param_vals = list(), input, output, packages = character(0), tags = "abstract", properties = character(0), dict_entry = id) {
+
+
+      ## ------ deprecating id and param_vals
+      sc = sys.calls()
+      found = 0
+      # exclude the last (i.e., current) and second-tolast frame, these are PipeOp$new() directly.
+      for (i in rev(seq_along(sc))[-c(1, 2)]) {
+        if (identical(sc[[i]], quote(initialize(...)))) {
+          found = i
+          break
+        }
       }
-      self$id = assert_string(id, min.chars = 1)
+      if (found > 0) {
+        sf = sys.frames()[[found - 1]]
+        if (identical(class(self), sf$classes)) {
+          newcall = match.call(sys.function(found), sc[[found]], envir = sf)
+          passes_param_vals = !is.null(newcall$param_vals)
+          dots = (function(...) evalq(list(...), envir = sf))()  # function(...) is here to pacify R CMD check static checks
+          unnamed_dots = dots[is.na(names2(dots))]
+          passes_id = length(unnamed_dots) && !is.null(newcall$id) && identical(newcall$id, unnamed_dots[[1]])
+          if (passes_param_vals || passes_id) {
+            mlr3component_deprecation_msg("passing param_vals, and unnamed id, for PipeOp construction directly is deprecated and will be removed in the future.
+Use the po()-syntax to set these, instead:
+po(\"pipeop\", \"newid\", param_vals = list(a = 1)) --> po(\"pipeop\", id = \"newid\", a = 1)")
+          }
+        }
+      }
+      ## ------
 
-      self$properties = assert_subset(properties, mlr_reflections$pipeops$properties)
+      super$initialize(id = id, dict_entry = dict_entry, dict_shortaccess = "po",
+        param_set = param_set, packages = packages, properties = properties
+      )
+
+      assert_subset(properties, mlr_reflections$pipeops$properties)
       self$param_set$values = insert_named(self$param_set$values, param_vals)
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
-      self$packages = union("mlr3pipelines", assert_character(packages, any.missing = FALSE, min.chars = 1L))
       self$tags = assert_subset(tags, mlr_reflections$pipeops$valid_tags)
     },
 
@@ -377,111 +401,21 @@ PipeOp = R6Class("PipeOp",
   ),
 
   active = list(
-    id = function(val) {
-      if (!missing(val)) {
-        private$.id = val
-      }
-      private$.id
-    },
-    param_set = function(val) {
-      if (is.null(private$.param_set)) {
-        sourcelist = lapply(private$.param_set_source, function(x) eval(x))
-        if (length(sourcelist) > 1) {
-          private$.param_set = ParamSetCollection$new(sourcelist)
-        } else {
-          private$.param_set = sourcelist[[1]]
-        }
-      }
-      if (!missing(val) && !identical(val, private$.param_set)) {
-        stop("param_set is read-only.")
-      }
-      private$.param_set
-    },
     predict_type = function(val) {
       if (!missing(val)) {
         stop("$predict_type is read-only.")
       }
-      return(NULL)
+      NULL
     },
     innum = function() nrow(self$input),
     outnum = function() nrow(self$output),
-    is_trained = function() !is.null(self$state),
-    hash = function() {
-      digest(list(class(self), self$id, lapply(self$param_set$values, function(val) {
-        # ideally we would just want to hash `param_set$values`, but one of the values
-        # could be an R6 object with a `$hash` slot as well, in which case we take that
-        # slot's value. This is to avoid different hashes from essentially the same
-        # objects.
-        # In the following we also avoid accessing `val$hash` twice, because it could
-        # potentially be an expensive AB.
-        if (is.environment(val) && !is.null({vhash = get0("hash", val, mode = "any", inherits = FALSE, ifnotfound = NULL)})) {
-          vhash
-        } else {
-          val
-        }
-      }), private$.additional_phash_input()), algo = "xxhash64")
-    },
-    phash = function() {
-      digest(list(class(self), self$id, private$.additional_phash_input()), algo = "xxhash64")
-    },
-    man = function(x) {
-      if (!missing(x)) stop("man is read-only")
-      paste0(topenv(self$.__enclos_env__)$.__NAMESPACE__.$spec[["name"]], "::", class(self)[[1]])
-    },
-    label = function(x) {
-      if (!missing(x)) stop("label is read-only")
-      if (is.null(private$.label)) {
-        helpinfo = self$help()
-        helpcontent = NULL
-        if (inherits(helpinfo, "help_files_with_topic") && length(helpinfo)) {
-          ghf = get(".getHelpFile", mode = "function", envir = getNamespace("utils"))
-          helpcontent = ghf(helpinfo)
-        } else if (inherits(helpinfo, "dev_topic")) {
-          helpcontent = tools::parse_Rd(helpinfo$path)
-        }
-        if (is.null(helpcontent)) {
-          private$.label = "LABEL COULD NOT BE RETRIEVED"
-        } else {
-          private$.label = Filter(function(x) identical(attr(x, "Rd_tag"), "\\title"), helpcontent)[[1]][[1]][1]
-        }
-      }
-      private$.label
-    }
+    is_trained = function() !is.null(self$state)
   ),
 
   private = list(
     .state_class = NULL,
-    deep_clone = function(name, value) {
-      if (!is.null(private$.param_set_source)) {
-        private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
-        if (name == ".param_set_source") {
-          value = lapply(value, function(x) {
-            if (inherits(x, "R6")) x$clone(deep = TRUE) else x
-          })
-        }
-      }
-      if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
-        return(value$clone(deep = TRUE))
-      }
-      value
-    },
     .train = function(input) stop("abstract"),
-    .predict = function(input) stop("abstract"),
-    .additional_phash_input = function() {
-      if (is.null(self$initialize)) return(NULL)
-      initformals <- names(formals(args(self$initialize)))
-      if (!test_subset(initformals, c("id", "param_vals"))) {
-        warningf("PipeOp %s has construction arguments besides 'id' and 'param_vals' but does not overload the private '.additional_phash_input()' function.
-
-The hash and phash of a PipeOp must differ when it represents a different operation; since %s has construction arguments that could change the operation that is performed by it, it is necessary for the $hash and $phash to reflect this. `.additional_phash_input()` should return all the information (e.g. hashes of encapsulated items) that should additionally be hashed; read the help of ?PipeOp for more information.
-
-This warning will become an error in the future.", class(self)[[1]], class(self)[[1]])
-      }
-    },
-    .param_set = NULL,
-    .param_set_source = NULL,
-    .label = NULL,
-    .id = NULL
+    .predict = function(input) stop("abstract")
   )
 )
 
@@ -511,7 +445,7 @@ check_types = function(self, data, direction, operation) {
   description = sprintf("%s of PipeOp %s's $%s()", direction, self$id, operation)
   if (direction == "input" && "..." %in% typetable$name) {
     assert_list(data, min.len = nrow(typetable) - 1, .var.name = description)
-    typetable = typetable[rep(1:.N, ifelse(get("name") == "...", length(data) - nrow(typetable) + 1, 1))]
+    typetable = typetable[rep(seq_len(.N), ifelse(get("name") == "...", length(data) - nrow(typetable) + 1, 1))]
   } else {
     assert_list(data, len = nrow(typetable), .var.name = description)
   }

@@ -14,7 +14,7 @@ test_that("PipeOpEncodeImpact", {
 
   expect_datapreproc_pipeop_class(PipeOpEncodeImpact, task = mlr_tasks$get("iris"))
 
-  op = PipeOpEncodeImpact$new()
+  op = po("encodeimpact")
 
   nt = train_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names
@@ -41,7 +41,7 @@ test_that("PipeOpImpactEncode on Classification", {
 
   testtask = TaskClassif$new("test", testdf, "t")
 
-  op = PipeOpEncodeImpact$new()
+  op = po("encodeimpact")
 
   expect_equal(op$train(list(tsk("iris")))[[1]], tsk("iris"))
 
@@ -116,7 +116,7 @@ test_that("PipeOpImpactEncode on Regression", {
       b = c(-1, 2, 2, -1, -1, -1) / 4,
       t = c(1, 2, 3, 1, 2, 3))
 
-  op = PipeOpEncodeImpact$new()
+  op = po("encodeimpact")
   op$param_set$values$smoothing = 0
 
   expect_equal(op$train(list(testtask))[[1]]$data(), expect, ignore.col.order = TRUE)

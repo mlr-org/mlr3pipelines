@@ -20,6 +20,7 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"randomprojection"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that
 #'   would otherwise be set during construction. Default `list()`.
@@ -77,7 +78,7 @@ PipeOpRandomProjection = R6Class("PipeOpRandomProjection",
         rank = p_int(lower = 0, tags = "train")
       )
       ps$values = list(rank = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), dict_entry = "randomprojection")
     }
   ),
   private = list(

@@ -18,8 +18,10 @@
 #'   Number of output channels, and therefore number of chunks created.
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"chunk"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output:
 #' `PipeOpChunk` has one input channel named `"input"`, taking a [`Task`][mlr3::Task] both during training and prediction.
@@ -72,7 +74,7 @@ PipeOpChunk = R6Class("PipeOpChunk",
         param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = rep_suffix("output", outnum), train = "Task", predict = "Task"),
-        tags = "meta"
+        tags = "meta", dict_entry = "chunk"
       )
     }
   ),

@@ -22,8 +22,10 @@
 #' ```
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"collapsefactors"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
@@ -99,7 +101,7 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
         target_level_count = p_int(2, tags = c("train", "predict"))
       )
       ps$values = list(no_collapse_above_prevalence = 1, no_collapse_above_absolute = Inf, target_level_count = 2)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("factor", "ordered"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("factor", "ordered"), dict_entry = "collapsefactors")
     }
   ),
   private = list(

@@ -11,7 +11,7 @@ test_that("PipeOpNearmiss - basic properties", {
 test_that("PipeOpNearmiss - train works as intended", {
   skip_if_not_installed("themis")
 
-  op = PipeOpNearmiss$new()
+  op = po("nearmiss")
 
   # Compare to themis::nearmiss for task with only numeric/integer features
   task = mlr_tasks$get("wine")

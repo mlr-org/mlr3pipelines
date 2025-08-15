@@ -14,9 +14,10 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"imputeconstant"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-#'   be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpImpute`].
@@ -83,7 +84,7 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
         check_levels = p_lgl(init = TRUE, tags = c("train", "required"))
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, empty_level_control = "always",
-        feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct"))
+        feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct"), dict_entry = "imputeconstant")
     }
   ),
   private = list(

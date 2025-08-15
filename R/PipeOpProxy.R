@@ -21,9 +21,10 @@
 #'   Determines the number of output channels.
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object. See `$id` slot of [`PipeOp`].
+#'   Deprecated, will be removed in the future.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-#'   be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' `PipeOpProxy` has multiple input channels depending on the `innum` construction argument, named
@@ -111,7 +112,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
       super$initialize(id, param_set = ps, param_vals = param_vals,
         input = data.table(name = inname, train = "*", predict = "*"),
         output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*"),
-        tags = "meta"
+        tags = "meta", dict_entry = "proxy"
       )
     }
   ),

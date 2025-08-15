@@ -22,8 +22,10 @@
 #' ```
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"colapply"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
@@ -96,7 +98,7 @@ PipeOpColApply = R6Class("PipeOpColApply",
         applicator = p_uty(custom_check = check_function, tags = c("train", "predict"))
       )
       ps$values = list(applicator = identity)
-      super$initialize(id, ps, param_vals = param_vals)
+      super$initialize(id, ps, param_vals = param_vals, dict_entry = "colapply")
     }
   ),
   private = list(

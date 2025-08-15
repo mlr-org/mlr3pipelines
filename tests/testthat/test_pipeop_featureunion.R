@@ -1,7 +1,7 @@
 context("PipeOpFeatureUnion")
 
 test_that("featureunion - basic properties", {
-  po = PipeOpFeatureUnion$new(3)
+  po = po("featureunion", innum = 3)
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 3)
   expect_data_table(po$output, nrows = 1)
@@ -9,12 +9,12 @@ test_that("featureunion - basic properties", {
   expect_pipeop_class(PipeOpFeatureUnion, list(1))
   expect_pipeop_class(PipeOpFeatureUnion, list(3))
 
-  po = PipeOpFeatureUnion$new()
+  po = po("featureunion")
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 1)
   expect_data_table(po$output, nrows = 1)
 
-  expect_error(PipeOpFeatureUnion$new(1, collect_multiplicity = TRUE), regexp = "collect_multiplicity only works with innum == 0")
+  expect_error(po("featureunion", innum = 1, collect_multiplicity = TRUE), regexp = "collect_multiplicity only works with innum == 0")
 })
 
 test_that("PipeOpFeatureUnion - train and predict", {
@@ -27,7 +27,7 @@ test_that("PipeOpFeatureUnion - train and predict", {
 
   expect_task(cbind_tasks(inputs = list(t1, t2), TRUE, c("", "")))
 
-  po = PipeOpFeatureUnion$new(2)
+  po = po("featureunion", innum = 2)
 
   tout = train_pipeop(po, list(t1, t2))
   expect_equivalent(tout[[1]]$feature_names, tsk$feature_names)
@@ -37,7 +37,7 @@ test_that("PipeOpFeatureUnion - train and predict", {
   expect_equivalent(pout[[1]]$feature_names, tsk$feature_names)
   expect_equivalent(pout[[1]]$target_names, tsk$target_names)
 
-  po = PipeOpFeatureUnion$new()
+  po = po("featureunion")
 
   tout = train_pipeop(po, list(t1, t2))
   expect_equivalent(tout[[1]]$feature_names, tsk$feature_names)
@@ -51,15 +51,15 @@ test_that("PipeOpFeatureUnion - train and predict", {
 test_that("PipeOpFeatureUnion - train and predict II", {
   skip_if_not_installed("rpart")
   # Define PipeOp's
-  scatter = PipeOpCopy$new(2)
-  op2a = PipeOpPCA$new()
-  op2b = PipeOpNOP$new()
-  op3 = PipeOpFeatureUnion$new(2)
-  opdot = PipeOpFeatureUnion$new()
+  scatter = po("copy", outnum = 2)
+  op2a = po("pca")
+  op2b = po("nop")
+  op3 = po("featureunion", innum = 2)
+  opdot = po("featureunion")
 
   task = mlr_tasks$get("iris")
   lrn = mlr_learners$get("classif.rpart")
-  op4 = PipeOpLearner$new(learner = lrn)
+  op4 = po("learner", lrn)
 
   # FIXME: Check param_set
   param_names_union = c(
@@ -96,18 +96,18 @@ test_that("PipeOpFeatureUnion - train and predict II", {
 
 test_that("Test wrong inputs", {
   # Differing rows
-  pos = PipeOpSubsample$new()
+  pos = po("subsample")
   pos$param_set$values$frac = 0.5
   g = pipeline_greplicate(
-    pos %>>% PipeOpPCA$new(),
+    pos %>>% po("pca"),
     2
-  ) %>>% PipeOpFeatureUnion$new(c("a", "b"))
+  ) %>>% po("featureunion", innum = c("a", "b"))
   task = mlr_tasks$get("iris")
   # TODO: the following was broken by mlr3 recently
   # expect_error(g$train(task), "Assertion on 'rows'")
 
   # Differing target columns
-  po = PipeOpFeatureUnion$new()
+  po = po("featureunion")
   expect_error(po$train(list(tsk("iris"), tsk("mtcars")), regexp = "All tasks must have the same target columns"))
 })
 
@@ -121,7 +121,7 @@ test_that("PipeOpFeatureUnion - levels are preserved", {
   tsk1$col_info
   tsk2$col_info
 
-  pofu = PipeOpFeatureUnion$new(2)
+  pofu = po("featureunion", innum = 2)
   expect_true(!pofu$is_trained)
   pofu$train(list(tsk1, tsk2))[[1]]$col_info
   expect_true(pofu$is_trained)
@@ -133,30 +133,30 @@ test_that("feature renaming", {
   skip_if_not_installed("rpart")
   expect_pipeop_class(PipeOpFeatureUnion, list(letters[1:3]))
 
-  expect_equal(nrow(PipeOpFeatureUnion$new(c("a", "b", "c"))$input), 3)
-  expect_equal(nrow(PipeOpFeatureUnion$new("a")$input), 1)
+  expect_equal(nrow(po("featureunion", innum = c("a", "b", "c"))$input), 3)
+  expect_equal(nrow(po("featureunion", innum = "a")$input), 1)
 
-  po = PipeOpFeatureUnion$new(c("", "a", "b"))
+  po = po("featureunion", innum = c("", "a", "b"))
 
   task = mlr_tasks$get("iris")
 
   expect_equal(po$train(list(task, task, task))[[1]]$feature_names,
     c(task$feature_names, paste0("a.", task$feature_names), paste0("b.", task$feature_names)))
 
-  po = PipeOpFeatureUnion$new(c("", "a", "a"))
+  po = po("featureunion", innum = c("", "a", "a"))
 
-  expect_equal(po$train(list(task, task, PipeOpPCA$new()$train(list(task))[[1]]))[[1]]$feature_names,
+  expect_equal(po$train(list(task, task, po("pca")$train(list(task))[[1]]))[[1]]$feature_names,
     c(task$feature_names, paste0("a.", task$feature_names), paste0("a.PC", 1:4)))
 
   # Define PipeOp's
-  scatter = PipeOpCopy$new(2)
-  op2a = PipeOpPCA$new()
-  op2b = PipeOpNOP$new()
-  op3 = PipeOpFeatureUnion$new(c("", "XX"))
+  scatter = po("copy", outnum = 2)
+  op2a = po("pca")
+  op2b = po("nop")
+  op3 = po("featureunion", innum = c("", "XX"))
 
   task = mlr_tasks$get("iris")
   lrn = mlr_learners$get("classif.rpart")
-  op4 = PipeOpLearner$new(learner = lrn)
+  op4 = po("learner", lrn)
 
   # FIXME: Check param_set
   param_names_union = c(
@@ -177,9 +177,9 @@ test_that("feature renaming", {
     "XX.Petal.Width", "XX.Sepal.Length", "XX.Sepal.Width"))
   expect_true(graph$is_trained)
 
-  po = PipeOpFeatureUnion$new(c("z", "a", "a"))
+  po = po("featureunion", innum = c("z", "a", "a"))
 
-  expect_equal(po$train(list(task, task, PipeOpPCA$new()$train(list(task))[[1]]))[[1]]$feature_names,
+  expect_equal(po$train(list(task, task, po("pca")$train(list(task))[[1]]))[[1]]$feature_names,
     c(task$feature_names, paste0("a.", task$feature_names), paste0("a.PC", 1:4)))
 })
 
@@ -204,12 +204,12 @@ test_that("feature renaming", {
 test_that("featureunion - duplicates in feature names", {
   tsk = mlr_tasks$get("iris")
 
-  g = pipeline_greplicate(PipeOpPCA$new(), 2) %>>% PipeOpFeatureUnion$new(2)
+  g = pipeline_greplicate(po("pca"), 2) %>>% po("featureunion", innum = 2)
 
   # this should work (just keeps each PC a single time)
   train_out_g = g$train(tsk)
 
-  popca = PipeOpPCA$new()
+  popca = po("pca")
   train_out_pca = popca$train(list(tsk))
   expect_equal(train_out_g[[1]]$data(), train_out_pca[[1]]$data())
 
@@ -219,12 +219,12 @@ test_that("featureunion - duplicates in feature names", {
   dat$Sepal.Width[1] = 999
   tsk2 = TaskClassif$new("tsk2", backend = dat, target = "Species")
 
-  po = PipeOpFeatureUnion$new()
+  po = po("featureunion")
   expect_error(po$train(list(tsk, tsk2)), regexp = "different features sharing the same feature name")
 })
 
 test_that("featureunion - collect_multiplicity", {
-  po = PipeOpFeatureUnion$new(0, collect_multiplicity = TRUE)
+  po = po("featureunion", innum = 0, collect_multiplicity = TRUE)
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 1)
   expect_data_table(po$output, nrows = 1)

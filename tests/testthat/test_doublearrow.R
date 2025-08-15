@@ -1,13 +1,13 @@
 context("double-arrow")
 
 test_that("Simple ops do what we expect", {
-  p1 = PipeOpNOP$new("p1")
-  p2 = PipeOpNOP$new("p2")
-  p3 = PipeOpNOP$new("p3")
-  p4 = PipeOpNOP$new("p4")
-  p5 = PipeOpNOP$new("p5")
-  p6 = PipeOpNOP$new("p6")
-  p7 = PipeOpNOP$new("p7")
+  p1 = po("nop", id = "p1")
+  p2 = po("nop", id = "p2")
+  p3 = po("nop", id = "p3")
+  p4 = po("nop", id = "p4")
+  p5 = po("nop", id = "p5")
+  p6 = po("nop", id = "p6")
+  p7 = po("nop", id = "p7")
 
   g = p1 %>>% p2 %>>% p3
   expect_class(g, "Graph")
@@ -51,11 +51,11 @@ test_that("Simple ops do what we expect", {
 })
 
 test_that("operations make deep copies", {
-  p1 = PipeOpNOP$new("p1")
-  p2 = PipeOpNOP$new("p2")
+  p1 = po("nop", id = "p1")
+  p2 = po("nop", id = "p2")
 
-  g3 = Graph$new()$add_pipeop(PipeOpNOP$new("p3"))
-  g4 = Graph$new()$add_pipeop(PipeOpNOP$new("p4"))
+  g3 = Graph$new()$add_pipeop(po("nop", id = "p3"))
+  g4 = Graph$new()$add_pipeop(po("nop", id = "p4"))
 
   g = p1 %>>% p2
   expect_deep_clone(g$pipeops$p1, p1)
@@ -67,7 +67,7 @@ test_that("operations make deep copies", {
 })
 
 test_that("neutral elements", {
-  p = PipeOpNOP$new("p1")
+  p = po("nop", id = "p1")
   g1 = p %>>% NULL
   expect_graph(g1)
   expect_true((length(g1$pipeops) == 1L) && (names(g1$pipeops) == "p1"))
@@ -77,9 +77,9 @@ test_that("neutral elements", {
 
 test_that("triple-arrow", {
 
-  p1 = PipeOpNOP$new("p1")
-  p2 = PipeOpNOP$new("p2")
-  p3 = PipeOpNOP$new("p3")
+  p1 = po("nop", id = "p1")
+  p2 = po("nop", id = "p2")
+  p3 = po("nop", id = "p3")
 
   gr = as_graph(p1)
 
@@ -145,14 +145,14 @@ test_that("triple-arrow", {
 
   gr = p1 %>>!% p2graph1
 
-  expect_deep_clone(p1, PipeOpNOP$new("p1"))
+  expect_deep_clone(p1, po("nop", id = "p1"))
   expect_deep_clone(p2graph1, as_graph(p2))
   expect_deep_clone(gr, p1 %>>% p2)
 
 
   gr = chain_graphs(list(p1, p2graph1), in_place = TRUE)
 
-  expect_deep_clone(p1, PipeOpNOP$new("p1"))
+  expect_deep_clone(p1, po("nop", id = "p1"))
   expect_deep_clone(p2graph1, as_graph(p2))
   expect_deep_clone(gr, p1 %>>% p2)
 

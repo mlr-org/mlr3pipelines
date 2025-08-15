@@ -27,8 +27,10 @@ Use the \code{\link{PipeOpTaskPreproc}} \verb{$affect_columns} functionality to 
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"encode"}.
+Deprecated, will be removed in the future. Use the \code{\link[=po]{po()}} syntax to set a custom ID on construction.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
+Deprecated, will be removed in the future. Use the \code{\link[=po]{po()}} syntax to set hyperparameters on construction.
 }
 }
 

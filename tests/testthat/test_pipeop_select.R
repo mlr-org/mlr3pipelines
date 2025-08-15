@@ -1,7 +1,7 @@
 context("PipeOpSelect")
 
 test_that("select", {
-  op = PipeOpSelect$new()
+  op = po("select")
   expect_pipeop(op)
 
   # Generic tests
@@ -9,11 +9,11 @@ test_that("select", {
   expect_datapreproc_pipeop_class(PipeOpSelect, task = mlr_tasks$get("iris"))
 
   expect_datapreproc_pipeop_class(PipeOpSelect, task = mlr_tasks$get("iris"),
-    constargs = list(param_vals = list(selector = selector_grep("^Petal"))))
+    constargs = list(), param_vals = list(selector = selector_grep("^Petal")))
 
 
   # Selects the columns we expect it to select
-  po = PipeOpSelect$new()
+  po = po("select")
   expect_equal(po$train(list(tsk("iris")))[[1]]$data(), mlr_tasks$get("iris")$data())
 
   po$param_set$values$selector = selector_grep("^Petal")

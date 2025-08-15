@@ -31,6 +31,7 @@
 #'   Identifier of the resulting [`Learner`][mlr3::Learner].
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings . Default `list()`.
+#'   Deprecated, will be removed in the future.
 #' * `task_type` :: `character(1)`\cr
 #'   What `task_type` the `GraphLearner` should have; usually automatically inferred for [`Graph`]s that are simple enough.
 #' * `predict_type` :: `character(1)`\cr
@@ -180,11 +181,14 @@
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
     impute_selected_features = FALSE,
-    initialize = function(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL, clone_graph = TRUE) {
+    initialize = function(graph, id = NULL, task_type = NULL, predict_type = NULL, clone_graph = TRUE) {
       graph = as_graph(graph, clone = assert_flag(clone_graph))
       graph$state = NULL
 
       id = assert_string(id, null.ok = TRUE) %??% paste(graph$ids(sorted = TRUE), collapse = ".")
+      if (".has_id" %in% names(private)) {
+        private$.has_id = TRUE
+      }
       self$id = id  # init early so 'base_learner()' can use it in error messages
       private$.graph = graph
 
@@ -217,17 +221,15 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       )
 
       super$initialize(id = id, task_type = task_type,
+        param_set = alist(private$.graph$param_set),
         feature_types = mlr_reflections$task_feature_types,
         predict_types = names(mlr_reflections$learner_predict_types[[task_type]]),
         packages = graph$packages,
-        properties = properties,
-        man = "mlr3pipelines::GraphLearner"
+        properties = properties
       )
 
-      if (length(param_vals)) {
-        private$.graph$param_set$values = insert_named(private$.graph$param_set$values, param_vals)
-      }
       if (!is.null(predict_type)) self$predict_type = predict_type
+
     },
     base_learner = function(recursive = Inf, return_po = FALSE, return_all = FALSE, resolve_branching = TRUE) {
       assert(check_numeric(recursive, lower = Inf), check_int(recursive))
@@ -393,12 +395,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       private$.graph$edges
     },
-    param_set = function(rhs) {
-      if (!missing(rhs) && !identical(rhs, self$graph$param_set)) {
-        stop("param_set is read-only.")
-      }
-      self$graph$param_set
-    },
     pipeops_param_set = function(rhs) {
       value = map(self$graph$pipeops, "param_set")
       if (!missing(rhs) && !identical(value, rhs)) {
@@ -433,16 +429,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       ivs = unlist(map(pos_with_property(self$graph_model, "validation"), "internal_valid_scores"), recursive = FALSE)
       if (!length(ivs)) return(named_list())
       ivs
-    },
-    deep_clone = function(name, value) {
-      # FIXME this repairs the mlr3::Learner deep_clone() method which is broken.
-      if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
-        return(value$clone(deep = TRUE))
-      }
-      if (name == "state") {
-        value$log = copy(value$log)
-      }
-      value
     },
 
     .train = function(task) {
@@ -603,7 +589,6 @@ as_learner.Graph = function(x, clone = FALSE, ...) {
 as_learner.PipeOp = function(x, clone = FALSE, ...) {
   as_learner(as_graph(x, clone = FALSE, ...), clone = clone)
 }
-
 
 infer_task_type = function(graph) {
   output = graph$output

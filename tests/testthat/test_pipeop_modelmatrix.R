@@ -5,10 +5,10 @@ test_that("PipeOpModelMatrix - basic properties", {
   task = mlr_tasks$get("iris")
   # General
   expect_datapreproc_pipeop_class(PipeOpModelMatrix,
-    constargs = list(param_vals = list(formula = ~ . ^ 2)), task = task)
+    param_vals = list(formula = ~ . ^ 2), task = task)
 
   # Intercept
-  op = PipeOpModelMatrix$new(param_vals = list(formula = ~ . ^ 2))
+  op = po("modelmatrix", formula = ~ . ^ 2)
   expect_pipeop(op)
   nt = train_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names
@@ -31,7 +31,7 @@ test_that("PipeOpModelMatrix - basic properties", {
   })
 
   # Without intercept
-  op = PipeOpModelMatrix$new(param_vals = list(formula = ~ 0 + Sepal.Length))
+  op = po("modelmatrix", formula = ~ 0 + Sepal.Length)
   expect_pipeop(op)
   nt = train_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names
@@ -40,10 +40,8 @@ test_that("PipeOpModelMatrix - basic properties", {
 
   # other formula
   expect_datapreproc_pipeop_class(PipeOpModelMatrix,
-    constargs = list(param_vals = list(formula = ~ 0 + Sepal.Length +
-        log(Sepal.Length))), task = task)
-  op = PipeOpModelMatrix$new(param_vals = list(formula = ~ 0 + Sepal.Length +
-      log(Sepal.Length)))
+    param_vals = list(formula = ~ 0 + Sepal.Length + log(Sepal.Length)), task = task)
+  op = po("modelmatrix", formula = ~ 0 + Sepal.Length + log(Sepal.Length))
   expect_pipeop(op)
   nt = train_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names
@@ -53,8 +51,8 @@ test_that("PipeOpModelMatrix - basic properties", {
 
   # Interactions with factors
   task = mlr_tasks$get("german_credit")
-  op = PipeOpModelMatrix$new(param_vals = list(formula = ~ 0 +
-      foreign_worker:other_installment_plans))
+  op = po("modelmatrix", formula = ~ 0 +
+      foreign_worker:other_installment_plans)
   expect_pipeop(op)
   nt = train_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names

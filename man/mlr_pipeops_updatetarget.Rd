@@ -37,6 +37,7 @@ Identifier of resulting object. See \verb{$id} slot of \code{\link{PipeOp}}.
 List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}.
 The subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}.
 Default \code{list()}.
+Deprecated, will be removed in the future.
 }
 }
 

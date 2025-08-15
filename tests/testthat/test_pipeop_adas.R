@@ -11,7 +11,7 @@ test_that("PipeOpADAS - basic properties", {
 test_that("PipeOpADAS - train works as intended", {
   skip_if_not_installed("smotefamily")
 
-  op = PipeOpADAS$new()
+  op = po("adas")
 
   set.seed(1234L)
   df = data.frame(
@@ -59,7 +59,7 @@ test_that("PipeOpADAS - train works as intended", {
 test_that("PipeOpADAS - handling of feature named 'class'", {
   skip_if_not_installed("smotefamily")
 
-  op = PipeOpADAS$new()
+  op = po("adas")
 
   set.seed(1234L)
   df = data.frame(

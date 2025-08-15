@@ -26,9 +26,10 @@
 #'   `innum`.
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting object, default `"multiplicityimply"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-#'   be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' [`PipeOpMultiplicityImply`] has multiple input channels depending on the `innum` construction
@@ -88,7 +89,7 @@ PipeOpMultiplicityImply = R6Class("PipeOpMultiplicityImply",
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = inname, train = "*", predict = "*"),
         output = data.table(name = "output", train = "[*]", predict = "[*]"),
-        tags = "multiplicity"
+        tags = "multiplicity", dict_entry = "multiplicityimply"
       )
     }
   ),
@@ -134,9 +135,10 @@ mlr_pipeops$add("multiplicityimply", PipeOpMultiplicityImply)
 #'   Determines the number of output channels.
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting object, default `"multiplicityexply"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-#'   be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' [`PipeOpMultiplicityExply`] has a single input channel named `"input"`, collecting a
@@ -182,7 +184,7 @@ PipeOpMultiplicityExply = R6Class("PipeOpMultiplicityExply",
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = "[*]", predict = "[*]"),
         output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*"),
-        tags = "multiplicity"
+        tags = "multiplicity", dict_entry = "multiplicityexply"
       )
     }
   ),
@@ -221,9 +223,10 @@ mlr_pipeops$add("multiplicityexply", PipeOpMultiplicityExply, list("N"))
 #'
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting object, default `"replicate"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-#'   be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' [`PipeOpReplicate`] has one input channel named `"input"`, taking any input (`"*"`) both during training and prediction.
@@ -267,7 +270,7 @@ PipeOpReplicate = R6Class("PipeOpReplicate",
       super$initialize(id, param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = "output", train = "[*]", predict = "[*]"),
-        tags = "multiplicity"
+        tags = "multiplicity", dict_entry = "replicate"
       )
     }
   ),

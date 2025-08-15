@@ -18,8 +18,10 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"scale"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
@@ -84,7 +86,7 @@ PipeOpScale = R6Class("PipeOpScale",
         robust = p_lgl(tags = c("train", "required"))
       )
       ps$values = list(robust = FALSE)
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), dict_entry = "scale")
     }
   ),
   private = list(

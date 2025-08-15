@@ -3,9 +3,9 @@ context("PipeOpRandomResponse")
 
 test_that("basic properties", {
   expect_pipeop_class(PipeOpRandomResponse)
-  expect_error(PipeOpCopy$new(param_vals = list(rdistfun = function(n) {})))
+  expect_error(po("copy", rdistfun = function(n) {}))
 
-  po = PipeOpRandomResponse$new()
+  po = po("randomresponse")
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 1)
   expect_data_table(po$output, nrows = 1)
@@ -17,7 +17,7 @@ test_that("train and predict", {
   skip_if_not_installed("rpart")
   task1 = mlr_tasks$get("iris")
   task1$row_roles$use = c(1:10, 140:150)
-  g1 = LearnerClassifRpart$new() %>>% PipeOpRandomResponse$new()
+  g1 = LearnerClassifRpart$new() %>>% po("randomresponse")
   g1$pipeops$classif.rpart$learner$predict_type = "prob"
   train_out1 = g1$train(task1)
   expect_list(train_out1)
@@ -31,12 +31,12 @@ test_that("train and predict", {
 
   learner1 = LearnerClassifRpart$new()
   learner1$train(task1)
-  g1x = LearnerClassifRpart$new() %>>% PipeOpRandomResponse$new()
+  g1x = LearnerClassifRpart$new() %>>% po("randomresponse")
   g1x$train(task1)
   expect_equal(g1x$predict(task1)[[1L]], learner1$predict(task1))
 
   task2 = mlr_tasks$get("mtcars")
-  g2 = mlr3learners::LearnerRegrLM$new() %>>% PipeOpRandomResponse$new()
+  g2 = mlr3learners::LearnerRegrLM$new() %>>% po("randomresponse")
   g2$pipeops$regr.lm$learner$predict_type = "se"
   train_out2 = g2$train(task2)
   expect_list(train_out2)
@@ -57,7 +57,7 @@ test_that("train and predict", {
 
   learner2 = mlr3learners::LearnerRegrLM$new()
   learner2$train(task2)
-  g2x = mlr3learners::LearnerRegrLM$new() %>>% PipeOpRandomResponse$new()
+  g2x = mlr3learners::LearnerRegrLM$new() %>>% po("randomresponse")
   g2x$train(task2)
   expect_equal(g2x$predict(task2)[[1L]], learner2$predict(task2))
 })

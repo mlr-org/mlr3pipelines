@@ -1,7 +1,7 @@
 context("PipeOpPCA")
 
 test_that("PipeOpPCA - basic properties", {
-  op = PipeOpPCA$new()
+  op = po("pca")
   task = mlr_tasks$get("iris")
   expect_pipeop(op)
 
@@ -11,7 +11,7 @@ test_that("PipeOpPCA - basic properties", {
 
 test_that("PipeOpPCA works as expected", {
 
-  op = PipeOpPCA$new()
+  op = po("pca")
   task = mlr_tasks$get("iris")
 
   ip = op$train(list(task))

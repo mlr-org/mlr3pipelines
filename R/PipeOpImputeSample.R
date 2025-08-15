@@ -14,8 +14,10 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"imputesample"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpImpute`].
@@ -61,7 +63,7 @@ PipeOpImputeSample = R6Class("PipeOpImputeSample",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputesample", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals, feature_types = c("factor", "integer", "logical", "numeric", "ordered"))
+      super$initialize(id, param_vals = param_vals, feature_types = c("factor", "integer", "logical", "numeric", "ordered"), dict_entry = "imputesample")
     }
   ),
   private = list(

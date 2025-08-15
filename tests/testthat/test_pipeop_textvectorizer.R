@@ -22,7 +22,7 @@ test_that("PipeOpTextVectorizer - basic properties", {
   }))
   task$cbind(dt)
 
-  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none"))
+  op = po("textvectorizer", stopwords_language = "none")
   expect_pipeop(op)
   result = op$train(list(task))[[1]]
   expect_task(result)
@@ -65,7 +65,7 @@ test_that("PipeOpTextVectorizer - tfidf works", {
   }))
   task$cbind(dt)
 
-  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", scheme_df = "inverse"))
+  op = po("textvectorizer", stopwords_language = "none", scheme_df = "inverse")
   expect_pipeop(op)
   result = op$train(list(task))[[1]]
   expect_task(result)
@@ -136,7 +136,7 @@ test_that("PipeOpTextVectorizer - bigrams", {
   }))
   task$cbind(dt)
 
-  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none"))
+  op = po("textvectorizer", stopwords_language = "none")
   expect_pipeop(op)
   result = op$train(list(task))[[1]]
   expect_task(result)
@@ -174,7 +174,7 @@ test_that("PipeOpTextVectorizer - integer sequence", {
   }))
   task$cbind(dt)
 
-  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", return_type = "integer_sequence"))
+  op = po("textvectorizer", stopwords_language = "none", return_type = "integer_sequence")
   expect_pipeop(op)
   result = op$train(list(task))[[1]]
   expect_task(result)
@@ -198,7 +198,7 @@ test_that("PipeOpTextVectorizer - integer sequence", {
   expect_true(prd$nrow == 0L)
 
   # Pad pad0
-  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", return_type = "integer_sequence", sequence_length = 20L))
+  op = po("textvectorizer", stopwords_language = "none", return_type = "integer_sequence", sequence_length = 20L)
   result = op$train(list(task))[[1]]
   dt2 = result$data()
   expect_true(ncol(dt2) == 25L)
@@ -207,7 +207,7 @@ test_that("PipeOpTextVectorizer - integer sequence", {
   expect_true(prd$nrow == 1L)
 
   # Cut pad0
-  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", return_type = "integer_sequence", sequence_length = 4L))
+  op = po("textvectorizer", stopwords_language = "none", return_type = "integer_sequence", sequence_length = 4L)
   result = op$train(list(task))[[1]]
   dt2 = result$data()
   expect_true(ncol(dt2) == 9L)
@@ -216,7 +216,7 @@ test_that("PipeOpTextVectorizer - integer sequence", {
   expect_true(prd$nrow == 1L)
 
   # OOB Newdata
-  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", return_type = "integer_sequence", sequence_length = 4L))
+  op = po("textvectorizer", stopwords_language = "none", return_type = "integer_sequence", sequence_length = 4L)
   result = op$train(list(task$clone()$filter(2:3)))[[1]]
   prd = op$predict(list(task$clone()$filter(rows = 1L)))[[1]]
   expect_true(sum(prd$data()[, paste0("txt.V", 1:4)]) == 0)
@@ -245,7 +245,7 @@ test_that("PipeOpTextVectorizer - factor sequence", {
   }))
   task$cbind(dt)
 
-  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", return_type = "factor_sequence"))
+  op = po("textvectorizer", stopwords_language = "none", return_type = "factor_sequence")
   expect_pipeop(op)
   result = op$train(list(task))[[1]]
   expect_task(result)
@@ -263,7 +263,7 @@ test_that("PipeOpTextVectorizer - factor sequence", {
 
   # Pad pad0
   nona = function(x) {x[!is.na(x)]}
-  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", return_type = "factor_sequence", sequence_length = 20L))
+  op = po("textvectorizer", stopwords_language = "none", return_type = "factor_sequence", sequence_length = 20L)
   result = op$train(list(task))[[1]]
   dt2 = result$data()
   expect_true(ncol(dt2) == 25L)
@@ -272,7 +272,7 @@ test_that("PipeOpTextVectorizer - factor sequence", {
   expect_true(prd$nrow == 1L)
 
   # Cut pad0
-  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", return_type = "factor_sequence", sequence_length = 4L))
+  op = po("textvectorizer", stopwords_language = "none", return_type = "factor_sequence", sequence_length = 4L)
   result = op$train(list(task))[[1]]
   dt2 = result$data()
   expect_true(ncol(dt2) == 9L)
@@ -281,7 +281,7 @@ test_that("PipeOpTextVectorizer - factor sequence", {
   expect_true(prd$nrow == 1L)
 
   # OOB Newdata
-  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", return_type = "factor_sequence", sequence_length = 4L))
+  op = po("textvectorizer", stopwords_language = "none", return_type = "factor_sequence", sequence_length = 4L)
   result = op$train(list(task$clone()$filter(2:3)))[[1]]
   prd = op$predict(list(task$clone()$filter(rows = 1L)))[[1]]
   expect_true(all(is.na(prd$data()[, paste0("txt.V", 1:4)])), info = paste(capture.output(print(prd$data())), collapse = "\n"))

@@ -7,7 +7,7 @@ test_that("PipeOpCollapseFactors - basic properties", {
 })
 
 test_that("PipeOpCollapseFactors - train and predict work", {
-  op = PipeOpCollapseFactors$new()
+  op = po("collapsefactors")
   df = data.frame(
     target = runif(100),
     fct = factor(rep(LETTERS[1:6], times = c(25, 30, 5, 15, 5, 20))),

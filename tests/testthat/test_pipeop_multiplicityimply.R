@@ -1,7 +1,7 @@
 context("PipeOpMultiplicityImply")
 
 test_that("multiplicityimply - basic properties", {
-  po = PipeOpMultiplicityImply$new(3)
+  po = po("multiplicityimply", innum = 3)
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 3)
   expect_data_table(po$output, nrows = 1)
@@ -9,7 +9,7 @@ test_that("multiplicityimply - basic properties", {
   expect_pipeop_class(PipeOpMultiplicityImply, list(1))
   expect_pipeop_class(PipeOpMultiplicityImply, list(3))
 
-  po = PipeOpMultiplicityImply$new()
+  po = po("multiplicityimply")
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 1)
   expect_data_table(po$output, nrows = 1)
@@ -22,7 +22,7 @@ test_that("multiplicityimply - train and predict", {
   t1 = tsk$clone()$select(keep1)
   t2 = tsk$clone()$select(keep2)
 
-  po = PipeOpMultiplicityImply$new(2)
+  po = po("multiplicityimply", innum = 2)
   tout = train_pipeop(po, list(t1, t2))
   expect_list(po$state, len = 0)
   expect_multiplicity(tout[[1]])
@@ -33,7 +33,7 @@ test_that("multiplicityimply - train and predict", {
   expect_equal(pout[[1]][[1]], t1)
   expect_equal(pout[[1]][[2]], t2)
 
-  po = PipeOpMultiplicityImply$new()
+  po = po("multiplicityimply")
   tout = train_pipeop(po, list(t1, t2))
   expect_list(po$state, len = 0)
   expect_multiplicity(tout[[1]])
@@ -44,7 +44,7 @@ test_that("multiplicityimply - train and predict", {
   expect_equal(pout[[1]][[1]], t1)
   expect_equal(pout[[1]][[2]], t2)
 
-  po = PipeOpMultiplicityImply$new(c("t1", "t2"))
+  po = po("multiplicityimply", innum = c("t1", "t2"))
   tout = train_pipeop(po, list(t1, t2))
   expect_list(po$state, len = 0)
   expect_multiplicity(tout[[1]])
@@ -57,12 +57,12 @@ test_that("multiplicityimply - train and predict", {
 })
 
 test_that("multiplicityimply innum names are used", {
-  po = PipeOpMultiplicityImply$new(2)
+  po = po("multiplicityimply", innum = 2)
   expect_names(names(po$train(list(1, 2))[[1]]), "unnamed")
   expect_names(names(po$predict(list(1, 2))[[1]]), "unnamed")
   expect_equal(po$input$name, c("input1", "input2"))
 
-  po = PipeOpMultiplicityImply$new(c("a", "b"))
+  po = po("multiplicityimply", innum = c("a", "b"))
   expect_equal(unclass(po$train(list(1, 2))[[1]]), list(a = 1, b = 2))
   expect_equal(unclass(po$predict(list(3, 4))[[1]]), list(a = 3, b = 4))
   expect_equal(po$input$name, c("a", "b"))

@@ -18,8 +18,10 @@ Transforms columns using a given \code{formula} using the \code{\link[stats:mode
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"modelmatrix"}.
+Deprecated, will be removed in the future. Use the \code{\link[=po]{po()}} syntax to set a custom ID on construction.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
+Deprecated, will be removed in the future. Use the \code{\link[=po]{po()}} syntax to set hyperparameters on construction.
 }
 }
 

@@ -1,34 +1,34 @@
 context("PipeOpColRoles")
 
 test_that("PipeOpColRoles - basic properties", {
-  op = PipeOpColRoles$new()
+  op = po("colroles")
   task = mlr_tasks$get("iris")
   expect_datapreproc_pipeop_class(PipeOpColRoles, task = task)
 })
 
 test_that("PipeOpColRoles - assertions on params work", {
 
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = "wrong")), regexp = "list")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "wrong", b = NA))), regexp = "character,null")
-  expect_no_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = NULL))))
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "wrong"))), regexp = "subset")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "target"))), regexp = "subset")
+  expect_error(po("colroles", new_role = "wrong"), regexp = "list")
+  expect_error(po("colroles", new_role = list(a = "wrong", b = NA)), regexp = "character,null")
+  expect_no_error(po("colroles", new_role = list(a = NULL)))
+  expect_error(po("colroles", new_role = list(a = "wrong")), regexp = "subset")
+  expect_error(po("colroles", new_role = list(a = "target")), regexp = "subset")
 
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "group", b = "group"))), regexp = "up to one column per role")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "weight", b = "weight"))), regexp = "up to one column per role")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "name", b = "name"))), regexp = "up to one column per role")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = c("group", "name"), b = c("group", "name")))), regexp = "up to one column per role.*?\"group\", \"name\"")
+  expect_error(po("colroles", new_role = list(a = "group", b = "group")), regexp = "up to one column per role")
+  expect_error(po("colroles", new_role = list(a = "weight", b = "weight")), regexp = "up to one column per role")
+  expect_error(po("colroles", new_role = list(a = "name", b = "name")), regexp = "up to one column per role")
+  expect_error(po("colroles", new_role = list(a = c("group", "name"), b = c("group", "name"))), regexp = "up to one column per role.*?\"group\", \"name\"")
 
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = "wrong")), regexp = "list")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(wrong = "x", feature = NA))), regexp = "character,null")
-  expect_no_error(PipeOpColRoles$new(param_vals = list(new_role = list(feature = NULL))))
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(wrong = "x"))), regexp = "subset")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(target = "y"))), regexp = "subset")
+  expect_error(po("colroles", new_role_direct = "wrong"), regexp = "list")
+  expect_error(po("colroles", new_role_direct = list(wrong = "x", feature = NA)), regexp = "character,null")
+  expect_no_error(po("colroles", new_role = list(feature = NULL)))
+  expect_error(po("colroles", new_role_direct = list(wrong = "x")), regexp = "subset")
+  expect_error(po("colroles", new_role_direct = list(target = "y")), regexp = "subset")
 
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(group = c("x", "y")))), regexp = "up to one column per role")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(weight = c("x", "y")))), regexp = "up to one column per role")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(name = c("x", "y")))), regexp = "up to one column per role")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(group = c("x", "y"), name = c("x", "y")))), regexp = "up to one column per role.*?\"group\", \"name\"")
+  expect_error(po("colroles", new_role_direct = list(group = c("x", "y"))), regexp = "up to one column per role")
+  expect_error(po("colroles", new_role_direct = list(weight = c("x", "y"))), regexp = "up to one column per role")
+  expect_error(po("colroles", new_role_direct = list(name = c("x", "y"))), regexp = "up to one column per role")
+  expect_error(po("colroles", new_role_direct = list(group = c("x", "y"), name = c("x", "y"))), regexp = "up to one column per role.*?\"group\", \"name\"")
 
 })
 
@@ -37,10 +37,10 @@ test_that("PipeOpColRoles - only existing columns are accepted", {
   task = mlr_tasks$get("iris")
   task$cbind(data.table(rn = sprintf("%03d", 1:150)))
 
-  op = PipeOpColRoles$new(param_vals = list(new_role = list(rn = "name", wrong = "feature")))
+  op = po("colroles", new_role = list(rn = "name", wrong = "feature"))
   expect_error(train_pipeop(op, inputs = list(task)), regexp = "subset")
 
-  op = PipeOpColRoles$new(param_vals = list(new_role_direct = list(name = "rn", feature = "wrong")))
+  op = po("colroles", new_role_direct = list(name = "rn", feature = "wrong"))
   expect_error(train_pipeop(op, inputs = list(task)), regexp = "subset")
 
 })
@@ -49,10 +49,10 @@ test_that("PipeOpColRoles - changing the role of a target fails", {
 
   task = mlr_tasks$get("iris")
 
-  op = PipeOpColRoles$new(param_vals = list(new_role = list(Species = "feature")))
+  op = po("colroles", new_role = list(Species = "feature"))
   expect_error(train_pipeop(op, inputs = list(task)), regexp = "role of a target")
 
-  op = PipeOpColRoles$new(param_vals = list(new_role_direct = list(feature = "Species")))
+  op = po("colroles", new_role_direct = list(feature = "Species"))
   expect_error(train_pipeop(op, inputs = list(task)), regexp = "role of a target")
 
 })
@@ -62,8 +62,8 @@ test_that("PipeOpColRoles - new_role works", {
   task = mlr_tasks$get("iris")
   task$cbind(data.table(rn = sprintf("%03d", 1:150)))
 
-  op = PipeOpColRoles$new(param_vals = list(new_role = list(
-    rn = "name", Petal.Length = c("feature", "order"), Petal.Width = character(0), Sepal.Width = NULL))
+  op = po("colroles", new_role = list(
+    rn = "name", Petal.Length = c("feature", "order"), Petal.Width = character(0), Sepal.Width = NULL)
   )
 
   train_out = train_pipeop(op, inputs = list(task))[[1L]]
@@ -92,8 +92,8 @@ test_that("PipeOpColRoles - new_role_direct works", {
   task$cbind(data.table(rn = sprintf("%03d", 1:150)))
   task$col_roles$group = "Species"
 
-  op = PipeOpColRoles$new(param_vals = list(new_role_direct = list(
-    name = "rn", order = c("Petal.Length", "Sepal.Length"), feature = character(0), group = NULL))
+  op = po("colroles", new_role_direct = list(
+    name = "rn", order = c("Petal.Length", "Sepal.Length"), feature = character(0), group = NULL)
   )
 
   train_out = train_pipeop(op, inputs = list(task))[[1L]]

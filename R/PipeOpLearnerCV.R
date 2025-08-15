@@ -33,8 +33,10 @@
 #'  This argument is always cloned; to access the [`Learner`][mlr3::Learner] inside `PipeOpLearnerCV` by-reference, use `$learner`.\cr
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
+#'   Deprecated, will be removed in the future.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' `PipeOpLearnerCV` has one input channel named `"input"`, taking a [`Task`][mlr3::Task] specific to the [`Learner`][mlr3::Learner]
@@ -137,7 +139,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       # in PipeOp ParamSets.
       # private$.crossval_param_set$add_dep("folds", "method", CondEqual$new("cv"))  # don't do this.
 
-      super$initialize(id, alist(resampling = private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = c("learner", "ensemble"))
+      super$initialize(id, alist(resampling = private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = c("learner", "ensemble"), dict_entry = "learner_cv")
     }
 
   ),

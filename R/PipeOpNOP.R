@@ -14,8 +14,10 @@
 #' ```
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"nop"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' `PipeOpNOP` has one input channel named `"input"`, taking any input (`"*"`) both during training and prediction.
@@ -64,7 +66,7 @@ PipeOpNOP = R6Class("PipeOpNOP",
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*"),
-        tags = "meta"
+        tags = "meta", dict_entry = "nop"
       )
     }
   ),

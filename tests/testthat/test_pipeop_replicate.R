@@ -1,7 +1,7 @@
 context("PipeOpReplicate")
 
 test_that("PipeOpReplicate - basic properties", {
-  po = PipeOpReplicate$new()
+  po = po("replicate")
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 1)
   expect_data_table(po$output, nrows = 1)
@@ -12,7 +12,7 @@ test_that("PipeOpReplicate - basic properties", {
 test_that("PipeOpReplicate - train and predict", {
   tsk = mlr_tasks$get("iris")
   nreps = 3
-  po = PipeOpReplicate$new(param_vals = list(reps = nreps))
+  po = po("replicate", reps = nreps)
 
   tout = train_pipeop(po, list(tsk))
   expect_list(po$state, len = 0)

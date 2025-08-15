@@ -63,8 +63,9 @@ test_that("PipeOpLearnerPICVPlus - param set and values", {
   po$param_set$values$picvplus.folds = 5
   expect_equal(po$param_set$values, list(picvplus.folds = 5, picvplus.alpha = 0.05, minsplit = 2, xval = 0))
 
-  expect_error(PipeOpLearnerPICVPlus$new(lrn, param_vals = list(picvplus.folds = 1)), "is not >= 1")
-  expect_error(PipeOpLearnerPICVPlus$new(lrn, param_vals = list(picvplus.alpha = -1)), "is not >= -")
+  po1 = PipeOpLearnerPICVPlus$new(lrn)
+  expect_error(po1$param_set$set_values(.values = list(picvplus.folds = 1)), "is not >= 1")
+  expect_error(po1$param_set$set_values(.values = list(picvplus.alpha = -1)), "is not >= -")
 
   lrn_classif = mlr_learners$get("classif.featureless")
   expect_error(PipeOpLearnerPICVPlus$new(lrn_classif), "only supports regression")
@@ -123,7 +124,7 @@ test_that("PipeOpLearnerPICVPlus - integration with larger graph", {
 
 test_that("marshal", {
   lrn = lrn("regr.debug")
-  lrn$properties = c(lrn$properties, "marshal")
+  lrn$.__enclos_env__$private$.properties = c(lrn$properties, "marshal")
 
   task = tsk("mtcars")
   po = PipeOpLearnerPICVPlus$new(lrn)
@@ -143,7 +144,7 @@ test_that("marshal", {
 
 test_that("marshal multiplicity", {
   lrn = lrn("regr.debug")
-  lrn$properties = c(lrn$properties, "marshal")
+  lrn$.__enclos_env__$private$.properties = c(lrn$properties, "marshal")
   po = PipeOpLearnerPICVPlus$new(lrn)
 
   task1 = mlr_tasks$get("mtcars")
@@ -162,7 +163,7 @@ test_that("marshal multiplicity", {
 test_that("state class and multiplicity", {
   skip_on_cran()
   lrn = lrn("regr.debug")
-  lrn$properties = c(lrn$properties, "marshal")
+  lrn$.__enclos_env__$private$.properties = c(lrn$properties, "marshal")
   po = PipeOpLearnerPICVPlus$new(lrn)
 
   task1 = mlr_tasks$get("mtcars")

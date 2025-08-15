@@ -19,9 +19,10 @@ An inverter-function that undoes the transformation during prediction must also 
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"targetmutate"}.
+Deprecated, will be removed in the future. Use the \code{\link[=po]{po()}} syntax to set a custom ID on construction.
 \item \code{param_vals} :: named \code{list}\cr
-List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-be set during construction. Default \code{list()}.
+List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
+Deprecated, will be removed in the future. Use the \code{\link[=po]{po()}} syntax to set hyperparameters on construction.
 \item \code{new_task_type} :: \code{character(1)} | \code{NULL}\cr
 The task type to which the output is converted, must be one of \code{mlr_reflections$task_types$type}.
 Defaults to \code{NULL}: no change in task type.

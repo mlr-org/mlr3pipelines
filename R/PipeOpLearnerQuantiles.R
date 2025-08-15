@@ -24,8 +24,10 @@
 #'   This argument is always cloned; to access the [`Learner`][mlr3::Learner] inside `PipeOpLearnerQuantiles` by-reference, use `$learner`.
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
+#'   Deprecated, will be removed in the future.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' `PipeOpLearnerQuantiles` has one input channel named `"input"`, taking a [`TaskRegr`][mlr3::TaskRegr] specific to the [`Learner`][mlr3::Learner]
@@ -109,10 +111,10 @@ PipeOpLearnerQuantiles = R6Class("PipeOpLearnerQuantiles",
       private$.quantiles_param_set$values = list(q_vals = c(0.05, 0.5, 0.95), q_response = 0.5)  # default
 
       super$initialize(id, param_set = alist(quantiles = private$.quantiles_param_set, private$.learner$param_set),
-                       param_vals = param_vals,
-                       input = data.table(name = "input", train = task_type, predict = task_type),
-                       output = data.table(name = "output", train = "NULL", predict = out_type),
-                       packages = learner$packages, tags = c("learner", "ensemble")
+        param_vals = param_vals,
+        input = data.table(name = "input", train = task_type, predict = task_type),
+        output = data.table(name = "output", train = "NULL", predict = out_type),
+        packages = learner$packages, tags = c("learner", "ensemble"), dict_entry = "learner_quantiles"
       )
     }
   ),

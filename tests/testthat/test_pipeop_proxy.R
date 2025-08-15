@@ -2,7 +2,7 @@ context("PipeOpProxy")
 
 test_that("PipeOpProxy - basic properties", {
   task = mlr_tasks$get("iris")
-  pop = PipeOpProxy$new(param_vals = list(content = PipeOpNOP$new()))
+  pop = po("proxy", content = PipeOpNOP$new())
   expect_pipeop(pop)
   expect_equal(train_pipeop(pop, inputs = list(task))[[1L]], task)
   expect_equal(pop$state, list(nop = list()))
@@ -10,21 +10,21 @@ test_that("PipeOpProxy - basic properties", {
 })
 
 test_that("PipeOpProxy - datapreproc", {
-  pop = PipeOpScale$new()
-  expect_datapreproc_pipeop_class(PipeOpProxy, constargs = list(param_vals = list(content = pop)), task = mlr_tasks$get("iris"))
+  pop = po("scale")
+  expect_datapreproc_pipeop_class(PipeOpProxy, constargs = list(), param_vals = list(content = pop), task = mlr_tasks$get("iris"))
 })
 
 test_that("PipeOpProxy - content error handling", {
-  expect_error(PipeOpProxy$new(param_vals = list(content = "error")), regexp = "`content` must be an object that can be converted to a Graph")
-  expect_error(PipeOpProxy$new(param_vals = list(content = PipeOpCopy$new(outnum = 2L))), regexp = "Graph's output number must either be 1 or match `outnum`")
-  expect_error(PipeOpProxy$new(param_vals = list(content = PipeOpFeatureUnion$new(innum = 3L)), innum = 2), regexp = "Graph's input number .* match `innum`")
+  expect_error(po("proxy", content = "error"), regexp = "`content` must be an object that can be converted to a Graph")
+  expect_error(po("proxy", content = PipeOpCopy$new(outnum = 2L)), regexp = "Graph's output number must either be 1 or match `outnum`")
+  expect_error(po("proxy", content = PipeOpFeatureUnion$new(innum = 3L), innum = 2), regexp = "Graph's input number .* match `innum`")
 })
 
 test_that("PipeOpProxy - several inputs via featureunion", {
   task1 = mlr_tasks$get("iris")
   task2 = mlr_tasks$get("iris")
-  gr1 = PipeOpCopy$new(outnum = 2L) %>>% gunion(list(PipeOpNOP$new(), PipeOpPCA$new())) %>>% PipeOpProxy$new(param_vals = list(content = PipeOpFeatureUnion$new()))
-  gr2 = PipeOpCopy$new(outnum = 2L) %>>% gunion(list(PipeOpNOP$new(), PipeOpPCA$new())) %>>% PipeOpFeatureUnion$new()
+  gr1 = po("copy", outnum = 2L) %>>% gunion(list(PipeOpNOP$new(), po("pca"))) %>>% po("proxy", content = PipeOpFeatureUnion$new())
+  gr2 = po("copy", outnum = 2L) %>>% gunion(list(PipeOpNOP$new(), po("pca"))) %>>% po("featureunion")
   tout1 = gr1$train(task1)
   tout2 = gr2$train(task2)
   expect_equal(tout1[[1L]], tout2[[1L]])
@@ -33,8 +33,8 @@ test_that("PipeOpProxy - several inputs via featureunion", {
 test_that("PipeOpProxy - several outputs", {
   task1 = mlr_tasks$get("iris")
   task2 = mlr_tasks$get("iris")
-  pop = PipeOpProxy$new(outnum = 2L, param_vals = list(content = PipeOpCopy$new(outnum = 2L)))
-  pop_copy = PipeOpCopy$new(outnum = 2L)
+  pop = po("proxy", outnum = 2L, content = PipeOpCopy$new(outnum = 2L))
+  pop_copy = po("copy", outnum = 2L)
   tout1 = pop$train(list(task1))
   tout2 = pop_copy$train(list(task2))
   expect_equal(tout1, tout2)
@@ -43,9 +43,9 @@ test_that("PipeOpProxy - several outputs", {
 test_that("PipeOpProxy - PCA proxied", {
   task1 = mlr_tasks$get("iris")
   task2 = mlr_tasks$get("iris")
-  pop = PipeOpProxy$new(param_vals = list(content =
-    PipeOpPCA$new(param_vals = list(center = TRUE, scale. = TRUE, rank. = 1L))))
-  pop_pca = PipeOpPCA$new(param_vals = list(center = TRUE, scale. = TRUE, rank. = 1L))
+  pop = po("proxy", content =
+    po("pca", center = TRUE, scale. = TRUE, rank. = 1L))
+  pop_pca = po("pca", center = TRUE, scale. = TRUE, rank. = 1L)
   task1 = mlr_tasks$get("iris")
   task2 = task1$clone(deep = TRUE)
   tout = train_pipeop(pop, list(task1))
@@ -54,11 +54,11 @@ test_that("PipeOpProxy - PCA proxied", {
 })
 
 test_that("PipeOpProxy - Graph proxied", {
-  pop = PipeOpProxy$new(param_vals = list(content =
-    PipeOpScale$new() %>>%
-    PipeOpPCA$new(param_vals = list(center = TRUE, scale. = TRUE, rank. = 1L))))
-  gr = PipeOpScale$new() %>>%
-    PipeOpPCA$new(param_vals = list(center = TRUE, scale. = TRUE, rank. = 1L))
+  pop = po("proxy", content =
+    po("scale") %>>%
+    po("pca", center = TRUE, scale. = TRUE, rank. = 1L))
+  gr = po("scale") %>>%
+    po("pca", center = TRUE, scale. = TRUE, rank. = 1L)
   task1 = mlr_tasks$get("iris")
   task2 = task1$clone(deep = TRUE)
   tout = train_pipeop(pop, list(task1))

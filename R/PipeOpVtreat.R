@@ -19,8 +19,10 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"vtreat"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`]. Instead of a [`Task`][mlr3::Task], a
@@ -194,7 +196,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         # NOTE: parallelCluster missing intentionally and will be set to NULL
       )
       ps$values = list(recommended = TRUE, cols_to_copy = selector_none())
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "vtreat", task_type = "TaskSupervised", tags = c("encode", "missings"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "vtreat", task_type = "TaskSupervised", tags = c("encode", "missings"), dict_entry = "vtreat")
     }
   ),
   private = list(

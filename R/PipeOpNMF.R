@@ -15,9 +15,10 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"nmf"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-#'   be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
@@ -133,7 +134,7 @@ PipeOpNMF = R6Class("PipeOpNMF",
         callback = p_uty(tags = c("train", "nmf"), depends = quote(keep.all == TRUE))  # .callback
       )
       ps$values = list(rank = 2L, method = "brunet", parallel = FALSE, parallel.required = FALSE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), packages = c("MASS", "NMF"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), packages = c("MASS", "NMF"), dict_entry = "nmf")
     }
   ),
   private = list(

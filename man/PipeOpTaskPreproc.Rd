@@ -49,8 +49,9 @@ Identifier of resulting object. See \verb{$id} slot of \code{\link{PipeOp}}.
 \item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}}\cr
 Parameter space description. This should be created by the subclass and given to \code{super$initialize()}.
 \item \code{param_vals} :: named \code{list}\cr
-List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}. The
-subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}. Default \code{list()}.
+List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}.
+The subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}. Default \code{list()}.
+Deprecated, will be removed in the future.
 \item \code{can_subset_cols} :: \code{logical(1)}\cr
 Whether the \code{affect_columns} parameter should be added which lets the user limit the columns that are
 modified by the \code{PipeOpTaskPreproc}. This should generally be \code{FALSE} if the operation adds or removes

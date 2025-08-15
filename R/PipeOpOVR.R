@@ -26,8 +26,10 @@
 #' ```
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting object, default `"ovrsplit"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' [`PipeOpOVRSplit`] has one input channel named `"input"` taking a [`TaskClassif`][mlr3::TaskClassif]
@@ -81,7 +83,7 @@ PipeOpOVRSplit = R6Class("PipeOpOVRSplit",
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = "TaskClassif", predict = "TaskClassif"),
         output = data.table(name = "output", train = "[TaskClassif]", predict = "[TaskClassif]"),
-        tags = c("target transform", "multiplicity")
+        tags = c("target transform", "multiplicity"), dict_entry = "ovrsplit"
       )
     }
   ),
@@ -142,8 +144,10 @@ mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting object, default `"ovrunite"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpEnsemble`]. Instead of a
@@ -186,7 +190,7 @@ PipeOpOVRUnite = R6Class("PipeOpOVRUnite",
   inherit = PipeOpEnsemble,
   public = list(
     initialize = function(id = "ovrunite", param_vals = list()) {
-      super$initialize(0, TRUE, id, param_vals = param_vals, prediction_type = "PredictionClassif", tags = "multiplicity")
+      super$initialize(0, TRUE, id, param_vals = param_vals, prediction_type = "PredictionClassif", tags = "multiplicity", dict_entry = "ovrunite")
     }
   ),
   private = list(

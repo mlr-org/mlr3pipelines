@@ -28,9 +28,10 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"datefeatures"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-#'   be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
@@ -116,7 +117,7 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
       ps$values = list(keep_date_var = FALSE, cyclic = FALSE, year = TRUE,
         month = TRUE, week_of_year = TRUE, day_of_year = TRUE, day_of_month = TRUE,
         day_of_week = TRUE, hour = TRUE, minute = TRUE, second = TRUE, is_day = TRUE)
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = "POSIXct")
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = "POSIXct", dict_entry = "datefeatures")
     }
   ),
   private = list(

@@ -26,8 +26,9 @@
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
 #'   Parameter space description. This should be created by the subclass and given to `super$initialize()`.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`. The
-#'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`.
+#'   The subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
+#'   Deprecated, will be removed in the future.
 #' * `packages` :: `character`\cr
 #'   Set of all required packages for the [`PipeOp`]'s `private$.train()` and `private$.predict()` methods. See `$packages` slot.
 #'   Default is `character(0)`.
@@ -78,9 +79,9 @@
 PipeOpEncodePL = R6Class("PipeOpEncodePL",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
-    initialize = function(id, param_set = ps(), param_vals = list(), packages = character(0), task_type = "Task") {
+    initialize = function(id, param_set = ps(), param_vals = list(), packages = character(0), task_type = "Task", dict_entry = id) {
       super$initialize(id = id, param_set = param_set, param_vals = param_vals, packages = packages,
-        task_type = task_type, tags = "encode", feature_types = c("numeric", "integer"))
+        task_type = task_type, tags = "encode", feature_types = c("numeric", "integer"), dict_entry = dict_entry)
     }
   ),
   private = list(
@@ -157,8 +158,10 @@ encode_piecewise_linear = function(column, bins) {
 #' ```
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"encodeplquantiles"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
@@ -228,7 +231,7 @@ PipeOpEncodePLQuantiles = R6Class("PipeOpEncodePLQuantiles",
         numsplits = p_int(lower = 2, init = 2, tags = c("train", "predict", "required")),
         type = p_int(lower = 1, upper = 9, default = 7, tags = c("train", "predict"))
       )
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats")
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats", dict_entry = "encodeplquantiles")
     }
   ),
   private = list(
@@ -271,8 +274,10 @@ mlr_pipeops$add("encodeplquantiles", PipeOpEncodePLQuantiles)
 #'   `"TaskRegr"`for [`LearnerRegrRpart`][mlr3::LearnerRegrRpart].
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"encodeplquantiles"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`]. Instead of a [`Task`][mlr3::Task], a
@@ -360,7 +365,7 @@ PipeOpEncodePLTree = R6Class("PipeOpEncodePLTree",
       }
 
       super$initialize(id, param_set = alist(private$.tree_learner$param_set), param_vals = param_vals,
-        packages = private$.tree_learner$packages, task_type = task_type)
+        packages = private$.tree_learner$packages, task_type = task_type, dict_entry = "encodepltree")
     }
   ),
   private = list(

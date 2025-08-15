@@ -14,8 +14,10 @@
 #' ```
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"mutate"`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set a custom ID on construction.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   Deprecated, will be removed in the future. Use the [po()] syntax to set hyperparameters on construction.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
@@ -78,7 +80,7 @@ PipeOpMutate = R6Class("PipeOpMutate",
         delete_originals = p_lgl(tags = c("train", "predict", "required"))
       )
       ps$values = list(mutation = list(), delete_originals = FALSE)
-      super$initialize(id, ps, param_vals = param_vals)
+      super$initialize(id, ps, param_vals = param_vals, dict_entry = "mutate")
     }
   ),
   private = list(
