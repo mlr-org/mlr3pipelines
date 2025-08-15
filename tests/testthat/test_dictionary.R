@@ -133,7 +133,9 @@ test_that("Dictionary contains all PipeOps", {
       expect_equal(other_obj$hash, test_obj$hash, info = paste(dictname, "$new id test 2"))
     }
     expect_equal(other_obj$phash, test_obj$phash, info = paste(dictname, "$new id test 2"))
-    expect_equal(inflate(do.call(pogen$new, args)), test_obj, info = dictname)
+    other_obj = inflate(do.call(pogen$new, args[names(args) != "param_vals"]))
+    other_obj$param_set$set_values(.values = args$param_vals)
+    expect_equal(other_obj, test_obj, info = dictname)
 
 
     tops = test_obj$param_set
