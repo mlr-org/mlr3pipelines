@@ -8,27 +8,27 @@ test_that("PipeOpColRoles - basic properties", {
 
 test_that("PipeOpColRoles - assertions on params work", {
 
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = "wrong")), regexp = "list")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "wrong", b = NA))), regexp = "character,null")
-  expect_no_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = NULL))))
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "wrong"))), regexp = "subset")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "target"))), regexp = "subset")
+  expect_error(po("colroles", new_role = "wrong"), regexp = "list")
+  expect_error(po("colroles", new_role = list(a = "wrong", b = NA)), regexp = "character,null")
+  expect_no_error(po("colroles", new_role = list(a = NULL)))
+  expect_error(po("colroles", new_role = list(a = "wrong")), regexp = "subset")
+  expect_error(po("colroles", new_role = list(a = "target")), regexp = "subset")
 
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "group", b = "group"))), regexp = "up to one column per role")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "weight", b = "weight"))), regexp = "up to one column per role")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = "name", b = "name"))), regexp = "up to one column per role")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role = list(a = c("group", "name"), b = c("group", "name")))), regexp = "up to one column per role.*?\"group\", \"name\"")
+  expect_error(po("colroles", new_role = list(a = "group", b = "group")), regexp = "up to one column per role")
+  expect_error(po("colroles", new_role = list(a = "weight", b = "weight")), regexp = "up to one column per role")
+  expect_error(po("colroles", new_role = list(a = "name", b = "name")), regexp = "up to one column per role")
+  expect_error(po("colroles", new_role = list(a = c("group", "name"), b = c("group", "name"))), regexp = "up to one column per role.*?\"group\", \"name\"")
 
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = "wrong")), regexp = "list")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(wrong = "x", feature = NA))), regexp = "character,null")
-  expect_no_error(PipeOpColRoles$new(param_vals = list(new_role = list(feature = NULL))))
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(wrong = "x"))), regexp = "subset")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(target = "y"))), regexp = "subset")
+  expect_error(po("colroles", new_role_direct = "wrong"), regexp = "list")
+  expect_error(po("colroles", new_role_direct = list(wrong = "x", feature = NA)), regexp = "character,null")
+  expect_no_error(po("colroles", new_role = list(feature = NULL)))
+  expect_error(po("colroles", new_role_direct = list(wrong = "x")), regexp = "subset")
+  expect_error(po("colroles", new_role_direct = list(target = "y")), regexp = "subset")
 
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(group = c("x", "y")))), regexp = "up to one column per role")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(weight = c("x", "y")))), regexp = "up to one column per role")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(name = c("x", "y")))), regexp = "up to one column per role")
-  expect_error(PipeOpColRoles$new(param_vals = list(new_role_direct = list(group = c("x", "y"), name = c("x", "y")))), regexp = "up to one column per role.*?\"group\", \"name\"")
+  expect_error(po("colroles", new_role_direct = list(group = c("x", "y"))), regexp = "up to one column per role")
+  expect_error(po("colroles", new_role_direct = list(weight = c("x", "y"))), regexp = "up to one column per role")
+  expect_error(po("colroles", new_role_direct = list(name = c("x", "y"))), regexp = "up to one column per role")
+  expect_error(po("colroles", new_role_direct = list(group = c("x", "y"), name = c("x", "y"))), regexp = "up to one column per role.*?\"group\", \"name\"")
 
 })
 

@@ -32,7 +32,7 @@ test_that("Robustify Pipeline", {
   expect_true("encode" %in% names(p$pipeops))
 
   # missing fcts, assuming rpart can not do missings
-  lrn$properties = c("multiclass", "twoclass")
+  lrn$.__enclos_env__$private$.properties = c("multiclass", "twoclass")
   dt =  data.table("fct2" = factor(rep_len(c(letters[1:3], NA), tsk$nrow)))
   tsk$cbind(dt)
   p = ppl("robustify", task = tsk, learner = lrn) %>>% po(lrn)
@@ -108,7 +108,7 @@ test_that("Robustify Pipeline Impute Missings", {
 
   lmissings = lrn("classif.rpart")
   lnomissings = lrn("classif.rpart")
-  lnomissings$properties = setdiff(lnomissings$properties, "missings")
+  lnomissings$.__enclos_env__$private$.properties = setdiff(lnomissings$properties, "missings")
 
   micols = tmissings$missings()[tmissings$missings() != 0]
   names(micols) = paste0("missing_", names(micols))

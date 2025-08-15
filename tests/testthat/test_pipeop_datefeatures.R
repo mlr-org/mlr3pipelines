@@ -113,8 +113,8 @@ test_that("PipeOpDateFeatures - feature selection works", {
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-  po = PipeOpDateFeatures$new(param_vals = list(cyclic = TRUE, year = FALSE,
-    second = FALSE))
+  po = po("datefeatures", cyclic = TRUE, year = FALSE,
+    second = FALSE)
   expect_identical(train_pipeop(po, inputs = list(task))$output$feature_names,
     c("Petal.Length", "Petal.Width", "Sepal.Length", "Sepal.Width",
       paste0("date.",
@@ -135,7 +135,7 @@ test_that("PipeOpDateFeatures - keep_date_var works", {
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-  po = PipeOpDateFeatures$new(param_vals = list(keep_date_var = TRUE))
+  po = po("datefeatures", keep_date_var = TRUE)
   expect_true("date" %in% train_pipeop(po, inputs = list(task))$output$feature_names)
 })
 
@@ -155,7 +155,7 @@ test_that("PipeOpDateFeatures - constant dates", {
   dat = iris
   dat$date = as.POSIXct("2020-01-31")
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-  po = PipeOpDateFeatures$new(param_vals = list(cyclic = TRUE))
+  po = po("datefeatures", cyclic = TRUE)
   output = train_pipeop(po, inputs = list(task))$output
   expect_true(all(apply(output$data(cols = output$feature_names[- (1L:4L)]), 2, duplicated)[-1L, ]))
 })
@@ -198,7 +198,7 @@ test_that("PipeOpDateFeatures - two POSIXct variables", {
   dat$date2 = sample(seq(as.POSIXct("2020-02-29"), to = as.POSIXct("2020-04-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-  po = PipeOpDateFeatures$new(param_vals = list(keep_date_var = TRUE, cyclic = TRUE))
+  po = po("datefeatures", keep_date_var = TRUE, cyclic = TRUE)
   expect_identical(train_pipeop(po, inputs = list(task))$output$feature_names,
     c("Petal.Length", "Petal.Width", "Sepal.Length", "Sepal.Width", "date1", "date2",
       c(paste0(rep(c("date1.", "date2."), each = 10L),
