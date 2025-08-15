@@ -39,7 +39,7 @@ test_that("PipeOpDateFeatures - unaltered if no features specified", {
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
   po = po("datefeatures", cyclic = TRUE, year = FALSE,
     month = FALSE, week_of_year = FALSE, day_of_year = FALSE, day_of_month = FALSE,
-    day_of_week = FALSE, hour = FALSE, minute = FALSE, second = FALSE, is_day = FALSE))
+    day_of_week = FALSE, hour = FALSE, minute = FALSE, second = FALSE, is_day = FALSE)
   train_pipeop(po, inputs = list(task))
   expect_identical(po$state$intasklayout, po$state$outtasklayout)
 })
