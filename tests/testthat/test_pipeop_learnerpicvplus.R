@@ -124,7 +124,7 @@ test_that("PipeOpLearnerPICVPlus - integration with larger graph", {
 
 test_that("marshal", {
   lrn = lrn("regr.debug")
-  lrn$properties = c(lrn$properties, "marshal")
+  lrn$.__enclos_env__$private$.properties = c(lrn$properties, "marshal")
 
   task = tsk("mtcars")
   po = PipeOpLearnerPICVPlus$new(lrn)
@@ -144,7 +144,7 @@ test_that("marshal", {
 
 test_that("marshal multiplicity", {
   lrn = lrn("regr.debug")
-  lrn$properties = c(lrn$properties, "marshal")
+  lrn$.__enclos_env__$private$.properties = c(lrn$properties, "marshal")
   po = PipeOpLearnerPICVPlus$new(lrn)
 
   task1 = mlr_tasks$get("mtcars")
@@ -163,7 +163,7 @@ test_that("marshal multiplicity", {
 test_that("state class and multiplicity", {
   skip_on_cran()
   lrn = lrn("regr.debug")
-  lrn$properties = c(lrn$properties, "marshal")
+  lrn$.__enclos_env__$private$.properties = c(lrn$properties, "marshal")
   po = PipeOpLearnerPICVPlus$new(lrn)
 
   task1 = mlr_tasks$get("mtcars")
