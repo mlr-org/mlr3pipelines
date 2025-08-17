@@ -24,7 +24,7 @@ test_that("check whether input and output are equal", {
   }
 })
 
-test_that("output type depending on log_target is appropriate", {
+test_that("console output type depending on log_target is correct", {
   # Creation of Prediction Object
   lg = lgr::get_logger("mlr3")
   old_threshold = lg$threshold
@@ -47,7 +47,7 @@ test_that("output type depending on log_target is appropriate", {
   lg$set_threshold(old_threshold)
 })
 
-test_that("logger is addressed when log_target is an output logger", {
+test_that("logger is addressed when log_target is set to a logger", {
   logger = lgr::get_logger("debug_logger")
   logger$set_propagate(FALSE)
   appender_buffer = lgr::AppenderBuffer$new()
@@ -73,7 +73,7 @@ test_that("logger is addressed when log_target is an output logger", {
   logger$remove_appender(1)
 })
 
-test_that("PipeOp recognizes which class of objects and prints information accordingly", {
+test_that("PipeOp recognizes class of input objects and prints information accordingly", {
   # Creation of Prediction Object
   lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
   mtcars_new = subset(mtcars[sample(nrow(mtcars), size = 10), ], select = -mpg)
@@ -139,7 +139,7 @@ test_that("original printer can be overwritten", {
   }
 })
 
-test_that("handling of multiplicity objects controlled via field collect_multiplicity", {
+test_that("handling of multiplicity objects controlled by field collect_multiplicity", {
   poovr = po("ovrsplit")
   OVR = poovr$train(list(tsk("iris")))
   # Actual Test

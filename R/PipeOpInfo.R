@@ -35,30 +35,14 @@
 #' @section Parameters:
 #' NULL
 #'
-#' @section Internals:
-#' Zusätzliche Info
-#' Was wird hier genau beschrieben? Also was ist der Zweck dieses Abschnitts
-#' https://github.com/mlr-org/mlr3pipelines/blob/0b5c4b766995334369d423ab337462843d5a4b30/R/PipeOpSmoteNC.R#L50
-#'
-#' @section Fields:
-#' Fields inherited from [`PipeOp`], as well as:
-#' * `original_printer` :: `list(4)` \cr
-#'   The default printer, which is used when the user does not override it with customized printer settings.
-#'   Printer settings are pre-defined for Objects of the class `Task`, `Prediction` and `NULL`.
-#'   If the object on question does not belong to one of these classes, then the printer command labeled as `Default`
-#'   will be utilized.
-#'   should it be deleted???????????
-#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
-#'
 #'
 #' @examples
 #' library("mlr3")
 #' poinfo = po("info")
 #' poinfo$train(list(tsk("mtcars")))
 #' poinfo$predict(list(tsk("penguins")))
-#'
 #'
 #' @references
 #'
