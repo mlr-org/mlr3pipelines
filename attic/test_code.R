@@ -74,6 +74,15 @@ plot(po40$state$e_vectors)
 
 
 
+# Setting k really low => eigendecomposition failed
+irisS4 = loadDataSet("Iris")
+emb50 <- embed(irisS4, "Isomap", knn = 5)
+
+
+
+
+
+
 
 # Prediction Method
 
