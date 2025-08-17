@@ -44,13 +44,12 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "isomap", param_vals = list(), get_geod = FALSE, keep_org_data = TRUE, diag = FALSE) {
-      #ps$values = list(k = 50, ndim = 2, eps = 0)
       ps = ps(
         k = p_int(default = 50, lower = 1, upper = Inf, tags = "train"), # tag isomap?
         ndim = p_int(default = 2, lower = 1, upper = Inf, tags = "train"), #tag isomap?
         eps = p_dbl(default = 0, tags = "train")) # tag isomap?
+      ps$values = list(k = 50, ndim = 2, eps = 0)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
-      if(length(self$param_set$values) == 0) self$param_set$values = self$param_set$default
       private$.get_geod = get_geod
       private$.keep_org_data = keep_org_data
       private$.diag = diag
@@ -86,7 +85,7 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
       igraph::as_undirected(g, mode = "collapse", edge.attr.comb = "first")
     },
     .train_dt = function(dt, levels, target) {
-      browser()
+      #browser()
       pv = self$param_set$get_values(tags = "train")
       knn_graph = private$.make_knn_graph(dt)
       geodist = igraph::distances(knn_graph, algorithm = "dijkstra")
@@ -95,8 +94,7 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
       k = - k / 2
       ## TODO: explicit symmetrizing
       ## TODO: return eigenvectors?
-      e = RSpectra::eigs_sym(k, pv$ndim, which = "LA",
-                              opts = list(retvec = TRUE))
+      e = RSpectra::eigs_sym(k, pv$ndim, which = "LA", opts = list(retvec = TRUE))
       e_values = e$values
       e_vectors = e$vectors
       neig = sum(e_values > 0)
@@ -118,9 +116,7 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
       nindata = nrow(dt)
       norg = nrow(self$state$orgdata)
       lknng = private$.make_knn_graph(rbind(dt, self$state$orgdata))
-      lgeodist = igraph::distances(lknng,
-                                    seq_len(nindata),
-                                    nindata + seq_len(norg))
+      lgeodist = igraph::distances(lknng, seq_len(nindata), nindata + seq_len(norg))
       dammu = sweep(lgeodist ^ 2, 2, colMeans(self$state$geodist ^ 2), "-")
       Lsharp = sweep(self$state$e_vectors, 2, self$state$e_values, "/")
       out = -0.5 * (dammu %*% Lsharp)
