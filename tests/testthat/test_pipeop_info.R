@@ -118,19 +118,20 @@ test_that("original printer can be overwritten", {
   regex_list = list("azbycxdw", "azbycxdwev", "azbycxdwevfu", "azbycxdwevfugt")
   for (j in seq_along(input)) {
     for (i in seq_along(output)) {
+      browser()
       poinfo = PipeOpInfo$new(id = "info", log_target = output[[i]],
       printer = list(Task = function(x) {"azbycxdw"},
                      Prediction = function(x) {"azbycxdwev"},
                      `NULL` = function(x) {"azbycxdwevfu"},
                      default= function(x) {"azbycxdwevfugt"}
                     ))
-      console_output_train = tryCatch(capture.output(poinfo$train(list(output[[i]]))),
+      console_output_train = tryCatch(capture.output(poinfo$train(list(input[[i]]))),
                                       warning = function(w) {conditionMessage(w)},
                                       message = function(m) {conditionMessage(m)})
       expect_match(console_output_train, regex_list[[j]], all = FALSE)
       console_output_predict = tryCatch({
-        capture.output(poinfo$train(list(output[[i]])))
-        capture.output(poinfo$predict(list(output[[i]])))
+        capture.output(poinfo$train(list(input[[i]])))
+        capture.output(poinfo$predict(list(input[[i]])))
         },
         warning = function(w) conditionMessage(w),
         message = function(m) conditionMessage(m))
