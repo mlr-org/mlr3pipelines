@@ -1,5 +1,7 @@
 # mlr3pipelines 0.9.0-9000
 
+* feat: allow dates in datefeatures pipe op and use data.table for date feature generation
+
 # mlr3pipelines 0.9.0
 
 * Breaking change: Removed initialization of `PipeOpImputeConstant`'s `constant` hyperparameter since it was incompatible with other defaults and would lead to not recommended usage (creating an empty level).
