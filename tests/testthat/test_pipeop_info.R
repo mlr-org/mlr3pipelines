@@ -128,13 +128,13 @@ test_that("original printer can be overwritten", {
                      `NULL` = function(x) "azbycxdwevfu",
                      default = function(x) "azbycxdwevfugt"
                     ))
-      console_output_train = tryCatch(capture.output(poinfo$train(list(input[[i]]))),
+      console_output_train = tryCatch(capture.output(poinfo$train(list(input[[j]]))),
         warning = function(w) conditionMessage(w),
         message = function(m) conditionMessage(m))
       expect_match(console_output_train, regex_list[[j]], all = FALSE)
       console_output_predict = tryCatch({
-        capture.output(poinfo$train(list(input[[i]])))
-        capture.output(poinfo$predict(list(input[[i]])))
+        capture.output(poinfo$train(list(input[[j]])))
+        capture.output(poinfo$predict(list(input[[j]])))
         },
         warning = function(w) conditionMessage(w),
         message = function(m) conditionMessage(m))
