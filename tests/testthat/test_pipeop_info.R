@@ -1,7 +1,11 @@
 context("PipeOpInfo")
 
+
+##### pipeop$new ersetzen mit po("")
+
+
 test_that("basic properties", {
-  po = PipeOpInfo$new("info")
+  po = po("info")
   expect_pipeop(po)
   expect_pipeop_class(PipeOpInfo, list(id = "info"))
 })
@@ -17,7 +21,7 @@ test_that("check whether input and output are equal", {
   output = list("lgr::mlr3/mlr3pipelines::info", "cat", "warning", "message", "none")
   for (j in input) {
     for (i in seq_along(output)) {
-      poinfo = PipeOpInfo$new(id = "info", log_target = output[[i]])
+      poinfo = po("info", log_target = output[[i]])
       suppressMessages(suppressWarnings(invisible(capture.output(expect_identical(poinfo$train(list(j))[[1]], j)))))
       suppressMessages(suppressWarnings(invisible(capture.output(expect_identical(poinfo$predict(list(j))[[1]], j)))))
     }
@@ -39,7 +43,7 @@ test_that("console output type depending on log_target is correct", {
   expect_func = list(expect_output, expect_output, expect_warning, expect_message, expect_silent)
   for (j in input) {
     for (i in seq_along(output)) {
-      poinfo = PipeOpInfo$new(id = "info", log_target = output[[i]])
+      poinfo = po("info", log_target = output[[i]])
       expect_func[[i]](poinfo$train(list(j)))
       expect_func[[i]](poinfo$predict(list(j)))
     }
@@ -58,7 +62,7 @@ test_that("logger is addressed when log_target is set to a logger", {
   prediction = lrn_rpart$predict_newdata(mtcars)
   prediction_new = lrn_rpart$predict_newdata(mtcars_new)
   # Actual Test
-  poinfo = PipeOpInfo$new(id = "info", log_target = "lgr::debug_logger::info")
+  poinfo = po("info", log_target = "lgr::debug_logger::info")
   input = list(tsk("iris"), prediction, prediction_new, NULL, "default_string")
   for (j in input) {
     poinfo$train(list(j))
@@ -85,15 +89,15 @@ test_that("PipeOp recognizes class of input objects and prints information accor
   regex_list = list("\\$task.*\\$data", "\\$prediction.*\\$score", "\\$prediction", "NULL", "default_string")
   for (j in seq_along(input)) {
     for (i in seq_along(output)) {
-      poinfo = PipeOpInfo$new(id = "info", log_target = output[[i]])
+      poinfo = po("info", log_target = output[[i]])
       console_output_train = tryCatch(capture.output(poinfo$train(list(input[[j]]))),
-                                      warning = function(w) {as.character(conditionMessage(w))},
-                                      message = function(m) {as.character(conditionMessage(m))})
+        warning = function(w) as.character(conditionMessage(w)),
+        message = function(m) as.character(conditionMessage(m)))
       expect_match(paste0(console_output_train, collapse = ""), regex_list[[j]], all = FALSE)
       suppressMessages(suppressWarnings(capture.output(poinfo$train(list(input[[j]])))))
       console_output_predict = tryCatch(capture.output(poinfo$predict(list(input[[j]]))),
-                                      warning = function(w) {as.character(conditionMessage(w))},
-                                      message = function(m) {as.character(conditionMessage(m))})
+        warning = function(w) as.character(conditionMessage(w)),
+        message = function(m) as.character(conditionMessage(m)))
       expect_match(paste0(console_output_predict, collapse = ""), regex_list[[j]], all = FALSE)
     }
   }
@@ -102,7 +106,7 @@ test_that("PipeOp recognizes class of input objects and prints information accor
 test_that("malformed log_target handled accordingly", {
   malformed_log_target = list("malformed", "::", "::::::", "log::", "log::log_level", "log::log_level::", "log::log_level::message::", "::log")
   for (i in seq_along(malformed_log_target)) {
-    expect_error(PipeOpInfo$new("info", log_target = malformed_log_target[[i]]))
+    expect_error(po("info", log_target = malformed_log_target[[i]]))
   }
 })
 
@@ -118,16 +122,15 @@ test_that("original printer can be overwritten", {
   regex_list = list("azbycxdw", "azbycxdwev", "azbycxdwevfu", "azbycxdwevfugt")
   for (j in seq_along(input)) {
     for (i in seq_along(output)) {
-      browser()
-      poinfo = PipeOpInfo$new(id = "info", log_target = output[[i]],
-      printer = list(Task = function(x) {"azbycxdw"},
-                     Prediction = function(x) {"azbycxdwev"},
-                     `NULL` = function(x) {"azbycxdwevfu"},
-                     default= function(x) {"azbycxdwevfugt"}
+      poinfo = po("info", log_target = output[[i]],
+      printer = list(Task = function(x) "azbycxdw",
+                     Prediction = function(x) "azbycxdwev",
+                     `NULL` = function(x) "azbycxdwevfu",
+                     default = function(x) "azbycxdwevfugt"
                     ))
       console_output_train = tryCatch(capture.output(poinfo$train(list(input[[i]]))),
-                                      warning = function(w) {conditionMessage(w)},
-                                      message = function(m) {conditionMessage(m)})
+        warning = function(w) conditionMessage(w),
+        message = function(m) conditionMessage(m))
       expect_match(console_output_train, regex_list[[j]], all = FALSE)
       console_output_predict = tryCatch({
         capture.output(poinfo$train(list(input[[i]])))
@@ -150,15 +153,15 @@ test_that("handling of multiplicity objects controlled by field collect_multipli
   input = list(OVR, list(OVR))
   for (i in seq_along(output)) {
     for (j in seq_along(collect_multiplicity)) {
-      poinfo = PipeOpInfo$new(id = "info", collect_multiplicity = collect_multiplicity[[j]], log_target = output[[i]], printer = list(default = function(x) "abc",  Multiplicity = function(x) "xyz"))
+      poinfo = po("info", collect_multiplicity = collect_multiplicity[[j]], log_target = output[[i]], printer = list(default = function(x) "abc",  Multiplicity = function(x) "xyz"))
       console_output_train = tryCatch(capture.output(poinfo$train(input[[j]])),
-                                      warning = function(w) {conditionMessage(w)},
-                                      message = function(m) {conditionMessage(m)})
+        warning = function(w) conditionMessage(w),
+        message = function(m) conditionMessage(m))
       expect_match(paste0(console_output_train, collapse = ""), test_string[[j]], all = FALSE)
       suppressMessages(suppressWarnings(capture.output(poinfo$train(input[[j]]))))
       console_output_predict = tryCatch(capture.output(poinfo$predict(input[[j]])),
-                                      warning = function(w) {conditionMessage(w)},
-                                      message = function(m) {conditionMessage(m)})
+        warning = function(w) conditionMessage(w),
+        message = function(m) conditionMessage(m))
       expect_match(paste0(console_output_predict, collapse = ""), test_string[[j]], all = FALSE)
     }
   }
