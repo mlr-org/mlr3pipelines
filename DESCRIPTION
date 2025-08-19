@@ -162,6 +162,7 @@ Collate:
     'PipeOpImputeOOR.R'
     'PipeOpImputeSample.R'
     'PipeOpInfo.R'    
+    'PipeOpIsomap.R'
     'PipeOpKernelPCA.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'
