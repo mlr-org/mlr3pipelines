@@ -103,7 +103,8 @@ Suggests:
     ranger,
     themis,
     lgr,
-    checkmate
+    checkmate,
+    dimRed
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3

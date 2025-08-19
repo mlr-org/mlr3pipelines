@@ -65,7 +65,7 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
     .predict_dt = function(dt, levels) {
       #browser()
       pv = self$param_set$get_values(tags = "train")
-      predict(self$state$embed_result, dt)
+      stats::predict(self$state$embed_result, dt)
     }
   )
 )
