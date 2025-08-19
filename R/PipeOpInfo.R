@@ -108,7 +108,7 @@ PipeOpInfo = R6Class("PipeOpInfo",
       specific_printer = private$.printer[[leftmost_class]]
       log_target_split = strsplit(private$.log_target, "::")[[1]]
       stage_string = sprintf("Object passing through PipeOp %s - %s", self$id, stage)
-      print_string = backports::capture.output({
+      print_string = utils::capture.output({
         cat(stage_string, "\n\n")
         specific_printer(inputs[[1]])
       })
