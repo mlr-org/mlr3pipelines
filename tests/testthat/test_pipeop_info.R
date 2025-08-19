@@ -23,8 +23,8 @@ test_that("check whether input and output are equal", {
   for (j in input) {
     for (i in seq_along(output)) {
       poinfo = po("info", log_target = output[[i]])
-      suppressMessages(suppressWarnings(invisible(backports::capture.output(expect_identical(poinfo$train(list(j))[[1]], j)))))
-      suppressMessages(suppressWarnings(invisible(backports::capture.output(expect_identical(poinfo$predict(list(j))[[1]], j)))))
+      suppressMessages(suppressWarnings(invisible(utils::capture.output(expect_identical(poinfo$train(list(j))[[1]], j)))))
+      suppressMessages(suppressWarnings(invisible(utils::capture.output(expect_identical(poinfo$predict(list(j))[[1]], j)))))
     }
   }
 })
@@ -94,12 +94,12 @@ test_that("PipeOp recognizes class of input objects and prints information accor
   for (j in seq_along(input)) {
     for (i in seq_along(output)) {
       poinfo = po("info", log_target = output[[i]])
-      console_output_train = tryCatch(backports::capture.output(poinfo$train(list(input[[j]]))),
+      console_output_train = tryCatch(utils::capture.output(poinfo$train(list(input[[j]]))),
         warning = function(w) as.character(conditionMessage(w)),
         message = function(m) as.character(conditionMessage(m)))
       expect_match(paste0(console_output_train, collapse = ""), regex_list[[j]], all = FALSE)
-      suppressMessages(suppressWarnings(backports::capture.output(poinfo$train(list(input[[j]])))))
-      console_output_predict = tryCatch(backports::capture.output(poinfo$predict(list(input[[j]]))),
+      suppressMessages(suppressWarnings(utils::capture.output(poinfo$train(list(input[[j]])))))
+      console_output_predict = tryCatch(utils::capture.output(poinfo$predict(list(input[[j]]))),
         warning = function(w) as.character(conditionMessage(w)),
         message = function(m) as.character(conditionMessage(m)))
       expect_match(paste0(console_output_predict, collapse = ""), regex_list[[j]], all = FALSE)
@@ -133,13 +133,13 @@ test_that("original printer can be overwritten", {
                      `NULL` = function(x) "azbycxdwevfu",
                      default = function(x) "azbycxdwevfugt"
                     ))
-      console_output_train = tryCatch(backports::capture.output(poinfo$train(list(input[[j]]))),
+      console_output_train = tryCatch(utils::capture.output(poinfo$train(list(input[[j]]))),
         warning = function(w) conditionMessage(w),
         message = function(m) conditionMessage(m))
       expect_match(console_output_train, regex_list[[j]], all = FALSE)
       console_output_predict = tryCatch({
-        backports::capture.output(poinfo$train(list(input[[j]])))
-        backports::capture.output(poinfo$predict(list(input[[j]])))
+        utils::capture.output(poinfo$train(list(input[[j]])))
+        utils::capture.output(poinfo$predict(list(input[[j]])))
         },
         warning = function(w) conditionMessage(w),
         message = function(m) conditionMessage(m))
@@ -159,12 +159,12 @@ test_that("handling of multiplicity objects controlled by field collect_multipli
   for (i in seq_along(output)) {
     for (j in seq_along(collect_multiplicity)) {
       poinfo = po("info", collect_multiplicity = collect_multiplicity[[j]], log_target = output[[i]], printer = list(default = function(x) "abc",  Multiplicity = function(x) "xyz"))
-      console_output_train = tryCatch(backports::capture.output(poinfo$train(input[[j]])),
+      console_output_train = tryCatch(utils::capture.output(poinfo$train(input[[j]])),
         warning = function(w) conditionMessage(w),
         message = function(m) conditionMessage(m))
       expect_match(paste0(console_output_train, collapse = ""), test_string[[j]], all = FALSE)
-      suppressMessages(suppressWarnings(backports::capture.output(poinfo$train(input[[j]]))))
-      console_output_predict = tryCatch(backports::capture.output(poinfo$predict(input[[j]])),
+      suppressMessages(suppressWarnings(utils::capture.output(poinfo$train(input[[j]]))))
+      console_output_predict = tryCatch(utils::capture.output(poinfo$predict(input[[j]])),
         warning = function(w) conditionMessage(w),
         message = function(m) conditionMessage(m))
       expect_match(paste0(console_output_predict, collapse = ""), test_string[[j]], all = FALSE)
