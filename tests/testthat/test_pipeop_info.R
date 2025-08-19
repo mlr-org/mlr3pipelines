@@ -11,6 +11,7 @@ test_that("basic properties", {
 })
 
 test_that("check whether input and output are equal", {
+  skip_if_not_installed("rpart")
   # Creation of Prediction Object
   lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
   mtcars_new = subset(mtcars[sample(nrow(mtcars), size = 10), ], select = -mpg)
@@ -29,6 +30,7 @@ test_that("check whether input and output are equal", {
 })
 
 test_that("console output type depending on log_target is correct", {
+  skip_if_not_installed("rpart")
   # Creation of Prediction Object
   lg = lgr::get_logger("mlr3")
   old_threshold = lg$threshold
@@ -52,6 +54,7 @@ test_that("console output type depending on log_target is correct", {
 })
 
 test_that("logger is addressed when log_target is set to a logger", {
+  skip_if_not_installed("rpart")
   logger = lgr::get_logger("debug_logger")
   logger$set_propagate(FALSE)
   appender_buffer = lgr::AppenderBuffer$new()
@@ -78,6 +81,7 @@ test_that("logger is addressed when log_target is set to a logger", {
 })
 
 test_that("PipeOp recognizes class of input objects and prints information accordingly", {
+  skip_if_not_installed("rpart")
   # Creation of Prediction Object
   lrn_rpart = lrn("regr.rpart")$train(tsk("mtcars"))
   mtcars_new = subset(mtcars[sample(nrow(mtcars), size = 10), ], select = -mpg)
@@ -111,6 +115,7 @@ test_that("malformed log_target handled accordingly", {
 })
 
 test_that("original printer can be overwritten", {
+  skip_if_not_installed("rpart")
   # Creation of Prediction Object
   logger = lgr::get_logger("debug_logger")
   logger$set_propagate(FALSE)
