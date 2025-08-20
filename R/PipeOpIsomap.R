@@ -64,18 +64,20 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
     },
     .predict_dt = function(dt, levels) {
       #browser()
-      pv = self$param_set$get_values(tags = "train")
-      stats::predict(self$state$embed_result, dt)
+      predict(self$state$embed_result, dt)@data
     }
   )
 )
 
 mlr_pipeops$add("isomap", PipeOpIsomap)
 
-#po = po("isomap", knn = 40, ndim = 2)
-#po$train(list(tsk("iris")))
-#po$predict(list(tsk("iris")))
+#po = po("isomap", knn = 50, ndim = 2)
 
-#samp <- sample(nrow(dat), size = 70)
-#emb2 <- embed(dat[samp,], "Isomap", .mute = NULL, knn = 30)
-#emb3 <- predict(emb2, dat[-samp,])
+# po$train(list(tsk("iris")))[[1]]$data()
+# po$predict(list(tsk("iris")))[[1]]$data()
+
+# po$train(list(tsk("mtcars")))
+# po$predict(list(tsk("mtcars")))[[1]]$data()
+
+# emb2 <- embed(iris[1:4], "Isomap", .mute = NULL, knn = 25)
+# emb3 <- predict(emb2, iris[1:4])
