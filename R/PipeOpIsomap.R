@@ -1,6 +1,6 @@
 #' @title Algorithm for Dimensionality Reduction
 #'
-#' @usage
+#' @usage NULL
 #' @name mlr_pipeops_isomap
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]
 #'
@@ -28,14 +28,12 @@
 #'
 #' @section Methods:
 #'
-#' @examples
+#' @examples NULL
 #'
-#'
-#' @references
 #'
 #' @family PipeOps
-#' @template
-#' @include
+#' @template seealso_pipeopslist
+#' @include PipeOpTaskPreproc.R
 #' @export
 #'
 #'
@@ -81,3 +79,5 @@ mlr_pipeops$add("isomap", PipeOpIsomap)
 
 # emb2 <- embed(iris[1:4], "Isomap", .mute = NULL, knn = 25)
 # emb3 <- predict(emb2, iris[1:4])
+
+

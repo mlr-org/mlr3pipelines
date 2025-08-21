@@ -44,11 +44,9 @@
 #' poinfo$train(list(tsk("mtcars")))
 #' poinfo$predict(list(tsk("penguins")))
 #'
-#' @references
-#'
 #' @family PipeOps
-#' @template
-#' @include
+#' @template seealso_pipeopslist
+#' @include PipeOp.R
 #' @export
 #'
 #'
