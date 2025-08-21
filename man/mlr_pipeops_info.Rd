@@ -7,13 +7,8 @@
 \format{
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}
 }
-\usage{
-Customizable Information Printer that prints specific information about the object
-}
 \description{
 Prints the given input in a customized way.
-
-\link{additional information}
 }
 \section{Construction}{
 

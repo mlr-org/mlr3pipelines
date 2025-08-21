@@ -1,13 +1,12 @@
 #' @title Customizable Information Printer
 #'
-#' @usage Customizable Information Printer that prints specific information about the object
+#' @usage NULL
 #' @name mlr_pipeops_info
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`]
 #'
 #' @description
 #' Prints the given input in a customized way.
 #'
-#' [additional information]
 #'
 #' @section Construction:
 #' ```
@@ -133,6 +132,9 @@ PipeOpInfo = R6Class("PipeOpInfo",
     .predict = function(inputs, stage = "Prediction") {
       private$.output(inputs, stage)
       inputs
+    },
+    .additional_phash_input = function() {
+      list(printer = self$printer, log_target = self$log_target)
     }
   )
 )

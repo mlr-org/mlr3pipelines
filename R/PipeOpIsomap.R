@@ -41,7 +41,7 @@
 PipeOpIsomap = R6Class("PipeOpIsomap",
   inherit = PipeOpTaskPreproc,
   public = list(
-    initialize = function(id = "isomap", param_vals = list(), get_geod = FALSE, keep_org_data = TRUE, diag = FALSE) {
+    initialize = function(id = "isomap", param_vals = list()) {
       ps = ps(
         knn = p_int(default = 50, lower = 1, upper = Inf, tags = "train"), # tag isomap?
         ndim = p_int(default = 2, lower = 1, upper = Inf, tags = "train"), #tag isomap?
@@ -61,8 +61,8 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
       embed_result@data@data
     },
     .predict_dt = function(dt, levels) {
-      #browser()
-      predict(self$state$embed_result, dt)@data
+      browser()
+      predict(self$state$embed_result, as.data.frame(dt))@data
     }
   )
 )
