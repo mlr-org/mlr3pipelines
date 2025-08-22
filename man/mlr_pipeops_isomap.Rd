@@ -8,7 +8,7 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}
 }
 \description{
-\link{additional information}
+Algorithm for Dimensionality Reduction
 }
 \section{Construction}{
 

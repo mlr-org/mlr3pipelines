@@ -7,8 +7,6 @@
 #' @description
 #'
 #'
-#' [additional information]
-#'
 #' @section Construction:
 #' ```
 #' PipeOpIsomap$new(id = "isomap", ...)
@@ -61,15 +59,14 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
       embed_result@data@data
     },
     .predict_dt = function(dt, levels) {
-      browser()
-      predict(self$state$embed_result, as.data.frame(dt))@data
+      selectMethod("predict", "dimRedResult")(self$state$embed_result, as.data.frame(dt))@data
     }
   )
 )
 
 mlr_pipeops$add("isomap", PipeOpIsomap)
 
-#po = po("isomap", knn = 50, ndim = 2)
+# po = po("isomap", knn = 50, ndim = 2)
 
 # po$train(list(tsk("iris")))[[1]]$data()
 # po$predict(list(tsk("iris")))[[1]]$data()
