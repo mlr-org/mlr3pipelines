@@ -44,7 +44,7 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
         knn = p_int(default = 50, lower = 1, upper = Inf, tags = "train"), # tag isomap?
         ndim = p_int(default = 2, lower = 1, upper = Inf, tags = "train"), #tag isomap?
         get_geod = p_lgl(default = FALSE, tags = "train"),
-        .mute = p_uty(default = NULL, tags = "train")
+        .mute = p_uty(tags = "train")
       )
       ps$values = list(knn = 50, ndim = 2)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))

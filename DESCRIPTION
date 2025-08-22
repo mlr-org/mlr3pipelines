@@ -104,7 +104,8 @@ Suggests:
     themis,
     lgr,
     checkmate,
-    dimRed
+    dimRed,
+    stats
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
