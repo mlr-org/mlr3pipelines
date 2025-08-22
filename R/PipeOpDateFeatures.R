@@ -5,12 +5,14 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Based on `POSIXct`/`Date` columns of the data, a set of date related features is computed and added to
-#' the feature set of the output task. If no `POSIXct` or `Date` column is found, the original task is
-#' returned unaltered. This functionality is based on the `add_datepart()` and
-#' `add_cyclic_datepart()` functions from the `fastai` library. If operation on only particular
-#' `POSIXct`/`Date` columns is requested, use the `affect_columns` parameter inherited from
-#' [`PipeOpTaskPreprocSimple`].
+#' Based on `POSIXct`/`Date` columns of the data, a set of date related features is computed and
+#' added to the feature set of the output task. If no `POSIXct` or `Date` column is found, the
+#' original task is returned unaltered. This functionality is based on the `add_datepart()` and
+#' `add_cyclic_datepart()` functions from the \CRANpkg{fastai} package. If operation on only
+#' particular `POSIXct`/`Date` columns is requested, use the `affect_columns` parameter inherited
+#' from [`PipeOpTaskPreprocSimple`].
+#'
+#' For `Date` columns, the features `"hour"`, `"minute"`, `"second"`, and `"is_day"` are skipped.
 #'
 #' If `cyclic = TRUE`, cyclic features are computed for the features `"month"`, `"week_of_year"`,
 #' `"day_of_year"`, `"day_of_month"`, `"day_of_week"`, `"hour"`, `"minute"` and `"second"`. This
@@ -259,7 +261,7 @@ compute_cyclic_date_features = function(date_features, features, date_var) {
 }
 
 get_weeks_per_year = function(year) {
-  as.integer(format(as.POSIXct(paste0(year, "-12-31"), format = c("%Y-%m-%d")), "%U"))
+  as.integer(format(as.POSIXct(paste0(year, "-12-31"), format = "%Y-%m-%d"), "%U"))
 }
 
 is_leap_year = function(year) {
