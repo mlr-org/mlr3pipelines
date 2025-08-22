@@ -4,7 +4,6 @@
 #' @name mlr_pipeops_isomap
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]
 #'
-#' @description
 #'
 #'
 #' @section Construction:
@@ -33,7 +32,7 @@
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
-#'
+#' @method predict Graph
 #'
 
 PipeOpIsomap = R6Class("PipeOpIsomap",

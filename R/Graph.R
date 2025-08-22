@@ -720,6 +720,7 @@ graph_load_namespaces = function(self, info) {
 
 
 #' @export
+#' @method predict Graph
 predict.Graph = function(object, newdata, ...) {
   if (!object$is_trained) {
     stop("Cannot predict, Graph has not been trained yet")
