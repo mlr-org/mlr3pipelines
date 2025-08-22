@@ -35,3 +35,51 @@ test_that("parameters", {
   train_out2 = op$train(list(task))[[1L]]
   expect_equal(train_out1, train_out2)
 })
+
+test_that("PipeOpNMF - does not modify search path when NMF is not loaded, fix for #929", {
+  skip_if_not_installed("NMF")
+
+  orig_attached = search()
+
+  op = po("nmf")
+  op$train(list(tsk("iris")))
+  expect_equal(search(), orig_attached)
+  # Ideally, we'd want to restore the original environment but that is not easily possible. Testing predict in its own
+  # test is also difficult since we'd need a correct PipeOp state for that.
+  unloadNamespace("NMF")
+  op$predict(list(tsk("iris")))
+  expect_equal(search(), orig_attached)
+})
+
+test_that("PipeOpNMF - does not modify search path when NMF or its dependencies are loaded, fix for #929", {
+  skip_if_not_installed("NMF")
+
+  library("NMF")
+  orig_attached = search()
+
+  op = po("nmf")
+  op$train(list(tsk("iris")))
+  expect_equal(search(), orig_attached)
+  op$predict(list(tsk("iris")))
+  expect_equal(search(), orig_attached)
+
+  # Test when only (some of) NMF's dependencies are loaded (e.g. through other packages)
+  unloadNamespace("NMF")
+  unloadNamespace("Biobase")
+  orig_attached = search()
+
+  op = po("nmf")
+  op$train(list(tsk("iris")))
+  expect_equal(search(), orig_attached)
+  unloadNamespace("NMF")
+  unloadNamespace("Biobase")
+  op$predict(list(tsk("iris")))
+  expect_equal(search(), orig_attached)
+})
+
+test_that("PipeOpNMF - Did NMF fix its issues?", {
+  skip_if_not_installed("NMF")
+  orig_attached = search()
+  NMF::nmfModels()
+  expect_failure(expect_equal(search(), orig_attached))
+})
