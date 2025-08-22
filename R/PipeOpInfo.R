@@ -31,9 +31,6 @@
 #' @section State:
 #' The `$state` is left empty (`list()`).
 #'
-#' @section Parameters:
-#' NULL
-#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'

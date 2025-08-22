@@ -105,7 +105,8 @@ Suggests:
     lgr,
     checkmate,
     dimRed,
-    stats
+    RSpectra,
+    RANN
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3

@@ -41,11 +41,6 @@ Has either he form \if{html}{\out{<output>}}::\if{html}{\out{<argument1>}}::\if{
 The \verb{$state} is left empty (\code{list()}).
 }
 
-\section{Parameters}{
-
-NULL
-}
-
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOp}}.
