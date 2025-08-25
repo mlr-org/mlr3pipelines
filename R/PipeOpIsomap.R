@@ -40,10 +40,13 @@
 #'
 #'
 #' @section Internals:
+#' Applies the Isomap Embedding from the `dimRed`-package.
 #'
 #' @section Fields:
+#' Only fields inherited from `PipeOp`.
 #'
 #' @section Methods:
+#'
 #'
 #' @examples NULL
 #'
@@ -59,9 +62,9 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
   public = list(
     initialize = function(id = "isomap", param_vals = list()) {
       ps = ps(
-        knn = p_int(default = 50, lower = 1, upper = Inf, tags = "train"), # tag isomap?
-        ndim = p_int(default = 2, lower = 1, upper = Inf, tags = "train"), #tag isomap?
-        get_geod = p_lgl(default = FALSE, tags = "train"),
+        knn = p_int(lower = 1, upper = Inf, tags = "train"), # tag isomap?
+        ndim = p_int(lower = 1, upper = Inf, tags = "train"), #tag isomap?
+        get_geod = p_lgl(tags = "train"),
         .mute = p_uty(tags = "train")
       )
       ps$values = list(knn = 50, ndim = 2, get_geod = FALSE)
@@ -70,7 +73,6 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
   ),
   private = list(
     .train_dt = function(dt, levels, target) {
-      browser()
       pv = self$param_set$get_values(tags = "train")
       embed_result = dimRed::embed(dt, "Isomap", knn = pv$knn, ndim = pv$ndim, get_geod = pv$get_geod, .mute = NULL)
       self$state = list(embed_result = embed_result)

@@ -3,6 +3,7 @@ context("PipeOpIsomap")
 test_that("PipeOpIsomap - basic properties", {
   op = po("isomap")
   task = mlr_tasks$get("iris")
+  #browser()
   expect_pipeop(op)
   expect_datapreproc_pipeop_class(PipeOpIsomap, task = task, tolerance = 1)
 })
@@ -51,3 +52,8 @@ test_that("cannot handle missing values", {
 #' emb2 <- predict(emb, dat)
 #' plot(emb)
 #' plot(emb2)
+
+
+
+# test idea - when ndim = 2, does the data have iso1 and iso2
+# test idea - when get_geod = TRUE, then the distance matrix is in the $state
