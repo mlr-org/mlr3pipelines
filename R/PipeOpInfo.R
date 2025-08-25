@@ -5,7 +5,7 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`]
 #'
 #' @description
-#' Prints the given input in a customized way.
+#' Given input is printed in a customizable way.
 #'
 #'
 #' @section Construction:
