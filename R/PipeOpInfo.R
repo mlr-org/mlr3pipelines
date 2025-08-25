@@ -14,7 +14,7 @@
 #' ```
 #' * `ìd` :: `character(1)`\cr
 #'   Identifier of resulting object, default "info"
-#' * `printer` :: `list(???)` \cr
+#' * `printer` :: `list` \cr
 #'   User input, specified printer-functions defined for a new object-classes or used to override their counterparts in the `original_printer`
 #' * `collect_multiplicity` :: `logical(1)`\cr
 #'   If `TRUE`, the input is a [`Multiplicity`] collecting channel. This means, a
@@ -30,6 +30,13 @@
 #'
 #' @section State:
 #' The `$state` is left empty (`list()`).
+#'
+#' @section Fields:
+#' Fields inherited from `PipeOp`, as well as:
+#' * `printer` :: `list`\cr
+#'   List that contains information on how a specific object-class should be printed to the console.
+#' * `log_target` :: `character(1)` \cr
+#'   Specifies how the printed console output should be displayed to the user.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].

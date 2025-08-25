@@ -18,7 +18,7 @@ Prints the given input in a customized way.
 \itemize{
 \item \code{ìd} :: \code{character(1)}\cr
 Identifier of resulting object, default "info"
-\item \code{printer} :: \verb{list(???)} \cr
+\item \code{printer} :: \code{list} \cr
 User input, specified printer-functions defined for a new object-classes or used to override their counterparts in the \code{original_printer}
 \item \code{collect_multiplicity} :: \code{logical(1)}\cr
 If \code{TRUE}, the input is a \code{\link{Multiplicity}} collecting channel. This means, a
@@ -39,6 +39,17 @@ Has either he form \if{html}{\out{<output>}}::\if{html}{\out{<argument1>}}::\if{
 \section{State}{
 
 The \verb{$state} is left empty (\code{list()}).
+}
+
+\section{Fields}{
+
+Fields inherited from \code{PipeOp}, as well as:
+\itemize{
+\item \code{printer} :: \code{list}\cr
+List that contains information on how a specific object-class should be printed to the console.
+\item \code{log_target} :: \code{character(1)} \cr
+Specifies how the printed console output should be displayed to the user.
+}
 }
 
 \section{Methods}{
