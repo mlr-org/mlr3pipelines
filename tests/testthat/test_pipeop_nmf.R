@@ -29,8 +29,8 @@ test_that("PipeOpNMF - parameters", {
 
   train_out1 = op$train(list(task))[[1L]]
   expect_subset(paste0("NMF", 1:3), train_out1$feature_names)
-  expect_equal(op$state@nrun, 2L)
-  expect_matrix(op$state@consensus)
+  expect_equal(op$state$nmf@nrun, 2L)
+  expect_matrix(op$state$nmf@consensus)
 
   train_out2 = op$train(list(task))[[1L]]
   expect_equal(train_out1, train_out2)
