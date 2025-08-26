@@ -174,7 +174,9 @@ PipeOpNMF = R6Class("PipeOpNMF",
         .options = self$param_set$get_values(tags = "nmf.options")
       )
 
+      # Adding separate state class to avoid NMF loading in S4 method lookup when operating on the state
       self$state = structure(list(nmf = nmf), class = "PipeOpNMFstate")
+
       # here we have two options? return directly h or do what we do during prediction
       #h = t(mlr3misc::invoke(NMF::coef, object = nmf))
       w = mlr3misc::invoke(NMF::basis, object = nmf)
@@ -214,7 +216,7 @@ mlr_pipeops$add("nmf", PipeOpNMF)
 
 #' @export
 # Prevent printing of PipeOpNMF's state if NMF is not loaded to avoid attaching of Biobase, BiocGenerics, and generics
-# during S4 method lookup
+# during S4 method lookup. We can not avoid that printing $state$nmf will lead to NMF getting loaded.
 print.PipeOpNMFstate = function(x, ...) {
   if ("NMF" %nin% loadedNamespaces()) {
     cat("[PipeOpNMFstate]\n")

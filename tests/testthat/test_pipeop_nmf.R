@@ -1,12 +1,12 @@
 context("PipeOpNMF")
 
-test_that("basic properties", {
+test_that("PipeOpNMF - basic properties", {
   skip_if_not_installed("NMF")
   task = mlr_tasks$get("iris")
   expect_datapreproc_pipeop_class(PipeOpNMF, task = task, deterministic_train = FALSE)
 })
 
-test_that("feature selector", {
+test_that("PipeOpNMF - feature selector", {
   skip_if_not_installed("NMF")
   op = PipeOpNMF$new()
   dat = iris
@@ -18,7 +18,7 @@ test_that("feature selector", {
 })
 
 
-test_that("parameters", {
+test_that("PipeOpNMF - parameters", {
   skip_if_not_installed("NMF")
   op = PipeOpNMF$new()
   op$param_set$values$rank = 3L
@@ -45,9 +45,14 @@ test_that("PipeOpNMF - does not modify search path when NMF is not loaded, fix f
   op$train(list(tsk("iris")))
   expect_equal(search(), orig_attached)
   # Ideally, we'd want to restore the original environment but that is not easily possible. Testing predict in its own
-  # test is also difficult since we'd need a correct PipeOp state for that.
+  # test is also difficult since we'd need a correct state for that.
   unloadNamespace("NMF")
   op$predict(list(tsk("iris")))
+  expect_equal(search(), orig_attached)
+
+  # Test that printing the state does not modify the search path
+  unloadNamespace("NMF")
+  print(op$state)
   expect_equal(search(), orig_attached)
 })
 
@@ -75,9 +80,16 @@ test_that("PipeOpNMF - does not modify search path when NMF or its dependencies 
   unloadNamespace("Biobase")
   op$predict(list(tsk("iris")))
   expect_equal(search(), orig_attached)
+
+  # Test that printing the state does not modify the search path
+  unloadNamespace("NMF")
+  unloadNamespace("Biobase")
+  print(op$state)
+  expect_equal(search(), orig_attached)
+
 })
 
-test_that("PipeOpNMF - Did NMF fix its issues?", {
+test_that("PipeOpNMF - Did NMF fix its .onload weirdness? See renozao/NMF#191", {
   skip_if_not_installed("NMF")
   orig_attached = search()
   NMF::nmfModels()
