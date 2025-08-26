@@ -93,5 +93,5 @@ test_that("PipeOpNMF - Did NMF fix its .onload weirdness? See renozao/NMF#191", 
   skip_if_not_installed("NMF")
   orig_attached = search()
   NMF::nmfModels()
-  expect_failure(expect_equal(search(), orig_attached))
+  expect_false(isTRUE(all.equal(search(), orig_attached)))
 })
