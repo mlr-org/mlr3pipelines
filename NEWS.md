@@ -1,5 +1,8 @@
 # mlr3pipelines 0.9.0-9000
 
+* Fix: Added internal workaround for `PipeOpNMF` attaching `Biobase`, `BiocGenerics`, and `generics` to the search path during training, prediction or when printing its `$state`.
+
+
 # mlr3pipelines 0.9.0
 
 * Breaking change: Removed initialization of `PipeOpImputeConstant`'s `constant` hyperparameter since it was incompatible with other defaults and would lead to not recommended usage (creating an empty level).
