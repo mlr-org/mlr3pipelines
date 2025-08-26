@@ -1,8 +1,6 @@
 # Restart R between running each block. Here as an alternative to the tests in PipeOpNMF's tests since those only
 # roughly emulate restarting of the R session by unloading packages.
 
-# ----------------------------------------------- #
-
 # debug(mlr3pipelines:::.__PipeOpTaskPreproc__.train_task)
 
 # ----------------------------------------------- #
