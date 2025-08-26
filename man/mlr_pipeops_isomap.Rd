@@ -17,12 +17,17 @@ Algorithm for Dimensionality Reduction
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{ìd} :: \code{character(1)}\cr
-Identifier of resulting object, default "isomap"
+Identifier of resulting object, default \code{"isomap"}
+\item \code{param_vals} :: named \code{list}\cr
+List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
 }
 
 \section{Input and Output Channels}{
 
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
+
+The output is the input \code{\link[mlr3:Task]{Task}} with the data projected on the lower dimension.
 }
 
 \section{State}{
@@ -31,14 +36,31 @@ Identifier of resulting object, default "isomap"
 
 \section{Parameters}{
 
+The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
+\itemize{
+\item \code{knn} :: \code{numeric(1)}\cr
+The number of nearest neighbors in the graph.
+Initialized to 50.
+\item \code{ndim} :: \code{numeric(1)}\cr
+The number of embedding dimensions.
+Initialized to 2.
+\item \code{get_geod} :: \code{logical(1)}\cr
+Determines whether the distance matrix should be kept in the \verb{$state}
+Initialized to \code{FALSE}.
+\item \code{.mute} :: \code{character}\cr
+A character vector containing the elements you want to mute (c("message", "output")).
+Initialized to \code{character(0)}.
+}
 }
 
 \section{Internals}{
 
+Applies the Isomap Embedding from the \code{dimRed}-package.
 }
 
 \section{Fields}{
 
+Only fields inherited from \code{PipeOp}.
 }
 
 \section{Methods}{

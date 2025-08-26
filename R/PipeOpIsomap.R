@@ -74,7 +74,7 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
   private = list(
     .train_dt = function(dt, levels, target) {
       pv = self$param_set$get_values(tags = "train")
-      embed_result = dimRed::embed(dt, "Isomap", knn = pv$knn, ndim = pv$ndim, get_geod = pv$get_geod, .mute = NULL)
+      embed_result = dimRed::embed(dt, "Isomap", knn = pv$knn, ndim = pv$ndim, get_geod = pv$get_geod, .mute = pv$.mute)
       self$state = list(embed_result = embed_result)
       embed_result@data@data
     },
