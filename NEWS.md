@@ -1,7 +1,7 @@
 # mlr3pipelines 0.9.0-9000
 
 * Fix: Added internal workaround for `PipeOpNMF` attaching `Biobase`, `BiocGenerics`, and `generics` to the search path during training, prediction or when printing its `$state`.
-
+* feat: allow dates in datefeatures pipe op and use data.table for date feature generation
 
 # mlr3pipelines 0.9.0
 
