@@ -146,9 +146,9 @@ PipeOpNMF = R6Class("PipeOpNMF",
   private = list(
 
     .train_dt = function(dt, levels, target) {
-      # NOTE: NMF indirectly attaches Biobase which attaches BiocGenerics which attaches generics to the search path on
+      # Note: NMF indirectly attaches Biobase which attaches BiocGenerics which attaches generics to the search path on
       # load. If NMF was not loaded prior to this, we detach packages on exit that were not originally attached. If it
-      # was, we leave the search path as it was. Necessary because of mlr-org/mlr3#1112, #751, and #929.
+      # was, we leave the search path as it was. Necessary because of #751, #929, and renozao/NMF#191.
       if ("NMF" %nin% loadedNamespaces()) {
         pkgs = c("package:Biobase", "package:BiocGenerics", "package:generics")  # order is important due to depends
         to_be_detached = pkgs[pkgs %nin% search()]
@@ -174,7 +174,7 @@ PipeOpNMF = R6Class("PipeOpNMF",
         .options = self$param_set$get_values(tags = "nmf.options")
       )
 
-      self$state = nmf
+      self$state = structure(list(nmf = nmf), class = "PipeOpNMFstate")
       # here we have two options? return directly h or do what we do during prediction
       #h = t(mlr3misc::invoke(NMF::coef, object = nmf))
       w = mlr3misc::invoke(NMF::basis, object = nmf)
@@ -195,7 +195,7 @@ PipeOpNMF = R6Class("PipeOpNMF",
       }
 
       x = t(as.matrix(dt))
-      w = mlr3misc::invoke(NMF::basis, object = self$state)
+      w = mlr3misc::invoke(NMF::basis, object = self$state$nmf)
       h_ = t(mlr3misc::invoke(MASS::ginv, X = w) %*% x)
       colnames(h_) = paste0("NMF", seq_len(self$param_set$values$rank))
       h_
@@ -211,6 +211,18 @@ PipeOpNMF = R6Class("PipeOpNMF",
 )
 
 mlr_pipeops$add("nmf", PipeOpNMF)
+
+#' @export
+# Prevent printing of PipeOpNMF's state if NMF is not loaded to avoid attaching of Biobase, BiocGenerics, and generics
+# during S4 method lookup
+print.PipeOpNMFstate = function(x, ...) {
+  if ("NMF" %nin% loadedNamespaces()) {
+    cat("[PipeOpNMFstate]\n")
+    invisible(x)
+  } else {
+    NextMethod()
+  }
+}
 
 # this is just a really bad idea
 ## CondLarger = R6Class("CondLarger", inherit = Condition,

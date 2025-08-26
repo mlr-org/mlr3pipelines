@@ -1,5 +1,9 @@
 devtools::load_all()
-debug(mlr3pipelines:::.__PipeOp__predict)
+# debug(mlr3pipelines:::.__PipeOpTaskPreproc__.train_task)
+
+# op = po("nmf")
+# op$train(list(tsk("iris")))
+# saveRDS(op$state, "attic/PipeOpNMF_state.RDS")
 
 # ----------------------------------------------- #
 
