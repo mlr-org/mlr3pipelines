@@ -1,5 +1,11 @@
-devtools::load_all()
+# Restart R between running each block. Here as an alternative to the tests in PipeOpNMF's tests since those only
+# roughly emulate restarting of the R session by unloading packages.
+
+# ----------------------------------------------- #
+
 # debug(mlr3pipelines:::.__PipeOpTaskPreproc__.train_task)
+
+# ----------------------------------------------- #
 
 # op = po("nmf")
 # op$train(list(tsk("iris")))
@@ -7,6 +13,7 @@ devtools::load_all()
 
 # ----------------------------------------------- #
 
+devtools::load_all()
 orig_attached <- search()
 op <- po("nmf")
 op$train(list(tsk("iris")))
@@ -14,6 +21,7 @@ expect_equal(search(), orig_attached)
 
 # ------------------------------------------- #
 
+devtools::load_all()
 library(NMF)
 orig_attached <- search()
 op <- po("nmf")
@@ -22,6 +30,7 @@ expect_equal(search(), orig_attached)
 
 # ---------------------------------------------- #
 
+devtools::load_all()
 library(BiocGenerics)
 orig_attached <- search()
 op <- po("nmf")
@@ -30,6 +39,7 @@ expect_equal(search(), orig_attached)
 
 # ------------------------------------------- #
 
+devtools::load_all()
 orig_attached <- search()
 op <- po("nmf")
 op$state <- readRDS("attic/PipeOpNMF_state.RDS")
@@ -38,6 +48,7 @@ expect_equal(search(), orig_attached)
 
 # ------------------------------------------- #
 
+devtools::load_all()
 library(NMF)
 orig_attached <- search()
 op <- po("nmf")
@@ -47,11 +58,10 @@ expect_equal(search(), orig_attached)
 
 # ---------------------------------------------- #
 
+devtools::load_all()
 library(BiocGenerics)
 orig_attached <- search()
 op <- po("nmf")
-op$state <- readRDS("attic/PipeOpNMF_PipeOpNMF_state.RDS")
+op$state <- readRDS("attic/PipeOpNMF_state.RDS")
 op$predict(list(tsk("iris")))
 expect_equal(search(), orig_attached)
-
-# different printer + accessing state somehow loads NMF (even already during field lookup ...)
