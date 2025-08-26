@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.8.0-9000
+Version: 0.9.0-9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -67,7 +67,7 @@ Imports:
     lgr,
     mlr3 (>= 0.20.0),
     mlr3misc (>= 0.17.0),
-    paradox,
+    paradox (>= 1.0.0),
     R6,
     withr
 Suggests:

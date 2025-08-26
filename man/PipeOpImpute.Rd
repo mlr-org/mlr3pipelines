@@ -35,7 +35,7 @@ during training. Can be one of \code{"never"}, \code{"always"}, or \code{"param"
 during prediction will \emph{not} be imputed.
 \item If set to \code{"always"}, an unseen level is added to the feature during training and missing values are imputed as
 that value during prediction.
-\item Finally, if set to \code{"param"}, the hyperparameter \code{create_empty_levels} is added and control over this behavior is
+\item Finally, if set to \code{"param"}, the hyperparameter \code{create_empty_level} is added and control over this behavior is
 left to the user.
 }
 
@@ -157,6 +157,7 @@ or the empty string (\code{character}).
 (\code{atomic}, \code{character(1)}, \code{any}, \code{\link[data.table:data.table]{data.table}}) -> \code{atomic}\cr
 Imputes the features. \code{model} is the model created by \code{private$.train_imputer()}. Default behaviour is to assume \code{model} is an atomic vector
 from which values are sampled to impute missing values of \code{feature}. \code{model} may have an attribute \code{probabilities} for non-uniform sampling.
+If \code{model} has length zero, \code{feature} is returned unchanged.
 }
 }
 

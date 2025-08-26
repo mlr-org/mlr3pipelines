@@ -332,7 +332,7 @@ PipeOp = R6Class("PipeOp",
         # If the PipeOp would only need NULLs in training anyways (e.g. PipeOpsClassifAvg), we can train the PipeOp for the user automatically.
         if (all(self$input$train %in% c("NULL", "[NULL]"))) {
           # Evaluates to NULL if x is not a Multiplicity
-          null_multiplicity <- function(x) {
+          null_multiplicity = function(x) {
             if (is.Multiplicity(x)) {
               as.Multiplicity(lapply(x, null_multiplicity))
             }
@@ -380,10 +380,6 @@ PipeOp = R6Class("PipeOp",
     id = function(val) {
       if (!missing(val)) {
         private$.id = val
-        if (paradox_info$is_old && !is.null(private$.param_set)) {
-          # private$.param_set may be NULL if it is constructed dynamically by active binding
-          private$.param_set$set_id = val
-        }
       }
       private$.id
     },
@@ -394,9 +390,6 @@ PipeOp = R6Class("PipeOp",
           private$.param_set = ParamSetCollection$new(sourcelist)
         } else {
           private$.param_set = sourcelist[[1]]
-        }
-        if (paradox_info$is_old && !is.null(self$id)) {
-          private$.param_set$set_id = self$id
         }
       }
       if (!missing(val) && !identical(val, private$.param_set)) {

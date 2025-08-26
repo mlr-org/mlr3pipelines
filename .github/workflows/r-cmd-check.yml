@@ -42,5 +42,5 @@ jobs:
 
       - uses: r-lib/actions/check-r-package@v2
         env:
-          _R_CHECK_DEPENDS_ONLY_: ${{ matrix.config.depends_only && 'TRUE' || '' }}
+          _R_CHECK_DEPENDS_ONLY_: ${{ matrix.config.depends_only && 'TRUE' || 'FALSE' }}
           NOT_CRAN: ${{ matrix.config.depends_only && 'FALSE' || 'TRUE' }}
