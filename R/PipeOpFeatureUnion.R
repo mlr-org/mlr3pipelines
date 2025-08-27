@@ -135,7 +135,18 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
     .train = function(inputs) {
       self$state = list()
       if (private$.collect) inputs = unclass(inputs[[1]])
-      list(cbind_tasks(inputs, self$assert_targets_equal, self$inprefix))
+
+      outtask = cbind_tasks(inputs, self$assert_targets_equal, self$inprefix)
+
+      input_internal_valid_tasks = map(inputs, "internal_valid_task")
+      # We drop internal_valid_task if any of the input Tasks has no internal_valid_task
+      if (!some(input_internal_valid_tasks, is.null)) {
+        outtask$internal_valid_task = cbind_tasks(input_internal_valid_tasks, self$assert_targets_equal, self$inprefix)
+      } else {
+        outtask$internal_valid_task = NULL
+      }
+
+      list(outtask)
     },
     .predict = function(inputs) {
       if (private$.collect) inputs = unclass(inputs[[1]])

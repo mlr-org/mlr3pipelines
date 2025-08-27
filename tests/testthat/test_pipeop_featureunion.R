@@ -274,3 +274,33 @@ test_that("featureunion - does not drop 'x' column", {
   taskout = po("featureunion")$train(list(task1, task2))[[1L]]
   expect_permutation(taskout$feature_names, c("x", "z"))
 })
+
+test_that("PipeOpFeatureUnion - internal validation task", {
+  task = tsk("iris")
+  task$internal_valid_task = c(1:10, 51:60, 101:110)
+  op = po("featureunion")
+
+  # Same columns
+  outtask = op$train(list(task, task))[[1L]]
+  expect_equal(outtask$internal_valid_task$data(), task$internal_valid_task$data())
+
+  # Distinct columns
+  task1 = task$clone(deep = TRUE)$select(c("Petal.Length", "Petal.Width"))
+  task2 = task$clone(deep = TRUE)$select(c("Sepal.Length", "Sepal.Width"))
+
+  outtask = op$train(list(task1, task2))[[1L]]
+  expect_equal(outtask$internal_valid_task$data(), task$internal_valid_task$data())
+
+  # Non-distinct, modified columns
+  gr = gunion(list(
+    po("select", selector = selector_grep("Sepal")),
+    po("scale", affect_columns = selector_grep("Petal"))
+  )) %>>% op
+  outtask = gr$train(task)[[1L]]
+  desired_task = po("scale", affect_columns = selector_grep("Petal"))$train(list(task))[[1L]]$internal_valid_task
+  expect_equal(outtask$internal_valid_task$data(), desired_task$data(), ignore.col.order = TRUE)
+
+  # Multiplicity input
+  outtask = po("featureunion", collect_multiplicity = TRUE)$train(list(Multiplicity(task, task)))[[1L]]
+
+})
