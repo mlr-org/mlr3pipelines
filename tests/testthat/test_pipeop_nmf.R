@@ -38,14 +38,24 @@ test_that("PipeOpNMF - parameters", {
 
 test_that("PipeOpNMF - does not modify search path when NMF is not loaded, fix for #929", {
   skip_if_not_installed("NMF")
+  # Cleanup to get as clean an environment and search path as possible. Necessary because skip_if_not_installed loads the package.
+  unloadNamespace("NMF")
+  unloadNamespace("Biobase")
+  unloadNamespace("BiocGenerics")
+  unloadNamespace("dplyr")  # necessary to unload generics
+  unloadNamespace("generics")
+  # Test that environment and search path are as we want them
+  expect_true(all(c("NMF", "Biobase", "BiocGenerics", "generics") %nin% loadedNamespaces()))
+  expect_true(all(paste0("package:", c("NMF", "Biobase", "BiocGenerics", "generics")) %nin% search()))
 
   orig_attached = search()
 
   op = po("nmf")
   op$train(list(tsk("iris")))
   expect_equal(search(), orig_attached)
-  # Ideally, we'd want to restore the original environment but that is not easily possible. Testing predict in its own
-  # test is also difficult since we'd need a correct state for that.
+
+  # Ideally, we'd want to restore the original environment but that is not easily possible.
+  # Testing predict in its own test is also difficult since we'd need a correct state for that.
   unloadNamespace("NMF")
   op$predict(list(tsk("iris")))
   expect_equal(search(), orig_attached)
@@ -54,12 +64,15 @@ test_that("PipeOpNMF - does not modify search path when NMF is not loaded, fix f
   unloadNamespace("NMF")
   print(op$state)
   expect_equal(search(), orig_attached)
+
 })
 
-test_that("PipeOpNMF - does not modify search path when NMF or its dependencies are loaded, fix for #929", {
-  skip_if_not_installed("NMF")
+test_that("PipeOpNMF - does not modify search path when NMF is loaded, fix for #929", {
+  skip_if_not_installed("NMF")  # does not attach NMF, but for our fix to work NMF only needs to be loaded
+  # Test that environment is as we'd expect it
+  expect_true(all(c("NMF", "Biobase", "BiocGenerics", "generics") %in% loadedNamespaces()))
+  expect_true(all(paste0("package:", c("Biobase", "BiocGenerics", "generics")) %in% search()))
 
-  library("NMF")
   orig_attached = search()
 
   op = po("nmf")
@@ -68,14 +81,24 @@ test_that("PipeOpNMF - does not modify search path when NMF or its dependencies 
   op$predict(list(tsk("iris")))
   expect_equal(search(), orig_attached)
 
-  # Test when only (some of) NMF's dependencies are loaded (e.g. through other packages)
+})
+
+test_that("PipeOpNMF - does not modify search path when some of NMF's dependencies are loaded, fix for #929", {
+  skip_if_not_installed("NMF")
   unloadNamespace("NMF")
   unloadNamespace("Biobase")
+  # Test that environment is as we'd expect it
+  expect_true(all(c("NMF", "Biobase") %nin% loadedNamespaces()))
+  expect_true(all(paste0("package:", c("NMF", "Biobase")) %nin% search()))
+  expect_true(all(c("BiocGenerics", "generics") %in% loadedNamespaces()))
+  expect_true(all(paste0("package:", c("BiocGenerics", "generics")) %in% search()))
+
   orig_attached = search()
 
   op = po("nmf")
   op$train(list(tsk("iris")))
   expect_equal(search(), orig_attached)
+
   unloadNamespace("NMF")
   unloadNamespace("Biobase")
   op$predict(list(tsk("iris")))
@@ -90,8 +113,7 @@ test_that("PipeOpNMF - does not modify search path when NMF or its dependencies 
 })
 
 test_that("PipeOpNMF - Did NMF fix its .onload weirdness? See renozao/NMF#191", {
-  skip_if_not_installed("NMF")
-  orig_attached = search()
-  NMF::nmfModels()
-  expect_false(isTRUE(all.equal(search(), orig_attached)))
+  skip_if_not_installed("NMF")  # loads NMF which attaches the packages as long as this is not fixed
+  expect_true(all(paste0("package:", c("Biobase", "BiocGenerics", "generics")) %in% search()))
+
 })
