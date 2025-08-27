@@ -1,27 +1,40 @@
 # DRAFT
 
 PipeOpBasisSplines = R6Class("PipeOpBasisSplines",
-  inherit = PipeOpTaskPreproc,
+  inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "basissplines", param_vals = list()) {
     ps = ps(
-      factor = p_fct(levels = c("polynomial", "natural cubic"), default = `placeholder`, tags = "train") # tag basissplines?
+      factor = p_fct(levels = c("polynomial", "cubic"), default = "polynomial", tags = c("train", "basissplines")), # tag basissplines?
+      df = p_int(lower = 1, upper = Inf, tags = c("train", "basissplines"))
     )
       ps$values = list()
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+      super$initialize(id = id, param_set = ps, param_vals = param_vals)
     }
   ),
   private = list(
-    .train_dt = function(dt, levels, target) {
-    },
-    .predict_dt = function(dt, levels, target) {
+    .transform_dt = function(dt, levels) {
+      browser()
+
+      dt
     }
+    # output
+    # eval(parse(text = paste0("splines::ns(", "dt[[", 3,"]], ", 2, ")")))
   )
 )
 
+mlr_pipeops$add("basissplines", PipeOpBasisSplines)
+
+po = po("basissplines")
+
+po$train(list(tsk("mtcars")))
+
+# df als hyperparameterf
+# das ziel ist es dass wir diese model.matrix für alle features kriegen
+# original features behalten dann feature_union ==> egaluser verantwortung
 
 
-
+#splines.cyl.1
 
 task = tsk("mtcars")
 
@@ -33,4 +46,3 @@ fit <- lm(mpg ~ splines::ns(cyl, df = 2) + splines::ns(hp, df = 2), data = mtcar
 model.matrix(fit) # this is what we want to get as a result from PipeOpSplineBasis
 
 as.data.frame(stats::model.matrix(mpg ~ splines::ns(cyl, 2) + splines::ns(task$data()$hp, 2), data = mtcars))
-?model.matrix
