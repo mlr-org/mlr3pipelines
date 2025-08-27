@@ -1,4 +1,4 @@
-#' @title Algorithm for Dimensionality Reduction
+#' @title ApAlgorithm for Dimensionality Reduction
 #'
 #' @usage NULL
 #' @name mlr_pipeops_isomap
@@ -35,7 +35,7 @@
 #'   Determines whether the distance matrix should be kept in the `$state`
 #'   Initialized to `FALSE`.
 #' * `.mute` :: `character`\cr
-#'   A character vector containing the elements you want to mute (c("message", "output")).
+#'   A character vector containing the elements you want to mute during training (c("message", "output")).
 #'   Initialized to `character(0)`.
 #'
 #'
@@ -62,19 +62,17 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
   public = list(
     initialize = function(id = "isomap", param_vals = list()) {
       ps = ps(
-        knn = p_int(lower = 1, upper = Inf, tags = "train"), # tag isomap?
-        ndim = p_int(lower = 1, upper = Inf, tags = "train"), #tag isomap?
-        get_geod = p_lgl(tags = "train"),
-        .mute = p_uty(tags = "train")
+        knn = p_int(default = 50, lower = 1, upper = Inf, tags = c("train", "isomap")),
+        ndim = p_int(default = 2, lower = 1, upper = Inf, tags = c("train", "isomap")),
+        get_geod = p_lgl(default = FALSE, tags = c("train", "isomap")),
+        .mute = p_uty(default = NULL, tags = c("train", "isomap"))
       )
-      ps$values = list(knn = 50, ndim = 2, get_geod = FALSE)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer", "factor", "logical"))
     }
   ),
   private = list(
     .train_dt = function(dt, levels, target) {
-      pv = self$param_set$get_values(tags = "train")
-      embed_result = dimRed::embed(dt, "Isomap", knn = pv$knn, ndim = pv$ndim, get_geod = pv$get_geod, .mute = pv$.mute)
+      embed_result = mlr3misc::invoke(.f = dimRed::embed, .data = dt, .method = "Isomap", .args = self$param_set$get_values(tags = "isomap"))
       self$state = list(embed_result = embed_result)
       embed_result@data@data
     },
@@ -86,7 +84,9 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
 
 mlr_pipeops$add("isomap", PipeOpIsomap)
 
-# po = po("isomap", knn = 50, ndim = 2, get_geod = TRUE)
+# po = po("isomap")
+# po$param_set$get_values(tags = "train")
+
 
 # po$train(list(tsk("iris")))[[1]]$data()
 # po$predict(list(tsk("iris")))[[1]]$data()
@@ -97,4 +97,6 @@ mlr_pipeops$add("isomap", PipeOpIsomap)
 # emb2 <- embed(iris[1:4], "Isomap", .mute = NULL, knn = 25)
 # emb3 <- predict(emb2, iris[1:4])
 
+# po = po("isomap", knn = 20, ndim = 2, get_geod = TRUE)
+# plot(po$train(list(tsk("mtcars")))[[1]]$data()[,2:3])
 

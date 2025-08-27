@@ -3,17 +3,17 @@ context("PipeOpIsomap")
 test_that("PipeOpIsomap - basic properties", {
   op = po("isomap", .mute = "message")
   task = mlr_tasks$get("iris")
-  #browser()
   expect_pipeop(op)
   expect_datapreproc_pipeop_class(PipeOpIsomap, task = task, tolerance = 1)
 })
 
 # Argumentation für tolerance = 1
-#' dat <- loadDataSet("Iris")
-#' emb <- embed(dat, "Isomap", knn = 50)
-#' emb2 <- predict(emb, dat)
-#' plot(emb)
-#' plot(emb2)
+dat <- dimRed::loadDataSet("Iris")
+emb <- dimRed::embed(dat, "Isomap", knn = 50)
+emb2 <- selectMethod("predict", "dimRedResult")(emb, dat)
+dimRed::plot(emb, type ="2vars")
+dimRed::plot(emb2, type = "2vars")
+
 
 test_that("compare to dimRed::isomap", {
   skip_if_not_installed("dimRed")
@@ -27,7 +27,6 @@ test_that("compare to dimRed::isomap", {
   # Version 2 - dimRed package
   data = dimRed::loadDataSet("Iris")
   dimRed_result_train = dimRed::embed(data, "Isomap", knn = 50)
-  dimRed_result_train@data@data = dimRed_result_train@data@data
 
   expect_equal(as.matrix(pipeop_iso_train), dimRed_result_train@data@data)
   expect_equal(as.data.frame(pipeop_meta_train), dimRed_result_train@data@meta)
@@ -80,15 +79,15 @@ test_that("hyperparameter get_geod", {
 
 test_that("hyperparameter .mute", {
   skip_if_not_installed("dimRed")
-  # Check 1 - get_geod = FALSE behaves as expected
   po = po("isomap", .mute = c("message", "output"))
   expect_no_message(po$train(list(tsk("iris"))))
   # expect_no_message(po$predict(list(tsk("iris"))))
 })
 
 
+# why does it fail
+po_message = po("isomap")
+po_message$train(list(tsk("iris")))
 
-
-
-# test idea - when ndim = 2, does the data have iso1 and iso2
-# test idea - when get_geod = TRUE, then the distance matrix is in the $state
+po_no_message = po("isomap", .mute = c("message", "output"))
+po_no_message$train(list(tsk("iris")))
