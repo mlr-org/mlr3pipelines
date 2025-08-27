@@ -302,5 +302,6 @@ test_that("PipeOpFeatureUnion - internal validation task", {
 
   # Multiplicity input
   outtask = po("featureunion", collect_multiplicity = TRUE)$train(list(Multiplicity(task, task)))[[1L]]
+  expect_equal(outtask$internal_valid_task$data(), task$internal_valid_task$data())
 
 })
