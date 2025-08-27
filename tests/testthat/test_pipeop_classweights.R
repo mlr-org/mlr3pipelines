@@ -26,7 +26,6 @@ test_that("PipeOpClassWeights", {
 
 test_that("PipeOpClassWeights - error for Tasks without weights property, #937", {
   skip_if_not_installed("mlr3learners")
-  library(mlr3learners)
 
   set.seed(1234)
   task = as_task_classif(data.table(
