@@ -111,9 +111,3 @@ test_that("PipeOpNMF - does not modify search path when some of NMF's dependenci
   expect_equal(search(), orig_attached)
 
 })
-
-test_that("PipeOpNMF - Did NMF fix its .onload weirdness? See renozao/NMF#191", {
-  skip_if_not_installed("NMF")  # loads NMF which attaches the packages as long as this is not fixed
-  expect_true(all(paste0("package:", c("Biobase", "BiocGenerics", "generics")) %in% search()))
-
-})
