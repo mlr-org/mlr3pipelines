@@ -42,10 +42,9 @@ test_that("PipeOpNMF - does not modify search path when NMF is not loaded, fix f
   unloadNamespace("NMF")
   unloadNamespace("Biobase")
   unloadNamespace("BiocGenerics")
-  unloadNamespace("dplyr")  # necessary to unload generics
-  unloadNamespace("generics")
+  detach(package:generics)  # We leave generics as loaded as it is required by other loaded packages (dplyr, themis, recipes)
   # Test that environment and search path are as we want them
-  expect_true(all(c("NMF", "Biobase", "BiocGenerics", "generics") %nin% loadedNamespaces()))
+  expect_true(all(c("NMF", "Biobase", "BiocGenerics") %nin% loadedNamespaces()))
   expect_true(all(paste0("package:", c("NMF", "Biobase", "BiocGenerics", "generics")) %nin% search()))
 
   orig_attached = search()
