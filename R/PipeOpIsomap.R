@@ -67,7 +67,7 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
         get_geod = p_lgl(default = FALSE, tags = c("train", "isomap")),
         .mute = p_uty(init = c("message", "output"), tags = c("train", "isomap"))
       )
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), packages = c("dimRed", "stats"))
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("dimRed", "stats"))
     }
   ),
   private = list(
