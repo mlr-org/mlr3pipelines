@@ -1,6 +1,7 @@
 # mlr3pipelines 0.9.0-9000
 
 * feat: allow dates in datefeatures pipe op and use data.table for date feature generation
+* Added support for internal validation tasks to `PipeOpFeatureUnion`.
 
 # mlr3pipelines 0.9.0
 
