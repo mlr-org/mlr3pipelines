@@ -65,9 +65,9 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
         knn = p_int(default = 50, lower = 1, upper = Inf, tags = c("train", "isomap")),
         ndim = p_int(default = 2, lower = 1, upper = Inf, tags = c("train", "isomap")),
         get_geod = p_lgl(default = FALSE, tags = c("train", "isomap")),
-        .mute = p_uty(default = NULL, tags = c("train", "isomap"))
+        .mute = p_uty(init = c("message", "output"), tags = c("train", "isomap"))
       )
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer", "factor", "logical"))
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), packages = c("dimRed", "stats"))
     }
   ),
   private = list(
@@ -77,14 +77,14 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
       embed_result@data@data
     },
     .predict_dt = function(dt, levels) {
-      selectMethod("predict", "dimRedResult")(self$state$embed_result, as.data.frame(dt))@data
+      dimRed::predict(self$state$embed_result, as.data.frame(dt))@data
     }
   )
 )
 
 mlr_pipeops$add("isomap", PipeOpIsomap)
 
-# po = po("isomap")
+# po = po("isomap", .mute = "message")
 # po$param_set$get_values(tags = "train")
 
 

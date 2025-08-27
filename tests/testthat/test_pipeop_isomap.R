@@ -1,22 +1,37 @@
 context("PipeOpIsomap")
 
 test_that("PipeOpIsomap - basic properties", {
+  skip_if_not_installed("dimRed")
+  skip_if_not_installed("stats")
   op = po("isomap", .mute = "message")
   task = mlr_tasks$get("iris")
   expect_pipeop(op)
-  expect_datapreproc_pipeop_class(PipeOpIsomap, task = task, tolerance = 1)
+  expect_datapreproc_pipeop_class(PipeOpIsomap, task = task, predict_like_train = FALSE, deterministic_predict = FALSE)
 })
 
+
+
 # Argumentation für tolerance = 1
-dat <- dimRed::loadDataSet("Iris")
-emb <- dimRed::embed(dat, "Isomap", knn = 50)
-emb2 <- selectMethod("predict", "dimRedResult")(emb, dat)
-dimRed::plot(emb, type ="2vars")
-dimRed::plot(emb2, type = "2vars")
+# dat <- dimRed::loadDataSet("Iris")
+# iris[150:1,] --> in Datenformat S4/dimRed Format bringen ==> schauen ob das Resultat das gleiche ist
+# falls es nicht gleich ist determ_pred auf FALSE
+# emb <- dimRed::embed(dat, "Isomap", knn = 50)
+# emb2 <- selectMethod("predict", "dimRedResult")(emb, dat)
+# emb3 <- selectMethod("predict", "dimRedResult")(emb, dat)
+# dimRed::plot(emb, type ="2vars")
+# dimRed::plot(emb3, type = "2vars")
+
+# datrev = dimRed::loadDataSet("Iris")
+# datrev@data <- datrev@data[nrow(datrev@data):1, ]
+# datrev@meta <- datrev@meta[nrow(datrev@meta):1, , drop = FALSE]
+
+# embrev <- dimRed::embed(datrev, "Isomap", knn = 50)
+# embrev2 <- selectMethod("predict", "dimRedResult")(embrev, dat)
 
 
 test_that("compare to dimRed::isomap", {
   skip_if_not_installed("dimRed")
+  skip_if_not_installed("stats")
   # Part 1 - Train-method
   # Version 1 - PipeOpIsomap
   task = tsk("iris")
@@ -47,6 +62,7 @@ test_that("compare to dimRed::isomap", {
 
 test_that("isomap algorithm requires data to be numeric", {
   skip_if_not_installed("dimRed")
+  skip_if_not_installed("stats")
   po = po("isomap")
   task = tsk("penguins")
   task$filter(which(complete.cases(task$data())))
@@ -55,6 +71,7 @@ test_that("isomap algorithm requires data to be numeric", {
 
 test_that("hyperparameter ndim", {
   skip_if_not_installed("dimRed")
+  skip_if_not_installed("stats")
   for (i in seq_len(length(tsk("iris")$feature_names))) {
     po = po("isomap", ndim = i)
     expect_equal(length(po$train(list(tsk("iris")))[[1]]$feature_names), i)
@@ -64,6 +81,7 @@ test_that("hyperparameter ndim", {
 
 test_that("hyperparameter get_geod", {
   skip_if_not_installed("dimRed")
+  skip_if_not_installed("stats")
   # Check 1 - get_geod = FALSE behaves as expected
   po_no_geod = po("isomap", get_geod = FALSE)
   po_no_geod$train(list(tsk("iris")))
@@ -79,6 +97,7 @@ test_that("hyperparameter get_geod", {
 
 test_that("hyperparameter .mute", {
   skip_if_not_installed("dimRed")
+  skip_if_not_installed("stats")
   po = po("isomap", .mute = c("message", "output"))
   expect_no_message(po$train(list(tsk("iris"))))
   # expect_no_message(po$predict(list(tsk("iris"))))
