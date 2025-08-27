@@ -175,3 +175,29 @@ test_that("Robustify Pipeline factor to numeric", {
 
 
 })
+
+test_that("Robustify pipeline - imputes missings for unseen factor levels", {
+  skip_if_not_installed("rpart")
+  # Construct Learner incapable of handling missings
+  learner = lrn("classif.rpart")
+  learner$properties = setdiff(learner$properties, "missings")
+  # Construct Tasks with unseen factor levels
+  task_NA = as_task_classif(data.table(
+    target = factor(rep(c("A", "B"), 3)),
+    fct = factor(rep(c("a", "b", NA), 2))
+  ), target = "target")
+  task_noNA = as_task_classif(data.table(
+    target = factor(rep(c("A", "B"), 3)),
+    fct = factor(rep(c("a", "b", "c"), 2))
+  ), target = "target")
+
+  g = ppl("robustify", learner = learner, task = task_NA)
+
+  expect_equal(sum(g$train(task_NA)[[1]]$missings()), 0)
+  expect_equal(sum(g$predict(task_noNA)[[1]]$missings()), 0)
+
+  glrn = g %>>% learner
+  expect_no_error(glrn$train(task_NA))
+  expect_no_error(glrn$predict(task_NA))
+
+})

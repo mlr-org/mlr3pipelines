@@ -654,3 +654,29 @@ test_that("'empty_level_control' in POImputeOOR and POImputeConstant", {
   expect_identical(predict_out$data(cols = names(dt_out)), dt_out)
 
 })
+
+test_that("PipeOpImputeSample - impute missings for unseen factor levels", {
+  skip_if_not_installed("rpart")
+  # Construct Learner incapable of handling missings
+  learner = lrn("classif.rpart")
+  learner$properties = setdiff(learner$properties, "missings")
+  # Construct Tasks with unseen factor levels
+  task_NA = as_task_classif(data.table(
+    target = factor(rep(c("A", "B"), 3)),
+    fct = factor(rep(c("a", "b", NA), 2))
+  ), target = "target")
+  task_noNA = as_task_classif(data.table(
+    target = factor(rep(c("A", "B"), 3)),
+    fct = factor(rep(c("a", "b", "c"), 2))
+  ), target = "target")
+
+  op = po("imputesample")
+
+  expect_equal(sum(op$train(list(task_NA))[[1]]$missings()), 0)
+  expect_equal(sum(op$predict(list(task_noNA))[[1]]$missings()), 0)
+
+  glrn = op %>>% learner
+  expect_no_error(glrn$train(task_NA))
+  expect_no_error(glrn$predict(task_NA))
+
+})
