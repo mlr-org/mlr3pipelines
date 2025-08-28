@@ -39,7 +39,7 @@
 #'
 #' # all Graphs currently in the dictionary:
 #' as.data.table(mlr_graphs)
-mlr_graphs = R6Class("DictionaryGraph", inherit = mlr3misc::Dictionary,
+mlr_graphs = R6Class("DictionaryGraph", inherit = Dictionary,
   cloneable = FALSE,
   public = list(
     add = function(key, value) {

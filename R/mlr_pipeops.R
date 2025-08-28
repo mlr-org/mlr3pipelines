@@ -62,7 +62,7 @@
 #'
 #' # all PipeOps currently in the dictionary:
 #' as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num", "packages")]
-mlr_pipeops = R6Class("DictionaryPipeOp", inherit = mlr3misc::Dictionary,
+mlr_pipeops = R6Class("DictionaryPipeOp", inherit = Dictionary,
   cloneable = FALSE,
   public = list(
     metainf = new.env(parent = emptyenv()),

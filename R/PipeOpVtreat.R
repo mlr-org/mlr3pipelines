@@ -134,7 +134,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
     initialize = function(id = "vtreat", param_vals = list()) {
       ps = ps(
         recommended = p_lgl(tags = c("train", "predict")),
-        cols_to_copy = p_uty(custom_check = checkmate::check_function, tags = c("train", "predict")),
+        cols_to_copy = p_uty(custom_check = check_function, tags = c("train", "predict")),
         # tags stand for: regression vtreat::regression_parameters() / classification vtreat::classification_parameters() / multinomial vtreat::multinomial_parameters()
         minFraction = p_dbl(lower = 0, upper = 1, default = 0.02, tags = c("train", "regression", "classification", "multinomial")),
         smFactor = p_dbl(lower = 0, upper = Inf, default = 0, tags = c("train", "regression", "classification", "multinomial")),
@@ -207,40 +207,40 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
       }
 
       if (length(self$param_set$values$imputation_map)) {
-        checkmate::assert_subset(names(self$param_set$values$imputation_map), choices = var_list, empty.ok = TRUE)
+        assert_subset(names(self$param_set$values$imputation_map), choices = var_list, empty.ok = TRUE)
       }
 
       # FIXME: Handle non-Regr / non-Classif Tasks that inherit from TaskSupervised, #913
       task_type = task$task_type
       transform_design = if (task_type == "regr") {
-        mlr3misc::invoke(vtreat::NumericOutcomeTreatment,
+        invoke(vtreat::NumericOutcomeTreatment,
           var_list = var_list,
           outcome_name = task$target_names,
           cols_to_copy = self$param_set$values$cols_to_copy(task),
-          params = vtreat::regression_parameters(mlr3misc::insert_named(self$param_set$get_values(tags = "regression"), list(check_for_duplicate_frames = FALSE))),
+          params = vtreat::regression_parameters(insert_named(self$param_set$get_values(tags = "regression"), list(check_for_duplicate_frames = FALSE))),
           imputation_map = self$param_set$values$imputation_map)
       } else if (task_type == "classif") {
         if (length(task$class_names) > 2L) {
-          mlr3misc::invoke(vtreat::MultinomialOutcomeTreatment,
+          invoke(vtreat::MultinomialOutcomeTreatment,
             var_list = var_list,
             outcome_name = task$target_names,
             cols_to_copy = self$param_set$values$cols_to_copy(task),
-            params = vtreat::multinomial_parameters(mlr3misc::insert_named(self$param_set$get_values(tags = "multinomial"), list(check_for_duplicate_frames = FALSE))),
+            params = vtreat::multinomial_parameters(insert_named(self$param_set$get_values(tags = "multinomial"), list(check_for_duplicate_frames = FALSE))),
             imputation_map = self$param_set$values$imputation_map)
         } else {
-          mlr3misc::invoke(vtreat::BinomialOutcomeTreatment,
+          invoke(vtreat::BinomialOutcomeTreatment,
             var_list = var_list,
             outcome_name = task$target_names,
             outcome_target = task$positive,
             cols_to_copy = self$param_set$values$cols_to_copy(task),
-            params = vtreat::classification_parameters(mlr3misc::insert_named(self$param_set$get_values(tags = "classification"), list(check_for_duplicate_frames = FALSE))),
+            params = vtreat::classification_parameters(insert_named(self$param_set$get_values(tags = "classification"), list(check_for_duplicate_frames = FALSE))),
             imputation_map = self$param_set$values$imputation_map)
         }
       }
 
       # the following exception handling is necessary because vtreat sometimes fails with "no usable vars" if the data is already "clean" enough
       vtreat_res = tryCatch(
-        mlr3misc::invoke(vtreat::fit_prepare,
+        invoke(vtreat::fit_prepare,
           vps = transform_design,
           dframe = task$data(),
           weights = if ("weights_learner" %in% names(task)) task$weights_learner$weight else task$weights$weight,
@@ -261,11 +261,11 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
 
       self$state$treatment_plan = vtreat_res$treatments
 
-      d_prepared = data.table::setDT(vtreat_res$cross_frame)
+      d_prepared = setDT(vtreat_res$cross_frame)
 
       feature_subset = self$state$treatment_plan$get_feature_names()  # subset to vtreat features
       if (self$param_set$values$recommended) {
-        score_frame = mlr3misc::invoke(vtreat::get_score_frame, vps = self$state$treatment_plan)
+        score_frame = invoke(vtreat::get_score_frame, vps = self$state$treatment_plan)
         feature_subset = feature_subset[feature_subset %in% score_frame$varName[score_frame$recommended]]  # subset to only recommended
       }
       feature_subset = c(feature_subset, self$param_set$values$cols_to_copy(task))  # respect cols_to_copy
@@ -283,7 +283,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
 
       # the following exception handling is necessary because vtreat sometimes fails with "no usable vars" if the data is already "clean" enough
       d_prepared = tryCatch(
-        data.table::setDT(mlr3misc::invoke(vtreat::prepare,
+        setDT(invoke(vtreat::prepare,
           treatmentplan = self$state$treatment_plan,
           dframe = task$data())),
         error = function(error_condition) {
@@ -297,7 +297,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
 
       feature_subset = self$state$treatment_plan$get_feature_names()  # subset to vtreat features
       if (self$param_set$values$recommended) {
-        score_frame = mlr3misc::invoke(vtreat::get_score_frame, vps = self$state$treatment_plan)
+        score_frame = invoke(vtreat::get_score_frame, vps = self$state$treatment_plan)
         feature_subset = feature_subset[feature_subset %in% score_frame$varName[score_frame$recommended]]  # subset to only recommended
       }
       feature_subset = c(feature_subset, self$param_set$values$cols_to_copy(task))  # respect cols_to_copy
