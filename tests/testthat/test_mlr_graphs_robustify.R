@@ -184,11 +184,13 @@ test_that("Robustify pipeline - imputes missings for unseen factor levels", {
   # Construct Tasks with unseen factor levels
   task_NA = as_task_classif(data.table(
     target = factor(rep(c("A", "B"), 3)),
-    fct = factor(rep(c("a", "b", NA), 2))
+    fct = factor(rep(c("a", "b", NA), 2)),
+    fct2 = factor(rep(c("a", "b"), 3))
   ), target = "target")
   task_noNA = as_task_classif(data.table(
     target = factor(rep(c("A", "B"), 3)),
-    fct = factor(rep(c("a", "b", "c"), 2))
+    fct = factor(rep(c("a", "b", "c"), 2)),
+    fct2 = factor(rep(c("a", "b", "c"), 2))
   ), target = "target")
 
   g = ppl("robustify", learner = learner, task = task_NA)
