@@ -130,58 +130,128 @@ of <code><a href="https://mlr3.mlr-org.com/reference/TaskSupervised.html" class=
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"pca"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Training</span></span></span>
 <span class="r-in"><span><span class="fu">preproc</span><span class="op">(</span><span class="va">task</span>, <span class="va">pop</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in preproc(task, pop):</span> unused argument (pop)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (150x5): Iris Flowers</span> <span style="color: #00BBBB;">─────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target: Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: setosa (33%), versicolor (33%), virginica (33%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Features (4):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (4): PC1, PC2, PC3, PC4</span>
 <span class="r-in"><span><span class="co"># Note that the PipeOp gets trained through this</span></span></span>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">is_trained</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Predicting a trained PipeOp (trained through previous call to preproc)</span></span></span>
 <span class="r-in"><span><span class="fu">preproc</span><span class="op">(</span><span class="va">task</span>, <span class="va">pop</span>, predict <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in preproc(task, pop, predict = TRUE):</span> unused arguments (pop, predict = TRUE)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (150x5): Iris Flowers</span> <span style="color: #00BBBB;">─────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target: Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: setosa (33%), versicolor (33%), virginica (33%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Features (4):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (4): PC1, PC2, PC3, PC4</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Predicting using a given state</span></span></span>
 <span class="r-in"><span><span class="co"># We use the state of the PipeOp from the last example and then reset it</span></span></span>
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">state</span> <span class="op">=</span> <span class="cn">NULL</span></span></span>
 <span class="r-in"><span><span class="fu">preproc</span><span class="op">(</span><span class="va">task</span>, <span class="va">pop</span>, <span class="va">state</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in preproc(task, pop, state):</span> unused arguments (pop, state)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (150x5): Iris Flowers</span> <span style="color: #00BBBB;">─────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target: Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: setosa (33%), versicolor (33%), virginica (33%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Features (4):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (4): PC1, PC2, PC3, PC4</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Note that the PipeOp's state may get overwritten inadvertently during</span></span></span>
 <span class="r-in"><span><span class="co"># training or if a state is given</span></span></span>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">state</span><span class="op">$</span><span class="va">sdev</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.0562689 0.4926162 0.2796596 0.1543862</span>
 <span class="r-in"><span><span class="fu">preproc</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"wine"</span><span class="op">)</span>, <span class="va">pop</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in preproc(tsk("wine"), pop):</span> unused argument (pop)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (178x14): Wine Regions</span> <span style="color: #00BBBB;">────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target: type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: 2 (40%), 1 (33%), 3 (27%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Features (13):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (13): PC1, PC10, PC11, PC12, PC13, PC2, PC3, PC4, PC5, PC6, PC7, PC8,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   PC9</span>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">state</span><span class="op">$</span><span class="va">sdev</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 314.9631558  13.1352680   3.0721513   2.2340946   1.1085329   0.9170953</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]   0.5281794   0.3890775   0.3348085   0.2677734   0.1938452   0.1451632</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13]   0.0905743</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Piping multiple preproc() calls, using dictionary sugar to set parameters</span></span></span>
-<span class="r-in"><span><span class="co"># tsk("penguins") |&gt;</span></span></span>
-<span class="r-in"><span><span class="co">#   preproc(po("imputemode", affect_columns = selector_name("sex"))) |&gt;</span></span></span>
-<span class="r-in"><span><span class="co">#   preproc(po("imputemean"))</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"penguins"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">preproc</span><span class="op">(</span><span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputemode"</span>, affect_columns <span class="op">=</span> <span class="fu"><a href="Selector.html">selector_name</a></span><span class="op">(</span><span class="st">"sex"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">preproc</span><span class="op">(</span><span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputemean"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (344x8): Palmer Penguins</span> <span style="color: #00BBBB;">──────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target: species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: Adelie (44%), Gentoo (36%), Chinstrap (20%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Features (7):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • int (3): body_mass, flipper_length, year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (2): bill_depth, bill_length</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • fct (2): island, sex</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Use preproc with a Graph</span></span></span>
 <span class="r-in"><span><span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"pca"</span>, rank. <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"learner"</span>, learner <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">preproc</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span>, <span class="va">gr</span><span class="op">)</span>  <span class="co"># returns NULL because of the learner</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in preproc(tsk("sonar"), gr):</span> unused argument (gr)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span><span class="fu">preproc</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span>, <span class="va">gr</span>, predict <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in preproc(tsk("sonar"), gr, predict = TRUE):</span> unused arguments (gr, predict = TRUE)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;PredictionClassif&gt;</span><span style="font-weight: bold;"> for </span><span style="color: #0000BB; font-weight: bold;">208</span><span style="font-weight: bold;"> observations:</span> <span style="color: #00BBBB;">───────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  row_ids truth response</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        1     R        R</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        2     R        R</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        3     R        R</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ---   ---      ---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      206     M        M</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      207     M        M</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      208     M        M</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Training with a data.table input</span></span></span>
 <span class="r-in"><span><span class="co"># Note that `$data()` drops the information that "Species" is the target.</span></span></span>
 <span class="r-in"><span><span class="co"># It gets handled like an ordinary feature here.</span></span></span>
 <span class="r-in"><span><span class="va">dt</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">preproc</span><span class="op">(</span><span class="va">dt</span>, <span class="va">pop</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in preproc(dt, pop):</span> unused argument (pop)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Species       PC1         PC2         PC3          PC4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;     &lt;num&gt;       &lt;num&gt;       &lt;num&gt;        &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa -2.684126 -0.31939725  0.02791483 -0.002262437</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa -2.714142  0.17700123  0.21046427 -0.099026550</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa -2.888991  0.14494943 -0.01790026 -0.019968390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa -2.745343  0.31829898 -0.03155937  0.075575817</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa -2.728717 -0.32675451 -0.09007924  0.061258593</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica  1.944110 -0.18753230 -0.17782509 -0.426195940</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica  1.527167  0.37531698  0.12189817 -0.254367442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica  1.764346 -0.07885885 -0.13048163 -0.137001274</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica  1.900942 -0.11662796 -0.72325156 -0.044595305</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica  1.390189  0.28266094 -0.36290965  0.155038628</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Predicting with a data.table input</span></span></span>
 <span class="r-in"><span><span class="fu">preproc</span><span class="op">(</span><span class="va">dt</span>, <span class="va">pop</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in preproc(dt, pop):</span> unused argument (pop)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Species       PC1         PC2         PC3          PC4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;     &lt;num&gt;       &lt;num&gt;       &lt;num&gt;        &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa -2.684126 -0.31939725  0.02791483 -0.002262437</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa -2.714142  0.17700123  0.21046427 -0.099026550</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa -2.888991  0.14494943 -0.01790026 -0.019968390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa -2.745343  0.31829898 -0.03155937  0.075575817</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa -2.728717 -0.32675451 -0.09007924  0.061258593</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica  1.944110 -0.18753230 -0.17782509 -0.426195940</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica  1.527167  0.37531698  0.12189817 -0.254367442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica  1.764346 -0.07885885 -0.13048163 -0.137001274</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica  1.900942 -0.11662796 -0.72325156 -0.044595305</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica  1.390189  0.28266094 -0.36290965  0.155038628</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
