@@ -536,7 +536,7 @@ check_types = function(self, data, direction, operation) {
     autoconverter = get_autoconverter(typereq)
     msg = ""
     if (!is.null(autoconverter)) {
-      mlr3misc::require_namespaces(autoconverter$packages,
+      require_namespaces(autoconverter$packages,
         sprintf("The following packages are required to convert object of class %s to class %s: %%s.", class(data_element)[1], typereq))
       msg = tryCatch({
         data_element = autoconverter$fun(data_element)
