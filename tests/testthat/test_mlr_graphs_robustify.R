@@ -156,7 +156,6 @@ test_that("Robustify Pipeline factor to numeric", {
   alltask = makeTypeTask(c("integer", "numeric", "logical", "character", "POSIXct"))
 
   skip_if_not_installed("quanteda")
-  suppressWarnings(loadNamespace("quanteda"))  # TODO: see https://github.com/quanteda/quanteda/issues/2116 , may not be an issue in the future
 
   lfactor = lrn("regr.rpart")
   lnofactor = lrn("regr.rpart")
@@ -174,5 +173,33 @@ test_that("Robustify Pipeline factor to numeric", {
   expect_equal(ppl("robustify", learner = lnofactor, alltask)$train(alltask)[[1]]$feature_types[, id := gsub("\\.[^.]*$", "", id)], vectoradft, check.attributes = FALSE)
   expect_equal(ppl("robustify", learner = lnofactor, alltask, character_action = "matrix")$train(alltask)[[1]]$feature_types, vectoradft, check.attributes = FALSE)
 
+
+})
+
+test_that("Robustify pipeline - imputes missings for unseen factor levels", {
+  skip_if_not_installed("rpart")
+  # Construct Learner incapable of handling missings
+  learner = lrn("classif.rpart")
+  learner$properties = setdiff(learner$properties, "missings")
+  # Construct Tasks with unseen factor levels
+  task_NA = as_task_classif(data.table(
+    target = factor(rep(c("A", "B"), 3)),
+    fct = factor(rep(c("a", "b", NA), 2)),
+    fct2 = factor(rep(c("a", "b"), 3))
+  ), target = "target")
+  task_noNA = as_task_classif(data.table(
+    target = factor(rep(c("A", "B"), 3)),
+    fct = factor(rep(c("a", "b", "c"), 2)),
+    fct2 = factor(rep(c("a", "b", "c"), 2))
+  ), target = "target")
+
+  g = ppl("robustify", learner = learner, task = task_NA)
+
+  expect_equal(sum(g$train(task_NA)[[1]]$missings()), 0)
+  expect_equal(sum(g$predict(task_noNA)[[1]]$missings()), 0)
+
+  glrn = g %>>% learner
+  expect_no_error(glrn$train(task_NA))
+  expect_no_error(glrn$predict(task_NA))
 
 })
