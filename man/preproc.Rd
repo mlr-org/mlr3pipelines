@@ -58,6 +58,7 @@ of \code{\link[mlr3:TaskSupervised]{TaskSupervised}} will not work with these in
 \examples{
 \dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
+
 task = tsk("iris")
 pop = po("pca")
 
@@ -82,9 +83,9 @@ preproc(tsk("wine"), pop)
 pop$state$sdev
 
 # Piping multiple preproc() calls, using dictionary sugar to set parameters
-# tsk("penguins") |>
-#   preproc(po("imputemode", affect_columns = selector_name("sex"))) |>
-#   preproc(po("imputemean"))
+tsk("penguins") |>
+  preproc(po("imputemode", affect_columns = selector_name("sex"))) |>
+  preproc(po("imputemean"))
 
 # Use preproc with a Graph
 gr = po("pca", rank. = 4) \%>>\% po("learner", learner = lrn("classif.rpart"))
