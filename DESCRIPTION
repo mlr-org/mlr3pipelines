@@ -68,8 +68,7 @@ Imports:
     mlr3 (>= 0.20.0),
     mlr3misc (>= 0.17.0),
     paradox (>= 1.0.0),
-    R6,
-    withr
+    R6
 Suggests:
     ggplot2,
     glmnet,
