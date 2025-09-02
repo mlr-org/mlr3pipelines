@@ -15,11 +15,13 @@ PipeOpBasisSplines = R6Class("PipeOpBasisSplines",
   private = list(
     .transform_dt = function(dt, levels) {
       browser()
-
+      single_string = paste0(
+        "splines::ns(mtcars[[", seq_along(dt), "]] , ", df, ")")
+      formula = paste(single_string, collapse = " + ")
+      stats::model.matrix(as.formula(paste(task$target_names , "~", formula)), data = dt)
       dt
     }
     # output
-    # eval(parse(text = paste0("splines::ns(", "dt[[", 3,"]], ", 2, ")")))
   )
 )
 
