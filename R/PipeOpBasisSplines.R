@@ -4,19 +4,25 @@ PipeOpBasisSplines = R6Class("PipeOpBasisSplines",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "basissplines", param_vals = list()) {
+      #browser()
     ps = ps(
-      factor = p_fct(levels = c("polynomial", "cubic"), default = "polynomial", tags = c("train", "basissplines")), # tag basissplines?
-      df = p_int(default = 2, lower = 1, upper = Inf, tags = c("train", "basissplines"))
+      factor = p_fct(levels = c("polynomial", "cubic"), init = "polynomial", tags = c("train", "basissplines")), # tag basissplines?
+      df = p_int(init = 2, lower = 1, upper = Inf, tags = c("train", "basissplines"))
     )
-      ps$values = list()
-      super$initialize(id = id, param_set = ps, param_vals = param_vals)
+    super$initialize(id = id, param_set = ps, param_vals = param_vals)
     }
   ),
   private = list(
     .transform_dt = function(dt, levels) {
       browser()
-      single_string = paste0(
-        "splines::ns(dt[[", seq_along(dt), "]] , ", self$param_set$get_values()$df, ")")
+      if (self$param_set$get_values()$factor == "polynomial") {
+        single_string =
+          invoke(.f = paste0, .args = list("splines::bs(dt[[", seq_along(dt), "]] , ", self$param_set$get_values()$df, ")"))
+      }
+      else {
+      single_string =
+        invoke(.f = paste0, .args = list("splines::ns(dt[[", seq_along(dt), "]] , ", self$param_set$get_values()$df, ")"))
+      }
       string = paste(" ~ ", paste(single_string, collapse = " + "))
       result = as.data.frame(stats::model.matrix(formula(string), data = dt))
       k = 1
@@ -34,9 +40,9 @@ PipeOpBasisSplines = R6Class("PipeOpBasisSplines",
 
 mlr_pipeops$add("basissplines", PipeOpBasisSplines)
 
-po = po("basissplines")
-sel_cyl = selector_grep("cyl|disp|am")
-po$train(list(tsk("mtcars")))
+# po = po("basissplines")
+# sel_cyl = selector_grep("cyl|disp|am")
+# po$train(list(tsk("mtcars")))
 
 # df als hyperparameterf
 # das ziel ist es dass wir diese model.matrix für alle features kriegen
@@ -45,16 +51,16 @@ po$train(list(tsk("mtcars")))
 
 #splines.cyl.1
 
-task = tsk("mtcars")
+# task = tsk("mtcars")
 
-list(task)[[1]]$data()
-pop = po("modelmatrix", formula = ~ splines::ns(task$data()$cyl, 2) + splines::ns(task$data()$hp, 2) +
-           splines::ns(task$data()$disp, 2) + splines::ns(task$data()$drat, 2) + splines::ns(task$data()$wt, 2) +
-           splines::ns(task$data()$qsec, 2) + splines::ns(task$data()$vs, 2) + splines::ns(task$data()$am, 2) +
-           splines::ns(task$data()$gear, 2) + splines::ns(task$data()$carb, 2))
-pop$train(list(task))[[1]]$data()
+# list(task)[[1]]$data()
+# pop = po("modelmatrix", formula = ~ splines::ns(task$data()$cyl, 2) + splines::ns(task$data()$hp, 2) +
+#           splines::ns(task$data()$disp, 2) + splines::ns(task$data()$drat, 2) + splines::ns(task$data()$wt, 2) +
+#           splines::ns(task$data()$qsec, 2) + splines::ns(task$data()$vs, 2) + splines::ns(task$data()$am, 2) +
+#           splines::ns(task$data()$gear, 2) + splines::ns(task$data()$carb, 2))
+# pop$train(list(task))[[1]]$data()
 
-fit <- lm(mpg ~ splines::ns(cyl, df = 2) + splines::ns(hp, df = 2), data = mtcars)
-model.matrix(fit) # this is what we want to get as a result from PipeOpSplineBasis
+# fit <- lm(mpg ~ splines::ns(cyl, df = 2) + splines::ns(hp, df = 2), data = mtcars)
+# model.matrix(fit) # this is what we want to get as a result from PipeOpSplineBasis
 
-as.data.frame(stats::model.matrix(mpg ~ splines::ns(cyl, 2) + splines::ns(task$data()$hp, 2), data = mtcars))
+# as.data.frame(stats::model.matrix(mpg ~ splines::ns(cyl, 2) + splines::ns(task$data()$hp, 2), data = mtcars))
