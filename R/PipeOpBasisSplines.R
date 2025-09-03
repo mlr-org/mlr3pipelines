@@ -6,7 +6,7 @@ PipeOpBasisSplines = R6Class("PipeOpBasisSplines",
     initialize = function(id = "basissplines", param_vals = list()) {
     ps = ps(
       factor = p_fct(levels = c("polynomial", "cubic"), default = "polynomial", tags = c("train", "basissplines")), # tag basissplines?
-      df = p_int(lower = 1, upper = Inf, tags = c("train", "basissplines"))
+      df = p_int(default = 2, lower = 1, upper = Inf, tags = c("train", "basissplines"))
     )
       ps$values = list()
       super$initialize(id = id, param_set = ps, param_vals = param_vals)
@@ -16,10 +16,17 @@ PipeOpBasisSplines = R6Class("PipeOpBasisSplines",
     .transform_dt = function(dt, levels) {
       browser()
       single_string = paste0(
-        "splines::ns(mtcars[[", seq_along(dt), "]] , ", df, ")")
-      formula = paste(single_string, collapse = " + ")
-      stats::model.matrix(as.formula(paste(task$target_names , "~", formula)), data = dt)
-      dt
+        "splines::ns(dt[[", seq_along(dt), "]] , ", self$param_set$get_values()$df, ")")
+      string = paste(" ~ ", paste(single_string, collapse = " + "))
+      result = as.data.frame(stats::model.matrix(formula(string), data = dt))
+      k = 1
+      for (j in colnames(dt)) {
+        for (i in seq_len(df)) {
+          colnames(result)[k + 1] = paste0("splines.", j, ".", i)
+          k = k + 1
+        }
+      }
+      result
     }
     # output
   )
@@ -28,7 +35,7 @@ PipeOpBasisSplines = R6Class("PipeOpBasisSplines",
 mlr_pipeops$add("basissplines", PipeOpBasisSplines)
 
 po = po("basissplines")
-
+sel_cyl = selector_grep("cyl|disp|am")
 po$train(list(tsk("mtcars")))
 
 # df als hyperparameterf
@@ -41,7 +48,10 @@ po$train(list(tsk("mtcars")))
 task = tsk("mtcars")
 
 list(task)[[1]]$data()
-pop = po("modelmatrix", formula = ~ splines::ns(task$data()$cyl, 2) + splines::ns(task$data()$hp, 2))
+pop = po("modelmatrix", formula = ~ splines::ns(task$data()$cyl, 2) + splines::ns(task$data()$hp, 2) +
+           splines::ns(task$data()$disp, 2) + splines::ns(task$data()$drat, 2) + splines::ns(task$data()$wt, 2) +
+           splines::ns(task$data()$qsec, 2) + splines::ns(task$data()$vs, 2) + splines::ns(task$data()$am, 2) +
+           splines::ns(task$data()$gear, 2) + splines::ns(task$data()$carb, 2))
 pop$train(list(task))[[1]]$data()
 
 fit <- lm(mpg ~ splines::ns(cyl, df = 2) + splines::ns(hp, df = 2), data = mtcars)
