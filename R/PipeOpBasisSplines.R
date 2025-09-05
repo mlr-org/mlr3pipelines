@@ -1,4 +1,60 @@
-# DRAFT
+#' @title Transforms Columns using Splines Methods by Constructing a Model Matrix
+#'
+#' @usage NULL
+#' @name mlr_pipeops_basissplines
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#'
+#' @description
+#' Transforms Columns using Splines Methods by Constructing a Model Matrix.
+#'
+#' @section Construction:
+#' ```
+#' po("basissplines", param_vals = list())
+#' ```
+#'
+#' * `id` :: `character(1)`\cr
+#'   Identifier of resulting object, default `"basissplines"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'
+#' @section Input and Output Channels:
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
+#'
+#' The output is the input [`Task`][mlr3::Task] with the selected columns transformed according to the specified Splines Method.
+#'
+#' @section State:
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`].
+#'
+#' @section Parameters:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
+#' * `hp`  :: `CHARACTER` \cr
+#'   Number of bins to create. Default is `2`.
+#' * `df`  :: `INTEGER` \cr
+#'   Number of bins to create. Default is `2`
+#'
+#' @section Internals:
+#' For creating the Splines uses the [`splines::bs`]/[`splines::bn`] function.
+#' Uses the [`stats::model.matrix()`] function.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
+#' @section Methods:
+#' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#'
+#' @examples
+#' library("mlr3")
+#'
+#' task = tsk("iris")
+#' pop = po("basissplines")
+#'
+#' pop$train(list(task))[[1]]$data()
+#'
+#' pop$state
+#' @family PipeOps
+#' @template seealso_pipeopslist
+#' @include PipeOpTaskPreproc.R
+#' @export
 
 PipeOpBasisSplines = R6Class("PipeOpBasisSplines",
   inherit = PipeOpTaskPreprocSimple,
@@ -7,14 +63,14 @@ PipeOpBasisSplines = R6Class("PipeOpBasisSplines",
       #browser()
     ps = ps(
       factor = p_fct(levels = c("polynomial", "cubic"), init = "polynomial", tags = c("train", "basissplines")), # tag basissplines?
-      df = p_int(init = 2, lower = 1, upper = Inf, tags = c("train", "basissplines"))
+      df = p_int(init = 3, lower = 1, upper = Inf, tags = c("train", "basissplines"))
     )
     super$initialize(id = id, param_set = ps, param_vals = param_vals)
     }
   ),
   private = list(
     .transform_dt = function(dt, levels) {
-      browser()
+      #browser()
       pv = self$param_set$get_values(tags = "train")
       if (pv$factor == "polynomial") {
         single_string =
@@ -26,10 +82,11 @@ PipeOpBasisSplines = R6Class("PipeOpBasisSplines",
       }
       string = paste(" ~ ", paste(single_string, collapse = " + "))
       result = as.data.frame(stats::model.matrix(formula(string), data = dt))
+      max_df = as.numeric(max(regmatches(colnames(result), regexpr("[0-9]+$", colnames(result)))))
       k = 1
       for (j in colnames(dt)) {
-        for (i in seq_len(pv$df)) {
-          colnames(result)[k + 1] = paste0("splines.", j, ".", i)
+        for (i in seq_len(max_df)) {
+          colnames(result)[k + 1] = paste0("splines.", j, ".", tail(strsplit(colnames(result)[[k + 1]], "")[[1]], 1))
           k = k + 1
         }
       }
@@ -40,7 +97,7 @@ PipeOpBasisSplines = R6Class("PipeOpBasisSplines",
 
 mlr_pipeops$add("basissplines", PipeOpBasisSplines)
 
-# po = po("basissplines", df = 3)
+# po = po("basissplines", df = 2)
 # sel_cyl = selector_grep("cyl|disp|am")
 # po$train(list(tsk("mtcars")))[[1]]$data()
 
