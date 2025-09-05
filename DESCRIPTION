@@ -128,6 +128,7 @@ Collate:
     'NO_OP.R'
     'PipeOpTaskPreproc.R'
     'PipeOpADAS.R'
+    'PipeOpBasisSplines.R'
     'PipeOpBLSmote.R'
     'PipeOpBoxCox.R'
     'PipeOpBranch.R'
