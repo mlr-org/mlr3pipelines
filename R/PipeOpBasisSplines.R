@@ -27,13 +27,16 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `hp`  :: `CHARACTER` \cr
-#'   Number of bins to create. Default is `2`.
-#' * `df`  :: `INTEGER` \cr
-#'   Number of bins to create. Default is `2`
+#' * `hp`  :: `character(1)` \cr
+#'   "Polynomial" when polynomial splines are applied [`splines::bs`] or
+#'   "Cubic" when natural cubic splines are applied [`splines::bs`].
+#'   Default is "polynomial".
+#' * `df`  :: `integer(1)` \cr
+#'   Number of degrees of freedom for calculation of splines basis matrix.
+#'   Default is NULL.
 #'
 #' @section Internals:
-#' For creating the Splines uses the [`splines::bs`]/[`splines::bn`] function.
+#' For creating the Splines uses the [`splines::bs`]/[`splines::ns`] function.
 #' Uses the [`stats::model.matrix()`] function.
 #'
 #' @section Fields:
@@ -63,7 +66,7 @@ PipeOpBasisSplines = R6Class("PipeOpBasisSplines",
       #browser()
     ps = ps(
       factor = p_fct(levels = c("polynomial", "cubic"), init = "polynomial", tags = c("train", "basissplines")), # tag basissplines?
-      df = p_int(init = 3, lower = 1, upper = Inf, tags = c("train", "basissplines"))
+      df = p_int(init = 1, lower = 1, upper = Inf, tags = c("train", "basissplines"))
     )
     super$initialize(id = id, param_set = ps, param_vals = param_vals)
     }
@@ -97,7 +100,7 @@ PipeOpBasisSplines = R6Class("PipeOpBasisSplines",
 
 mlr_pipeops$add("basissplines", PipeOpBasisSplines)
 
-# po = po("basissplines", df = 2)
+# po = po("basissplines")
 # sel_cyl = selector_grep("cyl|disp|am")
 # po$train(list(tsk("mtcars")))[[1]]$data()
 

@@ -101,7 +101,8 @@ Suggests:
     future,
     htmlwidgets,
     ranger,
-    themis
+    themis,
+    splines
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
@@ -128,8 +129,8 @@ Collate:
     'NO_OP.R'
     'PipeOpTaskPreproc.R'
     'PipeOpADAS.R'
-    'PipeOpBasisSplines.R'
     'PipeOpBLSmote.R'
+    'PipeOpBasisSplines.R'
     'PipeOpBoxCox.R'
     'PipeOpBranch.R'
     'PipeOpChunk.R'
