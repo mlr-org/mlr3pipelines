@@ -27,7 +27,7 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `hp`  :: `character(1)` \cr
+#' * `factor`  :: `character(1)` \cr
 #'   "Polynomial" when polynomial splines are applied [`splines::bs`] or
 #'   "Cubic" when natural cubic splines are applied [`splines::bs`].
 #'   Default is "polynomial".
@@ -63,10 +63,10 @@ PipeOpBasisSplines = R6Class("PipeOpBasisSplines",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "basissplines", param_vals = list()) {
-      #browser()
     ps = ps(
-      factor = p_fct(levels = c("polynomial", "cubic"), init = "polynomial", tags = c("train", "basissplines")), # tag basissplines?
-      df = p_int(init = 1, lower = 1, upper = Inf, tags = c("train", "basissplines"))
+      factor = p_fct(levels = c("polynomial", "cubic"), init = "polynomial", tags = c("train", "basissplines", "required")),
+      df = p_int(lower = 1, upper = Inf, special_vals = list(NULL), init = NULL, tags = c("train", "basissplines")),
+      degree = p_int(lower = 1, upper = Inf, depends = factor == "polynomial", tags = c("train", "basissplines"))
     )
     super$initialize(id = id, param_set = ps, param_vals = param_vals)
     }
@@ -74,15 +74,8 @@ PipeOpBasisSplines = R6Class("PipeOpBasisSplines",
   private = list(
     .transform_dt = function(dt, levels) {
       #browser()
-      pv = self$param_set$get_values(tags = "train")
-      if (pv$factor == "polynomial") {
-        single_string =
-          invoke(.f = paste0, .args = list("splines::bs(dt[[", seq_along(dt), "]] , ", pv$df, ")"))
-      }
-      else {
-      single_string =
-        invoke(.f = paste0, .args = list("splines::ns(dt[[", seq_along(dt), "]] , ", pv$df, ")"))
-      }
+      pv = self$param_set$get_values(tags = "basissplines")
+      single_string = mlr3misc::invoke(.f = paste0, .args = list(if (pv$factor == "polynomial") "splines::bs(dt[[" else "splines::ns(dt[[", seq_along(dt), "]]", if (!is.null(pv$df)) " , df = ", pv$df, if (!is.null(pv$degree)) ", degree = ", pv$degree, ")"))
       string = paste(" ~ ", paste(single_string, collapse = " + "))
       result = as.data.frame(stats::model.matrix(formula(string), data = dt))
       max_df = as.numeric(max(regmatches(colnames(result), regexpr("[0-9]+$", colnames(result)))))
@@ -101,8 +94,54 @@ PipeOpBasisSplines = R6Class("PipeOpBasisSplines",
 mlr_pipeops$add("basissplines", PipeOpBasisSplines)
 
 # po = po("basissplines")
+# po_result = po$train(list(tsk("iris")))[[1]]$data()
+
+# po_result_calc = stats::model.matrix(Species ~ splines::bs(Sepal.Length) + splines::bs(Sepal.Width) + splines::bs(Petal.Length) + splines::bs(Petal.Width), data = iris)
+
+# podf3 = po("basissplines", df = 3)
+# podf3_result = podf3$train(list(tsk("iris")))[[1]]$data()
+# podf3_result_calc = stats::model.matrix(Species ~ splines::bs(Sepal.Length, df = 3) + splines::bs(Sepal.Width, df = 3) + splines::bs(Petal.Length, df = 3) + splines::bs(Petal.Width, df = 3), data = iris)
+
+# podf4 = po("basissplines", df = 4)
+# podf4_result = podf4$train(list(tsk("iris")))[[1]]$data()
+# podf4_result_calc = stats::model.matrix(Species ~ splines::bs(Sepal.Length, df = 4) + splines::bs(Sepal.Width, df = 4) + splines::bs(Petal.Length, df = 4) + splines::bs(Petal.Width, df = 4), data = iris)
+
+# podf7 = po("basissplines", df = 7)
+# podf7_result = podf7$train(list(tsk("iris")))[[1]]$data()
+# podf7_result_calc = stats::model.matrix(Species ~ splines::bs(Sepal.Length, df = 7) + splines::bs(Sepal.Width, df = 7) + splines::bs(Petal.Length, df = 7) + splines::bs(Petal.Width, df = 7), data = iris)
+
+# podeg3df2 = po("basissplines", degree = 3, df = 2)
+# podeg3df2_result = podeg3df2$train(list(tsk("iris")))[[1]]$data()
+# podeg3df2_result_calc = stats::model.matrix(Species ~ splines::bs(Sepal.Length, degree = 3, df = 2) + splines::bs(Sepal.Width, degree = 3, df = 2) + splines::bs(Petal.Length, degree = 3, df = 2) + splines::bs(Petal.Width, degree = 3, df = 2), data = iris)
+
+
+# podeg5df8 = po("basissplines", degree = 5, df = 8)
+# podeg5df8_result = podeg5df8$train(list(tsk("iris")))[[1]]$data()
+# podeg5df8_result_calc = stats::model.matrix(Species ~ splines::bs(Sepal.Length, degree = 5, df = 8) + splines::bs(Sepal.Width, degree = 5, df = 8) + splines::bs(Petal.Length, degree = 5, df = 8) + splines::bs(Petal.Width, degree = 5, df = 8), data = iris)
+
+# pons = po("basissplines", factor = "cubic")
+# pons_result = pons$train(list(tsk("iris")))[[1]]$data()
+# pons_result_calc = stats::model.matrix(Species ~ splines::ns(Sepal.Length) + splines::ns(Sepal.Width) + splines::ns(Petal.Length) + splines::ns(Petal.Width), data = iris)
+
+# pons_error = po("basissplines", factor = "cubic", df = 3, degree = 4)
+
+# ponsdf5 = po("basissplines", factor = "cubic", df = 5)
+# ponsdf5_result = ponsdf5$train(list(tsk("iris")))[[1]]$data()
+# ponsdf5_result_calc = stats::model.matrix(Species ~ splines::ns(Sepal.Length, df = 5) + splines::ns(Sepal.Width, df = 5) + splines::ns(Petal.Length, df = 5) + splines::ns(Petal.Width, df = 5), data = iris)
+
+
+
+
+# selecting columns
 # sel_cyl = selector_grep("cyl|disp|am")
-# po$train(list(tsk("mtcars")))[[1]]$data()
+# pos = po("basissplines", affect_columns = sel_cyl)
+# pos$train(list(tsk("mtcars")))[[1]]$data()
+
+# pop = po("basissplines", df = 5)
+# pop$train(list(tsk("mtcars")))[[1]]$data()
+
+# poc = po("basissplines", df = 4, factor = "cubic")
+# poc$train(list(tsk("mtcars")))[[1]]$data()
 
 # df als hyperparameterf
 # das ziel ist es dass wir diese model.matrix für alle features kriegen
