@@ -1,9 +1,8 @@
-context("PipeOpBasisSplines")
+context("PipeOpSplines")
 
-test_that("PipeOpBasisSplines - basic properties", {
-  browser()
+test_that("PipeOpSplines - basic properties", {
   task = mlr_tasks$get("mtcars")
-  expect_datapreproc_pipeop_class(PipeOpBasisSplines, task = task, deterministic_predict = FALSE)
+  expect_datapreproc_pipeop_class(PipeOpSplines, task = task, deterministic_predict = FALSE)
 })
 
 test_that("Error when trying to pass degree argument while factor = cubic", {
@@ -11,11 +10,11 @@ test_that("Error when trying to pass degree argument while factor = cubic", {
 })
 
 test_that("results are identical as when calculating by hand", {
-  degree = c(1, 2, 3, 4, 5)
-  df = degree + 3
+  degree = list(1, 2, 3, 4, 5)
+  df = list(1, 2, 3, 4, 5)
   task = tsk("iris")
   for (j in degree) {
-    po = po("basissplines", df = df[[j]], degree = degree[[j]])
+    po = po("splines", type = "polynomial", df = df[[j]], degree = degree[[j]])
     result = po$train(list(task))[[1]]$data()[, -1]
     result_calc = as.data.table(stats::model.matrix(
       Species ~ splines::bs(Petal.Length, df = df[[j]], degree = degree[[j]]) +
@@ -29,13 +28,13 @@ test_that("results are identical as when calculating by hand", {
     expect_equal(result, result_calc)
   }
   for (j in df) {
-    po = po("basissplines", df = j)
+    po = po("splines", df = j + 1)
     result = po$train(list(task))[[1]]$data()[, -1]
     result_calc = as.data.table(stats::model.matrix(
-      Species ~ splines::bs(Petal.Length, df = j) +
-        splines::bs(Petal.Width, df = j) +
-        splines::bs(Sepal.Length, df = j) +
-        splines::bs(Sepal.Width, df = j),
+      Species ~ splines::ns(Petal.Length, df = j + 1) +
+        splines::ns(Petal.Width, df = j + 1) +
+        splines::ns(Sepal.Length, df = j + 1) +
+        splines::ns(Sepal.Width, df = j + 1),
       data = iris
     ))
     data.table::setnames(result, rep("", ncol(result)))
@@ -51,7 +50,7 @@ test_that("Selector", {
   factor = list("polynomial", "cubic")
   for (i in seq_along(factor)) {
   for (j in seq_along(selector)) {
-    po = po("basissplines", affect_columns = selector_grep(selector[[j]]))
+    po = po("splines", affect_columns = selector_grep(selector[[j]]))
     single_string = paste0(if (factor[[i]] == "polynomial") "splines::bs(dt[[" else "splines::ns(dt[[", selector, "]]", ")")
     result = po$train(list(task))[[1]]$data()[, -1]
     result_calc = as.data.table(stats::model.matrix(
