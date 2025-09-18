@@ -10,25 +10,6 @@ test_that("PipeOpIsomap - basic properties", {
 })
 
 
-
-# Argumentation für tolerance = 1
-# dat <- dimRed::loadDataSet("Iris")
-# iris[150:1,] --> in Datenformat S4/dimRed Format bringen ==> schauen ob das Resultat das gleiche ist
-# falls es nicht gleich ist determ_pred auf FALSE
-# emb <- dimRed::embed(dat, "Isomap", knn = 50)
-# emb2 <- selectMethod("predict", "dimRedResult")(emb, dat)
-# emb3 <- selectMethod("predict", "dimRedResult")(emb, dat)
-# dimRed::plot(emb, type ="2vars")
-# dimRed::plot(emb3, type = "2vars")
-
-# datrev = dimRed::loadDataSet("Iris")
-# datrev@data <- datrev@data[nrow(datrev@data):1, ]
-# datrev@meta <- datrev@meta[nrow(datrev@meta):1, , drop = FALSE]
-
-# embrev <- dimRed::embed(datrev, "Isomap", knn = 50)
-# embrev2 <- selectMethod("predict", "dimRedResult")(embrev, dat)
-
-
 test_that("compare to dimRed::isomap", {
   skip_if_not_installed("dimRed")
   skip_if_not_installed("stats")
@@ -95,18 +76,19 @@ test_that("hyperparameter get_geod", {
   expect_equal(po_geod$state$embed_result@other.data, emb1@other.data)
 })
 
-#test_that("hyperparameter .mute", {
-#  skip_if_not_installed("dimRed")
-#  skip_if_not_installed("stats")
-#  po = po("isomap", .mute = c("message", "output"))
-#  expect_no_message(po$train(list(tsk("iris"))))
-#  # expect_no_message(po$predict(list(tsk("iris"))))
-#})
+# test_that("hyperparameter .mute", {
+#   browser()
+#   skip_if_not_installed("dimRed")
+#   skip_if_not_installed("stats")
+#   po = po("isomap", .mute = c("message", "output"))
+#   expect_silent(po$train(list(tsk("iris"))))
+# })
 
 
 # why does it fail
-po_message = po("isomap")
-po_message$train(list(tsk("iris")))
+# po_message = po("isomap")
+# po_message$train(list(tsk("iris")))
 
-po_no_message = po("isomap", .mute = c("message", "output"))
-po_no_message$train(list(tsk("iris")))
+# po_no_message = po("isomap", .mute = c("message", "output"))
+# po_no_message$train(list(tsk("iris")))
+# po_no_message$predict(list(tsk("iris")))
