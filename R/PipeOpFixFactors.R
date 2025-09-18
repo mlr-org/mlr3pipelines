@@ -51,6 +51,16 @@
 #' @export
 #' @examples
 #' library("mlr3")
+#' rows_to_keep = tsk("german_credit")$data()[, .I[installment_rate != "< 20"]]
+#' reduced_task = tsk("german_credit")$filter(rows_to_keep)
+#'
+#' po = po("fixfactors")
+#' po$train(list(reduced_task))
+#' po$predict(list(tsk("german_credit")))[[1]]$data()
+#' po$predict(list(tsk("german_credit")))[[1]]$data()[, "installment_rate", with = TRUE]
+#'
+
+
 PipeOpFixFactors = R6Class("PipeOpFixFactors",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
