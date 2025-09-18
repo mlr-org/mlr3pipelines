@@ -1,7 +1,7 @@
 context("PipeOpSplines")
 
 test_that("PipeOpSplines - basic properties", {
-  task = mlr_tasks$get("mtcars")
+  task = mlr_tasks$get("iris")
   expect_datapreproc_pipeop_class(PipeOpSplines, task = task, deterministic_predict = FALSE)
 })
 
@@ -47,14 +47,13 @@ test_that("results are identical as when calculating by hand", {
 test_that("Selector", {
   selector = list("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
   task = tsk("iris")
-  factor = list("polynomial", "cubic")
+  factor = list("polynomial", "natural")
   for (i in seq_along(factor)) {
   for (j in seq_along(selector)) {
-    po = po("splines", affect_columns = selector_grep(selector[[j]]))
-    single_string = paste0(if (factor[[i]] == "polynomial") "splines::bs(dt[[" else "splines::ns(dt[[", selector, "]]", ")")
+    po = po("splines", type = factor[[i]], affect_columns = selector_grep(selector[[j]]))
     result = po$train(list(task))[[1]]$data()[, -1]
     result_calc = as.data.table(stats::model.matrix(
-      as.formula(paste("Species ~ splines::bs(", selector[[j]], ")")),
+      as.formula(paste0(if (factor[[i]] == "polynomial") {"Species ~ splines::bs("} else {"Species ~ splines::ns("}, selector[[j]], ")")),
       data = iris
     ))
     relevant_result = as.data.table(intersect(result_calc, result))
