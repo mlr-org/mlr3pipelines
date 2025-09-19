@@ -48,7 +48,7 @@ Initialized to 2.
 Determines whether the distance matrix should be kept in the \verb{$state}
 Initialized to \code{FALSE}.
 \item \code{.mute} :: \code{character}\cr
-A character vector containing the elements you want to mute (c("message", "output")).
+A character vector containing the elements you want to mute during training (c("message", "output")).
 Initialized to \code{character(0)}.
 }
 }
@@ -68,7 +68,9 @@ Only fields inherited from \code{PipeOp}.
 }
 
 \examples{
-NULL
+po = po("isomap")
+po$train(list(tsk("iris")))[[1]]$data()
+po$predict(list(tsk("iris")))[[1]]$data()
 
 
 }

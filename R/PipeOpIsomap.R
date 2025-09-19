@@ -1,4 +1,4 @@
-#' @title ApAlgorithm for Dimensionality Reduction
+#' @title Algorithm for Dimensionality Reduction
 #'
 #' @usage NULL
 #' @name mlr_pipeops_isomap
@@ -48,7 +48,10 @@
 #' @section Methods:
 #'
 #'
-#' @examples NULL
+#' @examples
+#' po = po("isomap")
+#' po$train(list(tsk("iris")))[[1]]$data()
+#' po$predict(list(tsk("iris")))[[1]]$data()
 #'
 #'
 #' @family PipeOps
