@@ -9,7 +9,7 @@
 #'
 #' @section Construction:
 #' ```
-#' po("basissplines", param_vals = list())
+#' po("splines", param_vals = list())
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -77,11 +77,9 @@ PipeOpSplines = R6Class("PipeOpSplines",
       single_string = paste0(if (pv$type == "natural") "splines::ns(dt[[" else "splines::bs(dt[[", seq_along(dt), "]]", if (!is.null(pv$df)) " , df = ", pv$df, if (!is.null(pv$degree)) ", degree = ", pv$degree, ")")
       string = paste(" ~ ", paste(single_string, collapse = " + "))
       result = as.data.frame(stats::model.matrix(formula(string), data = dt))
-      max_df = max(regmatches(colnames(result), regexpr("([0-9]+$|$)", colnames(result))))
-      if (!is.numeric(max_df)) {
+      max_df = as.numeric(max(regmatches(colnames(result), regexpr("([0-9]+$|$)", colnames(result)))))
+      if (is.na(max_df)) {
         max_df = 1
-      } else {
-        max_df = as.numeric(max_df)
       }
       k = 1
       for (j in colnames(dt)) {
