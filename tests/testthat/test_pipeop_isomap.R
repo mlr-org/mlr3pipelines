@@ -39,8 +39,6 @@ test_that("compare to dimRed::isomap", {
   expect_equal(as.data.frame(pipeop_meta_predict), dimRed_result_predict@meta)
 })
 
-
-
 test_that("isomap algorithm requires data to be numeric", {
   skip_if_not_installed("dimRed")
   skip_if_not_installed("stats")
