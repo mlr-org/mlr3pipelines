@@ -34,10 +34,8 @@ The output is the input \code{\link[mlr3:Task]{Task}} with the data projected on
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{knn} :: \code{numeric(1)}\cr
-The number of nearest neighbors in the graph.
-
-The number of nearest neighbors in the graph.
+\item \code{embed_result} :: \code{dimRedResult}\cr
+The resulting object after applying the "Isomap"-method from the dimRed package to the data.
 }
 }
 
@@ -74,13 +72,6 @@ Only fields inherited from \code{PipeOp}.
 
 }
 
-\examples{
-po = po("isomap")
-po$train(list(tsk("iris")))[[1]]$data()
-po$predict(list(tsk("iris")))[[1]]$data()
-
-
-}
 \seealso{
 https://mlr-org.com/pipeops.html
 
