@@ -9,7 +9,6 @@ test_that("PipeOpIsomap - basic properties", {
   expect_datapreproc_pipeop_class(PipeOpIsomap, task = task, predict_like_train = FALSE, deterministic_predict = FALSE)
 })
 
-
 test_that("compare to dimRed::isomap", {
   skip_if_not_installed("dimRed")
   skip_if_not_installed("stats")
@@ -28,11 +27,11 @@ test_that("compare to dimRed::isomap", {
   expect_equal(as.data.frame(pipeop_meta_train), dimRed_result_train@data@meta)
 
   # Part 2 - Predict-method
-  # Version 1
+  # Version 1 - PipeOpIsomap
   pipeop_result_predict = po$predict(list(task))[[1]]$data()
   pipeop_iso_predict = pipeop_result_predict[, grepl("^iso \\d", colnames(pipeop_result_predict)), with = FALSE]
   pipeop_meta_predict = pipeop_result_predict[, !grepl("^iso \\d", colnames(pipeop_result_predict)), with = FALSE]
-  # Version 2
+  # Version 2 - dimRed package
   dimRed_result_predict = selectMethod("predict", "dimRedResult")(dimRed_result_train, data)
 
   expect_equal(as.matrix(pipeop_iso_predict), dimRed_result_predict@data, tolerance = 0.001)
