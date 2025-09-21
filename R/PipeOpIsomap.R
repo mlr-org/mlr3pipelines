@@ -22,6 +22,10 @@
 #' The output is the input [`Task`][mlr3::Task] with the data projected on the lower dimension.
 #'
 #' @section State:
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
+#'
+
+#'   The number of nearest neighbors in the graph.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
@@ -49,10 +53,6 @@
 #'
 #'
 #' @examples
-#' po = po("isomap")
-#' po$train(list(tsk("iris")))[[1]]$data()
-#' po$predict(list(tsk("iris")))[[1]]$data()
-#'
 #'
 #' @family PipeOps
 #' @template seealso_pipeopslist
@@ -75,6 +75,7 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
   ),
   private = list(
     .train_dt = function(dt, levels, target) {
+      browser()
       embed_result = mlr3misc::invoke(.f = dimRed::embed, .data = dt, .method = "Isomap", .args = self$param_set$get_values(tags = "isomap"))
       self$state = list(embed_result = embed_result)
       embed_result@data@data
@@ -86,20 +87,3 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
 )
 
 mlr_pipeops$add("isomap", PipeOpIsomap)
-
-# po = po("isomap", .mute = "message")
-# po$param_set$get_values(tags = "train")
-
-
-# po$train(list(tsk("iris")))[[1]]$data()
-# po$predict(list(tsk("iris")))[[1]]$data()
-
-# po$train(list(tsk("mtcars")))
-# po$predict(list(tsk("mtcars")))[[1]]$data()
-
-# emb2 <- embed(iris[1:4], "Isomap", .mute = NULL, knn = 25)
-# emb3 <- predict(emb2, iris[1:4])
-
-# po = po("isomap", knn = 20, ndim = 2, get_geod = TRUE)
-# plot(po$train(list(tsk("mtcars")))[[1]]$data()[,2:3])
-
