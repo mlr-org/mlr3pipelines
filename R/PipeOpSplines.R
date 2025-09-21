@@ -53,7 +53,6 @@
 #'
 #' pop$train(list(task))[[1]]$data()
 #'
-#' pop$state
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
