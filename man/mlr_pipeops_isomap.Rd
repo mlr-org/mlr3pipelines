@@ -32,6 +32,13 @@ The output is the input \code{\link[mlr3:Task]{Task}} with the data projected on
 
 \section{State}{
 
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
+\itemize{
+\item \code{knn} :: \code{numeric(1)}\cr
+The number of nearest neighbors in the graph.
+
+The number of nearest neighbors in the graph.
+}
 }
 
 \section{Parameters}{

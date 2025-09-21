@@ -23,9 +23,8 @@
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
-#'
-
-#'   The number of nearest neighbors in the graph.
+#' * `embed_result` :: `dimRedResult`\cr
+#'   The resulting object after applying the "Isomap"-method from the dimRed package to the data.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
@@ -53,6 +52,11 @@
 #'
 #'
 #' @examples
+#' library("mlr3)
+#' po = po("isomap")
+#' po$train(list(tsk("iris")))[[1]]$data()
+#' po$predict(list(tsk("iris")))[[1]]$data()
+#'
 #'
 #' @family PipeOps
 #' @template seealso_pipeopslist
@@ -75,7 +79,6 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
   ),
   private = list(
     .train_dt = function(dt, levels, target) {
-      browser()
       embed_result = mlr3misc::invoke(.f = dimRed::embed, .data = dt, .method = "Isomap", .args = self$param_set$get_values(tags = "isomap"))
       self$state = list(embed_result = embed_result)
       embed_result@data@data
