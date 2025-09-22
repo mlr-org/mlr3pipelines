@@ -14,13 +14,13 @@ test_that("results are identical as when calculating by hand", {
   df = list(1, 2, 3, 4, 5)
   task = tsk("iris")
   for (j in degree) {
-    po = po("splines", type = "polynomial", df = df[[j]], degree = degree[[j]])
+    po = po("splines", type = "polynomial", df = j, degree = j)
     result = po$train(list(task))[[1]]$data()[, -1]
     result_calc = as.data.table(stats::model.matrix(
-      Species ~ splines::bs(Petal.Length, df = df[[j]], degree = degree[[j]]) +
-        splines::bs(Petal.Width, df = df[[j]], degree = degree[[j]]) +
-        splines::bs(Sepal.Length, df = df[[j]], degree = degree[[j]]) +
-        splines::bs(Sepal.Width, df = df[[j]], degree = degree[[j]]),
+      Species ~ splines::bs(Petal.Length, df = j, degree = j) +
+        splines::bs(Petal.Width, df = j, degree = j) +
+        splines::bs(Sepal.Length, df = j, degree = j) +
+        splines::bs(Sepal.Width, df = j, degree = j),
       data = iris
     ))
     data.table::setnames(result, rep("", ncol(result)))
@@ -28,13 +28,13 @@ test_that("results are identical as when calculating by hand", {
     expect_equal(result, result_calc)
   }
   for (j in df) {
-    po = po("splines", df = j + 1)
+    po = po("splines", df = j)
     result = po$train(list(task))[[1]]$data()[, -1]
     result_calc = as.data.table(stats::model.matrix(
-      Species ~ splines::ns(Petal.Length, df = j + 1) +
-        splines::ns(Petal.Width, df = j + 1) +
-        splines::ns(Sepal.Length, df = j + 1) +
-        splines::ns(Sepal.Width, df = j + 1),
+      Species ~ splines::ns(Petal.Length, df = j) +
+        splines::ns(Petal.Width, df = j) +
+        splines::ns(Sepal.Length, df = j) +
+        splines::ns(Sepal.Width, df = j),
       data = iris
     ))
     data.table::setnames(result, rep("", ncol(result)))
@@ -49,17 +49,17 @@ test_that("Selector", {
   task = tsk("iris")
   factor = list("polynomial", "natural")
   for (i in seq_along(factor)) {
-  for (j in seq_along(selector)) {
-    po = po("splines", type = factor[[i]], affect_columns = selector_grep(selector[[j]]))
-    result = po$train(list(task))[[1]]$data()[, -1]
-    result_calc = as.data.table(stats::model.matrix(
-      as.formula(paste0(if (factor[[i]] == "polynomial") {"Species ~ splines::bs("} else {"Species ~ splines::ns("}, selector[[j]], ")")),
-      data = iris
-    ))
-    relevant_result = as.data.table(intersect(result_calc, result))
-    data.table::setnames(result_calc, rep("", ncol(result_calc)))
-    data.table::setnames(relevant_result, rep("", ncol(relevant_result)))
-    expect_equal(result_calc, relevant_result)
-  }
+    for (j in seq_along(selector)) {
+      po = po("splines", type = factor[[i]], affect_columns = selector_grep(selector[[j]]))
+      result = po$train(list(task))[[1]]$data()[, -1]
+      result_calc = as.data.table(stats::model.matrix(
+        as.formula(paste0(if (factor[[i]] == "polynomial") {"Species ~ splines::bs("} else {"Species ~ splines::ns("}, selector[[j]], ")")),
+        data = iris
+      ))
+      relevant_result = as.data.table(intersect(result_calc, result))
+      data.table::setnames(result_calc, rep("", ncol(result_calc)))
+      data.table::setnames(relevant_result, rep("", ncol(relevant_result)))
+      expect_equal(result_calc, relevant_result)
+    }
   }
 })
