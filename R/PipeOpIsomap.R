@@ -51,7 +51,7 @@
 #' @section Methods:
 #'
 #'
-#' @examples
+#' @examplesIf requireNamespace("dimRed")
 #' library("mlr3")
 #' po = po("isomap")
 #' po$train(list(tsk("iris")))[[1]]$data()

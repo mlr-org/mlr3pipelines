@@ -73,19 +73,9 @@ test_that("hyperparameter get_geod", {
   expect_equal(po_geod$state$embed_result@other.data, emb1@other.data)
 })
 
-# test_that("hyperparameter .mute", {
-#   browser()
-#   skip_if_not_installed("dimRed")
-#   skip_if_not_installed("stats")
-#   po = po("isomap", .mute = c("message", "output"))
-#   expect_silent(po$train(list(tsk("iris"))))
-# })
-
-
-# why does it fail
-# po_message = po("isomap")
-# po_message$train(list(tsk("iris")))
-
-# po_no_message = po("isomap", .mute = c("message", "output"))
-# po_no_message$train(list(tsk("iris")))
-# po_no_message$predict(list(tsk("iris")))
+test_that("hyperparameter .mute", {
+  skip_if_not_installed("dimRed")
+  skip_if_not_installed("stats")
+  po = po("isomap", .mute = c("message", "output"))
+#  expect_silent(po$train(list(tsk("iris")))) # does not work because of testthat #1480
+})
