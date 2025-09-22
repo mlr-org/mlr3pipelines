@@ -1,15 +1,18 @@
 context("PipeOpSplines")
 
 test_that("PipeOpSplines - basic properties", {
+  skip_if_not_installed("splines")
   task = mlr_tasks$get("iris")
   expect_datapreproc_pipeop_class(PipeOpSplines, task = task, deterministic_predict = FALSE)
 })
 
-test_that("Error when trying to pass degree argument while factor = cubic", {
-  expect_error(po("basissplines", factor = "cubic", degree = 3))
+test_that("Error when trying to pass degree argument while factor = natural", {
+  skip_if_not_installed("splines")
+  expect_error(po("basissplines", factor = "natural", degree = 3))
 })
 
 test_that("results are identical as when calculating by hand", {
+  skip_if_not_installed("splines")
   degree = list(1, 2, 3, 4, 5)
   df = list(1, 2, 3, 4, 5)
   task = tsk("iris")
@@ -45,6 +48,7 @@ test_that("results are identical as when calculating by hand", {
 
 
 test_that("Selector", {
+  skip_if_not_installed("splines")
   selector = list("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
   task = tsk("iris")
   factor = list("polynomial", "natural")
