@@ -25,8 +25,8 @@
 #'   Has either he form <output>::<argument1>::<argument2> for logger output otherwise "message", "warning", "cat" or none.
 #'
 #' @section Input and Output Channels:
-#' `PipeOpInfo` has one input channel called "input", it can take any type of input (*)
-#' `PipeOpInfo` has one output channel called "output", it can take any type of output (*)
+#' `PipeOpInfo` has one input channel called "input", it can take any type of input (*).
+#' `PipeOpInfo` has one output channel called "output", it can take any type of output (*).
 #'
 #' @section State:
 #' The `$state` is left empty (`list()`).

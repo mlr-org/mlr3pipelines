@@ -74,7 +74,6 @@ Only fields inherited from \code{PipeOp}.
 
 \examples{
 library("mlr3")
-library("dimRed")
 po = po("isomap")
 po$train(list(tsk("iris")))[[1]]$data()
 po$predict(list(tsk("iris")))[[1]]$data()

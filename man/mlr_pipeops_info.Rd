@@ -32,8 +32,8 @@ Has either he form \if{html}{\out{<output>}}::\if{html}{\out{<argument1>}}::\if{
 
 \section{Input and Output Channels}{
 
-\code{PipeOpInfo} has one input channel called "input", it can take any type of input (\emph{)
-\code{PipeOpInfo} has one output channel called "output", it can take any type of output (})
+\code{PipeOpInfo} has one input channel called "input", it can take any type of input.\cr
+\code{PipeOpInfo} has one output channel called "output", it can take any type of output.
 }
 
 \section{State}{
@@ -67,7 +67,7 @@ poinfo$predict(list(tsk("penguins")))
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
