@@ -3,7 +3,8 @@ context("PipeOpSplines")
 test_that("PipeOpSplines - basic properties", {
   skip_if_not_installed("splines")
   task = mlr_tasks$get("iris")
-  expect_datapreproc_pipeop_class(PipeOpSplines, task = task, deterministic_predict = FALSE)
+  browser()
+  expect_datapreproc_pipeop_class(PipeOpSplines, task = task)
 })
 
 test_that("Error when trying to pass degree argument while factor = natural", {
