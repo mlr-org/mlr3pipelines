@@ -59,7 +59,7 @@
 #' @export
 
 PipeOpSplines = R6Class("PipeOpSplines",
-  inherit = PipeOpTaskPreprocSimple,
+  inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "splines", param_vals = list()) {
       ps = ps(
@@ -74,8 +74,7 @@ PipeOpSplines = R6Class("PipeOpSplines",
     }
   ),
   private = list(
-    .transform_dt = function(dt, levels) {
-      browser()
+    .train_dt = function(dt, levels, target) {
       result = list()
       bk = list()
       pv = self$param_set$get_values(tags = "train")
@@ -91,7 +90,7 @@ PipeOpSplines = R6Class("PipeOpSplines",
           if (!is.null(pv$Boundary.knots)) args$Boundary.knots = pv$Boundary.knots[[i]] else args$Boundary.knots = range(dt[[i]])
           result[[i]] <- as.data.frame(do.call(splines::bs, args))
           colnames(result[[i]]) = paste0("splines.", colnames(dt)[[i]], ".", seq_len(ncol(result[[i]])))
-          bk[[i]] = attributes(splines::bs(dt[[i]]))$Boundary.knots
+          bk[[colnames(dt)[[i]]]] = attributes(splines::bs(dt[[i]]))$Boundary.knots
         }
         self$param_set$values$Boundary.knots = bk
       } else {
@@ -111,39 +110,39 @@ PipeOpSplines = R6Class("PipeOpSplines",
         self$param_set$values$Boundary.knots = bk
       }
       result
+    },
+    .predict_dt = function(dt, levels) {
+      result = list()
+      pv = self$param_set$get_values(tags = "train")
+      if (pv$type == "polynomial") {
+        for (i in seq_len(ncol(dt))) {
+          args = list(
+            x = dt[[i]],
+            intercept = pv$intercept,
+            warn.outside = FALSE)
+          if (!is.null(pv$df)) args$df = pv$df
+          if (!is.null(pv$knots)) args$knots = pv$knots
+          if (!is.null(pv$degree)) args$degree = pv$degree
+          if (!is.null(pv$Boundary.knots)) args$Boundary.knots = pv$Boundary.knots[[colnames(dt)[[i]]]] else args$Boundary.knots = range(dt[[colnames(dt)[[i]]]])
+          result[[i]] = as.data.frame(do.call(splines::bs, args))
+          colnames(result[[i]]) = paste0("splines.", colnames(dt)[[i]], ".", seq_len(ncol(result[[i]])))
+        }
+      } else {
+        for (i in seq_len(ncol(dt))) {
+          args = list(
+            x = dt[[i]],
+            intercept = pv$intercept
+          )
+          if (!is.null(pv$df)) args$df = pv$df
+          if (!is.null(pv$knots)) args$knots = pv$knots
+          if (!is.null(pv$Boundary.knots)) args$Boundary.knots = pv$Boundary.knots[[colnames(dt)[[i]]]] else args$Boundary.knots = range(dt[[colnames(dt)[[i]]]])
+          result[[i]] = as.data.frame(do.call(splines::ns, args))
+          colnames(result[[i]]) = paste0("splines.", colnames(dt)[[i]], ".", seq_len(ncol(result[[i]])))
+        }
+      }
+      result
     }
   )
 )
 
-
 mlr_pipeops$add("splines", PipeOpSplines)
-
-po = po("splines")
-head(po$train(list(tsk("iris")))[[1]]$data())
-head(po$predict(list(tsk("iris")))[[1]]$data())
-
-
-head(po$predict(list(as_task_classif(head(iris), target = "Species")))[[1]]$data())
-
-
-
-po = po("splines", type = "polynomial")
-po$train(list(tsk("iris")))
-
-
-po = po("splines")
-po$train(list(tsk("iris")))[[1]]$data()
-po$param_set$values$Boundary.knots
-
-po$param_set$values$affect_columns = selector_grep("Petal.Length|Petal.Width")
-po$train(list(tsk("iris")))[[1]]$data()
-
-
-po$predict(list(tsk("iris")))[[1]]$data()
-
-
-# bk = attributes(splines::bs(iris$Sepal.Length))$Boundary.knots
-# splines::bs(head(iris)$Sepal.Length, Boundary.knots = bk)
-# head(splines::bs(iris$Sepal.Length, Boundary.knots = bk))
-
-# a = lapply(X = seq_len(ncol(iris)), FUN = function(x) {browser(); splines::bs(iris[[x]])})
