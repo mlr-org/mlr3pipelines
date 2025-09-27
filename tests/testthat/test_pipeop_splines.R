@@ -45,3 +45,38 @@ test_that("results are identical as when calculating by hand", {
     }
   }
 })
+
+test_that("Selector", {
+  skip_if_not_installed("splines")
+  type = list("natural", "polynomial")
+  intercept = list(TRUE, FALSE)
+  selector = list("Petal.Length", "Sepal.Length", "Petal.Width", "Sepal.Width")
+  degree = list(1, 2, 3, 4, 5)
+  df = list(1, 2, 3, 4, 5)
+  task = tsk("iris")
+  for (i in selector) {
+    for (j in degree) {
+      for (k in intercept) {
+        po = po("splines", type = "polynomial", df = j + 1, degree = j, intercept = k, affect_columns = selector_grep(i))
+        result = po$train(list(task))[[1]]$data()[, -1]
+        result_calc = as.data.table(
+          cbind(
+            splines::bs(iris[[i]], df = j + 1, degree = j, intercept = k)))
+        expect_subset(unname(as.matrix(result_calc)), unname(as.matrix(result)))
+      }
+    }
+  }
+  for (i in selector) {
+    for (j in degree) {
+      for (k in intercept) {
+        po = po("splines", type = "natural", df = j + 1, intercept = k, affect_columns = selector_grep(i))
+        result = po$train(list(task))[[1]]$data()[, -1]
+        result_calc = as.data.table(
+          cbind(
+            splines::ns(iris[[i]], df = j + 1, intercept = k)))
+        expect_subset(unname(as.matrix(result_calc)), unname(as.matrix(result)))
+      }
+    }
+  }
+})
+
