@@ -62,15 +62,15 @@ PipeOpSplines = R6Class("PipeOpSplines",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "splines", param_vals = list()) {
-    ps = ps(
-      type = p_fct(levels = c("polynomial", "natural"), init = "natural", tags = c("train", "required")),
-      df = p_int(lower = 1, upper = Inf, special_vals = list(NULL), init = NULL, tags = "train"),
-      knots = p_uty(special_vals = list(NULL), init = NULL, tags = "train"),
-      degree = p_int(lower = 1, upper = Inf, default = 3, depends = type == "polynomial", tags = "train"),
-      intercept = p_lgl(init = FALSE, tags = "train"),
-      Boundary.knots = p_uty(init = NULL, tags = "train")
-    )
-    super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("splines", "stats"))
+      ps = ps(
+        type = p_fct(levels = c("polynomial", "natural"), init = "natural", tags = c("train", "required")),
+        df = p_int(lower = 1, upper = Inf, special_vals = list(NULL), init = NULL, tags = "train"),
+        knots = p_uty(special_vals = list(NULL), init = NULL, tags = "train"),
+        degree = p_int(lower = 1, upper = Inf, default = 3, depends = type == "polynomial", tags = "train"),
+        intercept = p_lgl(init = FALSE, tags = "train"),
+        Boundary.knots = p_uty(init = NULL, tags = "train")
+      )
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("splines", "stats"))
     }
   ),
   private = list(
@@ -80,40 +80,41 @@ PipeOpSplines = R6Class("PipeOpSplines",
       bk = list()
       pv = self$param_set$get_values(tags = "train")
       if (pv$type == "polynomial") {
-      for (i in seq_len(ncol(dt))) {
-        args = list(
-          x = dt[[i]],
-          intercept = pv$intercept,
-          warn.outside = FALSE)
-        if (!is.null(pv$df)) args$df = pv$df
-        if (!is.null(pv$knots)) args$knots = pv$knots
-        if (!is.null(pv$degree)) args$degree = pv$degree
-        if (!is.null(pv$Boundary.knots)) args$Boundary.knots = pv$Boundary.knots[[i]] else args$Boundary.knots = range(dt[[i]])
-        result[[i]] <- as.data.frame(do.call(splines::bs, args))
-        colnames(result[[i]]) = paste0("splines.", colnames(dt)[[i]], ".", seq_len(ncol(result[[i]])))
-        bk[[i]] = attributes(splines::bs(dt[[i]]))$Boundary.knots
-      }
+        for (i in seq_len(ncol(dt))) {
+          args = list(
+            x = dt[[i]],
+            intercept = pv$intercept,
+            warn.outside = FALSE)
+          if (!is.null(pv$df)) args$df = pv$df
+          if (!is.null(pv$knots)) args$knots = pv$knots
+          if (!is.null(pv$degree)) args$degree = pv$degree
+          if (!is.null(pv$Boundary.knots)) args$Boundary.knots = pv$Boundary.knots[[i]] else args$Boundary.knots = range(dt[[i]])
+          result[[i]] <- as.data.frame(do.call(splines::bs, args))
+          colnames(result[[i]]) = paste0("splines.", colnames(dt)[[i]], ".", seq_len(ncol(result[[i]])))
+          bk[[i]] = attributes(splines::bs(dt[[i]]))$Boundary.knots
+        }
         self$param_set$values$Boundary.knots = bk
       } else {
-      for (i in seq_len(ncol(dt))) {
-        args = list(
-          x = dt[[i]],
-          intercept = pv$intercept
-        )
-        if (!is.null(pv$df)) args$df = pv$df
-        if (!is.null(pv$knots)) args$knots = pv$knots
-        if (!is.null(pv$Boundary.knots)) args$Boundary.knots = pv$Boundary.knots[[i]] else args$Boundary.knots = range(dt[[i]])
-        result[[i]] = as.data.frame(do.call(splines::ns, args))
+        for (i in seq_len(ncol(dt))) {
+          args = list(
+            x = dt[[i]],
+            intercept = pv$intercept
+          )
+          if (!is.null(pv$df)) args$df = pv$df
+          if (!is.null(pv$knots)) args$knots = pv$knots
+          if (!is.null(pv$Boundary.knots)) args$Boundary.knots = pv$Boundary.knots[[colnames(dt)[[i]]]] else args$Boundary.knots = range(dt[[i]])
+          result[[i]] = as.data.frame(do.call(splines::ns, args))
 
-        colnames(result[[i]]) = paste0("splines.", colnames(dt)[[i]], ".", seq_len(ncol(result[[i]])))
-        bk[[i]] = attributes(splines::bs(dt[[i]]))$Boundary.knots
+          colnames(result[[i]]) = paste0("splines.", colnames(dt)[[i]], ".", seq_len(ncol(result[[i]])))
+          bk[[colnames(dt)[[i]]]] = attributes(splines::bs(dt[[i]]))$Boundary.knots # should not update during predict
         }
         self$param_set$values$Boundary.knots = bk
-        }
+      }
       result
     }
   )
 )
+
 
 mlr_pipeops$add("splines", PipeOpSplines)
 
@@ -130,9 +131,14 @@ po = po("splines", type = "polynomial")
 po$train(list(tsk("iris")))
 
 
-po = po("splines", affect_columns = selector_grep(("Sepal.Length|Petal.Length")))
-
+po = po("splines")
 po$train(list(tsk("iris")))[[1]]$data()
+po$param_set$values$Boundary.knots
+
+po$param_set$values$affect_columns = selector_grep("Petal.Length|Petal.Width")
+po$train(list(tsk("iris")))[[1]]$data()
+
+
 po$predict(list(tsk("iris")))[[1]]$data()
 
 
