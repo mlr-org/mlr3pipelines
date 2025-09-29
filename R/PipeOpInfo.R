@@ -12,16 +12,18 @@
 #' ```
 #' PipeOpInfo$new(id = "info", collect_multiplicity = FALSE, log_target = "lgr::mlr3/mlr3pipelines::info")
 #' ```
-#' * `ìd` :: `character(1)`\cr
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default "info"
 #' * `printer` :: `list` \cr
 #'   Optional mapping from object classes to printer functions. Custom functions override default printer-functions.
 #' * `collect_multiplicity` :: `logical(1)`\cr
 #'   If `TRUE`, the input is a [`Multiplicity`] collecting channel. [`Multiplicity`] input/output is accepted and the members are aggregated.
 #' * `log_target` :: `character(1)`\cr
-#'   Determines how the output is printed, can either be assigned to a logger with a specified level, or can be printer in the
-#'   format "message", "warning" or "cat". When the log_target is specified as "none", the input will be printed as is.
-#'   Has either he form <output>::<argument1>::<argument2> for logger output otherwise "message", "warning", "cat" or none.
+#'   Specifies how the input object is printed to the console. By default it is
+#'   directed to a logger, whose address can be customized using the form
+#'   `<output>::<argument1>::<argument2>`. Otherwise it can be printed
+#'   as "message", "warning" or "cat". When set to "none", no customized
+#'   information about the object will be printed.
 #'
 #' @section Input and Output Channels:
 #' `PipeOpInfo` has one input channel called "input", it can take any type of input (*).

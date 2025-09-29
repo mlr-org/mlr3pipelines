@@ -15,7 +15,8 @@
 #' ```
 #' PipeOpIsomap$new(id = "isomap", ...)
 #' ```
-#' * `ìd` :: `character(1)`\cr
+#'
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"isomap"`
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
@@ -23,7 +24,7 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with the data projected on the lower dimension.
+#' The output is the input [`Task`][mlr3::Task] with the data projected to the lower-dimensional space.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
@@ -39,15 +40,14 @@
 #'   The number of embedding dimensions.
 #'   Initialized to 2.
 #' * `get_geod` :: `logical(1)`\cr
-#'   Determines whether the distance matrix should be kept in the `$state`
+#'   Determines whether the distance matrix should be kept in the `$state`.
 #'   Initialized to `FALSE`.
 #' * `.mute` :: `character`\cr
-#'   A character vector containing the elements you want to mute during training (c("message", "output")).
-#'   Initialized to `character(0)`.
-#'
+#'   A character vector of elements to mute during training (e.g. c("message", "output")).
+#'   Default: `character(0)`.
 #'
 #' @section Internals:
-#' Applies the Isomap Embedding from the `dimRed`-package.
+#' Applies the Isomap embedding from the `dimRed`-package.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].

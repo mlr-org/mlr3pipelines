@@ -17,16 +17,18 @@ Users can define how specific object classes should be displayed using custom pr
 \if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpInfo$new(id = "info", collect_multiplicity = FALSE, log_target = "lgr::mlr3/mlr3pipelines::info")
 }\if{html}{\out{</div>}}
 \itemize{
-\item \code{ìd} :: \code{character(1)}\cr
+\item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default "info"
 \item \code{printer} :: \code{list} \cr
 Optional mapping from object classes to printer functions. Custom functions override default printer-functions.
 \item \code{collect_multiplicity} :: \code{logical(1)}\cr
 If \code{TRUE}, the input is a \code{\link{Multiplicity}} collecting channel. \code{\link{Multiplicity}} input/output is accepted and the members are aggregated.
 \item \code{log_target} :: \code{character(1)}\cr
-Determines how the output is printed, can either be assigned to a logger with a specified level, or can be printer in the
-format "message", "warning" or "cat". When the log_target is specified as "none", the input will be printed as is.
-Has either he form \if{html}{\out{<output>}}::\if{html}{\out{<argument1>}}::\if{html}{\out{<argument2>}} for logger output otherwise "message", "warning", "cat" or none.
+Specifies how the input object is printed to the console. By default it is
+directed to a logger, whose address can be customized using the form
+\verb{<output>::<argument1>::<argument2>}. Otherwise it can be printed
+as "message", "warning" or "cat". When set to "none", no customized
+information about the object will be printed.
 }
 }
 

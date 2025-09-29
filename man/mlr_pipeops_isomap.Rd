@@ -19,7 +19,7 @@ dimensions (\code{ndim}) control the transformation.
 \if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpIsomap$new(id = "isomap", ...)
 }\if{html}{\out{</div>}}
 \itemize{
-\item \code{ìd} :: \code{character(1)}\cr
+\item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"isomap"}
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
@@ -30,7 +30,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
-The output is the input \code{\link[mlr3:Task]{Task}} with the data projected on the lower dimension.
+The output is the input \code{\link[mlr3:Task]{Task}} with the data projected to the lower-dimensional space.
 }
 
 \section{State}{
@@ -53,17 +53,17 @@ Initialized to 50.
 The number of embedding dimensions.
 Initialized to 2.
 \item \code{get_geod} :: \code{logical(1)}\cr
-Determines whether the distance matrix should be kept in the \verb{$state}
+Determines whether the distance matrix should be kept in the \verb{$state}.
 Initialized to \code{FALSE}.
 \item \code{.mute} :: \code{character}\cr
-A character vector containing the elements you want to mute during training (c("message", "output")).
-Initialized to \code{character(0)}.
+A character vector of elements to mute during training (e.g. c("message", "output")).
+Default: \code{character(0)}.
 }
 }
 
 \section{Internals}{
 
-Applies the Isomap Embedding from the \code{dimRed}-package.
+Applies the Isomap embedding from the \code{dimRed}-package.
 }
 
 \section{Fields}{
