@@ -9,7 +9,7 @@
 }
 \description{
 Reduces the dimensionality of the data of the input \code{\link[mlr3:Task]{Task}} using the
-Isomap algorithm from the \code{\link{dimRed}} package, preserving geodesic distances
+Isomap algorithm from the \code{dimRed}-package, preserving geodesic distances
 between observations. The number of neighbors (\code{knn}) and embedding
 dimensions (\code{ndim}) control the transformation.
 }
@@ -38,7 +38,7 @@ The output is the input \code{\link[mlr3:Task]{Task}} with the data projected on
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{embed_result} :: \code{dimRedResult}\cr
-The resulting object after applying the "Isomap"-method from the dimRed package to the data.
+The resulting object after applying the "Isomap"-method from the \code{dimRed}-package to the data.
 }
 }
 
@@ -63,7 +63,7 @@ Initialized to \code{character(0)}.
 
 \section{Internals}{
 
-Applies the Isomap Embedding from the \code{\link{dimRed}}-package.
+Applies the Isomap Embedding from the \code{dimRed}-package.
 }
 
 \section{Fields}{

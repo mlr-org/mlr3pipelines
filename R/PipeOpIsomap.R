@@ -6,7 +6,7 @@
 #'
 #' @description
 #' Reduces the dimensionality of the data of the input [`Task`][mlr3::Task] using the
-#' Isomap algorithm from the [`dimRed`] package, preserving geodesic distances
+#' Isomap algorithm from the `dimRed`-package, preserving geodesic distances
 #' between observations. The number of neighbors (`knn`) and embedding
 #' dimensions (`ndim`) control the transformation.
 #'
@@ -28,7 +28,7 @@
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `embed_result` :: `dimRedResult`\cr
-#'   The resulting object after applying the "Isomap"-method from the dimRed package to the data.
+#'   The resulting object after applying the "Isomap"-method from the `dimRed`-package to the data.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
@@ -47,7 +47,7 @@
 #'
 #'
 #' @section Internals:
-#' Applies the Isomap Embedding from the [`dimRed`]-package.
+#' Applies the Isomap Embedding from the `dimRed`-package.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
