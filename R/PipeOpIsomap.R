@@ -4,13 +4,17 @@
 #' @name mlr_pipeops_isomap
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]
 #'
+#' @description
+#' Reduces the dimensionality of the data of the input [`Task`][mlr3::Task] using the
+#' Isomap algorithm from the [`dimRed`] package, preserving geodesic distances
+#' between observations. The number of neighbors (`knn`) and embedding
+#' dimensions (`ndim`) control the transformation.
 #'
 #'
 #' @section Construction:
 #' ```
 #' PipeOpIsomap$new(id = "isomap", ...)
 #' ```
-#'
 #' * `ìd` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"isomap"`
 #' * `param_vals` :: named `list`\cr
@@ -43,17 +47,17 @@
 #'
 #'
 #' @section Internals:
-#' Applies the Isomap Embedding from the `dimRed`-package.
+#' Applies the Isomap Embedding from the [`dimRed`]-package.
 #'
 #' @section Fields:
-#' Only fields inherited from `PipeOp`.
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
-#'
+#' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examplesIf requireNamespace("dimRed")
 #' library("mlr3")
-#' po = po("isomap")
+#' po = po("isomap", .mute = c("message", "output"))
 #' po$train(list(tsk("iris")))[[1]]$data()
 #' po$predict(list(tsk("iris")))[[1]]$data()
 #'
@@ -72,7 +76,7 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
         knn = p_int(default = 50, lower = 1, upper = Inf, tags = c("train", "isomap")),
         ndim = p_int(default = 2, lower = 1, upper = Inf, tags = c("train", "isomap")),
         get_geod = p_lgl(default = FALSE, tags = c("train", "isomap")),
-        .mute = p_uty(init = c("message", "output"), tags = c("train", "isomap"))
+        .mute = p_uty(init = NULL, tags = c("train", "isomap"))
       )
       super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("dimRed", "stats"))
     }

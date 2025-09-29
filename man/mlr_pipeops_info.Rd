@@ -8,7 +8,8 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}
 }
 \description{
-Given input is printed in a customizable way.
+\code{PipeOpInfo} prints its input to the console or a logger in a customizable way.
+Users can define how specific object classes should be displayed using custom printer functions.
 }
 \section{Construction}{
 
@@ -19,12 +20,11 @@ Given input is printed in a customizable way.
 \item \code{ìd} :: \code{character(1)}\cr
 Identifier of resulting object, default "info"
 \item \code{printer} :: \code{list} \cr
-User input, specified printer-functions defined for a new object-classes or used to override their counterparts in the \code{original_printer}
+Optional mapping from object classes to printer functions. Custom functions override default printer-functions.
 \item \code{collect_multiplicity} :: \code{logical(1)}\cr
-If \code{TRUE}, the input is a \code{\link{Multiplicity}} collecting channel. This means, a
-\code{\link{Multiplicity}} input/output, instead of multiple normal inputs/outputs, is accepted and the members are aggregated.
+If \code{TRUE}, the input is a \code{\link{Multiplicity}} collecting channel. \code{\link{Multiplicity}} input/output is accepted and the members are aggregated.
 \item \code{log_target} :: \code{character(1)}\cr
-Specifies how the output is printed, can either be assigned to a logger with a specified level, or can be printer in the
+Determines how the output is printed, can either be assigned to a logger with a specified level, or can be printer in the
 format "message", "warning" or "cat". When the log_target is specified as "none", the input will be printed as is.
 Has either he form \if{html}{\out{<output>}}::\if{html}{\out{<argument1>}}::\if{html}{\out{<argument2>}} for logger output otherwise "message", "warning", "cat" or none.
 }
@@ -32,8 +32,8 @@ Has either he form \if{html}{\out{<output>}}::\if{html}{\out{<argument1>}}::\if{
 
 \section{Input and Output Channels}{
 
-\code{PipeOpInfo} has one input channel called "input", it can take any type of input.\cr
-\code{PipeOpInfo} has one output channel called "output", it can take any type of output.
+\code{PipeOpInfo} has one input channel called "input", it can take any type of input (\emph{).
+\code{PipeOpInfo} has one output channel called "output", it can take any type of output (}).
 }
 
 \section{State}{
@@ -41,14 +41,20 @@ Has either he form \if{html}{\out{<output>}}::\if{html}{\out{<argument1>}}::\if{
 The \verb{$state} is left empty (\code{list()}).
 }
 
+\section{Internals}{
+
+\code{PipeOpInfo} forwards its input unchanged, but prints information about it
+depending on the \code{printer} and \code{log_target} settings.
+}
+
 \section{Fields}{
 
 Fields inherited from \code{PipeOp}, as well as:
 \itemize{
 \item \code{printer} :: \code{list}\cr
-List that contains information on how a specific object-class should be printed to the console.
+Mapping of object classes to printer functions. Includes printer-specifications for \code{Task}, \code{Prediction}, \code{NULL}. Otherwise object is printed as is.
 \item \code{log_target} :: \code{character(1)} \cr
-Specifies how the printed console output should be displayed to the user.
+Specifies current output target.
 }
 }
 
@@ -59,15 +65,22 @@ Only methods inherited from \code{\link{PipeOp}}.
 
 \examples{
 library("mlr3")
+
 poinfo = po("info")
 poinfo$train(list(tsk("mtcars")))
-poinfo$predict(list(tsk("penguins")))
+poinfo$predict(list(tsk("mtcars")))
+
+# Specify customized console output for Task-objects
+poinfo = po("info", log_target = "cat", printer = list(Task = function(x) list(head_data = head(x$data()), nrow = nrow(x$data()))))
+
+poinfo$train(list(tsk("iris")))
+poinfo$predict(list(tsk("iris")))
 
 }
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps:
+Other PipeOps: 
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},

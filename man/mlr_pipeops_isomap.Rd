@@ -8,7 +8,10 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}
 }
 \description{
-Algorithm for Dimensionality Reduction
+Reduces the dimensionality of the data of the input \code{\link[mlr3:Task]{Task}} using the
+Isomap algorithm from the \code{\link{dimRed}} package, preserving geodesic distances
+between observations. The number of neighbors (\code{knn}) and embedding
+dimensions (\code{ndim}) control the transformation.
 }
 \section{Construction}{
 
@@ -60,25 +63,27 @@ Initialized to \code{character(0)}.
 
 \section{Internals}{
 
-Applies the Isomap Embedding from the \code{dimRed}-package.
+Applies the Isomap Embedding from the \code{\link{dimRed}}-package.
 }
 
 \section{Fields}{
 
-Only fields inherited from \code{PipeOp}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
 
+Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{
+\dontshow{if (requireNamespace("dimRed")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
-po = po("isomap")
+po = po("isomap", .mute = c("message", "output"))
 po$train(list(tsk("iris")))[[1]]$data()
 po$predict(list(tsk("iris")))[[1]]$data()
 
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html

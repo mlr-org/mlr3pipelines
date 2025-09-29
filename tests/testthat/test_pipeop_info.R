@@ -128,11 +128,11 @@ test_that("original printer can be overwritten", {
   for (j in seq_along(input)) {
     for (i in seq_along(output)) {
       poinfo = po("info", log_target = output[[i]],
-      printer = list(Task = function(x) "azbycxdw",
-                     Prediction = function(x) "azbycxdwev",
-                     `NULL` = function(x) "azbycxdwevfu",
-                     default = function(x) "azbycxdwevfugt"
-                    ))
+        printer = list(Task = function(x) "azbycxdw",
+                       Prediction = function(x) "azbycxdwev",
+                       `NULL` = function(x) "azbycxdwevfu",
+                       default = function(x) "azbycxdwevfugt"
+                      ))
       console_output_train = tryCatch(utils::capture.output(poinfo$train(list(input[[j]]))),
         warning = function(w) conditionMessage(w),
         message = function(m) conditionMessage(m))

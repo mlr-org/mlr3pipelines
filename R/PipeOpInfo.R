@@ -5,8 +5,8 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`]
 #'
 #' @description
-#' Given input is printed in a customizable way.
-#'
+#' `PipeOpInfo` prints its input to the console or a logger in a customizable way.
+#' Users can define how specific object classes should be displayed using custom printer functions.
 #'
 #' @section Construction:
 #' ```
@@ -15,12 +15,11 @@
 #' * `ìd` :: `character(1)`\cr
 #'   Identifier of resulting object, default "info"
 #' * `printer` :: `list` \cr
-#'   User input, specified printer-functions defined for a new object-classes or used to override their counterparts in the `original_printer`
+#'   Optional mapping from object classes to printer functions. Custom functions override default printer-functions.
 #' * `collect_multiplicity` :: `logical(1)`\cr
-#'   If `TRUE`, the input is a [`Multiplicity`] collecting channel. This means, a
-#'   [`Multiplicity`] input/output, instead of multiple normal inputs/outputs, is accepted and the members are aggregated.
+#'   If `TRUE`, the input is a [`Multiplicity`] collecting channel. [`Multiplicity`] input/output is accepted and the members are aggregated.
 #' * `log_target` :: `character(1)`\cr
-#'   Specifies how the output is printed, can either be assigned to a logger with a specified level, or can be printer in the
+#'   Determines how the output is printed, can either be assigned to a logger with a specified level, or can be printer in the
 #'   format "message", "warning" or "cat". When the log_target is specified as "none", the input will be printed as is.
 #'   Has either he form <output>::<argument1>::<argument2> for logger output otherwise "message", "warning", "cat" or none.
 #'
@@ -31,21 +30,32 @@
 #' @section State:
 #' The `$state` is left empty (`list()`).
 #'
+#' @section Internals:
+#' `PipeOpInfo` forwards its input unchanged, but prints information about it
+#' depending on the `printer` and `log_target` settings.
+#'
 #' @section Fields:
 #' Fields inherited from `PipeOp`, as well as:
 #' * `printer` :: `list`\cr
-#'   List that contains information on how a specific object-class should be printed to the console.
+#'   Mapping of object classes to printer functions. Includes printer-specifications for `Task`, `Prediction`, `NULL`. Otherwise object is printed as is.
 #' * `log_target` :: `character(1)` \cr
-#'   Specifies how the printed console output should be displayed to the user.
+#'   Specifies current output target.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @examples
 #' library("mlr3")
+#'
 #' poinfo = po("info")
 #' poinfo$train(list(tsk("mtcars")))
-#' poinfo$predict(list(tsk("penguins")))
+#' poinfo$predict(list(tsk("mtcars")))
+#'
+#' # Specify customized console output for Task-objects
+#' poinfo = po("info", log_target = "cat", printer = list(Task = function(x) list(head_data = head(x$data()), nrow = nrow(x$data()))))
+#'
+#' poinfo$train(list(tsk("iris")))
+#' poinfo$predict(list(tsk("iris")))
 #'
 #' @family PipeOps
 #' @template seealso_pipeopslist
