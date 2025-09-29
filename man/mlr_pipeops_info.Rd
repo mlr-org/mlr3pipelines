@@ -34,8 +34,8 @@ information about the object will be printed.
 
 \section{Input and Output Channels}{
 
-\code{PipeOpInfo} has one input channel called "input", it can take any type of input (\emph{).
-\code{PipeOpInfo} has one output channel called "output", it can take any type of output (}).
+\code{PipeOpInfo} has one input channel called "input", it can take any type of input (\code{*}).
+\code{PipeOpInfo} has one output channel called "output", it can take any type of output (\code{*}).
 }
 
 \section{State}{
