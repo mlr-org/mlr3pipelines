@@ -15,7 +15,7 @@ register_mlr3 = function() {
   x$pipeops$valid_tags = unique(c(x$pipeops$valid_tags,
     c("abstract", "meta", "missings", "feature selection", "imbalanced data",
     "data transform", "target transform", "ensemble", "robustify", "learner", "encode",
-     "multiplicity")))
+     "multiplicity", "debug")))
   x$pipeops$properties = c("validation", "internal_tuning")
 }
 
