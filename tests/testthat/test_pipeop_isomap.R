@@ -68,6 +68,7 @@ test_that("hyperparameter get_geod", {
   # Check 2 - get_geod = TRUE behaves as expected
   po_geod = po("isomap", get_geod = TRUE)
   po_geod$train(list(tsk("iris")))
+
   # obtain geodistance matrix from original isomap embedding
   emb1 = dimRed::embed(dimRed::loadDataSet("Iris"), "Isomap", get_geod = TRUE)
   expect_equal(po_geod$state$embed_result@other.data, emb1@other.data)

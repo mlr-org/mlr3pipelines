@@ -1,9 +1,5 @@
 context("PipeOpInfo")
 
-
-##### pipeop$new ersetzen mit po("")
-
-
 test_that("basic properties", {
   po = po("info")
   expect_pipeop(po)
