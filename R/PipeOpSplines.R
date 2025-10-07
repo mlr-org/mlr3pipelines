@@ -84,11 +84,11 @@ PipeOpSplines = R6Class("PipeOpSplines",
             x = dt[[i]],
             intercept = pv$intercept,
             warn.outside = FALSE)
-          if (!is.null(pv$df)) args$df = pv$df
+            args$df = pv$df # is.nll negation löschen
           if (!is.null(pv$knots)) args$knots = pv$knots
           if (!is.null(pv$degree)) args$degree = pv$degree
           if (!is.null(pv$Boundary.knots)) args$Boundary.knots = pv$Boundary.knots[[i]] else args$Boundary.knots = range(dt[[i]])
-          result[[i]] <- as.data.frame(do.call(splines::bs, args))
+          result[[i]] = as.data.frame(do.call(splines::bs, args))
           colnames(result[[i]]) = paste0("splines.", colnames(dt)[[i]], ".", seq_len(ncol(result[[i]])))
           bk[[colnames(dt)[[i]]]] = attributes(splines::bs(dt[[i]]))$Boundary.knots
         }
@@ -113,7 +113,7 @@ PipeOpSplines = R6Class("PipeOpSplines",
     },
     .predict_dt = function(dt, levels) {
       result = list()
-      pv = self$param_set$get_values(tags = "train")
+      pv = self$param_set$get_values # tag entfernen oben
       if (pv$type == "polynomial") {
         for (i in seq_len(ncol(dt))) {
           args = list(
@@ -124,7 +124,7 @@ PipeOpSplines = R6Class("PipeOpSplines",
           if (!is.null(pv$knots)) args$knots = pv$knots
           if (!is.null(pv$degree)) args$degree = pv$degree
           if (!is.null(pv$Boundary.knots)) args$Boundary.knots = pv$Boundary.knots[[colnames(dt)[[i]]]] else args$Boundary.knots = range(dt[[colnames(dt)[[i]]]])
-          result[[i]] = as.data.frame(do.call(splines::bs, args))
+          result[[i]] = as.data.frame(do.call(splines::bs, args)) #mlr3misc; invoke lieber benutzen; args pv = NULL;
           colnames(result[[i]]) = paste0("splines.", colnames(dt)[[i]], ".", seq_len(ncol(result[[i]])))
         }
       } else {
