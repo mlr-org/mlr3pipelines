@@ -1,7 +1,8 @@
 # mlr3pipelines 0.9.0-9000
 
+* Compatibility with new testthat version 3.3.0
 * Fix: Added internal workaround for `PipeOpNMF` attaching `Biobase`, `BiocGenerics`, and `generics` to the search path during training, prediction or when printing its `$state`.
-* feat: allow dates in datefeatures pipe op and use data.table for date feature generation
+* feat: allow dates in datefeatures pipe op and use data.table for date feature generation.
 * Added support for internal validation tasks to `PipeOpFeatureUnion`.
 
 # mlr3pipelines 0.9.0
