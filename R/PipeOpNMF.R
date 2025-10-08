@@ -166,7 +166,7 @@ PipeOpNMF = R6Class("PipeOpNMF",
       names(.args)[match("pbackend", names(.args), nomatch = 0L)] = ".pbackend"
       names(.args)[match("callback", names(.args), nomatch = 0L)] = ".callback"
 
-      nmf = mlr3misc::invoke(NMF::nmf,
+      nmf = invoke(NMF::nmf,
         x = x,
         rng = NULL,
         model = NULL,
@@ -178,9 +178,9 @@ PipeOpNMF = R6Class("PipeOpNMF",
       self$state = structure(list(nmf = nmf), class = "PipeOpNMFstate")
 
       # here we have two options? return directly h or do what we do during prediction
-      #h = t(mlr3misc::invoke(NMF::coef, object = nmf))
-      w = mlr3misc::invoke(NMF::basis, object = nmf)
-      h_ = t(mlr3misc::invoke(MASS::ginv, X = w) %*% x)
+      #h = t(invoke(NMF::coef, object = nmf))
+      w = invoke(NMF::basis, object = nmf)
+      h_ = t(invoke(MASS::ginv, X = w) %*% x)
       colnames(h_) = paste0("NMF", seq_len(self$param_set$values$rank))
       h_
     },
@@ -197,8 +197,8 @@ PipeOpNMF = R6Class("PipeOpNMF",
       }
 
       x = t(as.matrix(dt))
-      w = mlr3misc::invoke(NMF::basis, object = self$state$nmf)
-      h_ = t(mlr3misc::invoke(MASS::ginv, X = w) %*% x)
+      w = invoke(NMF::basis, object = self$state$nmf)
+      h_ = t(invoke(MASS::ginv, X = w) %*% x)
       colnames(h_) = paste0("NMF", seq_len(self$param_set$values$rank))
       h_
     },

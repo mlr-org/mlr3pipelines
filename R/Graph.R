@@ -383,13 +383,13 @@ Graph = R6Class("Graph",
           extra_vertices = setdiff(ids, c(df$from, df$to))
 
           all_names = unique(unlist(df))
-          df = data.table::setDT(mlr3misc::map(df, function(x) match(x, all_names)))
+          df = setDT(map(df, function(x) match(x, all_names)))
           gr = paste0(map(seq_len(nrow(df)), function(x) {
             paste0(df[x, ][[1L]], " -> ", df[x, ][[2L]])
           }), collapse = ";\n")
 
           all_names = gsub("\\.", "_", all_names)
-          labels = paste0(unlist(mlr3misc::map(unique(unlist(df)), function(x) {
+          labels = paste0(unlist(map(unique(unlist(df)), function(x) {
             paste0(x, " [label=", '"', all_names[x], '"', ",fontsize=", fontsize, ']')
           })), collapse = ";\n")
           dot = paste0(gr, ";\n", labels)
