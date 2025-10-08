@@ -63,12 +63,12 @@ PipeOpSplines = R6Class("PipeOpSplines",
   public = list(
     initialize = function(id = "splines", param_vals = list()) {
       ps = ps(
-        type = p_fct(levels = c("polynomial", "natural"), init = "natural", tags = c("train", "required")),
-        df = p_int(lower = 1, upper = Inf, special_vals = list(NULL), init = NULL, tags = "train"),
-        knots = p_uty(special_vals = list(NULL), init = NULL, tags = "train"),
-        degree = p_int(lower = 1, upper = Inf, default = 3, depends = type == "polynomial", tags = "train"),
-        intercept = p_lgl(init = FALSE, tags = "train"),
-        Boundary.knots = p_uty(init = NULL, tags = "train")
+        type = p_fct(levels = c("polynomial", "natural"), init = "natural", tags = c("train", "splines")),
+        df = p_int(lower = 1, upper = Inf, special_vals = list(NULL), init = NULL, tags = c("train", "splines")),
+        knots = p_uty(special_vals = list(NULL), init = NULL, tags = c("train", "splines")),
+        degree = p_int(lower = 1, upper = Inf, default = 3, depends = type == "polynomial", tags = c("train", "splines")),
+        intercept = p_lgl(init = FALSE, tags = c("train", "splines")),
+        Boundary.knots = p_uty(tags = c("train", "splines"))
       )
       super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("splines", "stats"))
     }
@@ -77,68 +77,35 @@ PipeOpSplines = R6Class("PipeOpSplines",
     .train_dt = function(dt, levels, target) {
       result = list()
       bk = list()
-      pv = self$param_set$get_values(tags = "train")
-      if (pv$type == "polynomial") {
-        for (i in seq_len(ncol(dt))) {
-          args = list(
-            x = dt[[i]],
-            intercept = pv$intercept,
-            warn.outside = FALSE)
-            args$df = pv$df # is.nll negation löschen
-          if (!is.null(pv$knots)) args$knots = pv$knots
-          if (!is.null(pv$degree)) args$degree = pv$degree
-          if (!is.null(pv$Boundary.knots)) args$Boundary.knots = pv$Boundary.knots[[i]] else args$Boundary.knots = range(dt[[i]])
-          result[[i]] = as.data.frame(do.call(splines::bs, args))
-          colnames(result[[i]]) = paste0("splines.", colnames(dt)[[i]], ".", seq_len(ncol(result[[i]])))
-          bk[[colnames(dt)[[i]]]] = attributes(splines::bs(dt[[i]]))$Boundary.knots
+      pv = self$param_set$get_values(tags = "splines")
+        for (i in colnames(dt)) {
+          args = pv
+          args$type = NULL
+          args$Boundary.knots = self$state$Boundary.knots[[i]]
+          if (pv$type == "polynomial") {
+            result[[i]] = invoke(splines::bs, .args = args, x = dt[[i]], warn.outside = FALSE)
+          } else  {
+            result[[i]] = invoke(splines::ns, .args = args, x = dt[[i]])
+          }
+          colnames(result[[i]]) = paste0("splines.", i, ".", seq_len(ncol(result[[i]])))
+          bk[[i]] = attributes(splines::bs(dt[[i]]))$Boundary.knots
         }
-        self$param_set$values$Boundary.knots = bk
-      } else {
-        for (i in seq_len(ncol(dt))) {
-          args = list(
-            x = dt[[i]],
-            intercept = pv$intercept
-          )
-          if (!is.null(pv$df)) args$df = pv$df
-          if (!is.null(pv$knots)) args$knots = pv$knots
-          if (!is.null(pv$Boundary.knots)) args$Boundary.knots = pv$Boundary.knots[[colnames(dt)[[i]]]] else args$Boundary.knots = range(dt[[i]])
-          result[[i]] = as.data.frame(do.call(splines::ns, args))
-
-          colnames(result[[i]]) = paste0("splines.", colnames(dt)[[i]], ".", seq_len(ncol(result[[i]])))
-          bk[[colnames(dt)[[i]]]] = attributes(splines::bs(dt[[i]]))$Boundary.knots # should not update during predict
-        }
-        self$param_set$values$Boundary.knots = bk
-      }
+        self$state$Boundary.knots = bk
       result
     },
     .predict_dt = function(dt, levels) {
       result = list()
-      pv = self$param_set$get_values # tag entfernen oben
-      if (pv$type == "polynomial") {
-        for (i in seq_len(ncol(dt))) {
-          args = list(
-            x = dt[[i]],
-            intercept = pv$intercept,
-            warn.outside = FALSE)
-          if (!is.null(pv$df)) args$df = pv$df
-          if (!is.null(pv$knots)) args$knots = pv$knots
-          if (!is.null(pv$degree)) args$degree = pv$degree
-          if (!is.null(pv$Boundary.knots)) args$Boundary.knots = pv$Boundary.knots[[colnames(dt)[[i]]]] else args$Boundary.knots = range(dt[[colnames(dt)[[i]]]])
-          result[[i]] = as.data.frame(do.call(splines::bs, args)) #mlr3misc; invoke lieber benutzen; args pv = NULL;
-          colnames(result[[i]]) = paste0("splines.", colnames(dt)[[i]], ".", seq_len(ncol(result[[i]])))
+      pv = self$param_set$get_values(tags = "splines") # tag entfernen oben
+      for (i in colnames(dt)) {
+        args = pv
+        args$type = NULL
+        args$Boundary.knots = self$state$Boundary.knots[[i]]
+        if (pv$type == "polynomial") {
+          result[[i]] = invoke(splines::bs, .args = args, x = dt[[i]], warn.outside = FALSE)
+        } else  {
+          result[[i]] = invoke(splines::ns, .args = args, x = dt[[i]])
         }
-      } else {
-        for (i in seq_len(ncol(dt))) {
-          args = list(
-            x = dt[[i]],
-            intercept = pv$intercept
-          )
-          if (!is.null(pv$df)) args$df = pv$df
-          if (!is.null(pv$knots)) args$knots = pv$knots
-          if (!is.null(pv$Boundary.knots)) args$Boundary.knots = pv$Boundary.knots[[colnames(dt)[[i]]]] else args$Boundary.knots = range(dt[[colnames(dt)[[i]]]])
-          result[[i]] = as.data.frame(do.call(splines::ns, args))
-          colnames(result[[i]]) = paste0("splines.", colnames(dt)[[i]], ".", seq_len(ncol(result[[i]])))
-        }
+          colnames(result[[i]]) = paste0("splines.", i, ".", seq_len(ncol(result[[i]])))
       }
       result
     }
