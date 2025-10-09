@@ -61,7 +61,7 @@ PipeOpImputeSample = R6Class("PipeOpImputeSample",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputesample", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals, feature_types = c("factor", "integer", "logical", "numeric", "ordered"))
+      super$initialize(id, param_vals = param_vals, feature_types = c("factor", "integer", "logical", "numeric", "ordered", "POSIXct", "Date"))
     }
   ),
   private = list(
