@@ -45,20 +45,33 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
+#' @examples
+#' library("mlr3")
+#'
+#' # Reduced task with no entries for the installment_rate < 20 is defined
+#' task = tsk("german_credit")
+#' logical = task$data()[, installment_rate != "< 20"]
+#' reduced_task = task$clone(deep = TRUE)$filter(which(logical))
+#' levels(reduced_task$data()$installment_rate)
+#'
+#' # PipeOp is trained on the reduced task
+#' po = po("fixfactors")
+#' processed_task = preproc(reduced_task, po)
+#' levels(processed_task$data()$installment_rate)
+#' summary(processed_task$data()$installment_rate)
+#'
+#' predicted_task = preproc(task, po, predict = TRUE)
+#'
+#' # Predictions are made on the task without any missing data
+#' levels(predicted_task$data()$installment_rate)
+#' summary(predicted_task$data()$installment_rate)
+#'
+#'
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
-#' @examples
-#' library("mlr3")
-#' rows_to_keep = tsk("german_credit")$data()[, .I[installment_rate != "< 20"]]
-#' reduced_task = tsk("german_credit")$filter(rows_to_keep)
-#'
-#' po = po("fixfactors")
-#' po$train(list(reduced_task))
-#' po$predict(list(tsk("german_credit")))[[1]]$data()
-#' po$predict(list(tsk("german_credit")))[[1]]$data()[, "installment_rate", with = TRUE]
-#'
+
 
 
 PipeOpFixFactors = R6Class("PipeOpFixFactors",
