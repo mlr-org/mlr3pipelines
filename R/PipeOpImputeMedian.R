@@ -59,7 +59,7 @@ PipeOpImputeMedian = R6Class("PipeOpImputeMedian",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputemedian", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals, packages = "stats", feature_types = c("numeric", "integer"))
+      super$initialize(id, param_vals = param_vals, packages = "stats", feature_types = c("numeric", "integer", "POSIXct", "Date"))
     }
   ),
   private = list(
