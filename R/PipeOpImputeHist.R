@@ -66,13 +66,31 @@ PipeOpImputeHist = R6Class("PipeOpImputeHist",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputehist", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals, packages = "graphics", feature_types = c("integer", "numeric"))
+      super$initialize(id, param_vals = param_vals, packages = "graphics", feature_types = c("integer", "numeric", "Date", "POSIXct"))
     }
   ),
   private = list(
 
     .train_imputer = function(feature, type, context) {
-      graphics::hist(feature, plot = FALSE)[c("counts", "breaks")]
+      if (class(feature) == "POSIXct") {
+        # hist() for POSIXct does not do "Sturges" breaks automatically, so we compute it explicitly
+        n_breaks = ceiling(log2(length(feature)) + 1)
+        # If we pass the number of breaks, hist() does some computation that results in integer overflow
+        breaks = as.POSIXct(as.numeric(pretty(range(feature, na.rm = TRUE), n = n_breaks, min.n = 1)))
+        # pretty() does not return values of length < 2, so the special case where `breaks` gets
+        # intepreted differently does not need to be handled here.
+        graphics::hist(feature, breaks = breaks, plot = FALSE)[c("counts", "breaks")]
+      } else if (class(feature) == "Date") {
+        # hist() for POSIXct does not do "Sturges" breaks automatically, so we compute it explicitly
+        n_breaks = ceiling(log2(length(feature)) + 1)
+        # If we pass the number of breaks, hist() does some computation that results in integer overflow
+        breaks = as.Date(as.numeric(pretty(range(feature, na.rm = TRUE), n = n_breaks, min.n = 1)))
+        # pretty() does not return values of length < 2, so the special case where `breaks` gets
+        # intepreted differently does not need to be handled here.
+        graphics::hist(feature, breaks = breaks, plot = FALSE)[c("counts", "breaks")]
+      } else {
+        graphics::hist(feature, plot = FALSE)[c("counts", "breaks")]
+      }
     },
 
     .impute = function(feature, type, model, context) {
