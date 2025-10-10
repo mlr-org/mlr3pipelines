@@ -60,7 +60,6 @@ PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "renamecolumns", param_vals = list()) {
-      browser()
       ps = ps(
         renaming = p_uty(
           custom_check = crate(function(x) check_character(x, any.missing = FALSE, names = "strict") %check&&% check_names(x, type = "strict") %check||% check_function(x)),
@@ -95,3 +94,13 @@ PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
 )
 
 mlr_pipeops$add("renamecolumns", PipeOpRenameColumns)
+
+
+# EXAMPLE FOR FUNCTION
+
+#' task = tsk("iris")
+#' pop = po("renamecolumns", renaming = function(colnames) {sub("a", "xy", colnames)}, affect_columns = selector_name("Petal.Length"))
+#' pop$train(list(task))
+
+
+
