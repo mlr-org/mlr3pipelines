@@ -62,14 +62,13 @@ PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
     initialize = function(id = "renamecolumns", param_vals = list()) {
       ps = ps(
         renaming = p_uty(
-          custom_check = crate(function(x) check_character(x, any.missing = FALSE, names = "strict") %check&&% check_names(x, type = "strict"),
-                               .parent = topenv()),
+          custom_check = crate(function(x) check_character(x, any.missing = FALSE, names = "strict") %check&&% check_names(x, type = "strict") %check||% check_function(x)),
           tags = c("train", "predict", "required")
         ),
         ignore_missing = p_lgl(tags = c("train", "predict", "required"))
       )
       ps$values = list(renaming = character(0), ignore_missing = FALSE)
-      super$initialize(id, ps, param_vals = param_vals, can_subset_cols = FALSE)
+      super$initialize(id, ps, param_vals = param_vals, can_subset_cols = TRUE) # TRUE or FALSE?
     }
   ),
   private = list(
@@ -77,17 +76,31 @@ PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
       if (!length(self$param_set$values$renaming)) {
         return(task)  # early exit
       }
-      innames = names(self$param_set$values$renaming)
-      nontargets = task$col_roles
-      nontargets$target = NULL
-      takenames = innames %in% unlist(nontargets)
-      if (!self$param_set$values$ignore_missing && !all(takenames)) {
-        # we can't rely on task$rename because it could also change the target name, which we don't want.
-        stopf("The names %s from `renaming` parameter were not found in the Task.", str_collapse(innames[!takenames]))
+      if (class(self$param_set$values$renaming) != "function") {
+        innames = names(self$param_set$values$renaming)
+        nontargets = task$col_roles
+        nontargets$target = NULL
+        takenames = innames %in% unlist(nontargets)
+        if (!self$param_set$values$ignore_missing && !all(takenames)) {
+          # we can't rely on task$rename because it could also change the target name, which we don't want.
+          stopf("The names %s from `renaming` parameter were not found in the Task.", str_collapse(innames[!takenames]))
+        }
+        task$rename(old = innames[takenames], new = self$param_set$values$renaming[takenames])
+      } else {
+        task$rename(old = unlist(task$col_roles), new = self$param_set$values$renaming(unlist(task$col_roles)))
       }
-      task$rename(old = innames[takenames], new = self$param_set$values$renaming[takenames])
     }
   )
 )
 
 mlr_pipeops$add("renamecolumns", PipeOpRenameColumns)
+
+
+# EXAMPLE FOR FUNCTION
+
+#' task = tsk("iris")
+#' pop = po("renamecolumns", renaming = function(colnames) {sub("a", "xy", colnames)}, affect_columns = selector_name("Petal.Length"))
+#' pop$train(list(task))
+
+
+
