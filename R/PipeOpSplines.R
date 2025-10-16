@@ -81,7 +81,7 @@ PipeOpSplines = R6Class("PipeOpSplines",
         for (i in colnames(dt)) {
           args = pv
           args$type = NULL
-          args$Boundary.knots = po$param_set$values$Boundary.knots[[i]]
+          args$Boundary.knots = self$param_set$values$Boundary.knots[[i]]
           if (pv$type == "polynomial") {
             result[[i]] = invoke(splines::bs, .args = args, x = dt[[i]], warn.outside = FALSE)
           } else {
