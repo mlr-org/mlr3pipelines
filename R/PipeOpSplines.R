@@ -68,7 +68,7 @@ PipeOpSplines = R6Class("PipeOpSplines",
         knots = p_uty(special_vals = list(NULL), init = NULL, tags = c("train", "splines")),
         degree = p_int(lower = 1, upper = Inf, default = 3, depends = type == "polynomial", tags = c("train", "splines")),
         intercept = p_lgl(init = FALSE, tags = c("train", "splines")),
-        Boundary.knots = p_uty(tags = c("train", "splines"))
+        Boundary.knots = p_uty(tags = c("train"))
       )
       super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("splines", "stats"))
     }
@@ -81,10 +81,10 @@ PipeOpSplines = R6Class("PipeOpSplines",
         for (i in colnames(dt)) {
           args = pv
           args$type = NULL
-          args$Boundary.knots = self$state$Boundary.knots[[i]]
+          args$Boundary.knots = po$param_set$values$Boundary.knots[[i]]
           if (pv$type == "polynomial") {
             result[[i]] = invoke(splines::bs, .args = args, x = dt[[i]], warn.outside = FALSE)
-          } else  {
+          } else {
             result[[i]] = invoke(splines::ns, .args = args, x = dt[[i]])
           }
           colnames(result[[i]]) = paste0("splines.", i, ".", seq_len(ncol(result[[i]])))
@@ -102,7 +102,7 @@ PipeOpSplines = R6Class("PipeOpSplines",
         args$Boundary.knots = self$state$Boundary.knots[[i]]
         if (pv$type == "polynomial") {
           result[[i]] = invoke(splines::bs, .args = args, x = dt[[i]], warn.outside = FALSE)
-        } else  {
+        } else {
           result[[i]] = invoke(splines::ns, .args = args, x = dt[[i]])
         }
           colnames(result[[i]]) = paste0("splines.", i, ".", seq_len(ncol(result[[i]])))
@@ -113,3 +113,8 @@ PipeOpSplines = R6Class("PipeOpSplines",
 )
 
 mlr_pipeops$add("splines", PipeOpSplines)
+
+#' po = po("splines", param_vals = list(Boundary.knots = list(Petal.Length = c(1, 5), Sepal.Length = c(2, 4), Sepal.Width = c(3, 6), Petal.Width = c(4, 5))))
+#' po$param_set$get_values(tags = "train")
+#' po$train(list(tsk("iris")))
+#' po$predict(list(tsk("iris")))[[1]]$data()

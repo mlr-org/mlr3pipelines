@@ -3,7 +3,8 @@ context("PipeOpSplines")
 test_that("PipeOpSplines - basic properties", {
   skip_if_not_installed("splines")
   task = mlr_tasks$get("iris")
-  expect_datapreproc_pipeop_class(PipeOpSplines, task = task)
+  expect_datapreproc_pipeop_class(PipeOpSplines, task = task, predict_like_train = FALSE)
+  # when we train we get the Boundary.knots, when we now predict on the same data the results will change
 })
 
 test_that("Error when trying to pass degree argument while factor = natural", {
