@@ -100,7 +100,8 @@ Suggests:
     future,
     htmlwidgets,
     ranger,
-    themis
+    themis,
+    splines
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
@@ -187,6 +188,7 @@ Collate:
     'PipeOpSmote.R'
     'PipeOpSmoteNC.R'
     'PipeOpSpatialSign.R'
+    'PipeOpSplines.R'
     'PipeOpSubsample.R'
     'PipeOpTextVectorizer.R'
     'PipeOpThreshold.R'
