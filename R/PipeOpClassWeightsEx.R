@@ -4,6 +4,7 @@
 #' opb = po("classweightsex", param_vals = list(weight_method = "inverse class frequency"))
 #' opb = po("classweightsex", param_vals = list(weight_method = "inverse square root of frequency"))
 #' opb = po("classweightsex", param_vals = list(weight_method = "median frequency balancing"))
+#' opb = po("classweightsex", param_vals = list(weight_method = "explicit", mapping = c("setosa" = 0.3, "virginica" = 0.5, "versicolor" = 0.4)))
 #'
 #' # task weights
 #' if ("weights_learner" %in% names(task)) {
@@ -57,7 +58,7 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
       } else if (self$param_set$values$weight_method == "median frequency balancing") {
         wcol = setnames(data.table(truth)[data.table(median(class_frequency) / class_frequency), on = .(truth)][, "N"], weightcolname)
       } else if (self$param_set$values$weight_method == "explicit") {
-        task$cbind(data.table(.WEIGHTS = mapping[task$truth()]))
+        wcol = data.table(.WEIGHTS = self$param_set$values$mapping[task$truth()])
       }
       task$cbind(wcol)
       task$col_roles$feature = setdiff(task$col_roles$feature, weightcolname)
