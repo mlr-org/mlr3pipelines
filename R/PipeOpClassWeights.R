@@ -94,6 +94,7 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
 
     .train_task = function(task) {
 
+
       if ("twoclass" %nin% task$properties) {
         stop("Only binary classification Tasks are supported.")
       }
