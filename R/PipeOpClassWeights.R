@@ -84,17 +84,15 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
   public = list(
     initialize = function(id = "classweights", param_vals = list()) {
       ps = ps(
-        minor_weight = p_dbl(lower = 0, upper = Inf, tags = "train")
+        minor_weight = p_dbl(init = 1, lower = 0, upper = Inf, tags = "train"),
+        weight_type = p_uty(init = c("learner", "measure"), tags = "train")
       )
-      ps$values = list(minor_weight = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data")
     }
   ),
   private = list(
 
     .train_task = function(task) {
-
-
       if ("twoclass" %nin% task$properties) {
         stop("Only binary classification Tasks are supported.")
       }
@@ -111,10 +109,19 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
 
       task$cbind(wcol)
       task$col_roles$feature = setdiff(task$col_roles$feature, weightcolname)
-      if ("weights_learner" %in% mlr_reflections$task_col_roles$classif) {
-        task$col_roles$weights_learner = weightcolname
-      } else {
-        task$col_roles$weight = weightcolname
+      if ("learner" %in% self$param_set$values$weight_type) {
+        if ("weights_learner" %in% mlr_reflections$task_col_roles$classif) {
+          task$col_roles$weights_learner = weightcolname
+        } else {
+          task$col_roles$weight = weightcolname
+        }
+      }
+      if ("measure" %in% self$param_set$values$weight_type) {
+        if ("weights_measure" %in% mlr_reflections$task_col_roles$classif) {
+          task$col_roles$weights_measure = weightcolname
+        } else {
+          task$col_roles$weight = weightcolname
+        }
       }
       task
     },
