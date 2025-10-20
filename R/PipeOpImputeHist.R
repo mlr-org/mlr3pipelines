@@ -72,19 +72,15 @@ PipeOpImputeHist = R6Class("PipeOpImputeHist",
   private = list(
 
     .train_imputer = function(feature, type, context) {
-      if (class(feature) == "POSIXct") {
-        # hist() for POSIXct does not do "Sturges" breaks automatically, so we compute it explicitly
+      if (inherits(feature, c("POSIXct", "Date"))) {
+        # hist() for POSIXct/Date does not do "Sturges" breaks automatically, so we compute it explicitly
         n_breaks = ceiling(log2(length(feature)) + 1)
         # If we pass the number of breaks, hist() does some computation that results in integer overflow
-        breaks = as.POSIXct(as.numeric(pretty(range(feature, na.rm = TRUE), n = n_breaks, min.n = 1)))
-        # pretty() does not return values of length < 2, so the special case where `breaks` gets
-        # intepreted differently does not need to be handled here.
-        graphics::hist(feature, breaks = breaks, plot = FALSE)[c("counts", "breaks")]
-      } else if (class(feature) == "Date") {
-        # hist() for POSIXct does not do "Sturges" breaks automatically, so we compute it explicitly
-        n_breaks = ceiling(log2(length(feature)) + 1)
-        # If we pass the number of breaks, hist() does some computation that results in integer overflow
-        breaks = as.Date(as.numeric(pretty(range(feature, na.rm = TRUE), n = n_breaks, min.n = 1)))
+        if (inherits(feature, "POSIXct")) {
+          breaks = as.POSIXct(as.numeric(pretty(range(feature, na.rm = TRUE), n = n_breaks, min.n = 1)))
+        } else {
+          breaks = as.Date(as.numeric(pretty(range(feature, na.rm = TRUE), n = n_breaks, min.n = 1)))
+        }
         # pretty() does not return values of length < 2, so the special case where `breaks` gets
         # intepreted differently does not need to be handled here.
         graphics::hist(feature, breaks = breaks, plot = FALSE)[c("counts", "breaks")]
