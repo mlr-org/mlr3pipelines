@@ -72,12 +72,15 @@ PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
     }
   ),
   private = list(
-    .transform = function(task) {
-      if (!length(self$param_set$values$renaming)) {
-        return(task)  # early exit
-      }
-      if (class(self$param_set$values$renaming) != "function") {
-        innames = names(self$param_set$values$renaming)
+    .get_state = function(task) {
+      if (is.function(self$param_set$values$renaming)) {
+        new_names = self$param_set$values$renaming(task$feature_names)
+        assert_character(new_names, any.missing = FALSE, len = length(task$feature_names), .var.name = "the value returned by `renaming` function")
+        names(new_names) = task$feature_names
+        list(old_names = task$feature_names, new_names = new_names)
+      } else {
+        new_names = self$param_set$values$renaming
+        innames = names(new_names)
         nontargets = task$col_roles
         nontargets$target = NULL
         takenames = innames %in% unlist(nontargets)
@@ -85,10 +88,14 @@ PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
           # we can't rely on task$rename because it could also change the target name, which we don't want.
           stopf("The names %s from `renaming` parameter were not found in the Task.", str_collapse(innames[!takenames]))
         }
-        task$rename(old = innames[takenames], new = self$param_set$values$renaming[takenames])
-      } else {
-        task$rename(old = unlist(task$col_roles), new = self$param_set$values$renaming(unlist(task$col_roles)))
+        list(old_names = innames[takenames], new_names = new_names[takenames])
       }
+    },
+    .transform = function(task) {
+      if (!length(self$state$new_names)) {
+        return(task)  # early exit
+      }
+      task$rename(old = self$state$old_names, new = self$state$new_names)
     }
   )
 )
@@ -102,5 +109,6 @@ mlr_pipeops$add("renamecolumns", PipeOpRenameColumns)
 #' pop = po("renamecolumns", renaming = function(colnames) {sub("a", "xy", colnames)}, affect_columns = selector_name("Petal.Length"))
 #' pop$train(list(task))
 
+# test dazu schreiben (ein test der das assert triggert u.a.)!
 
 
