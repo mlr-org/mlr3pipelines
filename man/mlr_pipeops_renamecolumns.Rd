@@ -40,10 +40,13 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{renaming} :: named \code{character}\cr
+\item \code{renaming} :: named \code{character} | \code{function}\cr
+Takes the form of either a named \code{character} or a \code{function}.
 Named \code{character} vector. The names of the vector specify the old column names that should be
 changed to the new column names as given by the elements of the vector. Initialized to the empty
 character vector.
+\code{function}. Specifies how the column names should be changed to new column names. To choose columns use the
+\code{affect_columns} parameter. No function is initialized.
 \item \code{ignore_missing} :: \code{logical(1)}\cr
 Ignore if columns named in \code{renaming} are not found in the input \code{\link[mlr3:Task]{Task}}. If this is
 \code{FALSE}, then names found in \code{renaming} not found in the \code{\link[mlr3:Task]{Task}} cause an error.
@@ -70,8 +73,14 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 library("mlr3")
 
 task = tsk("iris")
+Using a named list
 pop = po("renamecolumns", param_vals = list(renaming = c("Petal.Length" = "PL")))
 pop$train(list(task))
+
+Using a function
+pop = po("renamecolumns", param_vals = list(renaming = function(colnames) {sub("Petal", "P", colnames)}))
+pop$train(list(task))
+
 }
 \seealso{
 https://mlr-org.com/pipeops.html
