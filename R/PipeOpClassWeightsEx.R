@@ -1,7 +1,7 @@
 #' @title Class Weights for Sample  - Extended
 #'
 #' @usage NULL
-#' @name mlr_pipeops_classweights
+#' @name mlr_pipeops_classweightsex
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
