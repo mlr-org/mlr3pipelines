@@ -50,8 +50,8 @@
 #'
 #' # Reduced task with no entries for the installment_rate < 20 is defined
 #' task = tsk("german_credit")
-#' logical = task$data()[, installment_rate != "< 20"]
-#' reduced_task = task$clone(deep = TRUE)$filter(which(logical))
+#' rows = task$row_ids[task$data()[, installment_rate != "< 20"]]
+#' reduced_task = task$clone(deep = TRUE)$filter(rows)
 #' levels(reduced_task$data()$installment_rate)
 #'
 #' # PipeOp is trained on the reduced task
