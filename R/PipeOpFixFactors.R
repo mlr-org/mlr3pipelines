@@ -65,15 +65,10 @@
 #' # Predictions are made on the task without any missing data
 #' levels(predicted_task$data()$installment_rate)
 #' summary(predicted_task$data()$installment_rate)
-#'
-#'
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
-
-
-
 PipeOpFixFactors = R6Class("PipeOpFixFactors",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
