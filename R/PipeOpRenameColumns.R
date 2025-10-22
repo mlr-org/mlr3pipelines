@@ -57,12 +57,11 @@
 #' library("mlr3")
 #'
 #' task = tsk("iris")
-#' Using a named list
 #' pop = po("renamecolumns", param_vals = list(renaming = c("Petal.Length" = "PL")))
 #' pop$train(list(task))
 #'
-#' Using a function
-#' pop = po("renamecolumns", param_vals = list(renaming = function(colnames) {sub("Petal", "P", colnames)}))
+#' pop = po("renamecolumns",
+#'          param_vals = list(renaming = function(colnames) {sub("Petal", "P", colnames)}))
 #' pop$train(list(task))
 #'
 PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
