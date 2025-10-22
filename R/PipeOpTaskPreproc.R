@@ -157,12 +157,6 @@
 #'   `private$.predict_dt()`; alternatively, `private$.train_task()` and `private$.predict_task()` can be overloaded.\cr
 #'   If this method is not overloaded, it defaults to selecting of type indicated by the `feature_types` construction argument.
 #'
-#' @examples
-#'
-#'
-#'
-#'
-#'
 #' @family mlr3pipelines backend related
 #' @family PipeOps
 #' @template seealso_pipeopslist
