@@ -252,7 +252,6 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
 #' tt = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()))
 #' tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
 #' tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
-#'
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOp.R
