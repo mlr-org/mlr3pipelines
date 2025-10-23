@@ -109,19 +109,12 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
 
       task$cbind(wcol)
       task$col_roles$feature = setdiff(task$col_roles$feature, weightcolname)
-      if ("learner" %in% self$param_set$values$weight_type) {
-        if ("weights_learner" %in% mlr_reflections$task_col_roles$classif) {
-          task$col_roles$weights_learner = weightcolname
-        } else {
-          task$col_roles$weight = weightcolname
-        }
-      }
-      if ("measure" %in% self$param_set$values$weight_type) {
-        if ("weights_measure" %in% mlr_reflections$task_col_roles$classif) {
-          task$col_roles$weights_measure = weightcolname
-        } else {
-          task$col_roles$weight = weightcolname
-        }
+
+      classif_roles = mlr_reflections$task_col_roles$classif
+      for (type in self$param_set$values$weight_type) {
+        preferred_role = paste0("weights_", type)
+        final_role = if (preferred_role %in% classif_roles) preferred_role else "weight"
+        task$col_roles[[final_role]] = weightcolname
       }
       task
     },

@@ -95,7 +95,7 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
   private = list(
 
     .train_task = function(task) {
-      browser()
+
       #if ("twoclass" %nin% task$properties) {
       #  stop("Only binary classification Tasks are supported.")
       #}
@@ -115,23 +115,16 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
       } else if (self$param_set$values$weight_method == "median frequency balancing") {
         wcol = setnames(data.table(truth)[data.table(median(class_frequency) / class_frequency), on = .(truth)][, "N"], weightcolname)
       } else if (self$param_set$values$weight_method == "explicit") {
-        wcol = data.table(.WEIGHTS = self$param_set$values$mapping[task$truth()])
+        wcol = setnames(data.table(self$param_set$values$mapping[task$truth()], ".WEIGHTS"))
       }
       task$cbind(wcol)
       task$col_roles$feature = setdiff(task$col_roles$feature, weightcolname)
-      if ("learner" %in% self$param_set$values$weight_type) {
-        if ("weights_learner" %in% mlr_reflections$task_col_roles$classif) {
-          task$col_roles$weights_learner = weightcolname
-        } else {
-          task$col_roles$weight = weightcolname
-        }
-      }
-      if ("measure" %in% self$param_set$values$weight_type) {
-        if ("weights_measure" %in% mlr_reflections$task_col_roles$classif) {
-          task$col_roles$weights_measure = weightcolname
-        } else {
-          task$col_roles$weight = weightcolname
-        }
+
+      classif_roles = mlr_reflections$task_col_roles$classif
+      for (type in self$param_set$values$weight_type) {
+        preferred_role = paste0("weights_", type)
+        final_role = if (preferred_role %in% classif_roles) preferred_role else "weight"
+        task$col_roles[[final_role]] = weightcolname
       }
       task
     },
