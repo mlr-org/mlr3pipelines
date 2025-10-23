@@ -329,7 +329,7 @@ test_that("More tests for PipeOpImputeMode", {
   set.seed(1)
   dat = data.frame(y = rnorm(10L), x1 = as.character(1L:10L), x2 = rnorm(10L), x3 = factor(rep(c(1L, 2L), each = 5L)),
   x4 = ordered(rep(1L:5L, times = 2L)), x5 = 1L:10L, x6 = rep(c(TRUE, FALSE), times = 5L),
-  x7 = as.POSIXct(1L:10L), x8 = as.Date(1L:10L), , stringsAsFactors = FALSE)
+  x7 = as.POSIXct(1L:10L), x8 = as.Date(1L:10L), stringsAsFactors = FALSE)
   dat[c(1L, 10L), ] = NA
   task = TaskRegr$new("task", backend = dat, target = "y")
 
@@ -730,3 +730,4 @@ test_that("PipeOpImputeSample - impute missings for unseen factor levels", {
   expect_no_error(glrn$predict(task_NA))
 
 })
+
