@@ -1,7 +1,7 @@
-#' @title Class Weights for Sample Weighting
+#' @title Class Weights for Sample  - Extended
 #'
 #' @usage NULL
-#' @name mlr_pipeops_classweights
+#' @name mlr_pipeops_classweightsex
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
@@ -78,14 +78,16 @@
 #' } else {
 #'   result$weights  # old mlr3-versions
 #' }
-PipeOpClassWeights = R6Class("PipeOpClassWeights",
+
+PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
   inherit = PipeOpTaskPreproc,
 
   public = list(
-    initialize = function(id = "classweights", param_vals = list()) {
+    initialize = function(id = "classweightsex", param_vals = list()) {
       ps = ps(
-        minor_weight = p_dbl(init = 1, lower = 0, upper = Inf, tags = "train"),
-        weight_type = p_uty(init = c("learner", "measure"), tags = "train")
+        weight_type = p_uty(init = c("learner", "measure"), tags = "train"),
+        weight_method = p_fct(init = "explicit", levels = c("inverse class frequency", "inverse square root of frequency", "median frequency balancing", "effective number of samples", "explicit"), tags = "train"),
+        mapping = p_uty(tags = "train")
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data")
     }
@@ -93,9 +95,10 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
   private = list(
 
     .train_task = function(task) {
-      if ("twoclass" %nin% task$properties) {
-        stop("Only binary classification Tasks are supported.")
-      }
+
+      #if ("twoclass" %nin% task$properties) {
+      #  stop("Only binary classification Tasks are supported.")
+      #}
 
       weightcolname = ".WEIGHTS"
       if (weightcolname %in% unlist(task$col_roles)) {
@@ -104,9 +107,16 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
 
       truth = task$truth()
       minor = names(which.min(table(task$truth())))
-
-      wcol = setnames(data.table(ifelse(truth == minor, self$param_set$values$minor_weight, 1)), weightcolname)
-
+      class_frequency = table(truth) / length(truth)
+      if (self$param_set$values$weight_method == "inverse class frequency") {
+        wcol = setnames(data.table(truth)[data.table(class_frequency^-1), on = .(truth)][, "N"], weightcolname)
+      } else if (self$param_set$values$weight_method == "inverse square root of frequency") {
+        wcol = setnames(data.table(truth)[data.table((class_frequency^0.5)^-1), on = .(truth)][, "N"], weightcolname)
+      } else if (self$param_set$values$weight_method == "median frequency balancing") {
+        wcol = setnames(data.table(truth)[data.table(median(class_frequency) / class_frequency), on = .(truth)][, "N"], weightcolname)
+      } else if (self$param_set$values$weight_method == "explicit") {
+        wcol = setnames(data.table(self$param_set$values$mapping[task$truth()], ".WEIGHTS"))
+      }
       task$cbind(wcol)
       task$col_roles$feature = setdiff(task$col_roles$feature, weightcolname)
 
@@ -123,4 +133,28 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
   )
 )
 
-mlr_pipeops$add("classweights", PipeOpClassWeights)
+mlr_pipeops$add("classweightsex", PipeOpClassWeightsEx)
+
+# library("mlr3")
+#
+# task = tsk("spam")
+# opb = po("classweightsex", param_vals = list(weight_method = "inverse class frequency"))
+# opb = po("classweightsex", param_vals = list(weight_method = "inverse square root of frequency"))
+# opb = po("classweightsex", param_vals = list(weight_method = "median frequency balancing"))
+# opb = po("classweightsex", param_vals = list(weight_method = "explicit", mapping = c("setosa" = 0.3, "virginica" = 0.5, "versicolor" = 0.4)))
+#
+# task weights
+# if ("weights_learner" %in% names(task)) {
+#   task$weights_learner  # recent mlr3-versions
+# } else {
+#   task$weights  # old mlr3-versions
+# }
+#
+# double the instances in the minority class (spam)
+# opb$param_set$values$minor_weight = 2
+# result = opb$train(list(task))[[1L]]
+# if ("weights_learner" %in% names(result)) {
+#   result$weights_learner  # recent mlr3-versions
+# } else {
+#   result$weights  # old mlr3-versions
+# }
