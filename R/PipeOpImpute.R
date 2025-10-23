@@ -329,7 +329,9 @@ PipeOpImpute = R6Class("PipeOpImpute",
         logical = c(TRUE, FALSE),
         numeric = 0, # see PipeOpImputeMean and PipeOpImputeMedian
         ordered = levels(feature),  # see above
-        character = ""
+        character = "",
+        Date = as.Date(0),
+        POSIXct = as.POSIXct(0)
       )
     },
 

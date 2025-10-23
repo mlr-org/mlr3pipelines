@@ -83,7 +83,7 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
         check_levels = p_lgl(init = TRUE, tags = c("train", "required"))
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, empty_level_control = "always",
-        feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct"))
+        feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct", "Date"))
     }
   ),
   private = list(
