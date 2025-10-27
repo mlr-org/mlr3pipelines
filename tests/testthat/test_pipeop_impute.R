@@ -427,14 +427,14 @@ test_that("More tests for PipeOpImputeConstant", {
 
 
 test_that("More tests for Integers", {
-  data <- data.table(x = c(-.Machine$integer.max, -10000000L, 0L, 10000000L, .Machine$integer.max, rep(NA, 1001)), t = 1:1006)
+  data = data.table(x = c(-.Machine$integer.max, -10000000L, 0L, 10000000L, .Machine$integer.max, rep(NA, 1001)), t = 1:1006)
 
   task = TaskRegr$new("task", backend = data, target = "t")
   pos = list(PipeOpImputeHist$new(), PipeOpImputeMean$new(), PipeOpImputeSample$new(), PipeOpImputeMedian$new(), PipeOpImputeMode$new(), PipeOpImputeOOR$new())
 
 
   for (po in pos) {
-    result <- po$train(list(task))[[1]]
+    result = po$train(list(task))[[1]]
 
     expect_integer(result$data()$x, info = po$id)
     expect_false(anyNA(result$data()$x), info = po$id)
