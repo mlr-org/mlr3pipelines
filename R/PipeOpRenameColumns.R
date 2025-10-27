@@ -109,14 +109,3 @@ PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
 )
 
 mlr_pipeops$add("renamecolumns", PipeOpRenameColumns)
-
-
-# EXAMPLE FOR FUNCTION
-
-#' task = tsk("iris")
-#' pop = po("renamecolumns", renaming = function(colnames) {sub("a", "xy", colnames)}, affect_columns = selector_name("Petal.Length"))
-#' pop$train(list(task))
-
-# test dazu schreiben (ein test der das assert triggert u.a.)!
-
-
