@@ -47,7 +47,7 @@ Authors@R:
       person(given = "Lona",
              family = "Koers",
              role = "ctb",
-             email = "lona.koers@gmail.com")),
+             email = "lona.koers@gmail.com"),
       person(given = "Alexander",
              family = "Winterstetter",
              role = "ctb",
