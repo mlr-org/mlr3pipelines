@@ -81,3 +81,45 @@ test_that("Selector", {
   }
 })
 
+
+test_that("Boundary Knots", {
+  skip_if_not_installed("splines")
+  type = list("natural", "polynomial")
+  intercept = list(TRUE, FALSE)
+  degree = list(1, 2, 3, 4, 5)
+  df = list(1, 2, 3, 4, 5)
+  Boundary.knots = list()
+  for (col in names(iris)) {
+    if (is.numeric(iris[[col]])) {
+      Boundary.knots[[col]] <- quantile(iris[[col]], probs = c(0.25, 0.75), na.rm = TRUE)
+    }
+  }
+  task = tsk("iris")
+  for (j in degree) {
+    for (k in intercept) {
+      po = po("splines", type = "polynomial", df = j + 1, degree = j, intercept = k, Boundary.knots = Boundary.knots)
+      result = po$train(list(task))[[1]]$data()[, -1]
+      result_calc = as.data.table(
+        cbind(
+          suppressWarnings(splines::bs(iris$Petal.Length, df = j + 1,  degree = j, intercept = k, Boundary.knots = Boundary.knots[["Petal.Length"]])),
+          suppressWarnings(splines::bs(iris$Petal.Width, df = j + 1,  degree = j, intercept = k, Boundary.knots = Boundary.knots[["Petal.Width"]])),
+          suppressWarnings(splines::bs(iris$Sepal.Length, df = j + 1,  degree = j, intercept = k, Boundary.knots = Boundary.knots[["Sepal.Length"]])),
+          suppressWarnings(splines::bs(iris$Sepal.Width, df = j + 1,  degree = j, intercept = k, Boundary.knots = Boundary.knots[["Sepal.Width"]]))))
+      expect_equal(unname(as.matrix(result_calc)), unname(as.matrix(result)))
+    }
+  }
+  for (j in degree) {
+    for (k in intercept) {
+      po = po("splines", type = "natural", df = j + 1, intercept = k, Boundary.knots = Boundary.knots)
+      result = po$train(list(task))[[1]]$data()[, -1]
+      result_calc = as.data.table(
+        cbind(
+          splines::ns(iris$Petal.Length, df = j + 1, intercept = k, Boundary.knots = Boundary.knots[["Petal.Length"]]),
+          splines::ns(iris$Petal.Width, df = j + 1, intercept = k, Boundary.knots = Boundary.knots[["Petal.Width"]]),
+          splines::ns(iris$Sepal.Length, df = j + 1, intercept = k, Boundary.knots = Boundary.knots[["Sepal.Length"]]),
+          splines::ns(iris$Sepal.Width, df = j + 1, intercept = k, Boundary.knots = Boundary.knots[["Sepal.Width"]])))
+      expect_equal(unname(as.matrix(result_calc)), unname(as.matrix(result)))
+    }
+  }
+})
+

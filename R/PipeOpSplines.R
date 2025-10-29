@@ -1,11 +1,14 @@
-#' @title Transforms Columns using Splines Methods by Constructing a Model Matrix
+#' @title Transforms Numeric Features into Spline Basis Expansions
 #'
 #' @usage NULL
 #' @name mlr_pipeops_splines
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Transforms Columns using Splines Methods by Constructing a Model Matrix.
+#' Replaces numeric features with columns representing spline basis expansions.
+#'
+#' Depending on the type parameter, constructs polynomial B-splines [`splines::bs()`] or natural cubic splines [`splines::ns()`] for the respective column.
+#'
 #'
 #' @section Construction:
 #' ```
@@ -29,21 +32,33 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `factor`  :: `character(1)` \cr
 #'   "Polynomial" when polynomial splines are applied [`splines::bs`] or
-#'   "natural" when natural natural splines are applied [`splines::bs`].
+#'   "natural" when natural natural splines are applied [`splines::ns`].
 #'   Default is "polynomial".
 #' * `df`  :: `integer(1)` \cr
 #'   Number of degrees of freedom for calculation of splines basis matrix.
 #'   Default is NULL.
+#'   For further information look up [`splines::bs()`] or [`splines::ns()`].
+#' * `knots` :: `numeric(1)` \cr
+#'   The internal breakpoints that define the spline. The default is no knots.
+#'   For further information consult [`splines::bs()`] or [`splines::ns()`].
+#' * `intercept` :: `logical(1)` \cr
+#'   If `TRUE`, an intercept is included in the basis. Default is `FALSE`.
+#'   For further information look up [`splines::bs()`] or [`splines::ns()`].
+#' * `degree` :: `integer(1)` \cr
+#'   Degree of the polynomial used to compute B-splines. This parameter can only be used when type = "polynomial".
+#'   Default is 3. For further information look up [`splines::bs()`].
+#' * `Boundary.knots` :: `list` \cr
+#'   Boundary points at which to anchor the B-spline basis. Parameter has to be passed as a named list.
+#'   For further information look up [`splines::bs()`] or [`splines::ns()`].
 #'
 #' @section Internals:
 #' For creating the Splines uses the [`splines::bs`]/[`splines::ns`] function.
-#' Uses the [`stats::model.matrix()`] function.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
-#' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
 #' library("mlr3")
@@ -52,6 +67,9 @@
 #' pop = po("splines")
 #'
 #' pop$train(list(task))[[1]]$data()
+#'
+#' pobk = po("splines", param_vals = list(Boundary.knots = list("Petal.Length" = c(0, 4), "Petal.Width" = c(4, 7), "Sepal.Length" = c(1, 5), "Sepal.Width" = c(3, 6))))
+#' pobk$train(list(task))[[1]]$data()
 #'
 #' @family PipeOps
 #' @template seealso_pipeopslist
@@ -63,12 +81,12 @@ PipeOpSplines = R6Class("PipeOpSplines",
   public = list(
     initialize = function(id = "splines", param_vals = list()) {
       ps = ps(
-        type = p_fct(levels = c("polynomial", "natural"), init = "natural", tags = c("train", "splines")),
+        type = p_fct(levels = c("polynomial", "natural"), init = "natural", tags = c("train", "splines", "required")),
         df = p_int(lower = 1, upper = Inf, special_vals = list(NULL), init = NULL, tags = c("train", "splines")),
         knots = p_uty(special_vals = list(NULL), init = NULL, tags = c("train", "splines")),
         degree = p_int(lower = 1, upper = Inf, default = 3, depends = type == "polynomial", tags = c("train", "splines")),
         intercept = p_lgl(init = FALSE, tags = c("train", "splines")),
-        Boundary.knots = p_uty(tags = "predict") # predict probably wrong
+        Boundary.knots = p_uty(tags = c("train", "splines"))
       )
       super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("splines", "stats"))
     }
@@ -81,14 +99,14 @@ PipeOpSplines = R6Class("PipeOpSplines",
         for (i in colnames(dt)) {
           args = pv
           args$type = NULL
-          args$Boundary.knots = self$param_set$values$Boundary.knots[[i]]
+          args$Boundary.knots = pv$Boundary.knots[[i]]
           if (pv$type == "polynomial") {
             result[[i]] = invoke(splines::bs, .args = args, x = dt[[i]], warn.outside = FALSE)
           } else {
             result[[i]] = invoke(splines::ns, .args = args, x = dt[[i]])
           }
           colnames(result[[i]]) = paste0("splines.", i, ".", seq_len(ncol(result[[i]])))
-          bk[[i]] = attributes(splines::bs(dt[[i]]))$Boundary.knots
+          bk[[i]] = attributes(result[[i]])$Boundary.knots
         }
         self$state$Boundary.knots = bk
       result
@@ -113,8 +131,3 @@ PipeOpSplines = R6Class("PipeOpSplines",
 )
 
 mlr_pipeops$add("splines", PipeOpSplines)
-
-#' po = po("splines", param_vals = list(Boundary.knots = list(Petal.Length = c(1, 5), Sepal.Length = c(2, 4), Sepal.Width = c(3, 6), Petal.Width = c(4, 5))))
-#' po$param_set$get_values(tags = "splines")
-#' po$train(list(tsk("iris")))
-#' po$predict(list(tsk("iris")))[[1]]$data()

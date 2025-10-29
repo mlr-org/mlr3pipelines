@@ -3,17 +3,19 @@
 \name{mlr_pipeops_splines}
 \alias{mlr_pipeops_splines}
 \alias{PipeOpSplines}
-\title{Transforms Columns using Splines Methods by Constructing a Model Matrix}
+\title{Transforms Numeric Features into Spline Basis Expansions}
 \format{
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Transforms Columns using Splines Methods by Constructing a Model Matrix.
+Replaces numeric features with columns representing spline basis expansions.
+
+Depending on the type parameter, constructs polynomial B-splines \code{\link[splines:bs]{splines::bs()}} or natural cubic splines \code{\link[splines:ns]{splines::ns()}} for the respective column.
 }
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{po("basissplines", param_vals = list())
+\if{html}{\out{<div class="sourceCode">}}\preformatted{po("splines", param_vals = list())
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -41,18 +43,30 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \itemize{
 \item \code{factor}  :: \code{character(1)} \cr
 "Polynomial" when polynomial splines are applied \code{\link[splines:bs]{splines::bs}} or
-"natural" when natural natural splines are applied \code{\link[splines:bs]{splines::bs}}.
+"natural" when natural natural splines are applied \code{\link[splines:ns]{splines::ns}}.
 Default is "polynomial".
 \item \code{df}  :: \code{integer(1)} \cr
 Number of degrees of freedom for calculation of splines basis matrix.
 Default is NULL.
+For further information consult \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
+\item \code{knots} :: \code{numeric(1)} \cr
+The internal breakpoints that define the spline. The default is no knots.
+For further information consult \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
+\item \code{intercept} :: \code{logical(1)} \cr
+If \code{TRUE}, an intercept is included in the basis. Default is \code{FALSE}.
+For further information consult \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
+\item \code{degree} :: \code{integer(1)} \cr
+Degree of the polynomial used to compute B-splines. This parameter can only be used when type = "polynomial".
+Default is 3. For further information consult \code{\link[splines:bs]{splines::bs()}}.
+\item \code{Boundary.knots} :: \code{list} \cr
+Boundary points at which to anchor the B-spline basis. Parameter has to be passed as a named list.
+For further information consult \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 }
 }
 
 \section{Internals}{
 
 For creating the Splines uses the \code{\link[splines:bs]{splines::bs}}/\code{\link[splines:ns]{splines::ns}} function.
-Uses the \code{\link[stats:model.matrix]{stats::model.matrix()}} function.
 }
 
 \section{Fields}{
@@ -73,7 +87,9 @@ pop = po("splines")
 
 pop$train(list(task))[[1]]$data()
 
-pop$state
+pobk = po("splines", param_vals = list(Boundary.knots = list("Petal.Length" = c(0, 4), "Petal.Width" = c(4, 7), "Sepal.Length" = c(1, 5), "Sepal.Width" = c(3, 6))))
+pobk$train(list(task))[[1]]$data()
+
 }
 \seealso{
 https://mlr-org.com/pipeops.html
