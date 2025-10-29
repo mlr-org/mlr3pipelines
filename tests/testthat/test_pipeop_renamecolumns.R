@@ -47,7 +47,7 @@ test_that("assert on function works", {
 
 test_that("assert on function works", {
   task = mlr_tasks$get("iris")
-  po = po("renamecolumns", param_vals = list(renaming = function(colnames) {sub("Petal", "P", colnames)}))
+  po = po("renamecolumns", param_vals = list(renaming = function(colnames) sub("Petal", "P", colnames)))
   result = po$train(list(task))
   expect_equal(result[[1]]$feature_names, c("P.Length", "P.Width", "Sepal.Length", "Sepal.Width"))
 })

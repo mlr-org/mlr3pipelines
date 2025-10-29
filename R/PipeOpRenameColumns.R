@@ -64,19 +64,20 @@
 #'          param_vals = list(renaming = function(colnames) {sub("Petal", "P", colnames)}))
 #' pop$train(list(task))
 #'
+
 PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "renamecolumns", param_vals = list()) {
       ps = ps(
         renaming = p_uty(
-          custom_check = crate(function(x) check_character(x, any.missing = FALSE, names = "strict") %check&&% check_names(x, type = "strict") %check||% check_function(x)),
+          custom_check = crate(function(x) (check_character(x, any.missing = FALSE, names = "strict") %check&&% check_names(x, type = "strict")) %check||% check_function(x)),
           tags = c("train", "predict", "required")
         ),
         ignore_missing = p_lgl(tags = c("train", "predict", "required"))
       )
       ps$values = list(renaming = character(0), ignore_missing = FALSE)
-      super$initialize(id, ps, param_vals = param_vals, can_subset_cols = TRUE) # TRUE or FALSE?
+      super$initialize(id, ps, param_vals = param_vals, can_subset_cols = TRUE)
     }
   ),
   private = list(
@@ -87,12 +88,13 @@ PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
         names(new_names) = task$feature_names
         list(old_names = task$feature_names, new_names = new_names)
       } else {
-        new_names = self$param_set$values$renaming
+        pv = self$param_set$get_values(tags = "train")
+        new_names = pv$renaming
         innames = names(new_names)
         nontargets = task$col_roles
         nontargets$target = NULL
         takenames = innames %in% unlist(nontargets)
-        if (!self$param_set$values$ignore_missing && !all(takenames)) {
+        if (!pv$ignore_missing && !all(takenames)) {
           # we can't rely on task$rename because it could also change the target name, which we don't want.
           stopf("The names %s from `renaming` parameter were not found in the Task.", str_collapse(innames[!takenames]))
         }
