@@ -99,13 +99,14 @@ PipeOpSplines = R6Class("PipeOpSplines",
         for (i in colnames(dt)) {
           args = pv
           args$type = NULL
+          args$knots = pv$knots[[i]]
           args$Boundary.knots = pv$Boundary.knots[[i]]
           if (pv$type == "polynomial") {
             result[[i]] = invoke(splines::bs, .args = args, x = dt[[i]], warn.outside = FALSE)
           } else {
             result[[i]] = invoke(splines::ns, .args = args, x = dt[[i]])
           }
-          colnames(result[[i]]) = paste0("splines.", i, ".", seq_len(ncol(result[[i]])))
+          colnames(result[[i]]) = paste0("splines.", seq_len(ncol(result[[i]])))
           bk[[i]] = attributes(result[[i]])$Boundary.knots
         }
         self$state$Boundary.knots = bk
@@ -117,13 +118,14 @@ PipeOpSplines = R6Class("PipeOpSplines",
       for (i in colnames(dt)) {
         args = pv
         args$type = NULL
+        args$knots = pv$knots[[i]]
         args$Boundary.knots = self$state$Boundary.knots[[i]]
         if (pv$type == "polynomial") {
           result[[i]] = invoke(splines::bs, .args = args, x = dt[[i]], warn.outside = FALSE)
         } else {
           result[[i]] = invoke(splines::ns, .args = args, x = dt[[i]])
         }
-          colnames(result[[i]]) = paste0("splines.", i, ".", seq_len(ncol(result[[i]])))
+        colnames(result[[i]]) = paste0("splines.", seq_len(ncol(result[[i]])))
       }
       result
     }
