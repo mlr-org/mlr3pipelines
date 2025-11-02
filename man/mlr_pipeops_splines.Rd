@@ -35,6 +35,7 @@ The output is the input \code{\link[mlr3:Task]{Task}} with the selected columns 
 \section{State}{
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}.
+After training the \code{Boundary.knots}will be given to the \verb{$state}.
 }
 
 \section{Parameters}{
@@ -48,25 +49,27 @@ Default is "polynomial".
 \item \code{df}  :: \code{integer(1)} \cr
 Number of degrees of freedom for calculation of splines basis matrix.
 Default is NULL.
-For further information consult \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
-\item \code{knots} :: \code{numeric(1)} \cr
+For further information look up \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
+\item \code{knots} :: \code{list} \cr
 The internal breakpoints that define the spline. The default is no knots.
 For further information consult \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 \item \code{intercept} :: \code{logical(1)} \cr
 If \code{TRUE}, an intercept is included in the basis. Default is \code{FALSE}.
-For further information consult \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
+For further information look up \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 \item \code{degree} :: \code{integer(1)} \cr
-Degree of the polynomial used to compute B-splines. This parameter can only be used when type = "polynomial".
-Default is 3. For further information consult \code{\link[splines:bs]{splines::bs()}}.
+This parameter depends on type = "polynomial". Degree of the polynomial used to compute B-splines.
+Default is 3. For further information look up \code{\link[splines:bs]{splines::bs()}}.
 \item \code{Boundary.knots} :: \code{list} \cr
-Boundary points at which to anchor the B-spline basis. Parameter has to be passed as a named list.
-For further information consult \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
+Boundary points at which to anchor the spline basis. Parameter has to be passed as a named list.
+For further information look up \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 }
 }
 
 \section{Internals}{
 
 For creating the Splines uses the \code{\link[splines:bs]{splines::bs}}/\code{\link[splines:ns]{splines::ns}} function.
+After training, the \code{Boundary.Knots} that are either defined in the Parameter Set
+or have been calculated during training will be passed to the \verb{$state} of the PipeOp.
 }
 
 \section{Fields}{
@@ -76,7 +79,7 @@ Only fields inherited from \code{\link{PipeOp}}.
 
 \section{Methods}{
 
-Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{

@@ -27,6 +27,7 @@
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`].
+#' After training the `Boundary.knots`will be given to the `$state`.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
@@ -38,21 +39,23 @@
 #'   Number of degrees of freedom for calculation of splines basis matrix.
 #'   Default is NULL.
 #'   For further information look up [`splines::bs()`] or [`splines::ns()`].
-#' * `knots` :: `numeric(1)` \cr
+#' * `knots` :: `list` \cr
 #'   The internal breakpoints that define the spline. The default is no knots.
 #'   For further information consult [`splines::bs()`] or [`splines::ns()`].
 #' * `intercept` :: `logical(1)` \cr
 #'   If `TRUE`, an intercept is included in the basis. Default is `FALSE`.
 #'   For further information look up [`splines::bs()`] or [`splines::ns()`].
 #' * `degree` :: `integer(1)` \cr
-#'   Degree of the polynomial used to compute B-splines. This parameter can only be used when type = "polynomial".
+#'   This parameter depends on type = "polynomial". Degree of the polynomial used to compute B-splines.
 #'   Default is 3. For further information look up [`splines::bs()`].
 #' * `Boundary.knots` :: `list` \cr
-#'   Boundary points at which to anchor the B-spline basis. Parameter has to be passed as a named list.
+#'   Boundary points at which to anchor the spline basis. Parameter has to be passed as a named list.
 #'   For further information look up [`splines::bs()`] or [`splines::ns()`].
 #'
 #' @section Internals:
 #' For creating the Splines uses the [`splines::bs`]/[`splines::ns`] function.
+#' After training, the `Boundary.Knots` that are either defined in the Parameter Set
+#' or have been calculated during training will be passed to the `$state` of the PipeOp.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
