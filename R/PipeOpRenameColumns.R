@@ -30,11 +30,11 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `renaming` :: named `character` | `function`\cr
 #'   Takes the form of either a named `character` or a `function`.
-#'   Named `character` vector. The names of the vector specify the old column names that should be
-#'   changed to the new column names as given by the elements of the vector. Initialized to the empty
-#'   character vector.
-#'   `function`. Specifies how the column names should be changed to new column names. To choose columns use the
-#'   `affect_columns` parameter. No function is initialized.
+#'   For a named `character` vector the names of the vector elements specify the
+#'   old column names and the corresponding element values give the new column names.
+#'   Initialized to an empty character vector.
+#'   A `function` specifies how the old column names should be changed to the new column names.
+#'   To choose columns use the `affect_columns` parameter. No function is initialized.
 #' * `ignore_missing` :: `logical(1)`\cr
 #'   Ignore if columns named in `renaming` are not found in the input [`Task`][mlr3::Task]. If this is
 #'   `FALSE`, then names found in `renaming` not found in the [`Task`][mlr3::Task] cause an error.
@@ -60,9 +60,9 @@
 #' pop = po("renamecolumns", param_vals = list(renaming = c("Petal.Length" = "PL")))
 #' pop$train(list(task))
 #'
-#' pop = po("renamecolumns",
+#' pof = po("renamecolumns",
 #'          param_vals = list(renaming = function(colnames) {sub("Petal", "P", colnames)}))
-#' pop$train(list(task))
+#' pof$train(list(task))
 #'
 
 PipeOpRenameColumns = R6Class("PipeOpRenameColumns",

@@ -42,11 +42,11 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \itemize{
 \item \code{renaming} :: named \code{character} | \code{function}\cr
 Takes the form of either a named \code{character} or a \code{function}.
-Named \code{character} vector. The names of the vector specify the old column names that should be
-changed to the new column names as given by the elements of the vector. Initialized to the empty
-character vector.
-\code{function}. Specifies how the column names should be changed to new column names. To choose columns use the
-\code{affect_columns} parameter. No function is initialized.
+For a named \code{character} vector the names of the vector elements specify the
+old column names and the corresponding element values give the new column names.
+Initialized to an empty character vector.
+A \code{function} specifies how the old column names should be changed to the new column names.
+To choose columns use the \code{affect_columns} parameter. No function is initialized.
 \item \code{ignore_missing} :: \code{logical(1)}\cr
 Ignore if columns named in \code{renaming} are not found in the input \code{\link[mlr3:Task]{Task}}. If this is
 \code{FALSE}, then names found in \code{renaming} not found in the \code{\link[mlr3:Task]{Task}} cause an error.
@@ -76,9 +76,9 @@ task = tsk("iris")
 pop = po("renamecolumns", param_vals = list(renaming = c("Petal.Length" = "PL")))
 pop$train(list(task))
 
-pop = po("renamecolumns",
+pof = po("renamecolumns",
          param_vals = list(renaming = function(colnames) {sub("Petal", "P", colnames)}))
-pop$train(list(task))
+pof$train(list(task))
 
 }
 \seealso{
