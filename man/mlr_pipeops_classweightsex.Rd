@@ -8,25 +8,23 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Adds a class weight column to the \code{\link[mlr3:Task]{Task}} that different \code{\link[mlr3:Learner]{Learner}}s may be
-able to use for sample weighting. Sample weights are added to each sample according to the target class.
+Adds a class weight column to the \code{\link[mlr3:Task]{Task}}, influencing how different \code{\link[mlr3:Learner]{Learner}}s weight samples during training.
+It is also possible to add a weight column to the \code{\link[mlr3:Task]{Task}}, which affects how samples are weighted during evaluation.
+Sample weights are assigned to each observation according to its target class.
 
-Only binary \link[mlr3:TaskClassif]{classification tasks} are supported.
+Binary as well as Multiclass \link[mlr3:TaskClassif]{classification tasks} are supported.
 
-Caution: when constructed naively without parameter, the weights are all set to 1. The \code{minor_weight} parameter
-must be adjusted for this \code{\link{PipeOp}} to be useful.
-
-Note this only sets the \code{"weights_learner"} column.
-It therefore influences the behaviour of subsequent \code{\link[mlr3:Learner]{Learner}}s, but does not influence resampling or evaluation metric weights.
+It is possible to set either one of the \code{"weights_learner"} and \code{"weights_measure"} columns, both of them or none of them.
+Thus, the behavior of subsequent \code{\link[mlr3:Learner]{Learner}}s or evaluation metric weights can be determined. (resampling techniques???)
 }
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpClassWeights$new(id = "classweights", param_vals = list())
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpClassWeightsEx$new(id = "classweightsex", param_vals = list())
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}
-Identifier of the resulting  object, default \code{"classweights"}
+Identifier of the resulting  object, default \code{"classweightsex"}
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
@@ -50,15 +48,13 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}; however, the \code{affect_columns} parameter is \emph{not} present. Further parameters are:
 \itemize{
-\item \code{minor_weight} :: \code{numeric(1)} \cr
-Weight given to samples of the minor class. Major class samples have weight 1. Initialized to 1.
+\item \code{weight_type} :: \code{character} \cr
+Determines whether \code{"weights_learner"}, \code{"weights_measure"}, both or none of the columns will be set.
+\item \code{weight_method} :: \code{character(1)} \cr
+The method that is chosen to determine the weights of the samples. Methods encompass (\code{"inverse_class_frequency"}, \code{"inverse_square_root_of_frequency"}, \code{"median_frequency_balancing"}, \code{"explicit"})
+\item \code{mapping}:: named \code{character} \cr
+Depends on \code{"weight_method" = "explicit"}. Must be a named character, that specifies for each target class the corresponding weight.
 }
-}
-
-\section{Internals}{
-
-Introduces, or overwrites, the "weights" column in the \code{\link[mlr3:Task]{Task}}. However, the \code{\link[mlr3:Learner]{Learner}} method needs to
-respect weights for this to have an effect.
 
 The newly introduced column is named \code{.WEIGHTS}; there will be a naming conflict if this column already exists and is \emph{not} a
 weight column itself.
@@ -78,20 +74,21 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 library("mlr3")
 
 task = tsk("spam")
-opb = po("classweights")
 
-# task weights
-if ("weights_learner" \%in\% names(task)) {
-  task$weights_learner  # recent mlr3-versions
-} else {
-  task$weights  # old mlr3-versions
-}
+poicf = po("classweightsex", param_vals = list(weight_type = c("learner", "measure"), weight_method = "inverse_class_frequency"))
+result = poicf$train(list(task))[[1L]]
 
-# double the instances in the minority class (spam)
-opb$param_set$values$minor_weight = 2
-result = opb$train(list(task))[[1L]]
 if ("weights_learner" \%in\% names(result)) {
   result$weights_learner  # recent mlr3-versions
+} else {
+  result$weights  # old mlr3-versions
+}
+
+result$weights_measure
+
+
+#' if ("weights_measure" \%in\% names(result)) {
+  result$weights_measure  # recent mlr3-versions
 } else {
   result$weights  # old mlr3-versions
 }

@@ -5,24 +5,22 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Adds a class weight column to the [`Task`][mlr3::Task] that different [`Learner`][mlr3::Learner]s may be
-#' able to use for sample weighting. Sample weights are added to each sample according to the target class.
+#' Adds a class weight column to the [`Task`][mlr3::Task], influencing how different [`Learner`][mlr3::Learner]s weight samples during training.
+#' It is also possible to add a weight column to the [`Task`][mlr3::Task], which affects how samples are weighted during evaluation.
+#' Sample weights are assigned to each observation according to its target class.
 #'
-#' Only binary [classification tasks][mlr3::TaskClassif] are supported.
+#' Binary as well as Multiclass [classification tasks][mlr3::TaskClassif] are supported.
 #'
-#' Caution: when constructed naively without parameter, the weights are all set to 1. The `minor_weight` parameter
-#' must be adjusted for this [`PipeOp`] to be useful.
-#'
-#' Note this only sets the `"weights_learner"` column.
-#' It therefore influences the behaviour of subsequent [`Learner`][mlr3::Learner]s, but does not influence resampling or evaluation metric weights.
+#' It is possible to set either one of the `"weights_learner"` and `"weights_measure"` columns, both of them or none of them.
+#' Thus, the behavior of subsequent [`Learner`][mlr3::Learner]s or evaluation metric weights can be determined. (resampling techniques???)
 #'
 #' @section Construction:
 #' ```
-#' PipeOpClassWeights$new(id = "classweights", param_vals = list())
+#' PipeOpClassWeightsEx$new(id = "classweightsex", param_vals = list())
 #' ```
 #'
 #' * `id` :: `character(1)`
-#'   Identifier of the resulting  object, default `"classweights"`
+#'   Identifier of the resulting  object, default `"classweightsex"`
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
@@ -38,11 +36,12 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`]; however, the `affect_columns` parameter is *not* present. Further parameters are:
-#' * `minor_weight` :: `numeric(1)` \cr
-#'   Weight given to samples of the minor class. Major class samples have weight 1. Initialized to 1.
-#' @section Internals:
-#' Introduces, or overwrites, the "weights" column in the [`Task`][mlr3::Task]. However, the [`Learner`][mlr3::Learner] method needs to
-#' respect weights for this to have an effect.
+#' * `weight_type` :: `character` \cr
+#'   Determines whether `"weights_learner"`, `"weights_measure"`, both or none of the columns will be set.
+#' * `weight_method` :: `character(1)` \cr
+#'   The method that is chosen to determine the weights of the samples. Methods encompass (`"inverse_class_frequency"`, `"inverse_square_root_of_frequency"`, `"median_frequency_balancing"`, `"explicit"`)
+#' * `mapping`:: named `character` \cr
+#'   Depends on `"weight_method" = "explicit"`. Must be a named character, that specifies for each target class the corresponding weight.
 #'
 #' The newly introduced column is named `.WEIGHTS`; there will be a naming conflict if this column already exists and is *not* a
 #' weight column itself.
@@ -61,20 +60,21 @@
 #' library("mlr3")
 #'
 #' task = tsk("spam")
-#' opb = po("classweights")
 #'
-#' # task weights
-#' if ("weights_learner" %in% names(task)) {
-#'   task$weights_learner  # recent mlr3-versions
-#' } else {
-#'   task$weights  # old mlr3-versions
-#' }
+#' poicf = po("classweightsex", param_vals = list(weight_type = c("learner", "measure"), weight_method = "inverse_class_frequency"))
+#' result = poicf$train(list(task))[[1L]]
 #'
-#' # double the instances in the minority class (spam)
-#' opb$param_set$values$minor_weight = 2
-#' result = opb$train(list(task))[[1L]]
 #' if ("weights_learner" %in% names(result)) {
 #'   result$weights_learner  # recent mlr3-versions
+#' } else {
+#'   result$weights  # old mlr3-versions
+#' }
+#'
+#' result$weights_measure
+#'
+#'
+#' #' if ("weights_measure" %in% names(result)) {
+#'   result$weights_measure  # recent mlr3-versions
 #' } else {
 #'   result$weights  # old mlr3-versions
 #' }
@@ -85,9 +85,13 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
   public = list(
     initialize = function(id = "classweightsex", param_vals = list()) {
       ps = ps(
-        weight_type = p_uty(init = c("learner", "measure"), tags = "train"),
-        weight_method = p_fct(init = "explicit", levels = c("inverse class frequency", "inverse square root of frequency", "median frequency balancing", "effective number of samples", "explicit"), tags = "train"),
-        mapping = p_uty(tags = "train")
+        weight_type = p_uty(init = "learner", tags = "train",
+                            custom_check = crate(function(x) check_character(x, max.len = 2) %check&&% check_subset(x, choices = c("learner", "measure")))),
+        weight_method = p_fct(init = "explicit",
+                              levels = c("inverse_class_frequency", "inverse_square_root_of_frequency", "median_frequency_balancing", "effective_number_of_samples", "explicit"), tags = c("train", "required")),
+        mapping = p_uty(tags = "train",
+                        custom_check = crate(function(x) check_character(names(x), any.missing = FALSE, unique = TRUE)),
+                        depends = weight_method == "explicit")
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data")
     }
@@ -95,10 +99,7 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
   private = list(
 
     .train_task = function(task) {
-
-      #if ("twoclass" %nin% task$properties) {
-      #  stop("Only binary classification Tasks are supported.")
-      #}
+      pv = self$param_set$get_values(tags = "train")
 
       weightcolname = ".WEIGHTS"
       if (weightcolname %in% unlist(task$col_roles)) {
@@ -106,22 +107,28 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
       }
 
       truth = task$truth()
-      minor = names(which.min(table(task$truth())))
-      class_frequency = table(truth) / length(truth)
-      if (self$param_set$values$weight_method == "inverse class frequency") {
-        wcol = setnames(data.table(truth)[data.table(class_frequency^-1), on = .(truth)][, "N"], weightcolname)
-      } else if (self$param_set$values$weight_method == "inverse square root of frequency") {
-        wcol = setnames(data.table(truth)[data.table((class_frequency^0.5)^-1), on = .(truth)][, "N"], weightcolname)
-      } else if (self$param_set$values$weight_method == "median frequency balancing") {
-        wcol = setnames(data.table(truth)[data.table(median(class_frequency) / class_frequency), on = .(truth)][, "N"], weightcolname)
-      } else if (self$param_set$values$weight_method == "explicit") {
-        wcol = setnames(data.table(self$param_set$values$mapping[task$truth()], ".WEIGHTS"))
+
+      if (is.null(pv$weight_type)) {
+        return(task)
       }
+
+      class_frequency = table(truth) / length(truth)
+      class_names = names(class_frequency)
+
+      weights_by_class = switch(pv$weight_method,
+        "inverse_class_frequency" = 1 / class_frequency,
+        "inverse_square_root_of_frequency" = 1 / sqrt(class_frequency),
+        "median_frequency_balancing" = median(class_frequency) / class_frequency,
+        "explicit" = pv$mapping
+      )
+
+      wcol = setnames(data.table(weights_by_class[truth])[, "N"], weightcolname)
       task$cbind(wcol)
       task$col_roles$feature = setdiff(task$col_roles$feature, weightcolname)
 
+
       classif_roles = mlr_reflections$task_col_roles$classif
-      for (type in self$param_set$values$weight_type) {
+      for (type in pv$weight_type) {
         preferred_role = paste0("weights_", type)
         final_role = if (preferred_role %in% classif_roles) preferred_role else "weight"
         task$col_roles[[final_role]] = weightcolname
@@ -135,26 +142,3 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
 
 mlr_pipeops$add("classweightsex", PipeOpClassWeightsEx)
 
-# library("mlr3")
-#
-# task = tsk("spam")
-# opb = po("classweightsex", param_vals = list(weight_method = "inverse class frequency"))
-# opb = po("classweightsex", param_vals = list(weight_method = "inverse square root of frequency"))
-# opb = po("classweightsex", param_vals = list(weight_method = "median frequency balancing"))
-# opb = po("classweightsex", param_vals = list(weight_method = "explicit", mapping = c("setosa" = 0.3, "virginica" = 0.5, "versicolor" = 0.4)))
-#
-# task weights
-# if ("weights_learner" %in% names(task)) {
-#   task$weights_learner  # recent mlr3-versions
-# } else {
-#   task$weights  # old mlr3-versions
-# }
-#
-# double the instances in the minority class (spam)
-# opb$param_set$values$minor_weight = 2
-# result = opb$train(list(task))[[1L]]
-# if ("weights_learner" %in% names(result)) {
-#   result$weights_learner  # recent mlr3-versions
-# } else {
-#   result$weights  # old mlr3-versions
-# }
