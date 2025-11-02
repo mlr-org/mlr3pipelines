@@ -97,7 +97,7 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
   ),
   private = list(
     .train_task = function(task) {
-      browser()
+
       pv = self$param_set$get_values(tags = "train")
 
       if ("twoclass" %nin% task$properties) {

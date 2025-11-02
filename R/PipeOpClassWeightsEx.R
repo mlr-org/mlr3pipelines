@@ -101,16 +101,18 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
     .train_task = function(task) {
       pv = self$param_set$get_values(tags = "train")
 
+      if (is.null(pv$weight_type) ||
+          is.null(pv$weight_method) ||
+          (pv$weight_method == "explicit" && is.null(pv$mapping))) {
+        return(task)
+      }
+
       weightcolname = ".WEIGHTS"
       if (weightcolname %in% unlist(task$col_roles)) {
         stopf("Weight column '%s' is already in the Task", weightcolname)
       }
 
       truth = task$truth()
-
-      if (is.null(pv$weight_type)) {
-        return(task)
-      }
 
       class_frequency = table(truth) / length(truth)
       class_names = names(class_frequency)
@@ -122,7 +124,8 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
         "explicit" = pv$mapping
       )
 
-      wcol = setnames(data.table(weights_by_class[truth])[, "N"], weightcolname)
+      weights_table = data.table(weights_by_class[truth])
+      wcol = setnames(as.data.table(weights_table[[ncol(weights_table)]]), weightcolname)
       task$cbind(wcol)
       task$col_roles$feature = setdiff(task$col_roles$feature, weightcolname)
 
