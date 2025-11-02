@@ -39,7 +39,7 @@
 #'   Number of degrees of freedom for calculation of splines basis matrix.
 #'   Default is NULL.
 #'   For further information look up [`splines::bs()`] or [`splines::ns()`].
-#' * `knots` :: `list` \cr
+#' * `knots` :: named `list` \cr
 #'   The internal breakpoints that define the spline. The default is no knots.
 #'   For further information consult [`splines::bs()`] or [`splines::ns()`].
 #' * `intercept` :: `logical(1)` \cr
@@ -48,7 +48,7 @@
 #' * `degree` :: `integer(1)` \cr
 #'   This parameter depends on type = "polynomial". Degree of the polynomial used to compute B-splines.
 #'   Default is 3. For further information look up [`splines::bs()`].
-#' * `Boundary.knots` :: `list` \cr
+#' * `Boundary.knots` :: named `list` \cr
 #'   Boundary points at which to anchor the spline basis. Parameter has to be passed as a named list.
 #'   For further information look up [`splines::bs()`] or [`splines::ns()`].
 #'

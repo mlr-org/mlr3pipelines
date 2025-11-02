@@ -50,7 +50,7 @@ Default is "polynomial".
 Number of degrees of freedom for calculation of splines basis matrix.
 Default is NULL.
 For further information look up \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
-\item \code{knots} :: \code{list} \cr
+\item \code{knots} :: named \code{list} \cr
 The internal breakpoints that define the spline. The default is no knots.
 For further information consult \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 \item \code{intercept} :: \code{logical(1)} \cr
@@ -59,7 +59,7 @@ For further information look up \code{\link[splines:bs]{splines::bs()}} or \code
 \item \code{degree} :: \code{integer(1)} \cr
 This parameter depends on type = "polynomial". Degree of the polynomial used to compute B-splines.
 Default is 3. For further information look up \code{\link[splines:bs]{splines::bs()}}.
-\item \code{Boundary.knots} :: \code{list} \cr
+\item \code{Boundary.knots} :: named \code{list} \cr
 Boundary points at which to anchor the spline basis. Parameter has to be passed as a named list.
 For further information look up \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 }
