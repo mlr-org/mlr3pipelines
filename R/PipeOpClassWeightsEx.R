@@ -114,7 +114,7 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
 
       truth = task$truth()
 
-      class_frequency = table(truth) / length(truth)
+      class_frequency = prop.table(table(truth))
       class_names = names(class_frequency)
 
       weights_by_class = switch(pv$weight_method,

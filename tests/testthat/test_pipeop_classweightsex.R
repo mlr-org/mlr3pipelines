@@ -43,8 +43,18 @@ test_that("PipeOpClassWeightsEx", {
   nt = poicf$train(list(task))[[1L]]
   expect_equal(nt$data(), task$data())
 
+  freq = prop.table(table(task$truth()))
+  manual_weights = 1 / freq[task$truth()]
 
-  # manual_weights = as.data.table(1 / table(task$data()$Species))
+  if ("weights_learner" %in% names(nt$col_roles)) {
+    computed_weights = nt$weights_learner
+  } else {
+    computed_weights = nt$weights
+  }
+
+  expect_equal(computed_weights[["weight"]], as.numeric(unclass(manual_weights)))
+
+
   # weights = if ("weights_learner" %in% names(nt)) "weights_learner" else "weights"
   # expect_equal(nt[[weights]]$weight, ifelse(nt$truth(nt[[weights]]$row_ids) == "neg", 1, 3))
 })
