@@ -73,7 +73,7 @@
 #' result$weights_measure
 #'
 #'
-#' #' if ("weights_measure" %in% names(result)) {
+#' if ("weights_measure" %in% names(result)) {
 #'   result$weights_measure  # recent mlr3-versions
 #' } else {
 #'   result$weights  # old mlr3-versions
