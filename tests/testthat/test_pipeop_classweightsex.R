@@ -36,7 +36,7 @@ test_that("PipeOpClassWeightsEx - error for Tasks without weights property, #937
 
 test_that("PipeOpClassWeightsEx", {
 
-  task = mlr_tasks$get("iris")
+  task = mlr_tasks$get("penguins")
 
   # Method inverse_class_frequency
   poicf = po("classweightsex", param_vals = list(weight_method = "inverse_class_frequency"))
@@ -54,6 +54,38 @@ test_that("PipeOpClassWeightsEx", {
 
   expect_equal(computed_weights[["weight"]], as.numeric(unclass(manual_weights)))
 
+  # Method inverse square root of class frequency
+  poisf = po("classweightsex", param_vals = list(weight_method = "inverse_square_root_of_frequency"))
+  nt = poisf$train(list(task))[[1L]]
+  expect_equal(nt$data(), task$data())
+
+  freq = prop.table(table(task$truth()))
+  manual_weights = 1 / sqrt(freq[task$truth()])
+
+  if ("weights_learner" %in% names(nt$col_roles)) {
+    computed_weights = nt$weights_learner
+  } else {
+    computed_weights = nt$weights
+  }
+
+  expect_equal(computed_weights[["weight"]], as.numeric(unclass(manual_weights)))
+
+  # Method median frequency balancing
+  pomfb = po("classweightsex", param_vals = list(weight_method = "median_frequency_balancing"))
+  nt = pomfb$train(list(task))[[1L]]
+  expect_equal(nt$data(), task$data())
+
+  #freq = prop.table(table(task$truth()))
+  #manual_weights = median(freq) / freq
+  #manual_weights = 1 / sqrt(freq[task$truth()])
+
+  #if ("weights_learner" %in% names(nt$col_roles)) {
+  #  computed_weights = nt$weights_learner
+  #} else {
+  #  computed_weights = nt$weights
+  #}
+
+  #expect_equal(computed_weights[["weight"]], as.numeric(unclass(manual_weights)))
 
   # weights = if ("weights_learner" %in% names(nt)) "weights_learner" else "weights"
   # expect_equal(nt[[weights]]$weight, ifelse(nt$truth(nt[[weights]]$row_ids) == "neg", 1, 3))
