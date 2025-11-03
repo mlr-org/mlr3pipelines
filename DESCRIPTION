@@ -107,7 +107,7 @@ Config/testthat/edition: 3
 Config/testthat/parallel: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 VignetteBuilder: knitr, rmarkdown
 Collate:
     'CnfAtom.R'
@@ -140,6 +140,7 @@ Collate:
     'PipeOpCopy.R'
     'PipeOpDateFeatures.R'
     'PipeOpDecode.R'
+    'PipeOpDropCollinear.R'
     'PipeOpEncode.R'
     'PipeOpEncodeImpact.R'
     'PipeOpEncodeLmer.R'

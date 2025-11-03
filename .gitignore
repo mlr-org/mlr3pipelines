@@ -65,3 +65,5 @@ vignettes/*.pdf
 # pkgdown site
 docs/
 /Meta/
+
+AGENTS.md

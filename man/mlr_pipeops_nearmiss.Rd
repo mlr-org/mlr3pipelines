@@ -69,7 +69,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{if (requireNamespace("themis")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("themis")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
 # Create example task
@@ -115,6 +115,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_decode}},
+\code{\link{mlr_pipeops_dropcollinear}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},

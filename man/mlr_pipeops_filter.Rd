@@ -98,7 +98,7 @@ Methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpT
 }
 
 \examples{
-\dontshow{if (mlr3misc::require_namespaces(c("mlr3filters", "rpart"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (mlr3misc::require_namespaces(c("mlr3filters", "rpart"), quietly = TRUE)) withAutoprint(\{ # examplesIf}
 library("mlr3")
 library("mlr3filters")
 \dontshow{data.table::setDTthreads(1)}
@@ -165,6 +165,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_decode}},
+\code{\link{mlr_pipeops_dropcollinear}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},

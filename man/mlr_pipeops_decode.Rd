@@ -177,6 +177,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_dropcollinear}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
