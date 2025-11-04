@@ -148,7 +148,7 @@ PipeOpRegrAvg = R6Class("PipeOpRegrAvg",
     initialize = function(innum = 0, collect_multiplicity = FALSE, id = "regravg", param_vals = list(), ...) {
       param_set = ps(
         se_aggr = p_fct(levels = c("predictive", "mean", "within", "between", "none"), init = "none", tags = c("predict", "se_aggr")),
-        se_aggr_rho = p_dbl(lower = -1, upper = 1, default = 0, tags = c("predict", "se_aggr"))
+        se_aggr_rho = p_dbl(lower = -1, upper = 1, default = 0, tags = c("predict", "se_aggr"), depends = quote(se_aggr == "mean"))
       )
       super$initialize(innum, collect_multiplicity, id, param_set = param_set, param_vals = param_vals, prediction_type = "PredictionRegr", ...)
     }
