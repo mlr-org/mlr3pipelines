@@ -270,14 +270,12 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     aggregate_predictions = function(predictions) {
       if (!length(predictions)) stop("No predictions available to aggregate.")
       alignment = private$align_predictions(predictions)
-      weights = rep(1 / length(predictions), length(predictions))
-      weights = weights / sum(weights)
       task_type = private$.learner$task_type
       if (task_type == "classif") {
-        return(private$aggregate_classif_predictions(alignment, weights))
+        return(private$aggregate_classif_predictions(alignment))
       }
       if (task_type == "regr") {
-        return(private$aggregate_regr_predictions(alignment, weights))
+        return(private$aggregate_regr_predictions(alignment))
       }
       stopf("`resampling.predict_method = \"cv_ensemble\"` is not implemented for task type '%s'.", task_type)
     },
@@ -300,8 +298,11 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     # However, they return data.table instead of Prediction objects to integrate with pred_to_task() and
     # handle row alignment specific to CV fold predictions. This design avoids the overhead of creating
     # intermediate Prediction objects that would need to be immediately converted to data.table.
-    aggregate_classif_predictions = function(alignment, weights) {
+    aggregate_classif_predictions = function(alignment) {
       aligned = alignment$aligned
+      n = length(aligned)
+      weights = rep(1, n)
+      weights = weights / sum(weights)
       prob_list = map(aligned, function(x) x$pred$prob)
       if (length(prob_list) && all(map_lgl(prob_list, Negate(is.null)))) {
         prob = weighted_matrix_sum(map(seq_along(prob_list), function(i) prob_list[[i]][aligned[[i]]$idx, , drop = FALSE]), weights)
@@ -320,9 +321,9 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       response = factor(lvls[max.col(freq, ties.method = "first")], levels = lvls)
       data.table(row_ids = alignment$row_ids, response = response)
     },
-    aggregate_regr_predictions = function(alignment, weights) {
+    aggregate_regr_predictions = function(alignment) {
       responses = map(alignment$aligned, function(x) x$pred$response[x$idx])
-      response = Reduce(`+`, Map(function(resp, w) resp * w, responses, weights))
+      response = Reduce(`+`, responses) / length(responses)
       se_aligned = map(alignment$aligned, function(x) {
         se = x$pred$se
         if (is.null(se)) return(NULL)
@@ -334,7 +335,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         if (any(map_lgl(se_aligned, is.null))) {
           stop("Learners returned standard errors for only a subset of CV models.")
         }
-        se = Reduce(`+`, Map(function(se_vec, w) se_vec * w, se_aligned, weights))
+        se = Reduce(`+`, se_aligned) / length(se_aligned)
       }
       dt = data.table(row_ids = alignment$row_ids, response = response)
       if (!is.null(se)) {
