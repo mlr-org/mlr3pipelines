@@ -265,7 +265,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       }
       se_aggr = private$.crossval_param_set$get_values()$se_aggr %??% "none"
       if ((self$learner$predict_type != "se" || se_aggr == "none") && "se" %in% colnames(prds)) {
-        prds[, se := NULL]
+        set(prds, j = "se", value = NULL)
       }
       renaming = setdiff(colnames(prds), c("row_id", "row_ids"))
       setnames(prds, renaming, sprintf("%s.%s", self$id, renaming))
@@ -466,4 +466,4 @@ unmarshal_model.pipeop_learner_cv_state_marshaled = function(model, inplace = FA
 }
 
 
-mlr_pipeops$add("learner_cv", PipeOpLearnerCV, list(R6Class("Learner", public = list(id = "learner_cv", task_type = "classif", param_set = ps()))$new()))
+mlr_pipeops$add("learner_cv", PipeOpLearnerCV, list(R6Class("Learner", public = list(id = "learner_cv", task_type = "classif", param_set = ps(), predict_types = "response"))$new()))
