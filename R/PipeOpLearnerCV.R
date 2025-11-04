@@ -88,10 +88,12 @@
 #'   Standard error aggregation used when `"cv_ensemble"` predictions are produced for regression learners with `predict_type`
 #'   containing `"se"`. Shares the definitions with [`PipeOpRegrAvg`], i.e. `"predictive"`, `"mean"`, `"within"`, `"between"`, `"none"`.
 #'   Initialized to `"predictive"` (within-fold variance plus between-fold disagreement) when constructed with a [`Learner`][mlr3::Learner] that has `predict_type = "se"`;
-#'   otherwise to `"none"`.
+#'   otherwise to `"none"`.\cr
+#'   Only present for learners that support `"se"` predictions.
 #' * `resampling.se_aggr_rho` :: `numeric(1)`\cr
 #'   Equicorrelation parameter for `resampling.se_aggr = "mean"`, interpreted as in [`PipeOpRegrAvg`]. Ignored otherwise.
-#'   Defaults to `0` when `resampling.se_aggr = "mean"`.
+#'   Defaults to `0` when `resampling.se_aggr = "mean"`.\cr
+#'   Only present for learners that support `"se"` predictions.
 #'
 #' @section Internals:
 #' The `$state` is currently not updated by prediction, so the `$state$predict_log` and `$state$predict_time` will always be `NULL`.
@@ -143,21 +145,20 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       type = private$.learner$task_type
       task_type = mlr_reflections$task_types[type, mult = "first"]$task
 
-      private$.crossval_param_set = ps(
-        method = p_fct(levels = c("cv", "insample"), tags = c("train", "required")),
-        folds = p_int(lower = 2L, upper = Inf, tags = c("train", "required")),
-        keep_response = p_lgl(tags = c("train", "required")),
-        predict_method = p_fct(levels = c("full", "cv_ensemble"), tags = c("train", "required")),
-        se_aggr = p_fct(levels = c("predictive", "mean", "within", "between", "none"), tags = c("train", "predict", "se_aggr", "required")),
-        se_aggr_rho = p_dbl(lower = -1, upper = 1, tags = c("train", "predict", "se_aggr"), depends = quote(se_aggr == "mean"))
+      params = list(
+        method = p_fct(levels = c("cv", "insample"), init = "cv", tags = c("train", "required")),
+        folds = p_int(lower = 2L, upper = Inf, init = 3, tags = c("train", "required")),
+        keep_response = p_lgl(init = FALSE, tags = c("train", "required")),
+        predict_method = p_fct(levels = c("full", "cv_ensemble"), init = "full", tags = c("train", "required"))
       )
-      private$.crossval_param_set$values = list(
-        method = "cv",
-        folds = 3,
-        keep_response = FALSE,
-        predict_method = "full",
-        se_aggr = if (private$.learner$predict_type == "se") "predictive" else "none"
-      )
+
+      if ("se" %in% private$.learner$predict_types) {
+        params$se_aggr = p_fct(levels = c("predictive", "mean", "within", "between", "none"), tags = c("train", "predict", "se_aggr", "required"),
+          init = if (private$.learner$predict_type == "se") "predictive" else "none")
+        params$se_aggr_rho = p_dbl(lower = -1, upper = 1, tags = c("train", "predict", "se_aggr"), depends = quote(se_aggr == "mean"), default = 0)
+      }
+
+      private$.crossval_param_set = ParamSet$new(params)
       # Dependencies in paradox have been broken from the start and this is known since at least a year:
       # https://github.com/mlr-org/paradox/issues/216
       # The following would make it _impossible_ to set "method" to "insample", because then "folds"
