@@ -11,8 +11,23 @@
 #' Always returns a `"prob"` prediction, regardless of the incoming [`Learner`][mlr3::Learner]'s
 #' `$predict_type`. The label of the class with the highest predicted probability is selected as the
 #' `"response"` prediction. If the [`Learner`][mlr3::Learner]'s `$predict_type` is set to `"prob"`,
-#' the prediction obtained is also a `"prob"` type prediction with the probability predicted to be a
-#' weighted average of incoming predictions.
+#' the probability aggregation is controlled by `prob_aggr` (see below). If `$predict_type = "response"`,
+#' predictions are internally converted to one-hot probability vectors (point mass on the predicted class) before aggregation.
+#'
+#' ### `"prob"` aggregation:
+#'
+#' * **`prob_aggr = "mean"`** -- *Linear opinion pool (arithmetic mean of probabilities; default)*.
+#'   **Interpretation.** Mixture semantics: choose a base model with probability `w[i]`, then draw from its class distribution.
+#'   Decision-theoretically, this is the minimizer of `sum(w[i] * KL(p[i] || p))` over probability vectors `p`, where `KL(x || y)` is the Kullback-Leibler divergence.
+#'   **Typical behavior.** Conservative / better calibrated and robust to near-zero probabilities (never assigns zero unless all do).
+#'   This is the standard choice for probability averaging in ensembles and stacking.
+#'
+#' * **`prob_aggr = "log"`** -- *Log opinion pool / product of experts (geometric mean in probability space)*:
+#'   Average per-model logs (or equivalently, logits) and apply softmax.
+#'   **Interpretation.** Product semantics: `p_ens ~ prod_i p_i^{w[i]}`; minimizes `sum(w[i] * KL(p || p[i]))`.
+#'   **Typical behavior.** Sharper / lower entropy (emphasizes consensus regions), but can be **overconfident** and is sensitive
+#'   to zeros; use `prob_aggr_eps` to clip small probabilities for numerical stability. Often beneficial with strong, similarly
+#'   calibrated members (e.g., neural networks), less so when calibration is the priority.
 #'
 #' All incoming [`Learner`][mlr3::Learner]'s `$predict_type` must agree.
 #'
@@ -45,7 +60,14 @@
 #' The `$state` is left empty (`list()`).
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from the [`PipeOpEnsemble`].
+#' The parameters are the parameters inherited from the [`PipeOpEnsemble`], as well as:
+#' * `prob_aggr` :: `character(1)`\cr
+#'   Controls how incoming class probabilities are aggregated. One of `"mean"` (linear opinion pool; default) or
+#'   `"log"` (log opinion pool / product of experts). See the description above for definitions and interpretation.
+#'   Only has an effect if the incoming predictions have `"prob"` values.
+#' * `prob_aggr_eps` :: `numeric(1)`\cr
+#'   Small positive constant used only for `prob_aggr = "log"` to clamp probabilities before taking logs, improving numerical
+#'   stability and avoiding `-Inf`. Ignored for `prob_aggr = "mean"`. Default is `1e-12`.
 #'
 #' @section Internals:
 #' Inherits from [`PipeOpEnsemble`] by implementing the `private$weighted_avg_predictions()` method.
@@ -81,7 +103,11 @@ PipeOpClassifAvg = R6Class("PipeOpClassifAvg",
   inherit = PipeOpEnsemble,
   public = list(
     initialize = function(innum = 0, collect_multiplicity = FALSE, id = "classifavg", param_vals = list()) {
-      super$initialize(innum, collect_multiplicity, id, param_vals = param_vals, prediction_type = "PredictionClassif", packages = "stats")
+      param_set = ps(
+        prob_aggr = p_fct(levels = c("mean", "log"), init = "mean", tags = c("predict", "prob_aggr")),
+        prob_aggr_eps = p_dbl(lower = 0, upper = 1, default = 1e-12, tags = c("predict", "prob_aggr"), depends = quote(prob_aggr == "log"))
+      )
+      super$initialize(innum, collect_multiplicity, id, param_set = param_set, param_vals = param_vals, prediction_type = "PredictionClassif", packages = "stats")
     }
   ),
   private = list(
@@ -96,7 +122,12 @@ PipeOpClassifAvg = R6Class("PipeOpClassifAvg",
 
       prob = NULL
       if (every(inputs, function(x) !is.null(x$prob))) {
-        prob = weighted_matrix_sum(map(inputs, "prob"), weights)
+        pv = self$param_set$get_values(tags = "prob_aggr")
+        if (pv$prob_aggr == "mean") {
+          prob = weighted_matrix_sum(map(inputs, "prob"), weights)
+        } else if (pv$prob_aggr == "log") {
+          prob = weighted_matrix_logpool(map(inputs, "prob"), weights, epsilon = pv$prob_aggr_eps)
+        }
       } else if (every(inputs, function(x) !is.null(x$response))) {
         prob = weighted_factor_mean(map(inputs, "response"), weights, lvls)
       } else {

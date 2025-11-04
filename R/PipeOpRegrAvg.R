@@ -12,7 +12,7 @@
 #' Aggregation of `"se"` predictions is controlled by the `se_aggr` parameter (see below). When `"se"` is not requested
 #' or `se_aggr = "none"`, `"se"` is dropped.
 #'
-#' @section "se" Aggregation:
+#' @section `"se"` Aggregation:
 #'
 #' Let there be `K` incoming predictions with weights `w` (sum to 1). For a given row `j`, denote
 #' per-model means `mu_i[j]` and, if available, per-model standard errors `se_i[j]`.
