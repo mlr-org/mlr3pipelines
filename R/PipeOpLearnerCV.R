@@ -415,7 +415,7 @@ marshal_model.pipeop_learner_cv_state = function(model, inplace = FALSE, ...) {
   }
   if (!is.null(model$cv_model_states)) {
     model$cv_model_states = map(model$cv_model_states, marshal_model, inplace = inplace)
-    was_marshaled = was_marshaled || some(model$cv_model_states, is_marshaled_model) || length(model$cv_model_states) > 0
+    was_marshaled = was_marshaled || some(model$cv_model_states, is_marshaled_model)
   }
   # only wrap this in a marshaled class if something was actually marshaled above
   if (was_marshaled) {
