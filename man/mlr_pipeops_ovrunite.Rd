@@ -74,7 +74,7 @@ Only methods inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library(mlr3)
 task = tsk("iris")
 gr = po("ovrsplit") \%>>\% lrn("classif.rpart") \%>>\% po("ovrunite")

@@ -96,7 +96,7 @@ See \code{\link[NMF:nmf]{nmf()}}.
 
 \section{Internals}{
 
-Uses the \code{\link[NMF:nmf]{nmf()}} function as well as \code{\link[NMF:basis-coef-methods]{basis()}}, \code{\link[NMF:basis-coef-methods]{coef()}} and
+Uses the \code{\link[NMF:nmf]{nmf()}} function as well as \code{\link[NMF:basis]{basis()}}, \code{\link[NMF:coef]{coef()}} and
 \code{\link[MASS:ginv]{ginv()}}.
 }
 
@@ -111,7 +111,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{if (mlr3misc::require_namespaces(c("NMF", "MASS"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (mlr3misc::require_namespaces(c("NMF", "MASS"), quietly = TRUE)) withAutoprint(\{ # examplesIf}
 \dontshow{
 # NMF attaches these packages to search path on load, #929
 lapply(c("package:Biobase", "package:BiocGenerics", "package:generics"), detach, character.only = TRUE)
