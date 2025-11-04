@@ -49,7 +49,7 @@ test_that("PipeOpLearnerCV - param values", {
     resampling.folds = 3,
     resampling.keep_response = FALSE,
     resampling.predict_method = "full",
-    resampling.se_aggr = "predictive",
+    resampling.se_aggr = "none",
     xval = 0
   ))
   polrn$param_set$values$minsplit = 2
@@ -58,7 +58,7 @@ test_that("PipeOpLearnerCV - param values", {
     resampling.folds = 3,
     resampling.keep_response = FALSE,
     resampling.predict_method = "full",
-    resampling.se_aggr = "predictive",
+    resampling.se_aggr = "none",
     minsplit = 2,
     xval = 0
   ))
@@ -68,10 +68,22 @@ test_that("PipeOpLearnerCV - param values", {
     resampling.folds = 4,
     resampling.keep_response = FALSE,
     resampling.predict_method = "full",
-    resampling.se_aggr = "predictive",
+    resampling.se_aggr = "none",
     minsplit = 2,
     xval = 0
   ))
+})
+
+test_that("PipeOpLearnerCV se aggregation default matches learner predict_type", {
+  learner_resp = LearnerRegrDebug$new()
+  learner_resp$predict_type = "response"
+  po_resp = PipeOpLearnerCV$new(learner_resp)
+  expect_identical(po_resp$param_set$values$resampling.se_aggr, "none")
+
+  learner_se = LearnerRegrDebug$new()
+  learner_se$predict_type = "se"
+  po_se = PipeOpLearnerCV$new(learner_se)
+  expect_identical(po_se$param_set$values$resampling.se_aggr, "predictive")
 })
 
 test_that("PipeOpLearnerCV - cv ensemble averages fold learners", {
@@ -151,6 +163,10 @@ test_that("PipeOpLearnerCV - cv ensemble averages regression predictions", {
   })
   manual_average = Reduce(`+`, manual_responses) / length(manual_responses)
   expect_equal(result_task$data(rows = task$row_ids, cols = feature_name)[[1]], manual_average)
+
+  graph_pred = po$learner_model$predict(task)
+  expect_equal(graph_pred$response, manual_average)
+  expect_true(is.null(graph_pred$se) || all(is.na(graph_pred$se)))
 })
 
 test_that("PipeOpLearnerCV - cv ensemble handles multiplicity", {
