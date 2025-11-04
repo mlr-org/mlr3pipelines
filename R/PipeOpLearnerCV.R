@@ -295,6 +295,11 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       aligned = map(predictions, align_prediction)
       list(row_ids = row_ids, aligned = aligned)
     },
+    # Note: The following aggregation methods use similar logic to PipeOpClassifAvg and PipeOpRegrAvg
+    # (particularly the weighted_matrix_sum and weighted_factor_mean helper functions from PipeOpEnsemble).
+    # However, they return data.table instead of Prediction objects to integrate with pred_to_task() and
+    # handle row alignment specific to CV fold predictions. This design avoids the overhead of creating
+    # intermediate Prediction objects that would need to be immediately converted to data.table.
     aggregate_classif_predictions = function(alignment, weights) {
       aligned = alignment$aligned
       prob_list = map(aligned, function(x) x$pred$prob)
