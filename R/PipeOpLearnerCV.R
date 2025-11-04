@@ -265,8 +265,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         private$.learner$state = NULL
         pred
       })
-      aggregated = private$aggregate_predictions(predictions)
-      as.data.table(aggregated)
+      private$aggregate_predictions(predictions)
     },
     aggregate_predictions = function(predictions) {
       if (!length(predictions)) stop("No predictions available to aggregate.")
@@ -308,13 +307,22 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         prob = pmin(pmax(prob, 0), 1)
         lvls = colnames(prob)
         response = factor(lvls[max.col(prob, ties.method = "first")], levels = lvls)
-        return(PredictionClassif$new(row_ids = alignment$row_ids, truth = alignment$truth, response = response, prob = prob))
+        prob_dt = data.table(prob)
+        setnames(prob_dt, paste0("prob.", lvls))
+        dt = data.table(row_ids = alignment$row_ids)
+        if (!is.null(alignment$truth)) dt[, truth := alignment$truth]
+        dt[, response := response]
+        dt = cbind(dt, prob_dt)
+        return(dt)
       }
       responses = map(aligned, function(x) x$pred$response[x$idx])
       lvls = levels(responses[[1]])
       freq = weighted_factor_mean(responses, weights, lvls)
       response = factor(lvls[max.col(freq, ties.method = "first")], levels = lvls)
-      PredictionClassif$new(row_ids = alignment$row_ids, truth = alignment$truth, response = response)
+      dt = data.table(row_ids = alignment$row_ids)
+      if (!is.null(alignment$truth)) dt[, truth := alignment$truth]
+      dt[, response := response]
+      dt
     },
     aggregate_regr_predictions = function(alignment, weights) {
       responses = map(alignment$aligned, function(x) x$pred$response[x$idx])
@@ -332,7 +340,13 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         }
         se = Reduce(`+`, Map(function(se_vec, w) se_vec * w, se_aligned, weights))
       }
-      PredictionRegr$new(row_ids = alignment$row_ids, truth = alignment$truth, response = response, se = se)
+      dt = data.table(row_ids = alignment$row_ids)
+      if (!is.null(alignment$truth)) dt[, truth := alignment$truth]
+      dt[, response := response]
+      if (!is.null(se)) {
+        dt[, se := se]
+      }
+      dt
     },
     make_cv_state = function(cv_model_states) {
       list(
