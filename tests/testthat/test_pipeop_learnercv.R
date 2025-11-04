@@ -42,33 +42,29 @@ test_that("PipeOpLearnerCV - param values", {
   skip_if_not_installed("rpart")
   lrn = mlr_learners$get("classif.rpart")
   polrn = PipeOpLearnerCV$new(lrn)
-  expect_true(all(c("minsplit", "resampling.method", "resampling.folds", "resampling.predict_method") %in% polrn$param_set$ids()))
+  expect_true(all(c(
+    "minsplit",
+    "resampling.method",
+    "resampling.folds",
+    "resampling.predict_method",
+    "resampling.prob_aggr",
+    "resampling.prob_aggr_eps"
+  ) %in% polrn$param_set$ids()))
   expect_false(any(c("resampling.se_aggr", "resampling.se_aggr_rho") %in% polrn$param_set$ids()))
-  expect_equal(polrn$param_set$values, list(
-    resampling.method = "cv",
-    resampling.folds = 3,
-    resampling.keep_response = FALSE,
-    resampling.predict_method = "full",
-    xval = 0
-  ))
+  expect_equal(polrn$param_set$values$resampling.method, "cv")
+  expect_equal(polrn$param_set$values$resampling.folds, 3)
+  expect_false(polrn$param_set$values$resampling.keep_response)
+  expect_equal(polrn$param_set$values$resampling.predict_method, "full")
+  expect_equal(polrn$param_set$values$resampling.prob_aggr, "mean")
+  expect_null(polrn$param_set$values$resampling.prob_aggr_eps)
+  expect_equal(polrn$param_set$values$xval, 0)
   polrn$param_set$values$minsplit = 2
-  expect_equal(polrn$param_set$values, list(
-    resampling.method = "cv",
-    resampling.folds = 3,
-    resampling.keep_response = FALSE,
-    resampling.predict_method = "full",
-    minsplit = 2,
-    xval = 0
-  ))
+  expect_equal(polrn$param_set$values$minsplit, 2)
+  expect_equal(polrn$param_set$values$resampling.prob_aggr, "mean")
+  expect_null(polrn$param_set$values$resampling.prob_aggr_eps)
   polrn$param_set$values$resampling.folds = 4
-  expect_equal(polrn$param_set$values, list(
-    resampling.method = "cv",
-    resampling.folds = 4,
-    resampling.keep_response = FALSE,
-    resampling.predict_method = "full",
-    minsplit = 2,
-    xval = 0
-  ))
+  expect_equal(polrn$param_set$values$resampling.folds, 4)
+  expect_equal(polrn$param_set$values$minsplit, 2)
 })
 
 test_that("PipeOpLearnerCV se aggregation default matches learner predict_type", {
@@ -189,6 +185,51 @@ test_that("PipeOpLearnerCV - cv ensemble averages classif responses", {
   graph_prob = as.matrix(pred_dt[, paste0("prob.", task$class_names), with = FALSE])
   colnames(graph_prob) = task$class_names
   expect_equal(graph_prob, prob_matrix)
+})
+
+test_that("PipeOpLearnerCV - cv ensemble log prob aggregation", {
+  skip_if_not_installed("rpart")
+  task = tsk("iris")
+  learner = lrn("classif.rpart", predict_type = "prob")
+  param_vals = list(
+    resampling.folds = 3,
+    resampling.keep_response = TRUE,
+    resampling.predict_method = "cv_ensemble",
+    resampling.prob_aggr = "log",
+    resampling.prob_aggr_eps = 1e-8
+  )
+  po = PipeOpLearnerCV$new(learner, param_vals = param_vals)
+
+  trained_task = po$train(list(task))[[1]]
+  prob_cols = paste0(po$id, ".prob.", task$class_names)
+  expect_true(all(prob_cols %in% trained_task$feature_names))
+
+  result_task = po$predict(list(task))[[1]]
+  result_probs = as.matrix(result_task$data(rows = task$row_ids, cols = prob_cols))
+  manual_probs = mlr3misc::map(po$state$cv_model_states, function(state) {
+    clone = learner$clone(deep = TRUE)
+    clone$state = state
+    dt = as.data.table(clone$predict(task))
+    data.table::setorder(dt, row_ids)
+    as.matrix(dt[, paste0("prob.", task$class_names), with = FALSE])
+  })
+  weights = rep(1 / length(manual_probs), length(manual_probs))
+  expected_probs = mlr3pipelines:::weighted_matrix_logpool(manual_probs, weights, epsilon = param_vals$resampling.prob_aggr_eps)
+  colnames(expected_probs) = prob_cols
+  expect_equal(result_probs, expected_probs, tolerance = 1e-8)
+
+  response_col = sprintf("%s.response", po$id)
+  observed_response = result_task$data(rows = task$row_ids, cols = response_col)[[1]]
+  expected_response = factor(task$class_names[max.col(expected_probs, ties.method = "first")], levels = task$class_names)
+  expect_equal(as.character(observed_response), as.character(expected_response))
+
+  graph_prediction = po$learner_model$predict(task)
+  graph_dt = as.data.table(graph_prediction)
+  data.table::setorder(graph_dt, row_ids)
+  graph_probs = as.matrix(graph_dt[, paste0("prob.", task$class_names), with = FALSE])
+  colnames(graph_probs) = prob_cols
+  expect_equal(graph_probs, expected_probs, tolerance = 1e-8)
+  expect_equal(as.character(graph_dt$response), as.character(expected_response))
 })
 
 test_that("PipeOpLearnerCV - cv ensemble averages regression predictions", {

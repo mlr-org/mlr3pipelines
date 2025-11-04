@@ -185,12 +185,25 @@ weighted_matrix_sum = function(matrices, weights) {
 # @param epsilon numeric(1): small positive constant to clamp probabilities before log
 # @return matrix: row-normalized aggregated probabilities (same shape as inputs)
 weighted_matrix_logpool = function(matrices, weights, epsilon = 1e-12) {
+  assert_list(matrices, types = "matrix", min.len = 1)
+  assert_numeric(weights, len = length(matrices), any.missing = FALSE)
+  epsilon = as.numeric(epsilon %??% 0)
+  epsilon = max(epsilon, 0)
   acc = weights[1] * log(pmax(matrices[[1]], epsilon))
   for (idx in seq_along(matrices)[-1]) {
     acc = acc + weights[idx] * log(pmax(matrices[[idx]], epsilon))
   }
   P = exp(acc)
-  sweep(P, 1L, rowSums(P), "/")
+  row_sums = rowSums(P)
+  invalid = !is.finite(row_sums) | row_sums <= 0
+  if (any(invalid)) {
+    n_cols = ncol(P)
+    fallback = matrix(1 / n_cols, nrow = sum(invalid), ncol = n_cols)
+    colnames(fallback) = colnames(P)
+    P[invalid, ] = fallback
+    row_sums[invalid] = rowSums(fallback)
+  }
+  sweep(P, 1L, row_sums, "/")
 }
 
 

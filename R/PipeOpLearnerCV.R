@@ -84,6 +84,13 @@
 #'   Controls how predictions are produced after training. `"full"` (default) fits the wrapped learner on the entire training data.
 #'   `"cv_ensemble"` reuses the models fitted during resampling and averages their predictions. This option currently supports
 #'   classification and regression learners together with `resampling.method = "cv"`.
+#' * `resampling.prob_aggr` :: `character(1)`\cr
+#'   Probability aggregation used when `"cv_ensemble"` predictions are produced for classification learners that can emit class probabilities.
+#'   Shares the semantics with [`PipeOpClassifAvg`]: `"mean"` (linear opinion pool, default) and `"log"` (log opinion pool / product of experts).
+#'   Only present for learners that support `"prob"` predictions.
+#' * `resampling.prob_aggr_eps` :: `numeric(1)`\cr
+#'   Stabilization constant applied when `resampling.prob_aggr = "log"` to clamp probabilities before taking logarithms.
+#'   Defaults to `1e-12`. Only present for learners that support `"prob"` predictions.
 #' * `resampling.se_aggr` :: `character(1)`\cr
 #'   Standard error aggregation used when `"cv_ensemble"` predictions are produced for regression learners with `predict_type`
 #'   containing `"se"`. Shares the definitions with [`PipeOpRegrAvg`], i.e. `"predictive"`, `"mean"`, `"within"`, `"between"`, `"none"`.
@@ -151,6 +158,21 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         keep_response = p_lgl(init = FALSE, tags = c("train", "required")),
         predict_method = p_fct(levels = c("full", "cv_ensemble"), init = "full", tags = c("train", "required"))
       )
+
+      if ("prob" %in% private$.learner$predict_types) {
+        params$prob_aggr = p_fct(
+          levels = c("mean", "log"),
+          init = "mean",
+          tags = c("train", "predict", "prob_aggr", "required")
+        )
+        params$prob_aggr_eps = p_dbl(
+          lower = 0,
+          upper = 1,
+          default = 1e-12,
+          tags = c("train", "predict", "prob_aggr"),
+          depends = quote(prob_aggr == "log")
+        )
+      }
 
       if ("se" %in% private$.learner$predict_types) {
         params$se_aggr = p_fct(levels = c("predictive", "mean", "within", "between", "none"), tags = c("train", "predict", "se_aggr", "required"),
@@ -322,8 +344,16 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       weights = rep(1, n)
       weights = weights / sum(weights)
       prob_list = map(aligned, function(x) x$pred$prob)
+      prob_cfg = private$.crossval_param_set$get_values(tags = "prob_aggr")
+      prob_method = prob_cfg$prob_aggr %??% "mean"
+      prob_epsilon = prob_cfg$prob_aggr_eps %??% 1e-12
       if (length(prob_list) && all(map_lgl(prob_list, Negate(is.null)))) {
-        prob = weighted_matrix_sum(map(seq_along(prob_list), function(i) prob_list[[i]][aligned[[i]]$idx, , drop = FALSE]), weights)
+        prob_mats = map(seq_along(prob_list), function(i) prob_list[[i]][aligned[[i]]$idx, , drop = FALSE])
+        prob = switch(prob_method,
+          mean = weighted_matrix_sum(prob_mats, weights),
+          log = weighted_matrix_logpool(prob_mats, weights, epsilon = prob_epsilon),
+          stopf("Unsupported prob aggregation '%s'.", prob_method)
+        )
         prob = pmin(pmax(prob, 0), 1)
         lvls = colnames(prob)
         response = factor(lvls[max.col(prob, ties.method = "first")], levels = lvls)
@@ -410,6 +440,16 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         regr = PipeOpRegrAvg$new(innum = length(pipeops), id = agg_id),
         stopf("Task type '%s' not supported for cv ensemble.", private$.learner$task_type)
       )
+      if (inherits(aggregator, "PipeOpClassifAvg")) {
+        prob_cfg = private$.crossval_param_set$get_values(tags = "prob_aggr")
+        method = prob_cfg$prob_aggr
+        if (!is.null(method)) {
+          aggregator$param_set$set_values(prob_aggr = method)
+        }
+        if (!is.null(prob_cfg$prob_aggr_eps) && (method %??% "mean") == "log") {
+          aggregator$param_set$set_values(prob_aggr_eps = prob_cfg$prob_aggr_eps)
+        }
+      }
       if (inherits(aggregator, "PipeOpRegrAvg")) {
         se_cfg = private$.crossval_param_set$get_values(tags = "se_aggr")
         aggregator$param_set$set_values(.values = se_cfg)
