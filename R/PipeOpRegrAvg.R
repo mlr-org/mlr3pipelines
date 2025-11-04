@@ -174,16 +174,16 @@ PipeOpRegrAvg = R6Class("PipeOpRegrAvg",
 mlr_pipeops$add("regravg", PipeOpRegrAvg)
 
 
-#' Aggregate SEs from multiple learners with weights.
-#'
-#' @param means_list list of numeric vectors (length N), per-model mean predictions.
-#' @param ses_list   NULL or list of numeric vectors (length N), per-model SEs.
-#'                   If non-NULL, must have same length and alignment as means_list.
-#' @param weights    numeric vector of length K summing to 1 (checked elsewhere).
-#' @param method     one of "none", "predictive", "mean", "within", "between".
-#' @param rho        numeric scalar for "mean" method; equicorrelation parameter.
-#'                   Will be clamped to [-1/(K-1), 1] if K > 1; ignored otherwise.
-#' @return numeric vector (length N) of aggregated SEs, or `NULL` if `method = "none"`.
+# Aggregate SEs from multiple learners with weights.
+#
+# @param means_list list of numeric vectors (length N), per-model mean predictions.
+# @param ses_list   NULL or list of numeric vectors (length N), per-model SEs.
+#                   If non-NULL, must have same length and alignment as means_list.
+# @param weights    numeric vector of length K summing to 1 (checked elsewhere).
+# @param method     one of "none", "predictive", "mean", "within", "between".
+# @param rho        numeric scalar for "mean" method; equicorrelation parameter.
+#                   Will be clamped to `[-1/(K-1), 1]` if K > 1; ignored otherwise.
+# @return numeric vector (length N) of aggregated SEs, or `NULL` if `method = "none"`.
 aggregate_se_weighted = function(means_list, ses_list = NULL, weights,
   method = "none",
   rho = 0
