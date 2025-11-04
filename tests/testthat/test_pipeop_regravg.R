@@ -122,3 +122,41 @@ test_that("PipeOpRegrAvg se aggregation requiring SE errors when SE is missing",
     "requires `ses_list`"
   )
 })
+
+test_that("PipeOpRegrAvg se aggregation with single prediction behaves correctly", {
+  row_ids = 1:4
+  truth = c(0, 1, 2, 3)
+  response = c(1.1, 2.2, 3.3, 4.4)
+  se = c(0.5, 0.6, 0.7, 0.8)
+  single_pred_with_se = list(PredictionRegr$new(
+    row_ids = row_ids,
+    truth = truth,
+    response = response,
+    se = se
+  ))
+  single_pred_without_se = list(PredictionRegr$new(
+    row_ids = row_ids,
+    truth = truth,
+    response = response
+  ))
+
+  result_none = predict_regravg(single_pred_with_se, "none", weights = 1)
+  expect_equal(result_none$response, response)
+  expect_false("se" %in% names(result_none$data))
+
+  result_between = predict_regravg(single_pred_without_se, "between", weights = 1)
+  expect_equal(result_between$response, response)
+  expect_equal(result_between$se, rep(0, length(response)))
+
+  result_within = predict_regravg(single_pred_with_se, "within", weights = 1)
+  expect_equal(result_within$response, response)
+  expect_equal(result_within$se, se)
+
+  result_predictive = predict_regravg(single_pred_with_se, "predictive", weights = 1)
+  expect_equal(result_predictive$response, response)
+  expect_equal(result_predictive$se, se)
+
+  result_mean = predict_regravg(single_pred_with_se, "mean", weights = 1, se_aggr_rho = 0.25)
+  expect_equal(result_mean$response, response)
+  expect_equal(result_mean$se, se)
+})
