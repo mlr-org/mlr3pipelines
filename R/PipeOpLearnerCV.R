@@ -84,7 +84,14 @@
 #'   Controls how predictions are produced after training. `"full"` (default) fits the wrapped learner on the entire training data.
 #'   `"cv_ensemble"` reuses the models fitted during resampling and averages their predictions. This option currently supports
 #'   classification and regression learners together with `resampling.method = "cv"`.
-#'
+#' * `resampling.se_aggr` :: `character(1)`\cr
+#'   Standard error aggregation used when `"cv_ensemble"` predictions are produced for regression learners with `predict_type`
+#'   containing `"se"`. Shares the definitions with [`PipeOpRegrAvg`], i.e. `"predictive"`, `"mean"`, `"within"`, `"between"`, `"none"`.
+#'   Defaults to `"mean"` (arithmetic averaging of SEs, equivalent to `"mean"` with `rho = 1`).
+#' * `resampling.se_aggr_rho` :: `numeric(1)`\cr
+#'   Equicorrelation parameter for `resampling.se_aggr = "mean"`, interpreted as in [`PipeOpRegrAvg`]. Ignored otherwise.
+#'   Defaults to `1` when `resampling.se_aggr = "mean"`, otherwise to `0`.
+#' 
 #' @section Internals:
 #' The `$state` is currently not updated by prediction, so the `$state$predict_log` and `$state$predict_time` will always be `NULL`.
 #'
@@ -139,9 +146,17 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         method = p_fct(levels = c("cv", "insample"), tags = c("train", "required")),
         folds = p_int(lower = 2L, upper = Inf, tags = c("train", "required")),
         keep_response = p_lgl(tags = c("train", "required")),
-        predict_method = p_fct(levels = c("full", "cv_ensemble"), tags = c("train", "required"))
+        predict_method = p_fct(levels = c("full", "cv_ensemble"), tags = c("train", "required")),
+        se_aggr = p_fct(levels = c("predictive", "mean", "within", "between", "none"), tags = c("train", "predict", "se_aggr", "required")),
+        se_aggr_rho = p_dbl(lower = -1, upper = 1, tags = c("train", "predict", "se_aggr"), depends = quote(se_aggr == "mean"))
       )
-      private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE, predict_method = "full")
+      private$.crossval_param_set$values = list(
+        method = "cv",
+        folds = 3,
+        keep_response = FALSE,
+        predict_method = "full",
+        se_aggr = "predictive"
+      )
       # Dependencies in paradox have been broken from the start and this is known since at least a year:
       # https://github.com/mlr-org/paradox/issues/216
       # The following would make it _impossible_ to set "method" to "insample", because then "folds"
@@ -246,7 +261,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       if (!self$param_set$values$resampling.keep_response && self$learner$predict_type == "prob") {
         prds[, response := NULL]
       }
-      if (self$learner$predict_type != "se" && "se" %in% colnames(prds)) {
+      se_cfg = private$se_config()
+      if ((self$learner$predict_type != "se" || se_cfg$method == "none") && "se" %in% colnames(prds)) {
         prds[, se := NULL]
       }
       renaming = setdiff(colnames(prds), c("row_id", "row_ids"))
@@ -323,20 +339,23 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     },
     aggregate_regr_predictions = function(alignment) {
       responses = map(alignment$aligned, function(x) x$pred$response[x$idx])
-      response = Reduce(`+`, responses) / length(responses)
+      k = length(responses)
+      weights = rep(1 / k, k)
+      response = Reduce(`+`, responses) / k
       se_aligned = map(alignment$aligned, function(x) {
         se = x$pred$se
         if (is.null(se)) return(NULL)
         se[x$idx]
       })
-      if (all(map_lgl(se_aligned, is.null))) {
-        se = NULL
-      } else {
+      ses_list = NULL
+      if (!all(map_lgl(se_aligned, is.null))) {
         if (any(map_lgl(se_aligned, is.null))) {
           stop("Learners returned standard errors for only a subset of CV models.")
         }
-        se = Reduce(`+`, se_aligned) / length(se_aligned)
+        ses_list = se_aligned
       }
+      se_cfg = private$se_config()
+      se = aggregate_se_weighted(responses, ses_list, weights, method = se_cfg$method, rho = se_cfg$rho)
       dt = data.table(row_ids = alignment$row_ids, response = response)
       if (!is.null(se)) {
         dt[, se := se]
@@ -388,6 +407,14 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         regr = PipeOpRegrAvg$new(innum = length(pipeops), id = agg_id),
         stopf("Task type '%s' not supported for cv ensemble.", private$.learner$task_type)
       )
+      if (inherits(aggregator, "PipeOpRegrAvg")) {
+        se_cfg = private$se_config()
+        vals = list(se_aggr = se_cfg$method)
+        if (se_cfg$method == "mean" && !is.null(se_cfg$raw_rho)) {
+          vals$se_aggr_rho = se_cfg$raw_rho
+        }
+        do.call(aggregator$param_set$set_values, vals)
+      }
       aggregator$state = list()
       graph = gunion(pipeops) %>>% aggregator
       graph_state = graph$state
@@ -396,6 +423,12 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       glrn$model = graph_state
       glrn$man = private$.learner$man
       glrn
+    },
+    se_config = function() {
+      vals = self$param_set$values
+      method = vals$resampling.se_aggr
+      rho_raw = vals$resampling.se_aggr_rho
+      list(method = method, rho = rho_raw %??% 0, raw_rho = rho_raw)
     },
     .crossval_param_set = NULL,
     .learner = NULL,

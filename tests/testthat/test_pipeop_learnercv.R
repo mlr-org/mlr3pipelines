@@ -42,12 +42,14 @@ test_that("PipeOpLearnerCV - param values", {
   skip_if_not_installed("rpart")
   lrn = mlr_learners$get("classif.rpart")
   polrn = PipeOpLearnerCV$new(lrn)
-  expect_subset(c("minsplit", "resampling.method", "resampling.folds", "resampling.predict_method"), polrn$param_set$ids())
+  expect_subset(c("minsplit", "resampling.method", "resampling.folds", "resampling.predict_method",
+    "resampling.se_aggr", "resampling.se_aggr_rho"), polrn$param_set$ids())
   expect_equal(polrn$param_set$values, list(
     resampling.method = "cv",
     resampling.folds = 3,
     resampling.keep_response = FALSE,
     resampling.predict_method = "full",
+    resampling.se_aggr = "predictive",
     xval = 0
   ))
   polrn$param_set$values$minsplit = 2
@@ -56,6 +58,7 @@ test_that("PipeOpLearnerCV - param values", {
     resampling.folds = 3,
     resampling.keep_response = FALSE,
     resampling.predict_method = "full",
+    resampling.se_aggr = "predictive",
     minsplit = 2,
     xval = 0
   ))
@@ -65,6 +68,7 @@ test_that("PipeOpLearnerCV - param values", {
     resampling.folds = 4,
     resampling.keep_response = FALSE,
     resampling.predict_method = "full",
+    resampling.se_aggr = "predictive",
     minsplit = 2,
     xval = 0
   ))
@@ -239,10 +243,22 @@ test_that("PipeOpLearnerCV - cv ensemble with predict_type = 'se'", {
     clone$predict(task)
   })
 
-  manual_response = Reduce(`+`, mlr3misc::map(manual_preds, "response")) / length(manual_preds)
+  manual_dt = mlr3misc::map(manual_preds, function(pred) {
+    dt = as.data.table(pred)
+    data.table::setorderv(dt, "row_ids")
+    list(response = dt$response, se = dt$se)
+  })
+  manual_response = Reduce(`+`, mlr3misc::map(manual_dt, "response")) / length(manual_dt)
   expect_equal(result_task$data(rows = task$row_ids, cols = response_col)[[1]], manual_response)
 
-  manual_se = Reduce(`+`, mlr3misc::map(manual_preds, "se")) / length(manual_preds)
+  weights = rep(1 / length(manual_dt), length(manual_dt))
+  manual_se = mlr3pipelines:::aggregate_se_weighted(
+    mlr3misc::map(manual_dt, "response"),
+    mlr3misc::map(manual_dt, "se"),
+    weights = weights,
+    method = "predictive",
+    rho = 0
+  )
   expect_equal(result_task$data(rows = task$row_ids, cols = se_col)[[1]], manual_se)
 })
 
@@ -433,4 +449,88 @@ test_that("state class and multiplicity", {
   expect_class(po1$state, "Multiplicity")
   expect_class(po1$state[[1L]], "Multiplicity")
   expect_class(po1$state[[1L]][[1L]], "pipeop_learner_cv_state")
+})
+
+test_that("PipeOpLearnerCV cv ensemble aggregates SE like PipeOpRegrAvg", {
+  task_backend = data.table::data.table(
+    x1 = c(1, 2, 3, 4),
+    x2 = c(4, 3, 2, 1),
+    y = c(2, 4, 5, 7)
+  )
+  task = TaskRegr$new("debug_se_task", backend = task_backend, target = "y")
+  configs = list(
+    list(se_aggr = "none", rho = NULL),
+    list(se_aggr = "between", rho = NULL),
+    list(se_aggr = "within", rho = NULL),
+    list(se_aggr = "predictive", rho = NULL),
+    list(se_aggr = "mean", rho = 0),
+    list(se_aggr = "mean", rho = 1),
+    list(se_aggr = "mean", rho = -0.5)
+  )
+
+  for (cfg in configs) {
+    learner = LearnerRegrDebug$new()
+    learner$predict_type = "se"
+    param_vals = list(
+      resampling.method = "cv",
+      resampling.folds = 2,
+      resampling.predict_method = "cv_ensemble",
+      resampling.se_aggr = cfg$se_aggr
+    )
+    if (!is.null(cfg$rho)) {
+      param_vals$resampling.se_aggr_rho = cfg$rho
+    }
+    po = PipeOpLearnerCV$new(learner, param_vals = param_vals)
+
+    po$train(list(task))
+    result_task = po$predict(list(task))[[1]]
+    col_response = sprintf("%s.response", po$id)
+    col_se = sprintf("%s.se", po$id)
+
+    expect_true(col_response %in% result_task$feature_names)
+
+    base_preds = mlr3misc::map(po$state$cv_model_states, function(st) {
+      base = LearnerRegrDebug$new()
+      base$predict_type = "se"
+      base$state = st
+      pred = base$predict(task)
+      pred_dt = as.data.table(pred)
+      data.table::setorder(pred_dt, row_ids)
+      list(response = pred_dt$response, se = pred_dt$se)
+    })
+
+    k = length(base_preds)
+    weights = rep(1 / k, k)
+    response_list = mlr3misc::map(base_preds, "response")
+    expected_response = Reduce(`+`, response_list) / k
+    se_list = mlr3misc::map(base_preds, "se")
+    expected_se = mlr3pipelines:::aggregate_se_weighted(
+      response_list,
+      se_list,
+      weights = weights,
+      method = cfg$se_aggr,
+      rho = cfg$rho %??% 0
+    )
+
+    observed_response = result_task$data(rows = task$row_ids, cols = col_response)[[1]]
+    expect_equal(observed_response, expected_response)
+
+    if (is.null(expected_se)) {
+      expect_false(col_se %in% result_task$feature_names)
+    } else {
+      expect_true(col_se %in% result_task$feature_names)
+      observed_se = result_task$data(rows = task$row_ids, cols = col_se)[[1]]
+      expect_equal(observed_se, expected_se)
+    }
+
+    learner_model = po$learner_model
+    expect_class(learner_model, "GraphLearner")
+    graph_pred = learner_model$predict(task)
+    expect_equal(graph_pred$response, expected_response)
+    if (is.null(expected_se)) {
+      expect_true(is.null(graph_pred$se) || all(is.na(graph_pred$se)))
+    } else {
+      expect_equal(graph_pred$se, expected_se)
+    }
+  }
 })
