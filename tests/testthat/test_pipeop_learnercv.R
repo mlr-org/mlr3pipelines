@@ -42,12 +42,118 @@ test_that("PipeOpLearnerCV - param values", {
   skip_if_not_installed("rpart")
   lrn = mlr_learners$get("classif.rpart")
   polrn = PipeOpLearnerCV$new(lrn)
-  expect_subset(c("minsplit", "resampling.method", "resampling.folds"), polrn$param_set$ids())
-  expect_equal(polrn$param_set$values, list(resampling.method = "cv", resampling.folds = 3, resampling.keep_response = FALSE, xval = 0))
+  expect_subset(c("minsplit", "resampling.method", "resampling.folds", "resampling.predict_method"), polrn$param_set$ids())
+  expect_equal(polrn$param_set$values, list(
+    resampling.method = "cv",
+    resampling.folds = 3,
+    resampling.keep_response = FALSE,
+    resampling.predict_method = "full",
+    xval = 0
+  ))
   polrn$param_set$values$minsplit = 2
-  expect_equal(polrn$param_set$values, list(resampling.method = "cv", resampling.folds = 3, resampling.keep_response = FALSE, minsplit = 2, xval = 0))
+  expect_equal(polrn$param_set$values, list(
+    resampling.method = "cv",
+    resampling.folds = 3,
+    resampling.keep_response = FALSE,
+    resampling.predict_method = "full",
+    minsplit = 2,
+    xval = 0
+  ))
   polrn$param_set$values$resampling.folds = 4
-  expect_equal(polrn$param_set$values, list(resampling.method = "cv", resampling.folds = 4, resampling.keep_response = FALSE, minsplit = 2, xval = 0))
+  expect_equal(polrn$param_set$values, list(
+    resampling.method = "cv",
+    resampling.folds = 4,
+    resampling.keep_response = FALSE,
+    resampling.predict_method = "full",
+    minsplit = 2,
+    xval = 0
+  ))
+})
+
+test_that("PipeOpLearnerCV - cv ensemble averages fold learners", {
+  skip_if_not_installed("rpart")
+  task = tsk("iris")
+  learner = lrn("classif.rpart", predict_type = "prob")
+  po = PipeOpLearnerCV$new(learner,
+    param_vals = list(
+      resampling.folds = 2,
+      resampling.keep_response = TRUE,
+      resampling.predict_method = "cv_ensemble"
+    )
+  )
+
+  trained_task = po$train(list(task))[[1]]
+  expect_setequal(trained_task$feature_names, c(
+    sprintf("%s.response", po$id),
+    paste0(po$id, ".prob.", task$class_names)
+  ))
+  expect_equal(po$state$predict_method, "cv_ensemble")
+  expect_length(po$state$cv_model_states, 2)
+
+  result_task = po$predict(list(task))[[1]]
+  prob_feature_names = paste0(po$id, ".prob.", task$class_names)
+
+  pred_probs = as.matrix(result_task$data(rows = task$row_ids, cols = prob_feature_names))
+  manual_probs = mlr3misc::map(po$state$cv_model_states, function(state) {
+    clone = learner$clone(deep = TRUE)
+    clone$state = state
+    dt = as.data.table(clone$predict(task))
+    data.table::setorder(dt, row_ids)
+    as.matrix(dt[, paste0("prob.", task$class_names), with = FALSE])
+  })
+  manual_prob = Reduce(`+`, manual_probs) / length(manual_probs)
+  colnames(manual_prob) = prob_feature_names
+  expect_equal(pred_probs, manual_prob)
+
+  expected_response = factor(task$class_names[max.col(manual_prob)], levels = task$class_names)
+  result_response = result_task$data(rows = task$row_ids, cols = sprintf("%s.response", po$id))[[1]]
+  expect_equal(as.character(result_response), as.character(expected_response))
+})
+
+test_that("PipeOpLearnerCV - cv ensemble drops response when requested", {
+  skip_if_not_installed("rpart")
+  task = tsk("iris")
+  learner = lrn("classif.rpart", predict_type = "prob")
+  po = PipeOpLearnerCV$new(learner,
+    param_vals = list(
+      resampling.predict_method = "cv_ensemble"
+    )
+  )
+  po$train(list(task))
+  result_task = po$predict(list(task))[[1]]
+  expect_true(all(sprintf("%s.prob.%s", po$id, task$class_names) %in% result_task$feature_names))
+  expect_false(any(sprintf("%s.response", po$id) %in% result_task$feature_names))
+})
+
+test_that("PipeOpLearnerCV - cv ensemble averages regression predictions", {
+  skip_if_not_installed("rpart")
+  task = TaskRegr$new("mtcars", backend = data.table::as.data.table(mtcars), target = "mpg")
+  learner = lrn("regr.rpart")
+  po = PipeOpLearnerCV$new(learner,
+    param_vals = list(resampling.folds = 2, resampling.predict_method = "cv_ensemble")
+  )
+  po$train(list(task))
+  result_task = po$predict(list(task))[[1]]
+  feature_name = sprintf("%s.response", po$id)
+  expect_true(feature_name %in% result_task$feature_names)
+
+  manual_responses = mlr3misc::map(po$state$cv_model_states, function(state) {
+    clone = learner$clone(deep = TRUE)
+    clone$state = state
+    pred = clone$predict(task)
+    pred$response
+  })
+  manual_average = Reduce(`+`, manual_responses) / length(manual_responses)
+  expect_equal(result_task$data(rows = task$row_ids, cols = feature_name)[[1]], manual_average)
+})
+
+test_that("PipeOpLearnerCV - cv ensemble requires resampling method cv", {
+  skip_if_not_installed("rpart")
+  po = PipeOpLearnerCV$new(
+    lrn("classif.rpart"),
+    param_vals = list(resampling.method = "insample", resampling.predict_method = "cv_ensemble")
+  )
+  expect_error(po$train(list(tsk("iris"))), "cv_ensemble")
 })
 
 test_that("PipeOpLearnerCV - within resampling", {
@@ -142,6 +248,19 @@ test_that("marshal", {
 test_that("marshal multiplicity", {
   skip_if_not_installed("rpart")
   skip_if_not_installed("bbotk")
+  if (!"mlr3pipelines" %in% rownames(installed.packages())) {
+    expect_man_exists <<- function(man) {
+      checkmate::expect_string(man, na.ok = TRUE, fixed = "::")
+      if (!is.na(man)) {
+        parts = strsplit(man, "::", fixed = TRUE)[[1L]]
+        if (parts[1L] %nin% rownames(installed.packages())) {
+          return(invisible(NULL))
+        }
+        matches = help.search(parts[2L], package = parts[1L], ignore.case = FALSE)
+        checkmate::expect_data_frame(matches$matches, min.rows = 1L, info = "man page lookup")
+      }
+    }
+  }
   po = po("learner_cv", learner = lrn("classif.debug"))
   po$train(list(Multiplicity(tsk("iris"), tsk("sonar"))))
   s = po$state
@@ -191,6 +310,25 @@ test_that("marshal multiplicity", {
   p2 = glrn$marshal()$unmarshal()$predict(task)
   expect_equal(p1, p2)
 
+})
+
+test_that("marshal with cv ensemble", {
+  skip_if_not_installed("rpart")
+  task = tsk("iris")
+  po = po("learner_cv", learner = lrn("classif.rpart", predict_type = "prob"),
+    param_vals = list(resampling.predict_method = "cv_ensemble"))
+  po$train(list(task))
+  expect_equal(po$state$predict_method, "cv_ensemble")
+  marshaled = marshal_model(po$state)
+  expect_true(is_marshaled_model(marshaled))
+  unmarshaled = unmarshal_model(marshaled)
+  expect_equal(names(unmarshaled), names(po$state))
+  expect_equal(length(unmarshaled$cv_model_states), length(po$state$cv_model_states))
+  po$state = unmarshaled
+  expect_equal(
+    po$predict(list(task)),
+    po$predict(list(task))
+  )
 })
 
 test_that("state class and multiplicity", {
