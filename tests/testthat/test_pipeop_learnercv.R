@@ -147,6 +147,35 @@ test_that("PipeOpLearnerCV - cv ensemble averages regression predictions", {
   expect_equal(result_task$data(rows = task$row_ids, cols = feature_name)[[1]], manual_average)
 })
 
+test_that("PipeOpLearnerCV - cv ensemble handles multiplicity", {
+  skip_if_not_installed("rpart")
+  tasks = Multiplicity(tsk("iris"), tsk("sonar"))
+  learner = lrn("classif.rpart", predict_type = "prob")
+  po = po("learner_cv", learner,
+    param_vals = list(resampling.predict_method = "cv_ensemble")
+  )
+
+  train_out = po$train(list(tasks))[[1]]
+  expect_class(train_out, "Multiplicity")
+  expect_equal(length(train_out), 2L)
+  expect_true(all(mlr3misc::map_lgl(train_out, inherits, what = "Task")))
+
+  expect_class(po$state, "Multiplicity")
+  expect_true(all(mlr3misc::map_lgl(po$state, function(st) st$predict_method == "cv_ensemble")))
+  expect_true(all(mlr3misc::map_lgl(po$state, function(st) length(st$cv_model_states) == po$param_set$values$resampling.folds)))
+
+  predict_out = po$predict(list(tasks))[[1]]
+  expect_class(predict_out, "Multiplicity")
+  expect_equal(length(predict_out), 2L)
+  expect_true(all(mlr3misc::map_lgl(predict_out, inherits, what = "Task")))
+
+  orig_tasks = as.list(tasks)
+  pred_tasks = as.list(predict_out)
+  expect_true(all(unlist(Map(function(pred_task, orig_task) {
+    all(pred_task$feature_names %in% paste0(po$id, ".prob.", orig_task$class_names))
+  }, pred_tasks, orig_tasks))))
+})
+
 test_that("PipeOpLearnerCV - cv ensemble requires resampling method cv", {
   skip_if_not_installed("rpart")
   po = PipeOpLearnerCV$new(
@@ -154,6 +183,65 @@ test_that("PipeOpLearnerCV - cv ensemble requires resampling method cv", {
     param_vals = list(resampling.method = "insample", resampling.predict_method = "cv_ensemble")
   )
   expect_error(po$train(list(tsk("iris"))), "cv_ensemble")
+})
+
+test_that("PipeOpLearnerCV - learner_model returns averaged ensemble", {
+  skip_if_not_installed("rpart")
+  task = tsk("iris")
+  learner = lrn("classif.rpart", predict_type = "prob")
+  po = PipeOpLearnerCV$new(learner,
+    param_vals = list(resampling.predict_method = "cv_ensemble", resampling.keep_response = TRUE)
+  )
+  po$train(list(task))
+
+  learner_model = po$learner_model
+  expect_class(learner_model, "GraphLearner")
+
+  task_prediction = po$predict(list(task))[[1]]
+  dt_po = task_prediction$data(rows = task$row_ids, cols = task_prediction$feature_names)
+
+  graph_prediction = learner_model$predict(task)
+  expect_class(graph_prediction, "PredictionClassif")
+  dt_graph = as.data.table(graph_prediction)
+  data.table::setorder(dt_graph, row_ids)
+
+  prob_cols = paste0(po$id, ".prob.", task$class_names)
+  graph_prob_cols = paste0("prob.", task$class_names)
+  graph_matrix = as.matrix(dt_graph[, graph_prob_cols, with = FALSE])
+  colnames(graph_matrix) = prob_cols
+  expect_equal(as.matrix(dt_po[, prob_cols, with = FALSE]), graph_matrix)
+
+  expect_equal(
+    as.character(dt_po[[sprintf("%s.response", po$id)]]),
+    as.character(dt_graph$response)
+  )
+})
+
+test_that("PipeOpLearnerCV - cv ensemble with predict_type = 'se'", {
+  skip_if_not_installed("mlr3learners")
+  task = tsk("mtcars")
+  learner = lrn("regr.lm", predict_type = "se")
+  po = PipeOpLearnerCV$new(learner,
+    param_vals = list(resampling.predict_method = "cv_ensemble")
+  )
+  po$train(list(task))
+  result_task = po$predict(list(task))[[1]]
+
+  response_col = sprintf("%s.response", po$id)
+  se_col = sprintf("%s.se", po$id)
+  expect_true(all(c(response_col, se_col) %in% result_task$feature_names))
+
+  manual_preds = mlr3misc::map(po$state$cv_model_states, function(state) {
+    clone = learner$clone(deep = TRUE)
+    clone$state = state
+    clone$predict(task)
+  })
+
+  manual_response = Reduce(`+`, mlr3misc::map(manual_preds, "response")) / length(manual_preds)
+  expect_equal(result_task$data(rows = task$row_ids, cols = response_col)[[1]], manual_response)
+
+  manual_se = Reduce(`+`, mlr3misc::map(manual_preds, "se")) / length(manual_preds)
+  expect_equal(result_task$data(rows = task$row_ids, cols = se_col)[[1]], manual_se)
 })
 
 test_that("PipeOpLearnerCV - within resampling", {
