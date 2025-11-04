@@ -165,7 +165,7 @@ PipeOpRegrAvg = R6Class("PipeOpRegrAvg",
 
       response_matrix = simplify2array(responses)
       response = c(response_matrix %*% weights)
-      se = aggregate_se_weighted(responses, ses, weights, pv$se_aggr, pv$se_aggr_rho)
+      se = aggregate_se_weighted(responses, ses, weights, method = pv$se_aggr, rho = pv$se_aggr_rho %??% 0)
 
       PredictionRegr$new(row_ids = row_ids, truth = truth, response = response, se = se)
     }
@@ -181,7 +181,7 @@ mlr_pipeops$add("regravg", PipeOpRegrAvg)
 #' @param ses_list   NULL or list of numeric vectors (length N), per-model SEs.
 #'                   If non-NULL, must have same length and alignment as means_list.
 #' @param weights    numeric vector of length K summing to 1 (checked elsewhere).
-#' @param method     one of c("predictive", "mean", "within", "between").
+#' @param method     one of "none", "predictive", "mean", "within", "between".
 #' @param rho        numeric scalar for "mean" method; equicorrelation parameter.
 #'                   Will be clamped to [-1/(K-1), 1] if K > 1; ignored otherwise.
 #' @return numeric vector (length N) of aggregated SEs.
@@ -190,6 +190,11 @@ aggregate_se_weighted = function(means_list, ses_list = NULL, weights,
   rho = 0
 ) {
   assert_choice(method, c("none", "predictive", "mean", "within", "between"))
+  assert_number(rho, lower = -1, upper = 1)
+  assert_list(means_list, types = "numeric", any.missing = FALSE)
+  assert_list(ses_list, types = "numeric", any.missing = FALSE, len = length(means_list), null.ok = TRUE)
+  assert_numeric(weights, len = length(means_list), any.missing = FALSE, finite = TRUE)
+
   K = length(means_list)
   if (K == 0L) stop("internal error: means_list must have length >= 1.")
   N = length(means_list[[1L]])
@@ -211,7 +216,7 @@ aggregate_se_weighted = function(means_list, ses_list = NULL, weights,
   }
 
   if (is.null(ses_list)) {
-    stop("Selected method requires `ses_list`, but it is NULL. Use method='between'.")
+    stop("Selected method requires `ses_list`, but it is NULL. Use method \"between\" or \"none\".")
   }
   if (length(ses_list) != K) stop("ses_list length must equal means_list length.")
   if (!all(vapply(ses_list, length, integer(1)) == N)) stop("All SE vectors must have same length.")
