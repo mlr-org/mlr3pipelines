@@ -270,17 +270,19 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     },
     aggregate_predictions = function(predictions) {
       if (!length(predictions)) stop("No predictions available to aggregate.")
+      alignment = private$align_predictions(predictions)
+      weights = rep(1 / length(predictions), length(predictions))
+      weights = weights / sum(weights)
       task_type = private$.learner$task_type
       if (task_type == "classif") {
-        return(private$aggregate_classif_predictions(predictions))
+        return(private$aggregate_classif_predictions(alignment, weights))
       }
       if (task_type == "regr") {
-        return(private$aggregate_regr_predictions(predictions))
+        return(private$aggregate_regr_predictions(alignment, weights))
       }
       stopf("`resampling.predict_method = \"cv_ensemble\"` is not implemented for task type '%s'.", task_type)
     },
-    aggregate_classif_predictions = function(predictions) {
-      weights = rep(1 / length(predictions), length(predictions))
+    align_predictions = function(predictions) {
       row_ids = predictions[[1]]$row_ids
       ordering = order(row_ids)
       row_ids = row_ids[ordering]
@@ -296,53 +298,41 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       if (!is.null(truth)) {
         truth = truth[ordering]
       }
+      list(row_ids = row_ids, truth = truth, aligned = aligned)
+    },
+    aggregate_classif_predictions = function(alignment, weights) {
+      aligned = alignment$aligned
       prob_list = map(aligned, function(x) x$pred$prob)
       if (length(prob_list) && all(map_lgl(prob_list, Negate(is.null)))) {
         prob = weighted_matrix_sum(map(seq_along(prob_list), function(i) prob_list[[i]][aligned[[i]]$idx, , drop = FALSE]), weights)
         prob = pmin(pmax(prob, 0), 1)
         lvls = colnames(prob)
         response = factor(lvls[max.col(prob, ties.method = "first")], levels = lvls)
-        return(PredictionClassif$new(row_ids = row_ids, truth = truth, response = response, prob = prob))
+        return(PredictionClassif$new(row_ids = alignment$row_ids, truth = alignment$truth, response = response, prob = prob))
       }
       responses = map(aligned, function(x) x$pred$response[x$idx])
       lvls = levels(responses[[1]])
       freq = weighted_factor_mean(responses, weights, lvls)
       response = factor(lvls[max.col(freq, ties.method = "first")], levels = lvls)
-      PredictionClassif$new(row_ids = row_ids, truth = truth, response = response)
+      PredictionClassif$new(row_ids = alignment$row_ids, truth = alignment$truth, response = response)
     },
-    aggregate_regr_predictions = function(predictions) {
-      weights = rep(1 / length(predictions), length(predictions))
-      row_ids = predictions[[1]]$row_ids
-      ordering = order(row_ids)
-      row_ids = row_ids[ordering]
-      truth = predictions[[1]]$truth
-      if (!is.null(truth)) {
-        truth = truth[ordering]
-      }
-      responses = map(predictions, function(pred) {
-        idx = match(row_ids, pred$row_ids)
-        if (anyNA(idx)) {
-          stop("Mismatch in row ids between CV predictions.")
-        }
-        pred$response[idx]
+    aggregate_regr_predictions = function(alignment, weights) {
+      responses = map(alignment$aligned, function(x) x$pred$response[x$idx])
+      response = Reduce(`+`, Map(function(resp, w) resp * w, responses, weights))
+      se_aligned = map(alignment$aligned, function(x) {
+        se = x$pred$se
+        if (is.null(se)) return(NULL)
+        se[x$idx]
       })
-      response = Reduce(`+`, responses) / length(responses)
-      se_list = map(predictions, "se")
-      if (all(map_lgl(se_list, is.null))) {
+      if (all(map_lgl(se_aligned, is.null))) {
         se = NULL
       } else {
-        if (any(map_lgl(se_list, is.null))) {
+        if (any(map_lgl(se_aligned, is.null))) {
           stop("Learners returned standard errors for only a subset of CV models.")
         }
-        se = Reduce(`+`, map(seq_along(se_list), function(i) {
-          idx = match(row_ids, predictions[[i]]$row_ids)
-          if (anyNA(idx)) {
-            stop("Mismatch in row ids between CV predictions.")
-          }
-          se_list[[i]][idx]
-        })) / length(se_list)
+        se = Reduce(`+`, Map(function(se_vec, w) se_vec * w, se_aligned, weights))
       }
-      PredictionRegr$new(row_ids = row_ids, truth = truth, response = response, se = se)
+      PredictionRegr$new(row_ids = alignment$row_ids, truth = alignment$truth, response = response, se = se)
     },
     make_cv_state = function(cv_model_states) {
       list(
