@@ -87,7 +87,8 @@
 #' * `resampling.se_aggr` :: `character(1)`\cr
 #'   Standard error aggregation used when `"cv_ensemble"` predictions are produced for regression learners with `predict_type`
 #'   containing `"se"`. Shares the definitions with [`PipeOpRegrAvg`], i.e. `"predictive"`, `"mean"`, `"within"`, `"between"`, `"none"`.
-#'   Defaults to `"predictive"` (within-fold variance plus between-fold disagreement).
+#'   Initialized to `"predictive"` (within-fold variance plus between-fold disagreement) when constructed with a [`Learner`][mlr3::Learner] that has `predict_type = "se"`;
+#'   otherwise to `"none"`.
 #' * `resampling.se_aggr_rho` :: `numeric(1)`\cr
 #'   Equicorrelation parameter for `resampling.se_aggr = "mean"`, interpreted as in [`PipeOpRegrAvg`]. Ignored otherwise.
 #'   Defaults to `0` when `resampling.se_aggr = "mean"`.
@@ -155,7 +156,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         folds = 3,
         keep_response = FALSE,
         predict_method = "full",
-        se_aggr = "predictive"
+        se_aggr = if (private$.learner$predict_type == "se") "predictive" else "none"
       )
       # Dependencies in paradox have been broken from the start and this is known since at least a year:
       # https://github.com/mlr-org/paradox/issues/216
