@@ -293,11 +293,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         list(pred = pred, idx = idx)
       }
       aligned = map(predictions, align_prediction)
-      truth = predictions[[1]]$truth
-      if (!is.null(truth)) {
-        truth = truth[ordering]
-      }
-      list(row_ids = row_ids, truth = truth, aligned = aligned)
+      list(row_ids = row_ids, aligned = aligned)
     },
     aggregate_classif_predictions = function(alignment, weights) {
       aligned = alignment$aligned
@@ -309,9 +305,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         response = factor(lvls[max.col(prob, ties.method = "first")], levels = lvls)
         prob_dt = data.table(prob)
         setnames(prob_dt, paste0("prob.", lvls))
-        dt = data.table(row_ids = alignment$row_ids)
-        if (!is.null(alignment$truth)) dt[, truth := alignment$truth]
-        dt[, response := response]
+        dt = data.table(row_ids = alignment$row_ids, response = response)
         dt = cbind(dt, prob_dt)
         return(dt)
       }
@@ -319,10 +313,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       lvls = levels(responses[[1]])
       freq = weighted_factor_mean(responses, weights, lvls)
       response = factor(lvls[max.col(freq, ties.method = "first")], levels = lvls)
-      dt = data.table(row_ids = alignment$row_ids)
-      if (!is.null(alignment$truth)) dt[, truth := alignment$truth]
-      dt[, response := response]
-      dt
+      data.table(row_ids = alignment$row_ids, response = response)
     },
     aggregate_regr_predictions = function(alignment, weights) {
       responses = map(alignment$aligned, function(x) x$pred$response[x$idx])
@@ -340,9 +331,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         }
         se = Reduce(`+`, Map(function(se_vec, w) se_vec * w, se_aligned, weights))
       }
-      dt = data.table(row_ids = alignment$row_ids)
-      if (!is.null(alignment$truth)) dt[, truth := alignment$truth]
-      dt[, response := response]
+      dt = data.table(row_ids = alignment$row_ids, response = response)
       if (!is.null(se)) {
         dt[, se := se]
       }
