@@ -91,7 +91,7 @@
 #' * `resampling.se_aggr_rho` :: `numeric(1)`\cr
 #'   Equicorrelation parameter for `resampling.se_aggr = "mean"`, interpreted as in [`PipeOpRegrAvg`]. Ignored otherwise.
 #'   Defaults to `1` when `resampling.se_aggr = "mean"`, otherwise to `0`.
-#' 
+#'
 #' @section Internals:
 #' The `$state` is currently not updated by prediction, so the `$state$predict_log` and `$state$predict_time` will always be `NULL`.
 #'
@@ -261,8 +261,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       if (!self$param_set$values$resampling.keep_response && self$learner$predict_type == "prob") {
         prds[, response := NULL]
       }
-      se_cfg = private$se_config()
-      if ((self$learner$predict_type != "se" || se_cfg$method == "none") && "se" %in% colnames(prds)) {
+      se_aggr = private$.crossval_param_set$get_values()$se_aggr
+      if ((self$learner$predict_type != "se" || se_aggr == "none") && "se" %in% colnames(prds)) {
         prds[, se := NULL]
       }
       renaming = setdiff(colnames(prds), c("row_id", "row_ids"))
@@ -340,7 +340,6 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     aggregate_regr_predictions = function(alignment) {
       responses = map(alignment$aligned, function(x) x$pred$response[x$idx])
       k = length(responses)
-      weights = rep(1 / k, k)
       response = Reduce(`+`, responses) / k
       se_aligned = map(alignment$aligned, function(x) {
         se = x$pred$se
@@ -354,8 +353,10 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         }
         ses_list = se_aligned
       }
-      se_cfg = private$se_config()
-      se = aggregate_se_weighted(responses, ses_list, weights, method = se_cfg$method, rho = se_cfg$rho)
+      se_cfg = private$.crossval_param_set$get_values()
+      weights = rep(1 / k, k)
+
+      se = aggregate_se_weighted(responses, ses_list, weights, method = se_cfg$se_aggr, rho = se_cfg$se_aggr_rho %??% 0)
       dt = data.table(row_ids = alignment$row_ids, response = response)
       if (!is.null(se)) {
         dt[, se := se]
@@ -408,12 +409,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         stopf("Task type '%s' not supported for cv ensemble.", private$.learner$task_type)
       )
       if (inherits(aggregator, "PipeOpRegrAvg")) {
-        se_cfg = private$se_config()
-        vals = list(se_aggr = se_cfg$method)
-        if (se_cfg$method == "mean" && !is.null(se_cfg$raw_rho)) {
-          vals$se_aggr_rho = se_cfg$raw_rho
-        }
-        do.call(aggregator$param_set$set_values, vals)
+        se_cfg = private$.crossval_param_set$get_values(tags = "se_aggr")
+        aggregator$param_set$set_values(.values = se_cfg)
       }
       aggregator$state = list()
       graph = gunion(pipeops) %>>% aggregator
@@ -423,12 +420,6 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       glrn$model = graph_state
       glrn$man = private$.learner$man
       glrn
-    },
-    se_config = function() {
-      vals = self$param_set$values
-      method = vals$resampling.se_aggr
-      rho_raw = vals$resampling.se_aggr_rho
-      list(method = method, rho = rho_raw %??% 0, raw_rho = rho_raw)
     },
     .crossval_param_set = NULL,
     .learner = NULL,
