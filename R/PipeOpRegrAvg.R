@@ -80,7 +80,6 @@
 #'
 #' Weights can be set as a parameter; if none are provided, defaults to
 #' equal weights for each prediction.
-#' Defaults to equal weights for each model.
 #'
 #' @section Construction:
 #' ```
@@ -133,22 +132,22 @@
 #' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
 #'
-#' # Simple Bagging
+#' # Simple Bagging for Regression
 #' gr = ppl("greplicate",
 #'   po("subsample") %>>%
-#'   po("learner", lrn("classif.rpart")),
+#'   po("learner", lrn("regr.rpart")),
 #'   n = 5
 #' ) %>>%
-#'   po("classifavg")
+#'   po("regravg")
 #'
-#' resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
+#' resample(tsk("mtcars"), GraphLearner$new(gr), rsmp("holdout"))
 PipeOpRegrAvg = R6Class("PipeOpRegrAvg",
   inherit = PipeOpEnsemble,
 
   public = list(
     initialize = function(innum = 0, collect_multiplicity = FALSE, id = "regravg", param_vals = list(), ...) {
       param_set = ps(
-        se_aggr = p_fct(levels = c("predictive", "mean", "within", "between", "none"), init = "none", tags = c("predict", "se_aggr"))
+        se_aggr = p_fct(levels = c("predictive", "mean", "within", "between", "none"), init = "none", tags = c("predict", "se_aggr")),
         se_aggr_rho = p_dbl(lower = -1, upper = 1, default = 0, requires = quote(se_aggr == "mean"), tags = c("predict", "se_aggr"))
       )
       super$initialize(innum, collect_multiplicity, id, param_set = param_set, param_vals = param_vals, prediction_type = "PredictionRegr", ...)
@@ -184,9 +183,9 @@ mlr_pipeops$add("regravg", PipeOpRegrAvg)
 #' @param method     one of "none", "predictive", "mean", "within", "between".
 #' @param rho        numeric scalar for "mean" method; equicorrelation parameter.
 #'                   Will be clamped to [-1/(K-1), 1] if K > 1; ignored otherwise.
-#' @return numeric vector (length N) of aggregated SEs.
+#' @return numeric vector (length N) of aggregated SEs, or `NULL` if `method = "none"`.
 aggregate_se_weighted = function(means_list, ses_list = NULL, weights,
-  method = "none"
+  method = "none",
   rho = 0
 ) {
   assert_choice(method, c("none", "predictive", "mean", "within", "between"))
@@ -213,6 +212,10 @@ aggregate_se_weighted = function(means_list, ses_list = NULL, weights,
 
   if (method == "between") {
     return(sqrt(v_between))
+  }
+
+  if (method == "none") {
+    return(NULL)
   }
 
   if (is.null(ses_list)) {
