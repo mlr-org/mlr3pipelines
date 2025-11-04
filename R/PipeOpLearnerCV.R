@@ -87,10 +87,10 @@
 #' * `resampling.se_aggr` :: `character(1)`\cr
 #'   Standard error aggregation used when `"cv_ensemble"` predictions are produced for regression learners with `predict_type`
 #'   containing `"se"`. Shares the definitions with [`PipeOpRegrAvg`], i.e. `"predictive"`, `"mean"`, `"within"`, `"between"`, `"none"`.
-#'   Defaults to `"mean"` (arithmetic averaging of SEs, equivalent to `"mean"` with `rho = 1`).
+#'   Defaults to `"predictive"` (within-fold variance plus between-fold disagreement).
 #' * `resampling.se_aggr_rho` :: `numeric(1)`\cr
 #'   Equicorrelation parameter for `resampling.se_aggr = "mean"`, interpreted as in [`PipeOpRegrAvg`]. Ignored otherwise.
-#'   Defaults to `1` when `resampling.se_aggr = "mean"`, otherwise to `0`.
+#'   Defaults to `0` when `resampling.se_aggr = "mean"`.
 #'
 #' @section Internals:
 #' The `$state` is currently not updated by prediction, so the `$state$predict_log` and `$state$predict_time` will always be `NULL`.
@@ -395,10 +395,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     build_cv_graph_learner = function(cv_model_states) {
       assert_list(cv_model_states, types = "list", min.len = 1)
       pipeops = map(seq_along(cv_model_states), function(i) {
-        learner_clone = private$.learner$clone(deep = TRUE)
-        learner_clone$state = cv_model_states[[i]]
         po_id = sprintf("%s.cv_model_%02d", self$id, i)
-        polrn = PipeOpLearner$new(learner_clone, id = po_id)
+        polrn = PipeOpLearner$new(private$.learner, id = po_id)
         polrn$state = cv_model_states[[i]]
         polrn
       })
@@ -413,7 +411,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         aggregator$param_set$set_values(.values = se_cfg)
       }
       aggregator$state = list()
-      graph = gunion(pipeops) %>>% aggregator
+      graph = gunion(pipeops) %>>!% aggregator
       graph_state = graph$state
       class(graph_state) = c("graph_learner_model", class(graph_state))
       glrn = GraphLearner$new(graph)
