@@ -263,7 +263,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       if (!self$param_set$values$resampling.keep_response && self$learner$predict_type == "prob") {
         prds[, response := NULL]
       }
-      se_aggr = private$.crossval_param_set$get_values()$se_aggr
+      se_aggr = private$.crossval_param_set$get_values()$se_aggr %??% "none"
       if ((self$learner$predict_type != "se" || se_aggr == "none") && "se" %in% colnames(prds)) {
         prds[, se := NULL]
       }
@@ -358,7 +358,9 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       se_cfg = private$.crossval_param_set$get_values()
       weights = rep(1 / k, k)
 
-      se = aggregate_se_weighted(responses, ses_list, weights, method = se_cfg$se_aggr, rho = se_cfg$se_aggr_rho %??% 0)
+      method = se_cfg$se_aggr %??% "none"
+      rho = se_cfg$se_aggr_rho %??% 0
+      se = aggregate_se_weighted(responses, ses_list, weights, method = method, rho = rho)
       dt = data.table(row_ids = alignment$row_ids, response = response)
       if (!is.null(se)) {
         dt[, se := se]

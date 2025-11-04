@@ -42,14 +42,13 @@ test_that("PipeOpLearnerCV - param values", {
   skip_if_not_installed("rpart")
   lrn = mlr_learners$get("classif.rpart")
   polrn = PipeOpLearnerCV$new(lrn)
-  expect_subset(c("minsplit", "resampling.method", "resampling.folds", "resampling.predict_method",
-    "resampling.se_aggr", "resampling.se_aggr_rho"), polrn$param_set$ids())
+  expect_true(all(c("minsplit", "resampling.method", "resampling.folds", "resampling.predict_method") %in% polrn$param_set$ids()))
+  expect_false(any(c("resampling.se_aggr", "resampling.se_aggr_rho") %in% polrn$param_set$ids()))
   expect_equal(polrn$param_set$values, list(
     resampling.method = "cv",
     resampling.folds = 3,
     resampling.keep_response = FALSE,
     resampling.predict_method = "full",
-    resampling.se_aggr = "none",
     xval = 0
   ))
   polrn$param_set$values$minsplit = 2
@@ -58,7 +57,6 @@ test_that("PipeOpLearnerCV - param values", {
     resampling.folds = 3,
     resampling.keep_response = FALSE,
     resampling.predict_method = "full",
-    resampling.se_aggr = "none",
     minsplit = 2,
     xval = 0
   ))
@@ -68,7 +66,6 @@ test_that("PipeOpLearnerCV - param values", {
     resampling.folds = 4,
     resampling.keep_response = FALSE,
     resampling.predict_method = "full",
-    resampling.se_aggr = "none",
     minsplit = 2,
     xval = 0
   ))
@@ -78,12 +75,18 @@ test_that("PipeOpLearnerCV se aggregation default matches learner predict_type",
   learner_resp = LearnerRegrDebug$new()
   learner_resp$predict_type = "response"
   po_resp = PipeOpLearnerCV$new(learner_resp)
+  expect_true("resampling.se_aggr" %in% po_resp$param_set$ids())
   expect_identical(po_resp$param_set$values$resampling.se_aggr, "none")
 
   learner_se = LearnerRegrDebug$new()
   learner_se$predict_type = "se"
   po_se = PipeOpLearnerCV$new(learner_se)
+  expect_true(all(c("resampling.se_aggr", "resampling.se_aggr_rho") %in% po_se$param_set$ids()))
   expect_identical(po_se$param_set$values$resampling.se_aggr, "predictive")
+
+  learner_no_se = lrn("regr.rpart")
+  po_no_se = PipeOpLearnerCV$new(learner_no_se)
+  expect_false(any(c("resampling.se_aggr", "resampling.se_aggr_rho") %in% po_no_se$param_set$ids()))
 })
 
 test_that("PipeOpLearnerCV - cv ensemble averages fold learners", {
