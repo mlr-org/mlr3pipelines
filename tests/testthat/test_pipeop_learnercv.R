@@ -146,6 +146,51 @@ test_that("PipeOpLearnerCV - cv ensemble drops response when requested", {
   expect_false(any(sprintf("%s.response", po$id) %in% result_task$feature_names))
 })
 
+test_that("PipeOpLearnerCV - cv ensemble averages classif responses", {
+  skip_if_not_installed("rpart")
+  task = tsk("iris")
+  learner = lrn("classif.rpart", predict_type = "response")
+  po = PipeOpLearnerCV$new(learner,
+    param_vals = list(resampling.predict_method = "cv_ensemble")
+  )
+  po$train(list(task))
+  expect_equal(po$state$predict_method, "cv_ensemble")
+  expect_true(length(po$state$cv_model_states) > 1)
+
+  result_task = po$predict(list(task))[[1]]
+  response_feature = sprintf("%s.response", po$id)
+  expect_setequal(result_task$feature_names, response_feature)
+
+  manual_responses = mlr3misc::map(po$state$cv_model_states, function(state) {
+    clone = learner$clone(deep = TRUE)
+    clone$state = state
+    pred_dt = as.data.table(clone$predict(task))
+    data.table::setorderv(pred_dt, "row_ids")
+    as.character(pred_dt$response)
+  })
+
+  manual_matrix = as.matrix(do.call(cbind, manual_responses))
+  n = nrow(manual_matrix)
+  prob_matrix = vapply(task$class_names, function(cls) rowMeans(manual_matrix == cls), numeric(n))
+  if (!is.matrix(prob_matrix)) {
+    prob_matrix = matrix(prob_matrix, ncol = length(task$class_names))
+  }
+  colnames(prob_matrix) = task$class_names
+  manual_response = task$class_names[max.col(prob_matrix, ties.method = "first")]
+  manual_response = factor(manual_response, levels = task$class_names)
+
+  observed_response = result_task$data(rows = task$row_ids, cols = response_feature)[[1]]
+  expect_equal(as.character(observed_response), as.character(manual_response))
+
+  learner_prediction = po$learner_model$predict(task)
+  expect_equal(as.character(learner_prediction$response), as.character(manual_response))
+  pred_dt = as.data.table(learner_prediction)
+  data.table::setorderv(pred_dt, "row_ids")
+  graph_prob = as.matrix(pred_dt[, paste0("prob.", task$class_names), with = FALSE])
+  colnames(graph_prob) = task$class_names
+  expect_equal(graph_prob, prob_matrix)
+})
+
 test_that("PipeOpLearnerCV - cv ensemble averages regression predictions", {
   skip_if_not_installed("rpart")
   task = TaskRegr$new("mtcars", backend = data.table::as.data.table(mtcars), target = "mpg")
