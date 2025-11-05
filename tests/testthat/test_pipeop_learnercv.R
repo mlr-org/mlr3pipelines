@@ -232,6 +232,87 @@ test_that("PipeOpLearnerCV - cv ensemble log prob aggregation", {
   expect_equal(as.character(graph_dt$response), as.character(expected_response))
 })
 
+test_that("PipeOpLearnerCV - log aggregation with zeros uses epsilon", {
+  backend = data.table::data.table(
+    x = 1:2,
+    y = factor(c("a", "b"), levels = c("a", "b"))
+  )
+  task = TaskClassif$new("two_point", backend = backend, target = "y")
+  learner = lrn("classif.featureless", predict_type = "prob")
+  po = PipeOpLearnerCV$new(learner, param_vals = list(
+    resampling.method = "cv",
+    resampling.folds = 2,
+    resampling.predict_method = "cv_ensemble",
+    resampling.prob_aggr = "log",
+    resampling.prob_aggr_eps = 1e-8
+  ))
+
+  po$train(list(task))
+  result_task = po$predict(list(task))[[1]]
+  prob_cols = paste0(po$id, ".prob.", task$class_names)
+  probs = as.matrix(result_task$data(rows = task$row_ids, cols = prob_cols))
+  expect_false(any(is.nan(probs)))
+  expect_equal(
+    unname(probs),
+    matrix(rep(0.5, length(task$row_ids) * length(task$class_names)),
+      ncol = length(task$class_names), byrow = TRUE
+    )
+  )
+})
+
+test_that("PipeOpLearnerCV - log aggregation epsilon controls shrinkage", {
+  backend = data.table::data.table(
+    x = 1:3,
+    y = factor(c("a", "b", "b"), levels = c("a", "b"))
+  )
+  task = TaskClassif$new("three_point", backend = backend, target = "y")
+  learner = lrn("classif.featureless", predict_type = "prob")
+
+  po = PipeOpLearnerCV$new(learner, param_vals = list(
+    resampling.method = "cv",
+    resampling.folds = 3,
+    resampling.predict_method = "cv_ensemble",
+    resampling.prob_aggr = "log",
+    resampling.prob_aggr_eps = 1e-12
+  ))
+  po$train(list(task))
+  result_task = po$predict(list(task))[[1]]
+
+  manual_probs = mlr3misc::map(po$state$cv_model_states, function(state) {
+    clone = learner$clone(deep = TRUE)
+    clone$state = state
+    dt = as.data.table(clone$predict(task))
+    data.table::setorder(dt, row_ids)
+    as.matrix(dt[, paste0("prob.", task$class_names), with = FALSE])
+  })
+  weights = rep(1 / length(manual_probs), length(manual_probs))
+  expected_eps = mlr3pipelines:::weighted_matrix_logpool(
+    manual_probs, weights, epsilon = po$param_set$values$resampling.prob_aggr_eps
+  )
+  prob_cols = paste0(po$id, ".prob.", task$class_names)
+  observed_eps = as.matrix(result_task$data(rows = task$row_ids, cols = prob_cols))
+  expect_false(any(is.nan(observed_eps)))
+  expect_equal(unname(observed_eps), unname(expected_eps), tolerance = 1e-10)
+
+  po$param_set$values$resampling.prob_aggr_eps = 0
+  po$train(list(task))
+  result_zero = po$predict(list(task))[[1]]
+  manual_probs_zero = mlr3misc::map(po$state$cv_model_states, function(state) {
+    clone = learner$clone(deep = TRUE)
+    clone$state = state
+    dt = as.data.table(clone$predict(task))
+    data.table::setorder(dt, row_ids)
+    as.matrix(dt[, paste0("prob.", task$class_names), with = FALSE])
+  })
+  weights_zero = rep(1 / length(manual_probs_zero), length(manual_probs_zero))
+  manual_zero = mlr3pipelines:::weighted_matrix_logpool(manual_probs_zero, weights_zero, epsilon = 0)
+  colnames(manual_zero) = paste0(po$id, ".prob.", task$class_names)
+  observed_zero = as.matrix(result_zero$data(rows = task$row_ids, cols = prob_cols))
+  expect_equal(unname(observed_zero), unname(manual_zero))
+  expect_equal(observed_zero[, prob_cols[2]], rep(1, task$nrow))
+  expect_equal(observed_zero[, prob_cols[1]], rep(0, task$nrow))
+})
+
 test_that("PipeOpLearnerCV - cv ensemble averages regression predictions", {
   skip_if_not_installed("rpart")
   task = TaskRegr$new("mtcars", backend = data.table::as.data.table(mtcars), target = "mpg")

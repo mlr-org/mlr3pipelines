@@ -93,3 +93,35 @@ test_that("PipeOpClassifAvg aggregates factor responses when probabilities are m
   expected_response = factor(lvls[max.col(expected_freq, ties.method = "first")], levels = lvls)
   expect_equal(result$response, expected_response)
 })
+
+test_that("PipeOpClassifAvg log aggregation handles zeros with epsilon", {
+  row_ids = 1
+  lvls = c("a", "b")
+  truth = factor("a", levels = lvls)
+  prob_list = list(
+    matrix(c(0, 1), ncol = length(lvls), dimnames = list(NULL, lvls)),
+    matrix(c(0.5, 0.5), ncol = length(lvls), dimnames = list(NULL, lvls)),
+    matrix(c(0.5, 0.5), ncol = length(lvls), dimnames = list(NULL, lvls))
+  )
+  predictions = lapply(prob_list, function(prob) {
+    PredictionClassif$new(row_ids = row_ids, truth = truth, prob = prob)
+  })
+
+  po = po("classifavg")
+  po$param_set$values$weights = rep(1 / length(predictions), length(predictions))
+  po$param_set$values$prob_aggr = "log"
+  po$param_set$values$prob_aggr_eps = 1e-12
+
+  po$train(replicate(length(predictions), NULL, simplify = FALSE))
+  result_eps = po$predict(predictions)[[1]]
+  expect_true(all(is.finite(result_eps$prob)))
+  expected_eps = mlr3pipelines:::weighted_matrix_logpool(prob_list, po$param_set$values$weights, epsilon = 1e-12)
+  expect_equal(result_eps$prob, expected_eps, tolerance = 1e-10)
+
+  po$param_set$values$prob_aggr_eps = 0
+  po$train(replicate(length(predictions), NULL, simplify = FALSE))
+  result_zero = po$predict(predictions)[[1]]
+  expected_zero = mlr3pipelines:::weighted_matrix_logpool(prob_list, po$param_set$values$weights, epsilon = 0)
+  expect_equal(result_zero$prob, expected_zero)
+  expect_equal(as.numeric(result_zero$prob[1, ]), c(0, 1))
+})
