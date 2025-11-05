@@ -44,6 +44,7 @@ When fixing problems, always make sure you know the actual reason of the problem
 Straightforwardness: Avoid ideological adherence to other programming principles when something can be solved in a simple, short, straightforward way. Otherwise:
 
 - Simplicity: Favor small, focused components and avoid unnecessary complexity in design or logic.
+- This also means: avoid overly defensive code. Observe the typical level of defensiveness when looking at the code.
 - Idiomaticity: Solve problems the way they "should" be solved, in the respective language: the way a professional in that language would have approached it.
 - Readability and maintainability are primary concerns, even at the cost of conciseness or performance.
 - Doing it right is better than doing it fast. You are not in a rush. Never skip steps or take shortcuts.
@@ -56,6 +57,7 @@ Straightforwardness: Avoid ideological adherence to other programming principles
 
 - The package is very object-oriented; most things use R6.
 - Coding style: we use `snake_case` for variables, `UpperCamelCase` for R6 classes. We use `=` for assignment and mostly use the tidyverse style guide otherwise. We use block-indent (two spaces), *not* visual indent; i.e., we don't align code with opening parentheses in function calls, we align by block depth.
+- User-facing API (`@export`ed things, public R6 methods) always need checkmate `asserts_***()` argument checks. Otherwise don't be overly defensive, look at the other code in the project to see our esired level of paranoia.
 - Always read at least `R/PipeOp.R` and `R/PipeOpTaskPreproc.R` to see the base classes you will need in almost every task.
 - Read `R/Graph.R` and `R/GraphLearner.R` to understand the Graph architecture.
 - Before you start coding, look at other relevant `.R` files that do something similar to what you are supposed to implement.
@@ -78,6 +80,8 @@ Straightforwardness: Avoid ideological adherence to other programming principles
   - We initialize a parameter by giving the `p_xxx(init = )` argument. Some old code does `param_set$values = list(...)` or `param_set$values$param = ...` in the constructor. This is deprecated; we do not unnecessarily change it in old code, but new code should have `init = `. A parameter should be documented as "initialized to" something if and only if the value is set through one of these methods in the constructor.
   - Inside the train / predict functions of PipeOps, hyperparameter values should be obtained through `pv = self$param_set$get_values(tags = )`, where `tags` is often `"train"`, `"predict"`, or some custom tag that groups hyperparameters by meaning somehow (e.g. everything that should be passed to a specific function). A nice pattern is to call a function `fname` with many options configured through `pv` while also explicitly passing some arguments as `invoke(fname, arg1 = val1, arg2 = val2, .args = pv)`, using `invoke` from `mlr3misc`.
   - paradox does type-checking and range-checking automatically; `get_values()` automatically checks that `"required"` params are present and not `NULL`. Therefore, we only do additional parameter feasibility checks in the rarest of cases.
+- Minor things to be aware of:
+  - Errors that are thrown in PipeOps are automatically wrapped by Graph to also mention the PipeOp ID, so it is not necessary to include that in error messages.
 
 </project_info>
 <agent_notes>
