@@ -56,7 +56,7 @@ Initialized to \code{FALSE}.
 
 \section{Internals}{
 
-Uses the \verb{$rename()} mutator of the \code{\link[mlr3:Task]{Task}} to set the new column names.
+Uses the \verb{$rename()} mutator of the \code{\link[mlr3:Task]{Task}} to set new column names.
 }
 
 \section{Fields}{

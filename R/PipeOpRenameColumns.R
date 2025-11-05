@@ -41,7 +41,7 @@
 #'   Initialized to `FALSE`.
 #'
 #' @section Internals:
-#' Uses the `$rename()` mutator of the [`Task`][mlr3::Task] to set the new column names.
+#' Uses the `$rename()` mutator of the [`Task`][mlr3::Task] to set new column names.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
