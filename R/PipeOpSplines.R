@@ -32,24 +32,25 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `factor`  :: `character(1)` \cr
-#'   "Polynomial" when polynomial splines are applied [`splines::bs`] or
-#'   "natural" when natural natural splines are applied [`splines::ns`].
-#'   Default is "polynomial".
+#'   `polynomial` when polynomial splines are applied [`splines::bs`] or
+#'   `natural` when natural natural splines are applied [`splines::ns`].
+#'   Default is `polynomial`.
 #' * `df`  :: `integer(1)` \cr
 #'   Number of degrees of freedom for calculation of splines basis matrix.
-#'   Default is NULL.
+#'   Default is `NULL`.
 #'   For further information look up [`splines::bs()`] or [`splines::ns()`].
 #' * `knots` :: named `list` \cr
-#'   The internal breakpoints that define the spline. The default is no knots.
-#'   For further information consult [`splines::bs()`] or [`splines::ns()`].
+#'   The internal breakpoints that define the spline. Parameter has to be passed as a named list.
+#'   Default is `NULL`. For further information consult [`splines::bs()`] or [`splines::ns()`].
 #' * `intercept` :: `logical(1)` \cr
 #'   If `TRUE`, an intercept is included in the basis. Default is `FALSE`.
 #'   For further information look up [`splines::bs()`] or [`splines::ns()`].
 #' * `degree` :: `integer(1)` \cr
 #'   This parameter depends on type = "polynomial". Degree of the polynomial used to compute B-splines.
-#'   Default is 3. For further information look up [`splines::bs()`].
+#'   Default is `3`. For further information look up [`splines::bs()`].
 #' * `Boundary.knots` :: named `list` \cr
 #'   Boundary points at which to anchor the spline basis. Parameter has to be passed as a named list.
+#'   Default is `NULL`.
 #'   For further information look up [`splines::bs()`] or [`splines::ns()`].
 #'
 #' @section Internals:
