@@ -123,14 +123,11 @@ PipeOpClassifAvg = R6Class("PipeOpClassifAvg",
       prob = NULL
       if (every(inputs, function(x) !is.null(x$prob))) {
         pv = self$param_set$get_values(tags = "prob_aggr")
-        method = pv$prob_aggr %??% "mean"
-        if (method == "mean") {
+        if (pv$prob_aggr == "mean") {
           prob = weighted_matrix_sum(map(inputs, "prob"), weights)
-        } else if (method == "log") {
+        } else {  # prob_aggr == "log"
           epsilon = pv$prob_aggr_eps %??% 1e-12
           prob = weighted_matrix_logpool(map(inputs, "prob"), weights, epsilon = epsilon)
-        } else {
-          stopf("Unsupported prob aggregation '%s'.", method)
         }
       } else if (every(inputs, function(x) !is.null(x$response))) {
         prob = weighted_factor_mean(map(inputs, "response"), weights, lvls)

@@ -345,14 +345,11 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       weights = weights / sum(weights)
       prob_list = map(aligned, function(x) x$pred$prob)
       prob_cfg = private$.crossval_param_set$get_values(tags = "prob_aggr")
-      prob_method = prob_cfg$prob_aggr %??% "mean"
-      prob_epsilon = prob_cfg$prob_aggr_eps %??% 1e-12
       if (length(prob_list) && all(map_lgl(prob_list, Negate(is.null)))) {
         prob_mats = map(seq_along(prob_list), function(i) prob_list[[i]][aligned[[i]]$idx, , drop = FALSE])
-        prob = switch(prob_method,
+        prob = switch(prob_cfg$prob_aggr,
           mean = weighted_matrix_sum(prob_mats, weights),
-          log = weighted_matrix_logpool(prob_mats, weights, epsilon = prob_epsilon),
-          stopf("Unsupported prob aggregation '%s'.", prob_method)
+          log = weighted_matrix_logpool(prob_mats, weights, epsilon = prob_cfg$prob_aggr_eps %??% 1e-12)
         )
         prob = pmin(pmax(prob, 0), 1)
         lvls = colnames(prob)
@@ -440,20 +437,15 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         regr = PipeOpRegrAvg$new(innum = length(pipeops), id = agg_id),
         stopf("Task type '%s' not supported for cv ensemble.", private$.learner$task_type)
       )
+      extra_cfg = list()
       if (inherits(aggregator, "PipeOpClassifAvg")) {
-        prob_cfg = private$.crossval_param_set$get_values(tags = "prob_aggr")
-        method = prob_cfg$prob_aggr
-        if (!is.null(method)) {
-          aggregator$param_set$set_values(prob_aggr = method)
-        }
-        if (!is.null(prob_cfg$prob_aggr_eps) && (method %??% "mean") == "log") {
-          aggregator$param_set$set_values(prob_aggr_eps = prob_cfg$prob_aggr_eps)
-        }
+        extra_cfg = private$.crossval_param_set$get_values(tags = "prob_aggr")
       }
       if (inherits(aggregator, "PipeOpRegrAvg")) {
-        se_cfg = private$.crossval_param_set$get_values(tags = "se_aggr")
-        aggregator$param_set$set_values(.values = se_cfg)
+        extra_cfg = private$.crossval_param_set$get_values(tags = "se_aggr")
       }
+      aggregator$param_set$set_values(.values = extra_cfg)
+
       aggregator$state = list()
       graph = gunion(pipeops) %>>!% aggregator
       graph_state = graph$state
