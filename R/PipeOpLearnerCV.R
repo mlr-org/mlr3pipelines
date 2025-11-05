@@ -452,7 +452,6 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       class(graph_state) = c("graph_learner_model", class(graph_state))
       glrn = GraphLearner$new(graph)
       glrn$model = graph_state
-      glrn$man = private$.learner$man
       glrn
     },
     .crossval_param_set = NULL,
