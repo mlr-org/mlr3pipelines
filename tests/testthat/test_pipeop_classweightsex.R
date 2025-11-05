@@ -75,18 +75,21 @@ test_that("PipeOpClassWeightsEx", {
   nt = pomfb$train(list(task))[[1L]]
   expect_equal(nt$data(), task$data())
 
-  #freq = prop.table(table(task$truth()))
-  #manual_weights = median(freq) / freq
-  #manual_weights = 1 / sqrt(freq[task$truth()])
+  freq = prop.table(table(task$truth()))
+  manual_weights = median(freq[task$truth()]) / freq[task$truth()]
 
-  #if ("weights_learner" %in% names(nt$col_roles)) {
-  #  computed_weights = nt$weights_learner
-  #} else {
-  #  computed_weights = nt$weights
-  #}
+  if ("weights_learner" %in% names(nt$col_roles)) {
+    computed_weights = nt$weights_learner
+  } else {
+    computed_weights = nt$weights
+  }
 
-  #expect_equal(computed_weights[["weight"]], as.numeric(unclass(manual_weights)))
+  expect_equal(computed_weights[["weight"]], as.numeric(unclass(manual_weights)))
 
-  # weights = if ("weights_learner" %in% names(nt)) "weights_learner" else "weights"
-  # expect_equal(nt[[weights]]$weight, ifelse(nt$truth(nt[[weights]]$row_ids) == "neg", 1, 3))
 })
+
+
+test_that("PipeOpClassWeightsEx - learner and measure", {
+
+})
+
