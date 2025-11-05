@@ -3,12 +3,12 @@
 \name{mlr_pipeops_imputemean}
 \alias{mlr_pipeops_imputemean}
 \alias{PipeOpImputeMean}
-\title{Impute Numerical Features by their Mean}
+\title{Impute Numeric, Integer, POSIXct or Date Features by their Mean}
 \format{
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
 \description{
-Impute numerical features by their mean.
+Impute numeric, integer, POSIXct or Date features by their mean.
 }
 \section{Construction}{
 

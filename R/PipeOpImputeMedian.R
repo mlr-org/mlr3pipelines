@@ -1,11 +1,11 @@
-#' @title Impute Numerical Features by their Median
+#' @title Impute Numeric, Integer, POSIXct or Date Features by their Median
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputemedian
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
-#' Impute numerical features by their median.
+#' Impute numerical, integer, POSIXct or Date features by their median.
 #'
 #' @section Construction:
 #' ```

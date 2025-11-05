@@ -33,8 +33,8 @@
 #' @section Internals:
 #' Uses the `sample()` function. Features that are entirely `NA` are imputed as
 #' the following: For `factor` or `ordered`, random levels are sampled uniformly at random.
-#' For logicals, `TRUE` or `FALSE` are sampled uniformly at random.
-#' Numerics and integers are imputed as `0`.
+#' For `logical`, `TRUE` or `FALSE` are sampled uniformly at random.
+#' `numeric` and `integer` are imputed as `0`.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].

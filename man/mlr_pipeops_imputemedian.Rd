@@ -3,12 +3,12 @@
 \name{mlr_pipeops_imputemedian}
 \alias{mlr_pipeops_imputemedian}
 \alias{PipeOpImputeMedian}
-\title{Impute Numerical Features by their Median}
+\title{Impute Numeric, Integer, POSIXct or Date Features by their Median}
 \format{
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
 \description{
-Impute numerical features by their median.
+Impute numerical, integer, POSIXct or Date features by their median.
 }
 \section{Construction}{
 
