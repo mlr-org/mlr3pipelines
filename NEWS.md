@@ -6,6 +6,7 @@
 * Added support for internal validation tasks to `PipeOpFeatureUnion`.
 * feat: `PipeOpLearnerCV` can reuse the cross-validation models during prediction by averaging their outputs (`resampling.predict_method = "cv_ensemble"`).
 * feat: `PipeOpRegrAvg` gets new `se_aggr` and `se_aggr_rho` hyperparameters and now allows various forms of SE aggregation.
+* Fix: `PipeOpRemoveConstants` now avoids integer overflow when evaluating relative tolerances for near-`integer.max` data.
 
 # mlr3pipelines 0.9.0
 
