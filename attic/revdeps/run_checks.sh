@@ -7,5 +7,7 @@ fi
 
 export _R_CHECK_CRAN_INCOMING_=false
 export _R_CHECK_CRAN_INCOMING_REMOTE_=false
+export _R_CHECK_SYSTEM_CLOCK_=0
+
 
 find ../revdeps-src -name '*.tar.gz' -type f -print0 | parallel -0 -j "$(nproc)" R CMD check --as-cran
