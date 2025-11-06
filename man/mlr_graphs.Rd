@@ -35,7 +35,7 @@ Returns a \code{data.table} with column \code{key} (\code{character}).
 }
 
 \examples{
-\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library(mlr3)
 lrn = lrn("regr.rpart")
 task = mlr_tasks$get("boston_housing")

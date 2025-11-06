@@ -178,6 +178,25 @@ weighted_matrix_sum = function(matrices, weights) {
   accmat
 }
 
+# Weighted log-opinion pool (geometric) aggregation of probability matrices
+# Rows = samples, columns = classes. Each matrix must have the same shape.
+# @param matrices list of matrices: per-learner probabilities
+# @param weights numeric: weights, same length as `matrices` (assumed to sum to 1 upstream)
+# @param epsilon numeric(1): small positive constant to clamp probabilities before log
+# @return matrix: row-normalized aggregated probabilities (same shape as inputs)
+weighted_matrix_logpool = function(matrices, weights, epsilon = 1e-12) {
+  assert_list(matrices, types = "matrix", min.len = 1)
+  assert_numeric(weights, len = length(matrices), any.missing = FALSE, finite = TRUE)
+  assert_number(epsilon, lower = 0, upper = 1)
+  acc = weights[1] * log(pmax(matrices[[1]], epsilon))
+  for (idx in seq_along(matrices)[-1]) {
+    acc = acc + weights[idx] * log(pmax(matrices[[idx]], epsilon))
+  }
+  P = exp(acc)
+  sweep(P, 1L, rowSums(P), "/")
+}
+
+
 # For a set of n `factor` vectors each of length l with the same k levels and a
 # numeric weight vector of length n, returns a matrix of dimension l times k.
 # Each cell contains the weighted relative frequency of the respective factor
