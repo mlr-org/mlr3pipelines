@@ -98,6 +98,13 @@ Only effective during \code{"prob"} prediction: Whether to keep response values,
 Controls how predictions are produced after training. \code{"full"} (default) fits the wrapped learner on the entire training data.
 \code{"cv_ensemble"} reuses the models fitted during resampling and averages their predictions. This option currently supports
 classification and regression learners together with \code{resampling.method = "cv"}.
+\item \code{resampling.prob_aggr} :: \code{character(1)}\cr
+Probability aggregation used when \code{"cv_ensemble"} predictions are produced for classification learners that can emit class probabilities.
+Shares the semantics with \code{\link{PipeOpClassifAvg}}: \code{"mean"} (linear opinion pool, default) and \code{"log"} (log opinion pool / product of experts).
+Only present for learners that support \code{"prob"} predictions.
+\item \code{resampling.prob_aggr_eps} :: \code{numeric(1)}\cr
+Stabilization constant applied when \code{resampling.prob_aggr = "log"} to clamp probabilities before taking logarithms.
+Defaults to \code{1e-12}. Only present for learners that support \code{"prob"} predictions.
 \item \code{resampling.se_aggr} :: \code{character(1)}\cr
 Standard error aggregation used when \code{"cv_ensemble"} predictions are produced for regression learners with \code{predict_type}
 containing \code{"se"}. Shares the definitions with \code{\link{PipeOpRegrAvg}}, i.e. \code{"predictive"}, \code{"mean"}, \code{"within"}, \code{"between"}, \code{"none"}.

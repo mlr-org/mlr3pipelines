@@ -46,10 +46,10 @@ The resulting object after applying the "Isomap"-method from the \code{dimRed}-p
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{knn} :: \code{numeric(1)}\cr
+\item \code{knn} :: \code{integer(1)}\cr
 The number of nearest neighbors in the graph.
 Initialized to 50.
-\item \code{ndim} :: \code{numeric(1)}\cr
+\item \code{ndim} :: \code{integer(1)}\cr
 The number of embedding dimensions.
 Initialized to 2.
 \item \code{get_geod} :: \code{logical(1)}\cr
@@ -57,7 +57,7 @@ Determines whether the distance matrix should be kept in the \verb{$state}.
 Initialized to \code{FALSE}.
 \item \code{.mute} :: \code{character}\cr
 A character vector of elements to mute during training (e.g. c("message", "output")).
-Default: \code{character(0)}.
+Initialized to \code{NULL}.
 }
 }
 
@@ -77,7 +77,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{if (requireNamespace("dimRed")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("dimRed")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 po = po("isomap", .mute = c("message", "output"))
 po$train(list(tsk("iris")))[[1]]$data()

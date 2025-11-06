@@ -54,7 +54,9 @@
 #' poinfo$predict(list(tsk("mtcars")))
 #'
 #' # Specify customized console output for Task-objects
-#' poinfo = po("info", log_target = "cat", printer = list(Task = function(x) list(head_data = head(x$data()), nrow = nrow(x$data()))))
+#' poinfo = po("info", log_target = "cat",
+#'   printer = list(Task = function(x) list(head_data = head(x$data()), nrow = nrow(x$data())))
+#' )
 #'
 #' poinfo$train(list(tsk("iris")))
 #' poinfo$predict(list(tsk("iris")))
