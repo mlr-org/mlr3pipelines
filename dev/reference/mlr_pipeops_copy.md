@@ -167,12 +167,15 @@ po("scale") %>>%
     po("pca"),
     po("nop")
   ))
-#> Graph with 3 PipeOps:
+#> 
+#> ── Graph with 3 PipeOps: ───────────────────────────────────────────────────────
 #>      ID         State sccssors prdcssors
 #>  <char>        <char>   <char>    <char>
 #>   scale <<UNTRAINED>>  pca,nop          
 #>     pca <<UNTRAINED>>              scale
 #>     nop <<UNTRAINED>>              scale
+#> 
+#> ── Pipeline: non-sequential 
 
 # The following would not work: the '%>>%'-operator does not know
 # which output to connect to which input
@@ -195,7 +198,8 @@ gunion(list(
     po("nop"),
     po("imputemean")
   ))
-#> Graph with 6 PipeOps:
+#> 
+#> ── Graph with 6 PipeOps: ───────────────────────────────────────────────────────
 #>          ID         State   sccssors prdcssors
 #>      <char>        <char>     <char>    <char>
 #>       scale <<UNTRAINED>>       copy          
@@ -204,4 +208,6 @@ gunion(list(
 #>  imputemean <<UNTRAINED>>               select
 #>         pca <<UNTRAINED>>                 copy
 #>         nop <<UNTRAINED>>                 copy
+#> 
+#> ── Pipeline: non-sequential 
 ```

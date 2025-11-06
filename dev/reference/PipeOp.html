@@ -427,12 +427,20 @@ of the class, the id, the <code>$state</code>, and the <code>$param_set$values</
 <span class="r-in"><span><span class="va">posum</span> <span class="op">=</span> <span class="va">PipeOpSumLetter</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">posum</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PipeOp: &lt;posum&gt; (not trained)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> values: &lt;list()&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Input channels &lt;name [train type, predict type]&gt;:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   input1 [numeric,NULL], input2 [numeric,NULL]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Output channels &lt;name [train type, predict type]&gt;:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   output [numeric,character]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">PipeOp </span><span style="color: #0000BB; font-weight: bold;">&lt;posum&gt;</span><span style="font-weight: bold;">: not trained</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Values: list()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">Input channels:</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    name   train predict</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;char&gt;  &lt;char&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  input1 numeric    NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  input2 numeric    NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">Output channels:</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    name   train   predict</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;char&gt;  &lt;char&gt;    &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  output numeric character</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">posum</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>

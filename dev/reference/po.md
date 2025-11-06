@@ -76,46 +76,81 @@ A [`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)
 library("mlr3")
 
 po("learner", lrn("classif.rpart"), cp = 0.3)
-#> PipeOp: <classif.rpart> (not trained)
-#> values: <cp=0.3, xval=0>
-#> Input channels <name [train type, predict type]>:
-#>   input [TaskClassif,TaskClassif]
-#> Output channels <name [train type, predict type]>:
-#>   output [NULL,PredictionClassif]
+#> 
+#> ── PipeOp <classif.rpart>: not trained ─────────────────────────────────────────
+#> Values: cp=0.3, xval=0
+#> 
+#> ── Input channels: 
+#>    name       train     predict
+#>  <char>      <char>      <char>
+#>   input TaskClassif TaskClassif
+#> 
+#> ── Output channels: 
+#>    name  train           predict
+#>  <char> <char>            <char>
+#>  output   NULL PredictionClassif
 
 po(lrn("classif.rpart"), cp = 0.3)
-#> PipeOp: <classif.rpart> (not trained)
-#> values: <cp=0.3, xval=0>
-#> Input channels <name [train type, predict type]>:
-#>   input [TaskClassif,TaskClassif]
-#> Output channels <name [train type, predict type]>:
-#>   output [NULL,PredictionClassif]
+#> 
+#> ── PipeOp <classif.rpart>: not trained ─────────────────────────────────────────
+#> Values: cp=0.3, xval=0
+#> 
+#> ── Input channels: 
+#>    name       train     predict
+#>  <char>      <char>      <char>
+#>   input TaskClassif TaskClassif
+#> 
+#> ── Output channels: 
+#>    name  train           predict
+#>  <char> <char>            <char>
+#>  output   NULL PredictionClassif
 
 # is equivalent with:
 mlr_pipeops$get("learner", lrn("classif.rpart"),
   param_vals = list(cp = 0.3))
-#> PipeOp: <classif.rpart> (not trained)
-#> values: <cp=0.3, xval=0>
-#> Input channels <name [train type, predict type]>:
-#>   input [TaskClassif,TaskClassif]
-#> Output channels <name [train type, predict type]>:
-#>   output [NULL,PredictionClassif]
+#> 
+#> ── PipeOp <classif.rpart>: not trained ─────────────────────────────────────────
+#> Values: cp=0.3, xval=0
+#> 
+#> ── Input channels: 
+#>    name       train     predict
+#>  <char>      <char>      <char>
+#>   input TaskClassif TaskClassif
+#> 
+#> ── Output channels: 
+#>    name  train           predict
+#>  <char> <char>            <char>
+#>  output   NULL PredictionClassif
 
 mlr3pipelines::pos(c("pca", original = "nop"))
 #> $pca
-#> PipeOp: <pca> (not trained)
-#> values: <list()>
-#> Input channels <name [train type, predict type]>:
-#>   input [Task,Task]
-#> Output channels <name [train type, predict type]>:
-#>   output [Task,Task]
+#> 
+#> ── PipeOp <pca>: not trained ───────────────────────────────────────────────────
+#> Values: list()
+#> 
+#> ── Input channels: 
+#>    name  train predict
+#>  <char> <char>  <char>
+#>   input   Task    Task
+#> 
+#> ── Output channels: 
+#>    name  train predict
+#>  <char> <char>  <char>
+#>  output   Task    Task
 #> 
 #> $original
-#> PipeOp: <original> (not trained)
-#> values: <list()>
-#> Input channels <name [train type, predict type]>:
-#>   input [*,*]
-#> Output channels <name [train type, predict type]>:
-#>   output [*,*]
+#> 
+#> ── PipeOp <original>: not trained ──────────────────────────────────────────────
+#> Values: list()
+#> 
+#> ── Input channels: 
+#>    name  train predict
+#>  <char> <char>  <char>
+#>   input      *       *
+#> 
+#> ── Output channels: 
+#>    name  train predict
+#>  <char> <char>  <char>
+#>  output      *       *
 #> 
 ```

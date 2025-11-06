@@ -517,12 +517,20 @@ PipeOpSumLetter = R6::R6Class("sumletter",
 posum = PipeOpSumLetter$new()
 
 print(posum)
-#> PipeOp: <posum> (not trained)
-#> values: <list()>
-#> Input channels <name [train type, predict type]>:
-#>   input1 [numeric,NULL], input2 [numeric,NULL]
-#> Output channels <name [train type, predict type]>:
-#>   output [numeric,character]
+#> 
+#> ── PipeOp <posum>: not trained ─────────────────────────────────────────────────
+#> Values: list()
+#> 
+#> ── Input channels: 
+#>    name   train predict
+#>  <char>  <char>  <char>
+#>  input1 numeric    NULL
+#>  input2 numeric    NULL
+#> 
+#> ── Output channels: 
+#>    name   train   predict
+#>  <char>  <char>    <char>
+#>  output numeric character
 
 posum$train(list(1, 2))
 #> $output

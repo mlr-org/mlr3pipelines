@@ -60,32 +60,41 @@ branches = c("pca", "nothing")
 po("branch", branches) %>>%
   gunion(list(po_pca, po_nop)) %>>%
   po("unbranch", branches)
-#> Graph with 4 PipeOps:
+#> 
+#> ── Graph with 4 PipeOps: ───────────────────────────────────────────────────────
 #>        ID         State sccssors prdcssors
 #>    <char>        <char>   <char>    <char>
 #>    branch <<UNTRAINED>>  pca,nop          
 #>       pca <<UNTRAINED>> unbranch    branch
 #>       nop <<UNTRAINED>> unbranch    branch
 #>  unbranch <<UNTRAINED>>            pca,nop
+#> 
+#> ── Pipeline: non-sequential 
 
 pipeline_branch(list(pca = po_pca, nothing = po_nop),
   prefix_branchops = "br_", prefix_paths = "xy_")
-#> Graph with 4 PipeOps:
+#> 
+#> ── Graph with 4 PipeOps: ───────────────────────────────────────────────────────
 #>              ID         State               sccssors              prdcssors
 #>          <char>        <char>                 <char>                 <char>
 #>       br_branch <<UNTRAINED>> xy_pca.pca,xy_nothi...                       
 #>      xy_pca.pca <<UNTRAINED>>            br_unbranch              br_branch
 #>  xy_nothing.nop <<UNTRAINED>>            br_unbranch              br_branch
 #>     br_unbranch <<UNTRAINED>>                        xy_pca.pca,xy_nothi...
+#> 
+#> ── Pipeline: non-sequential 
 # gives the same as
 po("branch", branches, id = "br_branch") %>>%
   gunion(list(xy_pca = po_pca, xy_nothing = po_nop)) %>>%
   po("unbranch", branches, id = "br_unbranch")
-#> Graph with 4 PipeOps:
+#> 
+#> ── Graph with 4 PipeOps: ───────────────────────────────────────────────────────
 #>              ID         State               sccssors              prdcssors
 #>          <char>        <char>                 <char>                 <char>
 #>       br_branch <<UNTRAINED>> xy_pca.pca,xy_nothi...                       
 #>      xy_pca.pca <<UNTRAINED>>            br_unbranch              br_branch
 #>  xy_nothing.nop <<UNTRAINED>>            br_unbranch              br_branch
 #>     br_unbranch <<UNTRAINED>>                        xy_pca.pca,xy_nothi...
+#> 
+#> ── Pipeline: non-sequential 
 ```

@@ -52,9 +52,12 @@ library("mlr3")
 
 po_pca = po("pca")
 pipeline_greplicate(po_pca, n = 2)
-#> Graph with 2 PipeOps:
+#> 
+#> ── Graph with 2 PipeOps: ───────────────────────────────────────────────────────
 #>      ID         State sccssors prdcssors
 #>  <char>        <char>   <char>    <char>
 #>   pca_1 <<UNTRAINED>>                   
 #>   pca_2 <<UNTRAINED>>                   
+#> 
+#> ── Pipeline: <INPUT> -> pca_1 -> pca_2 -> <OUTPUT> 
 ```

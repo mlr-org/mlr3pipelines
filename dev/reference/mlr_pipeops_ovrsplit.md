@@ -210,7 +210,9 @@ task = tsk("iris")
 po = po("ovrsplit")
 po$train(list(task))
 #> $output
-#> Multiplicity:
+#> 
+#> ── Multiplicity: ──
+#> 
 #> $setosa
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
@@ -241,7 +243,8 @@ po$train(list(task))
 #> 
 po$predict(list(task))
 #> $output
-#> Multiplicity:
+#> ── Multiplicity: ──
+#> 
 #> $setosa
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────

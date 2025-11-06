@@ -192,10 +192,13 @@ gr$add_pipeop(poct)
 print(gr)
 ```
 
-    ## Graph with 1 PipeOps:
+    ## 
+    ## ── Graph with 1 PipeOps: ───────────────────────────────────────────────────────
     ##        ID         State sccssors prdcssors
     ##    <char>        <char>   <char>    <char>
-    ##  copy.two <<UNTRAINED>>
+    ##  copy.two <<UNTRAINED>>                   
+    ## 
+    ## ── Pipeline: <INPUT> -> copy.two -> <OUTPUT>
 
 ``` r
 result = gr$train(task)

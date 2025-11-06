@@ -109,34 +109,43 @@ to the input argument list.</p></dd>
 <span class="r-in"><span><span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"branch"</span>, <span class="va">branches</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="gunion.html">gunion</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">po_pca</span>, <span class="va">po_nop</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"unbranch"</span>, <span class="va">branches</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Graph with 4 PipeOps:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Graph with 4 PipeOps:</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        ID         State sccssors prdcssors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt;        &lt;char&gt;   &lt;char&gt;    &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    branch &lt;&lt;UNTRAINED&gt;&gt;  pca,nop          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       pca &lt;&lt;UNTRAINED&gt;&gt; unbranch    branch</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       nop &lt;&lt;UNTRAINED&gt;&gt; unbranch    branch</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  unbranch &lt;&lt;UNTRAINED&gt;&gt;            pca,nop</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── Pipeline: <span style="font-weight: bold;">non-sequential</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">pipeline_branch</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>pca <span class="op">=</span> <span class="va">po_pca</span>, nothing <span class="op">=</span> <span class="va">po_nop</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  prefix_branchops <span class="op">=</span> <span class="st">"br_"</span>, prefix_paths <span class="op">=</span> <span class="st">"xy_"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Graph with 4 PipeOps:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Graph with 4 PipeOps:</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              ID         State               sccssors              prdcssors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;char&gt;        &lt;char&gt;                 &lt;char&gt;                 &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       br_branch &lt;&lt;UNTRAINED&gt;&gt; xy_pca.pca,xy_nothi...                       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      xy_pca.pca &lt;&lt;UNTRAINED&gt;&gt;            br_unbranch              br_branch</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  xy_nothing.nop &lt;&lt;UNTRAINED&gt;&gt;            br_unbranch              br_branch</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     br_unbranch &lt;&lt;UNTRAINED&gt;&gt;                        xy_pca.pca,xy_nothi...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── Pipeline: <span style="font-weight: bold;">non-sequential</span> </span>
 <span class="r-in"><span><span class="co"># gives the same as</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"branch"</span>, <span class="va">branches</span>, id <span class="op">=</span> <span class="st">"br_branch"</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="gunion.html">gunion</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>xy_pca <span class="op">=</span> <span class="va">po_pca</span>, xy_nothing <span class="op">=</span> <span class="va">po_nop</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"unbranch"</span>, <span class="va">branches</span>, id <span class="op">=</span> <span class="st">"br_unbranch"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Graph with 4 PipeOps:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Graph with 4 PipeOps:</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              ID         State               sccssors              prdcssors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;char&gt;        &lt;char&gt;                 &lt;char&gt;                 &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       br_branch &lt;&lt;UNTRAINED&gt;&gt; xy_pca.pca,xy_nothi...                       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      xy_pca.pca &lt;&lt;UNTRAINED&gt;&gt;            br_unbranch              br_branch</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  xy_nothing.nop &lt;&lt;UNTRAINED&gt;&gt;            br_unbranch              br_branch</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     br_unbranch &lt;&lt;UNTRAINED&gt;&gt;                        xy_pca.pca,xy_nothi...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── Pipeline: <span style="font-weight: bold;">non-sequential</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

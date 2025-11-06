@@ -173,7 +173,9 @@ task = tsk("iris")
 po = po("replicate", param_vals = list(reps = 3))
 po$train(list(task))
 #> $output
-#> Multiplicity:
+#> 
+#> ── Multiplicity: ──
+#> 
 #> [[1]]
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
@@ -204,7 +206,8 @@ po$train(list(task))
 #> 
 po$predict(list(task))
 #> $output
-#> Multiplicity:
+#> ── Multiplicity: ──
+#> 
 #> [[1]]
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────

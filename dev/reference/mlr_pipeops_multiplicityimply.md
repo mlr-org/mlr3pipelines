@@ -199,7 +199,9 @@ task2 = tsk("mtcars")
 po = po("multiplicityimply")
 po$train(list(task1, task2))
 #> $output
-#> Multiplicity:
+#> 
+#> ── Multiplicity: ──
+#> 
 #> [[1]]
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
@@ -220,7 +222,8 @@ po$train(list(task1, task2))
 #> 
 po$predict(list(task1, task2))
 #> $output
-#> Multiplicity:
+#> ── Multiplicity: ──
+#> 
 #> [[1]]
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────

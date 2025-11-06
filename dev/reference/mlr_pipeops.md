@@ -208,21 +208,35 @@ Other Dictionaries:
 library("mlr3")
 
 mlr_pipeops$get("learner", lrn("classif.rpart"))
-#> PipeOp: <classif.rpart> (not trained)
-#> values: <xval=0>
-#> Input channels <name [train type, predict type]>:
-#>   input [TaskClassif,TaskClassif]
-#> Output channels <name [train type, predict type]>:
-#>   output [NULL,PredictionClassif]
+#> 
+#> ── PipeOp <classif.rpart>: not trained ─────────────────────────────────────────
+#> Values: xval=0
+#> 
+#> ── Input channels: 
+#>    name       train     predict
+#>  <char>      <char>      <char>
+#>   input TaskClassif TaskClassif
+#> 
+#> ── Output channels: 
+#>    name  train           predict
+#>  <char> <char>            <char>
+#>  output   NULL PredictionClassif
 
 # equivalent:
 po("learner", learner = lrn("classif.rpart"))
-#> PipeOp: <classif.rpart> (not trained)
-#> values: <xval=0>
-#> Input channels <name [train type, predict type]>:
-#>   input [TaskClassif,TaskClassif]
-#> Output channels <name [train type, predict type]>:
-#>   output [NULL,PredictionClassif]
+#> 
+#> ── PipeOp <classif.rpart>: not trained ─────────────────────────────────────────
+#> Values: xval=0
+#> 
+#> ── Input channels: 
+#>    name       train     predict
+#>  <char>      <char>      <char>
+#>   input TaskClassif TaskClassif
+#> 
+#> ── Output channels: 
+#>    name  train           predict
+#>  <char> <char>            <char>
+#>  output   NULL PredictionClassif
 
 # all PipeOps currently in the dictionary:
 as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num", "packages")]

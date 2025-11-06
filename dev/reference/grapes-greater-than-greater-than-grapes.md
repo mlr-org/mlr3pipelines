@@ -178,33 +178,49 @@ graph3 = Graph$new()$
   add_edge(o2$id, o3$id, dst_channel = 2)
 
 pipe1 %>>!% o3  # modify pipe1 in-place
-#> Graph with 3 PipeOps:
+#> 
+#> ── Graph with 3 PipeOps: ───────────────────────────────────────────────────────
 #>            ID         State     sccssors prdcssors
 #>        <char>        <char>       <char>    <char>
 #>         scale <<UNTRAINED>>          pca          
 #>           pca <<UNTRAINED>> featureunion     scale
 #>  featureunion <<UNTRAINED>>                    pca
+#> 
+#> ── Pipeline: non-sequential 
 
 pipe1  # contains o1, o2, and o3 now.
-#> Graph with 3 PipeOps:
+#> 
+#> ── Graph with 3 PipeOps: ───────────────────────────────────────────────────────
 #>            ID         State     sccssors prdcssors
 #>        <char>        <char>       <char>    <char>
 #>         scale <<UNTRAINED>>          pca          
 #>           pca <<UNTRAINED>> featureunion     scale
 #>  featureunion <<UNTRAINED>>                    pca
+#> 
+#> ── Pipeline: non-sequential 
 
 o1 %>>!% o2
-#> Graph with 2 PipeOps:
+#> 
+#> ── Graph with 2 PipeOps: ───────────────────────────────────────────────────────
 #>      ID         State sccssors prdcssors
 #>  <char>        <char>   <char>    <char>
 #>   scale <<UNTRAINED>>      pca          
 #>     pca <<UNTRAINED>>              scale
+#> 
+#> ── Pipeline: <INPUT> -> scale -> pca -> <OUTPUT> 
 
 o1  # not changed, becuase not a Graph.
-#> PipeOp: <scale> (not trained)
-#> values: <robust=FALSE>
-#> Input channels <name [train type, predict type]>:
-#>   input [Task,Task]
-#> Output channels <name [train type, predict type]>:
-#>   output [Task,Task]
+#> 
+#> ── PipeOp <scale>: not trained ─────────────────────────────────────────────────
+#> Values: robust=FALSE
+#> 
+#> ── Input channels: 
+#>    name  train predict
+#>  <char> <char>  <char>
+#>   input   Task    Task
+#> 
+#> ── Output channels: 
+#>    name  train predict
+#>  <char> <char>  <char>
+#>  output   Task    Task
 ```

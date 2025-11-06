@@ -277,10 +277,13 @@ graph, and see what happens when we train it on something:</p>
 <span><span class="va">gr</span><span class="op">$</span><span class="fu">add_pipeop</span><span class="op">(</span><span class="va">poct</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">gr</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Graph with 1 PipeOps:</span></span>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Graph with 1 PipeOps:</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────</span></span></span>
 <span><span class="co">##        ID         State sccssors prdcssors</span></span>
 <span><span class="co">##    &lt;char&gt;        &lt;char&gt;   &lt;char&gt;    &lt;char&gt;</span></span>
-<span><span class="co">##  copy.two &lt;&lt;UNTRAINED&gt;&gt;</span></span></code></pre>
+<span><span class="co">##  copy.two &lt;&lt;UNTRAINED&gt;&gt;                   </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## ── Pipeline: <span style="font-weight: bold;">&lt;INPUT&gt; -&gt; copy.two -&gt; &lt;OUTPUT&gt;</span></span></span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">=</span> <span class="va">gr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
 <span></span>
