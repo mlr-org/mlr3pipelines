@@ -34,6 +34,7 @@
 #'   old column names and the corresponding element values give the new column names.
 #'   Initialized to an empty character vector.
 #'   A `function` specifies how the old column names should be changed to the new column names.
+#'   The function must return a `character` vector with one entry per input column name so that each selected column receives a new name.
 #'   To choose columns use the `affect_columns` parameter. No function is initialized.
 #' * `ignore_missing` :: `logical(1)`\cr
 #'   Ignore if columns named in `renaming` are not found in the input [`Task`][mlr3::Task]. If this is
