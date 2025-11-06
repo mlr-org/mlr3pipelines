@@ -68,7 +68,7 @@ parse_args <- function(args) {
 
 args <- parse_args(commandArgs(trailingOnly = TRUE))
 
-repo <- args$repo %||% getOption("repos")[["CRAN"]] %||% "https://cran.r-project.org"
+repo <- args$repo %||% "https://cran.r-project.org"
 if (identical(repo, "@CRAN@")) {
   repo <- "https://cran.r-project.org"
 }
