@@ -1,17 +1,12 @@
 context("PipeOpRowApply")
 
 test_that("PipeOpRowApply - basic properties", {
-
   op = PipeOpRowApply$new()
   task = mlr_tasks$get("iris")
-  expect_pipeop(op)
-
   expect_datapreproc_pipeop_class(PipeOpRowApply, task = task)
-
 })
 
 test_that("PipeOpRowApply - transform on task with only numeric features", {
-
   op = PipeOpRowApply$new()
   task = mlr_tasks$get("iris")
   cnames = task$feature_names
@@ -359,7 +354,7 @@ test_that("PipeOpRowApply - transform works on task with only one row", {
 test_that("PipeOpRowApply - transform works on empty task (no rows)", {
 
   op = PipeOpRowApply$new()
-  task = mlr_tasks$get("wine")$filter(0)
+  task = mlr_tasks$get("wine")$clone(deep = TRUE)$filter(integer(0))
   cnames = task$feature_names
 
   # applicator generates matrix with names
@@ -431,7 +426,7 @@ test_that("PipeOpRowApply - transform works for empty predict task (no rows)", {
 
   op = PipeOpRowApply$new()
   task_train = mlr_tasks$get("wine")
-  task_predict = task_train$filter(0)
+  task_predict = task_train$clone(deep = TRUE)$filter(integer(0))
   cnames = task_train$feature_names
 
   # applicator generates matrix with names

@@ -174,7 +174,8 @@ test_that("PipeOpVtreat - Edge Cases", {
     weights = rep(c(1L, 2L), 6L))
 
   task = TaskRegr$new("test", backend = dat, target = "y")
-  task$col_roles$weight = "weights"
+  # Compatibility with upcoming new weights_learner role in mlr3
+  task$col_roles[[if ("weights_learner" %in% names(task)) "weights_learner" else "weight"]] = "weights"
   task$col_roles$feature = "x"
 
   po = PipeOpVtreat$new()
@@ -184,7 +185,8 @@ test_that("PipeOpVtreat - Edge Cases", {
   expect_true(colnames(train_out1$data()) == "y")
   expect_equal(train_out1$data(), predict_out1$data())
 
-  task$col_roles$weight = character()
+  # Compatibility with upcoming new weights_learner role in mlr3
+  task$col_roles[[if ("weights_learner" %in% names(task)) "weights_learner" else "weight"]] = character()
   train_out2 = po$train(list(task))[[1L]]
   predict_out2 = po$predict(list(task))[[1L]]
 })

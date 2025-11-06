@@ -12,7 +12,7 @@ Wraps an \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{PipeOp}}.
 
 Inherits the \verb{$param_set} (and therefore \verb{$param_set$values}) from the \code{\link[mlr3:Learner]{Learner}} it is constructed from.
 
-Using \code{\link{PipeOpLearner}}, it is possible to embed \code{\link[mlr3:Learner]{mlr3::Learner}}s into \code{\link{Graph}}s, which themselves can be
+Using \code{PipeOpLearner}, it is possible to embed \code{\link[mlr3:Learner]{mlr3::Learner}}s into \code{\link{Graph}}s, which themselves can be
 turned into Learners using \code{\link{GraphLearner}}. This way, preprocessing and ensemble methods can be included
 into a machine learning pipeline which then can be handled as singular object for resampling, benchmarking
 and tuning.
@@ -23,10 +23,10 @@ and tuning.
 \if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpLearner$new(learner, id = NULL, param_vals = list())
 }\if{html}{\out{</div>}}
 \itemize{
-\item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} | \code{character(1)}
+\item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} | \code{character(1)}\cr
 \code{\link[mlr3:Learner]{Learner}} to wrap, or a string identifying a \code{\link[mlr3:Learner]{Learner}} in the \code{\link[mlr3:mlr_learners]{mlr3::mlr_learners}} \code{\link[mlr3misc:Dictionary]{Dictionary}}.
 This argument is always cloned; to access the \code{\link[mlr3:Learner]{Learner}} inside \code{PipeOpLearner} by-reference, use \verb{$learner}.\cr
-\item \code{id} :: \code{character(1)}
+\item \code{id} :: \code{character(1)}\cr
 Identifier of the resulting  object, internally defaulting to the \code{id} of the \code{\link[mlr3:Learner]{Learner}} being wrapped.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
@@ -35,10 +35,10 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpLearner}} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
+\code{PipeOpLearner} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
 type given to \code{learner} during construction; both during training and prediction.
 
-\code{\link{PipeOpLearner}} has one output channel named \code{"output"}, producing \code{NULL} during training and a \code{\link[mlr3:Prediction]{Prediction}} subclass
+\code{PipeOpLearner} has one output channel named \code{"output"}, producing \code{NULL} during training and a \code{\link[mlr3:Prediction]{Prediction}} subclass
 during prediction; this subclass is specific to the \code{\link[mlr3:Learner]{Learner}} type given to \code{learner} during construction.
 
 The output during prediction is the \code{\link[mlr3:Prediction]{Prediction}} on the prediction input data, produced by the \code{\link[mlr3:Learner]{Learner}}
@@ -100,7 +100,7 @@ Methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{ if (requireNamespace("rpart")) \{ }
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
 task = tsk("iris")
@@ -109,19 +109,22 @@ lrn_po = mlr_pipeops$get("learner", learner)
 
 lrn_po$train(list(task))
 lrn_po$predict(list(task))
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_adas}},
+\code{\link{mlr_pipeops_blsmote}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -133,9 +136,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
@@ -150,11 +156,14 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nearmiss}},
 \code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
@@ -174,6 +183,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
+\code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
@@ -181,6 +191,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
@@ -188,7 +199,9 @@ Other PipeOps:
 \code{\link{mlr_pipeops_yeojohnson}}
 
 Other Meta PipeOps: 
-\code{\link{mlr_pipeops_learner_cv}}
+\code{\link{mlr_pipeops_learner_cv}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}}
 }
 \concept{Meta PipeOps}
 \concept{PipeOps}

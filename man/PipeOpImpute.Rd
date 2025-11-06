@@ -12,7 +12,8 @@ Abstract base class for feature imputation.
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpImpute$$new(id, param_set = ps(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task")
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpImpute$$new(id, param_set = ps(), param_vals = list(), whole_task_dependent = FALSE, empty_level_control = FALSE,
+  packages = character(0), task_type = "Task")
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -26,7 +27,20 @@ subclass should have its own \code{param_vals} parameter and pass it on to \code
 Whether the \code{context_columns} parameter should be added which lets the user limit the columns that are
 used for imputation inference. This should generally be \code{FALSE} if imputation depends only on individual features
 (e.g. mode imputation), and \code{TRUE} if imputation depends on other features as well (e.g. kNN-imputation).
-\item packages :: \code{character}\cr
+\item \code{empty_level_control} :: \code{logical(1)}\cr
+Control how to handle edge cases where \code{NA}s occur in \code{factor} or \code{ordered} features only during prediction but not
+during training. Can be one of \code{"never"}, \code{"always"}, or \code{"param"}:
+\itemize{
+\item If set to \code{"never"}, no empty level is introduced during training, but columns that have missing values only
+during prediction will \emph{not} be imputed.
+\item If set to \code{"always"}, an unseen level is added to the feature during training and missing values are imputed as
+that value during prediction.
+\item Finally, if set to \code{"param"}, the hyperparameter \code{create_empty_level} is added and control over this behavior is
+left to the user.
+}
+
+For implementation details, see Internals below. Default is \code{"never"}.
+\item \code{packages} :: \code{character}\cr
 Set of all required packages for the \code{\link{PipeOp}}'s \code{private$.train} and \code{private$.predict} methods. See \verb{$packages} slot.
 Default is \code{character(0)}.
 \item \code{task_type} :: \code{character(1)}\cr
@@ -40,10 +54,10 @@ Feature types affected by the \code{PipeOp}. See \code{private$.select_cols()} f
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpImpute}} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}}, or a subclass of
+\code{PipeOpImpute} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}}, or a subclass of
 \code{\link[mlr3:Task]{Task}} if the \code{task_type} construction argument is given as such; both during training and prediction.
 
-\code{\link{PipeOpImpute}} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}}, or a subclass;
+\code{PipeOpImpute} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}}, or a subclass;
 the \code{\link[mlr3:Task]{Task}} type is the same as for input; both during training and prediction.
 
 The output \code{\link[mlr3:Task]{Task}} is the modified input \code{\link[mlr3:Task]{Task}} with features imputed according to the \code{private$.impute()} function.
@@ -66,6 +80,9 @@ the \code{\link[mlr3:Task]{Task}} resulting from the prediction operation has th
 \item \code{model} :: named \code{list}\cr
 Model used for imputation. This is a list named by \code{\link[mlr3:Task]{Task}} features, containing the result of the \code{private$.train_imputer()} or
 \code{private$.train_nullmodel()} function for each one.
+\item \code{imputed_train} :: \code{character}\cr
+Names of features that were imputed during training. This is used to ensure that factor levels that were added during training are also added during prediction.
+Note that features that are imputed during prediction but not during training will still have inconsistent factor levels.
 }
 }
 
@@ -73,22 +90,40 @@ Model used for imputation. This is a list named by \code{\link[mlr3:Task]{Task}}
 
 \itemize{
 \item \code{affect_columns} :: \code{function} | \code{\link{Selector}} | \code{NULL} \cr
-What columns the \code{\link{PipeOpImpute}} should operate on.
+What columns the \code{PipeOpImpute} should operate on.
 The parameter must be a \code{\link{Selector}} function, which takes a \code{\link[mlr3:Task]{Task}} as argument and returns a \code{character}
 of features to use.\cr
 See \code{\link{Selector}} for example functions. Defaults to \code{NULL}, which selects all features.
 \item \code{context_columns} :: \code{function} | \code{\link{Selector}} | \code{NULL} \cr
-What columns the \code{\link{PipeOpImpute}} imputation may depend on. This parameter is only present if the constructor is called with
+What columns the \code{PipeOpImpute} imputation may depend on. This parameter is only present if the constructor is called with
 the \code{whole_task_dependent} argument set to \code{TRUE}.\cr
 The parameter must be a \code{\link{Selector}} function, which takes a \code{\link[mlr3:Task]{Task}} as argument and returns a \code{character}
 of features to use.\cr
 See \code{\link{Selector}} for example functions. Defaults to \code{NULL}, which selects all features.
+\item \code{create_empty_level} :: \code{logical(1)}\cr
+Whether an empty level should always be created for \code{factor} or \code{ordered} columns during training. If \code{FALSE},
+columns that had no \code{NA}s during training but have \code{NA}s during prediction will not be imputed. This parameter is
+only present if the constructor is called with the \code{empty_level_control} argument set to \code{"param"}.
+Initialized to \code{FALSE}.\cr
 }
 }
 
 \section{Internals}{
 
-\code{\link{PipeOpImpute}} is an abstract class inheriting from \code{\link{PipeOp}} that makes implementing imputer \code{\link{PipeOp}}s simple.
+\code{PipeOpImpute} is an abstract class inheriting from \code{\link{PipeOp}} that makes implementing imputer \code{\link{PipeOp}}s simple.
+
+Internally, the construction argument \code{empty_level_control} and the hyperparameter \code{create_empty_level} (should it
+exist) modify the \code{private$.create_empty_level} field. Behavior then depends on whether this field is set to \code{TRUE}
+or \code{FALSE} and works by controlling for which cases imputation is performed on \code{factor} or \code{ordered} columns. Its
+setting has no impact on columns of other types.\cr
+If \code{private$.create_empty_level} is set to \code{TRUE}, \code{private$.impute()} is called for all \code{factor} or \code{ordered}
+columns during training, regardless of whether they have any missing values. For this to lead to the creation of an
+empty level for columns with no missing values, inheriting \code{PipeOp}s must implement \code{private$.train_imputer()} in
+such a way that it returns the name of the level to be created for the feature types \code{factor} and \code{ordered}.\cr
+If \code{private$.create_empty_level} is set to \code{FALSE}, \code{private$.impute()} is not called during prediction for \code{factor}
+or \code{ordered} columns which were not modified during training. This means that \code{NA}s will not be imputed for these
+columns.\cr
+See \code{\link{PipeOpImputeOOR}}, for a detailed explanation of why these controls are necessary.
 }
 
 \section{Fields}{
@@ -106,7 +141,7 @@ Selects which columns the \code{\link{PipeOp}} operates on. In contrast to
 the \code{affect_columns} parameter. \code{private$.select_cols()} is for the \emph{inheriting class} to determine which columns
 the operator should function on, e.g. based on feature type, while \code{affect_columns} is a way for the \emph{user}
 to limit the columns that a \code{\link{PipeOpTaskPreproc}} should operate on.
-This method can optionally be overloaded when inheriting \code{\link{PipeOpImpute}};
+This method can optionally be overloaded when inheriting \code{PipeOpImpute};
 If this method is not overloaded, it defaults to selecting the columns of type indicated by the \code{feature_types} construction argument.
 \item \code{.train_imputer(feature, type, context)}\cr
 (\code{atomic}, \code{character(1)}, \code{\link[data.table:data.table]{data.table}}) -> \code{any}\cr
@@ -117,11 +152,12 @@ is only called for features with at least one non-missing value.
 (\code{atomic}, \code{character(1)}, \code{\link[data.table:data.table]{data.table}}) -> \code{any}\cr
 Like \code{.train_imputer()}, but only called for each feature that only contains missing values. This is not an abstract function
 and, if not overloaded, gives a default response of \code{0} (\code{integer}, \code{numeric}), \code{c(TRUE, FALSE)} (\code{logical}), all available levels (\code{factor}/\code{ordered}),
-or the empty  string (\code{character}).
+or the empty string (\code{character}).
 \item \code{.impute(feature, type, model, context)}\cr
 (\code{atomic}, \code{character(1)}, \code{any}, \code{\link[data.table:data.table]{data.table}}) -> \code{atomic}\cr
-Imputes the features. \code{model} is the model created by \code{private$.train_imputer()} Default behaviour is to assume \code{model} is an atomic vector
+Imputes the features. \code{model} is the model created by \code{private$.train_imputer()}. Default behaviour is to assume \code{model} is an atomic vector
 from which values are sampled to impute missing values of \code{feature}. \code{model} may have an attribute \code{probabilities} for non-uniform sampling.
+If \code{model} has length zero, \code{feature} is returned unchanged.
 }
 }
 
@@ -130,11 +166,14 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_adas}},
+\code{\link{mlr_pipeops_blsmote}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -146,9 +185,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
@@ -164,11 +206,14 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nearmiss}},
 \code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
@@ -188,6 +233,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
+\code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
@@ -195,6 +241,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},

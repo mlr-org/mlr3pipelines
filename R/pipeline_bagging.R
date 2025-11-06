@@ -33,8 +33,7 @@
 #'   Default `FALSE`.
 #' @return [`Graph`]
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' \donttest{
 #' library(mlr3)
 #' lrn_po = po("learner", lrn("regr.rpart"))
@@ -47,7 +46,6 @@
 #'   averager = po("regravg", collect_multiplicity = TRUE))
 #' resample(task, GraphLearner$new(gr), rsmp("holdout"))$aggregate()
 #' }
-#' \dontshow{ \} }
 pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL, replace = FALSE) {
   g = as_graph(graph)
   assert_count(iterations)

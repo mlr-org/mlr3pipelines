@@ -13,6 +13,7 @@
 #' ```
 #' PipeOpThreshold$new(id = "threshold", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, default `"threshold"`.
 #' * `param_vals` :: named `list`\cr
@@ -45,15 +46,13 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
 #' t = tsk("german_credit")
 #' gr = po(lrn("classif.rpart", predict_type = "prob")) %>>%
 #'   po("threshold", param_vals = list(thresholds = 0.9))
 #' gr$train(t)
 #' gr$predict(t)
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOp.R
@@ -91,7 +90,7 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
       thr = self$param_set$values$thresholds
       assert_subset("prob", prd$predict_types)
       if (length(thr) > 1) {
-        if (length(thr) != length(levels(prd$truth))) {
+        if (length(thr) != nlevels(prd$truth)) {
           stop("'thresholds' parameter must have length one or length equal to number of outcome levels")
         }
         if (is.null(names(thr))) {

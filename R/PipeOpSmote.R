@@ -5,12 +5,9 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Generates a more balanced data set by creating
-#' synthetic instances of the minority class using the SMOTE algorithm.
-#' The algorithm samples for each minority instance a new data point based on the `K` nearest
-#' neighbors of that data point.
-#' It can only be applied to tasks with purely numeric features.
-#' See [`smotefamily::SMOTE`] for details.
+#' Generates a more balanced data set by creating synthetic instances of the minority class using the SMOTE algorithm.
+#' The algorithm samples for each minority instance a new data point based on the `K` nearest neighbors of that data point.
+#' It can only be applied to tasks with purely numeric features. See [`smotefamily::SMOTE`] for details.
 #'
 #' @section Construction:
 #' ```
@@ -23,7 +20,8 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`]. Instead of a [`Task`][mlr3::Task], a
+#' [`TaskClassif`][mlr3::TaskClassif] is used as input and output during training and prediction.
 #'
 #' The output during training is the input [`Task`][mlr3::Task] with added synthetic rows for the minority class.
 #' The output during prediction is the unchanged input.
@@ -40,8 +38,12 @@
 #'   Desired times of synthetic minority instances over the original number of
 #'   majority instances. See [`SMOTE()`][`smotefamily::SMOTE`].
 #'
+#' @section Internals:
+#' If a target level is unobserved during training, no synthetic data points will be generated for that class.
+#' No error is raised; the unobserved class is simply ignored.
+#'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -53,8 +55,7 @@
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("smotefamily")) \{ }
+#' @examplesIf requireNamespace("smotefamily")
 #' library("mlr3")
 #'
 #' # Create example task
@@ -68,7 +69,6 @@
 #' pop = po("smote")
 #' smotedata = pop$train(list(task))[[1]]$data()
 #' table(smotedata$result)
-#' \dontshow{ \} }
 PipeOpSmote = R6Class("PipeOpSmote",
   inherit = PipeOpTaskPreproc,
   public = list(
@@ -86,23 +86,34 @@ PipeOpSmote = R6Class("PipeOpSmote",
   private = list(
 
     .train_task = function(task) {
-      assert_true(all(task$feature_types$type == "numeric"))
-      cols = private$.select_cols(task)
-
+      cols = task$feature_names
+      unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
+      if (length(unsupported_cols)) {
+        stopf("SMOTE cannot generate synthetic data for the following columns since they are neither features nor targets: %s.",
+              str_collapse(unsupported_cols, quote = '"'))
+      }
       if (!length(cols)) {
         return(task)
       }
-      dt = task$data(cols = cols)
+      if (!all(task$feature_types$type %in% c("numeric"))) {
+        stop("Smote does only accept numeric features. Use PipeOpSelect to select the appropriate features.")
+      }
 
-      # calculate synthetic data
-      st = setDT(invoke(smotefamily::SMOTE, X = dt, target = task$truth(),
+      # Calculate synthetic data
+      dt = task$data(cols = cols)
+      # Remove unseen target levels, see #881
+      # Don't need to re-add them later since we don't touch task here
+      target = droplevels(task$truth())
+
+      st = setDT(invoke(smotefamily::SMOTE, X = dt, target = target,
         .args = self$param_set$get_values(tags = "smote"),
         .opts = list(warnPartialMatchArgs = FALSE))$syn_data)
 
-      # rename target column and fix character conversion
-      st[["class"]] = as_factor(st[["class"]], levels = task$class_names)
-      setnames(st, "class", task$target_names)
-      
+      # Rename target column and fix character conversion
+      # We index by position (target should be last column) instead of indexing by name, which would lead to problems if a feature were called "class"
+      st[[ncol(st)]] = as_factor(st[[ncol(st)]], levels = task$class_names)
+      setnames(st, ncol(st), task$target_names)
+
       task$rbind(st)
     }
   )

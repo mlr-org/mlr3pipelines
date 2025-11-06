@@ -24,8 +24,7 @@ in conjunction with \code{\link[mlr3:mlr_resamplings_insample]{ResamplingInsampl
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{* `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \\cr
-  (`character(1)`, `list`) -> `self` \\cr
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -45,7 +44,8 @@ Input and output channels are inherited from \code{\link{PipeOp}}.
 
 The \verb{$state} is a named \code{list} with elements
 \itemize{
-\item \code{thresholds} :: \code{numeric} learned thresholds
+\item \code{thresholds} :: \code{numeric}\cr
+Learned thresholds;
 }
 }
 
@@ -62,7 +62,7 @@ Initialized to \code{"classif.ce"}, i.e. misclassification error.
 If \code{character}, converts to \code{\link[bbotk:Optimizer]{Optimizer}}
 via \code{\link[bbotk:opt]{opt}}. Initialized to \code{OptimizerGenSA}.
 \item \code{log_level} :: \code{character(1)} | \code{integer(1)}\cr
-Set a temporary log-level for \code{lgr::get_logger("bbotk")}. Initialized to: "warn".
+Set a temporary log-level for \code{lgr::get_logger("mlr3/bbotk")}. Initialized to: "warn".
 }
 }
 
@@ -89,9 +89,7 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{ if (requireNamespace("bbotk")) \{ }
-\dontshow{ if (requireNamespace("rpart")) \{ }
-\dontshow{ if (requireNamespace("GenSA")) \{ }
+\dontshow{if (mlr3misc::require_namespaces(c("bbotk", "rpart", "GenSA"), quietly = TRUE)) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
 task = tsk("iris")
@@ -102,21 +100,22 @@ task$data()
 pop$train(task)
 
 pop$state
-\dontshow{ \} }
-\dontshow{ \} }
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_adas}},
+\code{\link{mlr_pipeops_blsmote}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -128,9 +127,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
@@ -146,11 +148,14 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nearmiss}},
 \code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
@@ -170,6 +175,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
+\code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
@@ -177,6 +183,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_vtreat}},

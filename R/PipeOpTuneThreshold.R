@@ -20,9 +20,9 @@
 #'
 #' @section Construction:
 #' ```
-#' * `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \cr
-#'   (`character(1)`, `list`) -> `self` \cr
+#' PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object. Default: "tunethreshold".
 #' * `param_vals` :: named `list`\cr
@@ -34,7 +34,8 @@
 #'
 #' @section State:
 #' The `$state` is a named `list` with elements
-#' * `thresholds` :: `numeric` learned thresholds
+#' * `thresholds` :: `numeric`\cr
+#'   Learned thresholds;
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOp`], as well as:
@@ -47,7 +48,7 @@
 #'    If `character`, converts to [`Optimizer`][bbotk::Optimizer]
 #'    via [`opt`][bbotk::opt]. Initialized to `OptimizerGenSA`.
 #'  * `log_level` :: `character(1)` | `integer(1)`\cr
-#'    Set a temporary log-level for `lgr::get_logger("bbotk")`. Initialized to: "warn".
+#'    Set a temporary log-level for `lgr::get_logger("mlr3/bbotk")`. Initialized to: "warn".
 #'
 #' @section Internals:
 #' Uses the `optimizer` provided as a `param_val` in order to find an optimal threshold.
@@ -63,10 +64,7 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("bbotk")) \{ }
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
-#' \dontshow{ if (requireNamespace("GenSA")) \{ }
+#' @examplesIf mlr3misc::require_namespaces(c("bbotk", "rpart", "GenSA"), quietly = TRUE)
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -77,9 +75,6 @@
 #' pop$train(task)
 #'
 #' pop$state
-#' \dontshow{ \} }
-#' \dontshow{ \} }
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @export
@@ -92,7 +87,7 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
         measure = p_uty(custom_check = check_class_or_character("Measure", mlr_measures), tags = "train"),
         optimizer = p_uty(custom_check = check_optimizer, tags = "train"),
         log_level = p_uty(
-          custom_check = crate(function(x) check_string(x) %check||% check_integerish(x), .parent = topenv()),
+          custom_check = crate(function(x) check_string(x) %check||% check_integerish(x)),
           tags = "train"
         )
       )
@@ -162,9 +157,15 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
         )
       )
       lgr = lgr::get_logger("bbotk")
+      lgr2 = lgr::get_logger("mlr3/bbotk")
       old_threshold = lgr$threshold
-      on.exit(lgr$set_threshold(old_threshold))
+      old_threshold2 = lgr2$threshold
+      on.exit({
+        lgr$set_threshold(old_threshold)
+        lgr2$set_threshold(old_threshold2)
+      })
       lgr$set_threshold(self$param_set$values$log_level)
+      lgr2$set_threshold(self$param_set$values$log_level)
       optimizer$optimize(inst)
       result = unlist(inst$result_x_domain)
       names(result) = paramname_to_column_map[names(result)]

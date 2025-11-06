@@ -49,7 +49,7 @@ function multiple times when given a \code{\link{Multiplicity}}.
 
 If a \code{\link{PipeOp}} is trained on a \code{\link{Multiplicity}}, the \verb{$state} slot is set to a \code{\link{Multiplicity}}
 as well; this \code{\link{Multiplicity}} contains the "original" \verb{$state} resulting from each individual
-call of the \code{\link[=PipeOp]{PipeOP}} with the input \code{\link{Multiplicity}}'s content. If a \code{\link{PipeOp}} was trained
+call of the \code{\link{PipeOp}} with the input \code{\link{Multiplicity}}'s content. If a \code{\link{PipeOp}} was trained
 with a \code{\link{Multiplicity}}, then the \code{predict()} argument must be a \code{\link{Multiplicity}} with the same
 number of elements.
 }

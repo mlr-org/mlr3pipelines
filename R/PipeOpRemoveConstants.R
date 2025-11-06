@@ -39,7 +39,7 @@
 #'   Initialized to `TRUE`.
 #'
 #' @section Fields:
-#' Fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].

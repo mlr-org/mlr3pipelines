@@ -31,11 +31,11 @@ be set during construction. Default \code{list()}.
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpProxy}} has multiple input channels depending on the \code{innum} construction argument, named
+\code{PipeOpProxy} has multiple input channels depending on the \code{innum} construction argument, named
 \code{"input1"}, \code{"input2"}, ... if \code{innum} is nonzero; if \code{innum} is 0, there is only one \emph{vararg}
 input channel named \code{"..."}.
 
-\code{\link{PipeOpProxy}} has multiple output channels depending on the \code{outnum} construction argument,
+\code{PipeOpProxy} has multiple output channels depending on the \code{outnum} construction argument,
 named \code{"output1"}, \code{"output2"}, ...
 The output is determined by the output of the \code{content} operation (a \code{\link{PipeOp}} or \code{\link{Graph}}).
 }
@@ -74,38 +74,40 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{ if (requireNamespace("rpart")) \{ }
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library("mlr3")
-library("mlr3learners")
 
 set.seed(1234)
 task = tsk("iris")
 
 # use a proxy for preprocessing and a proxy for learning, i.e.,
-# no preprocessing and classif.kknn
+# no preprocessing and classif.rpart
 g = po("proxy", id = "preproc", param_vals = list(content = po("nop"))) \%>>\%
-  po("proxy", id = "learner", param_vals = list(content = lrn("classif.kknn")))
-rr_kknn = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
-rr_kknn$aggregate(msr("classif.ce"))
+  po("proxy", id = "learner", param_vals = list(content = lrn("classif.rpart")))
+rr_rpart = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
+rr_rpart$aggregate(msr("classif.ce"))
 
 # use pca for preprocessing and classif.rpart as the learner
 g$param_set$values$preproc.content = po("pca")
 g$param_set$values$learner.content = lrn("classif.rpart")
 rr_pca_rpart = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
 rr_pca_rpart$aggregate(msr("classif.ce"))
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_adas}},
+\code{\link{mlr_pipeops_blsmote}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -117,9 +119,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
@@ -135,11 +140,14 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nearmiss}},
 \code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
@@ -158,6 +166,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
+\code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
@@ -165,6 +174,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},

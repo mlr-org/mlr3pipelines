@@ -1,12 +1,12 @@
 #' @import data.table
 #' @import checkmate
+#' @import cli
 #' @import mlr3
 #' @import paradox
 #' @import mlr3misc
 #' @importFrom R6 R6Class
 #' @importFrom utils tail head
 #' @importFrom digest digest
-#' @importFrom withr with_options
 #' @importFrom stats setNames
 "_PACKAGE"
 
@@ -43,7 +43,7 @@ paradox_info <- list2env(list(is_old = FALSE), parent = emptyenv())
   if (Sys.getenv("IN_PKGDOWN") == "true") {
     lg$set_threshold("warn")
   }
-  paradox_info$is_old = "set_id" %in% names(ps())
+  supply_boston_housing()
 }  # nocov end
 
 .onUnload = function(libpath) { # nocov start

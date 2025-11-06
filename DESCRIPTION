@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.6.0-9000
+Version: 0.9.0-9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -34,7 +34,20 @@ Authors@R:
       person(given = "Susanne",
              family = "Dandl",
              role = "aut",
-             email = "dandl.susanne@googlemail.com"))
+             email = "dandl.susanne@googlemail.com"),
+      person(given = "Keno",
+             family = "Mersmann",
+             role = "ctb",
+             email = "keno.mersmann@gmail.com"),
+      person(given = "Maximilian",
+             family = "Mücke",
+             role = "ctb",
+             email = "muecke.maximilian@gmail.com",
+             comment = c(ORCID = "0009-0000-9432-9795")),
+      person(given = "Lona",
+             family = "Koers",
+             role = "ctb",
+             email = "lona.koers@gmail.com"))
 Description: Dataflow programming toolkit that enriches 'mlr3' with a diverse
   set of pipelining operators ('PipeOps') that can be composed into graphs.
   Operations exist for data preprocessing, model fitting, and ensemble
@@ -45,18 +58,18 @@ URL: https://mlr3pipelines.mlr-org.com,
     https://github.com/mlr-org/mlr3pipelines
 BugReports: https://github.com/mlr-org/mlr3pipelines/issues
 Depends:
-    R (>= 3.1.0)
+    R (>= 3.3.0)
 Imports:
     backports,
     checkmate,
+    cli,
     data.table,
     digest,
     lgr,
     mlr3 (>= 0.20.0),
-    mlr3misc (>= 0.9.0),
-    paradox,
-    R6,
-    withr
+    mlr3misc (>= 0.17.0),
+    paradox (>= 1.0.0),
+    R6
 Suggests:
     ggplot2,
     glmnet,
@@ -65,7 +78,7 @@ Suggests:
     lme4,
     mlbench,
     bbotk (>= 0.3.0),
-    mlr3filters (>= 0.1.1),
+    mlr3filters (>= 0.8.1),
     mlr3learners,
     mlr3measures,
     nloptr,
@@ -82,22 +95,28 @@ Suggests:
     evaluate,
     NMF,
     MASS,
-    kknn,
     GenSA,
     methods,
     vtreat,
     future,
     htmlwidgets,
-    ranger
+    ranger,
+    themis
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.3.2
-VignetteBuilder: knitr
+RoxygenNote: 7.3.3
+VignetteBuilder: knitr, rmarkdown
 Collate:
+    'CnfAtom.R'
+    'CnfClause.R'
+    'CnfFormula.R'
+    'CnfFormula_simplify.R'
+    'CnfSymbol.R'
+    'CnfUniverse.R'
     'FilterEnsemble.R'
     'Graph.R'
     'GraphLearner.R'
@@ -109,6 +128,8 @@ Collate:
     'LearnerAvg.R'
     'NO_OP.R'
     'PipeOpTaskPreproc.R'
+    'PipeOpADAS.R'
+    'PipeOpBLSmote.R'
     'PipeOpBoxCox.R'
     'PipeOpBranch.R'
     'PipeOpChunk.R'
@@ -120,9 +141,11 @@ Collate:
     'PipeOpCollapseFactors.R'
     'PipeOpCopy.R'
     'PipeOpDateFeatures.R'
+    'PipeOpDecode.R'
     'PipeOpEncode.R'
     'PipeOpEncodeImpact.R'
     'PipeOpEncodeLmer.R'
+    'PipeOpEncodePL.R'
     'PipeOpFeatureUnion.R'
     'PipeOpFilter.R'
     'PipeOpFixFactors.R'
@@ -140,12 +163,15 @@ Collate:
     'PipeOpKernelPCA.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'
+    'PipeOpLearnerPICVPlus.R'
+    'PipeOpLearnerQuantiles.R'
     'PipeOpMissingIndicators.R'
     'PipeOpModelMatrix.R'
     'PipeOpMultiplicity.R'
     'PipeOpMutate.R'
     'PipeOpNMF.R'
     'PipeOpNOP.R'
+    'PipeOpNearmiss.R'
     'PipeOpOVR.R'
     'PipeOpPCA.R'
     'PipeOpProxy.R'
@@ -161,16 +187,19 @@ Collate:
     'PipeOpScaleRange.R'
     'PipeOpSelect.R'
     'PipeOpSmote.R'
+    'PipeOpSmoteNC.R'
     'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
     'PipeOpTextVectorizer.R'
     'PipeOpThreshold.R'
+    'PipeOpTomek.R'
     'PipeOpTrafo.R'
     'PipeOpTuneThreshold.R'
     'PipeOpUnbranch.R'
     'PipeOpVtreat.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'
+    'TaskRegr_boston_housing.R'
     'assert_graph.R'
     'bibentries.R'
     'greplicate.R'
@@ -187,6 +216,7 @@ Collate:
     'pipeline_targettrafo.R'
     'po.R'
     'ppl.R'
+    'preproc.R'
     'reexports.R'
     'typecheck.R'
     'zzz.R'

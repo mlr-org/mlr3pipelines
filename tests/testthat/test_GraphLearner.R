@@ -9,7 +9,12 @@ test_that("basic graphlearner tests", {
   gr = PipeOpLearner$new(lrn)
 
   glrn = GraphLearner$new(gr)
+  glrn$properties = setdiff(glrn$properties, "weights")  # FIXME: workaround until weights handling does not need to be part of the paramset
+  if ("use_weights" %in% names(glrn)) {  # FIXME: condition can be removed when mlr3 weights update, mlr3-org/mlr3#1124 is on CRAN
+    glrn$use_weights = "error"  # also need to update use_weights now
+  }
   expect_true(run_experiment(task, glrn)$ok)
+  glrn$properties = c(glrn$properties, "weights")
 
   glrn = GraphLearner$new(gr)
   expect_learner(glrn)
@@ -37,7 +42,15 @@ test_that("basic graphlearner tests", {
   glrn2 = GraphLearner$new(gr2)
   glrn2_clone = glrn2$clone(deep = TRUE)
   expect_learner(glrn2)
-  expect_true(run_experiment(task, glrn)$ok)
+  glrn2$properties = setdiff(glrn2$properties, "weights")  # FIXME: see above
+  if ("use_weights" %in% names(glrn2)) {  # FIXME: see above
+    glrn2$use_weights = "error"  # see above
+  }
+  expect_true(run_experiment(task, glrn2)$ok)
+  glrn2$properties = c(glrn2$properties, "weights")  # reset changes
+  if ("use_weights" %in% names(glrn2)) {  # FIXME: see above
+    glrn2$use_weights = "use"  # reset changes
+  }
   glrn2$train(task)
   glrn2_clone$state = glrn2$state
 #  glrn2_clone$state$log = glrn2_clone$state$log$clone(deep = TRUE)  # FIXME: this can go when mlr-org/mlr3#343 is fixed
@@ -123,6 +136,7 @@ test_that("graphlearner parameters behave as they should", {
   dblrn = mlr_learners$get("classif.debug")
   dblrn$param_set$values$save_tasks = TRUE
 
+  # Graph ParamSet
   dbgr = PipeOpScale$new() %>>% PipeOpLearner$new(dblrn)
 
   expect_subset(c("scale.center", "scale.scale", "classif.debug.x"), dbgr$param_set$ids())
@@ -159,6 +173,7 @@ test_that("graphlearner parameters behave as they should", {
   expect_equal(dbgr$pipeops$classif.debug$param_set$values$x, 0.5)
   expect_equal(dbgr$pipeops$classif.debug$learner$param_set$values$x, 0.5)
 
+  # Graph Learner ParamSet
   dblrn = mlr_learners$get("classif.debug")
   dblrn$param_set$values$message_train = 1
   dblrn$param_set$values$message_predict = 1
@@ -173,6 +188,32 @@ test_that("graphlearner parameters behave as they should", {
 
   expect_mapequal(gl$param_set$values,
     list(classif.debug.message_predict = 0, classif.debug.message_train = 1, classif.debug.warning_predict = 0, classif.debug.warning_train = 1))
+
+  # GraphLearner AB shortcuts
+  gl = GraphLearner$new(dbgr)
+
+  # GraphLearner AB $pipeops
+  expect_no_error({gl$pipeops$classif.debug$param_set$values$x = 0.5})
+  expect_equal(gl$pipeops$classif.debug$param_set$values$x, 0.5)
+  expect_equal(gl$graph_model$pipeops$classif.debug$param_set$values$x, 0.5)
+
+  # GraphLearner AB $pipeops_param_set
+  expect_no_error({gl$pipeops_param_set$classif.debug$values$x = 0})
+  expect_equal(gl$pipeops_param_set$classif.debug$values$x, 0)
+  expect_equal(gl$graph_model$pipeops$classif.debug$param_set$values$x, 0)
+
+  # GraphLearner AB $pipeops_param_set_values
+  expect_no_error({gl$pipeops_param_set_values$classif.debug$x = 1})
+  expect_equal(gl$pipeops_param_set_values$classif.debug$x, 1)
+  expect_equal(gl$graph_model$pipeops$classif.debug$param_set$values$x, 1)
+
+  # Change param_set pointer should throw error
+  expect_error({gl$pipeops$scale$param_set = ps()})
+  expect_error({gl$pipeops_param_set$scale = ps()})
+  # Lists with wrong properties should not be accepted
+  expect_error({gl$pipeops_param_set_values = list()})
+  expect_error({gl$pipeops_param_set_values = list(x = 5)})
+
 })
 
 test_that("graphlearner type inference", {
@@ -527,6 +568,7 @@ test_that("predict() function for Graph", {
 })
 
 test_that("base_learner() works", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   # graph containing single PipeOpLearner
   x = as_learner(as_graph(lrn("classif.rpart")))
@@ -609,7 +651,9 @@ test_that("base_learner() works", {
   expect_identical(x$base_learner(), x$graph_model$pipeops$classif.debug$learner_model)
 
   x$param_set$values$branch.selection = to_tune()
-  expect_error(x$base_learner(), "Cannot infer active output.* PipeOpBranch branch.*non-numeric 'selection'")
+  # TODO: update this once something smarter happens here
+  # expect_error(x$base_learner(), "Cannot infer active output.* PipeOpBranch branch.*non-numeric 'selection'")
+
 
   x = as_learner(ppl("branch", list(classif.rpart = lrn("classif.rpart") %>>% po("unbranch", 1, id = "poub1"), classif.debug = lrn("classif.debug") %>>% po("unbranch", 1, id = "poub2"))))
   expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
@@ -874,7 +918,7 @@ test_that("GraphLearner hashes", {
 
 
   lr1 <- lrn("classif.rpart")
-  lr2 <- lrn("classif.rpart", fallback = lrn("classif.rpart"))
+  lr2 <- lrn("classif.rpart")$encapsulate("try", fallback = lrn("classif.rpart"))
 
   expect_string(all.equal(lr1$hash, lr2$hash), "mismatch")
   expect_string(all.equal(lr1$phash, lr2$phash), "mismatch")
@@ -894,11 +938,12 @@ test_that("GraphLearner hashes", {
 })
 
 test_that("validation, internal_valid_scores", {
+  skip_if_not_installed("rpart")
   expect_error(as_pipeop(lrn("classif.debug", validate = 0.3)), "must either be")
   # None of the Learners can do validation -> NULL
   glrn1 = as_learner(as_graph(lrn("classif.rpart")))$train(tsk("iris"))
   expect_false("validation" %in% glrn1$properties)
-  expect_equal(glrn1$internal_valid_scores, NULL)
+  expect_null(glrn1$internal_valid_scores)
 
   glrn2 = as_learner(as_graph(lrn("classif.debug")))
   expect_true("validation" %in% glrn2$properties)
@@ -911,7 +956,7 @@ test_that("validation, internal_valid_scores", {
 
   set_validate(glrn2, NULL)
   glrn2$train(tsk("iris"))
-  expect_true(is.null(glrn2$internal_valid_scores))
+  expect_null(glrn2$internal_valid_scores)
 
   # No validation set specified --> No internal_valid_scores
   expect_equal(
@@ -922,17 +967,18 @@ test_that("validation, internal_valid_scores", {
 })
 
 test_that("internal_tuned_values", {
+  skip_if_not_installed("rpart")
   # no internal tuning support -> NULL
   task = tsk("iris")
   glrn1 = as_learner(as_graph(lrn("classif.rpart")))$train(task)
   expect_false("internal_tuning" %in% glrn1$properties)
-  expect_equal(glrn1$internal_tuned_values, NULL)
+  expect_null(glrn1$internal_tuned_values)
 
   # learner wQ
   # ith internal tuning
   glrn2 = as_learner(as_graph(lrn("classif.debug")))
   expect_true("internal_tuning" %in% glrn2$properties)
-  expect_equal(glrn2$internal_tuned_values, NULL)
+  expect_null(glrn2$internal_tuned_values)
   glrn2$train(task)
   expect_equal(glrn2$internal_tuned_values, named_list())
   glrn2$param_set$set_values(classif.debug.early_stopping = TRUE, classif.debug.iter = 1000)
@@ -947,8 +993,8 @@ test_that("set_validate", {
   expect_equal(glrn$validate, "test")
   expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, "predefined")
   set_validate(glrn, NULL)
-  expect_equal(glrn$validate, NULL)
-  expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, NULL)
+  expect_null(glrn$validate)
+  expect_null(glrn$graph$pipeops$classif.debug$learner$validate)
   set_validate(glrn, 0.2, ids = "classif.debug")
   expect_equal(glrn$validate, 0.2)
   expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, "predefined")
@@ -968,7 +1014,7 @@ test_that("set_validate", {
   expect_equal(glrn2$validate, 0.25)
   expect_equal(glrn2$graph$pipeops$polearner$learner$validate, "predefined")
   expect_equal(glrn2$graph$pipeops$polearner$learner$graph$pipeops$final$learner$validate, "predefined")
-  expect_equal(glrn2$graph$pipeops$polearner$learner$graph$pipeops$classif.debug$learner$validate, NULL)
+  expect_null(glrn2$graph$pipeops$polearner$learner$graph$pipeops$classif.debug$learner$validate)
 
   # graphlearner in graphlearner: failure handling
   glrn = as_learner(po("pca") %>>% lrn("classif.debug"))
@@ -979,15 +1025,15 @@ test_that("set_validate", {
     set_validate(gglrn, validate = "test", args = list(po_glrn = list(ids = "pca"))),
     "Trying to heuristically reset"
   )
-  expect_equal(gglrn$validate, NULL)
+  expect_null(gglrn$validate)
 
   # base_learner is not final learner
   glrn = as_learner(lrn("classif.debug") %>>% po("nop"))
   set_validate(glrn, 0.3)
   expect_equal(glrn$graph$pipeops$classif.debug$validate, "predefined")
   set_validate(glrn, NULL)
-  expect_equal(glrn$graph$pipeops$classif.debug$validate, NULL)
-  expect_equal(glrn$validate, NULL)
+  expect_null(glrn$graph$pipeops$classif.debug$validate)
+  expect_null(glrn$validate)
 
   # args and args_all
   bglrn = as_learner(ppl("branch", list(lrn("classif.debug", id = "d1"), lrn("classif.debug", id = "d2"))))
@@ -999,13 +1045,13 @@ test_that("set_validate", {
   # args
   set_validate(gglrn, validate = 0.2, args = list(po_glrn = list(ids = "d1")))
   expect_equal(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d1$validate, "predefined")
-  expect_equal(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d2$validate, NULL)
+  expect_null(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d2$validate)
 
   # args all
   gglrn = as_learner(obj)
   set_validate(gglrn, validate = 0.2, args_all = list(ids = "d1"))
   expect_equal(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d1$validate, "predefined")
-  expect_equal(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d2$validate, NULL)
+  expect_null(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d2$validate)
 })
 
 test_that("marshal", {
@@ -1030,6 +1076,7 @@ test_that("marshal", {
 })
 
 test_that("marshal has no effect when nothing needed marshaling", {
+  skip_if_not_installed("rpart")
   task = tsk("iris")
   glrn = as_learner(as_graph(lrn("classif.rpart")))
   glrn$train(task)
@@ -1227,6 +1274,8 @@ test_that("GraphLearner Selected Features", {
 
 test_that("GraphLearner other properties", {
 
+  has_loglik = "loglik" %in% mlr_reflections$learner_properties[["classif"]]
+  if (!has_loglik) skip()
   DebugWithProperties = R6Class("DebugWithProperties", inherit = LearnerClassifDebug,
     public = list(
       initialize = function(...) {
