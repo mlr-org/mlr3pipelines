@@ -103,9 +103,6 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
   public = list(
     initialize = function(learner, id = "imputelearner", param_vals = list()) {
       private$.learner = as_learner(learner, clone = TRUE)
-      if (paradox_info$is_old) {
-        private$.learner$param_set$set_id = ""
-      }
       id = id %??% private$.learner$id
       feature_types = switch(private$.learner$task_type,
         regr = c("integer", "numeric"),
@@ -169,7 +166,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
 
       if (type %in% c("factor", "ordered")) {
         # in some edge cases there may be levels during training that are missing during predict.
-        levels(feature) = c(levels(feature), as.character(type))
+        levels(feature) = c(levels(feature), levels(imp_vals))
       }
 
       feature[nas] = imp_vals

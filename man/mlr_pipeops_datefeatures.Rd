@@ -8,12 +8,14 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Based on \code{POSIXct} columns of the data, a set of date related features is computed and added to
-the feature set of the output task. If no \code{POSIXct} column is found, the original task is
-returned unaltered. This functionality is based on the \code{add_datepart()} and
-\code{add_cyclic_datepart()} functions from the \code{fastai} library. If operation on only particular
-\code{POSIXct} columns is requested, use the \code{affect_columns} parameter inherited from
-\code{\link{PipeOpTaskPreprocSimple}}.
+Based on \code{POSIXct}/\code{Date} columns of the data, a set of date related features is computed and
+added to the feature set of the output task. If no \code{POSIXct} or \code{Date} column is found, the
+original task is returned unaltered. This functionality is based on the \code{add_datepart()} and
+\code{add_cyclic_datepart()} functions from the \CRANpkg{fastai} package. If operation on only
+particular \code{POSIXct}/\code{Date} columns is requested, use the \code{affect_columns} parameter inherited
+from \code{\link{PipeOpTaskPreprocSimple}}.
+
+For \code{Date} columns, the features \code{"hour"}, \code{"minute"}, \code{"second"}, and \code{"is_day"} are skipped.
 
 If \code{cyclic = TRUE}, cyclic features are computed for the features \code{"month"}, \code{"week_of_year"},
 \code{"day_of_year"}, \code{"day_of_month"}, \code{"day_of_week"}, \code{"hour"}, \code{"minute"} and \code{"second"}. This
@@ -58,30 +60,32 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{keep_date_var} :: \code{logical(1)}\cr
-Should the \code{POSIXct} columns be kept as features? Default FALSE.
+Should the \code{POSIXct} columns be kept as features? Default \code{FALSE}.
 \item \code{cyclic} :: \code{logical(1)}\cr
-Should cyclic features be computed? See Internals. Default FALSE.
+Should cyclic features be computed? See Internals. Default \code{FALSE}.
 \item \code{year} :: \code{logical(1)}\cr
-Should the year be extracted as a feature? Default TRUE.
+Should the year be extracted as a feature? Default \code{TRUE}.
+\item \code{quarter} :: \code{logical(1)}\cr
+Should the quarter be extracted as a feature? Default \code{TRUE}.
 \item \code{month} :: \code{logical(1)}\cr
-Should the month be extracted as a feature? Default TRUE.
+Should the month be extracted as a feature? Default \code{TRUE}.
 \item \code{week_of_year} :: \code{logical(1)}\cr
-Should the week of the year be extracted as a feature? Default TRUE.
+Should the week of the year be extracted as a feature? Default \code{TRUE}.
 \item \code{day_of_year} :: \code{logical(1)}\cr
-Should the day of the year be extracted as a feature? Default TRUE.
+Should the day of the year be extracted as a feature? Default \code{TRUE}.
 \item \code{day_of_month} :: \code{logical(1)}\cr
-Should the day of the month be extracted as a feature? Default TRUE.
+Should the day of the month be extracted as a feature? Default \code{TRUE}.
 \item \code{day_of_week} :: \code{logical(1)}\cr
-Should the day of the week be extracted as a feature? Default TRUE.
+Should the day of the week (ISO 8601) be extracted as a feature? Default \code{TRUE}.
 \item \code{hour} :: \code{logical(1)}\cr
-Should the hour be extracted as a feature? Default TRUE.
+Should the hour be extracted as a feature? Default \code{TRUE}.
 \item \code{minute} :: \code{logical(1)}\cr
-Should the minute be extracted as a feature? Default TRUE.
+Should the minute be extracted as a feature? Default \code{TRUE}.
 \item \code{second} :: \code{logical(1)}\cr
-Should the second be extracted as a feature? Default TRUE.
+Should the second be extracted as a feature? Default \code{TRUE}.
 \item \code{is_day} :: \code{logical(1)}\cr
 Should a feature be extracted indicating whether it is day time (06:00am - 08:00pm)?
-Default TRUE.
+Default \code{TRUE}.
 }
 }
 
@@ -105,8 +109,9 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 library("mlr3")
 dat = iris
 set.seed(1)
-dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"),
-  size = 150L)
+dat$date = sample(
+  seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"), size = 150L
+)
 task = TaskClassif$new("iris_date", backend = dat, target = "Species")
 pop = po("datefeatures", param_vals = list(cyclic = FALSE, minute = FALSE, second = FALSE))
 pop$train(list(task))

@@ -1,11 +1,11 @@
-#' @title Principle Component Analysis
+#' @title Principal Component Analysis
 #'
 #' @usage NULL
 #' @name mlr_pipeops_pca
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Extracts principle components from data. Only affects numerical features.
+#' Extracts principal components from data. Only affects numerical features.
 #' See [stats::prcomp()] for details.
 #'
 #' @section Construction:

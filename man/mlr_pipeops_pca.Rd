@@ -3,12 +3,12 @@
 \name{mlr_pipeops_pca}
 \alias{mlr_pipeops_pca}
 \alias{PipeOpPCA}
-\title{Principle Component Analysis}
+\title{Principal Component Analysis}
 \format{
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Extracts principle components from data. Only affects numerical features.
+Extracts principal components from data. Only affects numerical features.
 See \code{\link[stats:prcomp]{stats::prcomp()}} for details.
 }
 \section{Construction}{

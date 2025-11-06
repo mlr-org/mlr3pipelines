@@ -17,12 +17,22 @@ using \eqn{min(x) - offset - multiplier * diff(range(x))} or
 This type of imputation is especially sensible in the context of tree-based methods, see also
 Ding & Simonoff (2010).
 
-If a factor is missing during prediction, but not during training, this adds an unseen level
-\code{".MISSING"}, which would be a problem for most models. This is why it is recommended to use
-\code{\link[=mlr_pipeops_fixfactors]{po("fixfactors")}} and
+\code{\link[mlr3:Learner]{Learner}}s expect input \code{\link[mlr3:Task]{Task}}s to have the same \code{factor} (or \code{ordered}) levels during
+training as well as prediction. This \code{PipeOp} modifies the levels of \code{factor} and \code{ordered} features,
+and since it may occur that a \code{factor} or \code{ordered} feature contains missing values only during prediction, but not
+during training, the output \code{Task} could also have different levels during the two stages.
+
+To avoid problems with the \code{Learner}s' expectation, controlling the \code{PipeOp}s' handling of this edge-case is necessary.
+For this, use the \code{create_empty_level} hyperparameter inherited from \code{\link{PipeOpImpute}}.\cr
+If \code{create_empty_level} is set to \code{TRUE}, then an unseen level \code{".MISSING"} is added to the feature during
+training and missing values are imputed as \code{".MISSING"} during prediction.
+However, empty factor levels during training can be a problem for many \code{\link[mlr3:Learner]{Learners}}.\cr
+If \code{create_empty_level} is set to \code{FALSE}, then no empty level is introduced during training, but columns that
+have missing values only during prediction will \emph{not} be imputed. This is why it may still be necessary to use
 \code{\link[=mlr_pipeops_imputesample]{po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))}}
-(or some other imputation method) after this imputation method, if missing values are expected during prediction
-in factor columns that had no missing values during training.
+(or another imputation method) after this imputation method.
+Note that setting \code{create_empty_level} to \code{FALSE} is the same as setting it to \code{TRUE} and using \code{\link{PipeOpFixFactors}}
+after this \code{PipeOp}.
 }
 \section{Construction}{
 
@@ -58,14 +68,14 @@ The \verb{$state$model} contains either \code{".MISSING"} used for \code{charact
 The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, as well as:
 \itemize{
 \item \code{min} :: \code{logical(1)} \cr
-Should \code{integer} and \code{numeric} features be shifted below the minimum? Initialized to TRUE. If FALSE
+Should \code{integer} and \code{numeric} features be shifted below the minimum? Initialized to \code{TRUE}. If \code{FALSE}
 they are shifted above the maximum. See also the description above.
 \item \code{offset} :: \code{numeric(1)} \cr
 Numerical non-negative offset as used in the description above for \code{integer} and \code{numeric}
-features. Initialized to 1.
+features. Initialized to \code{1}.
 \item \code{multiplier} :: \code{numeric(1)} \cr
 Numerical non-negative multiplier as used in the description above for \code{integer} and \code{numeric}
-features. Initialized to 1.
+features. Initialized to \code{1}.
 }
 }
 
@@ -73,7 +83,8 @@ features. Initialized to 1.
 
 Adds an explicit new \code{level()} to \code{factor} and \code{ordered} features, but not to \code{character} features.
 For \code{integer} and \code{numeric} features uses the \code{min}, \code{max}, \code{diff} and \code{range} functions.
-\code{integer} and \code{numeric} features that are entirely \code{NA} are imputed as \code{0}.
+\code{integer} and \code{numeric} features that are entirely \code{NA} are imputed as \code{0}. \code{factor} and \code{ordered} features that are
+entirely \code{NA} are imputed as \code{".MISSING"}.
 }
 
 \section{Fields}{
@@ -101,8 +112,7 @@ new_task$data()
 
 # recommended use when missing values are expected during prediction on
 # factor columns that had no missing values during training
-gr = po("imputeoor") \%>>\%
-  po("fixfactors") \%>>\%
+gr = po("imputeoor", create_empty_level = FALSE) \%>>\%
   po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))
 t1 = as_task_classif(data.frame(l = as.ordered(letters[1:3]), t = letters[1:3]), target = "t")
 t2 = as_task_classif(data.frame(l = as.ordered(c("a", NA, NA)), t = letters[1:3]), target = "t")

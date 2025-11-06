@@ -1,4 +1,25 @@
-# mlr3pipelines 0.8.0-9000
+# mlr3pipelines 0.9.0-9000
+
+* Compatibility with new testthat version 3.3.0
+* Fix: Added internal workaround for `PipeOpNMF` attaching `Biobase`, `BiocGenerics`, and `generics` to the search path during training, prediction or when printing its `$state`.
+* feat: allow dates in datefeatures pipe op and use data.table for date feature generation.
+* Added support for internal validation tasks to `PipeOpFeatureUnion`.
+* feat: `PipeOpLearnerCV` can reuse the cross-validation models during prediction by averaging their outputs (`resampling.predict_method = "cv_ensemble"`).
+* feat: `PipeOpRegrAvg` gets new `se_aggr` and `se_aggr_rho` hyperparameters and now allows various forms of SE aggregation.
+
+# mlr3pipelines 0.9.0
+
+* Breaking change: Removed initialization of `PipeOpImputeConstant`'s `constant` hyperparameter since it was incompatible with other defaults and would lead to not recommended usage (creating an empty level).
+* Removed compatibility for old `paradox` versions pre-1.0.0.
+* Added `empty_level_control` argument to `PipeOpImpute` allowing control over edge cases for `factor`/`ordered` columns.
+* Set new construction argument `empty_level_control` to `"param"` for `PipeOpImputeOOR` and to `"always"` for `PipeOpImputeConstant`.
+* Untrained `PipeOp`s that take `NULL` as input during training now automatically perform training during prediction.
+* `PipeOpImputeConstant`, `PipeOpImputeMode`, `PipeOpImputeOOR`, and `PipeOpImputeLearner` can now handle `factor` or `ordered` features with zero levels.
+* `PipeOpImputeConstant` now gives a more informative error message if `check_levels` is `TRUE` and a new level would be created through imputation.
+* Fix: `PipeOpImputeOOR` now imputes `".MISSING"` for `factor`/`ordered` features with only `NA`s instead of sampling from the feature's levels.
+* Fix: `PipeOpImputeLearner` no longer adds `"factor"` or `"ordered"` levels for these feature types arbitrarily and instead updates levels correctly in certain edge-cases.
+* Fixed the error message for unexpected Multiplicities in the input and output type checking during `PipeOp`s training and prediction.
+* Fixed a grammatical error in `PipeOp`'s error message wrapper: now correctly says "This happened *in* ...".
 
 # mlr3pipelines 0.8.0
 
@@ -8,7 +29,7 @@
 * Added new convenience function `preproc()` for easier training of or prediction with `PipeOp`s or `Graph`s.
 * Fix: `PipeOpVtreat`, `PipeOpEncodeImpact`, and `PipeOpEncodeLmer` now accept the more precise `TaskSupervised` instead of `Task` as input for training and prediction.
 * Docs: Added missing documentation for the `task_type` of the input and output channels of `PipeOp`s that inherit from `PipeOpTaskPreproc` and set a non-default `task_type`.
-* Fix: `PipeOpEncodeLmer`, `PipeOpADAS`, `PipeOpBLSmote`, `PipeOpSmote`, and `PipeOpSmoteNC` no longer throw an error in case of empty target levels during training. 
+* Fix: `PipeOpEncodeLmer`, `PipeOpADAS`, `PipeOpBLSmote`, `PipeOpSmote`, and `PipeOpSmoteNC` no longer throw an error in case of empty target levels during training.
 * Fix: `PipeOpClassBalancing` now handles unseen target levels by ignoring them during upsampling instead of producing `NA`s.
 
 # mlr3pipelines 0.7.2
@@ -285,4 +306,3 @@
 # mlr3pipelines 0.1.0
 
 * Initial upload to CRAN.
-

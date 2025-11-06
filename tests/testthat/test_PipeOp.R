@@ -88,25 +88,25 @@ test_that("Informative error and warning messages", {
 
   # two 'expect_warning', because we want to 'expect' that there is exactly one warning.
   # a function argument for expect_warning that tests exactly this would be a good idea, and has therefore been removed -.-
-  expect_no_warning(expect_warning(gr$train(tsk("iris")), "This happened PipeOp classif.debug's \\$train\\(\\)$"))
+  expect_no_warning(expect_warning(gr$train(tsk("iris")), "This happened in PipeOp classif.debug's \\$train\\(\\)$"))
 
   expect_no_warning(suppressWarnings(gr$train(tsk("iris"))))
 
-  expect_no_warning(expect_warning(gr$predict(tsk("iris")), "This happened PipeOp classif.debug's \\$predict\\(\\)$"))
+  expect_no_warning(expect_warning(gr$predict(tsk("iris")), "This happened in PipeOp classif.debug's \\$predict\\(\\)$"))
 
   expect_no_warning(suppressWarnings(gr$predict(tsk("iris"))))
 
   gr$param_set$values$classif.debug.warning_train = 0
   gr$param_set$values$classif.debug.warning_predict = 0
-  
+
   gr$param_set$values$classif.debug.error_train = 1
-  expect_error(gr$train(tsk("iris")), "This happened PipeOp classif.debug's \\$train\\(\\)$")
+  expect_error(gr$train(tsk("iris")), "This happened in PipeOp classif.debug's \\$train\\(\\)$")
 
   gr$param_set$values$classif.debug.error_train = 0
   gr$param_set$values$classif.debug.error_predict = 1
   # Need to first train the Graph for predict to work
   gr$train(tsk("iris"))
-  expect_error(gr$predict(tsk("iris")), "This happened PipeOp classif.debug's \\$predict\\(\\)$")
+  expect_error(gr$predict(tsk("iris")), "This happened in PipeOp classif.debug's \\$predict\\(\\)$")
 
   potest = R6::R6Class("potest", inherit = PipeOp,
     private = list(
@@ -140,4 +140,89 @@ test_that("properties", {
   expect_error(f("abc"))
   po1 = f("validation")
   expect_equal(po1$properties, "validation")
+})
+
+test_that("PipeOp - auto-train untrained PipeOps during predict that have input type NULL", {
+  PipeOpTestAutotrain = R6Class("PipeOpTestAutotrain",
+    inherit = PipeOp,
+    public = list(
+      # Add argument innum
+      initialize = function(innum = 1, id = "test_autotrain", param_set = ps()) {
+        super$initialize(id = id, param_set = param_set,
+          input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "*"),
+          output = data.table(name = "output", train = "*", predict = "*")
+        )
+      }),
+    private = list(
+      .train = function(inputs) {
+        catf("Training %s", self$id)
+        self$state = list(length(inputs))
+        inputs[1L]
+      },
+      .predict = function(inputs) {
+        catf("Predicting %s", self$id)
+        inputs[1L]
+      }
+    )
+  )
+
+  # Normal input
+  op = PipeOpTestAutotrain$new()
+  predict_out = op$predict(list("test"))
+  expect_equal(op$state, list(1))
+  expect_equal(predict_out, list(output = "test"))
+
+  # single Multiplicity input
+  op$state = NULL  # reset PipeOp
+  predict_out = op$predict(list(Multiplicity("test", "test")))
+  expect_equal(op$state, Multiplicity(list(1), list(1)))
+  expect_equal(predict_out, list(output = Multiplicity("test", "test")))
+
+  # nested Multiplicity input
+  op$state = NULL  # reset PipeOp
+  predict_out = op$predict(list(Multiplicity("test", Multiplicity("test", "test"))))
+  expect_equal(op$state, Multiplicity(list(1), Multiplicity(list(1), list(1))))
+  expect_equal(predict_out, list(output = Multiplicity("test", Multiplicity("test", "test"))))
+
+  # Tests with PipeOp that has multiple input channel
+  op = PipeOpTestAutotrain$new(innum = 2)
+
+  # Normal input
+  predict_out = op$predict(list("test", "test"))
+  expect_equal(op$state, list(2))
+  expect_equal(predict_out, list(output = c("test")))
+
+  # single Multiplicity input
+  op$state = NULL  # reset PipeOp
+  predict_out = op$predict(list(Multiplicity("test", "test"), Multiplicity("test", "test")))
+  expect_equal(op$state, Multiplicity(list(2), list(2)))
+  expect_equal(predict_out, list(output = Multiplicity("test", "test")))
+
+  # nested Multiplicity input
+  op$state = NULL  # reset PipeOp
+  predict_out = op$predict(
+    list(Multiplicity("test", Multiplicity("test", "test")), Multiplicity("test", Multiplicity("test", "test")))
+  )
+  expect_equal(op$state, Multiplicity(list(2), Multiplicity(list(2), list(2))))
+  expect_equal(predict_out, list(output = Multiplicity("test", Multiplicity("test", "test"))))
+
+  # Simple test that pseudo-Multiplicity-aware PipeOp (having "[NULL]" as input type) works
+  op = PipeOpTestAutotrain$new(innum = 1)
+  op$input$train = "[NULL]"
+  op$input$predict = "[*]"
+  op$output$train = "[*]"
+  op$output$predict = "[*]"
+  predict_out = op$predict(list(Multiplicity("test", "test")))
+  expect_equal(op$state, list(1))
+  expect_equal(predict_out, list(output = Multiplicity("test", "test")))
+
+  # Test with real PipeOp: PipeOpClassifAvg
+  op = po("classifavg")
+  task = tsk("iris")
+  # Get a PredictionClassif object
+  learner = lrn("classif.featureless")
+  learner$train(task)
+  predict_out = learner$predict(task)
+  expect_no_error(op$predict(list(predict_out)))
+
 })

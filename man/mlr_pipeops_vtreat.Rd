@@ -18,7 +18,7 @@ Internally, \code{PipeOpVtreat} follows the fit/prepare interface of vtreat, i.e
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpVreat$new(id = "vtreat", param_vals = list())
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpVtreat$new(id = "vtreat", param_vals = list())
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -128,7 +128,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{if (requireNamespace("vtreat")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("vtreat")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
 set.seed(2020)

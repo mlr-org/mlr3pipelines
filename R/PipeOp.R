@@ -310,10 +310,10 @@ PipeOp = R6Class("PipeOp",
       withCallingHandlers({
         output = private$.train(input)
       }, error = function(e) {
-        e$message = sprintf("%s\nThis happened PipeOp %s's $train()", e$message, self$id)
+        e$message = sprintf("%s\nThis happened in PipeOp %s's $train()", e$message, self$id)
         stop(e)
       }, warning = function(w) {
-        w$message = sprintf("%s\nThis happened PipeOp %s's $train()", w$message, self$id)
+        w$message = sprintf("%s\nThis happened in PipeOp %s's $train()", w$message, self$id)
         warning(w)
         invokeRestart("muffleWarning")
       })
@@ -329,7 +329,18 @@ PipeOp = R6Class("PipeOp",
       assert_list(input, .var.name = sprintf("input to PipeOp %s's $predict()", self$id))
 
       if (!self$is_trained) {
-        stopf("Cannot predict, PipeOp '%s' has not been trained yet", self$id)
+        # If the PipeOp would only need NULLs in training anyways (e.g. PipeOpsClassifAvg), we can train the PipeOp for the user automatically.
+        if (all(self$input$train %in% c("NULL", "[NULL]"))) {
+          # Evaluates to NULL if x is not a Multiplicity
+          null_multiplicity = function(x) {
+            if (is.Multiplicity(x)) {
+              as.Multiplicity(lapply(x, null_multiplicity))
+            }
+          }
+          self$train(lapply(input, null_multiplicity))
+        } else {
+          stopf("Cannot predict, PipeOp '%s' has not been trained yet", self$id)
+        }
       }
 
       # need to load packages in train *and* predict, because they might run in different R instances
@@ -349,10 +360,10 @@ PipeOp = R6Class("PipeOp",
       withCallingHandlers({
         output = private$.predict(input)
       }, error = function(e) {
-        e$message = sprintf("%s\nThis happened PipeOp %s's $predict()", e$message, self$id)
+        e$message = sprintf("%s\nThis happened in PipeOp %s's $predict()", e$message, self$id)
         stop(e)
       }, warning = function(w) {
-        w$message = sprintf("%s\nThis happened PipeOp %s's $predict()", w$message, self$id)
+        w$message = sprintf("%s\nThis happened in PipeOp %s's $predict()", w$message, self$id)
         warning(w)
         invokeRestart("muffleWarning")
       })
@@ -369,10 +380,6 @@ PipeOp = R6Class("PipeOp",
     id = function(val) {
       if (!missing(val)) {
         private$.id = val
-        if (paradox_info$is_old && !is.null(private$.param_set)) {
-          # private$.param_set may be NULL if it is constructed dynamically by active binding
-          private$.param_set$set_id = val
-        }
       }
       private$.id
     },
@@ -383,9 +390,6 @@ PipeOp = R6Class("PipeOp",
           private$.param_set = ParamSetCollection$new(sourcelist)
         } else {
           private$.param_set = sourcelist[[1]]
-        }
-        if (paradox_info$is_old && !is.null(self$id)) {
-          private$.param_set$set_id = self$id
         }
       }
       if (!missing(val) && !identical(val, private$.param_set)) {
@@ -525,14 +529,14 @@ check_types = function(self, data, direction, operation) {
       return(data_element)
     }
     if (is.Multiplicity(data_element)) {
-      stopf("Problem with %s: %s contained Multiplicity when it shouldn't have.", varname, data_element)
+      stopf("Problem with %s: Contained Multiplicity when it shouldn't have.", varname)
     }
     if (typereq == "*") return(data_element)
     if (typereq %in% class(data_element)) return(data_element)
     autoconverter = get_autoconverter(typereq)
     msg = ""
     if (!is.null(autoconverter)) {
-      mlr3misc::require_namespaces(autoconverter$packages,
+      require_namespaces(autoconverter$packages,
         sprintf("The following packages are required to convert object of class %s to class %s: %%s.", class(data_element)[1], typereq))
       msg = tryCatch({
         data_element = autoconverter$fun(data_element)

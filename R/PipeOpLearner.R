@@ -141,9 +141,6 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     id = function(val) {
       if (!missing(val)) {
         private$.id = val
-        if (paradox_info$is_old) {
-          private$.learner$param_set$set_id = val
-        }
       }
       private$.id
     },
