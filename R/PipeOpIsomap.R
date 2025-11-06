@@ -33,10 +33,10 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `knn` :: `numeric(1)`\cr
+#' * `knn` :: `integer(1)`\cr
 #'   The number of nearest neighbors in the graph.
 #'   Initialized to 50.
-#' * `ndim` :: `numeric(1)`\cr
+#' * `ndim` :: `integer(1)`\cr
 #'   The number of embedding dimensions.
 #'   Initialized to 2.
 #' * `get_geod` :: `logical(1)`\cr
@@ -44,7 +44,7 @@
 #'   Initialized to `FALSE`.
 #' * `.mute` :: `character`\cr
 #'   A character vector of elements to mute during training (e.g. c("message", "output")).
-#'   Default: `character(0)`.
+#'   Initialized to `NULL`.
 #'
 #' @section Internals:
 #' Applies the Isomap embedding from the `dimRed`-package.
@@ -78,7 +78,8 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
         get_geod = p_lgl(default = FALSE, tags = c("train", "isomap")),
         .mute = p_uty(init = NULL, tags = c("train", "isomap"))
       )
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("dimRed", "stats"))
+      super$initialize(id = id, param_set = ps, param_vals = param_vals,
+        packages = c("dimRed", "stats"), feature_types = c("numeric", "integer"))
     }
   ),
   private = list(

@@ -82,7 +82,13 @@ PipeOpInfo = R6Class("PipeOpInfo",
       )
       original_printer = list(
         Task = crate(function(x) {
-          list(task = x, data = x$data()[, 1:min(10, ncol(x$data()))])
+          row_preview = head(x$row_ids, 10L)
+          col_preview = head(c(x$target_names, x$feature_names), 10L)
+          data_preview = x$data(rows = row_preview, cols = col_preview)
+          list(
+            task = x,
+            data_preview = data_preview
+          )
         }),
         Prediction = crate(function(x) {
           tryCatch(list(prediction = x, score = x$score()), error = function(e) {list(prediction = x)})
@@ -108,7 +114,7 @@ PipeOpInfo = R6Class("PipeOpInfo",
     .printer = NULL,
     .log_target = NULL,
     .output = function(inputs, stage) {
-    input_class = class(inputs[[1]])
+      input_class = class(inputs[[1]])
       leftmost_class =
         if (any(input_class %in% names(private$.printer))) {
           input_class[input_class %in% names(private$.printer)][[1]]
@@ -125,19 +131,20 @@ PipeOpInfo = R6Class("PipeOpInfo",
         cat(stage_string, "\n\n")
         specific_printer(inputs[[1]])
       })
+      message_text = paste(print_string, collapse = "\n")
       if (log_target_split[[1]] == "lgr") {
         logger = lgr::get_logger(log_target_split[[2]])
         log_level = log_target_split[[3]]
-        logger$log(log_level, msg = print_string)
+        logger$log(log_level, msg = message_text)
       } else if (private$.log_target == "cat") {
-        cat(paste(print_string, collapse = "\n"))
+        cat(message_text)
       } else if (private$.log_target == "message") {
-        message(paste(print_string, collapse = "\n"))
+        message(message_text)
       } else if (private$.log_target == "warning") {
-        warning(paste(print_string, collapse = "\n"))
+        warning(message_text)
       } else if (private$.log_target == "none") {
       } else {
-        stopf("Invalid log_target '%s'.", log_target)
+        stopf("Invalid log_target '%s'.", private$.log_target)
       }
     },
     .train = function(inputs, stage = "Training") {

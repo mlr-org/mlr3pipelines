@@ -66,10 +66,12 @@ test_that("logger is addressed when log_target is set to a logger", {
   for (j in input) {
     poinfo$train(list(j))
     logfile_posttrain = appender_buffer$data$msg
+    expect_equal(length(logfile_posttrain), 1L)
     expect_match(logfile_posttrain, "Object passing through PipeOp info - Training", all = FALSE)
     appender_buffer$flush()
     poinfo$predict(list(j))
     logfile_postprediction = appender_buffer$data$msg
+    expect_equal(length(logfile_postprediction), 1L)
     expect_match(logfile_postprediction, "Object passing through PipeOp info - Prediction", all = FALSE)
     appender_buffer$flush()
   }
@@ -101,6 +103,19 @@ test_that("PipeOp recognizes class of input objects and prints information accor
       expect_match(paste0(console_output_predict, collapse = ""), regex_list[[j]], all = FALSE)
     }
   }
+})
+
+test_that("Task printer only displays a preview", {
+  task = tsk("iris")
+  poinfo = po("info")
+  preview = poinfo$printer$Task(task)
+  row_preview = head(task$row_ids, 10L)
+  col_preview = head(c(task$target_names, task$feature_names), 10L)
+  expect_true(is.list(preview))
+  expect_identical(names(preview), c("task", "data_preview"))
+  expect_identical(preview$task, task)
+  expect_equal(preview$data_preview,
+    task$data(rows = row_preview, cols = col_preview))
 })
 
 test_that("malformed log_target handled accordingly", {
