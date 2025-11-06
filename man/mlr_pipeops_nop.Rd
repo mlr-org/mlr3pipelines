@@ -9,7 +9,7 @@
 }
 \description{
 Simply pushes the input forward.
-Can be useful during [`Graph`] construction using the [`%>>%`]-operator to specify which [`PipeOp`] gets connected to which.
+Can be useful during \code{\link{Graph}} construction using the \code{\link{\%>>\%}}-operator to specify which \code{\link{PipeOp}} gets connected to which.
 }
 \section{Construction}{
 

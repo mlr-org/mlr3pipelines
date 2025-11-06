@@ -60,7 +60,7 @@
 #' @section References:
 #' `r format_bib("binder_2020")`
 #'
-#' @examples
+#' @examplesIf mlr3misc::require_namespaces("mlr3filters", quietly = TRUE)
 #' library("mlr3")
 #' library("mlr3filters")
 #'

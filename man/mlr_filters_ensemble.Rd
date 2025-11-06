@@ -33,8 +33,8 @@ filter ids concatenated by \code{"."}.
 
 \itemize{
 \item \code{weights} :: \code{numeric()}\cr
-Required non-negative weights, one for each wrapped filter. Values are used as given
-when calculating the weighted mean. If named, names must match the wrapped filter ids.
+Required non-negative weights, one for each wrapped filter, with at least one strictly positive value.
+Values are used as given when calculating the weighted mean. If named, names must match the wrapped filter ids.
 \item \code{rank_transform} :: \code{logical(1)}\cr
 If \code{TRUE}, ranks of individual filter scores are used instead of the raw scores before
 averaging. Initialized to \code{FALSE}.
@@ -84,6 +84,7 @@ In \emph{Proceedings of the 2020 Genetic and Evolutionary Computation Conference
 }
 
 \examples{
+\dontshow{if (mlr3misc::require_namespaces("mlr3filters", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 library("mlr3")
 library("mlr3filters")
 
@@ -94,4 +95,5 @@ flt = mlr_filters$get("ensemble",
 flt$param_set$values$weights = c(variance = 0.5, auc = 0.5)
 flt$calculate(task)
 head(as.data.table(flt))
+\dontshow{\}) # examplesIf}
 }
