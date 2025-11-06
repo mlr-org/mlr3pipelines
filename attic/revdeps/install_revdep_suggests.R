@@ -23,7 +23,7 @@ usage <- function() {
     "                   getOption('repos')[['CRAN']] (falls back to\n",
     "                   https://cran.r-project.org if unset).\n",
     "  --lib=<path>     Target library directory for installations. Defaults to\n",
-    "                   the first entry in .libPaths().\n",
+    "                   R_LIBS_USER.\n",
     "  --type=<type>    Package type passed to install.packages(). Defaults to\n",
     "                   getOption('pkgType').\n",
     "  --help           Print this help message and exit.\n",
@@ -67,7 +67,7 @@ if (identical(repo, "@CRAN@")) {
   repo <- "https://cran.r-project.org"
 }
 
-lib_path <- args$lib %||% .libPaths()[1]
+lib_path <- args$lib %||% Sys.getenv("R_LIBS_USER")
 if (!dir.exists(lib_path)) {
   dir.create(lib_path, recursive = TRUE, showWarnings = FALSE)
 }
