@@ -27,8 +27,8 @@
 #'
 #' @section Parameters:
 #' * `weights` :: `numeric()`\cr
-#'   Required non-negative weights, one for each wrapped filter. Values are used as given
-#'   when calculating the weighted mean. If named, names must match the wrapped filter ids.
+#'   Required non-negative weights, one for each wrapped filter, with at least one strictly positive value.
+#'   Values are used as given when calculating the weighted mean. If named, names must match the wrapped filter ids.
 #' * `rank_transform` :: `logical(1)`\cr
 #'   If `TRUE`, ranks of individual filter scores are used instead of the raw scores before
 #'   averaging. Initialized to `FALSE`.
@@ -86,9 +86,13 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
       }
       .own_param_set = ps(
         weights = p_uty(custom_check = crate(function(x) {
-          check_numeric(x, len = length(fnames)) %check&&%
+          if (inherits(x, "TuneToken")) {
+            return(TRUE)
+          }
+          check_numeric(x, len = length(fnames), lower = 0) %check&&%
             (check_names(names(x), type = "unnamed") %check||%
-              check_names(names(x), type = "unique", permutation.of = fnames))
+              check_names(names(x), type = "unique", permutation.of = fnames)) %check&&%
+            (if (any(x > 0)) TRUE else "At least one weight must be > 0.")
           }, fnames),
           tags = "required"
         ),
@@ -138,6 +142,9 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
         } else if (normalize_weights == "naive") {
           w = w / max(sum(w), .Machine$double.eps)
         }
+        if (!any(w > 0)) {
+          w[] = 1 / length(w)
+        }
         x[[weights_param_name]] = w
         x
       }, innames, fnames, normalize_weights, weights_param_name)
@@ -157,6 +164,9 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
       wnames = names(private$.wrapped)
       if (!is.null(names(weights))) {
         weights = weights[wnames]
+      }
+      if (!any(weights > 0)) {
+        stop("At least one weight must be > 0.")
       }
       scores = pmap(list(private$.wrapped, weights), function(x, w) {
         x$calculate(task, nfeat)
