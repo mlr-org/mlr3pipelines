@@ -312,6 +312,18 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     },
     plot = function(html = FALSE, horizontal = FALSE, ...) {
       private$.graph$plot(html = html, horizontal = horizontal, ...)
+    },
+    print = function() {
+      super$print(self)
+
+      is_sequential = all(table(self$edges$src_id) <= 1) && all(table(self$edges$dst_id) <= 1)
+      if(is_sequential) {
+        ppunit = paste0(self$ids(), collapse = " -> ")
+        pp = paste0(c("<INPUT>", ppunit, "<OUTPUT>"), collapse = " -> ")
+      } else {
+        pp = "non-sequential"
+      }
+      cat_cli(cli_h3("Pipeline: {.strong {pp}}"))
     }
   ),
   active = list(

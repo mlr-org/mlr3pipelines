@@ -62,6 +62,7 @@ Depends:
 Imports:
     backports,
     checkmate,
+    cli,
     data.table,
     digest,
     lgr,
@@ -101,6 +102,7 @@ Suggests:
     htmlwidgets,
     ranger,
     themis
+Remotes: mlr-org/mlr3misc
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
