@@ -7,7 +7,70 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`Filter`][mlr3filters::Filter].
 #'
 #' @description
-#' Implements the filte rensemble proposed in `r cite_bib("binder_2020")`.
+#' `FilterEnsemble` aggregates several [`Filter`][mlr3filters::Filter]s by averaging their scores
+#' (or ranks) with user-defined weights. Each wrapped filter is evaluated on the supplied task,
+#' and the resulting feature scores are combined feature-wise by a convex combination determined
+#' through the `weights` parameter. This allows leveraging complementary inductive biases of
+#' multiple filters without committing to a single criterion. The concept was introduced by
+#' Binder et al. (2020). This implementation follows the idea but leaves the exact choice of
+#' weights to the user.
+#'
+#' @section Construction:
+#' ```
+#' FilterEnsemble$new(filters)
+#' ```
+#'
+#' * `filters` :: `list` of [`Filter`][mlr3filters::Filter]\cr
+#'   Filters that are evaluated and aggregated. Each filter must be cloneable and support the
+#'   task type and feature types of the ensemble. The ensemble identifier defaults to the wrapped
+#'   filter ids concatenated by `"."`.
+#'
+#' @section Parameters:
+#' * `weights` :: `numeric()`\cr
+#'   Required non-negative weights, one for each wrapped filter. Values are used as given
+#'   when calculating the weighted mean. If named, names must match the wrapped filter ids.
+#' * `rank_transform` :: `logical(1)`\cr
+#'   If `TRUE`, ranks of individual filter scores are used instead of the raw scores before
+#'   averaging. Initialized to `FALSE`.
+#'
+#' Parameters of wrapped filters are available via `$param_set` and can be referenced using
+#' the wrapped filter id followed by `"."`, e.g. `"variance.na.rm"`.
+#'
+#' @section Fields:
+#' * `$wrapped` :: named `list` of [`Filter`][mlr3filters::Filter]\cr
+#'   Read-only access to the wrapped filters.
+#'
+#' @section Methods:
+#' * `get_weights_search_space(weights_param_name = "weights", normalize_weights = "uniform", prefix = "w")`\cr
+#'   (`character(1)`, `character(1)`, `character(1)`) -> [`ParamSet`][paradox::ParamSet]\cr
+#'   Construct a [`ParamSet`][paradox::ParamSet] describing a weight search space.
+#' * `get_weights_tunetoken(normalize_weights = "uniform")`\cr
+#'   (`character(1)`) -> [`TuneToken`][paradox::TuneToken]\cr
+#'   Shortcut returning a [`TuneToken`][paradox::TuneToken] for tuning the weights.
+#' * `set_weights_to_tune(normalize_weights = "uniform")`\cr
+#'   (`character(1)`) -> `self`\cr
+#'   Convenience wrapper that stores the `TuneToken` returned by
+#'   `get_weights_tunetoken()` in `$param_set$values$weights`.
+#'
+#' @section Internals:
+#' All wrapped filters are called with `nfeat` equal to the number of features to ensure that
+#' complete score vectors are available for aggregation. Scores are combined per feature by
+#' computing the weighted (optionally rank-based) mean.
+#'
+#' @section References:
+#' `r format_bib("binder_2020")`
+#'
+#' @examples
+#' library("mlr3")
+#' library("mlr3filters")
+#'
+#' task = tsk("sonar")
+#'
+#' flt = mlr_filters$get("ensemble",
+#'   filters = list(FilterVariance$new(), FilterAUC$new()))
+#' flt$param_set$values$weights = c(variance = 0.5, auc = 0.5)
+#' flt$calculate(task)
+#' head(as.data.table(flt))
 
 FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
   public = list(
@@ -36,12 +99,15 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
         id = paste(fnames, collapse = "."),
         task_types = task_types,
         task_properties = unique(unlist(map(private$.wrapped, "task_properties"))),
-        param_set = ParamSetCollection$new(c(list(.own_param_set), map(private$.wrapped, "param_set"))),
+        param_set = .own_param_set,
         feature_types = Reduce(intersect, map(private$.wrapped, "feature_types")),
         packages = unique(unlist(map(private$.wrapped, "packages"))),
         label = "meta",
         man = "mlr3pipelines::mlr_filters_ensemble"
       )
+      private$.own_param_set = .own_param_set
+      private$.own_param_set$values$rank_transform = FALSE
+      private$.param_set = NULL
     },
     get_weights_tunetoken = function(normalize_weights = "uniform") {
       assert_choice(normalize_weights, c("uniform", "naive", "no"))
@@ -83,6 +149,7 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
   private = list(
     .wrapped = NULL,
     .own_param_set = NULL,
+    .param_set = NULL,
     .calculate = function(task, nfeat) {
       pv = private$.own_param_set$get_values()
       fn = task$feature_names
@@ -99,6 +166,37 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
         s * w
       })
       structure(rowSums(as.data.frame(scores)), names = fn)
+    },
+    deep_clone = function(name, value) {
+      if (name == ".wrapped") {
+        private$.param_set = NULL
+        return(map(value, function(x) x$clone(deep = TRUE)))
+      }
+      if (name == ".own_param_set") {
+        private$.param_set = NULL
+        return(value$clone(deep = TRUE))
+      }
+      if (name == ".param_set") {
+        return(NULL)
+      }
+      value
+    }
+  ),
+  active = list(
+    wrapped = function(val) {
+      if (!missing(val)) {
+        stop("$wrapped is read-only.")
+      }
+      private$.wrapped
+    },
+    param_set = function(val) {
+      if (is.null(private$.param_set)) {
+        private$.param_set = ParamSetCollection$new(c(list(private$.own_param_set), map(private$.wrapped, "param_set")))
+      }
+      if (!missing(val) && !identical(val, private$.param_set)) {
+        stop("param_set is read-only.")
+      }
+      private$.param_set
     }
   )
 

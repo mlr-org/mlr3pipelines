@@ -8,5 +8,90 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link[mlr3filters:Filter]{Filter}}.
 }
 \description{
-Implements the filte rensemble proposed in Binder (2020).
+\code{FilterEnsemble} aggregates several \code{\link[mlr3filters:Filter]{Filter}}s by averaging their scores
+(or ranks) with user-defined weights. Each wrapped filter is evaluated on the supplied task,
+and the resulting feature scores are combined feature-wise by a convex combination determined
+through the \code{weights} parameter. This allows leveraging complementary inductive biases of
+multiple filters without committing to a single criterion. The concept was introduced by
+Binder et al. (2020). This implementation follows the idea but leaves the exact choice of
+weights to the user.
+}
+\section{Construction}{
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{FilterEnsemble$new(filters)
+}\if{html}{\out{</div>}}
+\itemize{
+\item \code{filters} :: \code{list} of \code{\link[mlr3filters:Filter]{Filter}}\cr
+Filters that are evaluated and aggregated. Each filter must be cloneable and support the
+task type and feature types of the ensemble. The ensemble identifier defaults to the wrapped
+filter ids concatenated by \code{"."}.
+}
+}
+
+\section{Parameters}{
+
+\itemize{
+\item \code{weights} :: \code{numeric()}\cr
+Required non-negative weights, one for each wrapped filter. Values are used as given
+when calculating the weighted mean. If named, names must match the wrapped filter ids.
+\item \code{rank_transform} :: \code{logical(1)}\cr
+If \code{TRUE}, ranks of individual filter scores are used instead of the raw scores before
+averaging. Initialized to \code{FALSE}.
+}
+
+Parameters of wrapped filters are available via \verb{$param_set} and can be referenced using
+the wrapped filter id followed by \code{"."}, e.g. \code{"variance.na.rm"}.
+}
+
+\section{Fields}{
+
+\itemize{
+\item \verb{$wrapped} :: named \code{list} of \code{\link[mlr3filters:Filter]{Filter}}\cr
+Read-only access to the wrapped filters.
+}
+}
+
+\section{Methods}{
+
+\itemize{
+\item \code{get_weights_search_space(weights_param_name = "weights", normalize_weights = "uniform", prefix = "w")}\cr
+(\code{character(1)}, \code{character(1)}, \code{character(1)}) -> \code{\link[paradox:ParamSet]{ParamSet}}\cr
+Construct a \code{\link[paradox:ParamSet]{ParamSet}} describing a weight search space.
+\item \code{get_weights_tunetoken(normalize_weights = "uniform")}\cr
+(\code{character(1)}) -> \code{\link[paradox:to_tune]{TuneToken}}\cr
+Shortcut returning a \code{\link[paradox:to_tune]{TuneToken}} for tuning the weights.
+\item \code{set_weights_to_tune(normalize_weights = "uniform")}\cr
+(\code{character(1)}) -> \code{self}\cr
+Convenience wrapper that stores the \code{TuneToken} returned by
+\code{get_weights_tunetoken()} in \verb{$param_set$values$weights}.
+}
+}
+
+\section{Internals}{
+
+All wrapped filters are called with \code{nfeat} equal to the number of features to ensure that
+complete score vectors are available for aggregation. Scores are combined per feature by
+computing the weighted (optionally rank-based) mean.
+}
+
+\section{References}{
+
+Binder M, Moosbauer J, Thomas J, Bischl B (2020).
+\dQuote{Multi-objective hyperparameter tuning and feature selection using filter ensembles.}
+In \emph{Proceedings of the 2020 Genetic and Evolutionary Computation Conference}, 471--479.
+\doi{10.1145/3377930.3389815}.
+}
+
+\examples{
+library("mlr3")
+library("mlr3filters")
+
+task = tsk("sonar")
+
+flt = mlr_filters$get("ensemble",
+  filters = list(FilterVariance$new(), FilterAUC$new()))
+flt$param_set$values$weights = c(variance = 0.5, auc = 0.5)
+flt$calculate(task)
+head(as.data.table(flt))
 }
