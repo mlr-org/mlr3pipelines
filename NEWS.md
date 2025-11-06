@@ -1,12 +1,13 @@
 # mlr3pipelines 0.9.0-9000
 
-* Compatibility with new testthat version 3.3.0
+* Pretty-printing some info using the `cli` package now.
 * Fix: Added internal workaround for `PipeOpNMF` attaching `Biobase`, `BiocGenerics`, and `generics` to the search path during training, prediction or when printing its `$state`.
 * feat: allow dates in datefeatures pipe op and use data.table for date feature generation.
 * Added support for internal validation tasks to `PipeOpFeatureUnion`.
 * feat: `PipeOpLearnerCV` can reuse the cross-validation models during prediction by averaging their outputs (`resampling.predict_method = "cv_ensemble"`).
 * feat: `PipeOpRegrAvg` gets new `se_aggr` and `se_aggr_rho` hyperparameters and now allows various forms of SE aggregation.
 * Fix: `PipeOpRemoveConstants` now avoids integer overflow when evaluating relative tolerances for near-`integer.max` data.
+* Compatibility with new testthat version 3.3.0
 
 # mlr3pipelines 0.9.0
 

@@ -62,6 +62,7 @@ Depends:
 Imports:
     backports,
     checkmate,
+    cli,
     data.table,
     digest,
     lgr,
