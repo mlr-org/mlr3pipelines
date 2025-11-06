@@ -15,7 +15,7 @@ The resulting \code{"response"} prediction is a weighted average of the incoming
 Aggregation of \code{"se"} predictions is controlled by the \code{se_aggr} parameter (see below). When \code{"se"} is not requested
 or \code{se_aggr = "none"}, \code{"se"} is dropped.
 }
-\section{"se" Aggregation}{
+\section{\code{"se"} Aggregation}{
 
 
 Let there be \code{K} incoming predictions with weights \code{w} (sum to 1). For a given row \code{j}, denote
@@ -204,6 +204,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
+\code{\link{mlr_pipeops_info}},
+\code{\link{mlr_pipeops_isomap}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},

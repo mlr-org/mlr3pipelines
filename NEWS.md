@@ -6,6 +6,8 @@
 * Added support for internal validation tasks to `PipeOpFeatureUnion`.
 * feat: `PipeOpLearnerCV` can reuse the cross-validation models during prediction by averaging their outputs (`resampling.predict_method = "cv_ensemble"`).
 * feat: `PipeOpRegrAvg` gets new `se_aggr` and `se_aggr_rho` hyperparameters and now allows various forms of SE aggregation.
+* Fix: `PipeOpInfo` now prints a bounded task preview (respecting target/feature ordering and row ids) and collapses logger output to single messages.
+* Fix: `PipeOpIsomap` only operates on numeric or integer features and its parameter documentation was corrected.
 * Fix: `PipeOpRemoveConstants` now avoids integer overflow when evaluating relative tolerances for near-`integer.max` data.
 * Compatibility with new testthat version 3.3.0
 
