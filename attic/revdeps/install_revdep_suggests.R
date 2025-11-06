@@ -1,21 +1,21 @@
 #!/usr/bin/env Rscript
 
-# Install Suggests dependencies of all CRAN reverse dependencies for
-# mlr3pipelines (or a specified package).
+# Install test dependencies (Depends, Imports, Suggests) of all CRAN reverse
+# dependencies for mlr3pipelines (or a specified package).
 # Usage:
 #   Rscript install_revdep_suggests.R [--package=mlr3pipelines]
 #                                     [--repo=https://cran.r-project.org]
 #                                     [--lib=<path>] [--type=source]
 #
-# The script resolves reverse dependencies on CRAN, gathers their Suggests
-# fields, and installs the union of those packages. Reverse dependencies
-# themselves are not installed.
+# The script resolves reverse dependencies on CRAN, gathers their test
+# dependency fields (Depends, Imports, Suggests), and installs the union of
+# those packages. Reverse dependencies themselves are not installed.
 
 `%||%` <- function(x, y) if (is.null(x) || is.na(x) || identical(x, "")) y else x
 
 usage <- function() {
   cat(
-    "install_revdep_suggests.R - install Suggests of all reverse dependencies\n\n",
+    "install_revdep_suggests.R - install test deps of all reverse dependencies\n\n",
     "Options:\n",
     "  --package=<pkg>  Package whose reverse dependencies are analysed.\n",
     "                   Defaults to mlr3pipelines.\n",
@@ -104,41 +104,57 @@ if (length(missing_meta)) {
   revdep_pkgs <- intersect(revdep_pkgs, rownames(available))
 }
 
-suggest_map <- tools::package_dependencies(
+dependency_types <- c("Depends", "Imports", "Suggests")
+
+test_deps_map <- tools::package_dependencies(
   packages = revdep_pkgs,
   db = available,
-  which = "Suggests",
+  which = dependency_types,
   recursive = FALSE
 )
 
-suggested_pkgs <- sort(unique(unlist(suggest_map, use.names = FALSE)))
-suggested_pkgs <- suggested_pkgs[nzchar(suggested_pkgs)]
+test_dep_pkgs <- sort(unique(unlist(test_deps_map, use.names = FALSE)))
+test_dep_pkgs <- test_dep_pkgs[nzchar(test_dep_pkgs)]
 
-if (!length(suggested_pkgs)) {
-  message("Reverse dependencies do not list any Suggests packages on CRAN.")
+if (!length(test_dep_pkgs)) {
+  message("Reverse dependencies do not list any test dependencies on CRAN.")
   quit(status = 0)
 }
 
-suggested_pkgs <- setdiff(suggested_pkgs, revdep_pkgs)
+missing_test_deps <- setdiff(test_dep_pkgs, rownames(available))
+if (length(missing_test_deps)) {
+  warning(
+    "Skipping packages absent from available.packages(): ",
+    paste(missing_test_deps, collapse = ", ")
+  )
+}
+test_dep_pkgs <- intersect(test_dep_pkgs, rownames(available))
+
+if (!length(test_dep_pkgs)) {
+  message("No test dependency packages available on ", repo)
+  quit(status = 0)
+}
+
+test_dep_pkgs <- setdiff(test_dep_pkgs, revdep_pkgs)
 
 installed <- character(0)
 try({
   installed <- utils::installed.packages(lib.loc = lib_path)[, "Package"]
 }, silent = TRUE)
 
-to_install <- setdiff(suggested_pkgs, installed)
+to_install <- setdiff(test_dep_pkgs, installed)
 if (!length(to_install)) {
-  message("All suggested packages already installed in ", lib_path)
+  message("All test dependency packages already installed in ", lib_path)
   quit(status = 0)
 }
 
-message("Installing ", length(to_install), " packages...")
+message("Installing ", length(to_install), " test dependency packages...")
 utils::install.packages(
   pkgs = to_install,
   repos = repo,
   lib = lib_path,
   type = install_type,
-  dependencies = FALSE
+  dependencies = c("Depends", "Imports", "LinkingTo", "Suggests")
 )
 
 message("Installation attempt finished. Review output for any failures.")
