@@ -154,7 +154,7 @@ utils::install.packages(
   repos = repo,
   lib = lib_path,
   type = install_type,
-  dependencies = c("Depends", "Imports", "LinkingTo", "Suggests")
+  dependencies = c("Depends", "Imports", "LinkingTo")
 )
 
 message("Installation attempt finished. Review output for any failures.")
