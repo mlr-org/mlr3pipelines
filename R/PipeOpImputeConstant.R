@@ -96,7 +96,8 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
         "character" = assert_string(constant),
         "factor"    = assert_string_or_factor(constant),
         "ordered"   = assert_string_or_factor(constant),
-        "POSIXct"   = assert_posixct(constant, any.missing = FALSE, len = 1L)
+        "POSIXct"   = assert_posixct(constant, any.missing = FALSE, len = 1L),
+        "Date" = assert_date(constant, any.missing = FALSE, len = 1L)
       )
       if (type %in% c("ordered", "factor") && self$param_set$values$check_levels) {
         if (!isTRUE(check_choice(as.character(constant), levels(feature)))) {

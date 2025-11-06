@@ -27,14 +27,14 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 Input and output channels are inherited from \code{\link{PipeOpImpute}}.
 
-The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric features missing values imputed by (column-wise) median.
+The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric, integer, POSIXct and Date features missing values imputed by (column-wise) median.
 }
 
 \section{State}{
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpImpute}}.
 
-The \verb{$state$model} is a named \code{list} of \code{numeric(1)} indicating the median of the respective feature.
+The \verb{$state$model} is a named \code{list} of \code{numeric(1)}, \code{integer(1)}, \code{POSIXct(1)} or  \code{Date(1)} indicating the median of the respective feature.
 }
 
 \section{Parameters}{

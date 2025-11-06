@@ -1,11 +1,11 @@
-#' @title Impute Numerical Features by Histogram
+#' @title Impute Numeric, Integer, POSIXct or Date Features by Histogram
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputehist
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
-#' Impute numerical features by histogram.
+#' Impute numeric, integer, POSIXct or Date features by histogram.
 #'
 #' During training, a histogram is fitted on each column using R's [`hist()`][graphics::hist] function.
 #' The fitted histogram is then sampled from for imputation. Sampling happens in a two-step process:
@@ -27,7 +27,7 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpImpute`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with all affected numeric features missing values imputed by (column-wise) histogram; see Description for details.
+#' The output is the input [`Task`][mlr3::Task] with all affected numeric, integer, POSIXct or Date features missing values imputed by (column-wise) histogram; see Description for details.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpImpute`].

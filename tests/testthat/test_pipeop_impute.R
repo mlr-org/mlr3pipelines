@@ -417,12 +417,16 @@ test_that("More tests for PipeOpImputeConstant", {
   train_out = po$train(list(task))[[1L]]
   expect_equal(sum(train_out$missings()), 8L)
   expect_equal(train_out$data(cols = "x7")[[1L]][1L], pos_impute)
+  po$param_set$values = list(constant = "1970-01-11 10:39:22 CET", check_levels = TRUE, affect_columns = selector_type("POSIXct"))
+  expect_error(po$train(list(task)))
 
   pos_impute = as.Date(1000000)
   po$param_set$values = list(constant = pos_impute, check_levels = TRUE, affect_columns = selector_type("Date"))
   train_out = po$train(list(task))[[1L]]
   expect_equal(sum(train_out$missings()), 8L)
   expect_equal(train_out$data(cols = "x8")[[1L]][1L], pos_impute)
+  po$param_set$values = list(constant = "1999-12-31", check_levels = TRUE, affect_columns = selector_type("Date"))
+  expect_error(po$train(list(task)))
 })
 
 
