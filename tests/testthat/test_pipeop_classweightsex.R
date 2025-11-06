@@ -6,7 +6,7 @@ test_that("PipeOpClassWeightsEx - basic properties", {
   train_pipeop(op, inputs = list(task))
   predict_pipeop(op, inputs = list(task))
 
-  expect_datapreproc_pipeop_class(PipeOpClassWeights, task = task,
+  expect_datapreproc_pipeop_class(PipeOpClassWeightsEx, task = task,
                                   predict_like_train = FALSE)
 })
 
@@ -88,8 +88,37 @@ test_that("PipeOpClassWeightsEx", {
 
 })
 
-
-test_that("PipeOpClassWeightsEx - learner and measure", {
-
+test_that("PipeOpClassWeightsEx - explicit mapping must cover all classes", {
+  task = mlr_tasks$get("penguins")
+  po_explicit = po("classweightsex", param_vals = list(
+    weight_method = "explicit",
+    mapping = c("Adelie" = 0.5, "Chinstrap" = 0.3)
+  ))
+  expect_error(
+    po_explicit$train(list(task)),
+    "missing.*class",
+    fixed = FALSE
+  )
 })
 
+test_that("PipeOpClassWeightsEx - weight roles assigned", {
+  classif_roles = mlr_reflections$task_col_roles$classif
+  configs = list(
+    "learner",
+    "measure",
+    c("learner", "measure")
+  )
+
+  for (wt in configs) {
+    task = mlr_tasks$get("penguins")
+    po_roles = po("classweightsex", param_vals = list(weight_method = "inverse_class_frequency", weight_type = wt))
+    nt = po_roles$train(list(task))[[1L]]
+    weightcolname = ".WEIGHTS"
+    expect_false(weightcolname %in% nt$col_roles$feature)
+    for (type in wt) {
+      preferred_role = paste0("weights_", type)
+      final_role = if (preferred_role %in% classif_roles) preferred_role else "weight"
+      expect_true(weightcolname %in% nt$col_roles[[final_role]])
+    }
+  }
+})

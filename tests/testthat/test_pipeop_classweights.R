@@ -23,6 +23,38 @@ test_that("PipeOpClassWeights", {
   expect_equal(nt[[weights]]$weight, ifelse(nt$truth(nt[[weights]]$row_ids) == "neg", 1, 3))
 })
 
+test_that("PipeOpClassWeights - weight roles assigned", {
+  task = mlr_tasks$get("pima")
+  classif_roles = mlr_reflections$task_col_roles$classif
+  configs = list(
+    weight_type = "learner",
+    weight_type = "measure",
+    weight_type = c("learner", "measure"),
+    weight_type = character()
+  )
+
+  for (cfg in configs) {
+    task_clone = task$clone(deep = TRUE)
+    po_roles = po("classweights", param_vals = list(
+      minor_weight = 2,
+      weight_type = cfg))
+    nt = po_roles$train(list(task_clone))[[1L]]
+    weightcolname = ".WEIGHTS"
+
+    if (length(cfg) == 0) {
+      expect_false(weightcolname %in% unlist(nt$col_roles))
+      next
+    }
+
+    expect_false(weightcolname %in% nt$col_roles$feature)
+    for (type in cfg) {
+      preferred_role = paste0("weights_", type)
+      final_role = if (preferred_role %in% classif_roles) preferred_role else "weight"
+      expect_true(weightcolname %in% nt$col_roles[[final_role]])
+    }
+  }
+})
+
 test_that("PipeOpClassWeights - error for Tasks without weights property, #937", {
   skip_if_not_installed("mlr3learners")
   skip_if_not_installed("MASS")

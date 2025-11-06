@@ -18,7 +18,7 @@ Caution: when constructed naively without parameter, the weights are all set to 
 must be adjusted for this \code{\link{PipeOp}} to be useful.
 
 It is possible to set either one of the \code{"weights_learner"} and \code{"weights_measure"} columns, both of them or none of them.
-Thus, the behavior of subsequent \code{\link[mlr3:Learner]{Learner}}s or evaluation metric weights can be determined. (resampling techniques???)
+Thus, the behavior of subsequent \code{\link[mlr3:Learner]{Learner}}s or evaluation metric weights can be determined.
 }
 \section{Construction}{
 
@@ -54,17 +54,16 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \item \code{minor_weight} :: \code{numeric(1)} \cr
 Weight given to samples of the minor class. Major class samples have weight 1. Initialized to 1.
 \item \code{weight_type} :: \code{character} \cr
-Determines whether \code{"weights_learner"}, \code{"weights_measure"}, both or none of the columns will be set.
+Determines whether \code{"weights_learner"}, \code{"weights_measure"}, both or none of the columns will be set. Defaults to \code{"learner"}. An empty
+vector leaves the task unchanged.
 }
 }
 
 \section{Internals}{
 
-Introduces, or overwrites, the "weights" column in the \code{\link[mlr3:Task]{Task}}. However, the \code{\link[mlr3:Learner]{Learner}} method needs to
-respect weights for this to have an effect.
-
-The newly introduced column is named \code{.WEIGHTS}; there will be a naming conflict if this column already exists and is \emph{not} a
-weight column itself.
+Adds a \code{.WEIGHTS} column to the \code{\link[mlr3:Task]{Task}}, which is removed from the feature role and mapped to the requested weight roles.
+The \code{\link[mlr3:Learner]{Learner}} must support weights for this to have an effect. There will be a naming conflict if this column already
+exists and is \emph{not} as weight column itself.
 }
 
 \section{Fields}{

@@ -1,4 +1,4 @@
-#' @title Class Weights for Sample  - Extended
+#' @title Class Weights for Sample Weighting - Extended
 #'
 #' @usage NULL
 #' @name mlr_pipeops_classweightsex
@@ -9,10 +9,10 @@
 #' It is also possible to add a weight column to the [`Task`][mlr3::Task], which affects how samples are weighted during evaluation.
 #' Sample weights are assigned to each observation according to its target class.
 #'
-#' Binary as well as Multiclass [classification tasks][mlr3::TaskClassif] are supported.
+#' Binary as well as multiclass [classification tasks][mlr3::TaskClassif] are supported.
 #'
 #' It is possible to set either one of the `"weights_learner"` and `"weights_measure"` columns, both of them or none of them.
-#' Thus, the behavior of subsequent [`Learner`][mlr3::Learner]s or evaluation metric weights can be determined. (resampling techniques???)
+#' Thus, the behavior of subsequent [`Learner`][mlr3::Learner]s or evaluation metric weights can be determined.
 #'
 #' @section Construction:
 #' ```
@@ -39,12 +39,16 @@
 #' * `weight_type` :: `character` \cr
 #'   Determines whether `"weights_learner"`, `"weights_measure"`, both or none of the columns will be set.
 #' * `weight_method` :: `character(1)` \cr
-#'   The method that is chosen to determine the weights of the samples. Methods encompass (`"inverse_class_frequency"`, `"inverse_square_root_of_frequency"`, `"median_frequency_balancing"`, `"explicit"`)
-#' * `mapping`:: named `character` \cr
-#'   Depends on `"weight_method" = "explicit"`. Must be a named character, that specifies for each target class the corresponding weight.
+#'   The method that is chosen to determine the weights of the samples. Methods encompass (`"inverse_class_frequency"`, `"inverse_square_root_of_frequency"`, `"median_frequency_balancing"`, `"explicit"`).
+#' * `mapping` :: named `numeric` \cr
+#'   Depends on `"weight_method" = "explicit"`. Must be a named numeric vector that specifies a finite weight for each target class in the task.
 #'
 #' The newly introduced column is named `.WEIGHTS`; there will be a naming conflict if this column already exists and is *not* a
 #' weight column itself.
+#'
+#' @section Internals:
+#' The `.WEIGHTS` column is removed from the feature role and re-assigned to the requested weight roles. When `weight_method = "explicit"`,
+#' the mapping must cover every class present in the training data and may not contain additional classes.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -90,7 +94,13 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
         weight_method = p_fct(init = "explicit",
                               levels = c("inverse_class_frequency", "inverse_square_root_of_frequency", "median_frequency_balancing", "effective_number_of_samples", "explicit"), tags = c("train", "required")),
         mapping = p_uty(tags = "train",
-                        custom_check = crate(function(x) check_character(names(x), any.missing = FALSE, unique = TRUE)),
+                        custom_check = crate(function(x) {
+                          if (is.null(x)) {
+                            return(TRUE)
+                          }
+                          check_numeric(x, any.missing = FALSE, finite = TRUE) %check&&%
+                            check_character(names(x), any.missing = FALSE, unique = TRUE, min.chars = 1)
+                        }),
                         depends = weight_method == "explicit")
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data")
@@ -106,6 +116,21 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
           (pv$weight_method == "explicit" && is.null(pv$mapping))) {
         return(task)
       }
+
+      class_names = task$class_names
+      if (identical(pv$weight_method, "explicit")) {
+        mapping_names = names(pv$mapping)
+        missing = setdiff(class_names, mapping_names)
+        extra = setdiff(mapping_names, class_names)
+
+        if (length(missing)) {
+          stopf("Explicit class weights must cover every class in the task; missing: %s", paste(missing, collapse = ", "))
+        }
+        if (length(extra)) {
+          stopf("Explicit class weights contain labels not present in the task: %s", paste(extra, collapse = ", "))
+        }
+      }
+  
 
       weightcolname = ".WEIGHTS"
       if (weightcolname %in% unlist(task$col_roles)) {
@@ -144,4 +169,3 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
 )
 
 mlr_pipeops$add("classweightsex", PipeOpClassWeightsEx)
-

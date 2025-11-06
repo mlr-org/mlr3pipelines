@@ -15,7 +15,7 @@
 #' must be adjusted for this [`PipeOp`] to be useful.
 #'
 #' It is possible to set either one of the `"weights_learner"` and `"weights_measure"` columns, both of them or none of them.
-#' Thus, the behavior of subsequent [`Learner`][mlr3::Learner]s or evaluation metric weights can be determined. (resampling techniques???)
+#' Thus, the behavior of subsequent [`Learner`][mlr3::Learner]s or evaluation metric weights can be determined.
 #'
 #' @section Construction:
 #' ```
@@ -42,14 +42,13 @@
 #' * `minor_weight` :: `numeric(1)` \cr
 #'   Weight given to samples of the minor class. Major class samples have weight 1. Initialized to 1.
 #' * `weight_type` :: `character` \cr
-#'   Determines whether `"weights_learner"`, `"weights_measure"`, both or none of the columns will be set.
+#'   Determines whether `"weights_learner"`, `"weights_measure"`, both or none of the columns will be set. Defaults to `"learner"`. An empty
+#'   vector leaves the task unchanged.
 #'
 #' @section Internals:
-#' Introduces, or overwrites, the "weights" column in the [`Task`][mlr3::Task]. However, the [`Learner`][mlr3::Learner] method needs to
-#' respect weights for this to have an effect.
-#'
-#' The newly introduced column is named `.WEIGHTS`; there will be a naming conflict if this column already exists and is *not* a
-#' weight column itself.
+#' Adds a `.WEIGHTS` column to the [`Task`][mlr3::Task], which is removed from the feature role and mapped to the requested weight roles.
+#' The [`Learner`][mlr3::Learner] must support weights for this to have an effect. There will be a naming conflict if this column already
+#' exists and is *not* as weight column itself.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].

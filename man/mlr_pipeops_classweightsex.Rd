@@ -3,7 +3,7 @@
 \name{mlr_pipeops_classweightsex}
 \alias{mlr_pipeops_classweightsex}
 \alias{PipeOpClassWeightsEx}
-\title{Class Weights for Sample  - Extended}
+\title{Class Weights for Sample Weighting - Extended}
 \format{
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -12,10 +12,10 @@ Adds a class weight column to the \code{\link[mlr3:Task]{Task}}, influencing how
 It is also possible to add a weight column to the \code{\link[mlr3:Task]{Task}}, which affects how samples are weighted during evaluation.
 Sample weights are assigned to each observation according to its target class.
 
-Binary as well as Multiclass \link[mlr3:TaskClassif]{classification tasks} are supported.
+Binary as well as multiclass \link[mlr3:TaskClassif]{classification tasks} are supported.
 
 It is possible to set either one of the \code{"weights_learner"} and \code{"weights_measure"} columns, both of them or none of them.
-Thus, the behavior of subsequent \code{\link[mlr3:Learner]{Learner}}s or evaluation metric weights can be determined. (resampling techniques???)
+Thus, the behavior of subsequent \code{\link[mlr3:Learner]{Learner}}s or evaluation metric weights can be determined.
 }
 \section{Construction}{
 
@@ -23,7 +23,7 @@ Thus, the behavior of subsequent \code{\link[mlr3:Learner]{Learner}}s or evaluat
 \if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpClassWeightsEx$new(id = "classweightsex", param_vals = list())
 }\if{html}{\out{</div>}}
 \itemize{
-\item \code{id} :: \code{character(1)}
+\item \code{id} :: \code{character(1)} \cr
 Identifier of the resulting  object, default \code{"classweightsex"}
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
@@ -51,13 +51,19 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \item \code{weight_type} :: \code{character} \cr
 Determines whether \code{"weights_learner"}, \code{"weights_measure"}, both or none of the columns will be set.
 \item \code{weight_method} :: \code{character(1)} \cr
-The method that is chosen to determine the weights of the samples. Methods encompass (\code{"inverse_class_frequency"}, \code{"inverse_square_root_of_frequency"}, \code{"median_frequency_balancing"}, \code{"explicit"})
-\item \code{mapping}:: named \code{character} \cr
-Depends on \code{"weight_method" = "explicit"}. Must be a named character, that specifies for each target class the corresponding weight.
+The method that is chosen to determine the weights of the samples. Methods encompass (\code{"inverse_class_frequency"}, \code{"inverse_square_root_of_frequency"}, \code{"median_frequency_balancing"}, \code{"explicit"}).
+\item \code{mapping} :: named \code{numeric} \cr
+Depends on \code{"weight_method" = "explicit"}. Must be a named numeric vector that specifies a finite weight for each target class in the task.
 }
 
 The newly introduced column is named \code{.WEIGHTS}; there will be a naming conflict if this column already exists and is \emph{not} a
 weight column itself.
+}
+
+\section{Internals}{
+
+The \code{.WEIGHTS} column is removed from the feature role and re-assigned to the requested weight roles. When \code{weight_method = "explicit"},
+the mapping must cover every class present in the training data and may not contain additional classes.
 }
 
 \section{Fields}{
