@@ -170,12 +170,12 @@ test_that("handling of multiplicity objects controlled by field collect_multipli
   for (i in seq_along(output)) {
     for (j in seq_along(collect_multiplicity)) {
       poinfo = po("info", collect_multiplicity = collect_multiplicity[[j]], log_target = output[[i]], printer = list(default = function(x) "abc",  Multiplicity = function(x) "xyz"))
-      console_output_train = tryCatch(utils::capture.output(poinfo$train(input[[j]])),
+      console_output_train = tryCatch(utils::capture.output(invisible(poinfo$train(input[[j]]))),
         warning = function(w) conditionMessage(w),
         message = function(m) conditionMessage(m))
       expect_match(paste0(console_output_train, collapse = ""), test_string[[j]], all = FALSE)
-      suppressMessages(suppressWarnings(utils::capture.output(poinfo$train(input[[j]]))))
-      console_output_predict = tryCatch(utils::capture.output(poinfo$predict(input[[j]])),
+      suppressMessages(suppressWarnings(utils::capture.output(invisible(poinfo$train(input[[j]])))))
+      console_output_predict = tryCatch(utils::capture.output(invisible(poinfo$predict(input[[j]]))),
         warning = function(w) conditionMessage(w),
         message = function(m) conditionMessage(m))
       expect_match(paste0(console_output_predict, collapse = ""), test_string[[j]], all = FALSE)
