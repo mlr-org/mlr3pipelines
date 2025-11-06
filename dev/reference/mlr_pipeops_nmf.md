@@ -271,7 +271,7 @@ pop$state
 #>   Iterations: 650 
 #>   Timing:
 #>      user  system elapsed 
-#>     0.083   0.008   0.092 
+#>     0.079   0.006   0.085 
 #> 
 #> $dt_columns
 #> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
