@@ -102,8 +102,6 @@ Suggests:
     htmlwidgets,
     ranger,
     themis,
-    lgr,
-    checkmate,
     dimRed,
     RSpectra,
     RANN
@@ -164,7 +162,7 @@ Collate:
     'PipeOpImputeMode.R'
     'PipeOpImputeOOR.R'
     'PipeOpImputeSample.R'
-    'PipeOpInfo.R'    
+    'PipeOpInfo.R'
     'PipeOpIsomap.R'
     'PipeOpKernelPCA.R'
     'PipeOpLearner.R'
