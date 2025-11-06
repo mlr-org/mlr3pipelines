@@ -75,3 +75,34 @@ test_that("FilterEnsemble cloning keeps param sets independent", {
   expect_false(clone$wrapped[[filters[[1]]$id]]$param_set$get_values()[["na.rm"]])
   expect_true(original$wrapped[[filters[[1]]$id]]$param_set$get_values()[["na.rm"]])
 })
+
+test_that("FilterEnsemble ignores NA scores from wrapped filters", {
+  skip_if_not_installed("mlr3filters")
+
+  task = mlr_tasks$get("iris")
+  variance_filter = mlr3filters::FilterVariance$new()
+  permutation_filter = mlr3filters::FilterPermutation$new()
+
+  permutation_filter$resampling$instantiate(task)
+  permutation_filter$param_set$values$standardize = TRUE
+  permutation_filter$param_set$values$nmc = 1L
+
+  variance_filter$calculate(task)
+  permutation_filter$calculate(task)
+
+  variance_scores = variance_filter$scores[task$feature_names]
+  expect_true(all(is.nan(permutation_filter$scores[task$feature_names])))
+
+  filters = list(
+    variance_filter$clone(deep = TRUE),
+    permutation_filter$clone(deep = TRUE)
+  )
+  weights = c(variance = 0.5, permutation = 0.5)
+
+  flt_ensemble = FilterEnsemble$new(filters)
+  flt_ensemble$param_set$values$weights = weights
+  flt_ensemble$calculate(task)
+
+  combined_scores = flt_ensemble$scores[task$feature_names]
+  expect_equal(combined_scores, variance_scores * weights[["variance"]])
+})

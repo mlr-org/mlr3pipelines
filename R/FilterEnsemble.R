@@ -71,11 +71,11 @@
 #' flt$param_set$values$weights = c(variance = 0.5, auc = 0.5)
 #' flt$calculate(task)
 #' head(as.data.table(flt))
-
+#' @export
 FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
   public = list(
     initialize = function(filters) {
-      private$.wrapped = assert_list(filters, types = "Filter", min.len = 1)
+      private$.wrapped = lapply(assert_list(filters, types = "Filter", min.len = 1), function(x) x$clone(deep = TRUE))
       fnames = map_chr(private$.wrapped, "id")
       names(private$.wrapped) = fnames
       types_list = map(discard(private$.wrapped, function(x) test_scalar_na(x$task_types)), "task_types")
@@ -106,7 +106,6 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
         man = "mlr3pipelines::mlr_filters_ensemble"
       )
       private$.own_param_set = .own_param_set
-      private$.own_param_set$values$rank_transform = FALSE
       private$.param_set = NULL
     },
     get_weights_tunetoken = function(normalize_weights = "uniform") {
@@ -162,10 +161,14 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
       scores = pmap(list(private$.wrapped, weights), function(x, w) {
         x$calculate(task, nfeat)
         s = x$scores[fn]
-        if (pv$rank_transform) s = rank(s)
+        if (pv$rank_transform) s = rank(s, na.last = "keep", ties.method = "average")
         s * w
       })
-      structure(rowSums(as.data.frame(scores)), names = fn)
+      scores_df = as.data.frame(scores)
+      combined = rowSums(scores_df, na.rm = TRUE)
+      all_missing = rowSums(!is.na(scores_df)) == 0L
+      combined[all_missing] = NA_real_
+      structure(combined, names = fn)
     },
     deep_clone = function(name, value) {
       if (name == ".wrapped") {
