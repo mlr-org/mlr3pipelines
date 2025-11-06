@@ -33,6 +33,57 @@ test_that("FilterEnsemble combines wrapped filter scores", {
   expect_equal(combined_rank_scores[task$feature_names], expected_rank)
 })
 
+test_that("FilterEnsemble with a single filter is a passthrough", {
+  skip_if_not_installed("mlr3filters")
+
+  task = mlr_tasks$get("sonar")
+  variance_ref = mlr3filters::FilterVariance$new()
+  variance_ref$calculate(task)
+
+  ensemble = FilterEnsemble$new(list(mlr3filters::FilterVariance$new()))
+  ensemble$param_set$values$weights = c(variance = 1)
+  ensemble$calculate(task)
+
+  expect_equal(ensemble$scores[task$feature_names], variance_ref$scores[task$feature_names])
+})
+
+test_that("FilterEnsemble with one-hot weights selects the active filter", {
+  skip_if_not_installed("mlr3filters")
+
+  task = mlr_tasks$get("sonar")
+  variance_filter = mlr3filters::FilterVariance$new()
+  auc_filter = mlr3filters::FilterAUC$new()
+
+  variance_filter$calculate(task)
+  auc_filter$calculate(task)
+
+  weights = c(variance = 1, auc = 0)
+  ensemble = FilterEnsemble$new(list(
+    variance_filter$clone(deep = TRUE),
+    auc_filter$clone(deep = TRUE)
+  ))
+  ensemble$param_set$values$weights = weights
+  ensemble$calculate(task)
+
+  expect_equal(ensemble$scores[task$feature_names], variance_filter$scores[task$feature_names])
+})
+
+test_that("FilterEnsemble is registered in mlr_filters", {
+  skip_if_not_installed("mlr3filters")
+  expect_true("ensemble" %in% mlr3filters::mlr_filters$keys())
+})
+
+test_that("FilterEnsemble identifier concatenates wrapped filter ids", {
+  skip_if_not_installed("mlr3filters")
+
+  ensemble = FilterEnsemble$new(list(
+    mlr3filters::FilterVariance$new(),
+    mlr3filters::FilterAUC$new()
+  ))
+
+  expect_identical(ensemble$id, "variance.auc")
+})
+
 test_that("FilterEnsemble reorders named weights correctly", {
   skip_if_not_installed("mlr3filters")
 
@@ -108,6 +159,57 @@ test_that("FilterEnsemble weight input validation", {
 test_that("FilterEnsemble requires at least one wrapped filter", {
   skip_if_not_installed("mlr3filters")
   expect_error(FilterEnsemble$new(list()), "length >= 1")
+})
+
+test_that("FilterEnsemble task types are intersected", {
+  skip_if_not_installed("mlr3filters")
+
+  ensemble = FilterEnsemble$new(list(
+    mlr3filters::FilterAnova$new(),             # classif
+    mlr3filters::FilterCorrelation$new(),       # regr
+    mlr3filters::FilterVariance$new()           # any
+  ))
+
+  expect_identical(ensemble$task_types, character())
+})
+
+test_that("FilterEnsemble feature types intersect across filters", {
+  skip_if_not_installed("mlr3filters")
+  skip_if_not_installed("mlr3learners")
+  skip_if_not_installed("rpart")
+
+  importance_filter = mlr3filters::FilterImportance$new(mlr3::lrn("classif.rpart"))
+  variance_filter = mlr3filters::FilterVariance$new()
+
+  ensemble = FilterEnsemble$new(list(
+    variance_filter,
+    importance_filter
+  ))
+
+  expect_setequal(ensemble$feature_types, c("integer", "numeric"))
+})
+
+test_that("FilterEnsemble aggregates packages and task properties", {
+  skip_if_not_installed("mlr3filters")
+
+  ensemble = FilterEnsemble$new(list(
+    mlr3filters::FilterVariance$new(), # stats
+    mlr3filters::FilterAUC$new()       # mlr3measures, twoclass property
+  ))
+
+  expect_true(all(c("stats", "mlr3measures") %in% ensemble$packages))
+  expect_identical(ensemble$task_properties, "twoclass")
+})
+
+test_that("FilterEnsemble clones wrapped filters on construction", {
+  skip_if_not_installed("mlr3filters")
+
+  original_variance = mlr3filters::FilterVariance$new()
+  ensemble = FilterEnsemble$new(list(original_variance))
+
+  variance_in_ensemble = ensemble$wrapped$variance
+  variance_in_ensemble$param_set$values$na.rm = FALSE
+  expect_true(original_variance$param_set$values$na.rm)
 })
 
 test_that("FilterEnsemble works inside PipeOpFilter", {

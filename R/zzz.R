@@ -22,7 +22,7 @@ register_mlr3 = function() {
 register_mlr3filters = function() {
   if ("mlr3filters" %in% loadedNamespaces()) {
     x = utils::getFromNamespace("mlr_filters", ns = "mlr3filters")
-    mlr_filters$add("ensemble", FilterEnsemble)
+    x$add("ensemble", FilterEnsemble)
   }
 }
 
@@ -35,6 +35,9 @@ paradox_info <- list2env(list(is_old = FALSE), parent = emptyenv())
   register_mlr3filters()
   setHook(packageEvent("mlr3", "onLoad"), function(...) {
     register_mlr3()
+    register_mlr3filters()
+  }, action = "append")
+  setHook(packageEvent("mlr3filters", "onLoad"), function(...) {
     register_mlr3filters()
   }, action = "append")
   backports::import(pkgname)
