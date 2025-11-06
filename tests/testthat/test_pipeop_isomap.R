@@ -40,14 +40,25 @@ test_that("compare to dimRed::isomap", {
   expect_equal(as.data.frame(pipeop_meta_predict), dimRed_result_predict@meta)
 })
 
-test_that("isomap algorithm requires data to be numeric", {
+test_that("isomap handles non-numeric features by leaving them untouched", {
   skip_if_not_installed("dimRed")
   skip_if_not_installed("RSpectra")
   skip_if_not_installed("stats")
   po = po("isomap")
   task = tsk("penguins")
   task$filter(which(complete.cases(task$data())))
-  expect_error(po$train(list(task)))
+  non_numeric = task$feature_types[type %nin% c("numeric", "integer"), id]
+  expect_true(length(non_numeric) > 0)
+
+  trained_task = po$train(list(task))[[1]]
+  predicted_task = po$predict(list(task))[[1]]
+
+  expect_true(all(non_numeric %in% trained_task$feature_names))
+  expect_true(all(non_numeric %in% predicted_task$feature_names))
+  expect_equal(trained_task$data(cols = non_numeric), task$data(cols = non_numeric))
+  expect_equal(predicted_task$data(cols = non_numeric), task$data(cols = non_numeric))
+  expect_true(any(grepl("^iso ", trained_task$feature_names)))
+  expect_true(any(grepl("^iso ", predicted_task$feature_names)))
 })
 
 test_that("isomap leaves non-numeric features untouched", {
