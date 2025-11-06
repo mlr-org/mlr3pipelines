@@ -57,6 +57,8 @@
 <li>Fix: Added internal workaround for <code>PipeOpNMF</code> attaching <code>Biobase</code>, <code>BiocGenerics</code>, and <code>generics</code> to the search path during training, prediction or when printing its <code>$state</code>.</li>
 <li>feat: allow dates in datefeatures pipe op and use data.table for date feature generation.</li>
 <li>Added support for internal validation tasks to <code>PipeOpFeatureUnion</code>.</li>
+<li>feat: <code>PipeOpLearnerCV</code> can reuse the cross-validation models during prediction by averaging their outputs (<code>resampling.predict_method = "cv_ensemble"</code>).</li>
+<li>feat: <code>PipeOpRegrAvg</code> gets new <code>se_aggr</code> and <code>se_aggr_rho</code> hyperparameters and now allows various forms of SE aggregation.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.0" id="mlr3pipelines-090">mlr3pipelines 0.9.0<a class="anchor" aria-label="anchor" href="#mlr3pipelines-090"></a></h2><p class="text-muted">CRAN release: 2025-07-31</p>
@@ -456,7 +458,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

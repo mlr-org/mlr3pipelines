@@ -8,16 +8,12 @@
 </script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Weighted Prediction Averaging — mlr_pipeops_regravg"><meta name="description" content='Perform (weighted) prediction averaging from regression Predictions by connecting
 PipeOpRegrAvg to multiple PipeOpLearner outputs.
 The resulting "response" prediction is a weighted average of the incoming "response" predictions.
-"se" prediction is currently not aggregated but discarded if present.
-Weights can be set as a parameter; if none are provided, defaults to
-equal weights for each prediction.
-Defaults to equal weights for each model.'><meta property="og:description" content='Perform (weighted) prediction averaging from regression Predictions by connecting
+Aggregation of "se" predictions is controlled by the se_aggr parameter (see below). When "se" is not requested
+or se_aggr = "none", "se" is dropped.'><meta property="og:description" content='Perform (weighted) prediction averaging from regression Predictions by connecting
 PipeOpRegrAvg to multiple PipeOpLearner outputs.
 The resulting "response" prediction is a weighted average of the incoming "response" predictions.
-"se" prediction is currently not aggregated but discarded if present.
-Weights can be set as a parameter; if none are provided, defaults to
-equal weights for each prediction.
-Defaults to equal weights for each model.'><meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png"><meta name="robots" content="noindex"></head><body>
+Aggregation of "se" predictions is controlled by the se_aggr parameter (see below). When "se" is not requested
+or se_aggr = "none", "se" is dropped.'><meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png"><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -68,16 +64,66 @@ Defaults to equal weights for each model.'><meta property="og:image" content="ht
     <p>Perform (weighted) prediction averaging from regression <code><a href="https://mlr3.mlr-org.com/reference/Prediction.html" class="external-link">Prediction</a></code>s by connecting
 <code>PipeOpRegrAvg</code> to multiple <code><a href="mlr_pipeops_learner.html">PipeOpLearner</a></code> outputs.</p>
 <p>The resulting <code>"response"</code> prediction is a weighted average of the incoming <code>"response"</code> predictions.
-<code>"se"</code> prediction is currently not aggregated but discarded if present.</p>
-<p>Weights can be set as a parameter; if none are provided, defaults to
-equal weights for each prediction.
-Defaults to equal weights for each model.</p>
+Aggregation of <code>"se"</code> predictions is controlled by the <code>se_aggr</code> parameter (see below). When <code>"se"</code> is not requested
+or <code>se_aggr = "none"</code>, <code>"se"</code> is dropped.</p>
     </div>
 
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
     <p><code><a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6Class</a></code> inheriting from <code><a href="PipeOpEnsemble.html">PipeOpEnsemble</a></code>/<code><a href="PipeOp.html">PipeOp</a></code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="-se-aggregation">"se" Aggregation<a class="anchor" aria-label="anchor" href="#-se-aggregation"></a></h2>
+
+
+
+<p>Let there be <code>K</code> incoming predictions with weights <code>w</code> (sum to 1). For a given row <code>j</code>, denote
+per-model means <code>mu_i[j]</code> and, if available, per-model standard errors <code>se_i[j]</code>.
+Define</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>mu_bar[j]      <span class="ot">=</span> sum_i w[i] <span class="sc">*</span> mu_i[j]</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>var_between[j] <span class="ot">=</span> sum_i w[i] <span class="sc">*</span> (mu_i[j] <span class="sc">-</span> mu_bar[j])<span class="sc">^</span><span class="dv">2</span> <span class="co"># weighted var of means</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>var_within[j]  <span class="ot">=</span> sum_i w[i] <span class="sc">*</span> se_i[j]<span class="sc">^</span><span class="dv">2</span>               <span class="co"># weighted mean of SE^2s</span></span></code></pre><p></p></div>
+<p>The following aggregation methods are available:</p><ul><li><p><strong><code>se_aggr = "predictive"</code></strong> – <em>Within + Between (mixture/predictive SD)</em></p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>se[j] <span class="ot">=</span> <span class="fu">sqrt</span>(var_within[j] <span class="sc">+</span> var_between[j])</span></code></pre><p></p></div>
+<p><strong>Interpretation.</strong> Treats each incoming <code>se_i</code> as that model's predictive SD at the point (or, if the learner
+reports SE of the conditional mean–as many <code>mlr3</code> regression learners do–then as that mean-SE). The returned <code>se</code>
+is the SD of the <em>mixture ensemble</em> under weighted averaging: it increases when base models disagree (epistemic spread)
+and when individual models are uncertain (aleatoric spread).
+<strong>Notes.</strong> If <code>se_i</code> represents <em>mean</em> SE (common in <code>predict.lm(se.fit=TRUE)</code>-style learners), the result
+aggregates those mean-SEs and still adds model disagreement correctly, but it will <em>underestimate</em> a true predictive SD
+that would additionally include irreducible noise. Requires <code>"se"</code> to be present from <strong>all</strong> inputs.</p></li>
+<li><p><strong><code>se_aggr = "mean"</code></strong> – <em>SE of the weighted average of means under equicorrelation</em>
+With a correlation parameter <code>se_aggr_rho = rho</code>, assume
+<code>Cov(mu_i_hat, mu_j_hat) = rho * se_i * se_j</code> for all <code>i != j</code>. Then</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># components:</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>a[j] <span class="ot">=</span> <span class="fu">sum_i</span> (w[i]<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> se_i[j]<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>b[j] <span class="ot">=</span> (sum_i w[i] <span class="sc">*</span> se_i[j])<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>var_mean[j] <span class="ot">=</span> (<span class="dv">1</span> <span class="sc">-</span> rho) <span class="sc">*</span> a[j] <span class="sc">+</span> rho <span class="sc">*</span> b[j]</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>se[j] <span class="ot">=</span> <span class="fu">sqrt</span>(var_mean[j])</span></code></pre><p></p></div>
+<p><strong>Interpretation.</strong> Returns the <em>standard error of the averaged estimator</em> <code>sum_i w[i] * mu_i</code>, not a predictive SD.
+Use when you specifically care about uncertainty of the averaged mean itself.
+<strong>Notes.</strong> <code>rho</code> is clamped to the PSD range <code>[-1/(K-1), 1]</code> for <code>K &gt; 1</code>. Typical settings:
+<code>rho = 0</code> (assume independence; often optimistic for CV/bagging) and <code>rho = 1</code> (perfect correlation; conservative and
+equal to the weighted arithmetic mean of SEs). Requires <code>"se"</code> from <strong>all</strong> inputs.</p></li>
+<li><p><strong><code>se_aggr = "within"</code></strong> – <em>Within-model component only</em></p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>se[j] <span class="ot">=</span> <span class="fu">sqrt</span>(var_within[j])</span></code></pre><p></p></div>
+<p><strong>Interpretation.</strong> Aggregates only the average per-model uncertainty and <strong>ignores</strong> disagreement between models.
+Useful as a diagnostic of the aleatoric component; not a full ensemble uncertainty.
+<strong>Notes.</strong> Typically <em>underestimates</em> the uncertainty of the ensemble prediction when models disagree.
+Requires <code>"se"</code> from <strong>all</strong> inputs.</p></li>
+<li><p><strong><code>se_aggr = "between"</code></strong> – <em>Between-model component only (works without <code>"se"</code>)</em></p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>se[j] <span class="ot">=</span> <span class="fu">sqrt</span>(var_between[j])</span></code></pre><p></p></div>
+<p><strong>Interpretation.</strong> Captures only the spread of the base means (epistemic/model disagreement).
+<strong>Notes.</strong> This is the only method that does not use incoming <code>"se"</code>. It is a <em>lower bound</em> on a full predictive SD,
+because it omits within-model noise.</p></li>
+<li><p><strong><code>se_aggr = "none"</code></strong> – <em>Do not return <code>"se"</code></em>
+<code>"se"</code> is dropped from the output prediction.</p></li>
+</ul><p><strong>Relationships and edge cases.</strong> For any row, <code>se("predictive") &gt;= max(se("within"), se("between"))</code>.
+With a single input (<code>K = 1</code>), <code>"predictive"</code> and <code>"within"</code> return the input <code>"se"</code>, <code>"between"</code> returns <code>0</code>.
+Methods <code>"predictive"</code>, <code>"mean"</code>, and <code>"within"</code> require all inputs to provide <code>"se"</code>; otherwise aggregation errors.</p>
+<p>Weights can be set as a parameter; if none are provided, defaults to
+equal weights for each prediction.</p>
     </div>
     <div class="section level2">
     <h2 id="construction">Construction<a class="anchor" aria-label="anchor" href="#construction"></a></h2>
@@ -113,8 +159,13 @@ is used as input and output during prediction.</p>
     <h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a></h2>
 
 
-<p>The parameters are the parameters inherited from the <code><a href="PipeOpEnsemble.html">PipeOpEnsemble</a></code>.</p>
-    </div>
+<p>The parameters are the parameters inherited from the <code><a href="PipeOpEnsemble.html">PipeOpEnsemble</a></code>, as well as:</p><ul><li><p><code>se_aggr</code> :: <code>character(1)</code><br>
+Controls how incoming <code>"se"</code> values are aggregated into an ensemble <code>"se"</code>. One of
+<code>"predictive"</code>, <code>"mean"</code>, <code>"within"</code>, <code>"between"</code>, <code>"none"</code>. See the description above for definitions and interpretation.</p></li>
+<li><p><code>se_aggr_rho</code> :: <code>numeric(1)</code><br>
+Equicorrelation parameter used only for <code>se_aggr = "mean"</code>. Interpreted as the common correlation between
+per-model mean estimators. Recommended range <code>[0, 1]</code>; values are clamped to <code>[-1/(K-1), 1]</code> for validity.</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>
 
@@ -220,7 +271,7 @@ is used as input and output during prediction.</p>
 <code><a href="mlr_pipeops_vtreat.html">mlr_pipeops_vtreat</a></code>,
 <code><a href="mlr_pipeops_yeojohnson.html">mlr_pipeops_yeojohnson</a></code></p>
 <p>Other Multiplicity PipeOps:
-<code><a href="Multiplicity.html">Multiplicity</a>()</code>,
+<code><a href="Multiplicity.html">Multiplicity()</a></code>,
 <code><a href="PipeOpEnsemble.html">PipeOpEnsemble</a></code>,
 <code><a href="mlr_pipeops_classifavg.html">mlr_pipeops_classifavg</a></code>,
 <code><a href="mlr_pipeops_featureunion.html">mlr_pipeops_featureunion</a></code>,
@@ -240,23 +291,23 @@ is used as input and output during prediction.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Simple Bagging</span></span></span>
+<span class="r-in"><span><span class="co"># Simple Bagging for Regression</span></span></span>
 <span class="r-in"><span><span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="ppl.html">ppl</a></span><span class="op">(</span><span class="st">"greplicate"</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"subsample"</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"learner"</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"learner"</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.rpart"</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  n <span class="op">=</span> <span class="fl">5</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"classifavg"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"regravg"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/resample.html" class="external-link">resample</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span>, <span class="va"><a href="mlr_learners_graph.html">GraphLearner</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">gr</span><span class="op">)</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">rsmp</a></span><span class="op">(</span><span class="st">"holdout"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/resample.html" class="external-link">resample</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"mtcars"</span><span class="op">)</span>, <span class="va"><a href="mlr_learners_graph.html">GraphLearner</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">gr</span><span class="op">)</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">rsmp</a></span><span class="op">(</span><span class="st">"holdout"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;ResampleResult&gt;</span><span style="font-weight: bold;"> with </span><span style="color: #0000BB; font-weight: bold;">1</span><span style="font-weight: bold;"> resampling iterations</span> <span style="color: #00BBBB;">───────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  task_id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     iris</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                              learner_id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  subsample_1.subsample_2.subsample_3.subsample_4.subsample_5.classif.rpart_1.classif.rpart_2.classif.rpart_3.classif.rpart_4.classif.rpart_5.classifavg</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  resampling_id iteration     prediction_test warnings errors</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        holdout         1 &lt;PredictionClassif&gt;        0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mtcars</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                            learner_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  subsample_1.subsample_2.subsample_3.subsample_4.subsample_5.regr.rpart_1.regr.rpart_2.regr.rpart_3.regr.rpart_4.regr.rpart_5.regravg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  resampling_id iteration  prediction_test warnings errors</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        holdout         1 &lt;PredictionRegr&gt;        0      0</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -268,7 +319,7 @@ is used as input and output during prediction.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
