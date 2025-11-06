@@ -77,9 +77,10 @@ and multiplying this with the value of the \code{ratio} parameter. If \code{refe
 class count" is just the value of \code{ratio} (i.e. \code{1 * ratio}).
 
 Then for each class that is referenced by the \code{adjust} parameter (e.g. if \code{adjust} is \code{"nonminor"}:
-each class that is not the class with the fewest samples), \code{\link{PipeOpClassBalancing}} either throws out
+each class that is not the class with the fewest samples), \code{PipeOpClassBalancing} either throws out
 samples (downsampling), or adds additional rows that are equal to randomly chosen samples (upsampling),
 until the number of samples for these classes equals the "target class count".
+No upsampling is performed for classes that were not observed during training (i.e. empty factor levels in the target column).
 
 Uses \code{task$filter()} to remove rows. When identical rows are added during upsampling, then the \code{task$row_roles$use} can \emph{not} be used
 to duplicate rows because of [inaudible]; instead the \code{task$rbind()} function is used, and
@@ -88,7 +89,7 @@ a new \code{\link[data.table:data.table]{data.table}} is attached that contains 
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
@@ -122,6 +123,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -140,9 +142,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

@@ -20,7 +20,8 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`]. Instead of a [`Task`][mlr3::Task], a
+#' [`TaskClassif`][mlr3::TaskClassif] is used as input and output during training and prediction.
 #'
 #' The output during training is the input [`Task`][mlr3::Task] with added synthetic rows for the minority class.
 #' The output during prediction is the unchanged input.
@@ -36,7 +37,7 @@
 #' * `C` :: `numeric(1)` \cr
 #'   The number of nearest neighbors used for classifying sample points as SAFE/DANGER/NOISE. Default is `5`.
 #'   See [`BLSMOTE()`][`smotefamily::BLSMOTE`].
-#' * `dup_size` :: `numeric` \cr
+#' * `dup_size` :: `numeric(1)` \cr
 #'   Desired times of synthetic minority instances over the original number of majority instances. `0` leads to balancing minority and majority class.
 #'   Default is `0`. See [`BLSMOTE()`][`smotefamily::BLSMOTE`].
 #' * `method` :: `character(1)` \cr
@@ -45,8 +46,12 @@
 #' * `quiet` :: `logical(1)` \cr
 #'   Whether to suppress printing status during training. Initialized to `TRUE`.
 #'
+#' @section Internals:
+#' If a target level is unobserved during training, no synthetic data points will be generated for that class.
+#' No error is raised; the unobserved class is simply ignored.
+#'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -109,14 +114,18 @@ PipeOpBLSmote = R6Class("PipeOpBLSmote",
 
       # Calculate synthetic data
       dt = task$data(cols = cols)
+      # Remove unseen target levels, see #881
+      # Don't need to re-add them later since we don't touch task here
+      target = droplevels(task$truth())
+
       if (self$param_set$get_values()$quiet) {
         utils::capture.output({
-          st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = task$truth(),
+          st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = target,
                             .args = self$param_set$get_values(tags = "blsmote"),
                             .opts = list(warnPartialMatchArgs = FALSE))$syn_data)  # BLSMOTE uses partial arg matching internally
         })
       } else {
-        st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = task$truth(),
+        st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = target,
                           .args = self$param_set$get_values(tags = "blsmote"),
                           .opts = list(warnPartialMatchArgs = FALSE))$syn_data)
       }

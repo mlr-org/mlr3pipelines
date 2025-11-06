@@ -19,14 +19,14 @@
 #' ```
 #' PipeOpNearmiss$new(id = "nearmiss", param_vals = list())
 #' ```
-#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"nearmiss"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`]. Instead of a [`Task`][mlr3::Task], a
+#' [`TaskClassif`][mlr3::TaskClassif] is used as input and output during training and prediction.
 #'
 #' The output during training is the input [`Task`][mlr3::Task] with the rows removed from the non-minority classes.
 #' The output during prediction is the unchanged input.
@@ -44,7 +44,7 @@
 #'   Default is `1`. For details, see [`themis::nearmiss`].
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].

@@ -7,7 +7,7 @@
 #' @description
 #' Encodes columns of type `factor`, `character` and `ordered`.
 #'
-#' PipeOpEncodeLmer() converts factor levels of each factorial column to the
+#' `PipeOpEncodeLmer` converts factor levels of each factorial column to the
 #' estimated coefficients of a simple random intercept model.
 #' Models are fitted with the glmer function of the lme4 package and are
 #' of the type `target ~ 1 + (1 | factor)`.
@@ -42,7 +42,8 @@
 #'   otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`]. Instead of a [`Task`][mlr3::Task], a
+#' [`TaskSupervised`][mlr3::TaskSupervised] is used as input and output during training and prediction.
 #'
 #' The output is the input [`Task`][mlr3::Task] with all affected `factor`, `character` or
 #' `ordered` parameters encoded according to the `method` parameter.
@@ -52,20 +53,23 @@
 #' * `target_levels` :: `character`\cr
 #'   Levels of the target columns.
 #' * `control` :: a named `list`\cr
-#'   List of coefficients learned via `glmer`
+#'   List of coefficients learned via `glmer`.
 #'
 #' @section Parameters:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `fast_optim`  :: `logical(1)` \cr
+#'   If `fast_optim` is `TRUE` (default), a faster (up to 50 percent) optimizer from the `nloptr` package is used when
+#'   fitting the lmer models. This uses additional stopping criteria which can give suboptimal results.
 #'   Initialized to `TRUE`.
-#'   If "fast_optim" is `TRUE` (default), a faster (up to 50 percent)
-#'   optimizer from the nloptr package is used when fitting the lmer models.
-#'   This uses additional stopping criteria which can give suboptimal results.
 #'
 #' @section Internals:
 #' Uses the [`lme4::glmer`]. This is relatively inefficient for features with a large number of levels.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
-#' Only methods inherited [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only methods inherited [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
 #' @template seealso_pipeopslist
@@ -92,35 +96,37 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
         fast_optim = p_lgl(tags = c("train", "required"))
       )
       ps$values = list(fast_optim = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"), tags = "encode", feature_types = c("factor", "ordered"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"),
+        task_type = "TaskSupervised", tags = "encode", feature_types = c("factor", "ordered"))
     }
   ),
   private = list(
 
     .get_state_dt = function(dt, levels, target) {
+      # FIXME: Handle non-Regr / non-Classif Tasks that inherit from TaskSupervised, #913
       task_type = if (is.numeric(target)) "regr" else "classif"
       state = list()
       # for prediction, use complete encoding model
       # different funs depending on task.type / multi/binaryclass
 
-      state$target_levels = levels(target)
+      state$target_levels = if (task_type == "classif") levels(droplevels(target)) else NULL
 
       # one vs rest for multiclass.
       if (length(state$target_levels) <= 2) {
         state$control = lapply(dt, function(col) {
-          private$fit_lmer(col, target, self$param_set$values$fast_optim, task_type)
+          private$.fit_lmer(col, target, self$param_set$values$fast_optim, task_type)
         })
       } else {
         # create list with binary "one vs. rest" target variables
-        bin_targets = sapply(levels(target), function(x) factor(x == target),
-          simplify = FALSE)
+        bin_targets = sapply(state$target_levels, function(x) factor(x == target), simplify = FALSE)
         # for prediction, use complete encoding model
         state$control = sapply(colnames(dt), function(cname) {
           sapply(state$target_levels, function(lvl) {
-            private$fit_lmer(dt[[cname]], bin_targets[[lvl]], self$param_set$values$fast_optim, task_type)
-            }, simplify = FALSE)
+            private$.fit_lmer(dt[[cname]], bin_targets[[lvl]], self$param_set$values$fast_optim, task_type)
           }, simplify = FALSE)
+        }, simplify = FALSE)
       }
+
       # FIXME: We currently do not implement cross-validated encodings
       state
     },
@@ -139,13 +145,14 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
         }, simplify = FALSE)
         # return df with new feature names: feature_name.target_level
         # NOTE: special symbols in target levels (e.g. "-") are transformed to "."
-        # by as.data.frame to allign with naming rules for data.frame columns
+        # by as.data.frame to align with naming rules for data.frame columns
         dt_new = as.data.frame(num_vals_list, row.names = rownames(dt))
       }
       dt_new
     },
-    fit_lmer = function(feature, target, fast_optim, task_type) {
-      args = private$get_args_nlopt_lmer(feature, target, fast_optim, task_type)
+
+    .fit_lmer = function(feature, target, fast_optim, task_type) {
+      args = private$.get_args_nlopt_lmer(feature, target, fast_optim, task_type)
       if (task_type == "classif") args$family = stats::binomial
       # lmer for regr, glmer for classif
       if (task_type == "regr") {
@@ -153,10 +160,10 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
       } else {
         mod = invoke(lme4::glmer, .args = args, .opts = list(warnPartialMatchArgs = FALSE, warnPartialMatchDollar = FALSE))
       }
-      private$get_coefs(mod)
+      private$.get_coefs(mod)
     },
-    get_args_nlopt_lmer = function(feature, target, fast_optim, task_type) {
 
+    .get_args_nlopt_lmer = function(feature, target, fast_optim, task_type) {
       # lmer for regr, glmer for classif
       if (task_type == "regr") {
         control_fun = lme4::lmerControl
@@ -175,7 +182,8 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
         data = data.frame(lvl = feature, y = target),
         na.action = stats::na.omit, control = control)
     },
-    get_coefs = function(mod) {
+
+    .get_coefs = function(mod) {
       coefs = invoke(stats::coef, mod, .opts = list(warnPartialMatchArgs = FALSE, warnPartialMatchDollar = FALSE))$lvl
       lvls = rownames(coefs)
       coefs = coefs[,1]

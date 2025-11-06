@@ -3,11 +3,6 @@ context("PipeOpQuantileBin")
 test_that("PipeOpQuantileBin - basic properties", {
   task = mlr_tasks$get("iris")
   expect_datapreproc_pipeop_class(PipeOpQuantileBin, task = task)
-  op = PipeOpQuantileBin$new()
-  expect_pipeop(op)
-  result = op$train(list(task))
-  expect_task(result[[1]])
-  expect_equal(result[[1]]$data(), op$predict(list(task))[[1]]$data())
 })
 
 test_that("PipeOpQuantileBin - see if expected result is returned", {

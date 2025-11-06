@@ -90,7 +90,7 @@ Only methods inherited from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
 task = tsk("pima")
@@ -104,11 +104,11 @@ new_task$missings()
 po$state$model$mass
 
 library("mlr3learners")
-# to use the "regr.kknn" Learner, prefix it with its own imputation method!
-# The "imputehist" PipeOp is used to train "regr.kknn"; predictions of this
+# To use the "regr.lm" Learner, prefix it with its own imputation method!
+# The "imputehist" PipeOp is used to train "regr.lm"; predictions of this
 # trained Learner are then used to impute the missing values in the Task.
 po = po("imputelearner",
-  po("imputehist") \%>>\% lrn("regr.kknn")
+  po("imputehist") \%>>\% lrn("regr.lm")
 )
 
 new_task = po$train(list(task = task))[[1]]
@@ -120,6 +120,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -139,9 +140,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

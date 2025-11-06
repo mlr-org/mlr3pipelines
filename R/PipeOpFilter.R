@@ -16,10 +16,11 @@
 #' ```
 #' PipeOpFilter$new(filter, id = filter$id, param_vals = list())
 #' ```
+#'
 #' * `filter` :: [`Filter`][mlr3filters::Filter]\cr
 #'   [`Filter`][mlr3filters::Filter] used for feature filtering.
 #'  This argument is always cloned; to access the [`Filter`][mlr3filters::Filter] inside `PipeOpFilter` by-reference, use `$filter`.\cr
-#' * `id` :: `character(1)`
+#' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting  object, defaulting to the `id` of the [`Filter`][mlr3filters::Filter] being used.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
@@ -64,7 +65,7 @@
 #' instead the whole [`Task`][mlr3::Task] is used by `private$.get_state()` and subset internally.
 #'
 #' @section Fields:
-#' Fields inherited from [`PipeOpTaskPreproc`], as well as:
+#' Fields inherited from [`PipeOp`], as well as:
 #' * `filter` :: [`Filter`][mlr3filters::Filter]\cr
 #'   [`Filter`][mlr3filters::Filter] that is being used for feature filtering. Do *not* use this slot to get to the feature filtering scores
 #'   after training; instead, use `$state$scores`. Read-only.
@@ -114,13 +115,8 @@ PipeOpFilter = R6Class("PipeOpFilter",
     initialize = function(filter, id = filter$id, param_vals = list()) {
       assert_class(filter, "Filter")
       self$filter = filter$clone(deep = TRUE)
-      if (paradox_info$is_old) {
-        self$filter$param_set$set_id = ""
-        map(self$filter$param_set$params, function(p) p$tags = union(p$tags, "train"))
-      } else {
-        for (pn in self$filter$param_set$ids()) {
-          self$filter$param_set$tags[[pn]] = union(self$filter$param_set$tags[[pn]] , "train")
-        }
+      for (pn in self$filter$param_set$ids()) {
+        self$filter$param_set$tags[[pn]] = union(self$filter$param_set$tags[[pn]] , "train")
       }
       private$.outer_param_set = ps(
         nfeat = p_int(lower = 0, tags = "train"),
@@ -128,9 +124,6 @@ PipeOpFilter = R6Class("PipeOpFilter",
         cutoff = p_dbl(tags = "train"),
         permuted = p_int(lower = 1, tags = "train")
       )
-      if (paradox_info$is_old) {
-        private$.outer_param_set$set_id = "filter"
-      }
       super$initialize(id, alist(filter = private$.outer_param_set, self$filter$param_set), param_vals = param_vals, tags = "feature selection")
     }
   ),
@@ -191,7 +184,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
     .transform = function(task) {
       task$select(self$state$features)
     },
-    .additional_phash_input = function() class(self$filter)
+    .additional_phash_input = function() self$filter$hash
   )
 )
 

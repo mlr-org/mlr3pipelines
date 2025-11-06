@@ -44,20 +44,30 @@ The \verb{$state$model} contains the value of the \code{constant} parameter that
 The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, as well as:
 \itemize{
 \item \code{constant} :: \code{atomic(1)}\cr
-The constant value that should be used for the imputation, atomic vector of length 1. The
-atomic mode must match the type of the features that will be selected by the \code{affect_columns}
-parameter and this will be checked during imputation. Initialized to \code{".MISSING"}.
+The constant value that should be used for the imputation, atomic vector of length \code{1}. The atomic mode must match
+the type of the features that will be selected by the \code{affect_columns} parameter and this will be checked during
+imputation. This is a required hyperparameter and needs to be set by the user.
 \item \code{check_levels} :: \code{logical(1)}\cr
-Should be checked whether the \code{constant} value is a valid level of factorial features (i.e., it
-already is a level)? Raises an error if unsuccesful. This check is only performed for factorial
-features (i.e., \code{factor}, \code{ordered}; skipped for \code{character}). Initialized to \code{TRUE}.
+Should be checked whether the \code{constant} value is a valid level of factorial features (i.e., it already is a
+level)? Raises an error if unsuccessful. This check is only performed for factorial features (i.e., \code{factor},
+\code{ordered}; skipped for \code{character}). Initialized to \code{TRUE}.\cr
+Note that empty factor levels can be a problem for many \code{\link[mlr3:Learner]{Learners}}. Thus, \code{\link{PipeOpImputeOOR}} is
+the preferred choice for creating new levels, since it is designed to impute out-of-range values and offers a more
+explicit control for handling potentially problematic behavior.
 }
 }
 
 \section{Internals}{
 
-Adds an explicit new level to \code{factor} and \code{ordered} features, but not to \code{character} features,
-if \code{check_levels} is \code{FALSE} and the level is not already present.
+The constructor is called with \code{empty_level_control} set to \code{"always"}, to allow the creation of a new empty level
+for \code{factor} and \code{ordered} (but not \code{character}) features during training, if \code{constant} is not an already existing
+level and \code{check_levels} is set to \code{FALSE}. This has no impact if \code{check_levels} is \code{TRUE}, since in that case an
+error would be raised before imputation.
+}
+
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
@@ -78,12 +88,14 @@ po = po("imputeconstant", param_vals = list(
 new_task = po$train(list(task = task))[[1]]
 new_task$missings()
 new_task$data(cols = "glucose")[[1]]
+
 }
 \seealso{
 https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -103,9 +115,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

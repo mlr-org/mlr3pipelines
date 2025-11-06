@@ -31,11 +31,11 @@ be set during construction. Default \code{list()}.
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpProxy}} has multiple input channels depending on the \code{innum} construction argument, named
+\code{PipeOpProxy} has multiple input channels depending on the \code{innum} construction argument, named
 \code{"input1"}, \code{"input2"}, ... if \code{innum} is nonzero; if \code{innum} is 0, there is only one \emph{vararg}
 input channel named \code{"..."}.
 
-\code{\link{PipeOpProxy}} has multiple output channels depending on the \code{outnum} construction argument,
+\code{PipeOpProxy} has multiple output channels depending on the \code{outnum} construction argument,
 named \code{"output1"}, \code{"output2"}, ...
 The output is determined by the output of the \code{content} operation (a \code{\link{PipeOp}} or \code{\link{Graph}}).
 }
@@ -74,19 +74,18 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library("mlr3")
-library("mlr3learners")
 
 set.seed(1234)
 task = tsk("iris")
 
 # use a proxy for preprocessing and a proxy for learning, i.e.,
-# no preprocessing and classif.kknn
+# no preprocessing and classif.rpart
 g = po("proxy", id = "preproc", param_vals = list(content = po("nop"))) \%>>\%
-  po("proxy", id = "learner", param_vals = list(content = lrn("classif.kknn")))
-rr_kknn = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
-rr_kknn$aggregate(msr("classif.ce"))
+  po("proxy", id = "learner", param_vals = list(content = lrn("classif.rpart")))
+rr_rpart = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
+rr_rpart$aggregate(msr("classif.ce"))
 
 # use pca for preprocessing and classif.rpart as the learner
 g$param_set$values$preproc.content = po("pca")
@@ -100,6 +99,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -119,9 +119,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

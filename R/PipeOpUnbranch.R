@@ -11,6 +11,7 @@
 #' ```
 #' PipeOpUnbranch$new(options, id = "unbranch", param_vals = list())
 #' ```
+#'
 #' * `options` :: `numeric(1)` | `character`\cr
 #'   If `options` is 0, a vararg input channel is created that can take
 #'   any number of inputs.
@@ -27,19 +28,19 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output:
-#' [`PipeOpUnbranch`] has multiple input channels depending on the `options` construction argument, named `"input1"`, `"input2"`, ...
+#' `PipeOpUnbranch` has multiple input channels depending on the `options` construction argument, named `"input1"`, `"input2"`, ...
 #' if `options` is a nonzero integer and named after each `options` value if `options` is a `character`; if `options` is 0, there is only one
 #' *vararg* input channel named `"..."`.
 #' All input channels take any argument (`"*"`) both during training and prediction.
 #'
-#' [`PipeOpUnbranch`] has one output channel named `"output"`, producing the only [`NO_OP`] object received as input (`"*"`),
+#' `PipeOpUnbranch` has one output channel named `"output"`, producing the only [`NO_OP`] object received as input (`"*"`),
 #' both during training and prediction.
 #'
 #' @section State:
 #' The `$state` is left empty (`list()`).
 #'
 #' @section Parameters:
-#' [`PipeOpUnbranch`] has no parameters.
+#' `PipeOpUnbranch` has no parameters.
 #'
 #' @section Internals:
 #' See [`PipeOpBranch`] Internals on how alternative path branching works.

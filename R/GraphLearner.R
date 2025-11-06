@@ -91,7 +91,7 @@
 #'   `sorted` is `FALSE`, and topologically sorted if `sorted` is `TRUE`.
 #' * `plot(html = FALSE, horizontal = FALSE)` \cr
 #'   (`logical(1)`, `logical(1)`) -> `NULL` \cr
-#'   Plot the [`Graph`], using either the \pkg{igraph} package (for `html = FALSE`, default) or
+#'   Plot the [`Graph`], using either the \CRANpkg{igraph} package (for `html = FALSE`, default) or
 #'   the `visNetwork` package for `html = TRUE` producing a [`htmlWidget`][htmlwidgets::htmlwidgets].
 #'   The [`htmlWidget`][htmlwidgets::htmlwidgets] can be rescaled using [`visOptions`][visNetwork::visOptions].
 #'   For `html = FALSE`, the orientation of the plotted graph can be controlled through `horizontal`.

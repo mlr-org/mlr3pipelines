@@ -225,7 +225,8 @@ test_that("assert_graph test", {
 
   gr2 = assert_graph(gr)
 
-  expect_error(expect_deep_clone(gr, gr2), class = "error", regexp = "addresses differ.*isn't true|addresses differ.*is not TRUE")
+  expect_error(expect_deep_clone(gr, gr2), class = "error",
+    regexp = "Expected.*addresses differ.*to be TRUE|addresses differ.*isn't true|addresses differ.*is not TRUE")
 
   gr2 = as_graph(gr, clone = TRUE)
 
@@ -237,7 +238,8 @@ test_that("assert_graph test", {
 
   po = PipeOpNOP$new()
 
-  expect_error(expect_deep_clone(po, po), class = "error", regexp = "addresses differ.*isn't true|addresses differ.*is not TRUE")
+  expect_error(expect_deep_clone(po, po), class = "error",
+    regexp = "Expected.*addresses differ.*to be TRUE|addresses differ.*isn't true|addresses differ.*is not TRUE")
 
   po2 = as_graph(po, clone = TRUE)$pipeops[[1]]
 
@@ -665,4 +667,11 @@ test_that("Graph with vararg input", {
   expect_equal(g3$train(list(1, 2, 3), single_input = FALSE),
     list(debugvararg.output = 1006, debugvararg2.output = 2006))
 
+})
+
+test_that("Error when predicting with untrained Graph, #893", {
+  g = Graph$new()$
+    add_pipeop(PipeOpDebugBasic$new())
+
+  expect_error(g$predict(tsk("iris")), "Graph has not been trained yet")
 })

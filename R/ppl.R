@@ -23,12 +23,12 @@
 #' gr = ppl("bagging", graph = po(lrn("regr.rpart")),
 #'   averager = po("regravg", collect_multiplicity = TRUE))
 ppl = function(.key, ...) {
-  dictionary_sugar_get(dict = mlr_graphs, .key = .key, ...)
+  dictionary_sugar_get(dict = mlr_graphs, .key = .key, ..., .dicts_suggest = list("po()" = mlr_pipeops))
 }
 
 #' @export
 #' @rdname ppl
 ppls = function(.keys, ...) {
   if (missing(.keys)) return(mlr_graphs)
-  map(.x = .keys, .f = dictionary_sugar_get, dict = mlr_graphs, ...)
+  map(.x = .keys, .f = dictionary_sugar_get, dict = mlr_graphs, ..., .dicts_suggest = list("pos()" = mlr_pipeops))
 }

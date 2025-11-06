@@ -37,7 +37,7 @@
 #'    and equal initial weights for each learner.
 #'    For more fine-grained control, it is recommended to supply a instantiated [`Optimizer`][bbotk::Optimizer].
 #'  * `log_level` :: `character(1)` | `integer(1)`\cr
-#'    Set a temporary log-level for `lgr::get_logger("bbotk")`. Initialized to: "warn".
+#'    Set a temporary log-level for `lgr::get_logger("mlr3/bbotk")`. Initialized to: "warn".
 #'
 #'
 #' @section Methods:
@@ -59,11 +59,11 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
   public = list(
     initialize = function(id = "classif.avg") {
       ps = ps(
-        measure = p_uty(custom_check = check_class_or_character("MeasureClassif", mlr_measures), tags = "train"),
-        optimizer = p_uty(custom_check = check_optimizer, tags = "train"),
+        measure = p_uty(custom_check = check_class_or_character("MeasureClassif", mlr_measures), tags = c("train", "required")),
+        optimizer = p_uty(custom_check = check_optimizer, tags = c("train", "required")),
         log_level = p_uty(
-          custom_check = crate(function(x) check_string(x) %check||% check_integerish(x), .parent = topenv()),
-          tags = "train"
+          custom_check = crate(function(x) check_string(x) %check||% check_integerish(x)),
+          tags = c("train", "required")
         )
       )
       ps$values = list(measure = "classif.ce", optimizer = "nloptr", log_level = "warn")
@@ -135,9 +135,9 @@ LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
   public = list(
     initialize = function(id = "regr.avg") {
       ps = ps(
-        measure = p_uty(custom_check = check_class_or_character("MeasureRegr", mlr_measures), tags = "train"),
-        optimizer = p_uty(custom_check = check_optimizer, tags = "train"),
-        log_level = p_uty(tags = "train",
+        measure = p_uty(custom_check = check_class_or_character("MeasureRegr", mlr_measures), tags = c("train", "required")),
+        optimizer = p_uty(custom_check = check_optimizer, tags = c("train", "required")),
+        log_level = p_uty(tags = c("train", "required"),
           function(x) check_string(x) %check||% check_integerish(x))
       )
       ps$values = list(measure = "regr.mse", optimizer = "nloptr", log_level = "warn")
@@ -194,7 +194,7 @@ optimize_weights_learneravg = function(self, task, n_weights, data) {
       if (inherits(optimizer, "character")) {
         optimizer = bbotk::opt(optimizer)
         if (inherits(optimizer, "OptimizerNLoptr") || inherits(optimizer, "OptimizerBatchNLoptr")) {
-          optimizer$param_set$values = list(xtol_rel = 1e-8, algorithm = "NLOPT_LN_COBYLA", start_values = "center")
+          optimizer$param_set$set_values(xtol_rel = 1e-8, algorithm = "NLOPT_LN_COBYLA", start_values = "center")
         }
       }
       measure = pars$measure
@@ -213,8 +213,14 @@ optimize_weights_learneravg = function(self, task, n_weights, data) {
       )
       lgr = lgr::get_logger("bbotk")
       old_threshold = lgr$threshold
-      on.exit(lgr$set_threshold(old_threshold))
+      lgr2 = lgr::get_logger("mlr3/bbotk")
+      old_threshold2 = lgr2$threshold
+      on.exit({
+        lgr$set_threshold(old_threshold)
+        lgr2$set_threshold(old_threshold2)
+      })
       lgr$set_threshold(self$param_set$values$log_level)
+      lgr2$set_threshold(self$param_set$values$log_level)
       optimizer$optimize(inst)
       unlist(inst$result_x_domain)
 }

@@ -23,3 +23,27 @@ test_that("PipeOpClassWeights", {
   expect_equal(nt[[weights]]$weight, ifelse(nt$truth(nt[[weights]]$row_ids) == "neg", 1, 3))
 
 })
+
+test_that("PipeOpClassWeights - error for Tasks without weights property, #937", {
+  skip_if_not_installed("mlr3learners")
+  skip_if_not_installed("MASS")
+
+  set.seed(1234)
+  task = as_task_classif(data.table(
+    y = factor(rep(c("A", "B", "A"), 4)),
+    x = runif(12)
+  ), target = "y")
+
+  # no error: Learner has weights property
+  gr = po("classweights") %>>% lrn("classif.featureless")
+  expect_no_error(gr$train(task))
+
+  # error: Learner does not have weights property
+  gr = po("classweights") %>>% lrn("classif.lda")
+  expect_error(gr$train(task), ".*Learner does not support weights.*")
+
+  # no error: use_weights is set to "ignore"
+  gr = po("classweights") %>>% lrn("classif.lda", use_weights = "ignore")
+  expect_no_error(gr$train(task))
+
+})

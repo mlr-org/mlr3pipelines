@@ -8,12 +8,9 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Generates a more balanced data set by creating
-synthetic instances of the minority class using the SMOTE algorithm.
-The algorithm samples for each minority instance a new data point based on the \code{K} nearest
-neighbors of that data point.
-It can only be applied to tasks with purely numeric features.
-See \code{\link[smotefamily:SMOTE]{smotefamily::SMOTE}} for details.
+Generates a more balanced data set by creating synthetic instances of the minority class using the SMOTE algorithm.
+The algorithm samples for each minority instance a new data point based on the \code{K} nearest neighbors of that data point.
+It can only be applied to tasks with purely numeric features. See \code{\link[smotefamily:SMOTE]{smotefamily::SMOTE}} for details.
 }
 \section{Construction}{
 
@@ -30,7 +27,8 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}. Instead of a \code{\link[mlr3:Task]{Task}}, a
+\code{\link[mlr3:TaskClassif]{TaskClassif}} is used as input and output during training and prediction.
 
 The output during training is the input \code{\link[mlr3:Task]{Task}} with added synthetic rows for the minority class.
 The output during prediction is the unchanged input.
@@ -54,9 +52,15 @@ majority instances. See \code{\link[smotefamily:SMOTE]{SMOTE()}}.
 }
 }
 
+\section{Internals}{
+
+If a target level is unobserved during training, no synthetic data points will be generated for that class.
+No error is raised; the unobserved class is simply ignored.
+}
+
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
@@ -65,7 +69,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{if (requireNamespace("smotefamily")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("smotefamily")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
 # Create example task
@@ -92,6 +96,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -111,9 +116,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

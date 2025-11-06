@@ -191,13 +191,13 @@ test_that("validation", {
   expect_equal(obj$validate, "predefined")
   expect_equal(obj$learner$validate, "predefined")
   set_validate(obj, NULL)
-  expect_equal(obj$validate, NULL)
-  expect_equal(obj$learner$validate, NULL)
+  expect_null(obj$validate)
+  expect_null(obj$learner$validate)
   expect_warning({obj$learner$validate = 0.3}, "unexpected behaviour") # nolint
 
   obj = as_pipeop(as_learner(as_graph(lrn("classif.debug"))))
   expect_error(set_validate(obj, "predefined", ids = "none_existing"), "Trying to heuristically")
-  expect_equal(obj$validate, NULL)
+  expect_null(obj$validate)
 })
 
 test_that("internal_tuned_values, internal_valid_scores", {

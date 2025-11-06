@@ -36,6 +36,9 @@
 #' For logicals, `TRUE` or `FALSE` are sampled uniformly at random.
 #' Numerics and integers are imputed as `0`.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
 #'
@@ -72,9 +75,7 @@ PipeOpImputeSample = R6Class("PipeOpImputeSample",
         # memory usage of count table is larger than memory usage of just the values
         return(fvals)
       }
-      model = tab$fvals
-      attr(model, "probabilities") = tab$N / sum(tab$N)
-      model
+      setattr(tab$fvals, "probabilities", tab$N / sum(tab$N))
     }
   )
 )

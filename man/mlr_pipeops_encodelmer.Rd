@@ -10,7 +10,7 @@
 \description{
 Encodes columns of type \code{factor}, \code{character} and \code{ordered}.
 
-PipeOpEncodeLmer() converts factor levels of each factorial column to the
+\code{PipeOpEncodeLmer} converts factor levels of each factorial column to the
 estimated coefficients of a simple random intercept model.
 Models are fitted with the glmer function of the lme4 package and are
 of the type \code{target ~ 1 + (1 | factor)}.
@@ -49,7 +49,8 @@ otherwise be set during construction. Default \code{list()}.
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}. Instead of a \code{\link[mlr3:Task]{Task}}, a
+\code{\link[mlr3:TaskSupervised]{TaskSupervised}} is used as input and output during training and prediction.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with all affected \code{factor}, \code{character} or
 \code{ordered} parameters encoded according to the \code{method} parameter.
@@ -62,18 +63,18 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 \item \code{target_levels} :: \code{character}\cr
 Levels of the target columns.
 \item \code{control} :: a named \code{list}\cr
-List of coefficients learned via \code{glmer}
+List of coefficients learned via \code{glmer}.
 }
 }
 
 \section{Parameters}{
 
+The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{fast_optim}  :: \code{logical(1)} \cr
+If \code{fast_optim} is \code{TRUE} (default), a faster (up to 50 percent) optimizer from the \code{nloptr} package is used when
+fitting the lmer models. This uses additional stopping criteria which can give suboptimal results.
 Initialized to \code{TRUE}.
-If "fast_optim" is \code{TRUE} (default), a faster (up to 50 percent)
-optimizer from the nloptr package is used when fitting the lmer models.
-This uses additional stopping criteria which can give suboptimal results.
 }
 }
 
@@ -82,13 +83,18 @@ This uses additional stopping criteria which can give suboptimal results.
 Uses the \code{\link[lme4:glmer]{lme4::glmer}}. This is relatively inefficient for features with a large number of levels.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
-Only methods inherited \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only methods inherited \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{if (mlr3misc::require_namespaces(c("nloptr", "lme4"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (mlr3misc::require_namespaces(c("nloptr", "lme4"), quietly = TRUE)) withAutoprint(\{ # examplesIf}
 library("mlr3")
 poe = po("encodelmer")
 
@@ -108,6 +114,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -127,8 +134,11 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},

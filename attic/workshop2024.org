@@ -4,7 +4,6 @@
    - predict_sets during prediction: learner wird 3x aufgerufen
    - predict_sets vom graphlearner sollte das gleiche sein
 * **Filter**
-** filter hash not entirely correct #723
 ** Feature intersection #593
   - meta-filter
 * filter things
@@ -15,8 +14,6 @@
 *** $importance() for graphlearner #291 
 **** Variable importance by "mlr3filters" does not work in "mlr3proba" after preprocessing data with "mlr3pipelines" #579 
 *** GraphLearner could have an AB shortcut for $graph$pipeops #600 
-** **Better messages, warnings etc**
-*** Better warning if po(<id>) does not work, but ppl(<id>) exists #717
 ** **UI Changes**
 *** PipeOpCollapseFactors hyperparameters #709 
 *** pos in combination with as_graph leads to unexpected ids #718

@@ -13,6 +13,7 @@
 #' ```
 #' PipeOpProxy$new(innum = 0, outnum = 1, id = "proxy", param_vals = list())
 #' ```
+#'
 #' * `innum` :: `numeric(1)\cr
 #'   Determines the number of input channels.
 #'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
@@ -25,11 +26,11 @@
 #'   be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpProxy`] has multiple input channels depending on the `innum` construction argument, named
+#' `PipeOpProxy` has multiple input channels depending on the `innum` construction argument, named
 #' `"input1"`, `"input2"`, ... if `innum` is nonzero; if `innum` is 0, there is only one *vararg*
 #' input channel named `"..."`.
 #'
-#' [`PipeOpProxy`] has multiple output channels depending on the `outnum` construction argument,
+#' `PipeOpProxy` has multiple output channels depending on the `outnum` construction argument,
 #' named `"output1"`, `"output2"`, ...
 #' The output is determined by the output of the `content` operation (a [`PipeOp`] or [`Graph`]).
 #'
@@ -56,17 +57,16 @@
 #'
 #' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
-#' library("mlr3learners")
 #'
 #' set.seed(1234)
 #' task = tsk("iris")
 #'
 #' # use a proxy for preprocessing and a proxy for learning, i.e.,
-#' # no preprocessing and classif.kknn
+#' # no preprocessing and classif.rpart
 #' g = po("proxy", id = "preproc", param_vals = list(content = po("nop"))) %>>%
-#'   po("proxy", id = "learner", param_vals = list(content = lrn("classif.kknn")))
-#' rr_kknn = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
-#' rr_kknn$aggregate(msr("classif.ce"))
+#'   po("proxy", id = "learner", param_vals = list(content = lrn("classif.rpart")))
+#' rr_rpart = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
+#' rr_rpart$aggregate(msr("classif.ce"))
 #'
 #' # use pca for preprocessing and classif.rpart as the learner
 #' g$param_set$values$preproc.content = po("pca")
@@ -103,7 +103,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
               }
             },
             error = function(error_condition) "`content` must be an object that can be converted to a Graph")
-          }, innum, outnum, .parent = topenv()),
+          }, innum, outnum),
           tags = c("train", "predidct", "required")
         )
       )

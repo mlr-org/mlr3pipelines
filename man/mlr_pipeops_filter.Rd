@@ -24,7 +24,7 @@ this means e.g. that setting \code{nfeat} to 0 will only remove features of the 
 \item \code{filter} :: \code{\link[mlr3filters:Filter]{Filter}}\cr
 \code{\link[mlr3filters:Filter]{Filter}} used for feature filtering.
 This argument is always cloned; to access the \code{\link[mlr3filters:Filter]{Filter}} inside \code{PipeOpFilter} by-reference, use \verb{$filter}.\cr
-\item \code{id} :: \code{character(1)}
+\item \code{id} :: \code{character(1)}\cr
 Identifier of the resulting  object, defaulting to the \code{id} of the \code{\link[mlr3filters:Filter]{Filter}} being used.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
@@ -84,7 +84,7 @@ instead the whole \code{\link[mlr3:Task]{Task}} is used by \code{private$.get_st
 
 \section{Fields}{
 
-Fields inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
+Fields inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
 \item \code{filter} :: \code{\link[mlr3filters:Filter]{Filter}}\cr
 \code{\link[mlr3filters:Filter]{Filter}} that is being used for feature filtering. Do \emph{not} use this slot to get to the feature filtering scores
@@ -98,7 +98,7 @@ Methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpT
 }
 
 \examples{
-\dontshow{if (mlr3misc::require_namespaces(c("mlr3filters", "rpart"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (mlr3misc::require_namespaces(c("mlr3filters", "rpart"), quietly = TRUE)) withAutoprint(\{ # examplesIf}
 library("mlr3")
 library("mlr3filters")
 \dontshow{data.table::setDTthreads(1)}
@@ -144,6 +144,7 @@ https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
@@ -163,9 +164,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},

@@ -13,6 +13,7 @@
 #' ```
 #' PipeOpThreshold$new(id = "threshold", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, default `"threshold"`.
 #' * `param_vals` :: named `list`\cr
@@ -89,7 +90,7 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
       thr = self$param_set$values$thresholds
       assert_subset("prob", prd$predict_types)
       if (length(thr) > 1) {
-        if (length(thr) != length(levels(prd$truth))) {
+        if (length(thr) != nlevels(prd$truth)) {
           stop("'thresholds' parameter must have length one or length equal to number of outcome levels")
         }
         if (is.null(names(thr))) {

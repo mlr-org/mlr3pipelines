@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.7.0-9000
+Version: 0.9.0-9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -58,7 +58,7 @@ URL: https://mlr3pipelines.mlr-org.com,
     https://github.com/mlr-org/mlr3pipelines
 BugReports: https://github.com/mlr-org/mlr3pipelines/issues
 Depends:
-    R (>= 3.1.0)
+    R (>= 3.3.0)
 Imports:
     backports,
     checkmate,
@@ -67,10 +67,9 @@ Imports:
     digest,
     lgr,
     mlr3 (>= 0.20.0),
-    mlr3misc (>= 0.9.0),
-    paradox,
-    R6,
-    withr
+    mlr3misc (>= 0.17.0),
+    paradox (>= 1.0.0),
+    R6
 Suggests:
     ggplot2,
     glmnet,
@@ -79,7 +78,7 @@ Suggests:
     lme4,
     mlbench,
     bbotk (>= 0.3.0),
-    mlr3filters (>= 0.1.1),
+    mlr3filters (>= 0.8.1),
     mlr3learners,
     mlr3measures,
     nloptr,
@@ -96,7 +95,6 @@ Suggests:
     evaluate,
     NMF,
     MASS,
-    kknn,
     GenSA,
     methods,
     vtreat,
@@ -111,8 +109,8 @@ Config/testthat/edition: 3
 Config/testthat/parallel: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.3.2
-VignetteBuilder: knitr
+RoxygenNote: 7.3.3
+VignetteBuilder: knitr, rmarkdown
 Collate:
     'CnfAtom.R'
     'CnfClause.R'
@@ -143,9 +141,11 @@ Collate:
     'PipeOpCollapseFactors.R'
     'PipeOpCopy.R'
     'PipeOpDateFeatures.R'
+    'PipeOpDecode.R'
     'PipeOpEncode.R'
     'PipeOpEncodeImpact.R'
     'PipeOpEncodeLmer.R'
+    'PipeOpEncodePL.R'
     'PipeOpFeatureUnion.R'
     'PipeOpFilter.R'
     'PipeOpFixFactors.R'
@@ -199,6 +199,7 @@ Collate:
     'PipeOpVtreat.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'
+    'TaskRegr_boston_housing.R'
     'assert_graph.R'
     'bibentries.R'
     'greplicate.R'
@@ -215,6 +216,7 @@ Collate:
     'pipeline_targettrafo.R'
     'po.R'
     'ppl.R'
+    'preproc.R'
     'reexports.R'
     'typecheck.R'
     'zzz.R'
