@@ -14,6 +14,8 @@
   (`resampling.predict_method = "cv_ensemble"`).
 - feat: `PipeOpRegrAvg` gets new `se_aggr` and `se_aggr_rho`
   hyperparameters and now allows various forms of SE aggregation.
+- Fix: `PipeOpRemoveConstants` now avoids integer overflow when
+  evaluating relative tolerances for near-`integer.max` data.
 - Compatibility with new testthat version 3.3.0
 
 ## mlr3pipelines 0.9.0

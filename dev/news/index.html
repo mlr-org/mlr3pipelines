@@ -59,6 +59,7 @@
 <li>Added support for internal validation tasks to <code>PipeOpFeatureUnion</code>.</li>
 <li>feat: <code>PipeOpLearnerCV</code> can reuse the cross-validation models during prediction by averaging their outputs (<code>resampling.predict_method = "cv_ensemble"</code>).</li>
 <li>feat: <code>PipeOpRegrAvg</code> gets new <code>se_aggr</code> and <code>se_aggr_rho</code> hyperparameters and now allows various forms of SE aggregation.</li>
+<li>Fix: <code>PipeOpRemoveConstants</code> now avoids integer overflow when evaluating relative tolerances for near-<code>integer.max</code> data.</li>
 <li>Compatibility with new testthat version 3.3.0</li>
 </ul></div>
     <div class="section level2">
