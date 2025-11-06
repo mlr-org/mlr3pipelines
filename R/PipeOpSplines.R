@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_splines
-#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Replaces numeric features with columns representing spline basis expansions.
@@ -27,14 +27,14 @@
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`].
-#' After training the `Boundary.knots`will be given to the `$state`.
+#' After training the `Boundary.knots` will be given to the `$state`.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `factor`  :: `character(1)` \cr
+#' * `type`  :: `character(1)` \cr
 #'   `polynomial` when polynomial splines are applied [`splines::bs`] or
-#'   `natural` when natural natural splines are applied [`splines::ns`].
-#'   Default is `polynomial`.
+#'   `natural` when natural splines are applied [`splines::ns`].
+#'   Default is `natural`.
 #' * `df`  :: `integer(1)` \cr
 #'   Number of degrees of freedom for calculation of splines basis matrix.
 #'   Default is `NULL`.
@@ -54,8 +54,8 @@
 #'   For further information look up [`splines::bs()`] or [`splines::ns()`].
 #'
 #' @section Internals:
-#' For creating the Splines uses the [`splines::bs`]/[`splines::ns`] function.
-#' After training, the `Boundary.Knots` that are either defined in the Parameter Set
+#' Creates spline basis via [`splines::bs`]/[`splines::ns`] function depending on `type`.
+#' After training, the `Boundary.knots` that are either defined in the Parameter Set
 #' or have been calculated during training will be passed to the `$state` of the PipeOp.
 #'
 #' @section Fields:
@@ -135,6 +135,5 @@ PipeOpSplines = R6Class("PipeOpSplines",
     }
   )
 )
-
 
 mlr_pipeops$add("splines", PipeOpSplines)

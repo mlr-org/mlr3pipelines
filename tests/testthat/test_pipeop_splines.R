@@ -7,9 +7,9 @@ test_that("PipeOpSplines - basic properties", {
   # when we train we get the Boundary.knots, when we now predict on the same data the results will change
 })
 
-test_that("Error when trying to pass degree argument while factor = natural", {
+test_that("Error when trying to pass degree argument while type = natural", {
   skip_if_not_installed("splines")
-  expect_error(po("basissplines", factor = "natural", degree = 3))
+  expect_error(po("splines", type = "natural", degree = 3))
 })
 
 test_that("results are identical as when calculating by hand", {

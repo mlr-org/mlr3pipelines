@@ -5,7 +5,7 @@
 \alias{PipeOpSplines}
 \title{Transforms Numeric Features into Spline Basis Expansions}
 \format{
-\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Replaces numeric features with columns representing spline basis expansions.
@@ -35,40 +35,41 @@ The output is the input \code{\link[mlr3:Task]{Task}} with the selected columns 
 \section{State}{
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}.
-After training the \code{Boundary.knots}will be given to the \verb{$state}.
+After training the \code{Boundary.knots} will be given to the \verb{$state}.
 }
 
 \section{Parameters}{
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{factor}  :: \code{character(1)} \cr
-"Polynomial" when polynomial splines are applied \code{\link[splines:bs]{splines::bs}} or
-"natural" when natural natural splines are applied \code{\link[splines:ns]{splines::ns}}.
-Default is "polynomial".
+\item \code{type}  :: \code{character(1)} \cr
+\code{polynomial} when polynomial splines are applied \code{\link[splines:bs]{splines::bs}} or
+\code{natural} when natural splines are applied \code{\link[splines:ns]{splines::ns}}.
+Default is \code{natural}.
 \item \code{df}  :: \code{integer(1)} \cr
 Number of degrees of freedom for calculation of splines basis matrix.
-Default is NULL.
+Default is \code{NULL}.
 For further information look up \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 \item \code{knots} :: named \code{list} \cr
-The internal breakpoints that define the spline. The default is no knots.
-For further information consult \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
+The internal breakpoints that define the spline. Parameter has to be passed as a named list.
+Default is \code{NULL}. For further information consult \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 \item \code{intercept} :: \code{logical(1)} \cr
 If \code{TRUE}, an intercept is included in the basis. Default is \code{FALSE}.
 For further information look up \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 \item \code{degree} :: \code{integer(1)} \cr
 This parameter depends on type = "polynomial". Degree of the polynomial used to compute B-splines.
-Default is 3. For further information look up \code{\link[splines:bs]{splines::bs()}}.
+Default is \code{3}. For further information look up \code{\link[splines:bs]{splines::bs()}}.
 \item \code{Boundary.knots} :: named \code{list} \cr
 Boundary points at which to anchor the spline basis. Parameter has to be passed as a named list.
+Default is \code{NULL}.
 For further information look up \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 }
 }
 
 \section{Internals}{
 
-For creating the Splines uses the \code{\link[splines:bs]{splines::bs}}/\code{\link[splines:ns]{splines::ns}} function.
-After training, the \code{Boundary.Knots} that are either defined in the Parameter Set
+Creates spline basis via \code{\link[splines:bs]{splines::bs}}/\code{\link[splines:ns]{splines::ns}} function depending on \code{type}.
+After training, the \code{Boundary.knots} that are either defined in the Parameter Set
 or have been calculated during training will be passed to the \verb{$state} of the PipeOp.
 }
 
