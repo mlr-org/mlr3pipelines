@@ -82,12 +82,16 @@ graph_learner$train(tsk("german_credit"))
 #> # weights:  172
 #> initial  value 417.427019 
 #> iter  10 value 398.811803
-#> iter  20 value 379.569945
-#> iter  30 value 334.451724
-#> iter  40 value 290.026708
-#> iter  50 value 275.268927
-#> iter  60 value 258.182051
-#> final  value 256.600720 
+#> iter  20 value 379.569823
+#> iter  30 value 334.453177
+#> iter  40 value 289.756050
+#> iter  50 value 277.504280
+#> iter  60 value 259.000169
+#> iter  70 value 257.671612
+#> iter  80 value 257.668808
+#> iter  80 value 257.668807
+#> iter  80 value 257.668807
+#> final  value 257.668807 
 #> converged
 #> # weights:  172
 #> initial  value 437.127855 

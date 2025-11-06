@@ -142,6 +142,8 @@ Other PipeOps:
 [`mlr_pipeops_imputemode`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemode.md),
 [`mlr_pipeops_imputeoor`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputeoor.md),
 [`mlr_pipeops_imputesample`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputesample.md),
+[`mlr_pipeops_info`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_info.md),
+[`mlr_pipeops_isomap`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_isomap.md),
 [`mlr_pipeops_kernelpca`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_kernelpca.md),
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_pi_cvplus.md),
@@ -237,7 +239,7 @@ pop$state
 #> Empty data.table (0 rows and 3 cols): stage,class,msg
 #> 
 #> $train_time
-#> [1] 0.003
+#> [1] 0.004
 #> 
 #> $task_hash
 #> [1] "abc694dd29a7a8ce"
@@ -299,7 +301,7 @@ pop$state
 #> $tunethreshold
 #> $tunethreshold$threshold
 #>     setosa versicolor  virginica 
-#>  0.9797805  0.5447611  0.2876503 
+#>  0.5852014  0.3398626  0.6166942 
 #> 
 #> 
 ```

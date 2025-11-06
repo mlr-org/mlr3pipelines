@@ -11,9 +11,33 @@ Always returns a `"prob"` prediction, regardless of the incoming
 `$predict_type`. The label of the class with the highest predicted
 probability is selected as the `"response"` prediction. If the
 [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html)'s
-`$predict_type` is set to `"prob"`, the prediction obtained is also a
-`"prob"` type prediction with the probability predicted to be a weighted
-average of incoming predictions.
+`$predict_type` is set to `"prob"`, the probability aggregation is
+controlled by `prob_aggr` (see below). If `$predict_type = "response"`,
+predictions are internally converted to one-hot probability vectors
+(point mass on the predicted class) before aggregation.
+
+### `"prob"` aggregation:
+
+- **`prob_aggr = "mean"`** – *Linear opinion pool (arithmetic mean of
+  probabilities; default)*. **Interpretation.** Mixture semantics:
+  choose a base model with probability `w[i]`, then draw from its class
+  distribution. Decision-theoretically, this is the minimizer of
+  `sum(w[i] * KL(p[i] || p))` over probability vectors `p`, where
+  `KL(x || y)` is the Kullback-Leibler divergence. **Typical behavior.**
+  Conservative / better calibrated and robust to near-zero probabilities
+  (never assigns zero unless all do). This is the standard choice for
+  probability averaging in ensembles and stacking.
+
+- **`prob_aggr = "log"`** – *Log opinion pool / product of experts
+  (geometric mean in probability space)*: Average per-model logs (or
+  equivalently, logits) and apply softmax. **Interpretation.** Product
+  semantics: `p_ens ~ prod_i p_i^{w[i]}`; minimizes
+  `sum(w[i] * KL(p || p[i]))`. **Typical behavior.** Sharper / lower
+  entropy (emphasizes consensus regions), but can be **overconfident**
+  and is sensitive to zeros; use `prob_aggr_eps` to clip small
+  probabilities for numerical stability. Often beneficial with strong,
+  similarly calibrated members (e.g., neural networks), less so when
+  calibration is the priority.
 
 All incoming
 [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html)'s
@@ -70,7 +94,20 @@ The `$state` is left empty
 ## Parameters
 
 The parameters are the parameters inherited from the
-[`PipeOpEnsemble`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpEnsemble.md).
+[`PipeOpEnsemble`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpEnsemble.md),
+as well as:
+
+- `prob_aggr` :: `character(1)`  
+  Controls how incoming class probabilities are aggregated. One of
+  `"mean"` (linear opinion pool; default) or `"log"` (log opinion pool /
+  product of experts). See the description above for definitions and
+  interpretation. Only has an effect if the incoming predictions have
+  `"prob"` values.
+
+- `prob_aggr_eps` :: `numeric(1)`  
+  Small positive constant used only for `prob_aggr = "log"` to clamp
+  probabilities before taking logs, improving numerical stability and
+  avoiding `-Inf`. Ignored for `prob_aggr = "mean"`. Default is `1e-12`.
 
 ## Internals
 
@@ -132,6 +169,8 @@ Other PipeOps:
 [`mlr_pipeops_imputemode`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemode.md),
 [`mlr_pipeops_imputeoor`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputeoor.md),
 [`mlr_pipeops_imputesample`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputesample.md),
+[`mlr_pipeops_info`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_info.md),
+[`mlr_pipeops_isomap`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_isomap.md),
 [`mlr_pipeops_kernelpca`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_kernelpca.md),
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_pi_cvplus.md),

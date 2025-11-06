@@ -307,6 +307,8 @@ Other PipeOps:
 [`mlr_pipeops_imputemode`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemode.md),
 [`mlr_pipeops_imputeoor`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputeoor.md),
 [`mlr_pipeops_imputesample`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputesample.md),
+[`mlr_pipeops_info`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_info.md),
+[`mlr_pipeops_isomap`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_isomap.md),
 [`mlr_pipeops_kernelpca`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_kernelpca.md),
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_pi_cvplus.md),
@@ -367,11 +369,11 @@ pos$train(list(task))[[1]]$data()
 #> 'as(<dgCMatrix>, "dgTMatrix")' is deprecated.
 #> Use 'as(., "TsparseMatrix")' instead.
 #> See help("Deprecated") and help("Matrix-deprecated").
-#>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.n txt.f
+#>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.v txt.m
 #>         <fctr>        <num>       <num>        <num>       <num> <num> <num>
 #>   1:    setosa          1.4         0.2          5.1         3.5     1     1
 #>   2:    setosa          1.4         0.2          4.9         3.0     0     0
-#>   3:    setosa          1.3         0.2          4.7         3.2     0     1
+#>   3:    setosa          1.3         0.2          4.7         3.2     0     0
 #>   4:    setosa          1.5         0.2          4.6         3.1     0     0
 #>   5:    setosa          1.4         0.2          5.0         3.6     0     0
 #>  ---                                                                        
@@ -380,20 +382,20 @@ pos$train(list(task))[[1]]$data()
 #> 148: virginica          5.2         2.0          6.5         3.0     0     0
 #> 149: virginica          5.4         2.3          6.2         3.4     0     0
 #> 150: virginica          5.1         1.8          5.9         3.0     0     0
-#>      txt.v txt.m txt.p txt.r txt.d txt.w txt.x txt.q txt.b txt.l txt.t txt.o
+#>      txt.p txt.r txt.d txt.f txt.w txt.x txt.q txt.b txt.l txt.t txt.o txt.j
 #>      <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num>
 #>   1:     1     0     0     0     0     0     0     0     0     0     0     0
-#>   2:     0     1     1     1     0     0     0     0     0     0     0     0
-#>   3:     0     0     0     0     1     0     0     0     0     0     0     0
-#>   4:     0     0     0     0     0     1     1     1     0     0     0     0
-#>   5:     0     0     0     0     0     1     0     0     1     1     0     0
+#>   2:     0     1     1     0     0     0     0     0     0     0     0     0
+#>   3:     0     0     0     1     1     1     0     0     0     0     0     0
+#>   4:     0     0     0     0     1     0     1     1     0     0     0     0
+#>   5:     0     0     1     0     0     0     0     0     1     1     0     0
 #>  ---                                                                        
-#> 146:     1     0     0     0     0     0     0     0     0     0     0     0
-#> 147:     0     0     0     0     0     0     0     0     0     0     0     0
-#> 148:     0     0     0     1     0     0     0     0     0     0     0     0
-#> 149:     0     0     1     0     0     0     0     0     0     0     0     0
-#> 150:     0     0     0     1     1     0     0     0     0     0     0     0
-#>      txt.j txt.e txt.g txt.h txt.s txt.y txt.c txt.u txt.k txt.z
+#> 146:     0     0     0     0     0     0     0     0     0     0     0     0
+#> 147:     0     1     0     0     0     0     0     0     0     0     0     1
+#> 148:     1     0     0     0     0     0     0     0     0     0     0     0
+#> 149:     0     1     1     0     0     0     0     0     0     0     0     0
+#> 150:     0     0     0     0     1     0     0     0     0     0     0     0
+#>      txt.e txt.g txt.h txt.s txt.c txt.u txt.k txt.n txt.y txt.z
 #>      <num> <num> <num> <num> <num> <num> <num> <num> <num> <num>
 #>   1:     0     0     0     0     0     0     0     0     0     0
 #>   2:     0     0     0     0     0     0     0     0     0     0
@@ -401,27 +403,27 @@ pos$train(list(task))[[1]]$data()
 #>   4:     0     0     0     0     0     0     0     0     0     0
 #>   5:     0     0     0     0     0     0     0     0     0     0
 #>  ---                                                            
-#> 146:     0     0     0     0     0     0     0     1     1     0
-#> 147:     0     0     1     1     0     0     1     0     0     0
-#> 148:     1     0     1     0     0     0     0     0     0     0
-#> 149:     0     0     0     0     1     0     0     1     0     0
-#> 150:     0     0     0     0     0     0     1     0     0     0
+#> 146:     0     1     1     0     1     0     0     0     0     0
+#> 147:     0     1     0     0     0     0     0     0     0     0
+#> 148:     0     0     0     1     0     1     0     0     0     0
+#> 149:     0     0     0     0     1     0     0     0     0     0
+#> 150:     0     0     0     1     1     0     0     0     0     0
 
 one_line_of_iris = task$filter(13)
 
 one_line_of_iris$data()
 #>    Species Petal.Length Petal.Width Sepal.Length Sepal.Width    txt
 #>     <fctr>        <num>       <num>        <num>       <num> <char>
-#> 1:  setosa          1.4         0.1          4.8           3  s y p
+#> 1:  setosa          1.4         0.1          4.8           3  t c d
 
 pos$predict(list(one_line_of_iris))[[1]]$data()
-#>    Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.n txt.f txt.v
+#>    Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.v txt.m txt.p
 #>     <fctr>        <num>       <num>        <num>       <num> <num> <num> <num>
 #> 1:  setosa          1.4         0.1          4.8           3     0     0     0
-#>    txt.m txt.p txt.r txt.d txt.w txt.x txt.q txt.b txt.l txt.t txt.o txt.j
+#>    txt.r txt.d txt.f txt.w txt.x txt.q txt.b txt.l txt.t txt.o txt.j txt.e
 #>    <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num>
-#> 1:     0     1     0     0     0     0     0     0     0     0     0     0
-#>    txt.e txt.g txt.h txt.s txt.y txt.c txt.u txt.k txt.z
+#> 1:     0     1     0     0     0     0     0     0     1     0     0     0
+#>    txt.g txt.h txt.s txt.c txt.u txt.k txt.n txt.y txt.z
 #>    <num> <num> <num> <num> <num> <num> <num> <num> <num>
-#> 1:     0     0     0     1     1     0     0     0     0
+#> 1:     0     0     0     1     0     0     0     0     0
 ```

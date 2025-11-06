@@ -162,6 +162,8 @@ Whether to drop empty factor levels of the training task. Default <code>TRUE</co
 <code><a href="mlr_pipeops_imputemode.html">mlr_pipeops_imputemode</a></code>,
 <code><a href="mlr_pipeops_imputeoor.html">mlr_pipeops_imputeoor</a></code>,
 <code><a href="mlr_pipeops_imputesample.html">mlr_pipeops_imputesample</a></code>,
+<code><a href="mlr_pipeops_info.html">mlr_pipeops_info</a></code>,
+<code><a href="mlr_pipeops_isomap.html">mlr_pipeops_isomap</a></code>,
 <code><a href="mlr_pipeops_kernelpca.html">mlr_pipeops_kernelpca</a></code>,
 <code><a href="mlr_pipeops_learner.html">mlr_pipeops_learner</a></code>,
 <code><a href="mlr_pipeops_learner_pi_cvplus.html">mlr_pipeops_learner_pi_cvplus</a></code>,
@@ -210,6 +212,31 @@ Whether to drop empty factor levels of the training task. Default <code>TRUE</co
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Reduced task with no entries for the installment_rate &lt; 20 is defined</span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"german_credit"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rows</span> <span class="op">=</span> <span class="va">task</span><span class="op">$</span><span class="va">row_ids</span><span class="op">[</span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">[</span>, <span class="va">installment_rate</span> <span class="op">!=</span> <span class="st">"&lt; 20"</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">reduced_task</span> <span class="op">=</span> <span class="va">task</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="va">rows</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">reduced_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">installment_rate</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&gt;= 35"          "25 &lt;= ... &lt; 35" "20 &lt;= ... &lt; 25" "&lt; 20"          </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># PipeOp is trained on the reduced task</span></span></span>
+<span class="r-in"><span><span class="va">po</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"fixfactors"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">processed_task</span> <span class="op">=</span> <span class="fu"><a href="preproc.html">preproc</a></span><span class="op">(</span><span class="va">reduced_task</span>, <span class="va">po</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">processed_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">installment_rate</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&gt;= 35"          "25 &lt;= ... &lt; 35" "20 &lt;= ... &lt; 25"</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">processed_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">installment_rate</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &gt;= 35 25 &lt;= ... &lt; 35 20 &lt;= ... &lt; 25 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            136            231            157 </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">predicted_task</span> <span class="op">=</span> <span class="fu"><a href="preproc.html">preproc</a></span><span class="op">(</span><span class="va">task</span>, <span class="va">po</span>, predict <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Predictions are made on the task without any missing data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">predicted_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">installment_rate</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&gt;= 35"          "25 &lt;= ... &lt; 35" "20 &lt;= ... &lt; 25"</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">predicted_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">installment_rate</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &gt;= 35 25 &lt;= ... &lt; 35 20 &lt;= ... &lt; 25           NA's </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            136            231            157            476 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

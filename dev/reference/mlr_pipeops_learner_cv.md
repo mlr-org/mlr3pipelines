@@ -162,6 +162,20 @@ this object. Besides that, parameters introduced are:
   classification and regression learners together with
   `resampling.method = "cv"`.
 
+- `resampling.prob_aggr` :: `character(1)`  
+  Probability aggregation used when `"cv_ensemble"` predictions are
+  produced for classification learners that can emit class
+  probabilities. Shares the semantics with
+  [`PipeOpClassifAvg`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classifavg.md):
+  `"mean"` (linear opinion pool, default) and `"log"` (log opinion pool
+  / product of experts). Only present for learners that support `"prob"`
+  predictions.
+
+- `resampling.prob_aggr_eps` :: `numeric(1)`  
+  Stabilization constant applied when `resampling.prob_aggr = "log"` to
+  clamp probabilities before taking logarithms. Defaults to `1e-12`.
+  Only present for learners that support `"prob"` predictions.
+
 - `resampling.se_aggr` :: `character(1)`  
   Standard error aggregation used when `"cv_ensemble"` predictions are
   produced for regression learners with `predict_type` containing

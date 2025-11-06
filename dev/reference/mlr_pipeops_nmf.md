@@ -114,9 +114,7 @@ as well as:
 ## Internals
 
 Uses the [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html) function as
-well as
-[`basis()`](https://rdrr.io/pkg/NMF/man/basis-coef-methods.html),
-[`coef()`](https://rdrr.io/r/stats/coef.html) and
+well as `basis()`, [`coef()`](https://rdrr.io/r/stats/coef.html) and
 [`ginv()`](https://rdrr.io/pkg/MASS/man/ginv.html).
 
 ## Fields
@@ -174,6 +172,8 @@ Other PipeOps:
 [`mlr_pipeops_imputemode`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemode.md),
 [`mlr_pipeops_imputeoor`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputeoor.md),
 [`mlr_pipeops_imputesample`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputesample.md),
+[`mlr_pipeops_info`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_info.md),
+[`mlr_pipeops_isomap`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_isomap.md),
 [`mlr_pipeops_kernelpca`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_kernelpca.md),
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_pi_cvplus.md),
@@ -242,17 +242,17 @@ task$data()
 pop$train(list(task))[[1]]$data()
 #>        Species      NMF1       NMF2
 #>         <fctr>     <num>      <num>
-#>   1:    setosa 0.4722029 0.02426467
-#>   2:    setosa 0.4237720 0.04359711
-#>   3:    setosa 0.4322611 0.02502891
-#>   4:    setosa 0.4076002 0.04820838
-#>   5:    setosa 0.4735927 0.01986585
+#>   1:    setosa 0.5808520 0.04741536
+#>   2:    setosa 0.5179125 0.06572959
+#>   3:    setosa 0.5312856 0.04639643
+#>   4:    setosa 0.4971806 0.06988613
+#>   5:    setosa 0.5832509 0.04280681
 #>  ---                               
-#> 146: virginica 0.2489892 0.51344128
-#> 147: virginica 0.2124087 0.49500193
-#> 148: virginica 0.2463497 0.49957816
-#> 149: virginica 0.2372032 0.51500688
-#> 150: virginica 0.2226449 0.47879107
+#> 146: virginica 0.2290743 0.55676271
+#> 147: virginica 0.1866306 0.53550080
+#> 148: virginica 0.2279444 0.54191697
+#> 149: virginica 0.2142419 0.55788518
+#> 150: virginica 0.2018033 0.51875141
 
 pop$state
 #> $nmf
@@ -265,13 +265,13 @@ pop$state
 #>  # Details:
 #>   algorithm:  brunet 
 #>   seed:  random 
-#>   RNG: 10403L, 222L, ..., 581505866L [0c75f1787a6dee181f94de56ad96448d]
+#>   RNG: 10403L, 223L, ..., 581505866L [c6a8911f7b61c7ab6db7422cde75b137]
 #>   distance metric:  'KL' 
-#>   residuals:  3.084419 
-#>   Iterations: 650 
+#>   residuals:  3.084418 
+#>   Iterations: 440 
 #>   Timing:
 #>      user  system elapsed 
-#>     0.076   0.008   0.084 
+#>     0.063   0.007   0.070 
 #> 
 #> $dt_columns
 #> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 

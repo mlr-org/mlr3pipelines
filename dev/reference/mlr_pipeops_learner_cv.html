@@ -162,6 +162,13 @@ Only effective during <code>"prob"</code> prediction: Whether to keep response v
 Controls how predictions are produced after training. <code>"full"</code> (default) fits the wrapped learner on the entire training data.
 <code>"cv_ensemble"</code> reuses the models fitted during resampling and averages their predictions. This option currently supports
 classification and regression learners together with <code>resampling.method = "cv"</code>.</p></li>
+<li><p><code>resampling.prob_aggr</code> :: <code>character(1)</code><br>
+Probability aggregation used when <code>"cv_ensemble"</code> predictions are produced for classification learners that can emit class probabilities.
+Shares the semantics with <code><a href="mlr_pipeops_classifavg.html">PipeOpClassifAvg</a></code>: <code>"mean"</code> (linear opinion pool, default) and <code>"log"</code> (log opinion pool / product of experts).
+Only present for learners that support <code>"prob"</code> predictions.</p></li>
+<li><p><code>resampling.prob_aggr_eps</code> :: <code>numeric(1)</code><br>
+Stabilization constant applied when <code>resampling.prob_aggr = "log"</code> to clamp probabilities before taking logarithms.
+Defaults to <code>1e-12</code>. Only present for learners that support <code>"prob"</code> predictions.</p></li>
 <li><p><code>resampling.se_aggr</code> :: <code>character(1)</code><br>
 Standard error aggregation used when <code>"cv_ensemble"</code> predictions are produced for regression learners with <code>predict_type</code>
 containing <code>"se"</code>. Shares the definitions with <code><a href="mlr_pipeops_regravg.html">PipeOpRegrAvg</a></code>, i.e. <code>"predictive"</code>, <code>"mean"</code>, <code>"within"</code>, <code>"between"</code>, <code>"none"</code>.

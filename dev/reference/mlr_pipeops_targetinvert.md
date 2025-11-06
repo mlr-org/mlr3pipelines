@@ -110,6 +110,8 @@ Other PipeOps:
 [`mlr_pipeops_imputemode`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemode.md),
 [`mlr_pipeops_imputeoor`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputeoor.md),
 [`mlr_pipeops_imputesample`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputesample.md),
+[`mlr_pipeops_info`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_info.md),
+[`mlr_pipeops_isomap`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_isomap.md),
 [`mlr_pipeops_kernelpca`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_kernelpca.md),
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_pi_cvplus.md),
@@ -152,3 +154,85 @@ Other PipeOps:
 [`mlr_pipeops_updatetarget`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_updatetarget.md),
 [`mlr_pipeops_vtreat`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_vtreat.md),
 [`mlr_pipeops_yeojohnson`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_yeojohnson.md)
+
+## Examples
+
+``` r
+library(mlr3)
+task = tsk("boston_housing")
+po = PipeOpTargetMutate$new("logtrafo", param_vals = list(
+  trafo = function(x) log(x, base = 2),
+  inverter = function(x) list(response = 2 ^ x$response))
+)
+# Note that this example is ill-equipped to work with
+# `predict_type == "se"` predictions.
+
+po$train(list(task))
+#> $fun
+#> NULL
+#> 
+#> $output
+#> 
+#> ── <TaskRegr> (506x18): Boston Housing Prices ──────────────────────────────────
+#> • Target: cmedv
+#> • Properties: -
+#> • Features (17):
+#>   • dbl (12): age, b, crim, dis, indus, lat, lon, lstat, nox, ptratio, rm, zn
+#>   • int (3): rad, tax, tract
+#>   • fct (2): chas, town
+#> 
+po$predict(list(task))
+#> $fun
+#> function (inputs) 
+#> {
+#>     assert_list(inputs, len = 1L, types = "Prediction")
+#>     list(private$.invert(inputs[[1L]], predict_phase_state))
+#> }
+#> <bytecode: 0x55c9edd60480>
+#> <environment: 0x55c9edd5cf10>
+#> 
+#> $output
+#> 
+#> ── <TaskRegr> (506x18): Boston Housing Prices ──────────────────────────────────
+#> • Target: cmedv
+#> • Properties: -
+#> • Features (17):
+#>   • dbl (12): age, b, crim, dis, indus, lat, lon, lstat, nox, ptratio, rm, zn
+#>   • int (3): rad, tax, tract
+#>   • fct (2): chas, town
+#> 
+
+g = Graph$new()
+g$add_pipeop(po)
+g$add_pipeop(LearnerRegrRpart$new())
+g$add_pipeop(PipeOpTargetInvert$new())
+g$add_edge(src_id = "logtrafo", dst_id = "targetinvert",
+  src_channel = 1, dst_channel = 1)
+g$add_edge(src_id = "logtrafo", dst_id = "regr.rpart",
+  src_channel = 2, dst_channel = 1)
+g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert",
+  src_channel = 1, dst_channel = 2)
+
+g$train(task)
+#> $targetinvert.output
+#> NULL
+#> 
+g$predict(task)
+#> $targetinvert.output
+#> 
+#> ── <PredictionRegr> for 506 observations: ──────────────────────────────────────
+#>  row_ids truth response
+#>        1  24.0 22.97871
+#>        2  21.6 22.97871
+#>        3  34.7 33.42115
+#>      ---   ---      ---
+#>      504  23.9 25.44298
+#>      505  22.0 25.44298
+#>      506  19.0 20.16845
+#> 
+
+#syntactic sugar using ppl():
+tt = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()))
+tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
+tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
+```

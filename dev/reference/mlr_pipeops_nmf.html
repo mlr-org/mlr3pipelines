@@ -147,7 +147,7 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>
 
 
-<p>Uses the <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">nmf()</a></code> function as well as <code><a href="https://rdrr.io/pkg/NMF/man/basis-coef-methods.html" class="external-link">basis()</a></code>, <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> and
+<p>Uses the <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">nmf()</a></code> function as well as <code>basis()</code>, <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> and
 <code><a href="https://rdrr.io/pkg/MASS/man/ginv.html" class="external-link">ginv()</a></code>.</p>
     </div>
     <div class="section level2">
@@ -206,6 +206,8 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
 <code><a href="mlr_pipeops_imputemode.html">mlr_pipeops_imputemode</a></code>,
 <code><a href="mlr_pipeops_imputeoor.html">mlr_pipeops_imputeoor</a></code>,
 <code><a href="mlr_pipeops_imputesample.html">mlr_pipeops_imputesample</a></code>,
+<code><a href="mlr_pipeops_info.html">mlr_pipeops_info</a></code>,
+<code><a href="mlr_pipeops_isomap.html">mlr_pipeops_isomap</a></code>,
 <code><a href="mlr_pipeops_kernelpca.html">mlr_pipeops_kernelpca</a></code>,
 <code><a href="mlr_pipeops_learner.html">mlr_pipeops_learner</a></code>,
 <code><a href="mlr_pipeops_learner_pi_cvplus.html">mlr_pipeops_learner_pi_cvplus</a></code>,
@@ -274,17 +276,17 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species      NMF1       NMF2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;     &lt;num&gt;      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa 0.4722029 0.02426467</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa 0.4237720 0.04359711</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa 0.4322611 0.02502891</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa 0.4076002 0.04820838</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa 0.4735927 0.01986585</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa 0.5808520 0.04741536</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa 0.5179125 0.06572959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa 0.5312856 0.04639643</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa 0.4971806 0.06988613</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa 0.5832509 0.04280681</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ---                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica 0.2489892 0.51344128</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica 0.2124087 0.49500193</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica 0.2463497 0.49957816</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica 0.2372032 0.51500688</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica 0.2226449 0.47879107</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica 0.2290743 0.55676271</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica 0.1866306 0.53550080</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica 0.2279444 0.54191697</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica 0.2142419 0.55788518</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica 0.2018033 0.51875141</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $nmf</span>
@@ -297,13 +299,13 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
 <span class="r-out co"><span class="r-pr">#&gt;</span>  # Details:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   algorithm:  brunet </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   seed:  random </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   RNG: 10403L, 222L, ..., 581505866L [0c75f1787a6dee181f94de56ad96448d]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   RNG: 10403L, 223L, ..., 581505866L [c6a8911f7b61c7ab6db7422cde75b137]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   distance metric:  'KL' </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   residuals:  3.084419 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Iterations: 650 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   residuals:  3.084418 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Iterations: 440 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Timing:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      user  system elapsed </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.076   0.008   0.084 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.063   0.007   0.070 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dt_columns</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>

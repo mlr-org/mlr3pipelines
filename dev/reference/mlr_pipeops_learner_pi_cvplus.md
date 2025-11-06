@@ -181,6 +181,8 @@ Other PipeOps:
 [`mlr_pipeops_imputemode`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemode.md),
 [`mlr_pipeops_imputeoor`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputeoor.md),
 [`mlr_pipeops_imputesample`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputesample.md),
+[`mlr_pipeops_info`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_info.md),
+[`mlr_pipeops_isomap`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_isomap.md),
 [`mlr_pipeops_kernelpca`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_kernelpca.md),
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_quantiles.md),
@@ -247,12 +249,12 @@ lrncvplus_po$predict(list(task))
 #> 
 #> ── <PredictionRegr> for 32 observations: ───────────────────────────────────────
 #>  row_ids truth response     q0.05    q0.95
-#>        1  21.0 25.17000 10.400000 34.35248
-#>        2  21.0 16.73846  9.843529 32.10700
-#>        3  22.8 25.56250 17.696750 34.35248
+#>        1  21.0 17.29286 10.303571 31.61625
+#>        2  21.0 17.29286 10.303571 31.61625
+#>        3  22.8 26.12500 18.316250 34.70321
 #>      ---   ---      ---       ---      ---
-#>       30  19.7 16.73846  9.843529 32.10700
-#>       31  15.0 16.28667  7.680924 24.46259
-#>       32  21.4 25.17000  9.953524 33.07500
+#>       30  19.7 17.29286 10.303571 31.61625
+#>       31  15.0 17.27857  8.659712 24.43418
+#>       32  21.4 26.12500 18.316250 34.70321
 #> 
 ```

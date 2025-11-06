@@ -114,6 +114,8 @@ Other PipeOps:
 [`mlr_pipeops_imputemode`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemode.md),
 [`mlr_pipeops_imputeoor`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputeoor.md),
 [`mlr_pipeops_imputesample`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputesample.md),
+[`mlr_pipeops_info`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_info.md),
+[`mlr_pipeops_isomap`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_isomap.md),
 [`mlr_pipeops_kernelpca`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_kernelpca.md),
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_pi_cvplus.md),
@@ -162,4 +164,29 @@ Other PipeOps:
 
 ``` r
 library("mlr3")
+
+# Reduced task with no entries for the installment_rate < 20 is defined
+task = tsk("german_credit")
+rows = task$row_ids[task$data()[, installment_rate != "< 20"]]
+reduced_task = task$clone(deep = TRUE)$filter(rows)
+levels(reduced_task$data()$installment_rate)
+#> [1] ">= 35"          "25 <= ... < 35" "20 <= ... < 25" "< 20"          
+
+# PipeOp is trained on the reduced task
+po = po("fixfactors")
+processed_task = preproc(reduced_task, po)
+levels(processed_task$data()$installment_rate)
+#> [1] ">= 35"          "25 <= ... < 35" "20 <= ... < 25"
+summary(processed_task$data()$installment_rate)
+#>          >= 35 25 <= ... < 35 20 <= ... < 25 
+#>            136            231            157 
+
+predicted_task = preproc(task, po, predict = TRUE)
+
+# Predictions are made on the task without any missing data
+levels(predicted_task$data()$installment_rate)
+#> [1] ">= 35"          "25 <= ... < 35" "20 <= ... < 25"
+summary(predicted_task$data()$installment_rate)
+#>          >= 35 25 <= ... < 35 20 <= ... < 25           NA's 
+#>            136            231            157            476 
 ```

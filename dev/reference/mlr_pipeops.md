@@ -155,6 +155,8 @@ Other PipeOps:
 [`mlr_pipeops_imputemode`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemode.md),
 [`mlr_pipeops_imputeoor`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputeoor.md),
 [`mlr_pipeops_imputesample`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputesample.md),
+[`mlr_pipeops_info`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_info.md),
+[`mlr_pipeops_isomap`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_isomap.md),
 [`mlr_pipeops_kernelpca`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_kernelpca.md),
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_pi_cvplus.md),
@@ -275,48 +277,50 @@ as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num", "packages")]
 #> 30:            imputemode         1          1                    mlr3pipelines
 #> 31:             imputeoor         1          1                    mlr3pipelines
 #> 32:          imputesample         1          1                    mlr3pipelines
-#> 33:             kernelpca         1          1            mlr3pipelines,kernlab
-#> 34:               learner         1          1                    mlr3pipelines
-#> 35:            learner_cv         1          1                    mlr3pipelines
-#> 36:     learner_pi_cvplus         1          1                    mlr3pipelines
-#> 37:     learner_quantiles         1          1                    mlr3pipelines
-#> 38:               missind         1          1                    mlr3pipelines
-#> 39:           modelmatrix         1          1              mlr3pipelines,stats
-#> 40:     multiplicityexply         1         NA                    mlr3pipelines
-#> 41:     multiplicityimply        NA          1                    mlr3pipelines
-#> 42:                mutate         1          1                    mlr3pipelines
-#> 43:              nearmiss         1          1             mlr3pipelines,themis
-#> 44:                   nmf         1          1               mlr3pipelines,MASS
-#> 45:                   nop         1          1                    mlr3pipelines
-#> 46:              ovrsplit         1          1                    mlr3pipelines
-#> 47:              ovrunite         1          1                    mlr3pipelines
-#> 48:                   pca         1          1                    mlr3pipelines
-#> 49:                 proxy        NA          1                    mlr3pipelines
-#> 50:           quantilebin         1          1              mlr3pipelines,stats
-#> 51:      randomprojection         1          1                    mlr3pipelines
-#> 52:        randomresponse         1          1                    mlr3pipelines
-#> 53:               regravg        NA          1                    mlr3pipelines
-#> 54:       removeconstants         1          1                    mlr3pipelines
-#> 55:         renamecolumns         1          1                    mlr3pipelines
-#> 56:             replicate         1          1                    mlr3pipelines
-#> 57:              rowapply         1          1                    mlr3pipelines
-#> 58:                 scale         1          1                    mlr3pipelines
-#> 59:           scalemaxabs         1          1                    mlr3pipelines
-#> 60:            scalerange         1          1                    mlr3pipelines
-#> 61:                select         1          1                    mlr3pipelines
-#> 62:                 smote         1          1        mlr3pipelines,smotefamily
-#> 63:               smotenc         1          1             mlr3pipelines,themis
-#> 64:           spatialsign         1          1                    mlr3pipelines
-#> 65:             subsample         1          1                    mlr3pipelines
-#> 66:          targetinvert         2          1                    mlr3pipelines
-#> 67:          targetmutate         1          2                    mlr3pipelines
-#> 68: targettrafoscalerange         1          2                    mlr3pipelines
-#> 69:        textvectorizer         1          1 mlr3pipelines,quanteda,stopwords
-#> 70:             threshold         1          1                    mlr3pipelines
-#> 71:                 tomek         1          1             mlr3pipelines,themis
-#> 72:         tunethreshold         1          1              mlr3pipelines,bbotk
-#> 73:              unbranch        NA          1                    mlr3pipelines
-#> 74:                vtreat         1          1             mlr3pipelines,vtreat
-#> 75:            yeojohnson         1          1      mlr3pipelines,bestNormalize
+#> 33:                  info         1          1                    mlr3pipelines
+#> 34:                isomap         1          1       mlr3pipelines,dimRed,stats
+#> 35:             kernelpca         1          1            mlr3pipelines,kernlab
+#> 36:               learner         1          1                    mlr3pipelines
+#> 37:            learner_cv         1          1                    mlr3pipelines
+#> 38:     learner_pi_cvplus         1          1                    mlr3pipelines
+#> 39:     learner_quantiles         1          1                    mlr3pipelines
+#> 40:               missind         1          1                    mlr3pipelines
+#> 41:           modelmatrix         1          1              mlr3pipelines,stats
+#> 42:     multiplicityexply         1         NA                    mlr3pipelines
+#> 43:     multiplicityimply        NA          1                    mlr3pipelines
+#> 44:                mutate         1          1                    mlr3pipelines
+#> 45:              nearmiss         1          1             mlr3pipelines,themis
+#> 46:                   nmf         1          1               mlr3pipelines,MASS
+#> 47:                   nop         1          1                    mlr3pipelines
+#> 48:              ovrsplit         1          1                    mlr3pipelines
+#> 49:              ovrunite         1          1                    mlr3pipelines
+#> 50:                   pca         1          1                    mlr3pipelines
+#> 51:                 proxy        NA          1                    mlr3pipelines
+#> 52:           quantilebin         1          1              mlr3pipelines,stats
+#> 53:      randomprojection         1          1                    mlr3pipelines
+#> 54:        randomresponse         1          1                    mlr3pipelines
+#> 55:               regravg        NA          1                    mlr3pipelines
+#> 56:       removeconstants         1          1                    mlr3pipelines
+#> 57:         renamecolumns         1          1                    mlr3pipelines
+#> 58:             replicate         1          1                    mlr3pipelines
+#> 59:              rowapply         1          1                    mlr3pipelines
+#> 60:                 scale         1          1                    mlr3pipelines
+#> 61:           scalemaxabs         1          1                    mlr3pipelines
+#> 62:            scalerange         1          1                    mlr3pipelines
+#> 63:                select         1          1                    mlr3pipelines
+#> 64:                 smote         1          1        mlr3pipelines,smotefamily
+#> 65:               smotenc         1          1             mlr3pipelines,themis
+#> 66:           spatialsign         1          1                    mlr3pipelines
+#> 67:             subsample         1          1                    mlr3pipelines
+#> 68:          targetinvert         2          1                    mlr3pipelines
+#> 69:          targetmutate         1          2                    mlr3pipelines
+#> 70: targettrafoscalerange         1          2                    mlr3pipelines
+#> 71:        textvectorizer         1          1 mlr3pipelines,quanteda,stopwords
+#> 72:             threshold         1          1                    mlr3pipelines
+#> 73:                 tomek         1          1             mlr3pipelines,themis
+#> 74:         tunethreshold         1          1              mlr3pipelines,bbotk
+#> 75:              unbranch        NA          1                    mlr3pipelines
+#> 76:                vtreat         1          1             mlr3pipelines,vtreat
+#> 77:            yeojohnson         1          1      mlr3pipelines,bestNormalize
 #>                       key input.num output.num                         packages
 ```

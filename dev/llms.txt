@@ -267,6 +267,12 @@ the *[dplyr](https://github.com/tidyverse/dplyr)* package.
 - [`mlr_pipeops_imputesample`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputesample.md)
   [`PipeOpImputeSample`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputesample.md)
   : Impute Features by Sampling
+- [`mlr_pipeops_info`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_info.md)
+  [`PipeOpInfo`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_info.md)
+  : Customizable Information Printer
+- [`mlr_pipeops_isomap`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_isomap.md)
+  [`PipeOpIsomap`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_isomap.md)
+  : Algorithm for Dimensionality Reduction
 - [`mlr_pipeops_kernelpca`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_kernelpca.md)
   [`PipeOpKernelPCA`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_kernelpca.md)
   : Kernelized Principal Component Analysis
