@@ -9,6 +9,8 @@
 Returns cross-validated predictions during training as a Task and stores a model of the
 Learner trained on the whole data in $state. This is used to create a similar
 Task during prediction.
+Optionally, the fitted models obtained during the resampling phase can be reused for prediction by averaging
+their predictions, avoiding the need for an additional fit on the complete training data.
 The Task gets features depending on the capsuled Learner's
 $predict_type. If the Learner's $predict.type is &quot;response&quot;, a feature &amp;lt;ID&amp;gt;.response is created,
 for $predict.type &quot;prob&quot; the &amp;lt;ID&amp;gt;.prob.&amp;lt;CLASS&amp;gt; features are created, and for $predict.type &quot;se&quot; the new columns
@@ -20,6 +22,8 @@ useful to use PipeOpFeatureUnion to bind the prediction Task to the original inp
 Returns cross-validated predictions during training as a Task and stores a model of the
 Learner trained on the whole data in $state. This is used to create a similar
 Task during prediction.
+Optionally, the fitted models obtained during the resampling phase can be reused for prediction by averaging
+their predictions, avoiding the need for an additional fit on the complete training data.
 The Task gets features depending on the capsuled Learner's
 $predict_type. If the Learner's $predict.type is &quot;response&quot;, a feature &amp;lt;ID&amp;gt;.response is created,
 for $predict.type &quot;prob&quot; the &amp;lt;ID&amp;gt;.prob.&amp;lt;CLASS&amp;gt; features are created, and for $predict.type &quot;se&quot; the new columns
@@ -35,7 +39,7 @@ useful to use PipeOpFeatureUnion to bind the prediction Task to the original inp
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +74,7 @@ useful to use PipeOpFeatureUnion to bind the prediction Task to the original inp
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Wrap a Learner into a PipeOp with Cross-validated Predictions as Features</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpLearnerCV.R" class="external-link"><code>R/PipeOpLearnerCV.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.10.0/R/PipeOpLearnerCV.R" class="external-link"><code>R/PipeOpLearnerCV.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_learner_cv.Rd</code></div>
     </div>
 
@@ -78,7 +82,9 @@ useful to use PipeOpFeatureUnion to bind the prediction Task to the original inp
     <p>Wraps an <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">mlr3::Learner</a></code> into a <code><a href="PipeOp.html">PipeOp</a></code>.</p>
 <p>Returns cross-validated predictions during training as a <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> and stores a model of the
 <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> trained on the whole data in <code>$state</code>. This is used to create a similar
-<code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> during prediction.</p>
+<code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> during prediction.
+Optionally, the fitted models obtained during the resampling phase can be reused for prediction by averaging
+their predictions, avoiding the need for an additional fit on the complete training data.</p>
 <p>The <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> gets features depending on the capsuled <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>'s
 <code>$predict_type</code>. If the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>'s <code>$predict.type</code> is <code>"response"</code>, a feature <code>&lt;ID&gt;.response</code> is created,
 for <code>$predict.type</code> <code>"prob"</code> the <code>&lt;ID&gt;.prob.&lt;CLASS&gt;</code> features are created, and for <code>$predict.type</code> <code>"se"</code> the new columns
@@ -134,6 +140,10 @@ Training time, in seconds.</p></li>
 Errors logged during prediction.</p></li>
 <li><p><code>predict_time</code> :: <code>NULL</code> | <code>numeric(1)</code>
 Prediction time, in seconds.</p></li>
+<li><p><code>predict_method</code> :: <code>character(1)</code><br><code>"full"</code> when prediction uses a learner fitted on all training data, <code>"cv_ensemble"</code> when predictions are averaged over
+models trained on resampling folds.</p></li>
+<li><p><code>cv_model_states</code> :: <code>NULL</code> | <code>list</code><br>
+Present for <code>predict_method = "cv_ensemble"</code>. Contains the states of the learners trained on each resampling fold.</p></li>
 </ul><p>This state is given the class <code>"pipeop_learner_cv_state"</code>.</p>
     </div>
     <div class="section level2">
@@ -148,6 +158,27 @@ predictions with the model trained on all training data.</p></li>
 Number of cross validation folds. Initialized to 3. Only used for <code>resampling.method = "cv"</code>.</p></li>
 <li><p><code>keep_response</code> :: <code>logical(1)</code><br>
 Only effective during <code>"prob"</code> prediction: Whether to keep response values, if available. Initialized to <code>FALSE</code>.</p></li>
+<li><p><code>resampling.predict_method</code> :: <code>character(1)</code><br>
+Controls how predictions are produced after training. <code>"full"</code> (default) fits the wrapped learner on the entire training data.
+<code>"cv_ensemble"</code> reuses the models fitted during resampling and averages their predictions. This option currently supports
+classification and regression learners together with <code>resampling.method = "cv"</code>.</p></li>
+<li><p><code>resampling.prob_aggr</code> :: <code>character(1)</code><br>
+Probability aggregation used when <code>"cv_ensemble"</code> predictions are produced for classification learners that can emit class probabilities.
+Shares the semantics with <code><a href="mlr_pipeops_classifavg.html">PipeOpClassifAvg</a></code>: <code>"mean"</code> (linear opinion pool, default) and <code>"log"</code> (log opinion pool / product of experts).
+Only present for learners that support <code>"prob"</code> predictions.</p></li>
+<li><p><code>resampling.prob_aggr_eps</code> :: <code>numeric(1)</code><br>
+Stabilization constant applied when <code>resampling.prob_aggr = "log"</code> to clamp probabilities before taking logarithms.
+Defaults to <code>1e-12</code>. Only present for learners that support <code>"prob"</code> predictions.</p></li>
+<li><p><code>resampling.se_aggr</code> :: <code>character(1)</code><br>
+Standard error aggregation used when <code>"cv_ensemble"</code> predictions are produced for regression learners with <code>predict_type</code>
+containing <code>"se"</code>. Shares the definitions with <code><a href="mlr_pipeops_regravg.html">PipeOpRegrAvg</a></code>, i.e. <code>"predictive"</code>, <code>"mean"</code>, <code>"within"</code>, <code>"between"</code>, <code>"none"</code>.
+Initialized to <code>"predictive"</code> (within-fold variance plus between-fold disagreement) when constructed with a <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> that has <code>predict_type = "se"</code>;
+otherwise to <code>"none"</code>.<br>
+Only present for learners that support <code>"se"</code> predictions.</p></li>
+<li><p><code>resampling.se_aggr_rho</code> :: <code>numeric(1)</code><br>
+Equicorrelation parameter for <code>resampling.se_aggr = "mean"</code>, interpreted as in <code><a href="mlr_pipeops_regravg.html">PipeOpRegrAvg</a></code>. Ignored otherwise.
+Defaults to <code>0</code> when <code>resampling.se_aggr = "mean"</code>.<br>
+Only present for learners that support <code>"se"</code> predictions.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>
@@ -207,6 +238,7 @@ Only effective during <code>"prob"</code> prediction: Whether to keep response v
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">graph</span><span class="op">$</span><span class="va">pipeops</span><span class="op">$</span><span class="va">classif.rpart</span><span class="op">$</span><span class="va">learner</span><span class="op">$</span><span class="va">predict_type</span> <span class="op">=</span> <span class="st">"prob"</span></span></span>
+<span class="r-in"><span><span class="va">graph</span><span class="op">$</span><span class="va">pipeops</span><span class="op">$</span><span class="va">classif.rpart</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">resampling.predict_method</span> <span class="op">=</span> <span class="st">"cv_ensemble"</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">graph</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $featureunion.output</span>
@@ -231,7 +263,7 @@ Only effective during <code>"prob"</code> prediction: Whether to keep response v
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

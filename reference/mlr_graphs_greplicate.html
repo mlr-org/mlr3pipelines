@@ -17,7 +17,7 @@ All input arguments are cloned and have no references in common with the returne
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@ All input arguments are cloned and have no references in common with the returne
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Create Disjoint Graph Union of Copies of a Graph</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/pipeline_greplicate.R" class="external-link"><code>R/pipeline_greplicate.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.10.0/R/pipeline_greplicate.R" class="external-link"><code>R/pipeline_greplicate.R</code></a></small>
       <div class="d-none name"><code>mlr_graphs_greplicate.Rd</code></div>
     </div>
 
@@ -89,13 +89,13 @@ Number of copies to create.</p></dd>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other Graph operators:
 <code>%&gt;&gt;%()</code>,
-<code><a href="as_graph.html">as_graph</a>()</code>,
-<code><a href="as_pipeop.html">as_pipeop</a>()</code>,
-<code><a href="assert_graph.html">assert_graph</a>()</code>,
-<code><a href="assert_pipeop.html">assert_pipeop</a>()</code>,
-<code><a href="chain_graphs.html">chain_graphs</a>()</code>,
-<code><a href="greplicate.html">greplicate</a>()</code>,
-<code><a href="gunion.html">gunion</a>()</code></p></div>
+<code><a href="as_graph.html">as_graph()</a></code>,
+<code><a href="as_pipeop.html">as_pipeop()</a></code>,
+<code><a href="assert_graph.html">assert_graph()</a></code>,
+<code><a href="assert_pipeop.html">assert_pipeop()</a></code>,
+<code><a href="chain_graphs.html">chain_graphs()</a></code>,
+<code><a href="greplicate.html">greplicate()</a></code>,
+<code><a href="gunion.html">gunion()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -104,11 +104,14 @@ Number of copies to create.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">po_pca</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"pca"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">pipeline_greplicate</span><span class="op">(</span><span class="va">po_pca</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Graph with 2 PipeOps:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Graph with 2 PipeOps:</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      ID         State sccssors prdcssors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;char&gt;        &lt;char&gt;   &lt;char&gt;    &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   pca_1 &lt;&lt;UNTRAINED&gt;&gt;                   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   pca_2 &lt;&lt;UNTRAINED&gt;&gt;                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── Pipeline: <span style="font-weight: bold;">&lt;INPUT&gt; -&gt; pca_1 -&gt; pca_2 -&gt; &lt;OUTPUT&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -120,7 +123,7 @@ Number of copies to create.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

@@ -21,7 +21,7 @@ prediction."><meta property="og:image" content="https://mlr3pipelines.mlr-org.co
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +56,7 @@ prediction."><meta property="og:image" content="https://mlr3pipelines.mlr-org.co
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Linearly Transform a Numeric Target to Match Given Boundaries</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpTrafo.R" class="external-link"><code>R/PipeOpTrafo.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.10.0/R/PipeOpTrafo.R" class="external-link"><code>R/PipeOpTrafo.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_targettrafoscalerange.Rd</code></div>
     </div>
 
@@ -168,6 +168,8 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 <code><a href="mlr_pipeops_imputemode.html">mlr_pipeops_imputemode</a></code>,
 <code><a href="mlr_pipeops_imputeoor.html">mlr_pipeops_imputeoor</a></code>,
 <code><a href="mlr_pipeops_imputesample.html">mlr_pipeops_imputesample</a></code>,
+<code><a href="mlr_pipeops_info.html">mlr_pipeops_info</a></code>,
+<code><a href="mlr_pipeops_isomap.html">mlr_pipeops_isomap</a></code>,
 <code><a href="mlr_pipeops_kernelpca.html">mlr_pipeops_kernelpca</a></code>,
 <code><a href="mlr_pipeops_learner.html">mlr_pipeops_learner</a></code>,
 <code><a href="mlr_pipeops_learner_pi_cvplus.html">mlr_pipeops_learner_pi_cvplus</a></code>,
@@ -239,8 +241,8 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_list(inputs, len = 1L, types = "Prediction")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     list(private$.invert(inputs[[1L]], predict_phase_state))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x556148458260&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55615ba18b88&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56306af2e7c0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x56306e7a7e50&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -321,7 +323,7 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mlr3_version</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ‘1.1.0’</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ‘1.2.0’</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $data_prototype</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 18 cols): cmedv.scaled,age,b,chas,crim,dis...</span>
@@ -352,7 +354,7 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

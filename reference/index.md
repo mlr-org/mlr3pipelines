@@ -1,0 +1,401 @@
+# Package index
+
+## Package
+
+- [`mlr3pipelines`](https://mlr3pipelines.mlr-org.com/reference/mlr3pipelines-package.md)
+  [`mlr3pipelines-package`](https://mlr3pipelines.mlr-org.com/reference/mlr3pipelines-package.md)
+  : mlr3pipelines: Preprocessing Operators and Pipelines for 'mlr3'
+
+## Building Blocks
+
+- [`PipeOp`](https://mlr3pipelines.mlr-org.com/reference/PipeOp.md) :
+  PipeOp Base Class
+- [`Graph`](https://mlr3pipelines.mlr-org.com/reference/Graph.md) :
+  Graph Base Class
+- [`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/reference/PipeOpTaskPreproc.md)
+  : Task Preprocessing Base Class
+- [`PipeOpTaskPreprocSimple`](https://mlr3pipelines.mlr-org.com/reference/PipeOpTaskPreprocSimple.md)
+  : Simple Task Preprocessing Base Class
+- [`Multiplicity()`](https://mlr3pipelines.mlr-org.com/reference/Multiplicity.md)
+  : Multiplicity
+
+## Graph Tools
+
+- [`` `%>>%` ``](https://mlr3pipelines.mlr-org.com/reference/grapes-greater-than-greater-than-grapes.md)
+  [`concat_graphs()`](https://mlr3pipelines.mlr-org.com/reference/grapes-greater-than-greater-than-grapes.md)
+  [`` `%>>!%` ``](https://mlr3pipelines.mlr-org.com/reference/grapes-greater-than-greater-than-grapes.md)
+  : PipeOp Composition Operator
+- [`gunion()`](https://mlr3pipelines.mlr-org.com/reference/gunion.md) :
+  Disjoint Union of Graphs
+- [`greplicate()`](https://mlr3pipelines.mlr-org.com/reference/greplicate.md)
+  : Create Disjoint Graph Union of Copies of a Graph
+- [`chain_graphs()`](https://mlr3pipelines.mlr-org.com/reference/chain_graphs.md)
+  : Chain a Series of Graphs
+
+## PipeOps
+
+- [`mlr_pipeops`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops.md)
+  : Dictionary of PipeOps
+- [`po()`](https://mlr3pipelines.mlr-org.com/reference/po.md)
+  [`pos()`](https://mlr3pipelines.mlr-org.com/reference/po.md) :
+  Shorthand PipeOp Constructor
+- [`mlr_pipeops_adas`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_adas.md)
+  [`PipeOpADAS`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_adas.md)
+  : ADAS Balancing
+- [`mlr_pipeops_blsmote`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_blsmote.md)
+  [`PipeOpBLSmote`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_blsmote.md)
+  : BLSMOTE Balancing
+- [`mlr_pipeops_boxcox`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_boxcox.md)
+  [`PipeOpBoxCox`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_boxcox.md)
+  : Box-Cox Transformation of Numeric Features
+- [`mlr_pipeops_branch`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_branch.md)
+  [`PipeOpBranch`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_branch.md)
+  : Path Branching
+- [`mlr_pipeops_chunk`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_chunk.md)
+  [`PipeOpChunk`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_chunk.md)
+  : Chunk Input into Multiple Outputs
+- [`mlr_pipeops_classbalancing`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classbalancing.md)
+  [`PipeOpClassBalancing`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classbalancing.md)
+  : Class Balancing
+- [`mlr_pipeops_classifavg`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classifavg.md)
+  [`PipeOpClassifAvg`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classifavg.md)
+  : Majority Vote Prediction
+- [`mlr_pipeops_classweights`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweights.md)
+  [`PipeOpClassWeights`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweights.md)
+  : Class Weights for Sample Weighting
+- [`mlr_pipeops_colapply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colapply.md)
+  [`PipeOpColApply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colapply.md)
+  : Apply a Function to each Column of a Task
+- [`mlr_pipeops_collapsefactors`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_collapsefactors.md)
+  [`PipeOpCollapseFactors`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_collapsefactors.md)
+  : Collapse Factors
+- [`mlr_pipeops_colroles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colroles.md)
+  [`PipeOpColRoles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colroles.md)
+  : Change Column Roles of a Task
+- [`mlr_pipeops_copy`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_copy.md)
+  [`PipeOpCopy`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_copy.md)
+  : Copy Input Multiple Times
+- [`mlr_pipeops_datefeatures`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_datefeatures.md)
+  [`PipeOpDateFeatures`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_datefeatures.md)
+  : Preprocess Date Features
+- [`mlr_pipeops_decode`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_decode.md)
+  [`PipeOpDecode`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_decode.md)
+  : Reverse Factor Encoding
+- [`mlr_pipeops_encode`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encode.md)
+  [`PipeOpEncode`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encode.md)
+  : Factor Encoding
+- [`mlr_pipeops_encodeimpact`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encodeimpact.md)
+  [`PipeOpEncodeImpact`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encodeimpact.md)
+  : Conditional Target Value Impact Encoding
+- [`mlr_pipeops_encodelmer`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encodelmer.md)
+  [`PipeOpEncodeLmer`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encodelmer.md)
+  : Impact Encoding with Random Intercept Models
+- [`mlr_pipeops_encodeplquantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encodeplquantiles.md)
+  [`PipeOpEncodePLQuantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encodeplquantiles.md)
+  : Piecewise Linear Encoding using Quantiles
+- [`mlr_pipeops_encodepltree`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encodepltree.md)
+  [`PipeOpEncodePLTree`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encodepltree.md)
+  : Piecewise Linear Encoding using Decision Trees
+- [`mlr_pipeops_featureunion`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_featureunion.md)
+  [`PipeOpFeatureUnion`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_featureunion.md)
+  : Aggregate Features from Multiple Inputs
+- [`mlr_pipeops_filter`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_filter.md)
+  [`PipeOpFilter`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_filter.md)
+  : Feature Filtering
+- [`mlr_pipeops_fixfactors`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_fixfactors.md)
+  [`PipeOpFixFactors`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_fixfactors.md)
+  : Fix Factor Levels
+- [`mlr_pipeops_histbin`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_histbin.md)
+  [`PipeOpHistBin`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_histbin.md)
+  : Split Numeric Features into Equally Spaced Bins
+- [`mlr_pipeops_ica`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_ica.md)
+  [`PipeOpICA`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_ica.md)
+  : Independent Component Analysis
+- [`mlr_pipeops_imputeconstant`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputeconstant.md)
+  [`PipeOpImputeConstant`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputeconstant.md)
+  : Impute Features by a Constant
+- [`mlr_pipeops_imputehist`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputehist.md)
+  [`PipeOpImputeHist`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputehist.md)
+  : Impute Numerical Features by Histogram
+- [`mlr_pipeops_imputelearner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputelearner.md)
+  [`PipeOpImputeLearner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputelearner.md)
+  : Impute Features by Fitting a Learner
+- [`mlr_pipeops_imputemean`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputemean.md)
+  [`PipeOpImputeMean`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputemean.md)
+  : Impute Numerical Features by their Mean
+- [`mlr_pipeops_imputemedian`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputemedian.md)
+  [`PipeOpImputeMedian`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputemedian.md)
+  : Impute Numerical Features by their Median
+- [`mlr_pipeops_imputemode`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputemode.md)
+  [`PipeOpImputeMode`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputemode.md)
+  : Impute Features by their Mode
+- [`mlr_pipeops_imputeoor`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputeoor.md)
+  [`PipeOpImputeOOR`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputeoor.md)
+  : Out of Range Imputation
+- [`mlr_pipeops_imputesample`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputesample.md)
+  [`PipeOpImputeSample`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputesample.md)
+  : Impute Features by Sampling
+- [`mlr_pipeops_info`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_info.md)
+  [`PipeOpInfo`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_info.md)
+  : Customizable Information Printer
+- [`mlr_pipeops_isomap`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_isomap.md)
+  [`PipeOpIsomap`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_isomap.md)
+  : Algorithm for Dimensionality Reduction
+- [`mlr_pipeops_kernelpca`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_kernelpca.md)
+  [`PipeOpKernelPCA`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_kernelpca.md)
+  : Kernelized Principal Component Analysis
+- [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner.md)
+  [`PipeOpLearner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner.md)
+  : Wrap a Learner into a PipeOp
+- [`mlr_pipeops_learner_cv`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_cv.md)
+  [`PipeOpLearnerCV`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_cv.md)
+  : Wrap a Learner into a PipeOp with Cross-validated Predictions as
+  Features
+- [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_pi_cvplus.md)
+  [`PipeOpLearnerPICVPlus`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_pi_cvplus.md)
+  : Wrap a Learner into a PipeOp with Cross-validation Plus Confidence
+  Intervals as Predictions
+- [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md)
+  [`PipeOpLearnerQuantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md)
+  : Wrap a Learner into a PipeOp to predict multiple Quantiles
+- [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_missind.md)
+  [`PipeOpMissInd`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_missind.md)
+  : Add Missing Indicator Columns
+- [`mlr_pipeops_modelmatrix`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_modelmatrix.md)
+  [`PipeOpModelMatrix`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_modelmatrix.md)
+  : Transform Columns by Constructing a Model Matrix
+- [`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_multiplicityexply.md)
+  [`PipeOpMultiplicityExply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_multiplicityexply.md)
+  : Explicate a Multiplicity
+- [`mlr_pipeops_multiplicityimply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_multiplicityimply.md)
+  [`PipeOpMultiplicityImply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_multiplicityimply.md)
+  : Implicate a Multiplicity
+- [`mlr_pipeops_mutate`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_mutate.md)
+  [`PipeOpMutate`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_mutate.md)
+  : Add Features According to Expressions
+- [`mlr_pipeops_nearmiss`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_nearmiss.md)
+  [`PipeOpNearmiss`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_nearmiss.md)
+  : Nearmiss Down-Sampling
+- [`mlr_pipeops_nmf`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_nmf.md)
+  [`PipeOpNMF`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_nmf.md)
+  : Non-negative Matrix Factorization
+- [`mlr_pipeops_nop`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_nop.md)
+  [`PipeOpNOP`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_nop.md)
+  : Simply Push Input Forward
+- [`mlr_pipeops_ovrsplit`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_ovrsplit.md)
+  [`PipeOpOVRSplit`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_ovrsplit.md)
+  : Split a Classification Task into Binary Classification Tasks
+- [`mlr_pipeops_ovrunite`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_ovrunite.md)
+  [`PipeOpOVRUnite`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_ovrunite.md)
+  : Unite Binary Classification Tasks
+- [`mlr_pipeops_pca`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_pca.md)
+  [`PipeOpPCA`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_pca.md)
+  : Principal Component Analysis
+- [`mlr_pipeops_proxy`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_proxy.md)
+  [`PipeOpProxy`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_proxy.md)
+  : Wrap another PipeOp or Graph as a Hyperparameter
+- [`mlr_pipeops_quantilebin`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_quantilebin.md)
+  [`PipeOpQuantileBin`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_quantilebin.md)
+  : Split Numeric Features into Quantile Bins
+- [`mlr_pipeops_randomprojection`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_randomprojection.md)
+  [`PipeOpRandomProjection`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_randomprojection.md)
+  : Project Numeric Features onto a Randomly Sampled Subspace
+- [`mlr_pipeops_randomresponse`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_randomresponse.md)
+  [`PipeOpRandomResponse`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_randomresponse.md)
+  : Generate a Randomized Response Prediction
+- [`mlr_pipeops_regravg`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_regravg.md)
+  [`PipeOpRegrAvg`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_regravg.md)
+  : Weighted Prediction Averaging
+- [`mlr_pipeops_removeconstants`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_removeconstants.md)
+  [`PipeOpRemoveConstants`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_removeconstants.md)
+  : Remove Constant Features
+- [`mlr_pipeops_renamecolumns`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_renamecolumns.md)
+  [`PipeOpRenameColumns`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_renamecolumns.md)
+  : Rename Columns
+- [`mlr_pipeops_replicate`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_replicate.md)
+  [`PipeOpReplicate`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_replicate.md)
+  : Replicate the Input as a Multiplicity
+- [`mlr_pipeops_rowapply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_rowapply.md)
+  [`PipeOpRowApply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_rowapply.md)
+  : Apply a Function to each Row of a Task
+- [`mlr_pipeops_scale`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_scale.md)
+  [`PipeOpScale`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_scale.md)
+  : Center and Scale Numeric Features
+- [`mlr_pipeops_scalemaxabs`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_scalemaxabs.md)
+  [`PipeOpScaleMaxAbs`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_scalemaxabs.md)
+  : Scale Numeric Features with Respect to their Maximum Absolute Value
+- [`mlr_pipeops_scalerange`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_scalerange.md)
+  [`PipeOpScaleRange`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_scalerange.md)
+  : Linearly Transform Numeric Features to Match Given Boundaries
+- [`mlr_pipeops_select`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_select.md)
+  [`PipeOpSelect`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_select.md)
+  : Remove Features Depending on a Selector
+- [`mlr_pipeops_smote`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smote.md)
+  [`PipeOpSmote`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smote.md)
+  : SMOTE Balancing
+- [`mlr_pipeops_smotenc`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smotenc.md)
+  [`PipeOpSmoteNC`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smotenc.md)
+  : SMOTENC Balancing
+- [`mlr_pipeops_spatialsign`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_spatialsign.md)
+  [`PipeOpSpatialSign`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_spatialsign.md)
+  : Normalize Data Row-wise
+- [`mlr_pipeops_subsample`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_subsample.md)
+  [`PipeOpSubsample`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_subsample.md)
+  : Subsampling
+- [`mlr_pipeops_targetinvert`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetinvert.md)
+  [`PipeOpTargetInvert`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetinvert.md)
+  : Invert Target Transformations
+- [`mlr_pipeops_targetmutate`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetmutate.md)
+  [`PipeOpTargetMutate`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetmutate.md)
+  : Transform a Target by a Function
+- [`mlr_pipeops_targettrafoscalerange`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targettrafoscalerange.md)
+  [`PipeOpTargetTrafoScaleRange`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targettrafoscalerange.md)
+  : Linearly Transform a Numeric Target to Match Given Boundaries
+- [`mlr_pipeops_textvectorizer`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_textvectorizer.md)
+  [`PipeOpTextVectorizer`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_textvectorizer.md)
+  : Bag-of-word Representation of Character Features
+- [`mlr_pipeops_threshold`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_threshold.md)
+  [`PipeOpThreshold`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_threshold.md)
+  : Change the Threshold of a Classification Prediction
+- [`mlr_pipeops_tomek`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_tomek.md)
+  [`PipeOpTomek`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_tomek.md)
+  : Tomek Down-Sampling
+- [`mlr_pipeops_tunethreshold`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_tunethreshold.md)
+  [`PipeOpTuneThreshold`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_tunethreshold.md)
+  : Tune the Threshold of a Classification Prediction
+- [`mlr_pipeops_unbranch`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_unbranch.md)
+  [`PipeOpUnbranch`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_unbranch.md)
+  : Unbranch Different Paths
+- [`mlr_pipeops_updatetarget`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_updatetarget.md)
+  [`PipeOpUpdateTarget`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_updatetarget.md)
+  : Transform a Target without an Explicit Inversion
+- [`mlr_pipeops_vtreat`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_vtreat.md)
+  [`PipeOpVtreat`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_vtreat.md)
+  : Interface to the vtreat Package
+- [`mlr_pipeops_yeojohnson`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_yeojohnson.md)
+  [`PipeOpYeoJohnson`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_yeojohnson.md)
+  : Yeo-Johnson Transformation of Numeric Features
+- [`PipeOp`](https://mlr3pipelines.mlr-org.com/reference/PipeOp.md) :
+  PipeOp Base Class
+- [`PipeOpEncodePL`](https://mlr3pipelines.mlr-org.com/reference/PipeOpEncodePL.md)
+  : Piecewise Linear Encoding Base Class
+- [`PipeOpEnsemble`](https://mlr3pipelines.mlr-org.com/reference/PipeOpEnsemble.md)
+  : Ensembling Base Class
+- [`PipeOpImpute`](https://mlr3pipelines.mlr-org.com/reference/PipeOpImpute.md)
+  : Imputation Base Class
+- [`PipeOpTargetTrafo`](https://mlr3pipelines.mlr-org.com/reference/PipeOpTargetTrafo.md)
+  : Target Transformation Base Class
+- [`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/reference/PipeOpTaskPreproc.md)
+  : Task Preprocessing Base Class
+- [`PipeOpTaskPreprocSimple`](https://mlr3pipelines.mlr-org.com/reference/PipeOpTaskPreprocSimple.md)
+  : Simple Task Preprocessing Base Class
+
+## Pipelines
+
+- [`mlr_graphs`](https://mlr3pipelines.mlr-org.com/reference/mlr_graphs.md)
+  : Dictionary of (sub-)graphs
+- [`ppl()`](https://mlr3pipelines.mlr-org.com/reference/ppl.md)
+  [`ppls()`](https://mlr3pipelines.mlr-org.com/reference/ppl.md) :
+  Shorthand Graph Constructor
+- [`pipeline_bagging()`](https://mlr3pipelines.mlr-org.com/reference/mlr_graphs_bagging.md)
+  : Create a bagging learner
+- [`pipeline_branch()`](https://mlr3pipelines.mlr-org.com/reference/mlr_graphs_branch.md)
+  : Branch Between Alternative Paths
+- [`pipeline_convert_types()`](https://mlr3pipelines.mlr-org.com/reference/mlr_graphs_convert_types.md)
+  : Convert Column Types
+- [`pipeline_greplicate()`](https://mlr3pipelines.mlr-org.com/reference/mlr_graphs_greplicate.md)
+  : Create Disjoint Graph Union of Copies of a Graph
+- [`pipeline_ovr()`](https://mlr3pipelines.mlr-org.com/reference/mlr_graphs_ovr.md)
+  : Create A Graph to Perform "One vs. Rest" classification.
+- [`pipeline_robustify()`](https://mlr3pipelines.mlr-org.com/reference/mlr_graphs_robustify.md)
+  : Robustify a learner
+- [`pipeline_stacking()`](https://mlr3pipelines.mlr-org.com/reference/mlr_graphs_stacking.md)
+  : Create A Graph to Perform Stacking.
+- [`pipeline_targettrafo()`](https://mlr3pipelines.mlr-org.com/reference/mlr_graphs_targettrafo.md)
+  : Transform and Re-Transform the Target Variable
+
+## Learners
+
+- [`mlr_learners_graph`](https://mlr3pipelines.mlr-org.com/reference/mlr_learners_graph.md)
+  [`GraphLearner`](https://mlr3pipelines.mlr-org.com/reference/mlr_learners_graph.md)
+  : Encapsulate a Graph as a Learner
+- [`mlr_learners_classif.avg`](https://mlr3pipelines.mlr-org.com/reference/mlr_learners_avg.md)
+  [`mlr_learners_regr.avg`](https://mlr3pipelines.mlr-org.com/reference/mlr_learners_avg.md)
+  : Optimized Weighted Average of Features for Classification and
+  Regression
+
+## Tasks
+
+- [`mlr_tasks_boston_housing`](https://mlr3pipelines.mlr-org.com/reference/mlr_tasks_boston_housing.md)
+  : Housing Data for 506 Census Tracts of Boston
+
+## Filters
+
+- [`mlr_filters_ensemble`](https://mlr3pipelines.mlr-org.com/reference/mlr_filters_ensemble.md)
+  [`FilterEnsemble`](https://mlr3pipelines.mlr-org.com/reference/mlr_filters_ensemble.md)
+  : Filter Ensemble
+
+## Helpers
+
+- [`preproc()`](https://mlr3pipelines.mlr-org.com/reference/preproc.md)
+  : Simple Pre-processing
+- [`selector_all()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_none()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_type()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_grep()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_name()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_invert()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_intersect()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_union()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_setdiff()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_missing()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_cardinality_greater_than()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  : Selector Functions
+- [`as_graph()`](https://mlr3pipelines.mlr-org.com/reference/as_graph.md)
+  : Conversion to mlr3pipelines Graph
+- [`assert_graph()`](https://mlr3pipelines.mlr-org.com/reference/assert_graph.md)
+  : Assertion for mlr3pipelines Graph
+- [`as_pipeop()`](https://mlr3pipelines.mlr-org.com/reference/as_pipeop.md)
+  : Conversion to mlr3pipelines PipeOp
+- [`assert_pipeop()`](https://mlr3pipelines.mlr-org.com/reference/assert_pipeop.md)
+  : Assertion for mlr3pipelines PipeOp
+- [`is_noop()`](https://mlr3pipelines.mlr-org.com/reference/is_noop.md)
+  : Test for NO_OP
+- [`NO_OP`](https://mlr3pipelines.mlr-org.com/reference/NO_OP.md) :
+  No-Op Sentinel Used for Alternative Branching
+- [`filter_noop()`](https://mlr3pipelines.mlr-org.com/reference/filter_noop.md)
+  : Remove NO_OPs from a List
+- [`set_validate(`*`<GraphLearner>`*`)`](https://mlr3pipelines.mlr-org.com/reference/set_validate.GraphLearner.md)
+  : Configure Validation for a GraphLearner
+- [`as.Multiplicity()`](https://mlr3pipelines.mlr-org.com/reference/as.Multiplicity.md)
+  : Convert an object to a Multiplicity
+- [`is.Multiplicity()`](https://mlr3pipelines.mlr-org.com/reference/is.Multiplicity.md)
+  : Check if an object is a Multiplicity
+
+## Abstract PipeOps
+
+- [`PipeOp`](https://mlr3pipelines.mlr-org.com/reference/PipeOp.md) :
+  PipeOp Base Class
+- [`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/reference/PipeOpTaskPreproc.md)
+  : Task Preprocessing Base Class
+- [`PipeOpTaskPreprocSimple`](https://mlr3pipelines.mlr-org.com/reference/PipeOpTaskPreprocSimple.md)
+  : Simple Task Preprocessing Base Class
+- [`PipeOpImpute`](https://mlr3pipelines.mlr-org.com/reference/PipeOpImpute.md)
+  : Imputation Base Class
+- [`PipeOpEnsemble`](https://mlr3pipelines.mlr-org.com/reference/PipeOpEnsemble.md)
+  : Ensembling Base Class
+- [`PipeOpTargetTrafo`](https://mlr3pipelines.mlr-org.com/reference/PipeOpTargetTrafo.md)
+  : Target Transformation Base Class
+- [`PipeOpEncodePL`](https://mlr3pipelines.mlr-org.com/reference/PipeOpEncodePL.md)
+  : Piecewise Linear Encoding Base Class
+
+## PipeOp Type Inference
+
+- [`add_class_hierarchy_cache()`](https://mlr3pipelines.mlr-org.com/reference/add_class_hierarchy_cache.md)
+  : Add a Class Hierarchy to the Cache
+- [`reset_class_hierarchy_cache()`](https://mlr3pipelines.mlr-org.com/reference/reset_class_hierarchy_cache.md)
+  : Reset the Class Hierarchy Cache
+- [`register_autoconvert_function()`](https://mlr3pipelines.mlr-org.com/reference/register_autoconvert_function.md)
+  : Add Autoconvert Function to Conversion Register
+- [`reset_autoconvert_register()`](https://mlr3pipelines.mlr-org.com/reference/reset_autoconvert_register.md)
+  : Reset Autoconvert Register

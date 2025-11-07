@@ -1,5 +1,7 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://mlr3pipelines.mlr-org.com/404.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/AGENTS.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/CLAUDE.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/LICENSE-text.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/articles/extending.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/articles/index.html</loc></url>
@@ -37,6 +39,7 @@
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/is.Multiplicity.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/is_noop.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr3pipelines-package.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_filters_ensemble.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_graphs.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_graphs_bagging.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_graphs_branch.html</loc></url>
@@ -81,6 +84,8 @@
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputemode.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputeoor.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputesample.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_info.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_isomap.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_kernelpca.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_cv.html</loc></url>

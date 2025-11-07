@@ -15,7 +15,7 @@ affects non-negative numerical features. See nmf() for details."><meta property=
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@ affects non-negative numerical features. See nmf() for details."><meta property=
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Non-negative Matrix Factorization</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpNMF.R" class="external-link"><code>R/PipeOpNMF.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.10.0/R/PipeOpNMF.R" class="external-link"><code>R/PipeOpNMF.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_nmf.Rd</code></div>
     </div>
 
@@ -206,6 +206,8 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
 <code><a href="mlr_pipeops_imputemode.html">mlr_pipeops_imputemode</a></code>,
 <code><a href="mlr_pipeops_imputeoor.html">mlr_pipeops_imputeoor</a></code>,
 <code><a href="mlr_pipeops_imputesample.html">mlr_pipeops_imputesample</a></code>,
+<code><a href="mlr_pipeops_info.html">mlr_pipeops_info</a></code>,
+<code><a href="mlr_pipeops_isomap.html">mlr_pipeops_isomap</a></code>,
 <code><a href="mlr_pipeops_kernelpca.html">mlr_pipeops_kernelpca</a></code>,
 <code><a href="mlr_pipeops_learner.html">mlr_pipeops_learner</a></code>,
 <code><a href="mlr_pipeops_learner_pi_cvplus.html">mlr_pipeops_learner_pi_cvplus</a></code>,
@@ -274,19 +276,20 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species      NMF1       NMF2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;     &lt;num&gt;      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa 0.4722029 0.02426467</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa 0.4237720 0.04359711</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa 0.4322611 0.02502891</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa 0.4076002 0.04820838</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa 0.4735927 0.01986585</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa 0.5808520 0.04741536</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa 0.5179125 0.06572959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa 0.5312856 0.04639643</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa 0.4971806 0.06988613</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa 0.5832509 0.04280681</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ---                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica 0.2489892 0.51344128</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica 0.2124087 0.49500193</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica 0.2463497 0.49957816</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica 0.2372032 0.51500688</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica 0.2226449 0.47879107</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica 0.2290743 0.55676271</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica 0.1866306 0.53550080</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica 0.2279444 0.54191697</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica 0.2142419 0.55788518</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica 0.2018033 0.51875141</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">state</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $nmf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Object of class: NMFfit&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  # Model:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;Object of class:NMFstd&gt;</span>
@@ -296,17 +299,41 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
 <span class="r-out co"><span class="r-pr">#&gt;</span>  # Details:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   algorithm:  brunet </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   seed:  random </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   RNG: 10403L, 222L, ..., 581505866L [0c75f1787a6dee181f94de56ad96448d]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   RNG: 10403L, 223L, ..., 581505866L [c6a8911f7b61c7ab6db7422cde75b137]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   distance metric:  'KL' </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   residuals:  3.084419 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   miscellaneous: dt_columns=&lt;character&gt;, affected_cols=&lt;character&gt;,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               intasklayout=c("&lt;data.table&gt;", "&lt;data.frame&gt;"),</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               outtasklayout=c("&lt;data.table&gt;", "&lt;data.frame&gt;"),</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               outtaskshell=c("&lt;data.table&gt;", "&lt;data.frame&gt;") . (use 'misc(object)')</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Iterations: 650 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   residuals:  3.084418 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Iterations: 440 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Timing:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      user  system elapsed </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      0.08    0.00    0.08 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      0.06    0.00    0.06 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $dt_columns</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $affected_cols</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $intasklayout</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              id    type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;char&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: Petal.Length numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  Petal.Width numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: Sepal.Length numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  Sepal.Width numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $outtasklayout</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        id    type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:   NMF1 numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   NMF2 numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $outtaskshell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 3 cols): Species,NMF1,NMF2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "PipeOpNMFstate"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -318,7 +345,7 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

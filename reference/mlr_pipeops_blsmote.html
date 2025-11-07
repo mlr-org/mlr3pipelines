@@ -17,7 +17,7 @@ See smotefamily::BLSMOTE for details."><meta property="og:image" content="https:
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@ See smotefamily::BLSMOTE for details."><meta property="og:image" content="https:
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>BLSMOTE Balancing</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpBLSmote.R" class="external-link"><code>R/PipeOpBLSmote.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.10.0/R/PipeOpBLSmote.R" class="external-link"><code>R/PipeOpBLSmote.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_blsmote.Rd</code></div>
     </div>
 
@@ -181,6 +181,8 @@ ISBN 978-3-540-31902-3, <a href="https://doi.org/10.1007/11538059_91" class="ext
 <code><a href="mlr_pipeops_imputemode.html">mlr_pipeops_imputemode</a></code>,
 <code><a href="mlr_pipeops_imputeoor.html">mlr_pipeops_imputeoor</a></code>,
 <code><a href="mlr_pipeops_imputesample.html">mlr_pipeops_imputesample</a></code>,
+<code><a href="mlr_pipeops_info.html">mlr_pipeops_info</a></code>,
+<code><a href="mlr_pipeops_isomap.html">mlr_pipeops_isomap</a></code>,
 <code><a href="mlr_pipeops_kernelpca.html">mlr_pipeops_kernelpca</a></code>,
 <code><a href="mlr_pipeops_learner.html">mlr_pipeops_learner</a></code>,
 <code><a href="mlr_pipeops_learner_pi_cvplus.html">mlr_pipeops_learner_pi_cvplus</a></code>,
@@ -235,28 +237,28 @@ ISBN 978-3-540-31902-3, <a href="https://doi.org/10.1007/11538059_91" class="ext
 <span class="r-in"><span><span class="va">data</span><span class="op">$</span><span class="va">result</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">result</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"example"</span>, backend <span class="op">=</span> <span class="va">data</span>, target <span class="op">=</span> <span class="st">"result"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">head</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    result        X1          X2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt;     &lt;num&gt;       &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      n 0.7045238 0.727653679</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      n 0.2206197 0.738630963</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      n 0.7768594 0.761680195</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      n 0.4361547 0.956357428</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:      p 0.6626200 0.662670787</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:      n 0.2244044 0.008419263</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    result         X1         X2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt;      &lt;num&gt;      &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      p 0.42466816 0.52367848</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      n 0.76686014 0.49391270</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      n 0.12633054 0.04505079</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      n 0.61225042 0.08755770</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:      n 0.05346155 0.15983943</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:      n 0.43169760 0.22926869</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="st">"result"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> result</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   n   p </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 393 107 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 401  99 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Generate synthetic data for minority class</span></span></span>
 <span class="r-in"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"blsmote"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">bls_result</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">bls_result</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 776</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 796</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">bls_result</span><span class="op">$</span><span class="va">result</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   n   p </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 393 383 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 401 395 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -268,7 +270,7 @@ ISBN 978-3-540-31902-3, <a href="https://doi.org/10.1007/11538059_91" class="ext
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

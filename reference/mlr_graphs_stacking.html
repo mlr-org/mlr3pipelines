@@ -19,7 +19,7 @@ All input arguments are cloned and have no references in common with the returne
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@ All input arguments are cloned and have no references in common with the returne
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Create A Graph to Perform Stacking.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/pipeline_stacking.R" class="external-link"><code>R/pipeline_stacking.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.10.0/R/pipeline_stacking.R" class="external-link"><code>R/pipeline_stacking.R</code></a></small>
       <div class="d-none name"><code>mlr_graphs_stacking.Rd</code></div>
     </div>
 
@@ -127,31 +127,20 @@ Default <code>TRUE</code>.</p></dd>
 <span class="r-in"><span><span class="va">graph_learner</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_learner.html" class="external-link">as_learner</a></span><span class="op">(</span><span class="va">graph_stack</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">graph_learner</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"german_credit"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # weights:  172</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> initial  value 702.752783 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> initial  value 846.477289 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> final  value 610.864302 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> converged</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # weights:  172</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> initial  value 417.427019 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iter  10 value 398.811803</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iter  20 value 379.569823</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iter  30 value 334.453177</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iter  40 value 289.756050</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iter  50 value 277.504280</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iter  60 value 259.000169</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iter  70 value 257.671612</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iter  80 value 257.668808</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iter  80 value 257.668807</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iter  80 value 257.668807</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> final  value 257.668807 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> initial  value 417.567736 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> final  value 407.847240 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> converged</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # weights:  172</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> initial  value 437.127855 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> final  value 401.249484 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> initial  value 466.311391 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> final  value 408.206169 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> converged</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # weights:  172</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> initial  value 466.609427 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iter  10 value 406.510158</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> final  value 406.510141 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> initial  value 498.245682 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> final  value 405.651390 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> converged</span>
 </code></pre></div>
     </div>
@@ -164,7 +153,7 @@ Default <code>TRUE</code>.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

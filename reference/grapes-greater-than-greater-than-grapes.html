@@ -73,7 +73,7 @@ Analogously, if g2 is NULL, g1 converted to a Graph will be returned."><meta pro
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,7 @@ Analogously, if g2 is NULL, g1 converted to a Graph will be returned."><meta pro
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>PipeOp Composition Operator</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/operators.R" class="external-link"><code>R/operators.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.10.0/R/operators.R" class="external-link"><code>R/operators.R</code></a></small>
       <div class="d-none name"><code>grapes-greater-than-greater-than-grapes.Rd</code></div>
     </div>
 
@@ -176,13 +176,13 @@ Whether to try to avoid cloning <code>g1</code>. If <code>g1</code> is not a <co
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other Graph operators:
-<code><a href="as_graph.html">as_graph</a>()</code>,
-<code><a href="as_pipeop.html">as_pipeop</a>()</code>,
-<code><a href="assert_graph.html">assert_graph</a>()</code>,
-<code><a href="assert_pipeop.html">assert_pipeop</a>()</code>,
-<code><a href="chain_graphs.html">chain_graphs</a>()</code>,
-<code><a href="greplicate.html">greplicate</a>()</code>,
-<code><a href="gunion.html">gunion</a>()</code>,
+<code><a href="as_graph.html">as_graph()</a></code>,
+<code><a href="as_pipeop.html">as_pipeop()</a></code>,
+<code><a href="assert_graph.html">assert_graph()</a></code>,
+<code><a href="assert_pipeop.html">assert_pipeop()</a></code>,
+<code><a href="chain_graphs.html">chain_graphs()</a></code>,
+<code><a href="greplicate.html">greplicate()</a></code>,
+<code><a href="gunion.html">gunion()</a></code>,
 <code><a href="mlr_graphs_greplicate.html">mlr_graphs_greplicate</a></code></p></div>
     </div>
 
@@ -214,35 +214,51 @@ Whether to try to avoid cloning <code>g1</code>. If <code>g1</code> is not a <co
 <span class="r-in"><span>  <span class="fu">add_edge</span><span class="op">(</span><span class="va">o2</span><span class="op">$</span><span class="va">id</span>, <span class="va">o3</span><span class="op">$</span><span class="va">id</span>, dst_channel <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">pipe1</span> <span class="op">%&gt;&gt;!%</span> <span class="va">o3</span>  <span class="co"># modify pipe1 in-place</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Graph with 3 PipeOps:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Graph with 3 PipeOps:</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            ID         State     sccssors prdcssors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;char&gt;        &lt;char&gt;       &lt;char&gt;    &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         scale &lt;&lt;UNTRAINED&gt;&gt;          pca          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           pca &lt;&lt;UNTRAINED&gt;&gt; featureunion     scale</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  featureunion &lt;&lt;UNTRAINED&gt;&gt;                    pca</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── Pipeline: <span style="font-weight: bold;">non-sequential</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">pipe1</span>  <span class="co"># contains o1, o2, and o3 now.</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Graph with 3 PipeOps:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Graph with 3 PipeOps:</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            ID         State     sccssors prdcssors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;char&gt;        &lt;char&gt;       &lt;char&gt;    &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         scale &lt;&lt;UNTRAINED&gt;&gt;          pca          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           pca &lt;&lt;UNTRAINED&gt;&gt; featureunion     scale</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  featureunion &lt;&lt;UNTRAINED&gt;&gt;                    pca</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── Pipeline: <span style="font-weight: bold;">non-sequential</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">o1</span> <span class="op">%&gt;&gt;!%</span> <span class="va">o2</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Graph with 2 PipeOps:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Graph with 2 PipeOps:</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      ID         State sccssors prdcssors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;char&gt;        &lt;char&gt;   &lt;char&gt;    &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   scale &lt;&lt;UNTRAINED&gt;&gt;      pca          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     pca &lt;&lt;UNTRAINED&gt;&gt;              scale</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── Pipeline: <span style="font-weight: bold;">&lt;INPUT&gt; -&gt; scale -&gt; pca -&gt; &lt;OUTPUT&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">o1</span>  <span class="co"># not changed, becuase not a Graph.</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PipeOp: &lt;scale&gt; (not trained)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> values: &lt;robust=FALSE&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Input channels &lt;name [train type, predict type]&gt;:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   input [Task,Task]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Output channels &lt;name [train type, predict type]&gt;:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   output [Task,Task]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">PipeOp </span><span style="color: #0000BB; font-weight: bold;">&lt;scale&gt;</span><span style="font-weight: bold;">: not trained</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Values: robust=FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">Input channels:</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    name  train predict</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;char&gt; &lt;char&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   input   Task    Task</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">Output channels:</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    name  train predict</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;char&gt; &lt;char&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  output   Task    Task</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -254,7 +270,7 @@ Whether to try to avoid cloning <code>g1</code>. If <code>g1</code> is not a <co
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
