@@ -10,7 +10,7 @@
 #' Note this parameter is part of the [`PipeOpImpute`] base class and explained there.
 #'
 #' Additionally, only features supported by the learner can be imputed; i.e. learners of type
-#' `regr` can only impute features of type `integer` and `numeric`, while `classif` can impute
+#' `regr` can only impute features of type `integer`, `numeric`, `POSIXct` and `Date`, while `classif` can impute
 #' features of type `factor`, `ordered` and `logical`.
 #'
 #' The [`Learner`][mlr3::Learner] used for imputation is trained on all `context_columns`; if these contain missing values,
