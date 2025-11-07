@@ -4,6 +4,8 @@
 
 ## mlr3pipelines 0.10.0
 
+CRAN release: 2025-11-07
+
 - Pretty-printing some info using the `cli` package now.
 - New PipeOp `PipeOpInfo` prints or logs info about objects passing
   through.
