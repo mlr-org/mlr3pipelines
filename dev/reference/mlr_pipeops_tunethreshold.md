@@ -239,7 +239,7 @@ pop$state
 #> Empty data.table (0 rows and 3 cols): stage,class,msg
 #> 
 #> $train_time
-#> [1] 0.004
+#> [1] 0.002
 #> 
 #> $task_hash
 #> [1] "abc694dd29a7a8ce"

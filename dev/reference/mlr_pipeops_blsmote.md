@@ -198,26 +198,26 @@ data = smotefamily::sample_generator(500, 0.8)
 data$result = factor(data$result)
 task = TaskClassif$new(id = "example", backend = data, target = "result")
 task$head()
-#>    result        X1          X2
-#>    <fctr>     <num>       <num>
-#> 1:      n 0.7045238 0.727653679
-#> 2:      n 0.2206197 0.738630963
-#> 3:      n 0.7768594 0.761680195
-#> 4:      n 0.4361547 0.956357428
-#> 5:      p 0.6626200 0.662670787
-#> 6:      n 0.2244044 0.008419263
+#>    result         X1         X2
+#>    <fctr>      <num>      <num>
+#> 1:      p 0.42466816 0.52367848
+#> 2:      n 0.76686014 0.49391270
+#> 3:      n 0.12633054 0.04505079
+#> 4:      n 0.61225042 0.08755770
+#> 5:      n 0.05346155 0.15983943
+#> 6:      n 0.43169760 0.22926869
 table(task$data(cols = "result"))
 #> result
 #>   n   p 
-#> 393 107 
+#> 401  99 
 
 # Generate synthetic data for minority class
 pop = po("blsmote")
 bls_result = pop$train(list(task))[[1]]$data()
 nrow(bls_result)
-#> [1] 776
+#> [1] 796
 table(bls_result$result)
 #> 
 #>   n   p 
-#> 393 383 
+#> 401 395 
 ```

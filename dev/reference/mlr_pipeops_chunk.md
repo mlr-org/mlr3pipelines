@@ -169,7 +169,7 @@ opc$train(list(task))
 #> 
 #> ── <TaskClassif> (89x14): Wine Regions ─────────────────────────────────────────
 #> • Target: type
-#> • Target classes: 2 (42%), 1 (34%), 3 (25%)
+#> • Target classes: 2 (38%), 3 (31%), 1 (30%)
 #> • Properties: multiclass
 #> • Features (13):
 #>   • dbl (11): alcalinity, alcohol, ash, color, dilution, flavanoids, hue,
@@ -180,7 +180,7 @@ opc$train(list(task))
 #> 
 #> ── <TaskClassif> (89x14): Wine Regions ─────────────────────────────────────────
 #> • Target: type
-#> • Target classes: 2 (38%), 1 (33%), 3 (29%)
+#> • Target classes: 2 (42%), 1 (36%), 3 (22%)
 #> • Properties: multiclass
 #> • Features (13):
 #>   • dbl (11): alcalinity, alcohol, ash, color, dilution, flavanoids, hue,

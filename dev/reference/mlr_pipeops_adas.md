@@ -185,26 +185,26 @@ data = data.frame(
 )
 task = TaskClassif$new(id = "example", backend = data, target = "target")
 task$head()
-#>    target          x1         x2
-#>    <fctr>       <num>      <num>
-#> 1:     c2 -1.80179859  0.4839497
-#> 2:     c2 -0.73610585  0.1665491
-#> 3:     c2  1.57174231 -1.1888893
-#> 4:     c2  1.43272699  1.2162566
-#> 5:     c2 -1.62214871 -1.3224060
-#> 6:     c2 -0.04208987 -0.1837415
+#>    target         x1          x2
+#>    <fctr>      <num>       <num>
+#> 1:     c2  0.2159273 -0.59778050
+#> 2:     c2 -0.2991364 -0.03872375
+#> 3:     c2 -0.6386836 -0.50106336
+#> 4:     c2 -2.5712082 -0.74213566
+#> 5:     c2 -0.9918116 -0.65607738
+#> 6:     c2  1.2977356 -0.36689950
 table(task$data(cols = "target"))
 #> target
 #>  c1  c2 
-#>  25 275 
+#>  31 269 
 
 # Generate synthetic data for minority class
 pop = po("adas")
 adas_result = pop$train(list(task))[[1]]$data()
 nrow(adas_result)
-#> [1] 558
+#> [1] 539
 table(adas_result$target)
 #> 
 #>  c1  c2 
-#> 283 275 
+#> 270 269 
 ```

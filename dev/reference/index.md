@@ -329,6 +329,12 @@
 - [`mlr_tasks_boston_housing`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_tasks_boston_housing.md)
   : Housing Data for 506 Census Tracts of Boston
 
+## Filters
+
+- [`mlr_filters_ensemble`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_filters_ensemble.md)
+  [`FilterEnsemble`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_filters_ensemble.md)
+  : Filter Ensemble
+
 ## Helpers
 
 - [`preproc()`](https://mlr3pipelines.mlr-org.com/dev/reference/preproc.md)

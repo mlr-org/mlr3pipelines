@@ -106,6 +106,7 @@
 
 <ul><li>R unit tests in this repo assume helper <code>expect_man_exists()</code> is available. If you need to call it in a new test and you are working without mlr3pipelines installed, define a local fallback at the top of that test file before <code>expect_learner()</code> is used.</li>
 <li>Revdep helper scripts live in <code>attic/revdeps/</code>. <code>download_revdeps.R</code> downloads reverse dependency source tarballs; <code>install_revdep_suggests.R</code> installs Suggests for those revdeps without pulling the revdeps themselves.</li>
+<li>When writing <code><a href="https://paradox.mlr-org.com/reference/ParamSet.html" class="external-link">paradox::ParamSet</a></code> custom checks (e.g. <code>p_uty(custom_check = ...)</code>), you do not need to special-case <code>TuneToken</code>s. <code>paradox</code> skips custom validators for <code>TuneToken</code> inputs before evaluating them, so the check only sees concrete values.</li>
 </ul><p> <your_task> Again, when implementing something, focus on:</your_task></p>
 <ol style="list-style-type: decimal"><li>Think things through and plan ahead.</li>
 <li>Tests before implementation, if possible. In any case, write high quality tests, try to be better than the tests you find in this project.</li>

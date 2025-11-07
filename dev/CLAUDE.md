@@ -195,6 +195,12 @@ graphs.
   downloads reverse dependency source tarballs;
   `install_revdep_suggests.R` installs Suggests for those revdeps
   without pulling the revdeps themselves.
+- When writing
+  [`paradox::ParamSet`](https://paradox.mlr-org.com/reference/ParamSet.html)
+  custom checks (e.g. `p_uty(custom_check = ...)`), you do not need to
+  special-case `TuneToken`s. `paradox` skips custom validators for
+  `TuneToken` inputs before evaluating them, so the check only sees
+  concrete values.
 
 Again, when implementing something, focus on:
 

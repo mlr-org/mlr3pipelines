@@ -54,14 +54,17 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.0-9000" id="mlr3pipelines-090-9000">mlr3pipelines 0.9.0-9000<a class="anchor" aria-label="anchor" href="#mlr3pipelines-090-9000"></a></h2>
 <ul><li>Pretty-printing some info using the <code>cli</code> package now.</li>
-<li>Fix: Added internal workaround for <code>PipeOpNMF</code> attaching <code>Biobase</code>, <code>BiocGenerics</code>, and <code>generics</code> to the search path during training, prediction or when printing its <code>$state</code>.</li>
+<li>New PipeOp <code>PipeOpInfo</code> prints or logs info about objects passing through.</li>
+<li>New Pipeop <code>PipeOpIsomap</code> implements isomap embedding from <code><a href="https://rdrr.io/pkg/dimRed/man/embed.html" class="external-link">dimRed::embed</a></code>
+</li>
 <li>feat: allow dates in datefeatures pipe op and use data.table for date feature generation.</li>
-<li>Added support for internal validation tasks to <code>PipeOpFeatureUnion</code>.</li>
 <li>feat: <code>PipeOpLearnerCV</code> can reuse the cross-validation models during prediction by averaging their outputs (<code>resampling.predict_method = "cv_ensemble"</code>).</li>
-<li>feat: <code>PipeOpRegrAvg</code> gets new <code>se_aggr</code> and <code>se_aggr_rho</code> hyperparameters and now allows various forms of SE aggregation.</li>
-<li>Fix: <code>PipeOpInfo</code> now prints a bounded task preview (respecting target/feature ordering and row ids) and collapses logger output to single messages.</li>
-<li>Fix: <code>PipeOpIsomap</code> only operates on numeric or integer features and its parameter documentation was corrected.</li>
+<li>feat: <code>PipeOpRegrAvg</code> gets new <code>se_aggr</code>, <code>se_aggr_rho</code>, <code>prob_aggr</code>, and <code>prob_aggr_eps</code> hyperparameters and now allows different forms of prob / SE aggregation.</li>
+<li>feat: <code>FilterEnsemble</code> implements Binder et al. (2020) <em>Multi-Objective Hyperparameter Tuning and Feature Selection using Filter Ensembles</em>
+</li>
 <li>Fix: <code>PipeOpRemoveConstants</code> now avoids integer overflow when evaluating relative tolerances for near-<code>integer.max</code> data.</li>
+<li>Fix: Added support for internal validation tasks to <code>PipeOpFeatureUnion</code>.</li>
+<li>Fix: Added internal workaround for <code>PipeOpNMF</code> attaching <code>Biobase</code>, <code>BiocGenerics</code>, and <code>generics</code> to the search path during training, prediction or when printing its <code>$state</code>.</li>
 <li>Compatibility with new testthat version 3.3.0</li>
 </ul></div>
     <div class="section level2">

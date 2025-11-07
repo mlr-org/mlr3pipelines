@@ -91,13 +91,13 @@ task = mlr_tasks$get("boston_housing")
 gr = pipeline_bagging(lrn_po, 3, averager = po("regravg", collect_multiplicity = TRUE))
 resample(task, GraphLearner$new(gr), rsmp("holdout"))$aggregate()
 #> regr.mse 
-#> 12.44027 
+#> 17.31492 
 
 # The original bagging method uses boosting by sampling with replacement.
 gr = ppl("bagging", lrn_po, frac = 1, replace = TRUE,
   averager = po("regravg", collect_multiplicity = TRUE))
 resample(task, GraphLearner$new(gr), rsmp("holdout"))$aggregate()
 #> regr.mse 
-#> 14.96053 
+#> 11.37488 
 # }
 ```
