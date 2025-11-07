@@ -13,7 +13,7 @@ Uses the features indicated by the \code{context_columns} parameter as features 
 Note this parameter is part of the \code{\link{PipeOpImpute}} base class and explained there.
 
 Additionally, only features supported by the learner can be imputed; i.e. learners of type
-\code{regr} can only impute features of type \code{integer} and \code{numeric}, while \code{classif} can impute
+\code{regr} can only impute features of type \code{integer}, \code{numeric}, \code{POSIXct} and \code{Date}, while \code{classif} can impute
 features of type \code{factor}, \code{ordered} and \code{logical}.
 
 The \code{\link[mlr3:Learner]{Learner}} used for imputation is trained on all \code{context_columns}; if these contain missing values,

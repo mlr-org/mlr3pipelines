@@ -46,8 +46,8 @@ The parameters are the parameters inherited from \code{\link{PipeOpImpute}}.
 
 Uses the \code{sample()} function. Features that are entirely \code{NA} are imputed as
 the following: For \code{factor} or \code{ordered}, random levels are sampled uniformly at random.
-For logicals, \code{TRUE} or \code{FALSE} are sampled uniformly at random.
-Numerics and integers are imputed as \code{0}.
+For \code{logical}, \code{TRUE} or \code{FALSE} are sampled uniformly at random.
+\code{numeric} and \code{integer} are imputed as \code{0}.
 }
 
 \section{Fields}{

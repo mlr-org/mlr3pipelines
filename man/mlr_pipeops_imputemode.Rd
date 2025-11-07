@@ -8,7 +8,7 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
 \description{
-Impute features by their mode. Supports factors as well as logical and numerical features.
+Impute features by their mode. Supports factors, logical, numerical, POSIXct and Date features.
 If multiple modes are present then imputed values are sampled randomly from them.
 }
 \section{Construction}{

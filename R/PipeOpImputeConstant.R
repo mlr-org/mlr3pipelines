@@ -83,7 +83,7 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
         check_levels = p_lgl(init = TRUE, tags = c("train", "required"))
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, empty_level_control = "always",
-        feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct"))
+        feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct", "Date"))
     }
   ),
   private = list(
@@ -96,7 +96,8 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
         "character" = assert_string(constant),
         "factor"    = assert_string_or_factor(constant),
         "ordered"   = assert_string_or_factor(constant),
-        "POSIXct"   = assert_posixct(constant, any.missing = FALSE, len = 1L)
+        "POSIXct"   = assert_posixct(constant, any.missing = FALSE, len = 1L),
+        "Date" = assert_date(constant, any.missing = FALSE, len = 1L)
       )
       if (type %in% c("ordered", "factor") && self$param_set$values$check_levels) {
         if (!isTRUE(check_choice(as.character(constant), levels(feature)))) {

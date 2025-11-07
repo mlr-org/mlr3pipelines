@@ -1,11 +1,11 @@
-#' @title Impute Numerical Features by Histogram
+#' @title Impute Numeric, Integer, POSIXct or Date Features by Histogram
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputehist
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
-#' Impute numerical features by histogram.
+#' Impute numeric, integer, POSIXct or Date features by histogram.
 #'
 #' During training, a histogram is fitted on each column using R's [`hist()`][graphics::hist] function.
 #' The fitted histogram is then sampled from for imputation. Sampling happens in a two-step process:
@@ -27,7 +27,7 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpImpute`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with all affected numeric features missing values imputed by (column-wise) histogram; see Description for details.
+#' The output is the input [`Task`][mlr3::Task] with all affected numeric, integer, POSIXct or Date features missing values imputed by (column-wise) histogram; see Description for details.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpImpute`].
@@ -66,13 +66,27 @@ PipeOpImputeHist = R6Class("PipeOpImputeHist",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputehist", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals, packages = "graphics", feature_types = c("integer", "numeric"))
+      super$initialize(id, param_vals = param_vals, packages = "graphics", feature_types = c("integer", "numeric", "Date", "POSIXct"))
     }
   ),
   private = list(
 
     .train_imputer = function(feature, type, context) {
-      graphics::hist(feature, plot = FALSE)[c("counts", "breaks")]
+      if (inherits(feature, c("POSIXct", "Date"))) {
+        # hist() for POSIXct/Date does not do "Sturges" breaks automatically, so we compute it explicitly
+        n_breaks = ceiling(log2(length(feature)) + 1)
+        # If we pass the number of breaks, hist() does some computation that results in integer overflow
+        if (inherits(feature, "POSIXct")) {
+          breaks = as.POSIXct(as.numeric(pretty(range(feature, na.rm = TRUE), n = n_breaks, min.n = 1)))
+        } else {
+          breaks = as.Date(as.numeric(pretty(range(feature, na.rm = TRUE), n = n_breaks, min.n = 1)))
+        }
+        # pretty() does not return values of length < 2, so the special case where `breaks` gets
+        # intepreted differently does not need to be handled here.
+        graphics::hist(feature, breaks = breaks, plot = FALSE)[c("counts", "breaks")]
+      } else {
+        graphics::hist(feature, plot = FALSE)[c("counts", "breaks")]
+      }
     },
 
     .impute = function(feature, type, model, context) {
