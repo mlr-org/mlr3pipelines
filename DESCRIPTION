@@ -101,7 +101,10 @@ Suggests:
     future,
     htmlwidgets,
     ranger,
-    themis
+    themis,
+    dimRed,
+    RSpectra,
+    RANN
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
@@ -160,6 +163,8 @@ Collate:
     'PipeOpImputeMode.R'
     'PipeOpImputeOOR.R'
     'PipeOpImputeSample.R'
+    'PipeOpInfo.R'
+    'PipeOpIsomap.R'
     'PipeOpKernelPCA.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'
