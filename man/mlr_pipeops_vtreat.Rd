@@ -128,7 +128,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{if (requireNamespace("vtreat")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("vtreat")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
 set.seed(2020)
@@ -193,6 +193,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
+\code{\link{mlr_pipeops_info}},
+\code{\link{mlr_pipeops_isomap}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},

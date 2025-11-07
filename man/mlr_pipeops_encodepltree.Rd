@@ -73,7 +73,7 @@ Only methods inherited from \code{\link{PipeOpEncodePL}}/\code{\link{PipeOpTaskP
 }
 
 \examples{
-\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library(mlr3)
 
 # For classification task
@@ -160,6 +160,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
+\code{\link{mlr_pipeops_info}},
+\code{\link{mlr_pipeops_isomap}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},
