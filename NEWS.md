@@ -1,4 +1,4 @@
-# mlr3pipelines 0.9.0-9000
+# mlr3pipelines 0.10.0
 
 * Pretty-printing some info using the `cli` package now.
 * New PipeOp `PipeOpInfo` prints or logs info about objects passing through.

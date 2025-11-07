@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.9.0-9000
+Version: 0.10.0
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -47,7 +47,11 @@ Authors@R:
       person(given = "Lona",
              family = "Koers",
              role = "ctb",
-             email = "lona.koers@gmail.com"))
+             email = "lona.koers@gmail.com"),
+      person(given = "Alexander",
+             family = "Winterstetter",
+             role = "ctb",
+             email = "alexander.winterstetter@gmail.com"))
 Description: Dataflow programming toolkit that enriches 'mlr3' with a diverse
   set of pipelining operators ('PipeOps') that can be composed into graphs.
   Operations exist for data preprocessing, model fitting, and ensemble
