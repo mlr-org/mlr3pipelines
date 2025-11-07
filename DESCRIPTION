@@ -120,6 +120,7 @@ Collate:
     'CnfFormula_simplify.R'
     'CnfSymbol.R'
     'CnfUniverse.R'
+    'FilterEnsemble.R'
     'Graph.R'
     'GraphLearner.R'
     'mlr_pipeops.R'
