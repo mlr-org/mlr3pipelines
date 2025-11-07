@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_renamecolumns
-#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Renames the columns of a [`Task`][mlr3::Task] both during training and prediction.
@@ -19,15 +19,15 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpTaskPreprocSimple`].
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
 #' The output is the input [`Task`][mlr3::Task] with the old column names changed to the new ones.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreprocSimple`].
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`].
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`], as well as:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `renaming` :: named `character`\cr
 #'   Named `character` vector. The names of the vector specify the old column names that should be
 #'   changed to the new column names as given by the elements of the vector. Initialized to the empty
@@ -41,7 +41,7 @@
 #' Uses the `$rename()` mutator of the [`Task`][mlr3::Task] to set the new column names.
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -61,10 +61,11 @@ PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
   public = list(
     initialize = function(id = "renamecolumns", param_vals = list()) {
       ps = ps(
-        renaming = p_uty(tags = c("train", "predict", "required"), custom_check = function(x) {
-          check_character(x, any.missing = FALSE, names = "strict") %check&&%
-            check_names(x, type = "strict")
-        }),
+        renaming = p_uty(
+          custom_check = crate(function(x) check_character(x, any.missing = FALSE, names = "strict") %check&&% check_names(x, type = "strict"),
+                               .parent = topenv()),
+          tags = c("train", "predict", "required")
+        ),
         ignore_missing = p_lgl(tags = c("train", "predict", "required"))
       )
       ps$values = list(renaming = character(0), ignore_missing = FALSE)

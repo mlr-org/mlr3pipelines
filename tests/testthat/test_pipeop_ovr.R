@@ -67,6 +67,8 @@ test_that("PipeOpOVRUnite- train and predict", {
     lrn$train(task)
     lrn$predict(task)
   })
+  # Need to first train before predicting
+  expect_list(po$train(list(as.Multiplicity(NULL))), len = 1, types = "null")
   pout = po$predict(list(as.Multiplicity(tin)))
   expect_prediction_classif(pout[[1]])
 
@@ -112,6 +114,8 @@ test_that("PipeOpOVRSplit and PipeOpOVRUnite - train and predict", {
     lrn$train(task)
     lrn$predict(task)
   })
+  # Need to first train before predicting
+  po$train(list(as.Multiplicity(NULL)))
   pout_ref = po$predict(list(as.Multiplicity(tin)))
 
   gr = PipeOpOVRSplit$new() %>>% LearnerClassifRpart$new() %>>% PipeOpOVRUnite$new()

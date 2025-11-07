@@ -115,3 +115,53 @@ test_that("thresholding works for multiclass", {
   gr$train(t)
   expect_error(gr$predict(t))
 })
+
+test_that("threshold predict type", {
+  skip_if_not_installed("rpart")
+
+  t = tsk("iris")
+  g =  po("learner", learner = lrn("classif.rpart", predict_type = "prob")) %>>% po("threshold", thresholds = c(.2, .3, .5))
+  g$train(t)
+  res = g$predict(t)[[1]]
+
+  expect_set_equal(res$predict_types, c("response", "prob"))
+  expect_data_table(as.data.table(res))
+  expect_names(colnames(as.data.table(res)),
+    permutation.of = c("truth", "response", "prob.setosa", "prob.versicolor", "prob.virginica", "row_ids"))
+  g$pipeops$threshold$predict_type = "response"
+  res = g$predict(t)[[1]]
+  expect_prediction(res)
+  expect_set_equal(res$predict_types, "response")
+  expect_data_table(as.data.table(res))
+  expect_names(colnames(as.data.table(res)),
+    permutation.of = c("truth", "response", "row_ids"))
+
+  glrn = as_learner(g)
+  expect_equal(glrn$predict_type, "response")
+  glrn$train(t)
+
+  res = glrn$predict(t)
+  expect_prediction(res)
+  expect_set_equal(res$predict_types, "response")
+  expect_data_table(as.data.table(res))
+  expect_names(colnames(as.data.table(res)),
+    permutation.of = c("truth", "response", "row_ids"))
+
+  glrn$predict_type = "prob"
+  res = glrn$predict(t)
+  expect_set_equal(res$predict_types, c("response", "prob"))
+  expect_data_table(as.data.table(res))
+  expect_names(colnames(as.data.table(res)),
+    permutation.of = c("truth", "response", "prob.setosa", "prob.versicolor", "prob.virginica", "row_ids"))
+
+  # the following checks that setting 'response' does not change the predict-type of the classif.rpart
+  glrn$predict_type = "response"
+  expect_equal(glrn$graph$pipeops$classif.rpart$predict_type, "prob")
+  res = glrn$predict(t)
+  expect_prediction(res)
+  expect_set_equal(res$predict_types, "response")
+  expect_data_table(as.data.table(res))
+  expect_names(colnames(as.data.table(res)),
+    permutation.of = c("truth", "response", "row_ids"))
+
+})

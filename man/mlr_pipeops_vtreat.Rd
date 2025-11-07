@@ -10,15 +10,15 @@
 \description{
 Provides an interface to the vtreat package.
 
-\code{\link{PipeOpVtreat}} naturally works for \link[mlr3:TaskClassif]{classification tasks} and \link[mlr3:TaskRegr]{regression tasks}.
-Internally, \code{\link{PipeOpVtreat}} follows the fit/prepare interface of vtreat, i.e., first creating a data treatment transform object via
+\code{PipeOpVtreat} naturally works for \link[mlr3:TaskClassif]{classification tasks} and \link[mlr3:TaskRegr]{regression tasks}.
+Internally, \code{PipeOpVtreat} follows the fit/prepare interface of vtreat, i.e., first creating a data treatment transform object via
 \code{\link[vtreat:NumericOutcomeTreatment]{vtreat::NumericOutcomeTreatment()}}, \code{\link[vtreat:BinomialOutcomeTreatment]{vtreat::BinomialOutcomeTreatment()}}, or \code{\link[vtreat:MultinomialOutcomeTreatment]{vtreat::MultinomialOutcomeTreatment()}}, followed by calling
 \code{\link[vtreat:fit_prepare]{vtreat::fit_prepare()}} on the training data and \code{\link[vtreat:prepare]{vtreat::prepare()}} during predicton.
 }
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpVreat$new(id = "vtreat", param_vals = list())
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpVtreat$new(id = "vtreat", param_vals = list())
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -30,7 +30,8 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}. Instead of a \code{\link[mlr3:Task]{Task}}, a
+\code{\link[mlr3:TaskSupervised]{TaskSupervised}} is used as input and output during training and prediction.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with all affected features "prepared" by vtreat.
 If vtreat found "no usable vars", the input \code{\link[mlr3:Task]{Task}} is returned unaltered.
@@ -82,7 +83,7 @@ If \code{TRUE} force cross-validated significance calculations on all variables.
 If \code{TRUE} use \code{\link[stats:glm]{stats::glm()}} linkspace, if FALSE use \code{\link[stats:lm]{stats::lm()}} for scaling.
 \item \code{verbose} :: \code{logical(1)}\cr
 If \code{TRUE} print progress.
-\item \code{use_paralell} :: \code{logical(1)}\cr
+\item \code{use_parallel} :: \code{logical(1)}\cr
 If \code{TRUE} use parallel methods.
 \item \code{missingness_imputation} :: \code{function}\cr
 Function of signature f(values: numeric, weights: numeric), simple missing value imputer.\cr
@@ -116,13 +117,18 @@ Follows vtreat's fit/prepare interface. See \code{\link[vtreat:NumericOutcomeTre
 \code{\link[vtreat:MultinomialOutcomeTreatment]{vtreat::MultinomialOutcomeTreatment()}}, \code{\link[vtreat:fit_prepare]{vtreat::fit_prepare()}} and \code{\link[vtreat:prepare]{vtreat::prepare()}}.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{ if (requireNamespace("vtreat")) \{ }
+\dontshow{if (requireNamespace("vtreat")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
 set.seed(2020)
@@ -141,19 +147,22 @@ task = TaskRegr$new("vtreat_regr", backend = make_data(100), target = "y")
 
 pop = PipeOpVtreat$new()
 pop$train(list(task))
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_adas}},
+\code{\link{mlr_pipeops_blsmote}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -165,9 +174,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
@@ -181,13 +193,18 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
+\code{\link{mlr_pipeops_info}},
+\code{\link{mlr_pipeops_isomap}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nearmiss}},
 \code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
@@ -207,6 +224,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
+\code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
@@ -214,6 +232,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},

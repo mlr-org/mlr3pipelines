@@ -9,7 +9,7 @@
 #'
 #' Inherits the `$param_set` (and therefore `$param_set$values`) from the [`Learner`][mlr3::Learner] it is constructed from.
 #'
-#' Using [`PipeOpLearner`], it is possible to embed [`mlr3::Learner`]s into [`Graph`]s, which themselves can be
+#' Using `PipeOpLearner`, it is possible to embed [`mlr3::Learner`]s into [`Graph`]s, which themselves can be
 #' turned into Learners using [`GraphLearner`]. This way, preprocessing and ensemble methods can be included
 #' into a machine learning pipeline which then can be handled as singular object for resampling, benchmarking
 #' and tuning.
@@ -19,19 +19,19 @@
 #' PipeOpLearner$new(learner, id = NULL, param_vals = list())
 #' ```
 #'
-#' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`
+#' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`\cr
 #'   [`Learner`][mlr3::Learner] to wrap, or a string identifying a [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
 #'  This argument is always cloned; to access the [`Learner`][mlr3::Learner] inside `PipeOpLearner` by-reference, use `$learner`.\cr
-#' * `id` :: `character(1)`
+#' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting  object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpLearner`] has one input channel named `"input"`, taking a [`Task`][mlr3::Task] specific to the [`Learner`][mlr3::Learner]
+#' `PipeOpLearner` has one input channel named `"input"`, taking a [`Task`][mlr3::Task] specific to the [`Learner`][mlr3::Learner]
 #' type given to `learner` during construction; both during training and prediction.
 #'
-#' [`PipeOpLearner`] has one output channel named `"output"`, producing `NULL` during training and a [`Prediction`][mlr3::Prediction] subclass
+#' `PipeOpLearner` has one output channel named `"output"`, producing `NULL` during training and a [`Prediction`][mlr3::Prediction] subclass
 #' during prediction; this subclass is specific to the [`Learner`][mlr3::Learner] type given to `learner` during construction.
 #'
 #' The output during prediction is the [`Prediction`][mlr3::Prediction] on the prediction input data, produced by the [`Learner`][mlr3::Learner]
@@ -73,6 +73,7 @@
 #'    The internally tuned values if the wrapped `Learner` supports internal tuning, `NULL` otherwise.
 #' * `internal_valid_scores` :: named `list()` or `NULL`\cr
 #'    The internal validation scores if the wrapped `Learner` supports internal validation, `NULL` otherwise.
+#'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
 #'
@@ -81,8 +82,7 @@
 #' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -91,7 +91,6 @@
 #'
 #' lrn_po$train(list(task))
 #' lrn_po$predict(list(task))
-#' \dontshow{ \} }
 PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   public = list(
     initialize = function(learner, id = NULL, param_vals = list()) {
@@ -99,7 +98,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       id = id %??% private$.learner$id
       if (!test_po_validate(get0("validate", private$.learner))) {
         stopf(
-          "Validate field of PipeOp '%s' must either be NULL or 'predefined'.\nTo configure how the validation data is created, set the $validate field of the GraphLearner, e.g. using set_validate().",  # nolint
+          "Validate field of PipeOp '%s' must either be NULL or 'predefined'. We recommend specifying the validation data by calling set_validate(<glrn>, validate = <value>) on a GraphLearner. You can read more about this here: https://mlr3book.mlr-org.com/chapters/chapter15/predsets_valid_inttune.html.",  # nolint
           id
         )
       }
@@ -142,9 +141,6 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     id = function(val) {
       if (!missing(val)) {
         private$.id = val
-        if (paradox_info$is_old) {
-          private$.learner$param_set$set_id = val
-        }
       }
       private$.id
     },
@@ -155,11 +151,9 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
         }
         validate = get0("validate", private$.learner)
         if (!test_po_validate(validate)) {
-          warningf(paste(sep = "\n",
-            "PipeOpLearner '%s' has its validate field set to a value that is neither NULL nor 'predefined'.",
-            "This will likely lead to unexpected behaviour.",
-            "Configure the $validate field of the GraphLearner to define how the validation data is created."
-            ), self$id)
+          warningf(
+            "PipeOpLearner '%s' has its validate field set to a value that is neither NULL nor 'predefined'. This will likely lead to unexpected behaviour. We recommend configuring the validation data by calling set_validate(<glrn>, validate = <value>) on a GraphLearner. You can read more about this here: https://mlr3book.mlr-org.com/chapters/chapter15/predsets_valid_inttune.html", # nolint
+            self$id)
         }
       }
       private$.learner
@@ -207,6 +201,10 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
 
 mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(properties = character(0), id = "learner", task_type = "classif", param_set = ps(), packages = "mlr3pipelines"))$new())) # nolint
 
+# Q: Why do we have two different paths for setting $validate, the set_validate() and the `$validate` AB?
+# A: `$validate` is lower level machinery. `set_validate()` has optional arguments, e.g. `ids = ...`.
+#    `set_validate.PipeOpLearner` might be called by `set_validate.GraphLearner` and allows passing down
+#    further arguments in case the pipeoplearner was another graph learner e.g.
 #' @export
 set_validate.PipeOpLearner = function(learner, validate, ...) {
   assert_po_validate(validate)

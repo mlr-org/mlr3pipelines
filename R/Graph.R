@@ -4,11 +4,11 @@
 #' @format [`R6Class`][R6::R6Class].
 #'
 #' @description
-#' A [`Graph`] is a representation of a machine learning pipeline graph. It can be *trained*, and subsequently used for *prediction*.
+#' A `Graph` is a representation of a machine learning pipeline graph. It can be *trained*, and subsequently used for *prediction*.
 #'
-#' A [`Graph`] is most useful when used together with [`Learner`][mlr3::Learner] objects encapsulated as [`PipeOpLearner`]. In this case,
-#' the [`Graph`] produces [`Prediction`][mlr3::Prediction] data during its `$predict()` phase and can be used as a [`Learner`][mlr3::Learner]
-#' itself (using the [`GraphLearner`] wrapper). However, the [`Graph`] can also be used without [`Learner`][mlr3::Learner] objects to simply
+#' A `Graph` is most useful when used together with [`Learner`][mlr3::Learner] objects encapsulated as [`PipeOpLearner`]. In this case,
+#' the `Graph` produces [`Prediction`][mlr3::Prediction] data during its `$predict()` phase and can be used as a [`Learner`][mlr3::Learner]
+#' itself (using the [`GraphLearner`] wrapper). However, the `Graph` can also be used without [`Learner`][mlr3::Learner] objects to simply
 #' perform preprocessing of data, and, in principle, does not even need to handle data at all but can be used for general processes with
 #' dependency structure (although the [`PipeOp`]s for this would need to be written).
 #'
@@ -18,45 +18,45 @@
 #' ```
 #'
 #' @section Internals:
-#' A [`Graph`] is made up of a list of [`PipeOp`]s, and a [`data.table`][data.table::data.table] of edges. Both for training and prediction, the [`Graph`]
+#' A `Graph` is made up of a list of [`PipeOp`]s, and a [`data.table`][data.table::data.table] of edges. Both for training and prediction, the `Graph`
 #' performs topological sorting of the [`PipeOp`]s and executes their respective `$train()` or `$predict()` functions in order, moving
 #' the [`PipeOp`] results along the edges as input to other [`PipeOp`]s.
 #'
 #' @section Fields:
 #' * `pipeops` :: named `list` of [`PipeOp`] \cr
-#'   Contains all [`PipeOp`]s in the [`Graph`], named by the [`PipeOp`]'s `$id`s.
+#'   Contains all [`PipeOp`]s in the `Graph`, named by the [`PipeOp`]'s `$id`s.
 #' * `edges` :: [`data.table`][data.table::data.table]  with columns `src_id` (`character`), `src_channel` (`character`), `dst_id` (`character`), `dst_channel` (`character`)\cr
 #'   Table of connections between the [`PipeOp`]s. A [`data.table`][data.table::data.table]. `src_id` and `dst_id` are `$id`s of [`PipeOp`]s that must be present in
 #'   the `$pipeops` list. `src_channel` and `dst_channel` must respectively be `$output` and `$input` channel names of the
 #'   respective [`PipeOp`]s.
 #' * `is_trained` :: `logical(1)` \cr
-#'   Is the [`Graph`], i.e. are all of its [`PipeOp`]s, trained, and can the [`Graph`] be used for prediction?
+#'   Is the `Graph`, i.e. are all of its [`PipeOp`]s, trained, and can the `Graph` be used for prediction?
 #' * `lhs` :: `character` \cr
-#'   Ids of the 'left-hand-side' [`PipeOp`]s that have some unconnected input channels and therefore act as [`Graph`] input layer.
+#'   Ids of the 'left-hand-side' [`PipeOp`]s that have some unconnected input channels and therefore act as `Graph` input layer.
 #' * `rhs` :: `character` \cr
-#'   Ids of the 'right-hand-side' [`PipeOp`]s that have some unconnected output channels and therefore act as [`Graph`] output layer.
+#'   Ids of the 'right-hand-side' [`PipeOp`]s that have some unconnected output channels and therefore act as `Graph` output layer.
 #' * `input` :: [`data.table`][data.table::data.table] with columns `name` (`character`), `train` (`character`), `predict` (`character`), `op.id` (`character`), `channel.name` (`character`)\cr
-#'   Input channels of the [`Graph`]. For each channel lists the name, input type during training, input type during prediction,
+#'   Input channels of the `Graph`. For each channel lists the name, input type during training, input type during prediction,
 #'   [`PipeOp`] `$id` of the [`PipeOp`] the channel pertains to, and channel name as the [`PipeOp`] knows it.
 #' * `output` :: [`data.table`][data.table::data.table] with columns `name` (`character`), `train` (`character`), `predict` (`character`), `op.id` (`character`), `channel.name` (`character`)\cr
-#'   Output channels of the [`Graph`]. For each channel lists the name, output type during training, output type during prediction,
+#'   Output channels of the `Graph`. For each channel lists the name, output type during training, output type during prediction,
 #'   [`PipeOp`] `$id` of the [`PipeOp`] the channel pertains to, and channel name as the [`PipeOp`] knows it.
 #' * `packages` :: `character`\cr
-#'   Set of all required packages for the various methods in the [`Graph`], a set union of all required packages of all contained
+#'   Set of all required packages for the various methods in the `Graph`, a set union of all required packages of all contained
 #'   [`PipeOp`] objects.
 #' * `state` :: named `list`\cr
 #'   Get / Set the `$state` of each of the members of [`PipeOp`].
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
 #'   Parameters and parameter constraints. Parameter values are in `$param_set$values`. These are the union of `$param_set`s
-#'   of all [`PipeOp`]s in the [`Graph`]. Parameter names
-#'   as seen by the [`Graph`] have the naming scheme `<PipeOp$id>.<PipeOp original parameter name>`.
+#'   of all [`PipeOp`]s in the `Graph`. Parameter names
+#'   as seen by the `Graph` have the naming scheme `<PipeOp$id>.<PipeOp original parameter name>`.
 #'   Changing `$param_set$values` also propagates the changes directly to the contained
 #'   [`PipeOp`]s and is an alternative to changing a [`PipeOp`]s `$param_set$values` directly.
 #' * `hash` :: `character(1)` \cr
-#'   Stores a checksum calculated on the [`Graph`] configuration, which includes all [`PipeOp`] hashes
+#'   Stores a checksum calculated on the `Graph` configuration, which includes all [`PipeOp`] hashes
 #'   (and therefore their `$param_set$values`) and a hash of `$edges`.
 #' * `phash` :: `character(1)` \cr
-#'   Stores a checksum calculated on the [`Graph`] configuration, which includes all [`PipeOp`] hashes
+#'   Stores a checksum calculated on the `Graph` configuration, which includes all [`PipeOp`] hashes
 #'   *except* their `$param_set$values`, and a hash of `$edges`.
 #' * `keep_results` :: `logical(1)`\cr
 #'   Whether to store intermediate results in the [`PipeOp`]'s `$.result` slot, mostly for debugging purposes. Default `FALSE`.
@@ -70,8 +70,8 @@
 #'   `sorted` is `FALSE`, and topologically sorted if `sorted` is `TRUE`.
 #' * `add_pipeop(op, clone = TRUE)` \cr
 #'   ([`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `...`, `logical(1)`) -> `self` \cr
-#'   Mutates [`Graph`] by adding a [`PipeOp`] to the [`Graph`]. This does not add any edges, so the new [`PipeOp`]
-#'   will not be connected within the [`Graph`] at first.\cr
+#'   Mutates `Graph` by adding a [`PipeOp`] to the `Graph`. This does not add any edges, so the new [`PipeOp`]
+#'   will not be connected within the `Graph` at first.\cr
 #'   Instead of supplying a [`PipeOp`] directly, an object that can naturally be converted to a [`PipeOp`] can also
 #'   be supplied, e.g. a [`Learner`][mlr3::Learner] or a [`Filter`][mlr3filters::Filter]; see [`as_pipeop()`].
 #'   The argument given as `op` is cloned if `clone` is `TRUE` (default); to access a `Graph`'s [`PipeOp`]s
@@ -91,17 +91,18 @@
 #'   Takes a list of `Graph`s or [`PipeOp`]s (or objects that can be automatically converted into `Graph`s or [`PipeOp`]s,
 #'   see [`as_graph()`] and [`as_pipeop()`]) as inputs and joins them in a serial `Graph` coming after `self`, as if
 #'   connecting them using [`%>>%`].
-#' * `plot(html)` \cr
-#'   (`logical(1)`) -> `NULL` \cr
-#'   Plot the [`Graph`], using either the \pkg{igraph} package (for `html = FALSE`, default) or
+#' * `plot(html = FALSE, horizontal = FALSE)` \cr
+#'   (`logical(1)`, `logical(1)`) -> `NULL` \cr
+#'   Plot the `Graph`, using either the \CRANpkg{igraph} package (for `html = FALSE`, default) or
 #'   the `visNetwork` package for `html = TRUE` producing a [`htmlWidget`][htmlwidgets::htmlwidgets].
 #'   The [`htmlWidget`][htmlwidgets::htmlwidgets] can be rescaled using [`visOptions`][visNetwork::visOptions].
+#'   For `html = FALSE`, the orientation of the plotted graph can be controlled through `horizontal`.
 #' * `print(dot = FALSE, dotname = "dot", fontsize = 24L)` \cr
 #'   (`logical(1)`, `character(1)`, `integer(1)`) -> `NULL` \cr
-#'   Print a representation of the [`Graph`] on the console. If `dot` is `FALSE`, output is a table with one row for each contained [`PipeOp`] and
+#'   Print a representation of the `Graph` on the console. If `dot` is `FALSE`, output is a table with one row for each contained [`PipeOp`] and
 #'   columns `ID` (`$id` of `PipeOp`), `State` (short representation of `$state` of [`PipeOp`]), `sccssors` ([`PipeOp`]s that
 #'   take their input directly from the [`PipeOp`] on this line), and `prdcssors` (the [`PipeOp`]s that produce the data
-#'   that is read as input by the [`PipeOp`] on this line). If `dot` is `TRUE`, print a DOT representation of the [`Graph`] on the console.
+#'   that is read as input by the [`PipeOp`] on this line). If `dot` is `TRUE`, print a DOT representation of the `Graph` on the console.
 #'   The DOT output can be named via the argument `dotname` and the `fontsize` can also be specified.
 #' * `set_names(old, new)` \cr
 #'   (`character`, `character`) -> `self` \cr
@@ -112,21 +113,21 @@
 #'   Pre- or postfix [`PipeOp`]'s existing ids. Both `prefix` and `postfix` default to `""`, i.e. no changes.
 #' * `train(input, single_input = TRUE)` \cr
 #'   (`any`, `logical(1)`) -> named `list`\cr
-#'   Train [`Graph`] by traversing the [`Graph`]s' edges and calling all the [`PipeOp`]'s `$train` methods in turn.
+#'   Train `Graph` by traversing the `Graph`s' edges and calling all the [`PipeOp`]'s `$train` methods in turn.
 #'   Return a named `list` of outputs for each unconnected
-#'   [`PipeOp`] out-channel, named according to the [`Graph`]'s `$output` `name` column. During training, the `$state`
+#'   [`PipeOp`] out-channel, named according to the `Graph`'s `$output` `name` column. During training, the `$state`
 #'   member of each [`PipeOp`]s will be set and the `$is_trained` slot of the `Graph` (and each individual `PipeOp`) will
 #'   consequently be set to `TRUE`.\cr
 #'   If `single_input` is `TRUE`, the `input` value will be sent to each unconnected [`PipeOp`]'s input channel
-#'   (as listed in the [`Graph`]'s `$input`). Typically, `input` should be a [`Task`][mlr3::Task], although this is dependent
-#'   on the [`PipeOp`]s in the [`Graph`]. If `single_input` is `FALSE`, then
-#'   `input` should be a `list` with the same length as the [`Graph`]'s `$input` table has rows; each list item will be sent
-#'   to a corresponding input channel of the [`Graph`]. If `input` is a named `list`, names must correspond to input channel
+#'   (as listed in the `Graph`'s `$input`). Typically, `input` should be a [`Task`][mlr3::Task], although this is dependent
+#'   on the [`PipeOp`]s in the `Graph`. If `single_input` is `FALSE`, then
+#'   `input` should be a `list` with the same length as the `Graph`'s `$input` table has rows; each list item will be sent
+#'   to a corresponding input channel of the `Graph`. If `input` is a named `list`, names must correspond to input channel
 #'   names (`$input$name`) and inputs will be sent to the channels by name; otherwise they will be sent to the channels
 #'   in order in which they are listed in `$input`.
 #' * `predict(input, single_input = TRUE)` \cr
 #'   (`any`, `logical(1)`) -> `list` of `any` \cr
-#'   Predict with the [`Graph`] by calling all the [`PipeOp`]'s `$train` methods. Input and output, as well as the function
+#'   Predict with the `Graph` by calling all the [`PipeOp`]'s `$train` methods. Input and output, as well as the function
 #'   of the `single_input` argument, are analogous to `$train()`.
 #' * `help(help_type)` \cr
 #'   (`character(1)`) -> help file\cr
@@ -204,14 +205,14 @@ Graph = R6Class("Graph",
       assert_choice(src_id, names(self$pipeops))
       assert_choice(dst_id, names(self$pipeops))
       if (is.null(src_channel)) {
-        if (length(self$pipeops[[src_id]]$output$name) > 1) {
+        if (length(self$pipeops[[src_id]]$output$name) > 1L) {
           stopf("src_channel must not be NULL if src_id pipeop has more than one output channel.")
         }
         src_channel = 1L
       }
       if (is.null(dst_channel)) {
-        if (length(self$pipeops[[dst_id]]$input$name) > 1) {
-          stopf("dst_channel must not be NULL if src_id pipeop has more than one input channel.")
+        if (length(self$pipeops[[dst_id]]$input$name) > 1L) {
+          stopf("dst_channel must not be NULL if dst_id pipeop has more than one input channel.")
         }
         dst_channel = 1L
       }
@@ -224,7 +225,7 @@ Graph = R6Class("Graph",
         src_channel = self$pipeops[[src_id]]$output$name[src_channel]
       }
       assert(
-        check_integerish(dst_channel, lower = 1,
+        check_integerish(dst_channel, lower = 1L,
           upper = nrow(self$pipeops[[dst_id]]$input), any.missing = FALSE),
         check_choice(dst_channel, self$pipeops[[dst_id]]$input$name)
       )
@@ -282,7 +283,7 @@ Graph = R6Class("Graph",
         df = self$edges[, list(from = src_id, to = dst_id)]
         df = rbind(df, self$input[, list(from = "<INPUT>", to = op.id)])
         output = self$output
-        if (nrow(output) > 1) {
+        if (nrow(output) > 1L) {
           # In case we have multiple outputs, we add an output for every final node
           df = rbind(df, output[, list(from = op.id, to = paste0("<OUTPUT>\n", name))])
         } else {
@@ -308,7 +309,7 @@ Graph = R6Class("Graph",
           if (node == "<INPUT>") {
             txt = paste0("Input:<br>Name: ", self$input$name, "<br>Train: ", null_str(self$input$train), "<br>Predict: ", null_str(self$input$predict))
           } else if (grepl("<OUTPUT>", node)) {
-            if (nrow(self$output) > 1) {
+            if (nrow(self$output) > 1L) {
               out = self$output[self$output$name == gsub("<OUTPUT>\n", "", node), ]  # Deal with multiple outputs
             } else {
               out = self$output  # Standard case, single output
@@ -341,8 +342,8 @@ Graph = R6Class("Graph",
         if (horizontal) {
           layout = -layout[, 2:1]
         }
-        layout[, 1] = layout[, 1] * .75
-        layout[, 2] = layout[, 2] * .75
+        layout[, 1L] = layout[, 1L] * .75
+        layout[, 2L] = layout[, 2L] * .75
 
         defaultargs = list(vertex.shape = "crectangle", vertex.size = 60, vertex.size2 = 15 * 2.5, vertex.color = 0,
           xlim = range(layout[, 1]) + c(-0.3, 0.3),
@@ -382,13 +383,13 @@ Graph = R6Class("Graph",
           extra_vertices = setdiff(ids, c(df$from, df$to))
 
           all_names = unique(unlist(df))
-          df = data.table::setDT(mlr3misc::map(df, function(x) match(x, all_names)))
+          df = setDT(map(df, function(x) match(x, all_names)))
           gr = paste0(map(seq_len(nrow(df)), function(x) {
             paste0(df[x, ][[1L]], " -> ", df[x, ][[2L]])
           }), collapse = ";\n")
 
           all_names = gsub("\\.", "_", all_names)
-          labels = paste0(unlist(mlr3misc::map(unique(unlist(df)), function(x) {
+          labels = paste0(unlist(map(unique(unlist(df)), function(x) {
             paste0(x, " [label=", '"', all_names[x], '"', ",fontsize=", fontsize, ']')
           })), collapse = ";\n")
           dot = paste0(gr, ";\n", labels)
@@ -406,22 +407,32 @@ Graph = R6Class("Graph",
         # print table <id>, <state>, where <state> is `class(pipeop$state)`
         lines = rbindlist(map(self$pipeops[self$ids(sorted = TRUE)], function(pipeop) {
           data.table(ID = pipeop$id, State = sprintf("<%s>",
-            map_values(class(pipeop$state)[1], "NULL", "<UNTRAINED>")))
+            map_values(class(pipeop$state)[1L], "NULL", "<UNTRAINED>")))
         }), use.names = TRUE)
         if (nrow(lines)) {
           prd = self$edges[, list(prdcssors = paste(unique(src_id), collapse = ",")), by = list(ID = dst_id)]
           scc = self$edges[, list(sccssors = paste(unique(dst_id), collapse = ",")), by = list(ID = src_id)]
           lines = scc[prd[lines, on = "ID"], on = "ID"][, c("ID", "State", "sccssors", "prdcssors")]
           lines[is.na(lines)] = ""
-          catf("Graph with %s PipeOps:", nrow(lines))
+          cat_cli(cli_h1("Graph with {nrow(lines)} PipeOps:"))
           ## limit column width ##
 
           outwidth = getOption("width") %??% 80  # output width we want (default 80)
           colwidths = map_int(lines, function(x) max(nchar(x), na.rm = TRUE))  # original width of columns
           collimit = calculate_collimit(colwidths, outwidth)
-          with_options(list(datatable.prettyprint.char = collimit), {
-            print(lines, row.names = FALSE)
-          })
+
+          opts = options(datatable.prettyprint.char = collimit)
+          on.exit(options(opts), add = TRUE)
+          print(lines, row.names = FALSE)
+
+          is_sequential = all(table(self$edges$src_id) <= 1) && all(table(self$edges$dst_id) <= 1)
+          if(is_sequential) {
+            ppunit = paste0(self$ids(), collapse = " -> ")
+            pp = paste0(c("<INPUT>", ppunit, "<OUTPUT>"), collapse = " -> ")
+          } else {
+            pp = "non-sequential"
+          }
+          cat_cli(cli_h3("Pipeline: {.strong {pp}}"))
         } else {
           cat("Empty Graph.\n")
         }
@@ -435,7 +446,7 @@ Graph = R6Class("Graph",
     set_names = function(old, new) {
       ids = names2(self$pipeops)
       assert_subset(old, ids)
-      assert_character(new, any.missing = FALSE)
+      assert_character(new, any.missing = FALSE, min.chars = 1L)
       new_ids = map_values(ids, old, new)
       names(self$pipeops) = new_ids
       imap(self$pipeops, function(x, nn) x$id = nn)
@@ -443,6 +454,7 @@ Graph = R6Class("Graph",
       self$edges[, c("src_id", "dst_id") := list(map_values(src_id, old, new), map_values(dst_id, old, new))]
       invisible(self)
     },
+
     update_ids = function(prefix = "", postfix = "") {
       ids = names2(self$pipeops)
       self$set_names(ids, sprintf("%s%s%s", assert_string(prefix), ids, assert_string(postfix)))
@@ -455,12 +467,16 @@ Graph = R6Class("Graph",
     },
 
     predict = function(input, single_input = TRUE) {
+      if (!self$is_trained) {
+        stop("Cannot predict, Graph has not been trained yet")
+      }
       graph_load_namespaces(self, "predict")
       graph_reduce(self, input, "predict", single_input)
     },
+
     help = function(help_type = getOption("help_type")) {
-      parts = strsplit(self$man, split = "::", fixed = TRUE)[[1]]
-      match.fun("help")(parts[[2]], package = parts[[1]], help_type = help_type)
+      parts = strsplit(self$man, split = "::", fixed = TRUE)[[1L]]
+      match.fun("help")(parts[[2L]], package = parts[[1L]], help_type = help_type)
     }
   ),
 
@@ -543,8 +559,8 @@ graph_channels = function(ids, channels, pipeops, direction) {
     df$op.id = po$id
     df = df[rows,
       c("name", "train", "predict", "op.id", "name")]
-    df[[1]] = paste0(po$id, ".", df[[1]])
-    names(df)[5] = "channel.name"
+    df[[1L]] = paste0(po$id, ".", df[[1L]])
+    names(df)[5L] = "channel.name"
     df
   })
 
@@ -581,20 +597,35 @@ graph_reduce = function(self, input, fun, single_input) {
 
   assert_flag(single_input)
 
-  graph_input = self$input
+  graph_input_unique = graph_input = self$input
   graph_output = self$output
 
   edges = copy(self$edges)
 
+  if (!single_input) assert_list(input, .var.name = "input when single_input is FALSE")
+
+  if (!is.null(names(input)) && !single_input) {
+    assert_names(names(input), subset.of = graph_input$name, .var.name = "input when it has names and single_input is FALSE")
+  }
+
   # create virtual "__initial__" and "__terminal__" nodes with edges to inputs / outputs of graph.
-  # if we have `single_input == FALSE` and one(!) vararg channel, we widen the vararg input
+  # if we have `single_input == FALSE` and vararg channels, we widen the vararg input
   # appropriately.
-  if (!single_input && length(assert_list(input, .var.name = "input when single_input is FALSE")) > nrow(graph_input) && "..." %in% graph_input$channel.name) {
-    if (sum("..." == graph_input$channel.name) != 1) {
-      stop("Ambiguous distribution of inputs to vararg channels.\nAssigning more than one input to vararg channels when there are multiple vararg inputs does not work.")
+  # At this point we are agnostic about whether zero inputs to vararg are possible. In case this
+  # ever makes sense, the following should still work. We therefore don't check whether the number of
+  # inputs differs from the number of channels -- theoretically, there could be two varargs, one
+  # getting two inputs, the other none.
+  if (!single_input && "..." %in% graph_input$channel.name) {
+    if (sum("..." == graph_input$channel.name) != 1L && is.null(names(input))) {
+      stop("Ambiguous distribution of inputs to vararg channels.\nAssigning more than one input to vararg channels when there are multiple vararg inputs does not work.\nYou can try using a named input list. Vararg elements must be named '<pipeopname>....' (with four dots).")
     }
     # repeat the "..." as often as necessary
-    repeats = ifelse(graph_input$channel.name == "...", length(input) - nrow(graph_input) + 1, 1)
+    if (is.null(names(input))) {
+      repeats = ifelse(graph_input$channel.name == "...", length(input) - nrow(graph_input) + 1L, 1L)
+    } else {
+      repeats = nafill(as.numeric(table(names(input))[graph_input$name]), fill = 0)
+    }
+
     graph_input = graph_input[rep(graph_input$name, repeats), , on = "name"]
   }
 
@@ -607,25 +638,36 @@ graph_reduce = function(self, input, fun, single_input) {
   # add new column to store content that is sent along an edge
   edges$payload = list()
 
-  if (!single_input) {
+  if (single_input) {
+    edges[get("src_id") == "__initial__", "payload" := list(list(input))]
+  } else if (!is.null(names(input))) {
+    # input can be a named list (will be distributed to respective edges) or unnamed.
+    # if it is named, we check that names are unambiguous.
+    innames_novararg = graph_input$name[graph_input$channel.name != "..."]
+
+    # don't use graph_input in the following, since rows with varargs are potentially duplicated.
+    # Also don't use innames_novararg, since vararg channels could be duplicately named regardless.
+    if (anyDuplicated(graph_input_unique$name)) {
+      stopf("'input' must not be a named list because Graph input channels have duplicated names: %s",
+        paste0(unique(innames_novararg[duplicated(innames_novararg)]), collapse = ", "))
+    }
+
+    input_novararg = input[names(input) %in% innames_novararg]
+    assert_names(names(input_novararg), type = "unique", .var.name = "input that does not refer to vararg input channels (when input has names and single_input is FALSE)")
+
+    edges[list("__initial__", names(input_novararg)), "payload" := list(input_novararg), on = c("src_id", "src_channel")]
+
+    input_vararg = input[!names(input) %in% innames_novararg]
+    input_vararg = split(input_vararg, names(input_vararg))
+    for (vararg_channel in names(input_vararg)) {
+      edges[list("__initial__", vararg_channel), "payload" := list(input_vararg[[vararg_channel]]), on = c("src_id", "src_channel")]
+    }
+  } else {
     # we need the input list length to be equal to the number of channels. This number was
     # already increased appropriately if there is a single vararg channel.
     assert_list(input, len = nrow(graph_input), .var.name = sprintf("input when single_input is FALSE and there are %s input channels", nrow(graph_input)))
-    # input can be a named list (will be distributed to respective edges) or unnamed.
-    # if it is named, we check that names are unambiguous.
-    if (!is.null(names(input))) {
-      if (anyDuplicated(graph_input$name)) {
-        # FIXME this will unfortunately trigger if there is more than one named input for a vararg channel.
-        stopf("'input' must not be a named list because Graph %s input channels have duplicated names.", self$id)
-      }
-      assert_names(names(input), subset.of = graph_input$name, .var.name = sprintf("input when it has names and single_input is FALSE"))
-      edges[list("__initial__", names(input)), "payload" := list(input), on = c("src_id", "src_channel")]
-    } else {
-      # don't rely on unique graph_input$name!
-      edges[get("src_id") == "__initial__", "payload" := list(input)]
-    }
-  } else {
-    edges[get("src_id") == "__initial__", "payload" := list(list(input))]
+    # don't rely on unique graph_input$name!
+    edges[get("src_id") == "__initial__", "payload" := list(input)]
   }
 
   # get the topo-sorted pipeop ids
@@ -677,7 +719,7 @@ graph_load_namespaces = function(self, info) {
       NULL
     }, error = function(e) {
       sprintf("Error loading package %s (required by %s):\n    %s",
-        package, str_collapse(pipeops, n = 4), e$message)
+        package, str_collapse(pipeops, n = 4L), e$message)
     })
   })
   errors = discard(errors, is.null)
@@ -688,12 +730,13 @@ graph_load_namespaces = function(self, info) {
 
 
 #' @export
+#' @method predict Graph
 predict.Graph = function(object, newdata, ...) {
   if (!object$is_trained) {
-    stop("Graph is not trained.")
+    stop("Cannot predict, Graph has not been trained yet")
   }
   output = object$output
-  if (nrow(output) != 1) {
+  if (nrow(output) != 1L) {
     stop("Graph has more than one output channel")
   }
   if (!are_types_compatible(output$predict, "Prediction")) {
@@ -719,7 +762,7 @@ predict.Graph = function(object, newdata, ...) {
     )
   }
   result = object$predict(newdata)
-  assert_list(result, types = "Prediction", any.missing = FALSE, len = 1)
+  assert_list(result, types = "Prediction", any.missing = FALSE, len = 1L)
   result = result[[1]]
   if (plain) {
     result = result$data$response %??% result$data$prob

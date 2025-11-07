@@ -15,6 +15,7 @@
 #' ```
 #' PipeOpClassBalancing$new(id = "classbalancing", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, default `"classbalancing"`
 #' * `param_vals` :: named `list`\cr
@@ -61,16 +62,17 @@
 #' class count" is just the value of `ratio` (i.e. `1 * ratio`).
 #'
 #' Then for each class that is referenced by the `adjust` parameter (e.g. if `adjust` is `"nonminor"`:
-#' each class that is not the class with the fewest samples), [`PipeOpClassBalancing`] either throws out
+#' each class that is not the class with the fewest samples), `PipeOpClassBalancing` either throws out
 #' samples (downsampling), or adds additional rows that are equal to randomly chosen samples (upsampling),
 #' until the number of samples for these classes equals the "target class count".
+#' No upsampling is performed for classes that were not observed during training (i.e. empty factor levels in the target column).
 #'
 #' Uses `task$filter()` to remove rows. When identical rows are added during upsampling, then the `task$row_roles$use` can *not* be used
 #' to duplicate rows because of \[inaudible\]; instead the `task$rbind()` function is used, and
 #' a new [`data.table`][data.table::data.table] is attached that contains all rows that are being duplicated exactly as many times as they are being added.
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -148,6 +150,8 @@ PipeOpClassBalancing = R6Class("PipeOpClassBalancing",
           keep_lgl = seq_len(tbl[adjusting]) <= target_size
           keep_all[truth == adjusting] = shuffle(keep_lgl)
         } else {
+          # no upsampling for unobserved levels
+          if (!length(orig_ids[truth == adjusting])) next
           # upsampling
           add_ids = c(add_ids, rep_len(shuffle(orig_ids[truth == adjusting]), target_size - tbl[adjusting]))
         }

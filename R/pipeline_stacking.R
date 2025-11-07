@@ -25,23 +25,19 @@
 #' @return [`Graph`]
 #'
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
-#' if (requireNamespace("kknn")) {
+#' @examplesIf mlr3misc::require_namespaces("rpart", quietly = TRUE)
 #' library(mlr3)
 #' library(mlr3learners)
 #'
 #' base_learners = list(
 #'   lrn("classif.rpart", predict_type = "prob"),
-#'   lrn("classif.kknn", predict_type = "prob")
+#'   lrn("classif.nnet", predict_type = "prob")
 #' )
 #' super_learner = lrn("classif.log_reg")
 #'
 #' graph_stack = pipeline_stacking(base_learners, super_learner)
 #' graph_learner = as_learner(graph_stack)
 #' graph_learner$train(tsk("german_credit"))
-#' }
-#' \dontshow{ \} }
 pipeline_stacking = function(base_learners, super_learner, method = "cv", folds = 3, use_features = TRUE) {
   assert_learners(base_learners)
   assert_learner(super_learner)

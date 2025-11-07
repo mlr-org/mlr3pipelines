@@ -35,6 +35,9 @@
 #' @section Internals:
 #' Uses the [`model.matrix()`][stats::model.matrix()] function.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'

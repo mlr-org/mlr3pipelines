@@ -74,8 +74,8 @@ PipeOpScaleMaxAbs = R6Class("PipeOpScaleMaxAbs",
     },
 
     .transform_dt = function(dt, levels) {
-      for (i in seq_along(dt)) {
-        dt[[i]] = dt[[i]] / self$state[[i]] * self$param_set$values$maxabs
+      for (j in seq_along(dt)) {
+        set(dt, j = j, value = dt[[j]] / self$state[[j]] * self$param_set$values$maxabs)
       }
       dt
     }

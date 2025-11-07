@@ -26,7 +26,7 @@ test_that("mlr_graphs access works", {
 })
 
 
-test_that("mlr_pipeops multi-access works", {
+test_that("mlr_graphs multi-access works", {
 
   expect_equal(
     ppls("robustify"),
@@ -71,5 +71,13 @@ test_that("mlr3book authors don't sleepwalk through life", {
 
   learners = c(glrn_stack)
   bmr = benchmark(benchmark_grid(tasks, learners, rsmp("cv", folds = 2)))
+
+})
+
+test_that("ppl - dictionary suggest works", {
+
+  # test that correct dictionary is checked against
+  expect_error(ppl("adas"), "po\\(\\): 'adas'")
+  expect_error(ppls("adas"), "pos\\(\\): 'adas'")
 
 })

@@ -3,12 +3,7 @@ context("PipeOpSpatialSign")
 test_that("PipeOpSpatialSign - general functionality", {
   task = mlr_tasks$get("iris")
   op = PipeOpSpatialSign$new()
-  expect_pipeop(op)
   expect_datapreproc_pipeop_class(PipeOpSpatialSign, task = task)
-  result = train_pipeop(op, inputs = list(task))
-  expect_task(result[[1]])
-  result = predict_pipeop(op, inputs = list(task))
-  expect_task(result[[1]])
 })
 
 test_that("PipeOpSpatialSign - receive expected result", {

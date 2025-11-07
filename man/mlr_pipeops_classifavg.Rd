@@ -9,21 +9,34 @@
 }
 \description{
 Perform (weighted) majority vote prediction from classification \code{\link[mlr3:Prediction]{Prediction}}s by connecting
-\code{\link{PipeOpClassifAvg}} to multiple \code{\link{PipeOpLearner}} outputs.
+\code{PipeOpClassifAvg} to multiple \code{\link{PipeOpLearner}} outputs.
 
 Always returns a \code{"prob"} prediction, regardless of the incoming \code{\link[mlr3:Learner]{Learner}}'s
 \verb{$predict_type}. The label of the class with the highest predicted probability is selected as the
 \code{"response"} prediction. If the \code{\link[mlr3:Learner]{Learner}}'s \verb{$predict_type} is set to \code{"prob"},
-the prediction obtained is also a \code{"prob"} type prediction with the probability predicted to be a
-weighted average of incoming predictions.
+the probability aggregation is controlled by \code{prob_aggr} (see below). If \verb{$predict_type = "response"},
+predictions are internally converted to one-hot probability vectors (point mass on the predicted class) before aggregation.
+\subsection{\code{"prob"} aggregation:}{
+\itemize{
+\item \strong{\code{prob_aggr = "mean"}} -- \emph{Linear opinion pool (arithmetic mean of probabilities; default)}.
+\strong{Interpretation.} Mixture semantics: choose a base model with probability \code{w[i]}, then draw from its class distribution.
+Decision-theoretically, this is the minimizer of \code{sum(w[i] * KL(p[i] || p))} over probability vectors \code{p}, where \code{KL(x || y)} is the Kullback-Leibler divergence.
+\strong{Typical behavior.} Conservative / better calibrated and robust to near-zero probabilities (never assigns zero unless all do).
+This is the standard choice for probability averaging in ensembles and stacking.
+\item \strong{\code{prob_aggr = "log"}} -- \emph{Log opinion pool / product of experts (geometric mean in probability space)}:
+Average per-model logs (or equivalently, logits) and apply softmax.
+\strong{Interpretation.} Product semantics: \verb{p_ens ~ prod_i p_i^\{w[i]\}}; minimizes \code{sum(w[i] * KL(p || p[i]))}.
+\strong{Typical behavior.} Sharper / lower entropy (emphasizes consensus regions), but can be \strong{overconfident} and is sensitive
+to zeros; use \code{prob_aggr_eps} to clip small probabilities for numerical stability. Often beneficial with strong, similarly
+calibrated members (e.g., neural networks), less so when calibration is the priority.
+}
 
 All incoming \code{\link[mlr3:Learner]{Learner}}'s \verb{$predict_type} must agree.
 
 Weights can be set as a parameter; if none are provided, defaults to
 equal weights for each prediction.
 Defaults to equal weights for each model.
-
-If `
+}
 }
 \section{Construction}{
 
@@ -58,7 +71,16 @@ The \verb{$state} is left empty (\code{list()}).
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from the \code{\link{PipeOpEnsemble}}.
+The parameters are the parameters inherited from the \code{\link{PipeOpEnsemble}}, as well as:
+\itemize{
+\item \code{prob_aggr} :: \code{character(1)}\cr
+Controls how incoming class probabilities are aggregated. One of \code{"mean"} (linear opinion pool; default) or
+\code{"log"} (log opinion pool / product of experts). See the description above for definitions and interpretation.
+Only has an effect if the incoming predictions have \code{"prob"} values.
+\item \code{prob_aggr_eps} :: \code{numeric(1)}\cr
+Small positive constant used only for \code{prob_aggr = "log"} to clamp probabilities before taking logs, improving numerical
+stability and avoiding \code{-Inf}. Ignored for \code{prob_aggr = "mean"}. Default is \code{1e-12}.
+}
 }
 
 \section{Internals}{
@@ -68,7 +90,7 @@ Inherits from \code{\link{PipeOpEnsemble}} by implementing the \code{private$wei
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
@@ -77,7 +99,7 @@ Only methods inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{ if (requireNamespace("rpart")) \{ }
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 \donttest{
 library("mlr3")
 
@@ -91,19 +113,22 @@ gr = ppl("greplicate",
 
 resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
 }
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_adas}},
+\code{\link{mlr_pipeops_blsmote}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -114,9 +139,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
@@ -130,13 +158,18 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
+\code{\link{mlr_pipeops_info}},
+\code{\link{mlr_pipeops_isomap}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nearmiss}},
 \code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
@@ -156,6 +189,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
+\code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
@@ -163,6 +197,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},

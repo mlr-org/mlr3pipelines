@@ -2,6 +2,7 @@ context("PipeOpImputeLearner")
 
 test_that("PipeOpImputeLearner - simple tests", {
   skip_if_not_installed("rpart")
+  set.seed(1)
   # Pima has several missings
   task = mlr_tasks$get("pima")
   po = PipeOpImputeLearner$new(learner = lrn("regr.rpart"))
@@ -40,7 +41,7 @@ test_that("PipeOpImputeLearner - simple tests", {
 test_that("PipeOpImputeLearner", {
   skip_if_not_installed("rpart")
   skip_on_cran()  # slow test, so we don't do it on cran
-
+  set.seed(2)
   task = mlr_tasks$get("pima")
   expect_datapreproc_pipeop_class(PipeOpImputeLearner,
     constargs = list("learner" = lrn("regr.rpart")),
@@ -86,18 +87,18 @@ test_that("Test imputation matches, edge cases", {
 
   po = PipeOpImputeLearner$new(learner = lrn("regr.featureless"))
   out = po$train(list(task))[[1]]$data()
-  expect_true(!any(is.na(out$b)))
+  expect_true(!anyNA(out$b))
   expect_true(all(out$b[5:6] == 3))
   out = po$predict(list(task))[[1]]$data()
-  expect_true(!any(is.na(out$b)))
+  expect_true(!anyNA(out$b))
   expect_true(all(out$b[5:6] == 3))
 
   po = PipeOpImputeLearner$new(learner = lrn("classif.featureless"))
   out = po$train(list(task))[[1]]$data()
-  expect_true(!any(is.na(out$d)))
+  expect_true(!anyNA(out$d))
   expect_true(all(out$d[6] == "a"))
   out = po$predict(list(task))[[1]]$data()
-  expect_true(!any(is.na(out$d)))
+  expect_true(!anyNA(out$d))
   expect_true(all(out$d[6] == "a"))
 
   # Full NA
@@ -110,10 +111,10 @@ test_that("Test imputation matches, edge cases", {
   task = TaskClassif$new("mdata", mdata, target = "l")
   po = PipeOpImputeLearner$new(learner = lrn("regr.featureless"))
   out = po$train(list(task))[[1]]$data()
-  expect_true(!any(is.na(out$b)))
+  expect_true(!anyNA(out$b))
   expect_true(all(out$b == 0))
   out = po$predict(list(task))[[1]]$data()
-  expect_true(!any(is.na(out$b)))
+  expect_true(!anyNA(out$b))
   expect_true(all(out$b == 0))
 
   mdata = data.table(
@@ -125,10 +126,10 @@ test_that("Test imputation matches, edge cases", {
   task = TaskClassif$new("mdata", mdata, target = "l")
   po = PipeOpImputeLearner$new(learner = lrn("classif.featureless"))
   out = po$train(list(task))[[1]]$data()
-  expect_true(!any(is.na(out$d)))
+  expect_true(!anyNA(out$d))
   expect_true(all(out$d == "a"))
   out = po$predict(list(task))[[1]]$data()
-  expect_true(!any(is.na(out$d)))
+  expect_true(!anyNA(out$d))
   expect_true(all(out$d == "a"))
 })
 
@@ -171,3 +172,68 @@ test_that("marshal", {
   expect_equal(s, su)
 })
 
+test_that("Imputing zero level factors", {
+  # Tasks with zero levels cannot be directly created. However, they can occur within pipelines using FixFactors.
+  base_task = TaskClassif$new("test", target = "target", backend = data.table(
+    target = factor(c("C1", "C1", "C2", "C2", "C1")),
+    fct = factor(rep(NA, 5), levels = "lvl"),
+    ord = ordered(rep(NA, 5), levels = "lvl")
+  ))
+  task = po("fixfactors")$train(list(base_task))[[1L]]
+  # Just to be robust for possible changes to FixFactors in the future, since the usage here is a bit hacky
+  expect_equal(task$levels(), list(fct = character(0), ord = character(0), target = c("C1", "C2")))
+
+  op = po("imputelearner", learner = lrn("classif.featureless"))
+  expect_no_error({
+    expect_equal(op$train(list(task))[[1L]]$data(), task$data())
+  })
+  expect_no_error({
+    expect_equal(op$predict(list(task))[[1L]]$data(), task$data())
+  })
+
+})
+
+test_that("PipeOpImputeLearner - correct levels, #691", {
+  op = po("imputelearner", learner = lrn("classif.featureless"))
+  task = TaskRegr$new("test", target = "y", backend = data.table(
+    y = seq(1:5),
+    x1 = factor(c(NA, "a", "a", "b", "b")),
+    x2 = ordered(c(NA, "a", "a", "b", "b"))
+  ))
+
+  expect_equal(
+    op$train(list(task))[[1L]]$levels(),
+    list(x1 = c("a", "b"), x2 = c("a", "b"))
+  )
+  expect_equal(
+    op$predict(list(task))[[1L]]$levels(),
+    list(x1 = c("a", "b"), x2 = c("a", "b"))
+  )
+
+})
+
+test_that("PipeOpImputeLearner - impute missings for unseen factor levels", {
+  skip_if_not_installed("rpart")
+  # Construct Learner incapable of handling missings
+  learner = lrn("classif.rpart")
+  learner$properties = setdiff(learner$properties, "missings")
+  # Construct Tasks with unseen factor levels
+  task_NA = as_task_classif(data.table(
+    target = factor(rep(c("A", "B"), 3)),
+    fct = factor(rep(c("a", "b", NA), 2))
+  ), target = "target")
+  task_noNA = as_task_classif(data.table(
+    target = factor(rep(c("A", "B"), 3)),
+    fct = factor(rep(c("a", "b", "c"), 2))
+  ), target = "target")
+
+  op = po("imputelearner", learner = lrn("classif.featureless"))
+
+  expect_equal(sum(op$train(list(task_NA))[[1]]$missings()), 0)
+  expect_equal(sum(op$predict(list(task_noNA))[[1]]$missings()), 0)
+
+  glrn = op %>>% learner
+  expect_no_error(glrn$train(task_NA))
+  expect_no_error(glrn$predict(task_NA))
+
+})

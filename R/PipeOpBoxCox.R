@@ -44,11 +44,14 @@
 #'
 #' @section Internals:
 #' Uses the [`bestNormalize::boxcox`] function.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("bestNormalize")) \{ }
+#' @examplesIf requireNamespace("bestNormalize")
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -58,7 +61,7 @@
 #' pop$train(list(task))[[1]]$data()
 #'
 #' pop$state
-#' \dontshow{ \} }
+#'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @template seealso_pipeopslist
@@ -78,7 +81,6 @@ PipeOpBoxCox = R6Class("PipeOpBoxCox",
     }
   ),
   private = list(
-
     .train_dt = function(dt, levels, target) {
       bc = lapply(dt, FUN = function(x) {
         invoke(bestNormalize::boxcox, x, .args = self$param_set$get_values(tags = "boxcox"))
@@ -91,8 +93,8 @@ PipeOpBoxCox = R6Class("PipeOpBoxCox",
       self$state = list(bc = bc)
       dt
     },
+
     .predict_dt = function(dt, levels) {
-      cols = colnames(dt)
       for (j in colnames(dt)) {
         set(dt, j = j,
           value = stats::predict(self$state$bc[[j]], newdata = dt[[j]]))

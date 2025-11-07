@@ -13,16 +13,18 @@ Wraps an \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{PipeOp}}.
 Returns cross-validated predictions during training as a \code{\link[mlr3:Task]{Task}} and stores a model of the
 \code{\link[mlr3:Learner]{Learner}} trained on the whole data in \verb{$state}. This is used to create a similar
 \code{\link[mlr3:Task]{Task}} during prediction.
+Optionally, the fitted models obtained during the resampling phase can be reused for prediction by averaging
+their predictions, avoiding the need for an additional fit on the complete training data.
 
 The \code{\link[mlr3:Task]{Task}} gets features depending on the capsuled \code{\link[mlr3:Learner]{Learner}}'s
 \verb{$predict_type}. If the \code{\link[mlr3:Learner]{Learner}}'s \verb{$predict.type} is \code{"response"}, a feature \verb{<ID>.response} is created,
 for \verb{$predict.type} \code{"prob"} the \verb{<ID>.prob.<CLASS>} features are created, and for \verb{$predict.type} \code{"se"} the new columns
-are \verb{<ID>.response} and \verb{<ID>.se}. \verb{<ID>} denotes the \verb{$id} of the \code{\link{PipeOpLearnerCV}} object.
+are \verb{<ID>.response} and \verb{<ID>.se}. \verb{<ID>} denotes the \verb{$id} of the \code{PipeOpLearnerCV} object.
 
 Inherits the \verb{$param_set} (and therefore \verb{$param_set$values}) from the \code{\link[mlr3:Learner]{Learner}} it is constructed from.
 
-\code{\link{PipeOpLearnerCV}} can be used to create "stacking" or "super learning" \code{\link{Graph}}s that use the output of one \code{\link[mlr3:Learner]{Learner}}
-as feature for another \code{\link[mlr3:Learner]{Learner}}. Because the \code{\link{PipeOpLearnerCV}} erases the original input features, it is often
+\code{PipeOpLearnerCV} can be used to create "stacking" or "super learning" \code{\link{Graph}}s that use the output of one \code{\link[mlr3:Learner]{Learner}}
+as feature for another \code{\link[mlr3:Learner]{Learner}}. Because the \code{PipeOpLearnerCV} erases the original input features, it is often
 useful to use \code{\link{PipeOpFeatureUnion}} to bind the prediction \code{\link[mlr3:Task]{Task}} to the original input \code{\link[mlr3:Task]{Task}}.
 }
 \section{Construction}{
@@ -44,10 +46,10 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpLearnerCV}} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
+\code{PipeOpLearnerCV} has one input channel named \code{"input"}, taking a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
 type given to \code{learner} during construction; both during training and prediction.
 
-\code{\link{PipeOpLearnerCV}} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
+\code{PipeOpLearnerCV} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
 type given to \code{learner} during construction; both during training and prediction.
 
 The output is a task with the same target as the input task, with features replaced by predictions made by the \code{\link[mlr3:Learner]{Learner}}.
@@ -70,6 +72,11 @@ Training time, in seconds.
 Errors logged during prediction.
 \item \code{predict_time} :: \code{NULL} | \code{numeric(1)}
 Prediction time, in seconds.
+\item \code{predict_method} :: \code{character(1)}\cr
+\code{"full"} when prediction uses a learner fitted on all training data, \code{"cv_ensemble"} when predictions are averaged over
+models trained on resampling folds.
+\item \code{cv_model_states} :: \code{NULL} | \code{list}\cr
+Present for \code{predict_method = "cv_ensemble"}. Contains the states of the learners trained on each resampling fold.
 }
 
 This state is given the class \code{"pipeop_learner_cv_state"}.
@@ -87,6 +94,27 @@ predictions with the model trained on all training data.
 Number of cross validation folds. Initialized to 3. Only used for \code{resampling.method = "cv"}.
 \item \code{keep_response} :: \code{logical(1)}\cr
 Only effective during \code{"prob"} prediction: Whether to keep response values, if available. Initialized to \code{FALSE}.
+\item \code{resampling.predict_method} :: \code{character(1)}\cr
+Controls how predictions are produced after training. \code{"full"} (default) fits the wrapped learner on the entire training data.
+\code{"cv_ensemble"} reuses the models fitted during resampling and averages their predictions. This option currently supports
+classification and regression learners together with \code{resampling.method = "cv"}.
+\item \code{resampling.prob_aggr} :: \code{character(1)}\cr
+Probability aggregation used when \code{"cv_ensemble"} predictions are produced for classification learners that can emit class probabilities.
+Shares the semantics with \code{\link{PipeOpClassifAvg}}: \code{"mean"} (linear opinion pool, default) and \code{"log"} (log opinion pool / product of experts).
+Only present for learners that support \code{"prob"} predictions.
+\item \code{resampling.prob_aggr_eps} :: \code{numeric(1)}\cr
+Stabilization constant applied when \code{resampling.prob_aggr = "log"} to clamp probabilities before taking logarithms.
+Defaults to \code{1e-12}. Only present for learners that support \code{"prob"} predictions.
+\item \code{resampling.se_aggr} :: \code{character(1)}\cr
+Standard error aggregation used when \code{"cv_ensemble"} predictions are produced for regression learners with \code{predict_type}
+containing \code{"se"}. Shares the definitions with \code{\link{PipeOpRegrAvg}}, i.e. \code{"predictive"}, \code{"mean"}, \code{"within"}, \code{"between"}, \code{"none"}.
+Initialized to \code{"predictive"} (within-fold variance plus between-fold disagreement) when constructed with a \code{\link[mlr3:Learner]{Learner}} that has \code{predict_type = "se"};
+otherwise to \code{"none"}.\cr
+Only present for learners that support \code{"se"} predictions.
+\item \code{resampling.se_aggr_rho} :: \code{numeric(1)}\cr
+Equicorrelation parameter for \code{resampling.se_aggr = "mean"}, interpreted as in \code{\link{PipeOpRegrAvg}}. Ignored otherwise.
+Defaults to \code{0} when \code{resampling.se_aggr = "mean"}.\cr
+Only present for learners that support \code{"se"} predictions.
 }
 }
 
@@ -112,7 +140,7 @@ Methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{ if (requireNamespace("rpart")) \{ }
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
 task = tsk("iris")
@@ -131,15 +159,18 @@ graph = gunion(list(
 graph$train(task)
 
 graph$pipeops$classif.rpart$learner$predict_type = "prob"
+graph$pipeops$classif.rpart$param_set$values$resampling.predict_method = "cv_ensemble"
 
 graph$train(task)
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 https://mlr-org.com/pipeops.html
 
 Other Meta PipeOps: 
-\code{\link{mlr_pipeops_learner}}
+\code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}}
 }
 \concept{Meta PipeOps}
 \concept{Pipeops}

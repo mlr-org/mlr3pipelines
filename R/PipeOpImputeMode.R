@@ -8,8 +8,6 @@
 #' Impute features by their mode. Supports factors as well as logical and numerical features.
 #' If multiple modes are present then imputed values are sampled randomly from them.
 #'
-#'
-#'
 #' @section Construction:
 #' ```
 #' PipeOpImputeMode$new(id = "imputemode", param_vals = list())
@@ -41,6 +39,9 @@
 #'
 #' Note that every random imputation is drawn independently, so different values may be imputed
 #' if multiple values are missing.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].

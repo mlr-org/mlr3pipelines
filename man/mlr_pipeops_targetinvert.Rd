@@ -13,7 +13,7 @@ function. Typically should be used in combination with a subclass of \code{\link
 
 During prediction phase the function supplied through \code{"fun"} is called with a \code{list} containing
 the \code{"prediction"} as a single element, and should return a \code{list} with a single element
-(a \code{\link[mlr3:Prediction]{Prediction}}) that is returned by \code{\link{PipeOpTargetInvert}}.
+(a \code{\link[mlr3:Prediction]{Prediction}}) that is returned by \code{PipeOpTargetInvert}.
 }
 \section{Construction}{
 
@@ -30,11 +30,11 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpTargetInvert}} has two input channels named \code{"fun"} and \code{"prediction"}. During
+\code{PipeOpTargetInvert} has two input channels named \code{"fun"} and \code{"prediction"}. During
 training, both take \code{NULL} as input. During prediction, \code{"fun"} takes a function and
 \code{"prediction"} takes a \code{\link[mlr3:Prediction]{Prediction}}.
 
-\code{\link{PipeOpTargetInvert}} has one output channel named \code{"output"} and returns \code{NULL} during
+\code{PipeOpTargetInvert} has one output channel named \code{"output"} and returns \code{NULL} during
 training and a \code{\link[mlr3:Prediction]{Prediction}} during prediction.
 }
 
@@ -45,7 +45,7 @@ The \verb{$state} is left empty (\code{list()}).
 
 \section{Parameters}{
 
-\code{\link{PipeOpTargetInvert}} has no parameters.
+\code{PipeOpTargetInvert} has no parameters.
 }
 
 \section{Internals}{
@@ -63,17 +63,54 @@ Only fields inherited from \code{\link{PipeOp}}.
 Only methods inherited from \code{\link{PipeOp}}.
 }
 
+\examples{
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
+library(mlr3)
+task = tsk("boston_housing")
+po = PipeOpTargetMutate$new("logtrafo", param_vals = list(
+  trafo = function(x) log(x, base = 2),
+  inverter = function(x) list(response = 2 ^ x$response))
+)
+# Note that this example is ill-equipped to work with
+# `predict_type == "se"` predictions.
+
+po$train(list(task))
+po$predict(list(task))
+
+g = Graph$new()
+g$add_pipeop(po)
+g$add_pipeop(LearnerRegrRpart$new())
+g$add_pipeop(PipeOpTargetInvert$new())
+g$add_edge(src_id = "logtrafo", dst_id = "targetinvert",
+  src_channel = 1, dst_channel = 1)
+g$add_edge(src_id = "logtrafo", dst_id = "regr.rpart",
+  src_channel = 2, dst_channel = 1)
+g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert",
+  src_channel = 1, dst_channel = 2)
+
+g$train(task)
+g$predict(task)
+
+#syntactic sugar using ppl():
+tt = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()))
+tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
+tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
+\dontshow{\}) # examplesIf}
+}
 \seealso{
 https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_adas}},
+\code{\link{mlr_pipeops_blsmote}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -85,9 +122,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
@@ -101,13 +141,18 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
+\code{\link{mlr_pipeops_info}},
+\code{\link{mlr_pipeops_isomap}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nearmiss}},
 \code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
@@ -127,12 +172,14 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
+\code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetmutate}},
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},

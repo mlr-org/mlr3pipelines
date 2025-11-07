@@ -21,11 +21,11 @@
 #' * `as.data.table(dict)`\cr
 #'   [`Dictionary`][mlr3misc::Dictionary] -> [`data.table::data.table`]\cr
 #'   Returns a `data.table` with column `key` (`character`).
+#'
 #' @family mlr3pipelines backend related
 #' @family Dictionaries
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library(mlr3)
 #' lrn = lrn("regr.rpart")
 #' task = mlr_tasks$get("boston_housing")
@@ -39,8 +39,7 @@
 #'
 #' # all Graphs currently in the dictionary:
 #' as.data.table(mlr_graphs)
-#' \dontshow{ \} }
-mlr_graphs = R6Class("DictionaryGraph", inherit = mlr3misc::Dictionary,
+mlr_graphs = R6Class("DictionaryGraph", inherit = Dictionary,
   cloneable = FALSE,
   public = list(
     add = function(key, value) {
