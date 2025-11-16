@@ -131,6 +131,11 @@ If \code{resolve_branching} is \code{TRUE}, and when a \code{\link{PipeOpUnbranc
 corresponding \code{\link{PipeOpBranch}} is searched, and its hyperparameter configuration is used to select the base learner.
 There may be multiple corresponding \code{\link{PipeOpBranch}}s, which are all considered.
 If \code{resolve_branching} is \code{FALSE}, \code{\link{PipeOpUnbranch}} is treated as any other \code{PipeOp} with multiple inputs; all possible branch paths are considered equally.
+\item \code{predict_newdata_fast(newdata, task = NULL)}\cr
+(\code{data.frame}, \code{\link[mlr3:Task]{Task}} | \code{NULL}) -> \code{\link[mlr3:Prediction]{Prediction}}\cr
+Predicts outcomes for new data in \code{newdata} using the model fitted during \verb{$train()}.
+For the moment, this is merely a thin wrapper around \code{\link[mlr3:Learner]{Learner$predict_newdata()}} to ensure compatibility, meaning that \emph{no speedup} is currently achieved.
+In the future, this method may be optimized to be faster than \verb{$predict_newdata()}.
 }
 
 The following standard extractors as defined by the \code{\link[mlr3:Learner]{Learner}} class are available.
@@ -175,7 +180,7 @@ recommended.
 }
 
 \examples{
-\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
 graph = po("pca") \%>>\% lrn("classif.rpart")

@@ -118,7 +118,12 @@
 #'   corresponding [`PipeOpBranch`] is searched, and its hyperparameter configuration is used to select the base learner.
 #'   There may be multiple corresponding [`PipeOpBranch`]s, which are all considered.
 #'   If `resolve_branching` is `FALSE`, [`PipeOpUnbranch`] is treated as any other `PipeOp` with multiple inputs; all possible branch paths are considered equally.
-#'
+#' * `predict_newdata_fast(newdata, task = NULL)`\cr
+#'   (`data.frame`, [`Task`][mlr3::Task] | `NULL`) -> [`Prediction`][mlr3::Prediction]\cr
+#'   Predicts outcomes for new data in `newdata` using the model fitted during `$train()`.
+#'   For the moment, this is merely a thin wrapper around [`Learner$predict_newdata()`][mlr3::Learner] to ensure compatibility, meaning that *no speedup* is currently achieved.
+#'   In the future, this method may be optimized to be faster than `$predict_newdata()`.
+#' 
 #' The following standard extractors as defined by the [`Learner`][mlr3::Learner] class are available.
 #' Note that these typically only extract information from the `$base_learner()`.
 #' This works well for simple [`Graph`]s that do not modify features too much, but may give unexpected results for `Graph`s that
@@ -312,6 +317,9 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     },
     plot = function(html = FALSE, horizontal = FALSE, ...) {
       private$.graph$plot(html = html, horizontal = horizontal, ...)
+    },
+    predict_newdata_fast = function(newdata, task = NULL) {
+      self$predict_newdata(newdata, task)
     }
   ),
   active = list(
