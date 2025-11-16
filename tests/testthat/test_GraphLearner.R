@@ -1345,3 +1345,38 @@ test_that("GraphLearner other properties", {
   expect_true(all(c("loglik", "oob_error") %in% g_nested$properties))
 
 })
+
+test_that("GraphLearner - predict_newdata_fast", {
+  # Classification
+  task = tsk("iris")
+  newdata = task$data(cols = task$feature_names, rows = 1:10)
+  # predict_type = "response"
+  learner = lrn("classif.featureless")
+  lrn_pred = learner$train(task)$predict_newdata_fast(newdata)
+  glrn_pred = as_learner(po("learner", learner))$train(task)$predict_newdata_fast(newdata)
+  expect_equal(glrn_pred, lrn_pred)
+  # predict_type = "prob"
+  learner = lrn("classif.featureless", predict_type = "prob")
+  lrn_pred = learner$train(task)$predict_newdata_fast(newdata)
+  glrn_pred = as_learner(po("learner", learner))$train(task)$predict_newdata_fast(newdata)
+  expect_equal(glrn_pred, lrn_pred)
+
+  # Regression
+  task = tsk("mtcars")
+  newdata = task$data(cols = task$feature_names, rows = 1:10)
+  # predict_type = "response"
+  learner = lrn("regr.featureless")
+  lrn_pred = learner$train(task)$predict_newdata_fast(newdata)
+  glrn_pred = as_learner(po("learner", learner))$train(task)$predict_newdata_fast(newdata)
+  expect_equal(glrn_pred, lrn_pred)
+  # predict_type = "se"
+  learner = lrn("regr.featureless", predict_type = "se")
+  lrn_pred = learner$train(task)$predict_newdata_fast(newdata)
+  glrn_pred = as_learner(po("learner", learner))$train(task)$predict_newdata_fast(newdata)
+  expect_equal(glrn_pred, lrn_pred)
+  # predict_type = "quantiles"
+  learner = lrn("regr.featureless", predict_type = "quantiles", quantiles = 0.25)
+  lrn_pred = learner$train(task)$predict_newdata_fast(newdata)
+  glrn_pred = as_learner(po("learner", learner))$train(task)$predict_newdata_fast(newdata)
+  expect_equal(glrn_pred, lrn_pred)
+})

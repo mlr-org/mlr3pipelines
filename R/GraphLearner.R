@@ -330,8 +330,17 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       cat_cli(cli_h3("Pipeline: {.strong {pp}}"))
     },
+    # TODO: Optimize this method to be actually faster than predict_newdata(), #968
     predict_newdata_fast = function(newdata, task = NULL) {
-      self$predict_newdata(newdata, task)
+      pred = self$predict_newdata(newdata, task)
+      if (self$task_type == "regr") {
+        if (!is.null(pred$quantiles)) {
+          return(list(quantiles = pred$quantiles))
+        }
+        list(response = pred$response, se = if (!all(is.na(pred$se))) pred$se else NULL)
+      } else if (self$task_type == "classif") {
+        list(response = pred$response, prob = pred$prob)
+      }
     }
   ),
   active = list(
