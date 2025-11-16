@@ -14,14 +14,29 @@ Perform (weighted) majority vote prediction from classification \code{\link[mlr3
 Always returns a \code{"prob"} prediction, regardless of the incoming \code{\link[mlr3:Learner]{Learner}}'s
 \verb{$predict_type}. The label of the class with the highest predicted probability is selected as the
 \code{"response"} prediction. If the \code{\link[mlr3:Learner]{Learner}}'s \verb{$predict_type} is set to \code{"prob"},
-the prediction obtained is also a \code{"prob"} type prediction with the probability predicted to be a
-weighted average of incoming predictions.
+the probability aggregation is controlled by \code{prob_aggr} (see below). If \verb{$predict_type = "response"},
+predictions are internally converted to one-hot probability vectors (point mass on the predicted class) before aggregation.
+\subsection{\code{"prob"} aggregation:}{
+\itemize{
+\item \strong{\code{prob_aggr = "mean"}} -- \emph{Linear opinion pool (arithmetic mean of probabilities; default)}.
+\strong{Interpretation.} Mixture semantics: choose a base model with probability \code{w[i]}, then draw from its class distribution.
+Decision-theoretically, this is the minimizer of \code{sum(w[i] * KL(p[i] || p))} over probability vectors \code{p}, where \code{KL(x || y)} is the Kullback-Leibler divergence.
+\strong{Typical behavior.} Conservative / better calibrated and robust to near-zero probabilities (never assigns zero unless all do).
+This is the standard choice for probability averaging in ensembles and stacking.
+\item \strong{\code{prob_aggr = "log"}} -- \emph{Log opinion pool / product of experts (geometric mean in probability space)}:
+Average per-model logs (or equivalently, logits) and apply softmax.
+\strong{Interpretation.} Product semantics: \verb{p_ens ~ prod_i p_i^\{w[i]\}}; minimizes \code{sum(w[i] * KL(p || p[i]))}.
+\strong{Typical behavior.} Sharper / lower entropy (emphasizes consensus regions), but can be \strong{overconfident} and is sensitive
+to zeros; use \code{prob_aggr_eps} to clip small probabilities for numerical stability. Often beneficial with strong, similarly
+calibrated members (e.g., neural networks), less so when calibration is the priority.
+}
 
 All incoming \code{\link[mlr3:Learner]{Learner}}'s \verb{$predict_type} must agree.
 
 Weights can be set as a parameter; if none are provided, defaults to
 equal weights for each prediction.
 Defaults to equal weights for each model.
+}
 }
 \section{Construction}{
 
@@ -56,7 +71,16 @@ The \verb{$state} is left empty (\code{list()}).
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from the \code{\link{PipeOpEnsemble}}.
+The parameters are the parameters inherited from the \code{\link{PipeOpEnsemble}}, as well as:
+\itemize{
+\item \code{prob_aggr} :: \code{character(1)}\cr
+Controls how incoming class probabilities are aggregated. One of \code{"mean"} (linear opinion pool; default) or
+\code{"log"} (log opinion pool / product of experts). See the description above for definitions and interpretation.
+Only has an effect if the incoming predictions have \code{"prob"} values.
+\item \code{prob_aggr_eps} :: \code{numeric(1)}\cr
+Small positive constant used only for \code{prob_aggr = "log"} to clamp probabilities before taking logs, improving numerical
+stability and avoiding \code{-Inf}. Ignored for \code{prob_aggr = "mean"}. Default is \code{1e-12}.
+}
 }
 
 \section{Internals}{
@@ -134,6 +158,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
+\code{\link{mlr_pipeops_info}},
+\code{\link{mlr_pipeops_isomap}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},
