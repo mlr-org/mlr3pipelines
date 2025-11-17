@@ -120,9 +120,13 @@
 #'   If `resolve_branching` is `FALSE`, [`PipeOpUnbranch`] is treated as any other `PipeOp` with multiple inputs; all possible branch paths are considered equally.
 #' * `predict_newdata_fast(newdata, task = NULL)`\cr
 #'   (`data.frame`, [`Task`][mlr3::Task] | `NULL`) -> [`Prediction`][mlr3::Prediction]\cr
-#'   Predicts outcomes for new data in `newdata` using the model fitted during `$train()`.
+#'   Predicts outcomes for new data in `newdata` using the model fitted during `$train()`.\cr
 #'   For the moment, this is merely a thin wrapper around [`Learner$predict_newdata()`][mlr3::Learner] to ensure compatibility, meaning that *no speedup* is currently achieved.
-#'   In the future, this method may be optimized to be faster than `$predict_newdata()`.
+#'   In the future, this method may be optimized to be faster than `$predict_newdata()`.\cr
+#'   Unlike `$predict_newdata()`, this method does not return a [Prediction] object.
+#'   Instead, it returns a list with elements depending on `$task_type` and `$predict_type`:
+#'   * for `task_type = "classif"`: `response` and `prob`, or `quantiles` (if `predict_type = "quantiles"`)
+#'   * for `task_type = "regr"`: `response` and `se`
 #' 
 #' The following standard extractors as defined by the [`Learner`][mlr3::Learner] class are available.
 #' Note that these typically only extract information from the `$base_learner()`.

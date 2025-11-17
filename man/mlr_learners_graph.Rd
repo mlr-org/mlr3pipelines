@@ -133,9 +133,15 @@ There may be multiple corresponding \code{\link{PipeOpBranch}}s, which are all c
 If \code{resolve_branching} is \code{FALSE}, \code{\link{PipeOpUnbranch}} is treated as any other \code{PipeOp} with multiple inputs; all possible branch paths are considered equally.
 \item \code{predict_newdata_fast(newdata, task = NULL)}\cr
 (\code{data.frame}, \code{\link[mlr3:Task]{Task}} | \code{NULL}) -> \code{\link[mlr3:Prediction]{Prediction}}\cr
-Predicts outcomes for new data in \code{newdata} using the model fitted during \verb{$train()}.
+Predicts outcomes for new data in \code{newdata} using the model fitted during \verb{$train()}.\cr
 For the moment, this is merely a thin wrapper around \code{\link[mlr3:Learner]{Learner$predict_newdata()}} to ensure compatibility, meaning that \emph{no speedup} is currently achieved.
-In the future, this method may be optimized to be faster than \verb{$predict_newdata()}.
+In the future, this method may be optimized to be faster than \verb{$predict_newdata()}.\cr
+Unlike \verb{$predict_newdata()}, this method does not return a \link[mlr3:Prediction]{mlr3::Prediction} object.
+Instead, it returns a list with elements depending on \verb{$task_type} and \verb{$predict_type}:
+\itemize{
+\item for \code{task_type = "classif"}: \code{response} and \code{prob}, or \code{quantiles} (if \code{predict_type = "quantiles"})
+\item for \code{task_type = "regr"}: \code{response} and \code{se}
+}
 }
 
 The following standard extractors as defined by the \code{\link[mlr3:Learner]{Learner}} class are available.
