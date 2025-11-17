@@ -96,19 +96,17 @@ test_that("PipeOpLearnerCV - cv ensemble averages fold learners", {
       resampling.predict_method = "cv_ensemble"
     )
   )
+  prob_feature_names = paste0(po$id, ".prob.", task$class_names)
+  response_feature_name = paste0(po$id, ".response")
 
-  trained_task = po$train(list(task))[[1]]
-  expect_setequal(trained_task$feature_names, c(
-    sprintf("%s.response", po$id),
-    paste0(po$id, ".prob.", task$class_names)
-  ))
+  trained_task = po$train(list(task))[[1L]]
+  expect_setequal(trained_task$feature_names, c(response_feature_name, prob_feature_names))
   expect_equal(po$state$predict_method, "cv_ensemble")
   expect_length(po$state$cv_model_states, 2)
 
-  result_task = po$predict(list(task))[[1]]
-  prob_feature_names = paste0(po$id, ".prob.", task$class_names)
+  result_task = po$predict(list(task))[[1L]]
 
-  pred_probs = as.matrix(result_task$data(rows = task$row_ids, cols = prob_feature_names))
+  pred_probs = as.matrix(result_task$data(cols = prob_feature_names))
   manual_probs = mlr3misc::map(po$state$cv_model_states, function(state) {
     clone = learner$clone(deep = TRUE)
     clone$state = state
@@ -120,7 +118,7 @@ test_that("PipeOpLearnerCV - cv ensemble averages fold learners", {
   colnames(manual_prob) = prob_feature_names
   expect_equal(pred_probs, manual_prob)
 
-  result_response = result_task$data(rows = task$row_ids, cols = sprintf("%s.response", po$id))[[1]]
+  result_response = result_task$data(cols = response_feature_name)[[1L]]
   expect_equal(
     as.character(result_response),
     task$class_names[max.col(manual_prob)]
