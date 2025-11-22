@@ -1,5 +1,7 @@
 # mlr3pipelines 0.10.0-9000
 
+* New method `$predict_newdata_fast()` for `GraphLearner`. Note that currently this is only a thin wrapper around `$predict_newdata()` to maintain compatibility, but in the future it may get optimized to enable faster predictions on new data.
+
 # mlr3pipelines 0.10.0
 
 * Pretty-printing some info using the `cli` package now.
