@@ -1,5 +1,7 @@
 # mlr3pipelines 0.10.0-9000
 
+* Fix: Made tests for `PipeOpLearnerCV` deterministic by setting a seed before random tie resolving.
+
 # mlr3pipelines 0.10.0
 
 * Pretty-printing some info using the `cli` package now.
