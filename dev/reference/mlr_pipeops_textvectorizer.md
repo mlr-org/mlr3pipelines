@@ -366,9 +366,6 @@ task = tsk("iris")$cbind(dt)
 pos = po("textvectorizer", param_vals = list(stopwords_language = "en"))
 
 pos$train(list(task))[[1]]$data()
-#> 'as(<dgCMatrix>, "dgTMatrix")' is deprecated.
-#> Use 'as(., "TsparseMatrix")' instead.
-#> See help("Deprecated") and help("Matrix-deprecated").
 #>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.v txt.m
 #>         <fctr>        <num>       <num>        <num>       <num> <num> <num>
 #>   1:    setosa          1.4         0.2          5.1         3.5     1     1

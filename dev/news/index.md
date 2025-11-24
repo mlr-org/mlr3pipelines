@@ -2,6 +2,10 @@
 
 ## mlr3pipelines 0.10.0-9000
 
+- Fix: `PipeOpTextVectorizer` now uses coercion to `TsparseMatrix`
+  instead of deprecated `dgTMatrix` to avoid `Matrix` deprecation
+  warnings.
+
 ## mlr3pipelines 0.10.0
 
 CRAN release: 2025-11-07
