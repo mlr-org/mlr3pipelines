@@ -191,6 +191,15 @@ If <code>resolve_branching</code> is <code>TRUE</code>, and when a <code><a href
 corresponding <code><a href="mlr_pipeops_branch.html">PipeOpBranch</a></code> is searched, and its hyperparameter configuration is used to select the base learner.
 There may be multiple corresponding <code><a href="mlr_pipeops_branch.html">PipeOpBranch</a></code>s, which are all considered.
 If <code>resolve_branching</code> is <code>FALSE</code>, <code><a href="mlr_pipeops_unbranch.html">PipeOpUnbranch</a></code> is treated as any other <code>PipeOp</code> with multiple inputs; all possible branch paths are considered equally.</p></li>
+<li><p><code>predict_newdata_fast(newdata, task = NULL)</code><br>
+(<code>data.frame</code>, <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> | <code>NULL</code>) -&gt; <code><a href="https://mlr3.mlr-org.com/reference/Prediction.html" class="external-link">Prediction</a></code><br>
+Predicts outcomes for new data in <code>newdata</code> using the model fitted during <code>$train()</code>.<br>
+For the moment, this is merely a thin wrapper around <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner$predict_newdata()</a></code> to ensure compatibility, meaning that <em>no speedup</em> is currently achieved.
+In the future, this method may be optimized to be faster than <code>$predict_newdata()</code>.<br>
+Unlike <code>$predict_newdata()</code>, this method does not return a <a href="https://mlr3.mlr-org.com/reference/Prediction.html" class="external-link">mlr3::Prediction</a> object.
+Instead, it returns a list with elements depending on <code>$task_type</code> and <code>$predict_type</code>:</p><ul><li><p>for <code>task_type = "classif"</code>: <code>response</code> and <code>prob</code>, or <code>quantiles</code> (if <code>predict_type = "quantiles"</code>)</p></li>
+<li><p>for <code>task_type = "regr"</code>: <code>response</code> and <code>se</code></p></li>
+</ul></li>
 </ul><p>The following standard extractors as defined by the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> class are available.
 Note that these typically only extract information from the <code>$base_learner()</code>.
 This works well for simple <code><a href="Graph.html">Graph</a></code>s that do not modify features too much, but may give unexpected results for <code>Graph</code>s that
