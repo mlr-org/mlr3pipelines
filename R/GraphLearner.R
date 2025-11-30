@@ -344,6 +344,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         list(response = pred$response, se = if (!all(is.na(pred$se))) pred$se else NULL)
       } else if (self$task_type == "classif") {
         list(response = pred$response, prob = pred$prob)
+      } else {
+        stopf("GraphLearner's predict_newdata_fast does not support task type '%s'.", self$task_type)
       }
     }
   ),
