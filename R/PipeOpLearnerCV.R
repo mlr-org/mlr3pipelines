@@ -298,6 +298,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       setnames(prds, old = row_id_col, new = task$backend$primary_key)
       task$select(character(0))$cbind(prds)
     },
+
     predict_from_cv_models = function(task, cv_model_states) {
       predictions = map(cv_model_states, function(state) {
         private$.learner$state = state
@@ -307,93 +308,80 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       })
       private$aggregate_predictions(predictions)
     },
+
     aggregate_predictions = function(predictions) {
       if (!length(predictions)) stop("No predictions available to aggregate.")
-      alignment = private$align_predictions(predictions)
       task_type = private$.learner$task_type
       if (task_type == "classif") {
-        return(private$aggregate_classif_predictions(alignment))
+        return(private$aggregate_classif_predictions(predictions))
       }
       if (task_type == "regr") {
-        return(private$aggregate_regr_predictions(alignment))
+        return(private$aggregate_regr_predictions(predictions))
       }
       stopf("`resampling.predict_method = \"cv_ensemble\"` is not implemented for task type '%s'.", task_type)
     },
-    align_predictions = function(predictions) {
-      row_ids = predictions[[1]]$row_ids
-      ordering = order(row_ids)
-      row_ids = row_ids[ordering]
-      align_prediction = function(pred) {
-        idx = match(row_ids, pred$row_ids)
-        if (anyNA(idx)) {
-          stop("Mismatch in row ids between CV predictions.")
-        }
-        list(pred = pred, idx = idx)
-      }
-      aligned = map(predictions, align_prediction)
-      list(row_ids = row_ids, aligned = aligned)
-    },
+
     # Note: The following aggregation methods use similar logic to PipeOpClassifAvg and PipeOpRegrAvg
     # (particularly the weighted_matrix_sum and weighted_factor_mean helper functions from PipeOpEnsemble).
-    # However, they return data.table instead of Prediction objects to integrate with pred_to_task() and
-    # handle row alignment specific to CV fold predictions. This design avoids the overhead of creating
-    # intermediate Prediction objects that would need to be immediately converted to data.table.
-    aggregate_classif_predictions = function(alignment) {
-      aligned = alignment$aligned
-      n = length(aligned)
-      weights = rep(1, n)
-      weights = weights / sum(weights)
-      prob_list = map(aligned, function(x) x$pred$prob)
+    # However, they return data.table instead of Prediction objects to integrate with pred_to_task().
+    # This design avoids the overhead of creating intermediate Prediction objects that would need to be 
+    # immediately converted to data.table.
+    aggregate_classif_predictions = function(predictions) {
+      row_ids = predictions[[1]]$row_ids
+      k = length(predictions)
+      weights = rep(1 / k, k)
+
+      prob_list = map(predictions, "prob")
       prob_cfg = private$.crossval_param_set$get_values(tags = "prob_aggr")
-      if (length(prob_list) && all(map_lgl(prob_list, Negate(is.null)))) {
-        prob_mats = map(seq_along(prob_list), function(i) prob_list[[i]][aligned[[i]]$idx, , drop = FALSE])
+      if (length(prob_list) && !any(map_lgl(prob_list, is.null))) {
         prob = switch(prob_cfg$prob_aggr,
-          mean = weighted_matrix_sum(prob_mats, weights),
-          log = weighted_matrix_logpool(prob_mats, weights, epsilon = prob_cfg$prob_aggr_eps %??% 1e-12)
+          mean = weighted_matrix_sum(prob_list, weights),
+          log = weighted_matrix_logpool(prob_list, weights, epsilon = prob_cfg$prob_aggr_eps %??% 1e-12)
         )
+
         prob = pmin(pmax(prob, 0), 1)
         lvls = colnames(prob)
         response = factor(lvls[max.col(prob, ties.method = "first")], levels = lvls)
-        prob_dt = data.table(prob)
-        setnames(prob_dt, paste0("prob.", lvls))
-        dt = data.table(row_ids = alignment$row_ids, response = response)
-        dt = cbind(dt, prob_dt)
+
+        dt = cbind(
+          data.table(row_ids = row_ids, response = response), 
+          setnames(data.table(prob), paste0("prob.", lvls))
+        )
         return(dt)
       }
-      responses = map(aligned, function(x) x$pred$response[x$idx])
+
+      responses = map(predictions, "response")
       lvls = levels(responses[[1]])
       freq = weighted_factor_mean(responses, weights, lvls)
       response = factor(lvls[max.col(freq, ties.method = "first")], levels = lvls)
-      data.table(row_ids = alignment$row_ids, response = response)
+      data.table(row_ids = row_ids, response = response)
     },
-    aggregate_regr_predictions = function(alignment) {
-      responses = map(alignment$aligned, function(x) x$pred$response[x$idx])
+
+    aggregate_regr_predictions = function(predictions) {
+      responses = map(predictions, "response")
       k = length(responses)
       response = Reduce(`+`, responses) / k
-      se_aligned = map(alignment$aligned, function(x) {
-        se = x$pred$se
-        if (is.null(se)) return(NULL)
-        se[x$idx]
-      })
-      ses_list = NULL
-      if (!all(map_lgl(se_aligned, is.null))) {
-        if (any(map_lgl(se_aligned, is.null))) {
+
+      ses_list = map(predictions, "se")
+      if (!all(map_lgl(ses_list, is.null))) {
+        if (any(map_lgl(ses_list, is.null))) {
           stop("Learners returned standard errors for only a subset of CV models.")
         }
-        ses_list = se_aligned
+      } else {
+        # Let aggregate_se_weighted handle this
+        ses_list = NULL
       }
+
       se_cfg = private$.crossval_param_set$get_values()
       weights = rep(1 / k, k)
 
       method = se_cfg$se_aggr %??% "none"
       rho = se_cfg$se_aggr_rho %??% 0
       se = aggregate_se_weighted(responses, ses_list, weights, method = method, rho = rho)
-      dt = data.table(row_ids = alignment$row_ids, response = response)
-      if (!is.null(se)) {
-        dt[, se := se]
-      }
-      dt
+
+      data.table(row_ids = predictions[[1L]]$row_ids, response = response, se = se)
     },
+
     make_cv_state = function(cv_model_states) {
       list(
         model = NULL,
@@ -405,6 +393,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         cv_model_states = cv_model_states
       )
     },
+
     get_predict_method = function(state) {
       if (is.null(state) || is_noop(state) || !is.list(state)) {
         return("full")
@@ -423,6 +412,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       }
       clone_with_state(private$.learner, state)
     },
+    
     build_cv_graph_learner = function(cv_model_states) {
       assert_list(cv_model_states, types = "list", min.len = 1)
       pipeops = map(seq_along(cv_model_states), function(i) {
