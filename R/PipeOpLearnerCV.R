@@ -78,7 +78,7 @@
 #'   predictions with the model trained on all training data.
 #' * `resampling.folds` :: `numeric(1)`\cr
 #'   Number of cross validation folds. Initialized to 3. Only used for `resampling.method = "cv"`.
-#' * `keep_response` :: `logical(1)`\cr
+#' * `resampling.keep_response` :: `logical(1)`\cr
 #'   Only effective during `"prob"` prediction: Whether to keep response values, if available. Initialized to `FALSE`.
 #' * `resampling.predict_method` :: `character(1)`\cr
 #'   Controls how predictions are produced after training. `"full"` (default) fits the wrapped learner on the entire training data.
@@ -342,7 +342,6 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         prob = pmin(pmax(prob, 0), 1)
         lvls = colnames(prob)
         response = factor(lvls[max.col(prob, ties.method = "first")], levels = lvls)
-
         dt = cbind(
           data.table(row_ids = row_ids, response = response), 
           setnames(data.table(prob), paste0("prob.", lvls))
@@ -354,6 +353,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       lvls = levels(responses[[1]])
       freq = weighted_factor_mean(responses, weights, lvls)
       response = factor(lvls[max.col(freq, ties.method = "first")], levels = lvls)
+
       data.table(row_ids = row_ids, response = response)
     },
 
