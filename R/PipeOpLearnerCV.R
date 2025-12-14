@@ -224,6 +224,9 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   ),
   private = list(
     .state_class = "pipeop_learner_cv_state",
+    .crossval_param_set = NULL,
+    .learner = NULL,
+
     .train_task = function(task) {
       on.exit({private$.learner$state = NULL})
 
@@ -341,7 +344,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
 
         prob = pmin(pmax(prob, 0), 1)
         lvls = colnames(prob)
-        response = factor(lvls[max.col(prob, ties.method = "first")], levels = lvls)
+        response = factor(lvls[max.col(prob, ties.method = "random")], levels = lvls)
         dt = cbind(
           data.table(row_ids = row_ids, response = response), 
           setnames(data.table(prob), paste0("prob.", lvls))
@@ -352,7 +355,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       responses = map(predictions, "response")
       lvls = levels(responses[[1]])
       freq = weighted_factor_mean(responses, weights, lvls)
-      response = factor(lvls[max.col(freq, ties.method = "first")], levels = lvls)
+      response = factor(lvls[max.col(freq, ties.method = "random")], levels = lvls)
 
       data.table(row_ids = row_ids, response = response)
     },
@@ -400,11 +403,13 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       }
       state$predict_method %??% "full"
     },
+
     assert_cv_predict_supported = function() {
       if (private$.learner$task_type %nin% c("classif", "regr")) {
         stopf("`resampling.predict_method = \"cv_ensemble\"` is only supported for classification and regression learners (got '%s').", private$.learner$task_type)
       }
     },
+
     state_to_model = function(state) {
       predict_method = private$get_predict_method(state)
       if (predict_method == "cv_ensemble") {
@@ -444,8 +449,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       glrn$model = graph_state
       glrn
     },
-    .crossval_param_set = NULL,
-    .learner = NULL,
+
     .additional_phash_input = function() private$.learner$phash
   )
 )
