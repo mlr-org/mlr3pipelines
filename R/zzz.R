@@ -1,12 +1,12 @@
 #' @import data.table
 #' @import checkmate
+#' @import cli
 #' @import mlr3
 #' @import paradox
 #' @import mlr3misc
 #' @importFrom R6 R6Class
 #' @importFrom utils tail head
 #' @importFrom digest digest
-#' @importFrom withr with_options
 #' @importFrom stats setNames
 "_PACKAGE"
 
@@ -15,13 +15,31 @@ register_mlr3 = function() {
   x$pipeops$valid_tags = unique(c(x$pipeops$valid_tags,
     c("abstract", "meta", "missings", "feature selection", "imbalanced data",
     "data transform", "target transform", "ensemble", "robustify", "learner", "encode",
-     "multiplicity")))
+     "multiplicity", "debug")))
   x$pipeops$properties = c("validation", "internal_tuning")
 }
 
+register_mlr3filters = function() {
+  if ("mlr3filters" %in% loadedNamespaces()) {
+    x = utils::getFromNamespace("mlr_filters", ns = "mlr3filters")
+    x$add("ensemble", FilterEnsemble)
+  }
+}
+
+
+
+paradox_info <- list2env(list(is_old = FALSE), parent = emptyenv())
+
 .onLoad = function(libname, pkgname) {  # nocov start
   register_mlr3()
-  setHook(packageEvent("mlr3", "onLoad"), function(...) register_mlr3(), action = "append")
+  register_mlr3filters()
+  setHook(packageEvent("mlr3", "onLoad"), function(...) {
+    register_mlr3()
+    register_mlr3filters()
+  }, action = "append")
+  setHook(packageEvent("mlr3filters", "onLoad"), function(...) {
+    register_mlr3filters()
+  }, action = "append")
   backports::import(pkgname)
 
   assign("lg", lgr::get_logger("mlr3/mlr3pipelines"), envir = parent.env(environment()))

@@ -278,18 +278,23 @@ PipeOp = R6Class("PipeOp",
 
     print = function(...) {
       type_table_printout = function(table) {
-        strings = do.call(sprintf, cbind(fmt = "%s`[%s,%s]", table[, c("name", "train", "predict")]))
-        strings = strwrap(paste(strings, collapse = ", "), indent = 2, exdent = 2)
-        if (length(strings) > 6) {
-          strings = c(strings[1:5], sprintf("  [... (%s lines omitted)]", length(strings) - 5))
+        print(head(table, 5L), row.names = FALSE, print.keys = FALSE)
+        if (nrow(table) > 5L) {
+          catf("[...] (%i rows omitted)", nrow(table) - 5L)
         }
-        gsub("`", " ", paste(strings, collapse = "\n"))
       }
 
-      catf("PipeOp: <%s> (%strained)", self$id, if (self$is_trained) "" else "not ")
-      catf("values: <%s>", as_short_string(self$param_set$values))
-      catf("Input channels <name [train type, predict type]>:\n%s", type_table_printout(self$input))
-      catf("Output channels <name [train type, predict type]>:\n%s", type_table_printout(self$output))
+      msg_h = if (self$is_trained) "" else "not "
+      cat_cli({
+        cli_h1("PipeOp {.cls {self$id}}: {msg_h}trained")
+        cli_text("Values: {as_short_string(self$param_set$values)}")
+        cli_h3("{.strong Input channels:}")
+      })
+      type_table_printout(self$input)
+      cat_cli({
+        cli_h3("{.strong Output channels:}")
+      })
+      type_table_printout(self$output)
     },
 
     train = function(input) {
@@ -536,7 +541,7 @@ check_types = function(self, data, direction, operation) {
     autoconverter = get_autoconverter(typereq)
     msg = ""
     if (!is.null(autoconverter)) {
-      mlr3misc::require_namespaces(autoconverter$packages,
+      require_namespaces(autoconverter$packages,
         sprintf("The following packages are required to convert object of class %s to class %s: %%s.", class(data_element)[1], typereq))
       msg = tryCatch({
         data_element = autoconverter$fun(data_element)

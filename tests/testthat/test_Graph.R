@@ -20,15 +20,15 @@ test_that("linear graph", {
 
   expect_graph(g)
 
-  expect_output(print(g), "Graph with 2 PipeOps.*subsample.*UNTRAINED.*pca.*UNTRAINED")
-
-
+  expect_output(print(g), "Graph with 2 PipeOps:")
+  expect_output(print(g), ".*subsample.*UNTRAINED.*pca.*UNTRAINED")
 
   inputs = mlr_tasks$get("iris")
   x = g$train(inputs)
   expect_task(x[[1]])
 
-  expect_output(print(g), "Graph with 2 PipeOps.*subsample.*list.*pca.*prcomp")
+  expect_output(print(g), "Graph with 2 PipeOps")
+  expect_output(print(g), ".*subsample.*list.*pca.*prcomp")
 
   out = g$predict(inputs)
   expect_task(x[[1]])
@@ -225,7 +225,8 @@ test_that("assert_graph test", {
 
   gr2 = assert_graph(gr)
 
-  expect_error(expect_deep_clone(gr, gr2), class = "error", regexp = "addresses differ.*isn't true|addresses differ.*is not TRUE")
+  expect_error(expect_deep_clone(gr, gr2), class = "error",
+    regexp = "Expected.*addresses differ.*to be TRUE|addresses differ.*isn't true|addresses differ.*is not TRUE")
 
   gr2 = as_graph(gr, clone = TRUE)
 
@@ -237,7 +238,8 @@ test_that("assert_graph test", {
 
   po = PipeOpNOP$new()
 
-  expect_error(expect_deep_clone(po, po), class = "error", regexp = "addresses differ.*isn't true|addresses differ.*is not TRUE")
+  expect_error(expect_deep_clone(po, po), class = "error",
+    regexp = "Expected.*addresses differ.*to be TRUE|addresses differ.*isn't true|addresses differ.*is not TRUE")
 
   po2 = as_graph(po, clone = TRUE)$pipeops[[1]]
 

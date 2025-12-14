@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.9.0-9000
+Version: 0.10.0-9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -66,14 +66,14 @@ Depends:
 Imports:
     backports,
     checkmate,
+    cli,
     data.table,
     digest,
     lgr,
     mlr3 (>= 0.20.0),
     mlr3misc (>= 0.17.0),
     paradox (>= 1.0.0),
-    R6,
-    withr
+    R6
 Suggests:
     ggplot2,
     glmnet,
@@ -105,14 +105,17 @@ Suggests:
     future,
     htmlwidgets,
     ranger,
-    themis
+    themis,
+    dimRed,
+    RSpectra,
+    RANN
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 VignetteBuilder: knitr, rmarkdown
 Collate:
     'CnfAtom.R'
@@ -121,6 +124,7 @@ Collate:
     'CnfFormula_simplify.R'
     'CnfSymbol.R'
     'CnfUniverse.R'
+    'FilterEnsemble.R'
     'Graph.R'
     'GraphLearner.R'
     'mlr_pipeops.R'
@@ -163,6 +167,8 @@ Collate:
     'PipeOpImputeMode.R'
     'PipeOpImputeOOR.R'
     'PipeOpImputeSample.R'
+    'PipeOpInfo.R'
+    'PipeOpIsomap.R'
     'PipeOpKernelPCA.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'

@@ -1,8 +1,22 @@
-# mlr3pipelines 0.9.0-9000
+# mlr3pipelines 0.10.0-9000
 
+* Fix: `PipeOpTextVectorizer` now uses coercion to `TsparseMatrix` instead of deprecated `dgTMatrix` to avoid `Matrix` deprecation warnings.
+* New method `$predict_newdata_fast()` for `GraphLearner`. Note that currently this is only a thin wrapper around `$predict_newdata()` to maintain compatibility, but in the future it may get optimized to enable faster predictions on new data.
+
+# mlr3pipelines 0.10.0
+
+* Pretty-printing some info using the `cli` package now.
+* New PipeOp `PipeOpInfo` prints or logs info about objects passing through.
+* New Pipeop `PipeOpIsomap` implements isomap embedding from `dimRed::embed`
+* feat: allow dates in datefeatures pipe op and use data.table for date feature generation.
+* feat: `PipeOpLearnerCV` can reuse the cross-validation models during prediction by averaging their outputs (`resampling.predict_method = "cv_ensemble"`).
+* feat: `PipeOpRegrAvg` gets new `se_aggr`, `se_aggr_rho`, `prob_aggr`, and `prob_aggr_eps` hyperparameters and now allows different forms of prob / SE aggregation.
+* feat: `FilterEnsemble` implements Binder et al. (2020) *Multi-Objective Hyperparameter Tuning and Feature Selection using Filter Ensembles*
+* Fix: `PipeOpRemoveConstants` now avoids integer overflow when evaluating relative tolerances for near-`integer.max` data.
+* Fix: Added support for internal validation tasks to `PipeOpFeatureUnion`.
 * Fix: Added internal workaround for `PipeOpNMF` attaching `Biobase`, `BiocGenerics`, and `generics` to the search path during training, prediction or when printing its `$state`.
-* feat: allow dates in datefeatures pipe op and use data.table for date feature generation
-* Added support for internal validation tasks to `PipeOpFeatureUnion`.
+* Compatibility with new testthat version 3.3.0
+
 
 # mlr3pipelines 0.9.0
 
@@ -303,4 +317,3 @@
 # mlr3pipelines 0.1.0
 
 * Initial upload to CRAN.
-
