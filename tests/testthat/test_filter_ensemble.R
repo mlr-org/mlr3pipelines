@@ -279,7 +279,13 @@ test_that("FilterEnsemble cloning keeps param sets independent", {
 test_that("FilterEnsemble ignores NA scores from wrapped filters", {
   skip_if_not_installed("mlr3filters")
 
-  task = mlr_tasks$get("iris")
+  # Create task with same rows so that permutation has no effect and yields NA scores
+  task = TaskClassif$new(id = "test", target = "target", backend = data.table(
+    target = factor(rep("a", 10), levels = c("a", "b")),
+    x1 = rep(2, 10),
+    x2 = rep(5, 10)
+  ))
+
   variance_filter = mlr3filters::FilterVariance$new()
   permutation_filter = mlr3filters::FilterPermutation$new()
 
