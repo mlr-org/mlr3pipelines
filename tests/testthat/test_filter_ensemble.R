@@ -279,17 +279,14 @@ test_that("FilterEnsemble cloning keeps param sets independent", {
 test_that("FilterEnsemble ignores NA scores from wrapped filters", {
   skip_if_not_installed("mlr3filters")
 
+  task = tsk("iris")
+
   # Write a Filter "FilterAlwaysNaN" that always returns NaN scores
-  FilterAlwaysNaN = R6::R6Class("FilterAlwaysNaN",
+  FilterAlwaysNaN = R6Class("FilterAlwaysNaN",
     inherit = mlr3filters::Filter,
     public = list(
       initialize = function() {
-        super$initialize(
-          id = "always_nan",
-          task_types = "classif",
-          param_set = ps(),
-          feature_types = "numeric"
-        )
+        super$initialize(id = "always_nan", task_types = "classif", param_set = ps(), feature_types = "numeric")
       }
     ),
     private = list(
@@ -300,9 +297,9 @@ test_that("FilterEnsemble ignores NA scores from wrapped filters", {
   )
 
   # Check that Test Filter works
-  nan_filter = FilterAlwaysNaN$new()
-  nan_filter$calculate(task)
-  expect_true(all(is.nan(nan_filter$scores[task$feature_names])))
+  always_nan_filter = FilterAlwaysNaN$new()
+  always_nan_filter$calculate(task)
+  expect_true(all(is.nan(always_nan_filter$scores[task$feature_names])))
 
   # Prepare variance scores for comparison later
   variance_filter = mlr3filters::FilterVariance$new()
@@ -312,7 +309,7 @@ test_that("FilterEnsemble ignores NA scores from wrapped filters", {
   # Run FilterEnsemble
   filters = list(
     variance_filter$clone(deep = TRUE),
-    nan_filter$clone(deep = TRUE)
+    always_nan_filter$clone(deep = TRUE)
   )
   weights = c(variance = 0.5, always_nan = 0.5)
   flt_ensemble = FilterEnsemble$new(filters)
