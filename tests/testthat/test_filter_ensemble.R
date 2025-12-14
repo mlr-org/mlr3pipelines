@@ -279,32 +279,42 @@ test_that("FilterEnsemble cloning keeps param sets independent", {
 test_that("FilterEnsemble ignores NA scores from wrapped filters", {
   skip_if_not_installed("mlr3filters")
 
-  # Create task with same rows so that permutation has no effect and yields NA scores
-  task = TaskClassif$new(id = "test", target = "target", backend = data.table(
-    target = factor(rep("a", 10), levels = c("a", "b")),
-    x1 = rep(2, 10),
-    x2 = rep(5, 10)
-  ))
+  # Write a Filter "FilterAlwaysNaN" that always returns NaN scores
+  FilterAlwaysNaN = R6::R6Class("FilterAlwaysNaN",
+    inherit = mlr3filters::Filter,
+    public = list(
+      initialize = function() {
+        super$initialize(
+          id = "always_nan",
+          task_types = "classif",
+          param_set = ps(),
+          feature_types = "numeric"
+        )
+      }
+    ),
+    private = list(
+      .calculate = function(task, nfeat) {
+        setNames(rep(NaN, length(task$feature_names)), task$feature_names)
+      }
+    )
+  )
 
+  # Check that Test Filter works
+  nan_filter = FilterAlwaysNaN$new()
+  nan_filter$calculate(task)
+  expect_true(all(is.nan(nan_filter$scores[task$feature_names])))
+
+  # Prepare variance scores for comparison later
   variance_filter = mlr3filters::FilterVariance$new()
-  permutation_filter = mlr3filters::FilterPermutation$new()
-
-  permutation_filter$resampling$instantiate(task)
-  permutation_filter$param_set$values$standardize = TRUE
-  permutation_filter$param_set$values$nmc = 1L
-
   variance_filter$calculate(task)
-  permutation_filter$calculate(task)
-
   variance_scores = variance_filter$scores[task$feature_names]
-  expect_true(all(is.nan(permutation_filter$scores[task$feature_names])))
 
+  # Run FilterEnsemble
   filters = list(
     variance_filter$clone(deep = TRUE),
-    permutation_filter$clone(deep = TRUE)
+    nan_filter$clone(deep = TRUE)
   )
-  weights = c(variance = 0.5, permutation = 0.5)
-
+  weights = c(variance = 0.5, always_nan = 0.5)
   flt_ensemble = FilterEnsemble$new(filters)
   flt_ensemble$param_set$values$weights = weights
   flt_ensemble$calculate(task)
