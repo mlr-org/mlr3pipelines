@@ -48,8 +48,8 @@ The parameters are the parameters inherited from
 Uses the [`sample()`](https://rdrr.io/r/base/sample.html) function.
 Features that are entirely `NA` are imputed as the following: For
 `factor` or `ordered`, random levels are sampled uniformly at random.
-For logicals, `TRUE` or `FALSE` are sampled uniformly at random.
-Numerics and integers are imputed as `0`.
+For `logical`, `TRUE` or `FALSE` are sampled uniformly at random.
+`numeric` and `integer` are imputed as `0`.
 
 ## Fields
 

@@ -1,8 +1,8 @@
 # Impute Features by their Mode
 
-Impute features by their mode. Supports factors as well as logical and
-numerical features. If multiple modes are present then imputed values
-are sampled randomly from them.
+Impute features by their mode. Supports factors, logical, numerical,
+POSIXct and Date features. If multiple modes are present then imputed
+values are sampled randomly from them.
 
 ## Format
 

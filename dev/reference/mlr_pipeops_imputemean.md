@@ -1,6 +1,6 @@
-# Impute Numerical Features by their Mean
+# Impute Numeric, Integer, POSIXct or Date Features by their Mean
 
-Impute numerical features by their mean.
+Impute numeric, integer, POSIXct or Date features by their mean.
 
 ## Format
 
@@ -27,15 +27,17 @@ Input and output channels are inherited from
 
 The output is the input
 [`Task`](https://mlr3.mlr-org.com/reference/Task.html) with all affected
-numeric features missing values imputed by (column-wise) mean.
+numeric, integer, POSIXct and Date features missing values imputed by
+(column-wise) mean.
 
 ## State
 
 The `$state` is a named `list` with the `$state` elements inherited from
 [`PipeOpImpute`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpImpute.md).
 
-The `$state$model` is a named `list` of `numeric(1)` indicating the mean
-of the respective feature.
+The `$state$model` is a named `list` of either `numeric(1)`,
+`integer(1)`, `POSIXct(1)` or `Date(1)` indicating the mean of the
+respective feature.
 
 ## Parameters
 

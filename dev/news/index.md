@@ -2,6 +2,8 @@
 
 ## mlr3pipelines 0.10.0-9000
 
+- feat: All imputation PipeOps now support feature types `Date` and
+  `POSIXct`.
 - Fix: `PipeOpTextVectorizer` now uses coercion to `TsparseMatrix`
   instead of deprecated `dgTMatrix` to avoid `Matrix` deprecation
   warnings.

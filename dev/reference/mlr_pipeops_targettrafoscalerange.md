@@ -183,8 +183,8 @@ po$predict(list(task))
 #>     assert_list(inputs, len = 1L, types = "Prediction")
 #>     list(private$.invert(inputs[[1L]], predict_phase_state))
 #> }
-#> <bytecode: 0x560fb33dc358>
-#> <environment: 0x560fac0c7ff0>
+#> <bytecode: 0x565395137360>
+#> <environment: 0x56539548a290>
 #> 
 #> $output
 #> 
@@ -265,7 +265,7 @@ ttscalerange$state$regr.rpart
 #> NULL
 #> 
 #> $mlr3_version
-#> [1] ‘1.2.0’
+#> [1] ‘1.3.0’
 #> 
 #> $data_prototype
 #> Empty data.table (0 rows and 18 cols): cmedv.scaled,age,b,chas,crim,dis...

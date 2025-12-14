@@ -1,6 +1,6 @@
-# Impute Numerical Features by Histogram
+# Impute Numeric, Integer, POSIXct or Date Features by Histogram
 
-Impute numerical features by histogram.
+Impute numeric, integer, POSIXct or Date features by histogram.
 
 During training, a histogram is fitted on each column using R's
 [`hist()`](https://rdrr.io/r/graphics/hist.html) function. The fitted
@@ -37,8 +37,8 @@ Input and output channels are inherited from
 
 The output is the input
 [`Task`](https://mlr3.mlr-org.com/reference/Task.html) with all affected
-numeric features missing values imputed by (column-wise) histogram; see
-Description for details.
+numeric, integer, POSIXct or Date features missing values imputed by
+(column-wise) histogram; see Description for details.
 
 ## State
 

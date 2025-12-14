@@ -10,9 +10,9 @@ parameter is part of the
 base class and explained there.
 
 Additionally, only features supported by the learner can be imputed;
-i.e. learners of type `regr` can only impute features of type `integer`
-and `numeric`, while `classif` can impute features of type `factor`,
-`ordered` and `logical`.
+i.e. learners of type `regr` can only impute features of type `integer`,
+`numeric`, `POSIXct` and `Date`, while `classif` can impute features of
+type `factor`, `ordered` and `logical`.
 
 The [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) used
 for imputation is trained on all `context_columns`; if these contain
@@ -292,7 +292,7 @@ po$state$model$mass
 #> NULL
 #> 
 #> $mlr3_version
-#> [1] ‘1.2.0’
+#> [1] ‘1.3.0’
 #> 
 #> $data_prototype
 #> Empty data.table (0 rows and 8 cols): .impute_col,age,glucose,insulin,pedigree,pregnant...

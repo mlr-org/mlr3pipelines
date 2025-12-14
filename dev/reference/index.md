@@ -116,16 +116,16 @@
   : Impute Features by a Constant
 - [`mlr_pipeops_imputehist`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputehist.md)
   [`PipeOpImputeHist`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputehist.md)
-  : Impute Numerical Features by Histogram
+  : Impute Numeric, Integer, POSIXct or Date Features by Histogram
 - [`mlr_pipeops_imputelearner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputelearner.md)
   [`PipeOpImputeLearner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputelearner.md)
   : Impute Features by Fitting a Learner
 - [`mlr_pipeops_imputemean`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemean.md)
   [`PipeOpImputeMean`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemean.md)
-  : Impute Numerical Features by their Mean
+  : Impute Numeric, Integer, POSIXct or Date Features by their Mean
 - [`mlr_pipeops_imputemedian`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemedian.md)
   [`PipeOpImputeMedian`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemedian.md)
-  : Impute Numerical Features by their Median
+  : Impute Numeric, Integer, POSIXct or Date Features by their Median
 - [`mlr_pipeops_imputemode`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemode.md)
   [`PipeOpImputeMode`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemode.md)
   : Impute Features by their Mode

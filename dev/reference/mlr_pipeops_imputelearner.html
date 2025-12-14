@@ -9,7 +9,7 @@
 Uses the features indicated by the context_columns parameter as features to train the imputation Learner.
 Note this parameter is part of the PipeOpImpute base class and explained there.
 Additionally, only features supported by the learner can be imputed; i.e. learners of type
-regr can only impute features of type integer and numeric, while classif can impute
+regr can only impute features of type integer, numeric, POSIXct and Date, while classif can impute
 features of type factor, ordered and logical.
 The Learner used for imputation is trained on all context_columns; if these contain missing values,
 the Learner typically either needs to be able to handle missing values itself, or needs to do its
@@ -17,7 +17,7 @@ own imputation (see examples)."><meta property="og:description" content="Impute 
 Uses the features indicated by the context_columns parameter as features to train the imputation Learner.
 Note this parameter is part of the PipeOpImpute base class and explained there.
 Additionally, only features supported by the learner can be imputed; i.e. learners of type
-regr can only impute features of type integer and numeric, while classif can impute
+regr can only impute features of type integer, numeric, POSIXct and Date, while classif can impute
 features of type factor, ordered and logical.
 The Learner used for imputation is trained on all context_columns; if these contain missing values,
 the Learner typically either needs to be able to handle missing values itself, or needs to do its
@@ -73,7 +73,7 @@ own imputation (see examples)."><meta property="og:image" content="https://mlr3p
 Uses the features indicated by the <code>context_columns</code> parameter as features to train the imputation <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>.
 Note this parameter is part of the <code><a href="PipeOpImpute.html">PipeOpImpute</a></code> base class and explained there.</p>
 <p>Additionally, only features supported by the learner can be imputed; i.e. learners of type
-<code>regr</code> can only impute features of type <code>integer</code> and <code>numeric</code>, while <code>classif</code> can impute
+<code>regr</code> can only impute features of type <code>integer</code>, <code>numeric</code>, <code>POSIXct</code> and <code>Date</code>, while <code>classif</code> can impute
 features of type <code>factor</code>, <code>ordered</code> and <code>logical</code>.</p>
 <p>The <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> used for imputation is trained on all <code>context_columns</code>; if these contain missing values,
 the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> typically either needs to be able to handle missing values itself, or needs to do its
@@ -315,7 +315,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mlr3_version</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ‘1.2.0’</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ‘1.3.0’</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $data_prototype</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 8 cols): .impute_col,age,glucose,insulin,pedigree,pregnant...</span>
