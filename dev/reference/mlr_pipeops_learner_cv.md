@@ -150,7 +150,7 @@ this object. Besides that, parameters introduced are:
   Number of cross validation folds. Initialized to 3. Only used for
   `resampling.method = "cv"`.
 
-- `keep_response` :: `logical(1)`  
+- `resampling.keep_response` :: `logical(1)`  
   Only effective during `"prob"` prediction: Whether to keep response
   values, if available. Initialized to `FALSE`.
 

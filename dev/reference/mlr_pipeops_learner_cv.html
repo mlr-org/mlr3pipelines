@@ -156,7 +156,7 @@ Which resampling method do we want to use. Currently only supports <code>"cv"</c
 predictions with the model trained on all training data.</p></li>
 <li><p><code>resampling.folds</code> :: <code>numeric(1)</code><br>
 Number of cross validation folds. Initialized to 3. Only used for <code>resampling.method = "cv"</code>.</p></li>
-<li><p><code>keep_response</code> :: <code>logical(1)</code><br>
+<li><p><code>resampling.keep_response</code> :: <code>logical(1)</code><br>
 Only effective during <code>"prob"</code> prediction: Whether to keep response values, if available. Initialized to <code>FALSE</code>.</p></li>
 <li><p><code>resampling.predict_method</code> :: <code>character(1)</code><br>
 Controls how predictions are produced after training. <code>"full"</code> (default) fits the wrapped learner on the entire training data.
