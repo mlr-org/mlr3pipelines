@@ -1,11 +1,11 @@
-#' @title Impute Numerical Features by their Median
+#' @title Impute Numeric, Integer, POSIXct or Date Features by their Median
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputemedian
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
-#' Impute numerical features by their median.
+#' Impute numerical, integer, POSIXct or Date features by their median.
 #'
 #' @section Construction:
 #' ```
@@ -20,12 +20,12 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpImpute`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with all affected numeric features missing values imputed by (column-wise) median.
+#' The output is the input [`Task`][mlr3::Task] with all affected numeric, integer, POSIXct and Date features missing values imputed by (column-wise) median.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpImpute`].
 #'
-#' The `$state$model` is a named `list` of `numeric(1)` indicating the median of the respective feature.
+#' The `$state$model` is a named `list` of `numeric(1)`, `integer(1)`, `POSIXct(1)` or  `Date(1)` indicating the median of the respective feature.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpImpute`].
@@ -59,7 +59,7 @@ PipeOpImputeMedian = R6Class("PipeOpImputeMedian",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputemedian", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals, packages = "stats", feature_types = c("numeric", "integer"))
+      super$initialize(id, param_vals = param_vals, packages = "stats", feature_types = c("numeric", "integer", "POSIXct", "Date"))
     }
   ),
   private = list(
