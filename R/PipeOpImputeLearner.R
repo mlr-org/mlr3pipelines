@@ -10,7 +10,7 @@
 #' Note this parameter is part of the [`PipeOpImpute`] base class and explained there.
 #'
 #' Additionally, only features supported by the learner can be imputed; i.e. learners of type
-#' `regr` can only impute features of type `integer` and `numeric`, while `classif` can impute
+#' `regr` can only impute features of type `integer`, `numeric`, `POSIXct` and `Date`, while `classif` can impute
 #' features of type `factor`, `ordered` and `logical`.
 #'
 #' The [`Learner`][mlr3::Learner] used for imputation is trained on all `context_columns`; if these contain missing values,
@@ -105,7 +105,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
       private$.learner = as_learner(learner, clone = TRUE)
       id = id %??% private$.learner$id
       feature_types = switch(private$.learner$task_type,
-        regr = c("integer", "numeric"),
+        regr = c("integer", "numeric", "POSIXct", "Date"),
         classif = c("logical", "factor", "ordered"),
         stop("Only `classif` or `regr` Learners are currently supported by PipeOpImputeLearner.")
         # FIXME: at least ordinal should also be possible. When Moore's law catches up with us we could even do `character`
@@ -183,6 +183,8 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
       # Convert non-factor imputation targets to a factor
       if (is.numeric(feature)) {
         feature
+      } else if (any(class(feature) %in% c("POSIXct", "Date"))) {
+        as.numeric(feature)
       } else {
         if (!is.null(levels(feature))) {
           factor(feature, levels = levels(feature), ordered = FALSE)
@@ -198,6 +200,8 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
         feature = round(feature)
       }
       if (type == "logical") feature = as.logical(feature) # FIXME mlr-org/mlr3#475
+      if (type == "POSIXct") feature = as.POSIXct(feature)
+      if (type == "Date") feature = as.Date(feature)
       auto_convert(feature, "feature to be imputed", type, levels = levels(feature))
     },
     .additional_phash_input = function() private$.learner$phash
