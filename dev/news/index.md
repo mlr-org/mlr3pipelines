@@ -2,6 +2,7 @@
 
 ## mlr3pipelines 0.10.0-9000
 
+- Fix: Made `FilterEnsemble` tests deterministic and more robust.
 - Fix: Made tests for `PipeOpLearnerCV` deterministic.
 - feat: All imputation PipeOps now support feature types `Date` and
   `POSIXct`.
