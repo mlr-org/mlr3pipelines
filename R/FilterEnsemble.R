@@ -59,16 +59,16 @@
 #' @section Internals:
 #' All wrapped filters are called with `nfeat` equal to the number of features to ensure that
 #' complete score vectors are available for aggregation. 
+#' Scores are combined per feature by computing the weighted mean of (potentially transformed) scores or ranks.
+#' Additionally, the final scores may also be transformed.
+#' The order of transformations is as follows:
+#' 1. `$calculate` the filter's scores for all features;
+#' 2. If `rank_transform` is `TRUE`, convert filter scores to ranks;
+#' 3. Apply `filter_score_transform` to the scores / ranks;
+#' 4. Multiply the potentially transformed scores / ranks with the filter's weight and apply `result_score_transform`.
 #' 
-#' Scores are combined per feature by
-#' computing the weighted (optionally rank-based) mean.
+#' Final feature scores are computed as the element-wise sum of the weighted, transformed filter scores.
 #' 
-#' Order of transformations: 
-#' 1. If `rank_transform` is `TRUE`, ranks are computed from the filter scores.
-#' 2. `filter_score_transform` is applied to the scores (or ranks)
-#' 3. `result_score_transform` is applied to the product of transformed scores/ranks and weights.
-#' 
-#'
 #' @section References:
 #' `r format_bib("binder_2020")`
 #'
@@ -78,20 +78,19 @@
 #'
 #' task = tsk("sonar")
 #'
-#' flt = mlr_filters$get("ensemble",
+#' filter = flt("ensemble",
 #'   filters = list(FilterVariance$new(), FilterAUC$new()))
-#' flt$param_set$values$weights = c(variance = 0.5, auc = 0.5)
-#' flt$calculate(task)
+#' filter$param_set$values$weights = c(variance = 0.5, auc = 0.5)
+#' filter$calculate(task)
 #' head(as.data.table(flt))
 #' 
-#' # TODO: Example with agg_reciprocal_ranking
-#' 
-#' 
-#' # TODO: remove this test example
-#' filter = flt("ensemble", list(flt("anova"), flt("auc")), weights = c(0.5, 0.5))
-#' filter$calculate(tsk("spam"))
+#' # Aggregate reciprocal ranking
+#' filter$param_set$set_values(rank_transform = TRUE, 
+#'   filter_score_transform = function(x) 1 / x, 
+#'   result_score_transform = function(x) 1 / x)
+#' filter$calculate(task)
 #' head(as.data.table(filter))
-#' 
+#'
 #' @export
 FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
   public = list(
@@ -185,24 +184,34 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
       nfeat = length(fn)  # need to rank all features in an ensemble
       weights = pv$weights
       wnames = names(private$.wrapped)
+
       if (!is.null(names(weights))) {
         weights = weights[wnames]
       }
       if (!any(weights > 0)) {
         stop("At least one weight must be > 0.")
       }
-      scores = pmap(list(private$.wrapped, weights), function(x, w) {
+
+      # Calculate filter scores, weighted by weight for specific filter
+      weighted_scores = pmap(list(private$.wrapped, weights), function(x, w) {
         x$calculate(task, nfeat)
         s = x$scores[fn]
-        # TODO: What does s look like?
         if (pv$rank_transform) s = rank(s, na.last = "keep", ties.method = "average")
         s = pv$filter_score_transform(s)
-        pv$result_score_transform(s * w)
+        # TODO: some sort of assert on result? e.g. length
+        s * w
       })
-      scores_df = as.data.frame(scores)
-      combined = rowSums(scores_df, na.rm = TRUE)
-      all_missing = rowSums(!is.na(scores_df)) == 0L
+      scores_dt = as.data.table(weighted_scores)
+
+      # Aggregate across features
+      combined = rowSums(scores_dt, na.rm = TRUE)
+      # TODO: move weighting here? Add to docs, apply and weighted.mean with na.rm
+      combined = pv$result_score_transform(combined)
+      # TODO: some sort of assert on result? e.g. length
+
+      all_missing = rowSums(!is.na(scores_dt)) == 0L
       combined[all_missing] = NA_real_
+
       structure(combined, names = fn)
     },
     deep_clone = function(name, value) {

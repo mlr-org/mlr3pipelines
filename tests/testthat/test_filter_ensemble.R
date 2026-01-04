@@ -465,3 +465,32 @@ test_that("FilterEnsemble weight search space works with bbotk", {
   expect_true(nrow(instance$archive$data) >= 2)
   expect_true(all(instance$archive$data$classif.acc <= 1))
 })
+
+test_that("FilterEnsemble trafos", {
+  skip_if_not_installed("mlr3filters")
+  task = tsk("sonar")
+  weights = c(0.7, 0.3)
+
+  filters = list(
+    mlr3filters::FilterVariance$new(),
+    mlr3filters::FilterAUC$new()
+  )
+  ensemble = FilterEnsemble$new(filters)
+
+  ensemble$param_set$set_values(
+    weights = weights,
+    rank_transform = TRUE,
+    filter_score_transform = function (x) 1 / x, 
+    result_score_transform = function (x) 1 / x
+  )
+
+  actual = ensemble$calculate(task)$scores
+
+  individual_scores = as.data.table(lapply(filters, function(flt) {
+    flt$calculate(task)
+    rank(flt$scores[task$feature_names], ties.method = "average")
+  }))
+  expected = sort(setNames(apply(individual_scores, 1, function(row) 1 / sum(row / 1 * weights)), task$feature_names))
+
+  expect_equal(actual, expected)
+})

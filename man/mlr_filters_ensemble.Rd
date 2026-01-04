@@ -36,8 +36,14 @@ filter ids concatenated by \code{"."}.
 Required non-negative weights, one for each wrapped filter, with at least one strictly positive value.
 Values are used as given when calculating the weighted mean. If named, names must match the wrapped filter ids.
 \item \code{rank_transform} :: \code{logical(1)}\cr
-If \code{TRUE}, ranks of individual filter scores are used instead of the raw scores before
-averaging. Initialized to \code{FALSE}.
+If \code{TRUE}, ranks of individual filter scores are used instead of the raw scores before averaging.
+Initialized to \code{FALSE}.
+\item \code{filter_score_transform} :: \code{function}\cr
+Function to be applied to the vector of individual filter scores after they were potentially transformed by
+\code{rank_transform} but before weighting and aggregation. Initialized to \code{identity}.
+\item \code{result_score_transform} :: \code{function}\cr
+Function to be applied to the vector of weighted scores after they were potentially transformed by \code{rank_transform} and/or
+\code{filter_score_transform} but before aggregation. Initialized to \code{identity}.
 }
 
 Parameters of wrapped filters are available via \verb{$param_set} and can be referenced using
@@ -71,8 +77,18 @@ Convenience wrapper that stores the \code{TuneToken} returned by
 \section{Internals}{
 
 All wrapped filters are called with \code{nfeat} equal to the number of features to ensure that
-complete score vectors are available for aggregation. Scores are combined per feature by
-computing the weighted (optionally rank-based) mean.
+complete score vectors are available for aggregation.
+Scores are combined per feature by computing the weighted mean of (potentially transformed) scores or ranks.
+Additionally, the final scores may also be transformed.
+The order of transformations is as follows:
+\enumerate{
+\item \verb{$calculate} the filter's scores for all features;
+\item If \code{rank_transform} is \code{TRUE}, convert filter scores to ranks;
+\item Apply \code{filter_score_transform} to the scores / ranks;
+\item Multiply the potentially transformed scores / ranks with the filter's weight and apply \code{result_score_transform}.
+}
+
+Final feature scores are computed as the element-wise sum of the weighted, transformed filter scores.
 }
 
 \section{References}{
@@ -90,10 +106,17 @@ library("mlr3filters")
 
 task = tsk("sonar")
 
-flt = mlr_filters$get("ensemble",
+filter = flt("ensemble",
   filters = list(FilterVariance$new(), FilterAUC$new()))
-flt$param_set$values$weights = c(variance = 0.5, auc = 0.5)
-flt$calculate(task)
+filter$param_set$values$weights = c(variance = 0.5, auc = 0.5)
+filter$calculate(task)
 head(as.data.table(flt))
+
+# Aggregate reciprocal ranking
+filter$param_set$set_values(rank_transform = TRUE, 
+  filter_score_transform = function(x) 1 / x, 
+  result_score_transform = function(x) 1 / x)
+filter$calculate(task)
+head(as.data.table(filter))
 \dontshow{\}) # examplesIf}
 }
