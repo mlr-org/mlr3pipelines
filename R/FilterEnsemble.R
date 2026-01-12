@@ -87,7 +87,7 @@
 #' # Aggregate reciprocal ranking
 #' filter$param_set$set_values(rank_transform = TRUE, 
 #'   filter_score_transform = function(x) 1 / x, 
-#'   result_score_transform = function(x) 1 / x)
+#'   result_score_transform = function(x) rank(1 / x, ties.method = "average"))
 #' filter$calculate(task)
 #' head(as.data.table(filter))
 #'
@@ -199,12 +199,13 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
         if (pv$rank_transform) s = rank(s, na.last = "keep", ties.method = "average")
         s = pv$filter_score_transform(s)
         # TODO: some sort of assert on result? e.g. length
-        s * w
+        s
       })
       scores_dt = as.data.table(weighted_scores)
 
       # Aggregate across features
-      combined = rowSums(scores_dt, na.rm = TRUE)
+      # combined = rowSums(scores_dt, na.rm = TRUE)
+      combined = apply(scores_dt, 1, function(row) weighted.mean(row, w = weights, na.rm = TRUE))
       # TODO: move weighting here? Add to docs, apply and weighted.mean with na.rm
       combined = pv$result_score_transform(combined)
       # TODO: some sort of assert on result? e.g. length

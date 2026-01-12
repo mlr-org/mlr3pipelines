@@ -481,7 +481,7 @@ test_that("FilterEnsemble trafos", {
     weights = weights,
     rank_transform = TRUE,
     filter_score_transform = function (x) 1 / x, 
-    result_score_transform = function (x) 1 / x
+    result_score_transform = function (x) rank(1 / x, ties.method = "average")
   )
 
   actual = ensemble$calculate(task)$scores
@@ -490,7 +490,9 @@ test_that("FilterEnsemble trafos", {
     flt$calculate(task)
     rank(flt$scores[task$feature_names], ties.method = "average")
   }))
-  expected = sort(setNames(apply(individual_scores, 1, function(row) 1 / sum(row / 1 * weights)), task$feature_names))
+  expected_scores = apply(individual_scores, 1, function(row) 1 / sum(1 / row * weights))
+  expected = rank(expected_scores, ties.method = "average")
+  expected = sort(setNames(expected, task$feature_names), decreasing = TRUE)
 
   expect_equal(actual, expected)
 })
