@@ -28,14 +28,13 @@
 #'   Required non-negative weights, one for each wrapped filter, with at least one strictly positive value.
 #'   Values are used as given when calculating the weighted mean. If named, names must match the wrapped filter ids.
 #' * `rank_transform` :: `logical(1)`\cr
-#'   If `TRUE`, ranks of individual filter scores are used instead of the raw scores before averaging. 
-#'   Initialized to `FALSE`.
+#'   If `TRUE`, ranks of individual filter scores are used instead of the raw scores. Initialized to `FALSE`.
 #' * `filter_score_transform` :: `function`\cr
 #'   Function to be applied to the vector of individual filter scores after they were potentially transformed by 
 #'   `rank_transform` but before weighting and aggregation. Initialized to `identity`.
 #' * `result_score_transform` :: `function`\cr
-#'   Function to be applied to the vector of weighted scores after they were potentially transformed by `rank_transform` and/or 
-#'   `filter_score_transform` but before aggregation. Initialized to `identity`.
+#'   Function to be applied to the vector of aggregated scores after they were potentially transformed by `rank_transform` and/or 
+#'   `filter_score_transform`. Initialized to `identity`.
 #'
 #' Parameters of wrapped filters are available via `$param_set` and can be referenced using
 #' the wrapped filter id followed by `"."`, e.g. `"variance.na.rm"`.
@@ -65,9 +64,9 @@
 #' 1. `$calculate` the filter's scores for all features;
 #' 2. If `rank_transform` is `TRUE`, convert filter scores to ranks;
 #' 3. Apply `filter_score_transform` to the scores / ranks;
-#' 4. Multiply the potentially transformed scores / ranks with the filter's weight and apply `result_score_transform`.
-#' 
-#' Final feature scores are computed as the element-wise sum of the weighted, transformed filter scores.
+#' 4. Multiply the potentially transformed scores / ranks with the filter's weight
+#' 5. Compute the element-wise sum across all weighted, transformed filter scores;
+#' 6. Potentially apply `result_score_transform` to the vector of scores for each feature aggreagted across filters.
 #' 
 #' @section References:
 #' `r format_bib("binder_2020")`
