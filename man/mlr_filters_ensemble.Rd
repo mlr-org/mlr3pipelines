@@ -109,7 +109,7 @@ filter = flt("ensemble",
   filters = list(FilterVariance$new(), FilterAUC$new()))
 filter$param_set$values$weights = c(variance = 0.5, auc = 0.5)
 filter$calculate(task)
-head(as.data.table(flt))
+head(as.data.table(filter))
 
 # Aggregate reciprocal ranking
 filter$param_set$set_values(rank_transform = TRUE, 
