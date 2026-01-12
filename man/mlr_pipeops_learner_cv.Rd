@@ -92,7 +92,7 @@ Which resampling method do we want to use. Currently only supports \code{"cv"} a
 predictions with the model trained on all training data.
 \item \code{resampling.folds} :: \code{numeric(1)}\cr
 Number of cross validation folds. Initialized to 3. Only used for \code{resampling.method = "cv"}.
-\item \code{keep_response} :: \code{logical(1)}\cr
+\item \code{resampling.keep_response} :: \code{logical(1)}\cr
 Only effective during \code{"prob"} prediction: Whether to keep response values, if available. Initialized to \code{FALSE}.
 \item \code{resampling.predict_method} :: \code{character(1)}\cr
 Controls how predictions are produced after training. \code{"full"} (default) fits the wrapped learner on the entire training data.

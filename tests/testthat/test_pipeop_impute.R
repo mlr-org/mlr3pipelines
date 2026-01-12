@@ -12,20 +12,22 @@ test_that("PipeOpImpute", {
         ps = ps(
           method_num = p_fct(c("median", "mean", "mode", "sample", "hist", "oor", "constant"), tags = c("train", "predict")),
           method_fct = p_fct(c("oor", "sample", "mode", "constant"), tags = c("train", "predict")),
+          method_pxc = p_fct(c("median", "mean", "mode", "sample", "hist", "oor", "constant"), tags = c("train", "predict")),
+          method_dte = p_fct(c("median", "mean", "mode", "sample", "hist", "oor", "constant"), tags = c("train", "predict")),
           add_dummy = p_fct(c("none", "missing_train", "all"), tags = c("train", "predict")),
           innum = p_uty(tags = c("train", "predict"))
         )
-        ps$values = list(method_num = "median", method_fct = "oor", add_dummy = "missing_train")
+        ps$values = list(method_num = "median", method_fct = "oor", method_pxc = "median", method_dte = "median", add_dummy = "missing_train")
         super$initialize(id, ps, param_vals = param_vals)
       },
 
       build_graph = function() {
         numimputer = switch(self$param_set$values$method_num,
-          median = po("imputemedian"),
-          mean = po("imputemean"),
+          median = po("imputemedian", id = "num_median"),
+          mean = po("imputemean", id = "num_mean"),
           mode = po("imputemode", id = "num_mode"),
           sample = po("imputesample", id = "num_sample"),
-          hist = po("imputehist"),
+          hist = po("imputehist", id = "num_hist"),
           constant = po("imputeconstant", id = "num_constant", param_vals = list(constant = -999)),
           oor = po("imputeoor", id = "num_oor"))
         fctimputer = switch(self$param_set$values$method_fct,
@@ -33,6 +35,22 @@ test_that("PipeOpImpute", {
           sample = po("imputesample", id = "fct_sample"),
           mode = po("imputemode", id = "fct_mode"),
           constant = po("imputeconstant", id = "fct_constant", param_vals = list(constant = ".MISSING", check_levels = FALSE)))
+        pxcimputer = switch(self$param_set$values$method_pxc,
+          median = po("imputemedian", id = "pxc_median"),
+          mean = po("imputemean", id = "pxc_mean"),
+          mode = po("imputemode", id = "pxc_mode"),
+          sample = po("imputesample", id = "pxc_sample"),
+          hist = po("imputehist", id = "pxc_hist"),
+          constant = po("imputeconstant", id = "pxc_constant", param_vals = list(constant = as.POSIXct(0))),
+          oor = po("imputeoor", id = "pxc_oor"))
+        dteimputer = switch(self$param_set$values$method_dte,
+          median = po("imputemedian", id = "dte_median"),
+          mean = po("imputemean", id = "dte_mean"),
+          mode = po("imputemode", id = "dte_mode"),
+          sample = po("imputesample", id = "dte_sample"),
+          hist = po("imputehist", id = "dte_hist"),
+          constant = po("imputeconstant", id = "dte_constant", param_vals = list(constant = as.Date(0))),
+          oor = po("imputeoor", id = "dte_oor"))
 
         if (self$param_set$values$add_dummy == "none") {
           dummyselector = selector_none()
@@ -45,6 +63,8 @@ test_that("PipeOpImpute", {
         graph = list(
           po("select", id = "num_select", selector = selector_type(c("integer", "numeric"))) %>>% numimputer,
           po("select", id = "fct_select", selector = selector_type(c("factor", "ordered"))) %>>% fctimputer,
+          po("select", id = "pxc_select", selector = selector_type(c("POSIXct"))) %>>% pxcimputer,
+          po("select", id = "dte_select", selector = selector_type(c("Date"))) %>>% dteimputer,
           po("select", id = "lgl_select", selector = selector_type("logical")) %>>% po("imputesample", id = "lgl_sample"),
           po("select", id = "chr_select", selector = selector_type("character")) %>>% po("imputeconstant", id = "chr_const", constant = ".MISSING"),
           po("select", id = "dummyselector", selector = dummyselector) %>>% po("missind", type = "logical", affect_columns = NULL,
@@ -78,12 +98,9 @@ test_that("PipeOpImpute", {
 
   task = mlr_tasks$get("pima")
 
+  expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(param_vals = list(innum = c("a", "b", "c", "d", "e", "f", "g"))), task = task)
 
-  expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(param_vals = list(innum = c("a", "b", "c", "d", "e"))), task = task)
-
-  expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(param_vals = list(innum = c("a", "b", "c", "d", "e"))), task = mlr_tasks$get("iris"))
-
-
+  expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(param_vals = list(innum = c("a", "b", "c", "d", "e", "f", "g"))), task = mlr_tasks$get("iris"))
 
   mdata = data.frame(stringsAsFactors = FALSE,
     a = c(1, 2, 3, 4, 5, NA),
@@ -98,7 +115,11 @@ test_that("PipeOpImpute", {
     j = c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE),
     k = c(TRUE, FALSE, TRUE, FALSE, TRUE, NA),
     l = factor(letters[rep(1:2, 3)]),
-    m = c(-.Machine$integer.max, -10000000L, 0L, 10000000L, .Machine$integer.max, NA)
+    m = c(-.Machine$integer.max, -10000000L, 0L, 10000000L, .Machine$integer.max, NA),
+    n = as.POSIXct(1:6),
+    o = c(as.POSIXct(1:5), NA),
+    p = as.Date(1:6),
+    q = c(as.Date(1:5), NA)
   )
 
   task = TaskClassif$new("mdata", as_data_backend(mdata), target = "l")
@@ -109,6 +130,8 @@ test_that("PipeOpImpute", {
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task_no_lgl,
     constargs = list(param_vals = list(
       method_num = "median",
+      method_pxc = "oor",
+      method_dte = "oor",
       method_fct = "oor",
       add_dummy = "none")))
 
@@ -188,11 +211,11 @@ test_that("PipeOpImpute", {
 
   task_predicted = po$predict(list(task))[[1]]$data()
 
-  expect_equal(task_trained[1, c("a", "c", "d", "f", "k", "m")],
-    task_trained[2, c("a", "c", "d", "f", "k", "m")])
+  expect_equal(task_trained[1, c("a", "c", "d", "f", "k", "m", "o", "q")],
+    task_trained[2, c("a", "c", "d", "f", "k", "m", "o", "q")])
 
-  expect_equal(task_predicted[c(5:6), c("a", "c", "d", "f", "k", "m")],
-    task_trained[c(1:2), c("a", "c", "d", "f", "k", "m")])
+  expect_equal(task_predicted[c(5:6), c("a", "c", "d", "f", "k", "m", "o", "q")],
+    task_trained[c(1:2), c("a", "c", "d", "f", "k", "m", "o", "q")])
 
   expect_equal(task_trained$missing_a, c(FALSE, TRUE))
   expect_equal(task_trained$missing_c, c(FALSE, TRUE))
@@ -201,30 +224,34 @@ test_that("PipeOpImpute", {
   expect_equal(task_trained$missing_h, c(FALSE, TRUE))
   expect_equal(task_trained$missing_k, c(FALSE, TRUE))
   expect_equal(task_trained$missing_m, c(FALSE, TRUE))
+  expect_equal(task_trained$missing_o, c(FALSE, TRUE))
+  expect_equal(task_trained$missing_q, c(FALSE, TRUE))
 
   expect_equal(task_trained$missing_b, c(FALSE, FALSE))
   expect_equal(task_trained$missing_e, c(FALSE, FALSE))
   expect_equal(task_trained$missing_g, c(FALSE, FALSE))
   expect_equal(task_trained$missing_i, c(FALSE, FALSE))
   expect_equal(task_trained$missing_j, c(FALSE, FALSE))
+  expect_equal(task_trained$missing_n, c(FALSE, FALSE))
+  expect_equal(task_trained$missing_p, c(FALSE, FALSE))
 
-  expect_set_equal(colnames(task_trained), c(letters[1:13], paste0("missing_", letters[c(1:11, 13)])))
-  expect_set_equal(colnames(task_predicted), c(letters[1:13], paste0("missing_", letters[c(1:11, 13)])))
+  expect_set_equal(colnames(task_trained), c(letters[1:17], paste0("missing_", letters[c(1:11, 13:17)])))
+  expect_set_equal(colnames(task_predicted), c(letters[1:17], paste0("missing_", letters[c(1:11, 13:17)])))
 
   po = PipeOpTestImpute$new(param_vals = list(
-    method_num = "median", method_fct = "oor", add_dummy = "all"))
+    method_num = "median", method_pxc = "median", method_dte = "median", method_fct = "oor", add_dummy = "all"))
 
   task_trained = po$train(list(task$clone(deep = TRUE)$filter(5:6)))[[1]]$data()
   task_predicted = po$predict(list(task))[[1]]$data()
 
-  expect_equal(task_trained[1, c("a", "c", "k", "m")],
-    task_trained[2, c("a", "c", "k", "m")])
+  expect_equal(task_trained[1, c("a", "c", "k", "m", "o", "q")],
+    task_trained[2, c("a", "c", "k", "m", "o", "q")])
 
   expect_equal(task_predicted[5:6, ],
     task_trained[1:2])
 
-  expect_set_equal(colnames(task_trained), c(letters[1:13], paste0("missing_", c("a", "b", "c", "j", "k", "m"))))
-  expect_set_equal(colnames(task_predicted), c(letters[1:13], paste0("missing_", c("a", "b", "c", "j", "k", "m"))))
+  expect_set_equal(colnames(task_trained), c(letters[1:17], paste0("missing_", c("a", "b", "c", "j", "k", "m", "n", "o", "p", "q"))))
+  expect_set_equal(colnames(task_predicted), c(letters[1:17], paste0("missing_", c("a", "b", "c", "j", "k", "m", "n", "o", "p", "q"))))
 
   expect_equal(task_trained$d[2], factor(".MISSING", levels = c(letters[1:6], ".MISSING")))
   expect_equal(task_trained$h[2], ".MISSING")
@@ -235,8 +262,8 @@ test_that("PipeOpImpute", {
   task_trained = po$train(list(task$clone(deep = TRUE)$filter(5:6)))[[1]]$data()
   task_predicted = po$predict(list(task$clone(deep = TRUE)$filter(1:3)))[[1]]$data()
 
-  expect_set_equal(colnames(task_trained), c(letters[1:13], paste0("missing_", c("a", "c", "k", "m"))))
-  expect_set_equal(colnames(task_predicted), c(letters[1:13], paste0("missing_", c("a", "c", "k", "m"))))
+  expect_set_equal(colnames(task_trained), c(letters[1:17], paste0("missing_", c("a", "c", "k", "m", "o", "q"))))
+  expect_set_equal(colnames(task_predicted), c(letters[1:17], paste0("missing_", c("a", "c", "k", "m", "o", "q"))))
 
   po = PipeOpTestImpute$new(param_vals = list(
     method_num = "median", method_fct = "oor", add_dummy = "none"))
@@ -262,7 +289,6 @@ test_that("PipeOpImpute", {
 
   # impute full na columns:
   po = PipeOpTestImpute$new(param_vals = list(method_num = "median", method_fct = "oor"))
-
   mdata = data.table(
     stringsAsFactors = FALSE,
     a = as.numeric(rep(NA, 3)),
@@ -271,6 +297,8 @@ test_that("PipeOpImpute", {
     d = factor(rep(NA, 3), ordered = TRUE, levels = "a"),
     e = as.logical(rep(NA, 3)),
     f = as.character(rep(NA, 3)),
+    g = as.POSIXct(rep(NA, 3)),
+    h = as.Date(rep(NA, 3)),
     t = as.factor(letters[rep(1:2, 3)])
   )
   task = TaskClassif$new("mdata", as_data_backend(mdata), target = "t")
@@ -283,7 +311,9 @@ test_that("PipeOpImpute", {
         logical = c(TRUE, FALSE),
         numeric = 0,
         ordered = ".MISSING",
-        character = ".MISSING"
+        character = ".MISSING",
+        POSIXct = as.POSIXct(0),
+        Date = as.Date(0)
       )
     out1 = po$train(list(task))[[1]]$data()
     out2 = po$predict(list(task))[[1]]$data()
@@ -298,7 +328,8 @@ test_that("PipeOpImpute", {
 test_that("More tests for PipeOpImputeMode", {
   set.seed(1)
   dat = data.frame(y = rnorm(10L), x1 = as.character(1L:10L), x2 = rnorm(10L), x3 = factor(rep(c(1L, 2L), each = 5L)),
-  x4 = ordered(rep(1L:5L, times = 2L)), x5 = 1L:10L, x6 = rep(c(TRUE, FALSE), times = 5L), stringsAsFactors = FALSE)
+  x4 = ordered(rep(1L:5L, times = 2L)), x5 = 1L:10L, x6 = rep(c(TRUE, FALSE), times = 5L),
+  x7 = as.POSIXct(1L:10L), x8 = as.Date(1L:10L), stringsAsFactors = FALSE)
   dat[c(1L, 10L), ] = NA
   task = TaskRegr$new("task", backend = dat, target = "y")
 
@@ -314,7 +345,7 @@ test_that("More tests for PipeOpImputeMode", {
   expect_false(anyNA(task_NA_trained[[5L]]))
 
   expect_equivalent(sapply(po_NA$state$model, FUN = function(x) class(x)[1L]),
-    c("numeric", "character", "character", "integer", "logical"))
+    c("numeric", "character", "character", "integer", "logical", "POSIXct", "Date"))
   task_NA_predicted = po_NA$predict(list(task_NA))[[1L]]$data()
 
   expect_equal(levels(task_NA_predicted[[4L]]), as.character(1:2))
@@ -327,7 +358,7 @@ test_that("More tests for PipeOpImputeConstant", {
   set.seed(1)
   dat = data.frame(y = rnorm(10L), x1 = as.character(1L:10L), x2 = rnorm(10L), x3 = factor(rep(c(1L, 2L), each = 5L)),
    x4 = ordered(rep(1L:5L, times = 2L)), x5 = 1L:10L, x6 = rep(c(TRUE, FALSE), times = 5L),
-   x7 = as.POSIXct(1L:10L, origin = "1960-01-01", tz = "GMT"), stringsAsFactors = FALSE)
+   x7 = as.POSIXct(1L:10L), x8 = as.Date(1L:10L), stringsAsFactors = FALSE)
   dat[1L, ] = NA
   task = TaskRegr$new("task", backend = dat, target = "y")
 
@@ -340,13 +371,13 @@ test_that("More tests for PipeOpImputeConstant", {
 
   train_out = po$train(list(task))[[1L]]
   expect_equal(train_out$feature_types, task$feature_types)
-  expect_equal(sum(train_out$missings()), 7L)
+  expect_equal(sum(train_out$missings()), 8L)
   expect_equal(train_out$data(cols = "x1")[[1L]][1L], "test")
 
   po$param_set$values = list(constant = -999, check_levels = TRUE, affect_columns = selector_type("numeric"))
   train_out = po$train(list(task))[[1L]]
   expect_equal(train_out$feature_types, task$feature_types)
-  expect_equal(sum(train_out$missings()), 7L)
+  expect_equal(sum(train_out$missings()), 8L)
   expect_equal(train_out$data(cols = "x2")[[1L]][1L], -999)
 
   po$param_set$values = list(constant = "test", check_levels = TRUE, affect_columns = selector_type("factor"))
@@ -354,7 +385,7 @@ test_that("More tests for PipeOpImputeConstant", {
   po$param_set$values$check_levels = FALSE
   train_out = po$train(list(task))[[1L]]
   expect_equal(train_out$feature_types, task$feature_types)
-  expect_equal(sum(train_out$missings()), 7L)
+  expect_equal(sum(train_out$missings()), 8L)
   expect_equal(po$train(list(task))[[1L]]$data(cols = "x3")[[1L]][1L], factor("test", levels = c("1", "2", "test")))
   po$param_set$values$constant = factor("test", levels = c("test", "another"))
   expect_equal(po$train(list(task))[[1L]]$data(cols = "x3")[[1L]][1L], factor("test", levels = c("1", "2", "test")))
@@ -364,7 +395,7 @@ test_that("More tests for PipeOpImputeConstant", {
   po$param_set$values$check_levels = FALSE
   train_out = po$train(list(task))[[1L]]
   expect_equal(train_out$feature_types, task$feature_types)
-  expect_equal(sum(train_out$missings()), 7L)
+  expect_equal(sum(train_out$missings()), 8L)
   expect_equal(po$train(list(task))[[1L]]$data(cols = "x4")[[1L]][1L], ordered("test", levels = c("1", "2", "3", "4", "5", "test")))
   po$param_set$values$constant = factor("test", levels = c("test", "another"))
   expect_equal(po$train(list(task))[[1L]]$data(cols = "x4")[[1L]][1L], ordered("test", levels = c("1", "2", "3", "4", "5", "test")))
@@ -372,32 +403,42 @@ test_that("More tests for PipeOpImputeConstant", {
   po$param_set$values = list(constant = -999, check_levels = TRUE, affect_columns = selector_type("integer"))
   train_out = po$train(list(task))[[1L]]
   expect_equal(train_out$feature_types, task$feature_types)
-  expect_equal(sum(train_out$missings()), 7L)
+  expect_equal(sum(train_out$missings()), 8L)
   expect_equal(train_out$data(cols = "x5")[[1L]][1L], -999)
 
   po$param_set$values = list(constant = TRUE, check_levels = TRUE, affect_columns = selector_type("logical"))
   train_out = po$train(list(task))[[1L]]
   expect_equal(train_out$feature_types, task$feature_types)
-  expect_equal(sum(train_out$missings()), 7L)
+  expect_equal(sum(train_out$missings()), 8L)
   expect_equal(train_out$data(cols = "x6")[[1L]][1L], TRUE)
 
-  pos_impute = as.POSIXct(1000000, origin = "1960-01-01", tz = "GMT")
+  pos_impute = as.POSIXct(1000000)
   po$param_set$values = list(constant = pos_impute, check_levels = TRUE, affect_columns = selector_type("POSIXct"))
   train_out = po$train(list(task))[[1L]]
-  expect_equal(sum(train_out$missings()), 7L)
+  expect_equal(sum(train_out$missings()), 8L)
   expect_equal(train_out$data(cols = "x7")[[1L]][1L], pos_impute)
+  po$param_set$values = list(constant = "1970-01-11 10:39:22 CET", check_levels = TRUE, affect_columns = selector_type("POSIXct"))
+  expect_error(po$train(list(task)))
+
+  pos_impute = as.Date(1000000)
+  po$param_set$values = list(constant = pos_impute, check_levels = TRUE, affect_columns = selector_type("Date"))
+  train_out = po$train(list(task))[[1L]]
+  expect_equal(sum(train_out$missings()), 8L)
+  expect_equal(train_out$data(cols = "x8")[[1L]][1L], pos_impute)
+  po$param_set$values = list(constant = "1999-12-31", check_levels = TRUE, affect_columns = selector_type("Date"))
+  expect_error(po$train(list(task)))
 })
 
 
 test_that("More tests for Integers", {
-  data <- data.table(x = c(-.Machine$integer.max, -10000000L, 0L, 10000000L, .Machine$integer.max, rep(NA, 1001)), t = 1:1006)
+  data = data.table(x = c(-.Machine$integer.max, -10000000L, 0L, 10000000L, .Machine$integer.max, rep(NA, 1001)), t = 1:1006)
 
   task = TaskRegr$new("task", backend = data, target = "t")
   pos = list(PipeOpImputeHist$new(), PipeOpImputeMean$new(), PipeOpImputeSample$new(), PipeOpImputeMedian$new(), PipeOpImputeMode$new(), PipeOpImputeOOR$new())
 
 
   for (po in pos) {
-    result <- po$train(list(task))[[1]]
+    result = po$train(list(task))[[1]]
 
     expect_integer(result$data()$x, info = po$id)
     expect_false(anyNA(result$data()$x), info = po$id)
@@ -590,14 +631,16 @@ test_that("'empty_level_control' in POImputeOOR and POImputeConstant", {
 
 
   # PipeOpImputeConstant
-  # Add logical and POSIXct features
+  # Add logical, POSIXct and Date features
   task_train$cbind(data.table(
     lgl = c(TRUE, FALSE, NA),
-    pxc = as.POSIXct(c("2025/01/01", "2025/02/02", NA))
+    pxc = as.POSIXct(c("2025/01/01", "2025/02/02", NA)),
+    dte = as.Date(c("2025/01/01", "2025/02/02", NA))
   ))
   task_pred$cbind(data.table(
     lgl = c(TRUE, FALSE, NA),
-    pxc = as.POSIXct(c("2025/01/01", "2025/02/02", NA))
+    pxc = as.POSIXct(c("2025/01/01", "2025/02/02", NA)),
+    dte = as.Date(c("2025/01/01", "2025/02/02", NA))
   ))
 
   # Also test that other types still behave as expected
@@ -653,6 +696,17 @@ test_that("'empty_level_control' in POImputeOOR and POImputeConstant", {
   predict_out = op$predict(list(task_pred))[[1L]]
   expect_identical(predict_out$data(cols = names(dt_out)), dt_out)
 
+  # Type: Date
+  op$param_set$set_values(constant = as.Date("2024/01/01"), affect_columns = selector_type("Date"))
+
+  dt_out = data.table(
+    target = factor(c("a", "b", "a")),
+    dte = as.Date(c("2025/01/01", "2025/02/02", "2024/01/01"))
+  )
+  train_out = op$train(list(task_train))[[1L]]
+  expect_identical(train_out$data(cols = names(dt_out)), dt_out)
+  predict_out = op$predict(list(task_pred))[[1L]]
+  expect_identical(predict_out$data(cols = names(dt_out)), dt_out)
 })
 
 test_that("PipeOpImputeSample - impute missings for unseen factor levels", {
@@ -680,3 +734,4 @@ test_that("PipeOpImputeSample - impute missings for unseen factor levels", {
   expect_no_error(glrn$predict(task_NA))
 
 })
+

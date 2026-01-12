@@ -7,7 +7,7 @@
 #' @description
 #' Impute factorial features by adding a new level `".MISSING"`.
 #'
-#' Impute numerical features by constant values shifted below the minimum or above the maximum by
+#' Impute numeric, integer, POSIXct or Date features by constant values shifted below the minimum or above the maximum by
 #' using \eqn{min(x) - offset - multiplier * diff(range(x))} or
 #' \eqn{max(x) + offset + multiplier * diff(range(x))}.
 #'
@@ -51,7 +51,7 @@
 #'
 #' The `$state$model` contains either `".MISSING"` used for `character` and `factor` (also
 #' `ordered`) features or `numeric(1)` indicating the constant value used for imputation of
-#' `integer` and `numeric` features.
+#' `integer`, `numeric`, `POSIXct` or `Date` features.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpImpute`], as well as:
@@ -59,17 +59,17 @@
 #'   Should `integer` and `numeric` features be shifted below the minimum? Initialized to `TRUE`. If `FALSE`
 #'   they are shifted above the maximum. See also the description above.
 #' * `offset` :: `numeric(1)` \cr
-#'   Numerical non-negative offset as used in the description above for `integer` and `numeric`
+#'   Numerical non-negative offset as used in the description above for `integer`, `numeric`, `POSIXCT` and `Date`.
 #'   features. Initialized to `1`.
 #' * `multiplier` :: `numeric(1)` \cr
-#'   Numerical non-negative multiplier as used in the description above for `integer` and `numeric`
+#'   Numerical non-negative multiplier as used in the description above for `integer`, `numeric`, `POSIXct` and `Date`.
 #'   features. Initialized to `1`.
 #'
 #' @section Internals:
 #' Adds an explicit new `level()` to `factor` and `ordered` features, but not to `character` features.
 #' For `integer` and `numeric` features uses the `min`, `max`, `diff` and `range` functions.
 #' `integer` and `numeric` features that are entirely `NA` are imputed as `0`. `factor` and `ordered` features that are
-#' entirely `NA` are imputed as `".MISSING"`.
+#' entirely `NA` are imputed as `".MISSING"`. For `POSIXct` and `Date` features the value `0` is transformed into the respective data type.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -119,7 +119,7 @@ PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
       )
       # this is one of the few imputers that handles 'character' features!
       super$initialize(id, param_set = ps, param_vals = param_vals, empty_level_control = "param",
-        feature_types = c("character", "factor", "integer", "numeric", "ordered"))
+        feature_types = c("character", "factor", "integer", "numeric", "ordered", "POSIXct", "Date"))
     }
   ),
   private = list(
@@ -153,10 +153,13 @@ PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
         logical = c(TRUE, FALSE),
         numeric = 0,
         ordered = ".MISSING",
-        character = ""
+        character = "",
+        POSIXct = as.POSIXct(0),
+        Date = as.Date(0)
       )
     }
   )
 )
 
 mlr_pipeops$add("imputeoor", PipeOpImputeOOR)
+

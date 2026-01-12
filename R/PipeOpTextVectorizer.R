@@ -322,7 +322,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
       x = invoke(quanteda::dfm_weight, .args = c(list(x = tdm),
         rename_list(self$param_set$get_values("dfm_weight"), "_tf$", "")))
       v = docfreq
-      j = methods::as(x, "dgTMatrix")@j + 1L
+      j = methods::as(x, "TsparseMatrix")@j + 1L
       x@x = x@x * v[j]
       x
     }
