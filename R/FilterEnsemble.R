@@ -199,14 +199,13 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
         if (pv$rank_transform) s = rank(s, na.last = "keep", ties.method = "average")
         s = pv$filter_score_transform(s)
         # TODO: some sort of assert on result? e.g. length
-        s
+        s * w
       })
       scores_dt = as.data.table(weighted_scores)
 
       # Aggregate across features
-      # combined = rowSums(scores_dt, na.rm = TRUE)
-      combined = apply(scores_dt, 1, function(row) weighted.mean(row, w = weights, na.rm = TRUE))
-      # TODO: move weighting here? Add to docs, apply and weighted.mean with na.rm
+      combined = rowSums(scores_dt, na.rm = TRUE)
+      # combined = apply(scores_dt, 1, function(row) weighted.mean(row, w = weights, na.rm = TRUE))  # weighted.mean normalizes weights in case of NAs
       combined = pv$result_score_transform(combined)
       # TODO: some sort of assert on result? e.g. length
 
