@@ -15,8 +15,11 @@ Aggregates features from all input tasks by \code{\link[=cbind]{cbind()}}ing the
 across all \code{\link[mlr3:Task]{Task}}s. Only the target column(s) of the first \code{\link[mlr3:Task]{Task}}
 are kept.
 
-If \code{assert_targets_equal} is \code{TRUE} then target column names are compared and an error is thrown
-if they differ across inputs.
+\code{PipeOpFeatureUnion} tries to merge columns that are identical, while preventing accidental
+overwrites of columns that contain differing data. This is controlled using the \code{feature_clash}
+(for columns containing features, weights etc.) and \code{target_clash} (for tharget columns)
+hyperparameters. The \code{assert_target_equal} construction parameter / field can still be used
+as well but is deprecated and will generate a warning.
 
 If input tasks share some feature names but these features are not identical an error is thrown.
 This check is performed by first comparing the features names and if duplicates are found, also
@@ -45,6 +48,7 @@ Identifier of the resulting object, default \code{"featureunion"}.
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
 be set during construction. Default \code{list()}.
 \item \code{assert_targets_equal} :: \code{logical(1)}\cr
+DEPRECATED; use \code{target_clash} hyperparameter instead.\cr
 If \code{assert_targets_equal} is \code{TRUE} (Default), task target column names are checked for
 agreement. Disagreeing target column names are usually a bug, so this should often be left at
 the default.
@@ -72,7 +76,35 @@ The \verb{$state} is left empty (\code{list()}).
 
 \section{Parameters}{
 
-\code{PipeOpFeatureUnion} has no Parameters.
+\itemize{
+\item \code{target_clash} :: \code{character(1)}\cr
+How to handle target columns that differ between input \code{\link[mlr3:Task]{Task}}s. \code{"allow_same_hash"}
+checks the names and \verb{$col_hashes} and throws an error if they disagree. \code{"allow_same_content"} (default) is
+more permissive: If \verb{$col_hashes} disagree, then it checks the target content, if the content of both
+columns agree, then merging of tasks is still allowed. This avoids some rare false-positives, but in cases
+where hashes \emph{do} disagree this may be slow for \code{\link[mlr3:Task]{Task}}s with many rows or targets.
+\code{"ignore"} does not check for target agreement and overwrites the target with the target of the \emph{rightmost} /
+highest numbered input \code{\link[mlr3:Task]{Task}}. Use with caution. This is the only option that allows feature-union of \code{\link[mlr3:Task]{Task}}s
+that differ in the names of their target column (and all target columns except the rightmost / highest numbered input
+\code{\link[mlr3:Task]{Task}}'s target are dropped in that case).\cr
+The deprecated field \code{assert_targets_equal} sets this value to \code{"allow_same_content"} (i.e. default) when \code{TRUE} and to
+\code{"ignore"} when \code{FALSE}.
+\item \code{feature_clash} :: \code{character(1)}\cr
+How to handle non-target columns that have the same name but differ between input \code{\link[mlr3:Task]{Task}}s. \code{"allow_same_hash"}
+checks the names and \verb{$col_hashes} and throws an error if they disagree. \code{"allow_same_content"} (default) is
+more permissive: If \verb{$col_hashes} disagree, then it checks the column content, if the content of both
+columns agree, then merging of tasks is still allowed. This avoids some rare false-positives, but in cases
+where hashes \emph{do} disagree this may be slow for large \code{\link[mlr3:Task]{Task}}s.
+\code{"ignore"} does not check for column data agreement and overwrites columns of the same name with the values of the \emph{rightmost} /
+highest numbered input \code{\link[mlr3:Task]{Task}}.\cr
+Some column roles (\code{"group"}, \code{"weight"}, \code{"name"}) do not allow more than one column role present in a \code{\link[mlr3:Task]{Task}} (see
+\verb{$col_roles} documentation there). When up to one \code{\link[mlr3:Task]{Task}} has a column of these column role, it is taken for the
+resulting \code{\link[mlr3:Task]{Task}} without any issue. When more than one \code{\link[mlr3:Task]{Task}} has a column with one of these roles,
+but with the same name, the \code{feature_clash} policy applies as described above. When more than one \code{\link[mlr3:Task]{Task}} has a
+column with one of these roles, but they have \emph{different} names, then an error is thrown when \code{feature_clash} is not \code{"ignore"}.
+When it is \code{"ignore"}, the \emph{rightmost} / highest numbered input \code{\link[mlr3:Task]{Task}}'s column is used and all others of this
+role are discarded.
+}
 }
 
 \section{Internals}{
