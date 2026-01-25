@@ -40,9 +40,12 @@ test_that("error handling", {
   expect_equal(task$data(), op$train(list(task))[[1]]$data())
 })
 
-test_that("PipeOpRename - assert on function works", {
+test_that("PipeOpRename - errors for renaming function", {
   task = mlr_tasks$get("iris")
   expect_error(po("renamecolumns", param_vals = list(renaming = 1 + 1)))
+
+  op = po("renamecolumns", param_vals = list(renaming = function() "a"))
+  expect_error(po$train(list(task)), "")
 })
 
 test_that("PipeOpRename - renamimg by function", {
