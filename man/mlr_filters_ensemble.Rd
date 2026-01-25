@@ -114,11 +114,23 @@ filter$param_set$values$weights = c(variance = 0.5, auc = 0.5)
 filter$calculate(task)
 head(as.data.table(filter))
 
+# Weighted median as aggregator
+filter$param_set$set_values(aggregator = function(x, w, na.rm) {
+  if (na.rm) x <- x[!is.na(x)]
+  o <- order(x)
+  x <- x[o]
+  w <- w[o]
+  x[which(cumsum(w) >= sum(w) / 2)[1]]
+})
+filter$calculate(task)
+head(as.data.table(filter))
+
 # Aggregate reciprocal ranking
 filter$param_set$set_values(rank_transform = TRUE, 
   filter_score_transform = function(x) 1 / x, 
   result_score_transform = function(x) rank(1 / x, ties.method = "average"))
 filter$calculate(task)
 head(as.data.table(filter))
+
 \dontshow{\}) # examplesIf}
 }
