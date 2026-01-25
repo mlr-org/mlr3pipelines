@@ -67,7 +67,7 @@ values enclosed by square brackets ("\code{[}", "\verb{]}"), then the respective
 }
 
 \examples{
-\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
 mlr_pipeops$get("learner", lrn("classif.rpart"))

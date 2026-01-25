@@ -44,18 +44,18 @@ test_that("PipeOpRename - errors for renaming function", {
   task = mlr_tasks$get("iris")
   expect_error(po("renamecolumns", param_vals = list(renaming = 1 + 1)))
 
-  op = po("renamecolumns", param_vals = list(renaming = function() "a"))
-  expect_error(po$train(list(task)), "")
+  op = po("renamecolumns", param_vals = list(renaming = function(x) "a"))
+  expect_error(op$train(list(task)), "value returned by `renaming` function.*length")
 })
 
 test_that("PipeOpRename - renamimg by function", {
   task = mlr_tasks$get("iris")
   
   op = po("renamecolumns", param_vals = list(renaming = function(colnames) sub("Petal", "P", colnames)))
-  result = po$train(list(task))
+  result = op$train(list(task))
   expect_equal(result[[1]]$feature_names, c("P.Length", "P.Width", "Sepal.Length", "Sepal.Width"))
 
-  op$param_set$set_values(affect_columns = "Petal.Length")
-  result = po$train(list(task))
+  op$param_set$set_values(affect_columns = selector_name("Petal.Length"))
+  result = op$train(list(task))
   expect_equal(result[[1]]$feature_names, c("P.Length", "Petal.Width", "Sepal.Length", "Sepal.Width"))                                          
 })

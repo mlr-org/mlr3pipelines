@@ -73,7 +73,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{if (requireNamespace("bestNormalize")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("bestNormalize")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
 task = tsk("iris")

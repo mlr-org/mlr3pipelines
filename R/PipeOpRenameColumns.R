@@ -61,11 +61,11 @@
 #' pop = po("renamecolumns", param_vals = list(renaming = c("Petal.Length" = "PL")))
 #' pop$train(list(task))
 #'
-#' pof = po("renamecolumns",
-#'          param_vals = list(renaming = function(colnames) {sub("Petal", "P", colnames)}))
+#' pof = po("renamecolumns", param_vals = list(renaming = function(colnames) {
+#'   sub("Petal", "P", colnames)
+#' }))
 #' pof$train(list(task))
-#'
-
+#' 
 PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
