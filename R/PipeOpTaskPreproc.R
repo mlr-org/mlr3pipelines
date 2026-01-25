@@ -59,7 +59,7 @@
 #'   `"TaskRegr"` (or another subclass introduced by other packages). Default is `"Task"`.
 #' * `tags` :: `character` | `NULL`\cr
 #'   Tags of the resulting `PipeOp`. This is added to the tag `"data transform"`. Default `NULL`.
-#'* `feature_types` :: `character`\cr
+#' * `feature_types` :: `character`\cr
 #'   Feature types affected by the `PipeOp`. See `private$.select_cols()` for more information.
 #'   Defaults to all available feature types.
 #'

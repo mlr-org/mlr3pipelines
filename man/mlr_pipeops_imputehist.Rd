@@ -3,12 +3,12 @@
 \name{mlr_pipeops_imputehist}
 \alias{mlr_pipeops_imputehist}
 \alias{PipeOpImputeHist}
-\title{Impute Numerical Features by Histogram}
+\title{Impute Numeric, Integer, POSIXct or Date Features by Histogram}
 \format{
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
 \description{
-Impute numerical features by histogram.
+Impute numeric, integer, POSIXct or Date features by histogram.
 
 During training, a histogram is fitted on each column using R's \code{\link[graphics:hist]{hist()}} function.
 The fitted histogram is then sampled from for imputation. Sampling happens in a two-step process:
@@ -34,7 +34,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 Input and output channels are inherited from \code{\link{PipeOpImpute}}.
 
-The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric features missing values imputed by (column-wise) histogram; see Description for details.
+The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric, integer, POSIXct or Date features missing values imputed by (column-wise) histogram; see Description for details.
 }
 
 \section{State}{
@@ -119,6 +119,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
+\code{\link{mlr_pipeops_info}},
+\code{\link{mlr_pipeops_isomap}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},

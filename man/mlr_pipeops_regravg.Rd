@@ -12,12 +12,80 @@ Perform (weighted) prediction averaging from regression \code{\link[mlr3:Predict
 \code{\link{PipeOpRegrAvg}} to multiple \code{\link{PipeOpLearner}} outputs.
 
 The resulting \code{"response"} prediction is a weighted average of the incoming \code{"response"} predictions.
-\code{"se"} prediction is currently not aggregated but discarded if present.
+Aggregation of \code{"se"} predictions is controlled by the \code{se_aggr} parameter (see below). When \code{"se"} is not requested
+or \code{se_aggr = "none"}, \code{"se"} is dropped.
+}
+\section{\code{"se"} Aggregation}{
+
+
+Let there be \code{K} incoming predictions with weights \code{w} (sum to 1). For a given row \code{j}, denote
+per-model means \code{mu_i[j]} and, if available, per-model standard errors \code{se_i[j]}.
+Define
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{mu_bar[j]      = sum_i w[i] * mu_i[j]
+var_between[j] = sum_i w[i] * (mu_i[j] - mu_bar[j])^2 # weighted var of means
+var_within[j]  = sum_i w[i] * se_i[j]^2               # weighted mean of SE^2s
+}\if{html}{\out{</div>}}
+
+The following aggregation methods are available:
+\itemize{
+\item \strong{\code{se_aggr = "predictive"}} -- \emph{Within + Between (mixture/predictive SD)}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{se[j] = sqrt(var_within[j] + var_between[j])
+}\if{html}{\out{</div>}}
+
+\strong{Interpretation.} Treats each incoming \code{se_i} as that model's predictive SD at the point (or, if the learner
+reports SE of the conditional mean--as many \code{mlr3} regression learners do--then as that mean-SE). The returned \code{se}
+is the SD of the \emph{mixture ensemble} under weighted averaging: it increases when base models disagree (epistemic spread)
+and when individual models are uncertain (aleatoric spread).
+\strong{Notes.} If \code{se_i} represents \emph{mean} SE (common in \code{predict.lm(se.fit=TRUE)}-style learners), the result
+aggregates those mean-SEs and still adds model disagreement correctly, but it will \emph{underestimate} a true predictive SD
+that would additionally include irreducible noise. Requires \code{"se"} to be present from \strong{all} inputs.
+\item \strong{\code{se_aggr = "mean"}} -- \emph{SE of the weighted average of means under equicorrelation}
+With a correlation parameter \code{se_aggr_rho = rho}, assume
+\code{Cov(mu_i_hat, mu_j_hat) = rho * se_i * se_j} for all \code{i != j}. Then
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{# components:
+a[j] = sum_i (w[i]^2 * se_i[j]^2)
+b[j] = (sum_i w[i] * se_i[j])^2
+var_mean[j] = (1 - rho) * a[j] + rho * b[j]
+se[j] = sqrt(var_mean[j])
+}\if{html}{\out{</div>}}
+
+\strong{Interpretation.} Returns the \emph{standard error of the averaged estimator} \verb{sum_i w[i] * mu_i}, not a predictive SD.
+Use when you specifically care about uncertainty of the averaged mean itself.
+\strong{Notes.} \code{rho} is clamped to the PSD range \verb{[-1/(K-1), 1]} for \code{K > 1}. Typical settings:
+\code{rho = 0} (assume independence; often optimistic for CV/bagging) and \code{rho = 1} (perfect correlation; conservative and
+equal to the weighted arithmetic mean of SEs). Requires \code{"se"} from \strong{all} inputs.
+\item \strong{\code{se_aggr = "within"}} -- \emph{Within-model component only}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{se[j] = sqrt(var_within[j])
+}\if{html}{\out{</div>}}
+
+\strong{Interpretation.} Aggregates only the average per-model uncertainty and \strong{ignores} disagreement between models.
+Useful as a diagnostic of the aleatoric component; not a full ensemble uncertainty.
+\strong{Notes.} Typically \emph{underestimates} the uncertainty of the ensemble prediction when models disagree.
+Requires \code{"se"} from \strong{all} inputs.
+\item \strong{\code{se_aggr = "between"}} -- \emph{Between-model component only (works without \code{"se"})}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{se[j] = sqrt(var_between[j])
+}\if{html}{\out{</div>}}
+
+\strong{Interpretation.} Captures only the spread of the base means (epistemic/model disagreement).
+\strong{Notes.} This is the only method that does not use incoming \code{"se"}. It is a \emph{lower bound} on a full predictive SD,
+because it omits within-model noise.
+\item \strong{\code{se_aggr = "none"}} -- \emph{Do not return \code{"se"}}
+\code{"se"} is dropped from the output prediction.
+}
+
+\strong{Relationships and edge cases.} For any row, \code{se("predictive") >= max(se("within"), se("between"))}.
+With a single input (\code{K = 1}), \code{"predictive"} and \code{"within"} return the input \code{"se"}, \code{"between"} returns \code{0}.
+Methods \code{"predictive"}, \code{"mean"}, and \code{"within"} require all inputs to provide \code{"se"}; otherwise aggregation errors.
 
 Weights can be set as a parameter; if none are provided, defaults to
 equal weights for each prediction.
-Defaults to equal weights for each model.
 }
+
 \section{Construction}{
 
 
@@ -51,7 +119,15 @@ The \verb{$state} is left empty (\code{list()}).
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from the \code{\link{PipeOpEnsemble}}.
+The parameters are the parameters inherited from the \code{\link{PipeOpEnsemble}}, as well as:
+\itemize{
+\item \code{se_aggr} :: \code{character(1)}\cr
+Controls how incoming \code{"se"} values are aggregated into an ensemble \code{"se"}. One of
+\code{"predictive"}, \code{"mean"}, \code{"within"}, \code{"between"}, \code{"none"}. See the description above for definitions and interpretation.
+\item \code{se_aggr_rho} :: \code{numeric(1)}\cr
+Equicorrelation parameter used only for \code{se_aggr = "mean"}. Interpreted as the common correlation between
+per-model mean estimators. Recommended range \verb{[0, 1]}; values are clamped to \verb{[-1/(K-1), 1]} for validity.
+}
 }
 
 \section{Internals}{
@@ -73,15 +149,15 @@ Only methods inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 \dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
-# Simple Bagging
+# Simple Bagging for Regression
 gr = ppl("greplicate",
   po("subsample") \%>>\%
-  po("learner", lrn("classif.rpart")),
+  po("learner", lrn("regr.rpart")),
   n = 5
 ) \%>>\%
-  po("classifavg")
+  po("regravg")
 
-resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
+resample(tsk("mtcars"), GraphLearner$new(gr), rsmp("holdout"))
 \dontshow{\}) # examplesIf}
 }
 \seealso{
@@ -128,6 +204,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
+\code{\link{mlr_pipeops_info}},
+\code{\link{mlr_pipeops_isomap}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},

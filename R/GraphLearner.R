@@ -118,7 +118,16 @@
 #'   corresponding [`PipeOpBranch`] is searched, and its hyperparameter configuration is used to select the base learner.
 #'   There may be multiple corresponding [`PipeOpBranch`]s, which are all considered.
 #'   If `resolve_branching` is `FALSE`, [`PipeOpUnbranch`] is treated as any other `PipeOp` with multiple inputs; all possible branch paths are considered equally.
-#'
+#' * `predict_newdata_fast(newdata, task = NULL)`\cr
+#'   (`data.frame`, [`Task`][mlr3::Task] | `NULL`) -> [`Prediction`][mlr3::Prediction]\cr
+#'   Predicts outcomes for new data in `newdata` using the model fitted during `$train()`.\cr
+#'   For the moment, this is merely a thin wrapper around [`Learner$predict_newdata()`][mlr3::Learner] to ensure compatibility, meaning that *no speedup* is currently achieved.
+#'   In the future, this method may be optimized to be faster than `$predict_newdata()`.\cr
+#'   Unlike `$predict_newdata()`, this method does not return a [Prediction] object.
+#'   Instead, it returns a list with elements depending on `$task_type` and `$predict_type`:
+#'   * for `task_type = "classif"`: `response` and `prob`, or `quantiles` (if `predict_type = "quantiles"`)
+#'   * for `task_type = "regr"`: `response` and `se`
+#' 
 #' The following standard extractors as defined by the [`Learner`][mlr3::Learner] class are available.
 #' Note that these typically only extract information from the `$base_learner()`.
 #' This works well for simple [`Graph`]s that do not modify features too much, but may give unexpected results for `Graph`s that
@@ -312,6 +321,32 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     },
     plot = function(html = FALSE, horizontal = FALSE, ...) {
       private$.graph$plot(html = html, horizontal = horizontal, ...)
+    },
+    print = function() {
+      super$print(self)
+
+      is_sequential = all(table(self$edges$src_id) <= 1) && all(table(self$edges$dst_id) <= 1)
+      if(is_sequential) {
+        ppunit = paste0(self$ids(), collapse = " -> ")
+        pp = paste0(c("<INPUT>", ppunit, "<OUTPUT>"), collapse = " -> ")
+      } else {
+        pp = "non-sequential"
+      }
+      cat_cli(cli_h3("Pipeline: {.strong {pp}}"))
+    },
+    # TODO: Optimize this method to be actually faster than predict_newdata(), #968
+    predict_newdata_fast = function(newdata, task = NULL) {
+      pred = self$predict_newdata(newdata, task)
+      if (self$task_type == "regr") {
+        if (!is.null(pred$quantiles)) {
+          return(list(quantiles = pred$quantiles))
+        }
+        list(response = pred$response, se = if (!all(is.na(pred$se))) pred$se else NULL)
+      } else if (self$task_type == "classif") {
+        list(response = pred$response, prob = pred$prob)
+      } else {
+        stopf("GraphLearner's predict_newdata_fast does not support task type '%s'.", self$task_type)
+      }
     }
   ),
   active = list(
