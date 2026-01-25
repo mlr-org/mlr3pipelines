@@ -40,6 +40,9 @@ If \code{TRUE}, ranks of individual filter scores are used instead of the raw sc
 \item \code{filter_score_transform} :: \code{function}\cr
 Function to be applied to the vector of individual filter scores after they were potentially transformed by
 \code{rank_transform} but before weighting and aggregation. Initialized to \code{identity}.
+\item \code{aggregator} :: \code{function}\cr
+Function to aggregate the (potentially transformed) and weighted filter scores across filters. Must take formal
+arguments \code{w} for weights and \code{na.rm}. Defaults to \code{weighted.mean}.
 \item \code{result_score_transform} :: \code{function}\cr
 Function to be applied to the vector of aggregated scores after they were potentially transformed by \code{rank_transform} and/or
 \code{filter_score_transform}. Initialized to \code{identity}.
@@ -77,15 +80,15 @@ Convenience wrapper that stores the \code{TuneToken} returned by
 
 All wrapped filters are called with \code{nfeat} equal to the number of features to ensure that
 complete score vectors are available for aggregation.
-Scores are combined per feature by computing the weighted mean of (potentially transformed) scores or ranks.
+Scores are combined per feature by computing a weighted aggregation of (potentially transformed) scores or ranks.
 Additionally, the final scores may also be transformed.
+
 The order of transformations is as follows:
 \enumerate{
 \item \verb{$calculate} the filter's scores for all features;
 \item If \code{rank_transform} is \code{TRUE}, convert filter scores to ranks;
 \item Apply \code{filter_score_transform} to the scores / ranks;
-\item Multiply the potentially transformed scores / ranks with the filter's weight
-\item Compute the element-wise sum across all weighted, transformed filter scores;
+\item Calculate the weighted aggregation across all filters using \code{aggregator};
 \item Potentially apply \code{result_score_transform} to the vector of scores for each feature aggreagted across filters.
 }
 }

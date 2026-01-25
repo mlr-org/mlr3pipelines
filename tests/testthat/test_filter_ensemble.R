@@ -317,7 +317,7 @@ test_that("FilterEnsemble ignores NA scores from wrapped filters", {
   flt_ensemble$calculate(task)
 
   combined_scores = flt_ensemble$scores[task$feature_names]
-  expect_equal(combined_scores, variance_scores * weights[["variance"]])
+  expect_equal(combined_scores, variance_scores)
 })
 
 test_that("FilterEnsemble rank transform ignores NA scores", {
@@ -362,7 +362,7 @@ test_that("FilterEnsemble rank transform ignores NA scores", {
 
   combined_scores = flt_ensemble$scores[task$feature_names]
   expected_rank = rank(variance_scores, na.last = "keep", ties.method = "average")
-  expect_equal(combined_scores, expected_rank * weights[["variance"]])
+  expect_equal(combined_scores, expected_rank)
 })
 
 test_that("FilterEnsemble weight helper normalization works", {
@@ -479,7 +479,7 @@ test_that("FilterEnsemble weight search space works with bbotk", {
   expect_true(all(instance$archive$data$classif.acc <= 1))
 })
 
-test_that("FilterEnsemble trafos", {
+test_that("FilterEnsemble - trafos", {
   skip_if_not_installed("mlr3filters")
   task = tsk("sonar")
   weights = c(0.7, 0.3)
@@ -508,4 +508,71 @@ test_that("FilterEnsemble trafos", {
   expected = sort(setNames(expected, task$feature_names), decreasing = TRUE)
 
   expect_equal(actual, expected)
+})
+
+test_that("FilterEnsemble - aggregator", {
+  skip_if_not_installed("mlr3filters")
+
+  task = mlr_tasks$get("sonar")
+  filters = list(
+    mlr3filters::FilterVariance$new(),
+    mlr3filters::FilterAUC$new()
+  )
+  flt_ensemble = FilterEnsemble$new(filters)
+
+  flt_ensemble$param_set$set_values(
+    weights = c(0.5, 0.5),
+    aggregator = function(x, w, na.rm) median(x, na.rm = na.rm)
+  )
+
+  flt_ensemble$calculate(task)
+  combined_scores = flt_ensemble$scores
+  individual_scores = as.data.table(lapply(filters, function(flt) {
+    flt$calculate(task)
+    flt$scores[task$feature_names]
+  }))
+  expected_scores = apply(individual_scores, 1, function(row) median(row, na.rm = TRUE))
+  expected = sort(setNames(expected_scores, task$feature_names), decreasing = TRUE)
+
+  expect_equal(combined_scores, expected)
+})
+
+test_that("FilterEnsemble - Error messages", {
+  skip_if_not_installed("mlr3filters")
+
+  task = mlr_tasks$get("sonar")
+  filters = list(
+    mlr3filters::FilterVariance$new(),
+    mlr3filters::FilterAUC$new()
+  )
+  flt_ensemble = FilterEnsemble$new(filters)
+
+  flt_ensemble$param_set$set_values(
+    weights = c(0.5, 0.5)
+  )
+
+  # Error if formal args are inccorect
+  expect_error(flt_ensemble$param_set$set_values(
+    aggregator = function(x) mean(x)
+  ), "Must have formal arguments: w")
+
+  # Error if filter_score_transform output has wrong length
+  flt_ensemble$param_set$set_values(
+    filter_score_transform = function(x) rep(1, length(x) + 1)
+  )
+  expect_error(flt_ensemble$calculate(task), "Filter score transformation.*length.*")
+
+  # Error if aggregator output has wrong length
+  flt_ensemble$param_set$set_values(
+    filter_score_transform = identity,
+    aggregator = function(x, w, na.rm) rep(1, length(x) + 1)
+  )
+  expect_error(flt_ensemble$calculate(task), "Aggregator.*length.*")
+
+  # Error if result_score_transform output has wrong length
+  flt_ensemble$param_set$set_values(
+    aggregator = weighted.mean,
+    result_score_transform = function(x) rep(1, length(x) + 1)
+  )
+  expect_error(flt_ensemble$calculate(task), "Result score transformation.*length.*")
 })

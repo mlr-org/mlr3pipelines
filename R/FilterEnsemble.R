@@ -32,6 +32,9 @@
 #' * `filter_score_transform` :: `function`\cr
 #'   Function to be applied to the vector of individual filter scores after they were potentially transformed by 
 #'   `rank_transform` but before weighting and aggregation. Initialized to `identity`.
+#' * `aggregator` :: `function`\cr
+#'   Function to aggregate the (potentially transformed) and weighted filter scores across filters. Must take formal 
+#'   arguments `w` for weights and `na.rm`. Defaults to `weighted.mean`.
 #' * `result_score_transform` :: `function`\cr
 #'   Function to be applied to the vector of aggregated scores after they were potentially transformed by `rank_transform` and/or 
 #'   `filter_score_transform`. Initialized to `identity`.
@@ -58,14 +61,14 @@
 #' @section Internals:
 #' All wrapped filters are called with `nfeat` equal to the number of features to ensure that
 #' complete score vectors are available for aggregation. 
-#' Scores are combined per feature by computing the weighted mean of (potentially transformed) scores or ranks.
+#' Scores are combined per feature by computing a weighted aggregation of (potentially transformed) scores or ranks.
 #' Additionally, the final scores may also be transformed.
+#' 
 #' The order of transformations is as follows:
 #' 1. `$calculate` the filter's scores for all features;
 #' 2. If `rank_transform` is `TRUE`, convert filter scores to ranks;
 #' 3. Apply `filter_score_transform` to the scores / ranks;
-#' 4. Multiply the potentially transformed scores / ranks with the filter's weight
-#' 5. Compute the element-wise sum across all weighted, transformed filter scores;
+#' 4. Calculate the weighted aggregation across all filters using `aggregator`;
 #' 6. Potentially apply `result_score_transform` to the vector of scores for each feature aggreagted across filters.
 #' 
 #' @section References:
@@ -117,7 +120,9 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
         ),
         rank_transform = p_lgl(init = FALSE, tags = "required"),
         filter_score_transform = p_uty(init = identity, tags = "required", custom_check = check_function),
-        result_score_transform = p_uty(init = identity, tags = "required", custom_check = check_function)
+        result_score_transform = p_uty(init = identity, tags = "required", custom_check = check_function),
+        aggregator = p_uty(init = weighted.mean, tags = "required", custom_check = crate(function(x) check_function(x, args = "w")))
+        # NOTE: We should assert that the fun has the arguments we later use. However, these may be called differently, and we can't assert on na.rm since that is inherited. Use anon function? Write test for errors
       )
 
       super$initialize(
@@ -192,21 +197,21 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
       }
 
       # Calculate filter scores, weighted by weight for specific filter
-      weighted_scores = pmap(list(private$.wrapped, weights), function(x, w) {
+      weighted_scores = map(private$.wrapped, function(x) {
         x$calculate(task, nfeat)
         s = x$scores[fn]
         if (pv$rank_transform) s = rank(s, na.last = "keep", ties.method = "average")
         s = pv$filter_score_transform(s)
-        # TODO: some sort of assert on result? e.g. length
-        s * w
+        if (!isTRUE(check_numeric(s, len = nfeat))) stopf("Filter score transformation did not return a numeric vector of the same length as there are features.")
+        s
       })
       scores_dt = as.data.table(weighted_scores)
 
       # Aggregate across features
-      combined = rowSums(scores_dt, na.rm = TRUE)
-      # combined = apply(scores_dt, 1, function(row) weighted.mean(row, w = weights, na.rm = TRUE))  # weighted.mean normalizes weights in case of NAs
+      combined = apply(scores_dt, 1, function(row) pv$aggregator(row, w = weights, na.rm = TRUE))  # weighted.mean normalizes weights in case of NAs
+      if (!isTRUE(check_numeric(combined, len = nfeat))) stopf("Aggregator did not return a numeric vector of the same length as there are scored features.")
       combined = pv$result_score_transform(combined)
-      # TODO: some sort of assert on result? e.g. length
+      if (!isTRUE(check_numeric(combined, len = nfeat))) stopf("Result score transformation did not return a numeric vector of the same length as there are features.")
 
       all_missing = rowSums(!is.na(scores_dt)) == 0L
       combined[all_missing] = NA_real_
@@ -245,5 +250,4 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
       private$.param_set
     }
   )
-
 )
