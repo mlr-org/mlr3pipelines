@@ -208,7 +208,7 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
         stop("At least one weight must be > 0.")
       }
 
-      # Calculate filter scores, weighted by weight for specific filter
+      # Calculate filter scores, apply rank and filter score trafo
       weighted_scores = map(private$.wrapped, function(x) {
         x$calculate(task, nfeat)
         s = x$scores[fn]
@@ -222,6 +222,7 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
       # Aggregate across features
       combined = apply(scores_dt, 1, function(row) pv$aggregator(row, w = weights, na.rm = TRUE))  # weighted.mean normalizes weights in case of NAs
       if (!isTRUE(check_numeric(combined, len = nfeat))) stopf("Aggregator did not return a numeric vector of the same length as there are scored features.")
+      # Apply result score trafo
       combined = pv$result_score_transform(combined)
       if (!isTRUE(check_numeric(combined, len = nfeat))) stopf("Result score transformation did not return a numeric vector of the same length as there are features.")
 
