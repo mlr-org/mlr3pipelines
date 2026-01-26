@@ -30,12 +30,12 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `renaming` :: named `character` | `function`\cr
 #'   Takes the form of either a named `character` or a `function`.
-#'   For a named `character` vector the names of the vector elements specify the
+#'   For a named `character` vector, the names of the vector elements specify the
 #'   old column names and the corresponding element values give the new column names.
-#'   Initialized to an empty character vector.
 #'   A `function` specifies how the old column names should be changed to the new column names.
 #'   The function must return a `character` vector with one entry per input column name so that each selected column receives a new name.
-#'   To choose columns use the `affect_columns` parameter. No function is initialized.
+#'   To choose columns use the `affect_columns` parameter.
+#'   Initialized to `character(0)`.
 #' * `ignore_missing` :: `logical(1)`\cr
 #'   Ignore if columns named in `renaming` are not found in the input [`Task`][mlr3::Task]. If this is
 #'   `FALSE`, then names found in `renaming` not found in the [`Task`][mlr3::Task] cause an error.
