@@ -161,7 +161,7 @@ as well as:
   can be overloaded.
 
 - `.get_state_dt(dt)`  
-  ([`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html))
+  ([`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html))
   -\> named `list`  
   Create something that will be stored in `$state` during training phase
   of `PipeOpTaskPreprocSimple`. The state can then influence the
@@ -178,14 +178,13 @@ as well as:
   `private$.transform()` can be overloaded.
 
 - `.transform_dt(dt)`  
-  ([`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html))
-  -\>
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  ([`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html))
+  -\> [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   \| `data.frame` \| `matrix`  
   Predict on new data in `dt`, possibly using the stored `$state`. A
   transformed object must be returned that can be converted to a
   `data.table` using
-  [`as.data.table`](https://rdatatable.gitlab.io/data.table/reference/as.data.table.html).
+  [`as.data.table`](https://rdrr.io/pkg/data.table/man/as.data.table.html).
   `dt` does not need to be copied deliberately, it is possible and
   encouraged to change it in-place. This method is called both during
   training and prediction phase, and should essentially behave the same

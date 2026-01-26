@@ -82,13 +82,13 @@ Abstract [`R6Class`](https://r6.r-lib.org/reference/R6Class.html).
   [`list()`](https://rdrr.io/r/base/list.html).
 
 - `input` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   with columns `name` (`character`), `train` (`character`), `predict`
   (`character`)  
   Sets the `$input` slot of the resulting object; see description there.
 
 - `output` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   with columns `name` (`character`), `train` (`character`), `predict`
   (`character`)  
   Sets the `$output` slot of the resulting object; see description
@@ -169,7 +169,7 @@ to return the same identical-by-reference objects to multiple outputs.
   and [mlr3](https://CRAN.R-project.org/package=mlr3).
 
 - `input` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   with columns `name` (`character`), `train` (`character`), `predict`
   (`character`)  
   Input channels of `PipeOp`. Column `name` gives the names (and order)
@@ -201,7 +201,7 @@ to return the same identical-by-reference objects to multiple outputs.
   for more information.
 
 - `output` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   with columns `name` (`character`), `train` (`character`), `predict`
   (`character`)  
   Output channels of `PipeOp`, in the order in which they will be given

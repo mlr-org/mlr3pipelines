@@ -45,7 +45,7 @@ as well as:
 - `as.data.table(dict)`  
   [`Dictionary`](https://mlr3misc.mlr-org.com/reference/Dictionary.html)
   -\>
-  [`data.table::data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)  
+  [`data.table::data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)  
   Returns a `data.table` with the following columns:
 
   - `key` :: (`character`)  
@@ -323,4 +323,5 @@ as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num", "packages")]
 #> 76:                vtreat         1          1             mlr3pipelines,vtreat
 #> 77:            yeojohnson         1          1      mlr3pipelines,bestNormalize
 #>                       key input.num output.num                         packages
+#>                    <char>     <int>      <int>                           <list>
 ```

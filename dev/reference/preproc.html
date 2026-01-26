@@ -64,7 +64,7 @@ The passed  PipeOp or Graph gets modified by-reference."><meta property="og:imag
 
     <div class="ref-description section level2">
     <p>Function that offers a simple and direct way to train or predict <code><a href="PipeOp.html">PipeOp</a></code>s and <code><a href="Graph.html">Graph</a></code>s on <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>s,
-<code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code>s or <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>s.</p>
+<code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code>s or <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>s.</p>
 <p>Training happens if <code>predict</code> is set to <code>FALSE</code> and no <code>state</code> is passed to this function.
 Prediction happens if <code>predict</code> is set to <code>TRUE</code> and if the passed <code>Graph</code> or <code>PipeOp</code> is either trained or a <code>state</code>
 is explicitly passed to this function.</p>
@@ -81,15 +81,15 @@ is explicitly passed to this function.</p>
 
 
 <dl><dt id="arg-indata">indata<a class="anchor" aria-label="anchor" href="#arg-indata"></a></dt>
-<dd><p>(<code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> | <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> | <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> )<br>
+<dd><p>(<code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> | <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> | <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> )<br>
 Data to be pre-processed.</p></dd>
 
 
 <dt id="arg-processor">processor<a class="anchor" aria-label="anchor" href="#arg-processor"></a></dt>
 <dd><p>(<code><a href="Graph.html">Graph</a></code> | <code><a href="PipeOp.html">PipeOp</a></code>)<br><code>Graph</code> or <code>PipeOp</code> accepting a <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> that has one output channel.<br>
-Whenever <code>indata</code> is passed a <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>, the output channel must return a <code>Task</code> to be converted back into a
+Whenever <code>indata</code> is passed a <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>, the output channel must return a <code>Task</code> to be converted back into a
 <code>data.frame</code> or <code>data.table</code>. Additionally, <code>processor</code>s which only work on sub-classes of
-<code><a href="https://mlr3.mlr-org.com/reference/TaskSupervised.html" class="external-link">TaskSupervised</a></code> will not accept <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>, as it would be unclear which column was the <code>target</code>.<br>
+<code><a href="https://mlr3.mlr-org.com/reference/TaskSupervised.html" class="external-link">TaskSupervised</a></code> will not accept <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>, as it would be unclear which column was the <code>target</code>.<br>
 Be aware that the <code>processor</code> gets modified by-reference both during training, and if a <code>state</code> is passed to
 this function. This especially means that the state of a trained <code>processor</code> will get overwritten when <code>state</code> is passed.<br>
 You may want to use dictionary sugar functions to select a <code>processor</code> and to set its hyperparameters, e.g.
@@ -111,9 +111,9 @@ and <code>TRUE</code> otherwise.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>any</code> | <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> | <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>:
+    <p><code>any</code> | <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> | <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>:
 If <code>indata</code> is a <code>Task</code>, whatever is returned by the <code>processor</code>'s single output channel is returned.
-If <code>indata</code> is a <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>, an object of the same class is returned, or
+If <code>indata</code> is a <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>, an object of the same class is returned, or
 if the <code>processor</code>'s output channel does not return a <code>Task</code>, an error is thrown.</p>
     </div>
     <div class="section level2">
@@ -122,7 +122,7 @@ if the <code>processor</code>'s output channel does not return a <code>Task</cod
 
 <p>If <code>processor</code> is a <code><a href="PipeOp.html">PipeOp</a></code>, the S3 method <code>preproc.PipeOp</code> gets called first, converting the <code>PipeOp</code> into a
 <code><a href="Graph.html">Graph</a></code> and wrapping the <code>state</code> appropriately, before calling the S3 method <code>preproc.Graph</code> with the modified objects.</p>
-<p>If <code>indata</code> is a <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>, a
+<p>If <code>indata</code> is a <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>, a
 <code><a href="https://mlr3.mlr-org.com/reference/TaskUnsupervised.html" class="external-link">TaskUnsupervised</a></code> is constructed internally. This implies that <code>processor</code>s which only work on sub-classes
 of <code><a href="https://mlr3.mlr-org.com/reference/TaskSupervised.html" class="external-link">TaskSupervised</a></code> will not work with these input types for <code>indata</code>.</p>
     </div>

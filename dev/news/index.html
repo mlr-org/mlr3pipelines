@@ -58,6 +58,7 @@
 <li>feat: All imputation PipeOps now support feature types <code>Date</code> and <code>POSIXct</code>.</li>
 <li>Fix: <code>PipeOpTextVectorizer</code> now uses coercion to <code>TsparseMatrix</code> instead of deprecated <code>dgTMatrix</code> to avoid <code>Matrix</code> deprecation warnings.</li>
 <li>New method <code>$predict_newdata_fast()</code> for <code>GraphLearner</code>. Note that currently this is only a thin wrapper around <code>$predict_newdata()</code> to maintain compatibility, but in the future it may get optimized to enable faster predictions on new data.</li>
+<li>feat: <code>PipeOpRenameColumns</code>’s hyperparameter <code>renaming</code> can now also take a function transforming old column names to new column names.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.0" id="mlr3pipelines-0100">mlr3pipelines 0.10.0<a class="anchor" aria-label="anchor" href="#mlr3pipelines-0100"></a></h2><p class="text-muted">CRAN release: 2025-11-07</p>

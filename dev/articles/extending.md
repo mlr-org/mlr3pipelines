@@ -771,7 +771,8 @@ print(pss$param_set$values)
 pss$param_set$values$scale = "TRUE" # bad input is checked!
 ```
 
-    ## Error in self$assert(xs, sanitize = TRUE): Assertion on 'xs' failed: scale: Must be of type 'logical flag', not 'character'.
+    ## Error in `self$assert()`:
+    ## ! Assertion on 'xs' failed: scale: Must be of type 'logical flag', not 'character'.
 
 How `PipeOpScale` handles its parameters can be seen in its `$.train_dt`
 method: It gets the relevant parameters from its `$values` slot and uses

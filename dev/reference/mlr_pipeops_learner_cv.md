@@ -108,7 +108,7 @@ It is a named `list` with the inherited members, as well as:
   `$.train()` function.
 
 - `train_log` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   with columns `class` (`character`), `msg` (`character`)  
   Errors logged during training.
 
@@ -116,7 +116,7 @@ It is a named `list` with the inherited members, as well as:
   Training time, in seconds.
 
 - `predict_log` :: `NULL` \|
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   with columns `class` (`character`), `msg` (`character`)  
   Errors logged during prediction.
 

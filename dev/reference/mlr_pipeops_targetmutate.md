@@ -51,7 +51,7 @@ as well as:
   with one column. The return value is used as the new target of the
   resulting [`Task`](https://mlr3.mlr-org.com/reference/Task.html). To
   change target names, change the column name of the data using e.g.
-  [`setnames()`](https://rdatatable.gitlab.io/data.table/reference/setattr.html).  
+  [`setnames()`](https://rdrr.io/pkg/data.table/man/setattr.html).  
   Note that this function also gets called during prediction and should
   thus gracefully handle `NA` values.  
   Initialized to [`identity()`](https://rdrr.io/r/base/identity.html).
@@ -62,7 +62,7 @@ as well as:
   `data.table` created from a
   [`Prediction`](https://mlr3.mlr-org.com/reference/Prediction.html)
   using
-  [`as.data.table()`](https://rdatatable.gitlab.io/data.table/reference/as.data.table.html),
+  [`as.data.table()`](https://rdrr.io/pkg/data.table/man/as.data.table.html),
   without the `$row_ids` and `$truth` columns, and should return a
   `data.table` or named `list` that contains the new relevant slots of a
   [`Prediction`](https://mlr3.mlr-org.com/reference/Prediction.html)
@@ -214,8 +214,8 @@ po$predict(list(task))
 #>     assert_list(inputs, len = 1L, types = "Prediction")
 #>     list(private$.invert(inputs[[1L]], predict_phase_state))
 #> }
-#> <bytecode: 0x55d8c6531938>
-#> <environment: 0x55d8b72e7d28>
+#> <bytecode: 0x5555fbce6f48>
+#> <environment: 0x5555f96e4108>
 #> 
 #> $output
 #> 

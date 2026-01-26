@@ -13,6 +13,8 @@
   currently this is only a thin wrapper around `$predict_newdata()` to
   maintain compatibility, but in the future it may get optimized to
   enable faster predictions on new data.
+- feat: `PipeOpRenameColumns`’s hyperparameter `renaming` can now also
+  take a function transforming old column names to new column names.
 
 ## mlr3pipelines 0.10.0
 

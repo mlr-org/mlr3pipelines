@@ -31,7 +31,7 @@ possible, be manipulated in-place, and should not be cloned.
 
 Alternatively, the `private$.train_dt()` and `private$.predict_dt()`
 functions can be implemented, which operate on
-[`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+[`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
 objects instead. This should generally only be done if all data is in
 some way altered (e.g. PCA changing all columns to principal components)
 and not if only a few columns are added or removed (e.g. feature
@@ -143,7 +143,7 @@ classes, the members are:
   present; names of *all* present features otherwise.
 
 - `intasklayout` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)  
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)  
   Copy of the training
   [`Task`](https://mlr3.mlr-org.com/reference/Task.html)'s
   `$feature_types` slot. This is used during prediction to ensure that
@@ -152,7 +152,7 @@ classes, the members are:
   training.
 
 - `outtasklayout` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)  
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)  
   Copy of the trained
   [`Task`](https://mlr3.mlr-org.com/reference/Task.html)'s
   `$feature_types` slot. This is used during prediction to ensure that
@@ -247,14 +247,14 @@ as well as:
   `private$.train_dt()` is *not* used).
 
 - `.train_dt(dt, levels, target)`  
-  ([`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html),
+  ([`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html),
   named `list`, `any`) -\>
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
-  \| `data.frame` \| `matrix`  
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html) \|
+  `data.frame` \| `matrix`  
   Train `PipeOpTaskPreproc` on `dt`, transform it and store a state in
   `$state`. A transformed object must be returned that can be converted
   to a `data.table` using
-  [`as.data.table`](https://rdatatable.gitlab.io/data.table/reference/as.data.table.html).
+  [`as.data.table`](https://rdrr.io/pkg/data.table/man/as.data.table.html).
   `dt` does not need to be copied deliberately, it is possible and
   encouraged to change it in-place.  
   The `levels` argument is a named list of factor levels for factorial
@@ -273,14 +273,14 @@ as well as:
   overloaded.
 
 - `.predict_dt(dt, levels)`  
-  ([`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html),
+  ([`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html),
   named `list`) -\>
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
-  \| `data.frame` \| `matrix`  
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html) \|
+  `data.frame` \| `matrix`  
   Predict on new data in `dt`, possibly using the stored `$state`. A
   transformed object must be returned that can be converted to a
   `data.table` using
-  [`as.data.table`](https://rdatatable.gitlab.io/data.table/reference/as.data.table.html).
+  [`as.data.table`](https://rdrr.io/pkg/data.table/man/as.data.table.html).
   `dt` does not need to be copied deliberately, it is possible and
   encouraged to change it in-place.  
   The `levels` argument is a named list of factor levels for factorial

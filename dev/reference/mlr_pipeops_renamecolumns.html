@@ -91,10 +91,14 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
     <h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a></h2>
 
 
-<p>The parameters are the parameters inherited from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>, as well as:</p><ul><li><p><code>renaming</code> :: named <code>character</code><br>
-Named <code>character</code> vector. The names of the vector specify the old column names that should be
-changed to the new column names as given by the elements of the vector. Initialized to the empty
-character vector.</p></li>
+<p>The parameters are the parameters inherited from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>, as well as:</p><ul><li><p><code>renaming</code> :: named <code>character</code> | <code>function</code><br>
+Takes the form of either a named <code>character</code> or a <code>function</code>.
+For a named <code>character</code> vector, the names of the vector elements specify the
+old column names and the corresponding element values give the new column names.
+A <code>function</code> specifies how the old column names should be changed to the new column names.
+The function must return a <code>character</code> vector with one entry per input column name so that each selected column receives a new name.
+To choose columns use the <code>affect_columns</code> parameter.
+Initialized to <code>character(0)</code>.</p></li>
 <li><p><code>ignore_missing</code> :: <code>logical(1)</code><br>
 Ignore if columns named in <code>renaming</code> are not found in the input <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>. If this is
 <code>FALSE</code>, then names found in <code>renaming</code> not found in the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> cause an error.
@@ -104,7 +108,7 @@ Initialized to <code>FALSE</code>.</p></li>
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>
 
 
-<p>Uses the <code>$rename()</code> mutator of the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> to set the new column names.</p>
+<p>Uses the <code>$rename()</code> mutator of the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> to set new column names.</p>
     </div>
     <div class="section level2">
     <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>
@@ -224,6 +228,21 @@ Initialized to <code>FALSE</code>.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Features (4):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (4): PL, Petal.Width, Sepal.Length, Sepal.Width</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pof</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"renamecolumns"</span>, param_vals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>renaming <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">colnames</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">sub</a></span><span class="op">(</span><span class="st">"Petal"</span>, <span class="st">"P"</span>, <span class="va">colnames</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pof</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (150x5): Iris Flowers</span> <span style="color: #00BBBB;">─────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target: Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: setosa (33%), versicolor (33%), virginica (33%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Features (4):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (4): P.Length, P.Width, Sepal.Length, Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

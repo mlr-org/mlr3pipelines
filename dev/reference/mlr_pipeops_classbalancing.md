@@ -102,8 +102,8 @@ Uses `task$filter()` to remove rows. When identical rows are added
 during upsampling, then the `task$row_roles$use` can *not* be used to
 duplicate rows because of \[inaudible\]; instead the `task$rbind()`
 function is used, and a new
-[`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
-is attached that contains all rows that are being duplicated exactly as
+[`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html) is
+attached that contains all rows that are being duplicated exactly as
 many times as they are being added.
 
 ## Fields

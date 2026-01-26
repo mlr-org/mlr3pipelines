@@ -60,9 +60,9 @@ as well as:
   be a `vector` of the same length as the input, i.e., the function
   vectorizes over the input. A typical example would be `as.numeric`.  
   The return value can also be a `matrix`, `data.frame`, or
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html).
-  In this case, the length of the input must match the number of
-  returned rows. The names of the resulting features of the output
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html). In
+  this case, the length of the input must match the number of returned
+  rows. The names of the resulting features of the output
   [`Task`](https://mlr3.mlr-org.com/reference/Task.html) is based on the
   (column) name(s) of the return value of the applicator function,
   prefixed with the original feature name separated by a dot (`.`). Use
@@ -75,7 +75,7 @@ as well as:
 Calls [`map`](https://mlr3misc.mlr-org.com/reference/compat-map.html) on
 the data, using the value of `applicator` as `f.` and coerces the output
 via
-[`as.data.table`](https://rdatatable.gitlab.io/data.table/reference/as.data.table.html).
+[`as.data.table`](https://rdrr.io/pkg/data.table/man/as.data.table.html).
 
 ## Fields
 

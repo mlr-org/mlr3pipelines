@@ -101,7 +101,7 @@ classes, the members are:
   Names of features being selected by the `context_columns` parameter.
 
 - `intasklayout` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)  
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)  
   Copy of the training
   [`Task`](https://mlr3.mlr-org.com/reference/Task.html)'s
   `$feature_types` slot. This is used during prediction to ensure that
@@ -110,7 +110,7 @@ classes, the members are:
   training.
 
 - `outtasklayout` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)  
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)  
   Copy of the trained
   [`Task`](https://mlr3.mlr-org.com/reference/Task.html)'s
   `$feature_types` slot. This is used during prediction to ensure that
@@ -227,7 +227,7 @@ as well as:
 
 - `.train_imputer(feature, type, context)`  
   (`atomic`, `character(1)`,
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html))
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html))
   -\> `any`  
   Abstract function that must be overloaded when inheriting. Called once
   for each feature selected by `affect_columns` to create the model
@@ -236,7 +236,7 @@ as well as:
 
 - `.train_nullmodel(feature, type, context)`  
   (`atomic`, `character(1)`,
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html))
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html))
   -\> `any`  
   Like `.train_imputer()`, but only called for each feature that only
   contains missing values. This is not an abstract function and, if not
@@ -246,7 +246,7 @@ as well as:
 
 - `.impute(feature, type, model, context)`  
   (`atomic`, `character(1)`, `any`,
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html))
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html))
   -\> `atomic`  
   Imputes the features. `model` is the model created by
   `private$.train_imputer()`. Default behaviour is to assume `model` is

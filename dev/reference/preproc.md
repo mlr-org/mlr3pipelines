@@ -5,7 +5,7 @@ Function that offers a simple and direct way to train or predict
 and [`Graph`](https://mlr3pipelines.mlr-org.com/dev/reference/Graph.md)s
 on [`Task`](https://mlr3.mlr-org.com/reference/Task.html)s,
 [`data.frame`](https://rdrr.io/r/base/data.frame.html)s or
-[`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)s.
+[`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)s.
 
 Training happens if `predict` is set to `FALSE` and no `state` is passed
 to this function. Prediction happens if `predict` is set to `TRUE` and
@@ -26,8 +26,7 @@ preproc(indata, processor, state = NULL, predict = !is.null(state))
 
   ([`Task`](https://mlr3.mlr-org.com/reference/Task.html) \|
   [`data.frame`](https://rdrr.io/r/base/data.frame.html) \|
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
-  )  
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html) )  
   Data to be pre-processed.
 
 - processor:
@@ -40,14 +39,13 @@ preproc(indata, processor, state = NULL, predict = !is.null(state))
   output channel.  
   Whenever `indata` is passed a
   [`data.frame`](https://rdrr.io/r/base/data.frame.html) or
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html),
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html),
   the output channel must return a `Task` to be converted back into a
   `data.frame` or `data.table`. Additionally, `processor`s which only
   work on sub-classes of
   [`TaskSupervised`](https://mlr3.mlr-org.com/reference/TaskSupervised.html)
   will not accept [`data.frame`](https://rdrr.io/r/base/data.frame.html)
-  or
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html),
+  or [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html),
   as it would be unclear which column was the `target`.  
   Be aware that the `processor` gets modified by-reference both during
   training, and if a `state` is passed to this function. This especially
@@ -76,12 +74,12 @@ preproc(indata, processor, state = NULL, predict = !is.null(state))
 ## Value
 
 `any` \| [`data.frame`](https://rdrr.io/r/base/data.frame.html) \|
-[`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html):
-If `indata` is a `Task`, whatever is returned by the `processor`'s
-single output channel is returned. If `indata` is a
+[`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html): If
+`indata` is a `Task`, whatever is returned by the `processor`'s single
+output channel is returned. If `indata` is a
 [`data.frame`](https://rdrr.io/r/base/data.frame.html) or
-[`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html),
-an object of the same class is returned, or if the `processor`'s output
+[`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html), an
+object of the same class is returned, or if the `processor`'s output
 channel does not return a `Task`, an error is thrown.
 
 ## Internals
@@ -95,9 +93,7 @@ wrapping the `state` appropriately, before calling the S3 method
 `preproc.Graph` with the modified objects.
 
 If `indata` is a [`data.frame`](https://rdrr.io/r/base/data.frame.html)
-or
-[`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html),
-a
+or [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html), a
 [`TaskUnsupervised`](https://mlr3.mlr-org.com/reference/TaskUnsupervised.html)
 is constructed internally. This implies that `processor`s which only
 work on sub-classes of

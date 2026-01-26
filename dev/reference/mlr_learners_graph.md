@@ -111,7 +111,7 @@ as:
   for details.
 
 - `edges` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   with columns `src_id` (`character`), `src_channel` (`character`),
   `dst_id` (`character`), `dst_channel` (`character`)  
   Table of connections between the
