@@ -280,7 +280,7 @@ po$state$model$mass
 #> Empty data.table (0 rows and 3 cols): stage,class,msg
 #> 
 #> $train_time
-#> [1] 0.014
+#> [1] 0.004
 #> 
 #> $task_hash
 #> [1] "103bfb27778d3e5d"
