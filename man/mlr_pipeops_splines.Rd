@@ -42,35 +42,34 @@ After training the \code{Boundary.knots} will be given to the \verb{$state}.
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{type}  :: \code{character(1)} \cr
-\code{polynomial} when polynomial splines are applied \code{\link[splines:bs]{splines::bs}} or
-\code{natural} when natural splines are applied \code{\link[splines:ns]{splines::ns}}.
-Default is \code{natural}.
+\item \code{type} :: \code{character(1)} \cr
+Controls the type of splines that are to be created. Can be either \code{polynomial} (\code{\link[splines:bs]{splines::bs}})
+or \code{natural} (\code{\link[splines:ns]{splines::ns}}). Initializied to \code{natural}.
 \item \code{df}  :: \code{integer(1)} \cr
-Number of degrees of freedom for calculation of splines basis matrix.
-Default is \code{NULL}.
-For further information look up \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
+Number of degrees of freedom for calculation of the spline basis matrix. Initialized to \code{NULL}.
+Depending on \code{type}, see either \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 \item \code{knots} :: named \code{list} \cr
-The internal breakpoints that define the spline. Parameter has to be passed as a named list.
-Default is \code{NULL}. For further information consult \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
+Internal breakpoints that define the spline, given as a named list of numeric vectors,
+where each name corresponds to a feature and its value specifies the knots for that feature.
+Initialized to \code{NULL}. Depending on \code{type}, see either \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 \item \code{intercept} :: \code{logical(1)} \cr
 If \code{TRUE}, an intercept is included in the basis. Default is \code{FALSE}.
-For further information look up \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
+Depending on \code{type}, see either \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 \item \code{degree} :: \code{integer(1)} \cr
-This parameter depends on type = "polynomial". Degree of the polynomial used to compute B-splines.
-Default is \code{3}. For further information look up \code{\link[splines:bs]{splines::bs()}}.
+Degree of the polynomial used to compute polynomial splines. Only used if \code{type} is \code{"polynomial"}.
+Default is \code{3}. See \code{\link[splines:bs]{splines::bs()}}.
 \item \code{Boundary.knots} :: named \code{list} \cr
-Boundary points at which to anchor the spline basis. Parameter has to be passed as a named list.
-Default is \code{NULL}.
-For further information look up \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
+Boundary points at which to anchor the spline basis, given as a named list of numeric vectors,
+where each name corresponds to a feature and its value specifies the boundary points for that feature.
+Initialized to \code{NULL}. Depending on \code{type}, see either \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 }
 }
 
 \section{Internals}{
 
-Creates spline basis via \code{\link[splines:bs]{splines::bs}}/\code{\link[splines:ns]{splines::ns}} function depending on \code{type}.
-After training, the \code{Boundary.knots} that are either defined in the Parameter Set
-or have been calculated during training will be passed to the \verb{$state} of the PipeOp.
+Creates a spline basis using either \code{\link[splines:bs]{splines::bs}} or \code{\link[splines:ns]{splines::ns}} depending on the hyperparameter \code{type}.
+After training, the \code{Boundary.knots} that were either provided by the user or calculated during training are
+stored in the \code{PipeOp}'s \verb{$state}.
 }
 
 \section{Fields}{
@@ -91,7 +90,9 @@ pop = po("splines")
 
 pop$train(list(task))[[1]]$data()
 
-pobk = po("splines", param_vals = list(Boundary.knots = list("Petal.Length" = c(0, 4), "Petal.Width" = c(4, 7), "Sepal.Length" = c(1, 5), "Sepal.Width" = c(3, 6))))
+pobk = po("splines", Boundary.knots = list(
+  Petal.Length = c(0, 4), Petal.Width = c(4, 7), Sepal.Length = c(1, 5), Sepal.Width = c(3, 6))
+)
 pobk$train(list(task))[[1]]$data()
 
 }
@@ -139,6 +140,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
+\code{\link{mlr_pipeops_info}},
+\code{\link{mlr_pipeops_isomap}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},
