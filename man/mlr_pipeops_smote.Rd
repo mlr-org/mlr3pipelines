@@ -167,6 +167,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
+\code{\link{mlr_pipeops_splines}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
 \code{\link{mlr_pipeops_targetmutate}},
