@@ -1,5 +1,3 @@
-
-
 #' @title Filter Ensemble
 #'
 #' @usage NULL
@@ -30,8 +28,16 @@
 #'   Required non-negative weights, one for each wrapped filter, with at least one strictly positive value.
 #'   Values are used as given when calculating the weighted mean. If named, names must match the wrapped filter ids.
 #' * `rank_transform` :: `logical(1)`\cr
-#'   If `TRUE`, ranks of individual filter scores are used instead of the raw scores before
-#'   averaging. Initialized to `FALSE`.
+#'   If `TRUE`, ranks of individual filter scores are used instead of the raw scores. Initialized to `FALSE`.
+#' * `filter_score_transform` :: `function`\cr
+#'   Function to be applied to the vector of individual filter scores after they were potentially transformed by 
+#'   `rank_transform` but before weighting and aggregation. Initialized to `identity`.
+#' * `aggregator` :: `function`\cr
+#'   Function to aggregate the (potentially transformed) and weighted filter scores across filters. Must take 
+#'   arguments `w` for weights and `na.rm`, the latter of which is always set to `TRUE`. Defaults to [`stats::weighted.mean`].
+#' * `result_score_transform` :: `function`\cr
+#'   Function to be applied to the vector of aggregated scores after they were potentially transformed by `rank_transform` and/or 
+#'   `filter_score_transform`. Initialized to `identity`.
 #'
 #' Parameters of wrapped filters are available via `$param_set` and can be referenced using
 #' the wrapped filter id followed by `"."`, e.g. `"variance.na.rm"`.
@@ -54,9 +60,17 @@
 #'
 #' @section Internals:
 #' All wrapped filters are called with `nfeat` equal to the number of features to ensure that
-#' complete score vectors are available for aggregation. Scores are combined per feature by
-#' computing the weighted (optionally rank-based) mean.
-#'
+#' complete score vectors are available for aggregation. 
+#' Scores are combined per feature by computing a weighted aggregation of transformed (default: `identity`) 
+#' scores or ranks. Additionally, the final scores may also be transformed (default: `identity`).
+#' 
+#' The order of transformations is as follows:
+#' 1. `$calculate` the filter's scores for all features;
+#' 2. If `rank_transform` is `TRUE`, convert filter scores to ranks;
+#' 3. Apply `filter_score_transform` to the scores / ranks;
+#' 4. Calculate the weighted aggregation across all filters using `aggregator`;
+#' 6. Potentially apply `result_score_transform` to the vector of scores for each feature aggreagted across filters.
+#' 
 #' @section References:
 #' `r format_bib("binder_2020")`
 #'
@@ -66,11 +80,30 @@
 #'
 #' task = tsk("sonar")
 #'
-#' flt = mlr_filters$get("ensemble",
+#' filter = flt("ensemble",
 #'   filters = list(FilterVariance$new(), FilterAUC$new()))
-#' flt$param_set$values$weights = c(variance = 0.5, auc = 0.5)
-#' flt$calculate(task)
-#' head(as.data.table(flt))
+#' filter$param_set$values$weights = c(variance = 0.5, auc = 0.5)
+#' filter$calculate(task)
+#' head(as.data.table(filter))
+#' 
+#' # Weighted median as aggregator
+#' filter$param_set$set_values(aggregator = function(x, w, na.rm) {
+#'   if (na.rm) x <- x[!is.na(x)]
+#'   o <- order(x)
+#'   x <- x[o]
+#'   w <- w[o]
+#'   x[match(TRUE, which(cumsum(w) >= sum(w) / 2))]
+#' })
+#' filter$calculate(task)
+#' head(as.data.table(filter))
+#' 
+#' # Aggregate reciprocal ranking
+#' filter$param_set$set_values(rank_transform = TRUE, 
+#'   filter_score_transform = function(x) 1 / x, 
+#'   result_score_transform = function(x) rank(1 / x, ties.method = "average"))
+#' filter$calculate(task)
+#' head(as.data.table(filter))
+#' 
 #' @export
 FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
   public = list(
@@ -96,7 +129,10 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
           }, fnames),
           tags = "required"
         ),
-        rank_transform = p_lgl(init = FALSE, tags = "required")
+        rank_transform = p_lgl(init = FALSE, tags = "required"),
+        filter_score_transform = p_uty(init = identity, tags = "required", custom_check = check_function),
+        result_score_transform = p_uty(init = identity, tags = "required", custom_check = check_function),
+        aggregator = p_uty(init = stats::weighted.mean, tags = "required", custom_check = crate(function(x) check_function(x, args = "w")))
       )
 
       super$initialize(
@@ -162,22 +198,35 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
       nfeat = length(fn)  # need to rank all features in an ensemble
       weights = pv$weights
       wnames = names(private$.wrapped)
+
       if (!is.null(names(weights))) {
         weights = weights[wnames]
       }
       if (!any(weights > 0)) {
         stop("At least one weight must be > 0.")
       }
-      scores = pmap(list(private$.wrapped, weights), function(x, w) {
+
+      # Calculate filter scores, apply rank and filter score trafo
+      scores = map(private$.wrapped, function(x) {
         x$calculate(task, nfeat)
         s = x$scores[fn]
         if (pv$rank_transform) s = rank(s, na.last = "keep", ties.method = "average")
-        s * w
+        s = pv$filter_score_transform(s)
+        if (!isTRUE(check_numeric(s, len = nfeat))) stopf("Filter score transformation did not return a numeric vector of the same length as there are features.")
+        s
       })
-      scores_df = as.data.frame(scores)
-      combined = rowSums(scores_df, na.rm = TRUE)
-      all_missing = rowSums(!is.na(scores_df)) == 0L
+      scores_dt = as.data.table(scores)
+
+      # Aggregate across features
+      combined = apply(scores_dt, 1, pv$aggregator, w = weights, na.rm = TRUE)  # weighted.mean normalizes weights in case of NAs
+      if (!isTRUE(check_numeric(combined, len = nfeat))) stopf("Aggregator did not return a numeric vector of the same length as there are scored features.")
+      # Apply result score trafo
+      combined = pv$result_score_transform(combined)
+      if (!isTRUE(check_numeric(combined, len = nfeat))) stopf("Result score transformation did not return a numeric vector of the same length as there are features.")
+
+      all_missing = rowSums(!is.na(scores_dt)) == 0L
       combined[all_missing] = NA_real_
+
       structure(combined, names = fn)
     },
     deep_clone = function(name, value) {
@@ -212,5 +261,4 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
       private$.param_set
     }
   )
-
 )

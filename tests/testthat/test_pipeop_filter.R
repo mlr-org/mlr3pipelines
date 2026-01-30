@@ -16,10 +16,10 @@ test_that("PipeOpFilter", {
 
   expect_equal(po$id, mlr3filters::FilterVariance$new()$id)
 
-  expect_error(po$train(list(task)), "Exactly one of 'nfeat', 'frac', 'cutoff', or 'permuted' must be given.*none")
+  expect_error(po$train(list(task)), "Exactly one hyperparameter of 'filter.nfeat', 'filter.frac', 'filter.cutoff', or 'filter.permuted' must be given.*none")
 
   po$param_set$values = list(filter.nfeat = 1, filter.frac = 1, na.rm = TRUE)
-  expect_error(po$train(list(task)), "Exactly one of 'nfeat', 'frac', 'cutoff', or 'permuted' must be given.*nfeat, frac")
+  expect_error(po$train(list(task)), "Exactly one hyperparameter of 'filter.nfeat', 'filter.frac', 'filter.cutoff', or 'filter.permuted' must be given.*nfeat, frac")
 
   po$param_set$values = list(filter.nfeat = 1, na.rm = TRUE)
 

@@ -136,7 +136,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
       filtercrit = c("nfeat", "frac", "cutoff", "permuted")
       filtercrit = Filter(function(name) !is.null(private$.outer_param_set$values[[name]]), filtercrit)
       if (length(filtercrit) != 1) {
-        stopf("Exactly one of 'nfeat', 'frac', 'cutoff', or 'permuted' must be given. Instead given: %s",
+        stopf("Exactly one hyperparameter of 'filter.nfeat', 'filter.frac', 'filter.cutoff', or 'filter.permuted' must be given. Instead given: %s",
           if (length(filtercrit) == 0) "none" else str_collapse(filtercrit))
       }
       critvalue = private$.outer_param_set$values[[filtercrit]]
