@@ -34,7 +34,7 @@
 #'   `rank_transform` but before weighting and aggregation. Initialized to `identity`.
 #' * `aggregator` :: `function`\cr
 #'   Function to aggregate the (potentially transformed) and weighted filter scores across filters. Must take 
-#'   arguments `w` for weights and `na.rm`, the latter of which is always set to `TRUE`. Defaults to `weighted.mean`.
+#'   arguments `w` for weights and `na.rm`, the latter of which is always set to `TRUE`. Defaults to [`stats::weighted.mean`].
 #' * `result_score_transform` :: `function`\cr
 #'   Function to be applied to the vector of aggregated scores after they were potentially transformed by `rank_transform` and/or 
 #'   `filter_score_transform`. Initialized to `identity`.
@@ -92,7 +92,7 @@
 #'   o <- order(x)
 #'   x <- x[o]
 #'   w <- w[o]
-#'   x[match(TRUE, which(cumsum(w) >= sum(w) / 2))
+#'   x[match(TRUE, which(cumsum(w) >= sum(w) / 2))]
 #' })
 #' filter$calculate(task)
 #' head(as.data.table(filter))
@@ -132,7 +132,7 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
         rank_transform = p_lgl(init = FALSE, tags = "required"),
         filter_score_transform = p_uty(init = identity, tags = "required", custom_check = check_function),
         result_score_transform = p_uty(init = identity, tags = "required", custom_check = check_function),
-        aggregator = p_uty(init = weighted.mean, tags = "required", custom_check = crate(function(x) check_function(x, args = "w")))
+        aggregator = p_uty(init = stats::weighted.mean, tags = "required", custom_check = crate(function(x) check_function(x, args = "w")))
       )
 
       super$initialize(
