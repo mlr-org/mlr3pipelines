@@ -41,8 +41,8 @@ If \code{TRUE}, ranks of individual filter scores are used instead of the raw sc
 Function to be applied to the vector of individual filter scores after they were potentially transformed by
 \code{rank_transform} but before weighting and aggregation. Initialized to \code{identity}.
 \item \code{aggregator} :: \code{function}\cr
-Function to aggregate the (potentially transformed) and weighted filter scores across filters. Must take formal
-arguments \code{w} for weights and \code{na.rm}. Defaults to \code{weighted.mean}.
+Function to aggregate the (potentially transformed) and weighted filter scores across filters. Must take
+arguments \code{w} for weights and \code{na.rm}, the latter of which is always set to \code{TRUE}. Defaults to \code{weighted.mean}.
 \item \code{result_score_transform} :: \code{function}\cr
 Function to be applied to the vector of aggregated scores after they were potentially transformed by \code{rank_transform} and/or
 \code{filter_score_transform}. Initialized to \code{identity}.
@@ -80,8 +80,8 @@ Convenience wrapper that stores the \code{TuneToken} returned by
 
 All wrapped filters are called with \code{nfeat} equal to the number of features to ensure that
 complete score vectors are available for aggregation.
-Scores are combined per feature by computing a weighted aggregation of (potentially transformed) scores or ranks.
-Additionally, the final scores may also be transformed.
+Scores are combined per feature by computing a weighted aggregation of transformed (default: \code{identity})
+scores or ranks. Additionally, the final scores may also be transformed (default: \code{identity}).
 
 The order of transformations is as follows:
 \enumerate{
@@ -120,7 +120,7 @@ filter$param_set$set_values(aggregator = function(x, w, na.rm) {
   o <- order(x)
   x <- x[o]
   w <- w[o]
-  x[which(cumsum(w) >= sum(w) / 2)[1]]
+  x[match(TRUE, which(cumsum(w) >= sum(w) / 2))
 })
 filter$calculate(task)
 head(as.data.table(filter))
@@ -131,6 +131,5 @@ filter$param_set$set_values(rank_transform = TRUE,
   result_score_transform = function(x) rank(1 / x, ties.method = "average"))
 filter$calculate(task)
 head(as.data.table(filter))
-
 \dontshow{\}) # examplesIf}
 }

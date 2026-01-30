@@ -5,7 +5,7 @@
 * feat: All imputation PipeOps now support feature types `Date` and `POSIXct`.
 * Fix: `PipeOpTextVectorizer` now uses coercion to `TsparseMatrix` instead of deprecated `dgTMatrix` to avoid `Matrix` deprecation warnings.
 * New method `$predict_newdata_fast()` for `GraphLearner`. Note that currently this is only a thin wrapper around `$predict_newdata()` to maintain compatibility, but in the future it may get optimized to enable faster predictions on new data.
-- feat: Added new hyperparameters `filter_score_transform`, `result_score_transform`, and `aggregator` to `FilterEnsemble`. Note that the default behavior for handling NAs scores in the aggregation has changed.
+- feat: Added new hyperparameters `filter_score_transform`, `result_score_transform`, and `aggregator` to `FilterEnsemble`. BREAKING CHANGE: The default behavior for handling NA scores in the aggregation has changed. Previously, NA scores were simply ignored and weights were not changed. Now, `weighted.mean` is used, which normalizes the weights for all non-NA scores. 
 
 # mlr3pipelines 0.10.0
 

@@ -33,8 +33,8 @@
 #'   Function to be applied to the vector of individual filter scores after they were potentially transformed by 
 #'   `rank_transform` but before weighting and aggregation. Initialized to `identity`.
 #' * `aggregator` :: `function`\cr
-#'   Function to aggregate the (potentially transformed) and weighted filter scores across filters. Must take formal 
-#'   arguments `w` for weights and `na.rm`. Defaults to `weighted.mean`.
+#'   Function to aggregate the (potentially transformed) and weighted filter scores across filters. Must take 
+#'   arguments `w` for weights and `na.rm`, the latter of which is always set to `TRUE`. Defaults to `weighted.mean`.
 #' * `result_score_transform` :: `function`\cr
 #'   Function to be applied to the vector of aggregated scores after they were potentially transformed by `rank_transform` and/or 
 #'   `filter_score_transform`. Initialized to `identity`.
@@ -61,8 +61,8 @@
 #' @section Internals:
 #' All wrapped filters are called with `nfeat` equal to the number of features to ensure that
 #' complete score vectors are available for aggregation. 
-#' Scores are combined per feature by computing a weighted aggregation of (potentially transformed) scores or ranks.
-#' Additionally, the final scores may also be transformed.
+#' Scores are combined per feature by computing a weighted aggregation of transformed (default: `identity`) 
+#' scores or ranks. Additionally, the final scores may also be transformed (default: `identity`).
 #' 
 #' The order of transformations is as follows:
 #' 1. `$calculate` the filter's scores for all features;
@@ -92,7 +92,7 @@
 #'   o <- order(x)
 #'   x <- x[o]
 #'   w <- w[o]
-#'   x[which(cumsum(w) >= sum(w) / 2)[1]]
+#'   x[match(TRUE, which(cumsum(w) >= sum(w) / 2))
 #' })
 #' filter$calculate(task)
 #' head(as.data.table(filter))
@@ -104,7 +104,6 @@
 #' filter$calculate(task)
 #' head(as.data.table(filter))
 #' 
-#'
 #' @export
 FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
   public = list(
@@ -134,7 +133,6 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
         filter_score_transform = p_uty(init = identity, tags = "required", custom_check = check_function),
         result_score_transform = p_uty(init = identity, tags = "required", custom_check = check_function),
         aggregator = p_uty(init = weighted.mean, tags = "required", custom_check = crate(function(x) check_function(x, args = "w")))
-        # NOTE: We should assert that the fun has the arguments we later use. However, these may be called differently, and we can't assert on na.rm since that is inherited. Use anon function? Write test for errors
       )
 
       super$initialize(
@@ -209,7 +207,7 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
       }
 
       # Calculate filter scores, apply rank and filter score trafo
-      weighted_scores = map(private$.wrapped, function(x) {
+      scores = map(private$.wrapped, function(x) {
         x$calculate(task, nfeat)
         s = x$scores[fn]
         if (pv$rank_transform) s = rank(s, na.last = "keep", ties.method = "average")
@@ -217,10 +215,10 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
         if (!isTRUE(check_numeric(s, len = nfeat))) stopf("Filter score transformation did not return a numeric vector of the same length as there are features.")
         s
       })
-      scores_dt = as.data.table(weighted_scores)
+      scores_dt = as.data.table(scores)
 
       # Aggregate across features
-      combined = apply(scores_dt, 1, function(row) pv$aggregator(row, w = weights, na.rm = TRUE))  # weighted.mean normalizes weights in case of NAs
+      combined = apply(scores_dt, 1, pv$aggregator, w = weights, na.rm = TRUE)  # weighted.mean normalizes weights in case of NAs
       if (!isTRUE(check_numeric(combined, len = nfeat))) stopf("Aggregator did not return a numeric vector of the same length as there are scored features.")
       # Apply result score trafo
       combined = pv$result_score_transform(combined)
