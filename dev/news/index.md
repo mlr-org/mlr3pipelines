@@ -15,6 +15,12 @@
   enable faster predictions on new data.
 - feat: `PipeOpRenameColumns`’s hyperparameter `renaming` can now also
   take a function transforming old column names to new column names.
+- feat: Added new hyperparameters `filter_score_transform`,
+  `result_score_transform`, and `aggregator` to `FilterEnsemble`.
+  BREAKING CHANGE: The default behavior for handling NA scores in the
+  aggregation has changed. Previously, NA scores were simply ignored and
+  weights were not changed. Now, `weighted.mean` is used, which
+  normalizes the weights for all non-NA scores.
 
 ## mlr3pipelines 0.10.0
 

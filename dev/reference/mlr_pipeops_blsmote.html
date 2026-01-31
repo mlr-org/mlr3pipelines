@@ -237,28 +237,28 @@ ISBN 978-3-540-31902-3, <a href="https://doi.org/10.1007/11538059_91" class="ext
 <span class="r-in"><span><span class="va">data</span><span class="op">$</span><span class="va">result</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">result</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"example"</span>, backend <span class="op">=</span> <span class="va">data</span>, target <span class="op">=</span> <span class="st">"result"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">head</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    result         X1         X2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt;      &lt;num&gt;      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      p 0.42466816 0.52367848</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      n 0.76686014 0.49391270</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      n 0.12633054 0.04505079</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      n 0.61225042 0.08755770</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:      n 0.05346155 0.15983943</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:      n 0.43169760 0.22926869</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    result        X1        X2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt;     &lt;num&gt;     &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      n 0.1793132 0.6350560</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      n 0.8056459 0.4654057</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      n 0.7024092 0.5336559</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      n 0.9422849 0.1640595</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:      n 0.1749097 0.3146567</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:      n 0.6135778 0.8848479</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="st">"result"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> result</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   n   p </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 401  99 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 388 112 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Generate synthetic data for minority class</span></span></span>
 <span class="r-in"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"blsmote"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">bls_result</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">bls_result</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 796</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 770</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">bls_result</span><span class="op">$</span><span class="va">result</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   n   p </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 401 395 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 388 382 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

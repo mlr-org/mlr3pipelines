@@ -97,8 +97,16 @@ filter ids concatenated by <code>"."</code>.</p></li>
 Required non-negative weights, one for each wrapped filter, with at least one strictly positive value.
 Values are used as given when calculating the weighted mean. If named, names must match the wrapped filter ids.</p></li>
 <li><p><code>rank_transform</code> :: <code>logical(1)</code><br>
-If <code>TRUE</code>, ranks of individual filter scores are used instead of the raw scores before
-averaging. Initialized to <code>FALSE</code>.</p></li>
+If <code>TRUE</code>, ranks of individual filter scores are used instead of the raw scores. Initialized to <code>FALSE</code>.</p></li>
+<li><p><code>filter_score_transform</code> :: <code>function</code><br>
+Function to be applied to the vector of individual filter scores after they were potentially transformed by
+<code>rank_transform</code> but before weighting and aggregation. Initialized to <code>identity</code>.</p></li>
+<li><p><code>aggregator</code> :: <code>function</code><br>
+Function to aggregate the (potentially transformed) and weighted filter scores across filters. Must take
+arguments <code>w</code> for weights and <code>na.rm</code>, the latter of which is always set to <code>TRUE</code>. Defaults to <code><a href="https://rdrr.io/r/stats/weighted.mean.html" class="external-link">stats::weighted.mean</a></code>.</p></li>
+<li><p><code>result_score_transform</code> :: <code>function</code><br>
+Function to be applied to the vector of aggregated scores after they were potentially transformed by <code>rank_transform</code> and/or
+<code>filter_score_transform</code>. Initialized to <code>identity</code>.</p></li>
 </ul><p>Parameters of wrapped filters are available via <code>$param_set</code> and can be referenced using
 the wrapped filter id followed by <code>"."</code>, e.g. <code>"variance.na.rm"</code>.</p>
     </div>
@@ -129,9 +137,15 @@ Convenience wrapper that stores the <code>TuneToken</code> returned by
 
 
 <p>All wrapped filters are called with <code>nfeat</code> equal to the number of features to ensure that
-complete score vectors are available for aggregation. Scores are combined per feature by
-computing the weighted (optionally rank-based) mean.</p>
-    </div>
+complete score vectors are available for aggregation.
+Scores are combined per feature by computing a weighted aggregation of transformed (default: <code>identity</code>)
+scores or ranks. Additionally, the final scores may also be transformed (default: <code>identity</code>).</p>
+<p>The order of transformations is as follows:</p><ol><li><p><code>$calculate</code> the filter's scores for all features;</p></li>
+<li><p>If <code>rank_transform</code> is <code>TRUE</code>, convert filter scores to ranks;</p></li>
+<li><p>Apply <code>filter_score_transform</code> to the scores / ranks;</p></li>
+<li><p>Calculate the weighted aggregation across all filters using <code>aggregator</code>;</p></li>
+<li><p>Potentially apply <code>result_score_transform</code> to the vector of scores for each feature aggreagted across filters.</p></li>
+</ol></div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
 
@@ -150,11 +164,11 @@ In <em>Proceedings of the 2020 Genetic and Evolutionary Computation Conference</
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"sonar"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">flt</span> <span class="op">=</span> <span class="va">mlr_filters</span><span class="op">$</span><span class="fu">get</span><span class="op">(</span><span class="st">"ensemble"</span>,</span></span>
+<span class="r-in"><span><span class="va">filter</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3filters.mlr-org.com/reference/flt.html" class="external-link">flt</a></span><span class="op">(</span><span class="st">"ensemble"</span>,</span></span>
 <span class="r-in"><span>  filters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va"><a href="https://mlr3filters.mlr-org.com/reference/mlr_filters_variance.html" class="external-link">FilterVariance</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>, <span class="va"><a href="https://mlr3filters.mlr-org.com/reference/mlr_filters_auc.html" class="external-link">FilterAUC</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">flt</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">weights</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>variance <span class="op">=</span> <span class="fl">0.5</span>, auc <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">flt</span><span class="op">$</span><span class="fu">calculate</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">flt</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">filter</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">weights</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>variance <span class="op">=</span> <span class="fl">0.5</span>, auc <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">filter</span><span class="op">$</span><span class="fu">calculate</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">filter</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    feature     score</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;char&gt;     &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:     V11 0.1493737</span>
@@ -163,6 +177,40 @@ In <em>Proceedings of the 2020 Genetic and Evolutionary Computation Conference</
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:      V9 0.1224299</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:     V36 0.1174703</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:     V49 0.1162774</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Weighted median as aggregator</span></span></span>
+<span class="r-in"><span><span class="va">filter</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="fu">set_values</span><span class="op">(</span>aggregator <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">w</span>, <span class="va">na.rm</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="kw">if</span> <span class="op">(</span><span class="va">na.rm</span><span class="op">)</span> <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span>  <span class="va">o</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">[</span><span class="va">o</span><span class="op">]</span></span></span>
+<span class="r-in"><span>  <span class="va">w</span> <span class="op">&lt;-</span> <span class="va">w</span><span class="op">[</span><span class="va">o</span><span class="op">]</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">w</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">w</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">filter</span><span class="op">$</span><span class="fu">calculate</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">filter</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    feature      score</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;char&gt;      &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     V36 0.06975989</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     V20 0.06898649</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     V35 0.06714950</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     V19 0.06655799</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     V21 0.06647019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     V22 0.06547617</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Aggregate reciprocal ranking</span></span></span>
+<span class="r-in"><span><span class="va">filter</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="fu">set_values</span><span class="op">(</span>rank_transform <span class="op">=</span> <span class="cn">TRUE</span>, </span></span>
+<span class="r-in"><span>  filter_score_transform <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fl">1</span> <span class="op">/</span> <span class="va">x</span>, </span></span>
+<span class="r-in"><span>  result_score_transform <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/rank.html" class="external-link">rank</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="va">x</span>, ties.method <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">filter</span><span class="op">$</span><span class="fu">calculate</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">filter</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    feature score</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;char&gt; &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     V36  59.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     V11  59.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     V12  57.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     V17  57.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     V10  55.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     V20  55.5</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
