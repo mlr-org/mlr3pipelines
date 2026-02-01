@@ -6,8 +6,7 @@ test_that("PipeOpClassWeightsEx - basic properties", {
   train_pipeop(op, inputs = list(task))
   predict_pipeop(op, inputs = list(task))
 
-  expect_datapreproc_pipeop_class(PipeOpClassWeightsEx, task = task,
-                                  predict_like_train = FALSE)
+  expect_datapreproc_pipeop_class(PipeOpClassWeightsEx, task = task, predict_like_train = FALSE)
 })
 
 test_that("PipeOpClassWeightsEx - error for Tasks without weights property, #937", {
@@ -34,8 +33,7 @@ test_that("PipeOpClassWeightsEx - error for Tasks without weights property, #937
 
 })
 
-test_that("PipeOpClassWeightsEx", {
-
+test_that("PipeOpClassWeightsEx - methods", {
   task = mlr_tasks$get("penguins")
 
   # Method inverse_class_frequency
@@ -86,6 +84,21 @@ test_that("PipeOpClassWeightsEx", {
 
   expect_equal(computed_weights[["weight"]], as.numeric(unclass(manual_weights)))
 
+  # Method: explicit weighting
+  mapping = c(Adelie = 0.4, Gentoo = 0.3, Chinstrap = 0.3)
+  pomfb = po("classweightsex", weight_method = "explicit", mapping = mapping)
+  nt = pomfb$train(list(task))[[1L]]
+  expect_equal(nt$data(), task$data())
+
+  manual_weights = mapping[task$truth()]
+
+  if ("weights_learner" %in% names(nt$col_roles)) {
+    computed_weights = nt$weights_learner
+  } else {
+    computed_weights = nt$weights
+  }
+
+  expect_equal(computed_weights[["weight"]], unname(manual_weights))
 })
 
 test_that("PipeOpClassWeightsEx - explicit mapping must cover all classes", {
