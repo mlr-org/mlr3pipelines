@@ -5,14 +5,14 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Adds a class weight column to the [`Task`][mlr3::Task], influencing how different [`Learner`][mlr3::Learner]s weight samples during training.
-#' It is also possible to add a weight column to the [`Task`][mlr3::Task], which affects how samples are weighted during evaluation.
-#' Sample weights are assigned to each observation according to its target class.
+#' Adds a class-dependent sample weights column to a [`Task`][mlr3::Task], allowing
+#' [`Learner`][mlr3::Learner]s and [`Measure`][mlr3::Measure]s to weight observations
+#' differently during training and evaluation. 
+#' 
+#' Weights are assigned per observation based on the target class and can be written
+#' to the `"weights_learner"` column, the `"weights_measure"` column, both, or neither.
 #'
-#' Binary as well as multiclass [classification tasks][mlr3::TaskClassif] are supported.
-#'
-#' It is possible to set either one of the `"weights_learner"` and `"weights_measure"` columns, both of them or none of them.
-#' Thus, the behavior of subsequent [`Learner`][mlr3::Learner]s or evaluation metric weights can be determined.
+#' Binary as well as multiclass classification tasks ([`TaskClassif`][mlr3::TaskClassif]) are supported.
 #'
 #' @section Construction:
 #' ```
@@ -28,7 +28,7 @@
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`]. Instead of a [`Task`][mlr3::Task], a
 #' [`TaskClassif`][mlr3::TaskClassif] is used as input and output during training and prediction.
 #'
-#' The output during training is the input [`Task`][mlr3::Task] with added weights column according to target class.
+#' The output during training is the input [`Task`][mlr3::Task] with an added weights column according to the target class.
 #' The output during prediction is the unchanged input.
 #'
 #' @section State:
@@ -37,19 +37,20 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`]; however, the `affect_columns` parameter is *not* present. Further parameters are:
 #' * `weight_type` :: `character` \cr
-#'   Determines whether `"weights_learner"`, `"weights_measure"`, both or none of the columns will be set.
+#'   Determines which weight column types will be added. Can be `"learner"` (for column `"weights_learner"`), `"measure"` (for column `"weights_measure"`), both or none.
+#'   Initialized to `"learner"`.
 #' * `weight_method` :: `character(1)` \cr
-#'   The method that is chosen to determine the weights of the samples. Methods encompass (`"inverse_class_frequency"`, `"inverse_square_root_of_frequency"`, `"median_frequency_balancing"`, `"explicit"`).
+#'   The method that is chosen to determine the weights of the samples. Methods encompass `"inverse_class_frequency"`, `"inverse_square_root_of_frequency"`, `"median_frequency_balancing"` and `"explicit"`.
+#'   In case of `"explicit"`, the `mapping` hyperparameter must be use. Initialized to `"explicit"`.
 #' * `mapping` :: named `numeric` \cr
 #'   Depends on `"weight_method" = "explicit"`. Must be a named numeric vector that specifies a finite weight for each target class in the task.
 #'
-#' The newly introduced column is named `.WEIGHTS`; there will be a naming conflict if this column already exists and is *not* a
-#' weight column itself.
-#'
 #' @section Internals:
-#' The `.WEIGHTS` column is removed from the feature role and re-assigned to the requested weight roles. When `weight_method = "explicit"`,
-#' the mapping must cover every class present in the training data and may not contain additional classes.
-#'
+#' Adds a `.WEIGHTS` column to the [`Task`][mlr3::Task], which is removed from the feature role and mapped to the requested weight roles.
+#' There will be a naming conflict if this column already exists and is *not* a weight column already.
+#' When `weight_method = "explicit"`, the mapping must cover every class present in the training data and may not contain additional classes.
+#' The [`Learner`][mlr3::Learner] must support weights for this to have an effect.
+#' 
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
 #'
@@ -74,51 +75,38 @@
 #'   result$weights  # old mlr3-versions
 #' }
 #'
-#' result$weights_measure
-#'
-#'
 #' if ("weights_measure" %in% names(result)) {
 #'   result$weights_measure  # recent mlr3-versions
 #' } else {
 #'   result$weights  # old mlr3-versions
 #' }
-
 PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
   inherit = PipeOpTaskPreproc,
-
   public = list(
     initialize = function(id = "classweightsex", param_vals = list()) {
       ps = ps(
-        weight_type = p_uty(init = "learner", tags = "train",
-                            custom_check = crate(function(x) check_character(x, max.len = 2) %check&&% check_subset(x, choices = c("learner", "measure")))),
-        weight_method = p_fct(init = "explicit",
-                              levels = c("inverse_class_frequency", "inverse_square_root_of_frequency", "median_frequency_balancing", "effective_number_of_samples", "explicit"), tags = c("train", "required")),
-        mapping = p_uty(tags = "train",
-                        custom_check = crate(function(x) {
-                          if (is.null(x)) {
-                            return(TRUE)
-                          }
-                          check_numeric(x, any.missing = FALSE, finite = TRUE) %check&&%
-                            check_character(names(x), any.missing = FALSE, unique = TRUE, min.chars = 1)
-                        }),
-                        depends = weight_method == "explicit")
+        weight_type = p_uty(init = "learner", tags = c("train", "required"),
+          custom_check = crate(function(x) check_character(x, max.len = 2) %check&&% check_subset(x, choices = c("learner", "measure")))),
+        weight_method = p_fct(init = "explicit", levels = c("inverse_class_frequency", "inverse_square_root_of_frequency", "median_frequency_balancing", "explicit"), 
+          tags = c("train", "required")),
+        mapping = p_uty(tags = "train", depends = quote(weight_method == "explicit"), custom_check = crate(function(x) {
+          if (is.null(x)) return(TRUE)
+          check_numeric(x, any.missing = FALSE, finite = TRUE) %check&&% check_character(names(x), any.missing = FALSE, unique = TRUE, min.chars = 1)
+        }))
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data")
     }
   ),
   private = list(
-
     .train_task = function(task) {
       pv = self$param_set$get_values(tags = "train")
 
-      if (is.null(pv$weight_type) ||
-          is.null(pv$weight_method) ||
-          (pv$weight_method == "explicit" && is.null(pv$mapping))) {
+      if (pv$weight_type == "" || (pv$weight_method == "explicit" && is.null(pv$mapping))) {
         return(task)
       }
 
       class_names = task$class_names
-      if (identical(pv$weight_method, "explicit")) {
+      if (pv$weight_method == "explicit") {
         mapping_names = names(pv$mapping)
         missing = setdiff(class_names, mapping_names)
         extra = setdiff(mapping_names, class_names)
@@ -131,14 +119,12 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
         }
       }
   
-
       weightcolname = ".WEIGHTS"
       if (weightcolname %in% unlist(task$col_roles)) {
         stopf("Weight column '%s' is already in the Task", weightcolname)
       }
 
       truth = task$truth()
-
       class_frequency = prop.table(table(truth))
       class_names = names(class_frequency)
 
@@ -153,7 +139,6 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
       wcol = setnames(as.data.table(weights_table[[ncol(weights_table)]]), weightcolname)
       task$cbind(wcol)
       task$col_roles$feature = setdiff(task$col_roles$feature, weightcolname)
-
 
       classif_roles = mlr_reflections$task_col_roles$classif
       for (type in pv$weight_type) {

@@ -8,7 +8,7 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Adds class-dependent sample weights to a \code{\link[mlr3:Task]{Task}}, allowing
+Adds a class-dependent sample weights column to a \code{\link[mlr3:Task]{Task}}, allowing
 \code{\link[mlr3:Learner]{Learner}}s and \code{\link[mlr3:Measure]{Measure}}s to weight observations
 differently during training and evaluation.
 
@@ -17,8 +17,12 @@ to the \code{"weights_learner"} column, the \code{"weights_measure"} column, bot
 
 Only binary classification tasks (\code{\link[mlr3:TaskClassif]{TaskClassif}}) are supported.
 
-Note: By default, all weights are set to 1. To obtain a meaningful effect, the
+Note: By default, all weights are set to \code{1}. To obtain a meaningful effect, the
 \code{minor_weight} parameter must be adjusted.
+
+See \code{\link{PipeOpClassWeightsEx}} for an extended version of this \code{PipeOp} which can
+handle multiclass classification tasks and offers several methods for automatically
+determining weights.
 }
 \section{Construction}{
 
@@ -54,16 +58,16 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \item \code{minor_weight} :: \code{numeric(1)} \cr
 Weight given to samples of the minor class. Major class samples have weight \code{1}. Initialized to \code{1}.
 \item \code{weight_type} :: \code{character} \cr
-Determines whether \code{"weights_learner"}, \code{"weights_measure"}, both or none of the columns will be set. Defaults to \code{"learner"}. An empty
-vector leaves the task unchanged.
+Determines which weight column types will be added. Can be \code{"learner"} (for column \code{"weights_learner"}), \code{"measure"} (for column \code{"weights_measure"}), both or none.
+An empty vector leaves the task unchanged. Initialized to \code{"learner"}.
 }
 }
 
 \section{Internals}{
 
 Adds a \code{.WEIGHTS} column to the \code{\link[mlr3:Task]{Task}}, which is removed from the feature role and mapped to the requested weight roles.
-The \code{\link[mlr3:Learner]{Learner}} must support weights for this to have an effect. There will be a naming conflict if this column already
-exists and is \emph{not} a weight column itself.
+There will be a naming conflict if this column already exists and is \emph{not} a weight column already.
+The \code{\link[mlr3:Learner]{Learner}} must support weights for this to have an effect.
 }
 
 \section{Fields}{

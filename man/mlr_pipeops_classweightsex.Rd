@@ -8,14 +8,14 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Adds a class weight column to the \code{\link[mlr3:Task]{Task}}, influencing how different \code{\link[mlr3:Learner]{Learner}}s weight samples during training.
-It is also possible to add a weight column to the \code{\link[mlr3:Task]{Task}}, which affects how samples are weighted during evaluation.
-Sample weights are assigned to each observation according to its target class.
+Adds a class-dependent sample weights column to a \code{\link[mlr3:Task]{Task}}, allowing
+\code{\link[mlr3:Learner]{Learner}}s and \code{\link[mlr3:Measure]{Measure}}s to weight observations
+differently during training and evaluation.
 
-Binary as well as multiclass \link[mlr3:TaskClassif]{classification tasks} are supported.
+Weights are assigned per observation based on the target class and can be written
+to the \code{"weights_learner"} column, the \code{"weights_measure"} column, both, or neither.
 
-It is possible to set either one of the \code{"weights_learner"} and \code{"weights_measure"} columns, both of them or none of them.
-Thus, the behavior of subsequent \code{\link[mlr3:Learner]{Learner}}s or evaluation metric weights can be determined.
+Binary as well as multiclass classification tasks (\code{\link[mlr3:TaskClassif]{TaskClassif}}) are supported.
 }
 \section{Construction}{
 
@@ -35,7 +35,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}. Instead of a \code{\link[mlr3:Task]{Task}}, a
 \code{\link[mlr3:TaskClassif]{TaskClassif}} is used as input and output during training and prediction.
 
-The output during training is the input \code{\link[mlr3:Task]{Task}} with added weights column according to target class.
+The output during training is the input \code{\link[mlr3:Task]{Task}} with an added weights column according to the target class.
 The output during prediction is the unchanged input.
 }
 
@@ -49,21 +49,22 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}; however, the \code{affect_columns} parameter is \emph{not} present. Further parameters are:
 \itemize{
 \item \code{weight_type} :: \code{character} \cr
-Determines whether \code{"weights_learner"}, \code{"weights_measure"}, both or none of the columns will be set.
+Determines which weight column types will be added. Can be \code{"learner"} (for column \code{"weights_learner"}), \code{"measure"} (for column \code{"weights_measure"}), both or none.
+Initialized to \code{"learner"}.
 \item \code{weight_method} :: \code{character(1)} \cr
-The method that is chosen to determine the weights of the samples. Methods encompass (\code{"inverse_class_frequency"}, \code{"inverse_square_root_of_frequency"}, \code{"median_frequency_balancing"}, \code{"explicit"}).
+The method that is chosen to determine the weights of the samples. Methods encompass \code{"inverse_class_frequency"}, \code{"inverse_square_root_of_frequency"}, \code{"median_frequency_balancing"} and \code{"explicit"}.
+In case of \code{"explicit"}, the \code{mapping} hyperparameter must be use. Initialized to \code{"explicit"}.
 \item \code{mapping} :: named \code{numeric} \cr
 Depends on \code{"weight_method" = "explicit"}. Must be a named numeric vector that specifies a finite weight for each target class in the task.
 }
-
-The newly introduced column is named \code{.WEIGHTS}; there will be a naming conflict if this column already exists and is \emph{not} a
-weight column itself.
 }
 
 \section{Internals}{
 
-The \code{.WEIGHTS} column is removed from the feature role and re-assigned to the requested weight roles. When \code{weight_method = "explicit"},
-the mapping must cover every class present in the training data and may not contain additional classes.
+Adds a \code{.WEIGHTS} column to the \code{\link[mlr3:Task]{Task}}, which is removed from the feature role and mapped to the requested weight roles.
+There will be a naming conflict if this column already exists and is \emph{not} a weight column already.
+When \code{weight_method = "explicit"}, the mapping must cover every class present in the training data and may not contain additional classes.
+The \code{\link[mlr3:Learner]{Learner}} must support weights for this to have an effect.
 }
 
 \section{Fields}{
@@ -89,9 +90,6 @@ if ("weights_learner" \%in\% names(result)) {
 } else {
   result$weights  # old mlr3-versions
 }
-
-result$weights_measure
-
 
 if ("weights_measure" \%in\% names(result)) {
   result$weights_measure  # recent mlr3-versions

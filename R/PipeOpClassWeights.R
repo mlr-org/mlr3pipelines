@@ -5,17 +5,21 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Adds class-dependent sample weights to a [`Task`][mlr3::Task], allowing
+#' Adds a class-dependent sample weights column to a [`Task`][mlr3::Task], allowing
 #' [`Learner`][mlr3::Learner]s and [`Measure`][mlr3::Measure]s to weight observations
-#' differently during training and evaluation.
+#' differently during training and evaluation. 
 #'
 #' Weights are assigned per observation based on the target class and can be written
 #' to the `"weights_learner"` column, the `"weights_measure"` column, both, or neither.
 #'
 #' Only binary classification tasks ([`TaskClassif`][mlr3::TaskClassif]) are supported.
 #'
-#' Note: By default, all weights are set to 1. To obtain a meaningful effect, the
+#' Note: By default, all weights are set to `1`. To obtain a meaningful effect, the
 #' `minor_weight` parameter must be adjusted.
+#' 
+#' See [`PipeOpClassWeightsEx`] for an extended version of this `PipeOp` which can 
+#' handle multiclass classification tasks and offers several methods for automatically 
+#' determining weights.
 #'
 #' @section Construction:
 #' ```
@@ -42,13 +46,13 @@
 #' * `minor_weight` :: `numeric(1)` \cr
 #'   Weight given to samples of the minor class. Major class samples have weight `1`. Initialized to `1`.
 #' * `weight_type` :: `character` \cr
-#'   Determines whether `"weights_learner"`, `"weights_measure"`, both or none of the columns will be set. Defaults to `"learner"`. An empty
-#'   vector leaves the task unchanged.
+#'   Determines which weight column types will be added. Can be `"learner"` (for column `"weights_learner"`), `"measure"` (for column `"weights_measure"`), both or none.
+#'   An empty vector leaves the task unchanged. Initialized to `"learner"`.
 #'
 #' @section Internals:
 #' Adds a `.WEIGHTS` column to the [`Task`][mlr3::Task], which is removed from the feature role and mapped to the requested weight roles.
-#' The [`Learner`][mlr3::Learner] must support weights for this to have an effect. There will be a naming conflict if this column already
-#' exists and is *not* a weight column itself.
+#' There will be a naming conflict if this column already exists and is *not* a weight column already.
+#' The [`Learner`][mlr3::Learner] must support weights for this to have an effect.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -96,14 +100,12 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
   ),
   private = list(
     .train_task = function(task) {
-      pv = self$param_set$get_values(tags = "train")
-
       if ("twoclass" %nin% task$properties) {
         stop("Only binary classification Tasks are supported.")
       }
+      if (pv$weight_type == "") return(task)
 
-      # return task as is, if weight_type is an empty list
-      if (!length(pv$weight_type)) return(task)
+      pv = self$param_set$get_values(tags = "train")
 
       weightcolname = ".WEIGHTS"
       if (weightcolname %in% unlist(task$col_roles)) {
@@ -114,7 +116,6 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
       minor = names(which.min(table(task$truth())))
 
       wcol = setnames(data.table(ifelse(truth == minor, pv$minor_weight, 1)), weightcolname)
-
       task$cbind(wcol)
       task$col_roles$feature = setdiff(task$col_roles$feature, weightcolname)
 
