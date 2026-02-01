@@ -142,6 +142,7 @@ Collate:
     'PipeOpChunk.R'
     'PipeOpClassBalancing.R'
     'PipeOpClassWeights.R'
+    'PipeOpClassWeightsEx.R'
     'PipeOpClassifAvg.R'
     'PipeOpColApply.R'
     'PipeOpColRoles.R'

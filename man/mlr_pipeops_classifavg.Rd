@@ -134,6 +134,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_chunk}},
 \code{\link{mlr_pipeops_classbalancing}},
 \code{\link{mlr_pipeops_classweights}},
+\code{\link{mlr_pipeops_classweightsex}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},
