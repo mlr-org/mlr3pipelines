@@ -111,7 +111,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{if (mlr3misc::require_namespaces(c("NMF", "MASS"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (mlr3misc::require_namespaces(c("NMF", "MASS"), quietly = TRUE)) withAutoprint(\{ # examplesIf}
 \dontshow{
 # NMF attaches these packages to search path on load, #929
 lapply(c("package:Biobase", "package:BiocGenerics", "package:generics"), detach, character.only = TRUE)

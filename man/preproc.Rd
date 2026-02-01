@@ -56,7 +56,7 @@ of \code{\link[mlr3:TaskSupervised]{TaskSupervised}} will not work with these in
 }
 
 \examples{
-\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
 task = tsk("iris")
