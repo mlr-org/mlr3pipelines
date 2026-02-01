@@ -84,6 +84,9 @@ reference:
   - title: Tasks
     contents:
       - mlr_tasks_boston_housing
+  - title: Filters
+    contents:
+      - mlr_filters_ensemble
   - title: Helpers
     contents:
       - preproc

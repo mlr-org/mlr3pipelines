@@ -1,0 +1,5 @@
+NEWS.md merge=union
+man/* linguist-generated
+man-roxygen/* linguist-documentation
+info/* linguist-documentation
+vignettes/* linguist-documentation

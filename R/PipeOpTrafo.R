@@ -221,6 +221,37 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
+#' @examplesIf requireNamespace("rpart")
+#' library(mlr3)
+#' task = tsk("boston_housing")
+#' po = PipeOpTargetMutate$new("logtrafo", param_vals = list(
+#'   trafo = function(x) log(x, base = 2),
+#'   inverter = function(x) list(response = 2 ^ x$response))
+#' )
+#' # Note that this example is ill-equipped to work with
+#' # `predict_type == "se"` predictions.
+#'
+#' po$train(list(task))
+#' po$predict(list(task))
+#'
+#' g = Graph$new()
+#' g$add_pipeop(po)
+#' g$add_pipeop(LearnerRegrRpart$new())
+#' g$add_pipeop(PipeOpTargetInvert$new())
+#' g$add_edge(src_id = "logtrafo", dst_id = "targetinvert",
+#'   src_channel = 1, dst_channel = 1)
+#' g$add_edge(src_id = "logtrafo", dst_id = "regr.rpart",
+#'   src_channel = 2, dst_channel = 1)
+#' g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert",
+#'   src_channel = 1, dst_channel = 2)
+#'
+#' g$train(task)
+#' g$predict(task)
+#'
+#' #syntactic sugar using ppl():
+#' tt = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()))
+#' tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
+#' tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOp.R

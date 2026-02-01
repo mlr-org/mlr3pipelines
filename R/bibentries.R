@@ -65,6 +65,16 @@ bibentries = c(
     journal   = "Journal of the American Statistical Association"
   ),
 
+  binder_2020 = bibentry("inproceedings",
+    doi       = "10.1145/3377930.3389815",
+    year      = "2020",
+    publisher = "Association for Computing Machinery",
+    pages     = "471--479",
+    author    = "Martin Binder and Julia Moosbauer and Janek Thomas and Bernd Bischl",
+    title     = "Multi-objective hyperparameter tuning and feature selection using filter ensembles",
+    booktitle = "Proceedings of the 2020 Genetic and Evolutionary Computation Conference"
+  ),
+
   zhang2003   = bibentry("inproceedings",
     year      = "2003",
     author    = "Zhang, J. and Mani, I.",

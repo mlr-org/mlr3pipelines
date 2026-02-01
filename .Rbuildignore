@@ -25,3 +25,5 @@
 ^\.vscode$
 ^\.lintr$
 ^\.pre-commit-config\.yaml$
+^AGENTS\.md$
+^CLAUDE\.md$

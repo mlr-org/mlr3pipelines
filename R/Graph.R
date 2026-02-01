@@ -414,15 +414,25 @@ Graph = R6Class("Graph",
           scc = self$edges[, list(sccssors = paste(unique(dst_id), collapse = ",")), by = list(ID = src_id)]
           lines = scc[prd[lines, on = "ID"], on = "ID"][, c("ID", "State", "sccssors", "prdcssors")]
           lines[is.na(lines)] = ""
-          catf("Graph with %s PipeOps:", nrow(lines))
+          cat_cli(cli_h1("Graph with {nrow(lines)} PipeOps:"))
           ## limit column width ##
 
           outwidth = getOption("width") %??% 80  # output width we want (default 80)
           colwidths = map_int(lines, function(x) max(nchar(x), na.rm = TRUE))  # original width of columns
           collimit = calculate_collimit(colwidths, outwidth)
+
           opts = options(datatable.prettyprint.char = collimit)
           on.exit(options(opts), add = TRUE)
           print(lines, row.names = FALSE)
+
+          is_sequential = all(table(self$edges$src_id) <= 1) && all(table(self$edges$dst_id) <= 1)
+          if(is_sequential) {
+            ppunit = paste0(self$ids(), collapse = " -> ")
+            pp = paste0(c("<INPUT>", ppunit, "<OUTPUT>"), collapse = " -> ")
+          } else {
+            pp = "non-sequential"
+          }
+          cat_cli(cli_h3("Pipeline: {.strong {pp}}"))
         } else {
           cat("Empty Graph.\n")
         }
@@ -720,6 +730,7 @@ graph_load_namespaces = function(self, info) {
 
 
 #' @export
+#' @method predict Graph
 predict.Graph = function(object, newdata, ...) {
   if (!object$is_trained) {
     stop("Cannot predict, Graph has not been trained yet")

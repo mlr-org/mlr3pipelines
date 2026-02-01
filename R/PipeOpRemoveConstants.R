@@ -109,7 +109,7 @@ is_constant_enough = function(x, ratio, rel_tol, abs_tol, na_ignore) {
 
     # now consider finite values: sort them and see if items that are
     # 'required_size - 1' steps away from each other differ by at most 'abs_tol' or 'rel_tol'
-    x = sort(x[is.finite(x)])
+    x = as.numeric(sort(x[is.finite(x)]))
     if (length(x) < required_size) {
       return(FALSE)
     }

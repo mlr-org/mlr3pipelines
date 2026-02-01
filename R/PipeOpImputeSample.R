@@ -33,8 +33,8 @@
 #' @section Internals:
 #' Uses the `sample()` function. Features that are entirely `NA` are imputed as
 #' the following: For `factor` or `ordered`, random levels are sampled uniformly at random.
-#' For logicals, `TRUE` or `FALSE` are sampled uniformly at random.
-#' Numerics and integers are imputed as `0`.
+#' For `logical`, `TRUE` or `FALSE` are sampled uniformly at random.
+#' `numeric` and `integer` are imputed as `0`.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -61,7 +61,7 @@ PipeOpImputeSample = R6Class("PipeOpImputeSample",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputesample", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals, feature_types = c("factor", "integer", "logical", "numeric", "ordered"))
+      super$initialize(id, param_vals = param_vals, feature_types = c("factor", "integer", "logical", "numeric", "ordered", "POSIXct", "Date"))
     }
   ),
   private = list(
