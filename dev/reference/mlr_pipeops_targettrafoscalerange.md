@@ -183,8 +183,8 @@ po$predict(list(task))
 #>     assert_list(inputs, len = 1L, types = "Prediction")
 #>     list(private$.invert(inputs[[1L]], predict_phase_state))
 #> }
-#> <bytecode: 0x55e23d39a900>
-#> <environment: 0x55e22a222d18>
+#> <bytecode: 0x559733fa14f0>
+#> <environment: 0x559725c4ea70>
 #> 
 #> $output
 #> 
@@ -251,7 +251,7 @@ ttscalerange$state$regr.rpart
 #> Empty data.table (0 rows and 3 cols): stage,class,msg
 #> 
 #> $train_time
-#> [1] 0.007
+#> [1] 0.008
 #> 
 #> $task_hash
 #> [1] "a097dd7c237a13cd"
