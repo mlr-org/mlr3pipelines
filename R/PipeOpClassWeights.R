@@ -103,9 +103,8 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
       if ("twoclass" %nin% task$properties) {
         stop("Only binary classification Tasks are supported.")
       }
-      if (pv$weight_type == "") return(task)
-
       pv = self$param_set$get_values(tags = "train")
+      if (pv$weight_type == "") return(task)
 
       weightcolname = ".WEIGHTS"
       if (weightcolname %in% unlist(task$col_roles)) {
