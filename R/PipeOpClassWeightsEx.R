@@ -101,7 +101,7 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
     .train_task = function(task) {
       pv = self$param_set$get_values(tags = "train")
 
-      if (pv$weight_type == "" || (pv$weight_method == "explicit" && is.null(pv$mapping))) {
+      if (all(pv$weight_type == "") || (pv$weight_method == "explicit" && is.null(pv$mapping))) {
         return(task)
       }
 
