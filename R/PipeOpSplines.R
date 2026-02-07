@@ -32,14 +32,14 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `type` :: `character(1)` \cr
 #'   Controls the type of splines that are to be created. Can be either `polynomial` ([`splines::bs`]) 
-#'   or `natural` ([`splines::ns`]). Initializied to `natural`.
+#'   or `natural` ([`splines::ns`]). Initializied to `"natural"`.
 #' * `df`  :: `integer(1)` \cr
 #'   Number of degrees of freedom for calculation of the spline basis matrix. Initialized to `NULL`.
 #'   Depending on `type`, see either [`splines::bs()`] or [`splines::ns()`].
 #' * `knots` :: named `list` \cr
 #'   Internal breakpoints that define the spline, given as a named list of numeric vectors,
 #'   where each name corresponds to a feature and its value specifies the knots for that feature.
-#'   Initialized to `NULL`. Depending on `type`, see either [`splines::bs()`] or [`splines::ns()`].
+#'   Default is `NULL`. Depending on `type`, see either [`splines::bs()`] or [`splines::ns()`].
 #' * `intercept` :: `logical(1)` \cr
 #'   If `TRUE`, an intercept is included in the basis. Default is `FALSE`.
 #'   Depending on `type`, see either [`splines::bs()`] or [`splines::ns()`].
@@ -49,7 +49,7 @@
 #' * `Boundary.knots` :: named `list` \cr
 #'   Boundary points at which to anchor the spline basis, given as a named list of numeric vectors,
 #'   where each name corresponds to a feature and its value specifies the boundary points for that feature.
-#'   Initialized to `NULL`. Depending on `type`, see either [`splines::bs()`] or [`splines::ns()`].
+#'   Default is `NULL`. Depending on `type`, see either [`splines::bs()`] or [`splines::ns()`].
 #'
 #' @section Internals:
 #' Creates a spline basis using either [`splines::bs`] or [`splines::ns`] depending on the hyperparameter `type`.
@@ -84,14 +84,16 @@ PipeOpSplines = R6Class("PipeOpSplines",
   public = list(
     initialize = function(id = "splines", param_vals = list()) {
       ps = ps(
-        type = p_fct(levels = c("polynomial", "natural"), init = "natural", tags = c("train", "splines", "required")),
-        df = p_int(lower = 1, upper = Inf, special_vals = list(NULL), default = NULL, tags = c("train", "splines")),
-        knots = p_uty(special_vals = list(NULL), init = NULL, custom_check = function(x) check_list(x, any.missing = FALSE, null.ok = TRUE, names = "named"),
-          tags = c("train", "splines")),
-        degree = p_int(lower = 1, upper = Inf, default = 3, depends = quote(type == "polynomial"), tags = c("train", "splines")),
-        intercept = p_lgl(default = FALSE, tags = c("train", "splines")),
-        Boundary.knots = p_uty(special_vals = list(NULL), init = NULL, custom_check = function(x) check_list(x, any.missing = FALSE, null.ok = TRUE, names = "named"), 
-          tags = c("train", "splines"), )
+        type = p_fct(levels = c("polynomial", "natural"), init = "natural", tags = c("train", "predict", "splines", "required")),
+        df = p_int(lower = 1, upper = Inf, special_vals = list(NULL), default = NULL, tags = c("train", "predict",  "splines")),
+        # NULL is the meaningful default value, it doesn't mean that we pass nothing to default.
+        knots = p_uty(default = NULL, custom_check = function(x) check_list(x, any.missing = FALSE, null.ok = TRUE, names = "named"),
+          tags = c("train", "predict", "splines")),
+        degree = p_int(lower = 1, upper = Inf, default = 3, depends = quote(type == "polynomial"), tags = c("train", "predict", "splines")),
+        intercept = p_lgl(default = FALSE, tags = c("train", "predict", "splines")),
+        # NULL is the meaningful default value, it doesn't mean that we pass nothing to default.
+        Boundary.knots = p_uty(default = NULL, custom_check = function(x) check_list(x, any.missing = FALSE, null.ok = TRUE, names = "named"), 
+          tags = c("train", "splines"))
       )
       super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("splines", "stats"))
     }
@@ -119,9 +121,9 @@ PipeOpSplines = R6Class("PipeOpSplines",
       result
     },
     .predict_dt = function(dt, levels) {
-      result = list()
-      pv = self$param_set$get_values(tags = "splines")
+      pv = self$param_set$get_values(tags = "predict")
 
+      result = list()
       for (i in colnames(dt)) {
         args = pv
         args$type = NULL

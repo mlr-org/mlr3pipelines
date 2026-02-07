@@ -44,14 +44,14 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \itemize{
 \item \code{type} :: \code{character(1)} \cr
 Controls the type of splines that are to be created. Can be either \code{polynomial} (\code{\link[splines:bs]{splines::bs}})
-or \code{natural} (\code{\link[splines:ns]{splines::ns}}). Initializied to \code{natural}.
+or \code{natural} (\code{\link[splines:ns]{splines::ns}}). Initializied to \code{"natural"}.
 \item \code{df}  :: \code{integer(1)} \cr
 Number of degrees of freedom for calculation of the spline basis matrix. Initialized to \code{NULL}.
 Depending on \code{type}, see either \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 \item \code{knots} :: named \code{list} \cr
 Internal breakpoints that define the spline, given as a named list of numeric vectors,
 where each name corresponds to a feature and its value specifies the knots for that feature.
-Initialized to \code{NULL}. Depending on \code{type}, see either \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
+Default is \code{NULL}. Depending on \code{type}, see either \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 \item \code{intercept} :: \code{logical(1)} \cr
 If \code{TRUE}, an intercept is included in the basis. Default is \code{FALSE}.
 Depending on \code{type}, see either \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
@@ -61,7 +61,7 @@ Default is \code{3}. See \code{\link[splines:bs]{splines::bs()}}.
 \item \code{Boundary.knots} :: named \code{list} \cr
 Boundary points at which to anchor the spline basis, given as a named list of numeric vectors,
 where each name corresponds to a feature and its value specifies the boundary points for that feature.
-Initialized to \code{NULL}. Depending on \code{type}, see either \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
+Default is \code{NULL}. Depending on \code{type}, see either \code{\link[splines:bs]{splines::bs()}} or \code{\link[splines:ns]{splines::ns()}}.
 }
 }
 
