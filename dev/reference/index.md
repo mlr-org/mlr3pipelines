@@ -63,6 +63,9 @@
 - [`mlr_pipeops_classweights`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classweights.md)
   [`PipeOpClassWeights`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classweights.md)
   : Class Weights for Sample Weighting
+- [`mlr_pipeops_classweightsex`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classweightsex.md)
+  [`PipeOpClassWeightsEx`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classweightsex.md)
+  : Class Weights for Sample Weighting - Extended
 - [`mlr_pipeops_colapply`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_colapply.md)
   [`PipeOpColApply`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_colapply.md)
   : Apply a Function to each Column of a Task

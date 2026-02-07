@@ -1,8 +1,18 @@
-# Non-negative Matrix Factorization
+# Class Weights for Sample Weighting - Extended
 
-Extracts non-negative components from data by performing non-negative
-matrix factorization. Only affects non-negative numerical features. See
-[`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html) for details.
+Adds a class-dependent sample weights column to a
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html), allowing
+[`Learner`](https://mlr3.mlr-org.com/reference/Learner.html)s and
+[`Measure`](https://mlr3.mlr-org.com/reference/Measure.html)s to weight
+observations differently during training and evaluation.
+
+Weights are assigned per observation based on the target class and can
+be written to the `"weights_learner"` column, the `"weights_measure"`
+column, both, or neither.
+
+Binary as well as multiclass classification tasks
+([`TaskClassif`](https://mlr3.mlr-org.com/reference/TaskClassif.html))
+are supported.
 
 ## Format
 
@@ -12,10 +22,10 @@ inheriting from
 
 ## Construction
 
-    PipeOpNMF$new(id = "nmf", param_vals = list())
+    PipeOpClassWeightsEx$new(id = "classweightsex", param_vals = list())
 
 - `id` :: `character(1)`  
-  Identifier of resulting object, default `"nmf"`.
+  Identifier of the resulting object, default `"classweightsex"`
 
 - `param_vals` :: named `list`  
   List of hyperparameter settings, overwriting the hyperparameter
@@ -26,96 +36,61 @@ inheriting from
 
 Input and output channels are inherited from
 [`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md).
+Instead of a [`Task`](https://mlr3.mlr-org.com/reference/Task.html), a
+[`TaskClassif`](https://mlr3.mlr-org.com/reference/TaskClassif.html) is
+used as input and output during training and prediction.
 
-The output is the input
-[`Task`](https://mlr3.mlr-org.com/reference/Task.html) with all affected
-numeric features replaced by their non-negative components.
+The output during training is the input
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html) with an added
+weights column according to the target class. The output during
+prediction is the unchanged input.
 
 ## State
 
 The `$state` is a named `list` with the `$state` elements inherited from
-[`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md),
-as well as the elements of the object returned by
-[`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html).
+[`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md).
 
 ## Parameters
 
 The parameters are the parameters inherited from
-[`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md),
-as well as:
+[`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md);
+however, the `affect_columns` parameter is *not* present. Further
+parameters are:
 
-- `rank` :: `integer(1)`  
-  Factorization rank, i.e., number of components. Initialized to `2`.
-  See [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html).
+- `weights_learner` :: `logical(1)`  
+  Whether the created weights should be stored as a `weights_learner`
+  column or not. Initialized to `TRUE`.
 
-- `method` :: `character(1)`  
-  Specification of the NMF algorithm. Initialized to `"brunet"`. See
-  [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html).
+- `weights_measure` :: `logical(1)`  
+  Whether the created weights should be stored as a `weights_measure`
+  column or not. Initialized to `FALSE`.
 
-- `seed` :: `character(1)` \| `integer(1)` \|
-  [`list()`](https://rdrr.io/r/base/list.html) \| object of class `NMF`
-  \| `function()`  
-  Specification of the starting point. See
-  [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html).
+- `weight_method` :: `character(1)`  
+  The method that is chosen to determine the weights of the samples.
+  Methods encompass `"inverse_class_frequency"`,
+  `"inverse_square_root_of_frequency"`, `"median_frequency_balancing"`
+  and `"explicit"`. In case of `"explicit"`, the `mapping`
+  hyperparameter must be use. Initialized to `"explicit"`.
 
-- `nrun` :: `integer(1)`  
-  Number of runs to performs. Default is `1`. More than a single run
-  allows for the computation of a consensus matrix which will also be
-  stored in the `$state`. See
-  [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html).
-
-- `debug` :: `logical(1)`  
-  Whether to toggle debug mode. Default is `FALSE`. See
-  [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html).
-
-- `keep.all` :: `logical(1)`  
-  Whether all factorizations are to be saved and returned. Default is
-  `FALSE`. Only has an effect if `nrun > 1`. See
-  [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html).
-
-- `parallel` :: `character(1)` \| `integer(1)` \| `logical(1)`  
-  Specification of parallel handling if `nrun > 1`. Initialized to
-  `FALSE`, as it is recommended to use `mlr3`'s `future`-based
-  parallelization. See [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html).
-
-- `parallel.required` :: `character(1)` \| `integer(1)` \|
-  `logical(1)`  
-  Same as `parallel`, but an error is thrown if the computation cannot
-  be performed in parallel or with the specified number of processors.
-  Initialized to `FALSE`, as it is recommended to use `mlr3`'s
-  `future`-based parallelization. See
-  [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html).
-
-- `shared.memory` :: `logical(1)`  
-  Whether shared memory should be enabled. See
-  [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html).
-
-- `simplifyCB` :: `logical(1)`  
-  Whether callback results should be simplified. Default is `TRUE`. See
-  [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html).
-
-- `track` :: `logical(1)`  
-  Whether error tracking should be enabled. Default is `FALSE`. See
-  [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html).
-
-- `verbose` :: `integer(1)` \| `logical(1)`  
-  Specification of verbosity. Default is `FALSE`. See
-  [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html).
-
-- `pbackend` :: `character(1)` \| `integer(1)` \| `NULL`  
-  Specification of the parallel backend. It is recommended to use
-  `mlr3`'s `future`-based parallelization. See
-  [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html).
-
-- `callback` \| `function()`  
-  Callback function that is called after each run (if `nrun > 1`). See
-  [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html).
+- `mapping` :: named `numeric`  
+  A named numeric vector that specifies a finite weight for each target
+  class in the task. This only has an effect if `weight_method` is
+  `explicit`.
 
 ## Internals
 
-Uses the [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html) function as
-well as `basis()`, [`coef()`](https://rdrr.io/r/stats/coef.html) and
-[`ginv()`](https://rdrr.io/pkg/MASS/man/ginv.html).
+Adds a `.WEIGHTS` column to the
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html), which is removed
+from the feature role and mapped to the requested weight roles. There
+will be a naming conflict if this column already exists and is *not* a
+weight column already. For potentially pre-existing weight columns, the
+weight column role gets dropped, but they remain in the
+[`DataBackend`](https://mlr3.mlr-org.com/reference/DataBackend.html) of
+the `Task`.  
+When `weight_method = "explicit"`, the mapping must cover every class
+present in the training data and may not contain additional classes.  
+The [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) must
+support weights for this `PipeOp` to have an effect.
 
 ## Fields
 
@@ -148,7 +123,6 @@ Other PipeOps:
 [`mlr_pipeops_classbalancing`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classbalancing.md),
 [`mlr_pipeops_classifavg`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classifavg.md),
 [`mlr_pipeops_classweights`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classweights.md),
-[`mlr_pipeops_classweightsex`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classweightsex.md),
 [`mlr_pipeops_colapply`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_colapply.md),
 [`mlr_pipeops_collapsefactors`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_collapsefactors.md),
 [`mlr_pipeops_colroles`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_colroles.md),
@@ -185,6 +159,7 @@ Other PipeOps:
 [`mlr_pipeops_multiplicityimply`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_multiplicityimply.md),
 [`mlr_pipeops_mutate`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_mutate.md),
 [`mlr_pipeops_nearmiss`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_nearmiss.md),
+[`mlr_pipeops_nmf`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_nmf.md),
 [`mlr_pipeops_nop`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_nop.md),
 [`mlr_pipeops_ovrsplit`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_ovrsplit.md),
 [`mlr_pipeops_ovrunite`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_ovrunite.md),
@@ -223,82 +198,49 @@ Other PipeOps:
 ``` r
 library("mlr3")
 
-task = tsk("iris")
-pop = po("nmf")
+task = tsk("spam")
 
-task$data()
-#>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#>         <fctr>        <num>       <num>        <num>       <num>
-#>   1:    setosa          1.4         0.2          5.1         3.5
-#>   2:    setosa          1.4         0.2          4.9         3.0
-#>   3:    setosa          1.3         0.2          4.7         3.2
-#>   4:    setosa          1.5         0.2          4.6         3.1
-#>   5:    setosa          1.4         0.2          5.0         3.6
-#>  ---                                                            
-#> 146: virginica          5.2         2.3          6.7         3.0
-#> 147: virginica          5.0         1.9          6.3         2.5
-#> 148: virginica          5.2         2.0          6.5         3.0
-#> 149: virginica          5.4         2.3          6.2         3.4
-#> 150: virginica          5.1         1.8          5.9         3.0
-pop$train(list(task))[[1]]$data()
-#>        Species      NMF1       NMF2
-#>         <fctr>     <num>      <num>
-#>   1:    setosa 0.5808520 0.04741536
-#>   2:    setosa 0.5179125 0.06572959
-#>   3:    setosa 0.5312856 0.04639643
-#>   4:    setosa 0.4971806 0.06988613
-#>   5:    setosa 0.5832509 0.04280681
-#>  ---                               
-#> 146: virginica 0.2290743 0.55676271
-#> 147: virginica 0.1866306 0.53550080
-#> 148: virginica 0.2279444 0.54191697
-#> 149: virginica 0.2142419 0.55788518
-#> 150: virginica 0.2018033 0.51875141
+poicf = po("classweightsex", param_vals = list(weights_learner = TRUE, weights_measure = TRUE, 
+  weight_method = "inverse_class_frequency"))
+result = poicf$train(list(task))[[1L]]
 
-pop$state
-#> $nmf
-#> <Object of class: NMFfit>
-#>  # Model:
-#>   <Object of class:NMFstd>
-#>   features: 4 
-#>   basis/rank: 2 
-#>   samples: 150 
-#>  # Details:
-#>   algorithm:  brunet 
-#>   seed:  random 
-#>   RNG: 10403L, 223L, ..., 581505866L [c6a8911f7b61c7ab6db7422cde75b137]
-#>   distance metric:  'KL' 
-#>   residuals:  3.084418 
-#>   Iterations: 440 
-#>   Timing:
-#>      user  system elapsed 
-#>     0.062   0.020   0.082 
-#> 
-#> $dt_columns
-#> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
-#> 
-#> $affected_cols
-#> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
-#> 
-#> $intasklayout
-#> Key: <id>
-#>              id    type
-#>          <char>  <char>
-#> 1: Petal.Length numeric
-#> 2:  Petal.Width numeric
-#> 3: Sepal.Length numeric
-#> 4:  Sepal.Width numeric
-#> 
-#> $outtasklayout
-#> Key: <id>
-#>        id    type
-#>    <char>  <char>
-#> 1:   NMF1 numeric
-#> 2:   NMF2 numeric
-#> 
-#> $outtaskshell
-#> Empty data.table (0 rows and 3 cols): Species,NMF1,NMF2
-#> 
-#> attr(,"class")
-#> [1] "PipeOpNMFstate"
+if ("weights_learner" %in% names(result)) {
+  result$weights_learner  # recent mlr3-versions
+} else {
+  result$weights  # old mlr3-versions
+}
+#> Key: <row_id>
+#>       row_id   weight
+#>        <int>    <num>
+#>    1:      1 2.537783
+#>    2:      2 2.537783
+#>    3:      3 2.537783
+#>    4:      4 2.537783
+#>    5:      5 2.537783
+#>   ---                
+#> 4597:   4597 1.650287
+#> 4598:   4598 1.650287
+#> 4599:   4599 1.650287
+#> 4600:   4600 1.650287
+#> 4601:   4601 1.650287
+
+if ("weights_measure" %in% names(result)) {
+  result$weights_measure  # recent mlr3-versions
+} else {
+  result$weights  # old mlr3-versions
+}
+#> Key: <row_id>
+#>       row_id   weight
+#>        <int>    <num>
+#>    1:      1 2.537783
+#>    2:      2 2.537783
+#>    3:      3 2.537783
+#>    4:      4 2.537783
+#>    5:      5 2.537783
+#>   ---                
+#> 4597:   4597 1.650287
+#> 4598:   4598 1.650287
+#> 4599:   4599 1.650287
+#> 4600:   4600 1.650287
+#> 4601:   4601 1.650287
 ```

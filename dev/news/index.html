@@ -60,6 +60,8 @@
 <li>New method <code>$predict_newdata_fast()</code> for <code>GraphLearner</code>. Note that currently this is only a thin wrapper around <code>$predict_newdata()</code> to maintain compatibility, but in the future it may get optimized to enable faster predictions on new data.</li>
 <li>feat: <code>PipeOpRenameColumns</code>’s hyperparameter <code>renaming</code> can now also take a function transforming old column names to new column names.</li>
 <li>feat: Added new hyperparameters <code>filter_score_transform</code>, <code>result_score_transform</code>, and <code>aggregator</code> to <code>FilterEnsemble</code>. BREAKING CHANGE: The default behavior for handling NA scores in the aggregation has changed. Previously, NA scores were simply ignored and weights were not changed. Now, <code>weighted.mean</code> is used, which normalizes the weights for all non-NA scores.</li>
+<li>feat: Added new hyperparameters <code>weights_learner</code> and <code>weights_measure</code> to <code>PipeOpClassWeights</code> to allow specification which type of weight column to add to the <code>Task</code>.</li>
+<li>New PipeOp <code>PipeOpClassWeightEx</code> extends the functionality of <code>PipeOpClassWeights</code> to also support multiclass classification tasks as well as several methods of automatically determining weights based on the target class of a sample.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.0" id="mlr3pipelines-0100">mlr3pipelines 0.10.0<a class="anchor" aria-label="anchor" href="#mlr3pipelines-0100"></a></h2><p class="text-muted">CRAN release: 2025-11-07</p>

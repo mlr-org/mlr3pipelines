@@ -1,24 +1,27 @@
 # Class Weights for Sample Weighting
 
-Adds a class weight column to the
-[`Task`](https://mlr3.mlr-org.com/reference/Task.html) that different
-[`Learner`](https://mlr3.mlr-org.com/reference/Learner.html)s may be
-able to use for sample weighting. Sample weights are added to each
-sample according to the target class.
+Adds a class-dependent sample weights column to a
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html), allowing
+[`Learner`](https://mlr3.mlr-org.com/reference/Learner.html)s and
+[`Measure`](https://mlr3.mlr-org.com/reference/Measure.html)s to weight
+observations differently during training and evaluation.
 
-Only binary [classification
-tasks](https://mlr3.mlr-org.com/reference/TaskClassif.html) are
-supported.
+Weights are assigned per observation based on the target class and can
+be written to the `"weights_learner"` column, the `"weights_measure"`
+column, both, or neither.
 
-Caution: when constructed naively without parameter, the weights are all
-set to 1. The `minor_weight` parameter must be adjusted for this
-[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md) to
-be useful.
+Only binary classification tasks
+([`TaskClassif`](https://mlr3.mlr-org.com/reference/TaskClassif.html))
+are supported.
 
-Note this only sets the `"weights_learner"` column. It therefore
-influences the behaviour of subsequent
-[`Learner`](https://mlr3.mlr-org.com/reference/Learner.html)s, but does
-not influence resampling or evaluation metric weights.
+Note: By default, all weights are set to `1`. To obtain a meaningful
+effect, the `minor_weight` parameter must be adjusted.
+
+See
+[`PipeOpClassWeightsEx`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classweightsex.md)
+for an extended version of this `PipeOp` which can handle multiclass
+classification tasks and offers several methods for automatically
+determining weights.
 
 ## Format
 
@@ -30,8 +33,8 @@ inheriting from
 
     PipeOpClassWeights$new(id = "classweights", param_vals = list())
 
-- `id` :: `character(1)` Identifier of the resulting object, default
-  `"classweights"`
+- `id` :: `character(1)`  
+  Identifier of the resulting object, default `"classweights"`
 
 - `param_vals` :: named `list`  
   List of hyperparameter settings, overwriting the hyperparameter
@@ -47,9 +50,9 @@ Instead of a [`Task`](https://mlr3.mlr-org.com/reference/Task.html), a
 used as input and output during training and prediction.
 
 The output during training is the input
-[`Task`](https://mlr3.mlr-org.com/reference/Task.html) with added
-weights column according to target class. The output during prediction
-is the unchanged input.
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html) with an added
+weights column according to the target class. The output during
+prediction is the unchanged input.
 
 ## State
 
@@ -65,18 +68,28 @@ parameters are:
 
 - `minor_weight` :: `numeric(1)`  
   Weight given to samples of the minor class. Major class samples have
-  weight 1. Initialized to 1.
+  weight `1`. Initialized to `1`.
+
+- `weights_learner` :: `logical(1)`  
+  Whether the created weights should be stored as a `weights_learner`
+  column or not. Initialized to `TRUE`.
+
+- `weights_measure` :: `logical(1)`  
+  Whether the created weights should be stored as a `weights_measure`
+  column or not. Initialized to `FALSE`.
 
 ## Internals
 
-Introduces, or overwrites, the "weights" column in the
-[`Task`](https://mlr3.mlr-org.com/reference/Task.html). However, the
-[`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) method
-needs to respect weights for this to have an effect.
-
-The newly introduced column is named `.WEIGHTS`; there will be a naming
-conflict if this column already exists and is *not* a weight column
-itself.
+Adds a `.WEIGHTS` column to the
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html), which is removed
+from the feature role and mapped to the requested weight roles. There
+will be a naming conflict if this column already exists and is *not* a
+weight column already. For potentially pre-existing weight columns, the
+weight column role gets dropped, but they remain in the
+[`DataBackend`](https://mlr3.mlr-org.com/reference/DataBackend.html) of
+the `Task`. The
+[`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) must
+support weights for this to have an effect.
 
 ## Fields
 
@@ -108,6 +121,7 @@ Other PipeOps:
 [`mlr_pipeops_chunk`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_chunk.md),
 [`mlr_pipeops_classbalancing`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classbalancing.md),
 [`mlr_pipeops_classifavg`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classifavg.md),
+[`mlr_pipeops_classweightsex`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classweightsex.md),
 [`mlr_pipeops_colapply`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_colapply.md),
 [`mlr_pipeops_collapsefactors`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_collapsefactors.md),
 [`mlr_pipeops_colroles`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_colroles.md),

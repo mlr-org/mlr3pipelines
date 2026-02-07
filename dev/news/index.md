@@ -21,6 +21,13 @@
   aggregation has changed. Previously, NA scores were simply ignored and
   weights were not changed. Now, `weighted.mean` is used, which
   normalizes the weights for all non-NA scores.
+- feat: Added new hyperparameters `weights_learner` and
+  `weights_measure` to `PipeOpClassWeights` to allow specification which
+  type of weight column to add to the `Task`.
+- New PipeOp `PipeOpClassWeightEx` extends the functionality of
+  `PipeOpClassWeights` to also support multiclass classification tasks
+  as well as several methods of automatically determining weights based
+  on the target class of a sample.
 
 ## mlr3pipelines 0.10.0
 
