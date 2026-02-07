@@ -36,20 +36,22 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`]; however, the `affect_columns` parameter is *not* present. Further parameters are:
-#' * `weight_type` :: `character` \cr
-#'   Determines which weight column types will be added. Can be `"learner"` (for column `"weights_learner"`), `"measure"` (for column `"weights_measure"`), both or none.
-#'   Initialized to `"learner"`.
+#' * `weights_learner` :: `logical(1)` \cr
+#'   Whether the created weights should be stored as a `weights_learner` column or not. Initialized to `TRUE`.
+#' * `weights_measure` :: `logical(1)` \cr
+#'   Whether the created weights should be stored as a `weights_measure` column or not. Initialized to `FALSE`.
 #' * `weight_method` :: `character(1)` \cr
 #'   The method that is chosen to determine the weights of the samples. Methods encompass `"inverse_class_frequency"`, `"inverse_square_root_of_frequency"`, `"median_frequency_balancing"` and `"explicit"`.
 #'   In case of `"explicit"`, the `mapping` hyperparameter must be use. Initialized to `"explicit"`.
 #' * `mapping` :: named `numeric` \cr
-#'   Depends on `"weight_method" = "explicit"`. Must be a named numeric vector that specifies a finite weight for each target class in the task.
+#'   A named numeric vector that specifies a finite weight for each target class in the task. This only has an effect if `weight_method` is `explicit`.
 #'
 #' @section Internals:
 #' Adds a `.WEIGHTS` column to the [`Task`][mlr3::Task], which is removed from the feature role and mapped to the requested weight roles.
-#' There will be a naming conflict if this column already exists and is *not* a weight column already.
-#' When `weight_method = "explicit"`, the mapping must cover every class present in the training data and may not contain additional classes.
-#' The [`Learner`][mlr3::Learner] must support weights for this to have an effect.
+#' There will be a naming conflict if this column already exists and is *not* a weight column already. For potentially pre-existing weight columns, the weight 
+#' column role gets dropped, but they remain in the [`DataBackend`][mlr3::DataBackend] of the `Task`. \cr
+#' When `weight_method = "explicit"`, the mapping must cover every class present in the training data and may not contain additional classes. \cr
+#' The [`Learner`][mlr3::Learner] must support weights for this `PipeOp` to have an effect.
 #' 
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -66,7 +68,8 @@
 #'
 #' task = tsk("spam")
 #'
-#' poicf = po("classweightsex", param_vals = list(weight_type = c("learner", "measure"), weight_method = "inverse_class_frequency"))
+#' poicf = po("classweightsex", param_vals = list(weights_learner = TRUE, weights_measure = TRUE, 
+#'   weight_method = "inverse_class_frequency"))
 #' result = poicf$train(list(task))[[1L]]
 #'
 #' if ("weights_learner" %in% names(result)) {
@@ -85,8 +88,8 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
   public = list(
     initialize = function(id = "classweightsex", param_vals = list()) {
       ps = ps(
-        weight_type = p_uty(init = "learner", tags = c("train", "required"),
-          custom_check = crate(function(x) check_character(x, max.len = 2) %check&&% check_subset(x, choices = c("learner", "measure")))),
+        weights_learner = p_lgl(init = TRUE, tags = c("train", "weights_indicator", "required")),
+        weights_measure = p_lgl(init = FALSE, tags = c("train", "weights_indicator", "required")),
         weight_method = p_fct(init = "explicit", levels = c("inverse_class_frequency", "inverse_square_root_of_frequency", "median_frequency_balancing", "explicit"), 
           tags = c("train", "required")),
         mapping = p_uty(tags = "train", depends = quote(weight_method == "explicit"), custom_check = crate(function(x) {
@@ -101,7 +104,7 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
     .train_task = function(task) {
       pv = self$param_set$get_values(tags = "train")
 
-      if (all(pv$weight_type == "") || (pv$weight_method == "explicit" && is.null(pv$mapping))) {
+      if ((!pv$weights_learner && !pv$weights_measure) || (pv$weight_method == "explicit" && is.null(pv$mapping))) {
         return(task)
       }
 
@@ -137,15 +140,15 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
 
       weights_table = data.table(weights_by_class[truth])
       wcol = setnames(as.data.table(weights_table[[ncol(weights_table)]]), weightcolname)
+      
       task$cbind(wcol)
       task$col_roles$feature = setdiff(task$col_roles$feature, weightcolname)
 
-      classif_roles = mlr_reflections$task_col_roles$classif
-      for (type in pv$weight_type) {
-        preferred_role = paste0("weights_", type)
-        final_role = if (preferred_role %in% classif_roles) preferred_role else "weight"
-        task$col_roles[[final_role]] = weightcolname
-      }
+      weights_indicators = unlist(self$param_set$get_values(tags = "weights_indicator"))
+      final_roles = names(weights_indicators)[weights_indicators]
+      final_roles = if (all(final_roles %in% mlr_reflections$task_col_roles$classif)) final_roles else "weight"  # support for older mlr3 versions
+      task$col_roles[final_roles] = weightcolname
+
       task
     },
 

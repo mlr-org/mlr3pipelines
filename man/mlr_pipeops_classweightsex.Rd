@@ -48,23 +48,25 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}; however, the \code{affect_columns} parameter is \emph{not} present. Further parameters are:
 \itemize{
-\item \code{weight_type} :: \code{character} \cr
-Determines which weight column types will be added. Can be \code{"learner"} (for column \code{"weights_learner"}), \code{"measure"} (for column \code{"weights_measure"}), both or none.
-Initialized to \code{"learner"}.
+\item \code{weights_learner} :: \code{logical(1)} \cr
+Whether the created weights should be stored as a \code{weights_learner} column or not. Initialized to \code{TRUE}.
+\item \code{weights_measure} :: \code{logical(1)} \cr
+Whether the created weights should be stored as a \code{weights_measure} column or not. Initialized to \code{FALSE}.
 \item \code{weight_method} :: \code{character(1)} \cr
 The method that is chosen to determine the weights of the samples. Methods encompass \code{"inverse_class_frequency"}, \code{"inverse_square_root_of_frequency"}, \code{"median_frequency_balancing"} and \code{"explicit"}.
 In case of \code{"explicit"}, the \code{mapping} hyperparameter must be use. Initialized to \code{"explicit"}.
 \item \code{mapping} :: named \code{numeric} \cr
-Depends on \code{"weight_method" = "explicit"}. Must be a named numeric vector that specifies a finite weight for each target class in the task.
+A named numeric vector that specifies a finite weight for each target class in the task. This only has an effect if \code{weight_method} is \code{explicit}.
 }
 }
 
 \section{Internals}{
 
 Adds a \code{.WEIGHTS} column to the \code{\link[mlr3:Task]{Task}}, which is removed from the feature role and mapped to the requested weight roles.
-There will be a naming conflict if this column already exists and is \emph{not} a weight column already.
-When \code{weight_method = "explicit"}, the mapping must cover every class present in the training data and may not contain additional classes.
-The \code{\link[mlr3:Learner]{Learner}} must support weights for this to have an effect.
+There will be a naming conflict if this column already exists and is \emph{not} a weight column already. For potentially pre-existing weight columns, the weight
+column role gets dropped, but they remain in the \code{\link[mlr3:DataBackend]{DataBackend}} of the \code{Task}. \cr
+When \code{weight_method = "explicit"}, the mapping must cover every class present in the training data and may not contain additional classes. \cr
+The \code{\link[mlr3:Learner]{Learner}} must support weights for this \code{PipeOp} to have an effect.
 }
 
 \section{Fields}{
@@ -82,7 +84,8 @@ library("mlr3")
 
 task = tsk("spam")
 
-poicf = po("classweightsex", param_vals = list(weight_type = c("learner", "measure"), weight_method = "inverse_class_frequency"))
+poicf = po("classweightsex", param_vals = list(weights_learner = TRUE, weights_measure = TRUE, 
+  weight_method = "inverse_class_frequency"))
 result = poicf$train(list(task))[[1L]]
 
 if ("weights_learner" \%in\% names(result)) {
@@ -141,6 +144,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
+\code{\link{mlr_pipeops_info}},
+\code{\link{mlr_pipeops_isomap}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},
