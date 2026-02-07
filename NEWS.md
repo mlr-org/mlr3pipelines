@@ -7,7 +7,7 @@
 * New method `$predict_newdata_fast()` for `GraphLearner`. Note that currently this is only a thin wrapper around `$predict_newdata()` to maintain compatibility, but in the future it may get optimized to enable faster predictions on new data.
 * feat: `PipeOpRenameColumns`'s hyperparameter `renaming` can now also take a function transforming old column names to new column names.
 * feat: Added new hyperparameters `filter_score_transform`, `result_score_transform`, and `aggregator` to `FilterEnsemble`. BREAKING CHANGE: The default behavior for handling NA scores in the aggregation has changed. Previously, NA scores were simply ignored and weights were not changed. Now, `weighted.mean` is used, which normalizes the weights for all non-NA scores. 
-* feat: Added new hyperparameters `weights_leanrer` and `weights_measure` to `PipeOpClassWeights` to allow specification which type of weight column to add to the `Task`. 
+* feat: Added new hyperparameters `weights_learner` and `weights_measure` to `PipeOpClassWeights` to allow specification which type of weight column to add to the `Task`. 
 * New PipeOp `PipeOpClassWeightEx` extends the functionality of `PipeOpClassWeights` to also support multiclass classification tasks as well as several methods of automatically determining weights based on the target class of a sample.
 
 # mlr3pipelines 0.10.0
