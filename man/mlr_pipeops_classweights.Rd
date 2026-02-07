@@ -8,16 +8,21 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Adds a class weight column to the \code{\link[mlr3:Task]{Task}} that different \code{\link[mlr3:Learner]{Learner}}s may be
-able to use for sample weighting. Sample weights are added to each sample according to the target class.
+Adds a class-dependent sample weights column to a \code{\link[mlr3:Task]{Task}}, allowing
+\code{\link[mlr3:Learner]{Learner}}s and \code{\link[mlr3:Measure]{Measure}}s to weight observations
+differently during training and evaluation.
 
-Only binary \link[mlr3:TaskClassif]{classification tasks} are supported.
+Weights are assigned per observation based on the target class and can be written
+to the \code{"weights_learner"} column, the \code{"weights_measure"} column, both, or neither.
 
-Caution: when constructed naively without parameter, the weights are all set to 1. The \code{minor_weight} parameter
-must be adjusted for this \code{\link{PipeOp}} to be useful.
+Only binary classification tasks (\code{\link[mlr3:TaskClassif]{TaskClassif}}) are supported.
 
-Note this only sets the \code{"weights_learner"} column.
-It therefore influences the behaviour of subsequent \code{\link[mlr3:Learner]{Learner}}s, but does not influence resampling or evaluation metric weights.
+Note: By default, all weights are set to \code{1}. To obtain a meaningful effect, the
+\code{minor_weight} parameter must be adjusted.
+
+See \code{\link{PipeOpClassWeightsEx}} for an extended version of this \code{PipeOp} which can
+handle multiclass classification tasks and offers several methods for automatically
+determining weights.
 }
 \section{Construction}{
 
@@ -25,9 +30,9 @@ It therefore influences the behaviour of subsequent \code{\link[mlr3:Learner]{Le
 \if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpClassWeights$new(id = "classweights", param_vals = list())
 }\if{html}{\out{</div>}}
 \itemize{
-\item \code{id} :: \code{character(1)}
+\item \code{id} :: \code{character(1)} \cr
 Identifier of the resulting  object, default \code{"classweights"}
-\item \code{param_vals} :: named \code{list}\cr
+\item \code{param_vals} :: named \code{list} \cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
 }
@@ -37,7 +42,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}. Instead of a \code{\link[mlr3:Task]{Task}}, a
 \code{\link[mlr3:TaskClassif]{TaskClassif}} is used as input and output during training and prediction.
 
-The output during training is the input \code{\link[mlr3:Task]{Task}} with added weights column according to target class.
+The output during training is the input \code{\link[mlr3:Task]{Task}} with an added weights column according to the target class.
 The output during prediction is the unchanged input.
 }
 
@@ -51,17 +56,20 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}; however, the \code{affect_columns} parameter is \emph{not} present. Further parameters are:
 \itemize{
 \item \code{minor_weight} :: \code{numeric(1)} \cr
-Weight given to samples of the minor class. Major class samples have weight 1. Initialized to 1.
+Weight given to samples of the minor class. Major class samples have weight \code{1}. Initialized to \code{1}.
+\item \code{weights_learner} :: \code{logical(1)} \cr
+Whether the created weights should be stored as a \code{weights_learner} column or not. Initialized to \code{TRUE}.
+\item \code{weights_measure} :: \code{logical(1)} \cr
+Whether the created weights should be stored as a \code{weights_measure} column or not. Initialized to \code{FALSE}.
 }
 }
 
 \section{Internals}{
 
-Introduces, or overwrites, the "weights" column in the \code{\link[mlr3:Task]{Task}}. However, the \code{\link[mlr3:Learner]{Learner}} method needs to
-respect weights for this to have an effect.
-
-The newly introduced column is named \code{.WEIGHTS}; there will be a naming conflict if this column already exists and is \emph{not} a
-weight column itself.
+Adds a \code{.WEIGHTS} column to the \code{\link[mlr3:Task]{Task}}, which is removed from the feature role and mapped to the requested weight roles.
+There will be a naming conflict if this column already exists and is \emph{not} a weight column already. For potentially pre-existing weight columns,
+the weight column role gets dropped, but they remain in the \code{\link[mlr3:DataBackend]{DataBackend}} of the \code{Task}.
+The \code{\link[mlr3:Learner]{Learner}} must support weights for this to have an effect.
 }
 
 \section{Fields}{
@@ -115,6 +123,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_chunk}},
 \code{\link{mlr_pipeops_classbalancing}},
 \code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_classweightsex}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},
