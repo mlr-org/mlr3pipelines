@@ -45,14 +45,16 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`]; however, the `affect_columns` parameter is *not* present. Further parameters are:
 #' * `minor_weight` :: `numeric(1)` \cr
 #'   Weight given to samples of the minor class. Major class samples have weight `1`. Initialized to `1`.
-#' * `weight_type` :: `character` \cr
-#'   Determines which weight column types will be added. Can be `"learner"` (for column `"weights_learner"`), `"measure"` (for column `"weights_measure"`), both or none.
-#'   An empty vector leaves the task unchanged. Initialized to `"learner"`.
+#' * `weights_learner` :: `logical(1)` \cr
+#'   Whether the created weights should be stored as a `weights_learner` column or not. Initialized to `TRUE`.
+#' * `weights_measure` :: `logical(1)` \cr
+#'   Whether the created weights should be stored as a `weights_measure` column or not. Initialized to `FALSE`.
 #'
 #' @section Internals:
 #' Adds a `.WEIGHTS` column to the [`Task`][mlr3::Task], which is removed from the feature role and mapped to the requested weight roles.
-#' There will be a naming conflict if this column already exists and is *not* a weight column already.
-#' The [`Learner`][mlr3::Learner] must support weights for this to have an effect.
+#' There will be a naming conflict if this column already exists and is *not* a weight column already. For potentially pre-existing weight columns, 
+#' the weight column role gets dropped, but they remain in the [`DataBackend`][mlr3::DataBackend] of the `Task`.
+#' The [`Learner`][mlr3::Learner] must support weights for this `PipeOp` to have an effect.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -92,9 +94,9 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
     initialize = function(id = "classweights", param_vals = list()) {
       ps = ps(
         minor_weight = p_dbl(init = 1, lower = 0, upper = Inf, tags = "train"),
-        weight_type = p_uty(init = "learner", tags = "train",
-          custom_check = crate(function(x) check_character(x, max.len = 2) %check&&% check_subset(x, choices = c("learner", "measure"))))
-        )
+        weights_learner = p_lgl(init = TRUE, tags = c("train", "weights_indicator", "required")),
+        weights_measure = p_lgl(init = FALSE, tags = c("train", "weights_indicator", "required"))
+      )
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data")
     }
   ),
@@ -104,7 +106,7 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
         stop("Only binary classification Tasks are supported.")
       }
       pv = self$param_set$get_values(tags = "train")
-      if (all(pv$weight_type == "")) return(task)
+      if (!pv$weights_learner && !pv$weights_measure) return(task)
 
       weightcolname = ".WEIGHTS"
       if (weightcolname %in% unlist(task$col_roles)) {
@@ -118,12 +120,10 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
       task$cbind(wcol)
       task$col_roles$feature = setdiff(task$col_roles$feature, weightcolname)
 
-      classif_roles = mlr_reflections$task_col_roles$classif
-      for (type in pv$weight_type) {
-        preferred_role = paste0("weights_", type)
-        final_role = if (preferred_role %in% classif_roles) preferred_role else "weight"
-        task$col_roles[[final_role]] = weightcolname
-      }
+      weights_indicators = unlist(self$param_set$get_values(tags = "weights_indicator"))
+      final_roles = names(weights_indicators)[weights_indicators]
+      final_roles = if (all(final_roles %in% mlr_reflections$task_col_roles$classif)) final_roles else "weight"  # support for older mlr3 versions
+      task$col_roles[final_roles] = weightcolname
 
       task
     },

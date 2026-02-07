@@ -117,18 +117,23 @@ test_that("PipeOpClassWeightsEx - explicit mapping must cover all classes", {
 test_that("PipeOpClassWeightsEx - weight roles assigned", {
   classif_roles = mlr_reflections$task_col_roles$classif
   configs = list(
+    list(weights_learner = FALSE, weights_measure = FALSE),
     list(weights_learner = TRUE, weights_measure = FALSE),
     list(weights_learner = FALSE, weights_measure = TRUE),
     list(weights_learner = TRUE, weights_measure = TRUE)
   )
 
   for (i in seq_along(configs)) {
-    task = mlr_tasks$get("penguins")
+    task = tsk("penguins")
     po_roles = po("classweightsex", param_vals = list(weight_method = "inverse_class_frequency"))
     po_roles$param_set$set_values(.values = configs[[i]])
     nt = po_roles$train(list(task))[[1L]]
 
     weightcolname = ".WEIGHTS"
+    if (!length(configs[[i]])) {
+      expect_false(weightcolname %in% unlist(nt$col_roles))
+      next
+    }
     expect_false(weightcolname %in% nt$col_roles$feature)
 
     types = names(configs[[i]])[unlist(configs[[i]])]

@@ -24,32 +24,30 @@ test_that("PipeOpClassWeights", {
 })
 
 test_that("PipeOpClassWeights - weight roles assigned", {
-  task = mlr_tasks$get("pima")
   classif_roles = mlr_reflections$task_col_roles$classif
   configs = list(
-    weight_type = "learner",
-    weight_type = "measure",
-    weight_type = c("learner", "measure"),
-    weight_type = character()
+    list(weights_learner = FALSE, weights_measure = FALSE),
+    list(weights_learner = TRUE, weights_measure = FALSE),
+    list(weights_learner = FALSE, weights_measure = TRUE),
+    list(weights_learner = TRUE, weights_measure = TRUE)
   )
 
-  for (cfg in configs) {
-    task_clone = task$clone(deep = TRUE)
-    po_roles = po("classweights", param_vals = list(
-      minor_weight = 2,
-      weight_type = cfg))
-    nt = po_roles$train(list(task_clone))[[1L]]
-    weightcolname = ".WEIGHTS"
+  for (i in seq_along(configs)) {
+    task = tsk("pima")
+    po_roles = po("classweights", param_vals = list(minor_weight = 2))
+    po_roles$param_set$set_values(.values = configs[[i]])
+    nt = po_roles$train(list(task))[[1L]]
 
-    if (length(cfg) == 0) {
+    weightcolname = ".WEIGHTS"
+    if (!length(configs[[i]])) {
       expect_false(weightcolname %in% unlist(nt$col_roles))
       next
     }
-
     expect_false(weightcolname %in% nt$col_roles$feature)
-    for (type in cfg) {
-      preferred_role = paste0("weights_", type)
-      final_role = if (preferred_role %in% classif_roles) preferred_role else "weight"
+
+    types = names(configs[[i]])[unlist(configs[[i]])]
+    for (type in types) {
+      final_role = if (type %in% classif_roles) type else "weight"
       expect_true(weightcolname %in% nt$col_roles[[final_role]])
     }
   }
