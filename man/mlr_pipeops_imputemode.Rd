@@ -8,7 +8,7 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
 \description{
-Impute features by their mode. Supports factors as well as logical and numerical features.
+Impute features by their mode. Supports factors, logical, numerical, POSIXct and Date features.
 If multiple modes are present then imputed values are sampled randomly from them.
 }
 \section{Construction}{
@@ -96,6 +96,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_classbalancing}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_classweights}},
+\code{\link{mlr_pipeops_classweightsex}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},

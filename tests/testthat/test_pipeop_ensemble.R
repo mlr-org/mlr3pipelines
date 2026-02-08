@@ -69,6 +69,7 @@ test_that("PipeOpWeightedRegrAvg - train and predict", {
 
 test_that("PipeOpWeightedClassifAvg - response - train and predict", {
   nulls = rep(list(NULL), 4)
+  set.seed(1L)
   prds = replicate(4,
     make_prediction_obj_classif(n = 100, noise = TRUE,
       predict_types = "response", nclasses = 3),
@@ -103,6 +104,7 @@ test_that("PipeOpWeightedClassifAvg - response - train and predict", {
 })
 
 test_that("PipeOpWeightedClassifAvg - prob - train and predict", {
+  set.seed(2L)
   nulls = rep(list(NULL), 4)
   prds = replicate(4,
     make_prediction_obj_classif(n = 100, noise = TRUE,

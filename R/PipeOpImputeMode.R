@@ -5,7 +5,7 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
-#' Impute features by their mode. Supports factors as well as logical and numerical features.
+#' Impute features by their mode. Supports factors, logical, numerical, POSIXct and Date features.
 #' If multiple modes are present then imputed values are sampled randomly from them.
 #'
 #' @section Construction:
@@ -66,7 +66,7 @@ PipeOpImputeMode = R6Class("PipeOpImputeMode",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputemode", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals, feature_types = c("factor", "integer", "logical", "numeric", "ordered"))
+      super$initialize(id, param_vals = param_vals, feature_types = c("factor", "integer", "logical", "numeric", "ordered", "POSIXct", "Date"))
     }
   ),
   private = list(
