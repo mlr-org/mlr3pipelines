@@ -1,28 +1,25 @@
-# Replicate the Input as a Multiplicity
+# Transforms Numeric Features into Spline Basis Expansions
 
-Replicate the input as a
-[`Multiplicity`](https://mlr3pipelines.mlr-org.com/dev/reference/Multiplicity.md),
-causing subsequent
-[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)s
-to be executed multiple `reps` times.
+Replaces numeric features with columns representing spline basis
+expansions.
 
-Note that
-[`Multiplicity`](https://mlr3pipelines.mlr-org.com/dev/reference/Multiplicity.md)
-is currently an experimental features and the implementation or UI may
-change.
+Depending on the type parameter, constructs polynomial B-splines
+[`splines::bs()`](https://rdrr.io/r/splines/bs.html) or natural cubic
+splines [`splines::ns()`](https://rdrr.io/r/splines/ns.html) for the
+respective column.
 
 ## Format
 
 [`R6Class`](https://r6.r-lib.org/reference/R6Class.html) object
 inheriting from
-[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md).
+[`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md)/[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md).
 
 ## Construction
 
-    PipeOpReplicate$new(id = "replicate", param_vals = list())
+    po("splines", param_vals = list())
 
-- `id` :: `character(1)` Identifier of the resulting object, default
-  `"replicate"`.
+- `id` :: `character(1)`  
+  Identifier of resulting object, default `"splines"`.
 
 - `param_vals` :: named `list`  
   List of hyperparameter settings, overwriting the hyperparameter
@@ -31,23 +28,72 @@ inheriting from
 
 ## Input and Output Channels
 
-`PipeOpReplicate` has one input channel named `"input"`, taking any
-input (`"*"`) both during training and prediction.
+Input and output channels are inherited from
+[`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md).
 
-`PipeOpReplicate` has one output channel named `"output"` returning the
-replicated input as a
-[`Multiplicity`](https://mlr3pipelines.mlr-org.com/dev/reference/Multiplicity.md)
-of type any (`"[*]"`) both during training and prediction.
+The output is the input
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html) with the selected
+columns transformed according to the specified Splines Method.
 
 ## State
 
-The `$state` is left empty
-([`list()`](https://rdrr.io/r/base/list.html)).
+The `$state` is a named `list` with the `$state` elements inherited from
+[`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md).
+After training the `Boundary.knots` will be given to the `$state`.
 
 ## Parameters
 
-- `reps` :: `numeric(1)`  
-  Integer indicating the number of times the input should be replicated.
+The parameters are the parameters inherited from
+[`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md),
+as well as:
+
+- `type` :: `character(1)`  
+  Controls the type of splines that are to be created. Can be either
+  `polynomial` ([`splines::bs`](https://rdrr.io/r/splines/bs.html)) or
+  `natural` ([`splines::ns`](https://rdrr.io/r/splines/ns.html)).
+  Initializied to `"natural"`.
+
+- `df` :: `integer(1)`  
+  Number of degrees of freedom for calculation of the spline basis
+  matrix. Initialized to `NULL`. Depending on `type`, see either
+  [`splines::bs()`](https://rdrr.io/r/splines/bs.html) or
+  [`splines::ns()`](https://rdrr.io/r/splines/ns.html).
+
+- `knots` :: named `list`  
+  Internal breakpoints that define the spline, given as a named list of
+  numeric vectors, where each name corresponds to a feature and its
+  value specifies the knots for that feature. Default is `NULL`.
+  Depending on `type`, see either
+  [`splines::bs()`](https://rdrr.io/r/splines/bs.html) or
+  [`splines::ns()`](https://rdrr.io/r/splines/ns.html).
+
+- `intercept` :: `logical(1)`  
+  If `TRUE`, an intercept is included in the basis. Default is `FALSE`.
+  Depending on `type`, see either
+  [`splines::bs()`](https://rdrr.io/r/splines/bs.html) or
+  [`splines::ns()`](https://rdrr.io/r/splines/ns.html).
+
+- `degree` :: `integer(1)`  
+  Degree of the polynomial used to compute polynomial splines. Only used
+  if `type` is `"polynomial"`. Default is `3`. See
+  [`splines::bs()`](https://rdrr.io/r/splines/bs.html).
+
+- `Boundary.knots` :: named `list`  
+  Boundary points at which to anchor the spline basis, given as a named
+  list of numeric vectors, where each name corresponds to a feature and
+  its value specifies the boundary points for that feature. Default is
+  `NULL`. Depending on `type`, see either
+  [`splines::bs()`](https://rdrr.io/r/splines/bs.html) or
+  [`splines::ns()`](https://rdrr.io/r/splines/ns.html).
+
+## Internals
+
+Creates a spline basis using either
+[`splines::bs`](https://rdrr.io/r/splines/bs.html) or
+[`splines::ns`](https://rdrr.io/r/splines/ns.html) depending on the
+hyperparameter `type`. After training, the `Boundary.knots` that were
+either provided by the user or calculated during training are stored in
+the `PipeOp`'s `$state`.
 
 ## Fields
 
@@ -57,7 +103,7 @@ Only fields inherited from
 ## Methods
 
 Only methods inherited from
-[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md).
+[`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md)/[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md).
 
 ## See also
 
@@ -80,7 +126,6 @@ Other PipeOps:
 [`mlr_pipeops_classbalancing`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classbalancing.md),
 [`mlr_pipeops_classifavg`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classifavg.md),
 [`mlr_pipeops_classweights`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classweights.md),
-[`mlr_pipeops_classweightsex`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classweightsex.md),
 [`mlr_pipeops_colapply`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_colapply.md),
 [`mlr_pipeops_collapsefactors`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_collapsefactors.md),
 [`mlr_pipeops_colroles`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_colroles.md),
@@ -129,6 +174,7 @@ Other PipeOps:
 [`mlr_pipeops_regravg`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_regravg.md),
 [`mlr_pipeops_removeconstants`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_removeconstants.md),
 [`mlr_pipeops_renamecolumns`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_renamecolumns.md),
+[`mlr_pipeops_replicate`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_replicate.md),
 [`mlr_pipeops_rowapply`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_rowapply.md),
 [`mlr_pipeops_scale`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_scale.md),
 [`mlr_pipeops_scalemaxabs`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_scalemaxabs.md),
@@ -137,7 +183,6 @@ Other PipeOps:
 [`mlr_pipeops_smote`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_smote.md),
 [`mlr_pipeops_smotenc`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_smotenc.md),
 [`mlr_pipeops_spatialsign`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_spatialsign.md),
-[`mlr_pipeops_splines`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_splines.md),
 [`mlr_pipeops_subsample`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_subsample.md),
 [`mlr_pipeops_targetinvert`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_targetinvert.md),
 [`mlr_pipeops_targetmutate`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_targetmutate.md),
@@ -151,93 +196,44 @@ Other PipeOps:
 [`mlr_pipeops_vtreat`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_vtreat.md),
 [`mlr_pipeops_yeojohnson`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_yeojohnson.md)
 
-Other Multiplicity PipeOps:
-[`Multiplicity()`](https://mlr3pipelines.mlr-org.com/dev/reference/Multiplicity.md),
-[`PipeOpEnsemble`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpEnsemble.md),
-[`mlr_pipeops_classifavg`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classifavg.md),
-[`mlr_pipeops_featureunion`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_featureunion.md),
-[`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_multiplicityexply.md),
-[`mlr_pipeops_multiplicityimply`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_multiplicityimply.md),
-[`mlr_pipeops_ovrsplit`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_ovrsplit.md),
-[`mlr_pipeops_ovrunite`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_ovrunite.md),
-[`mlr_pipeops_regravg`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_regravg.md)
-
-Other Experimental Features:
-[`Multiplicity()`](https://mlr3pipelines.mlr-org.com/dev/reference/Multiplicity.md),
-[`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_multiplicityexply.md),
-[`mlr_pipeops_multiplicityimply`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_multiplicityimply.md),
-[`mlr_pipeops_ovrsplit`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_ovrsplit.md),
-[`mlr_pipeops_ovrunite`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_ovrunite.md)
-
 ## Examples
 
 ``` r
 library("mlr3")
+
 task = tsk("iris")
-po = po("replicate", param_vals = list(reps = 3))
-po$train(list(task))
-#> $output
-#> 
-#> ── Multiplicity: ──
-#> 
-#> [[1]]
-#> 
-#> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
-#> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
-#> • Properties: multiclass
-#> • Features (4):
-#>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
-#> 
-#> [[2]]
-#> 
-#> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
-#> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
-#> • Properties: multiclass
-#> • Features (4):
-#>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
-#> 
-#> [[3]]
-#> 
-#> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
-#> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
-#> • Properties: multiclass
-#> • Features (4):
-#>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
-#> 
-#> 
-po$predict(list(task))
-#> $output
-#> ── Multiplicity: ──
-#> 
-#> [[1]]
-#> 
-#> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
-#> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
-#> • Properties: multiclass
-#> • Features (4):
-#>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
-#> 
-#> [[2]]
-#> 
-#> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
-#> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
-#> • Properties: multiclass
-#> • Features (4):
-#>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
-#> 
-#> [[3]]
-#> 
-#> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
-#> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
-#> • Properties: multiclass
-#> • Features (4):
-#>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
-#> 
-#> 
+pop = po("splines")
+
+pop$train(list(task))[[1]]$data()
+#>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
+#>         <fctr>        <num>       <num>        <num>       <num>
+#>   1:    setosa   0.05435822  0.03340766   0.17817416   0.5011148
+#>   2:    setosa   0.05435822  0.03340766   0.13363062   0.3340766
+#>   3:    setosa   0.04076866  0.03340766   0.08908708   0.4008919
+#>   4:    setosa   0.06794777  0.03340766   0.06681531   0.3674842
+#>   5:    setosa   0.05435822  0.03340766   0.15590239   0.5345225
+#>  ---                                                            
+#> 146: virginica   0.57076130  0.73496842   0.53452248   0.3340766
+#> 147: virginica   0.54358219  0.60133779   0.44543540   0.1670383
+#> 148: virginica   0.57076130  0.63474545   0.48997894   0.3340766
+#> 149: virginica   0.59794041  0.73496842   0.42316363   0.4677072
+#> 150: virginica   0.55717174  0.56793014   0.35634832   0.3340766
+
+pobk = po("splines", Boundary.knots = list(
+  Petal.Length = c(0, 4), Petal.Width = c(4, 7), Sepal.Length = c(1, 5), Sepal.Width = c(3, 6))
+)
+pobk$train(list(task))[[1]]$data()
+#>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
+#>         <fctr>        <num>       <num>        <num>       <num>
+#>   1:    setosa    0.2806243  -1.0155927    0.8218283  0.13363062
+#>   2:    setosa    0.2806243  -1.0155927    0.7817391  0.00000000
+#>   3:    setosa    0.2605797  -1.0155927    0.7416499  0.05345225
+#>   4:    setosa    0.3006689  -1.0155927    0.7216054  0.02672612
+#>   5:    setosa    0.2806243  -1.0155927    0.8017837  0.16035675
+#>  ---                                                            
+#> 146: virginica    1.0423188  -0.4543441    1.1425418  0.00000000
+#> 147: virginica    1.0022297  -0.5612486    1.0623634 -0.13363062
+#> 148: virginica    1.0423188  -0.5345225    1.1024526  0.00000000
+#> 149: virginica    1.0824080  -0.4543441    1.0423188  0.10690450
+#> 150: virginica    1.0222743  -0.5879747    0.9821851  0.00000000
 ```

@@ -180,6 +180,7 @@ Other PipeOps:
 [`mlr_pipeops_smote`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_smote.md),
 [`mlr_pipeops_smotenc`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_smotenc.md),
 [`mlr_pipeops_spatialsign`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_spatialsign.md),
+[`mlr_pipeops_splines`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_splines.md),
 [`mlr_pipeops_subsample`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_subsample.md),
 [`mlr_pipeops_targetinvert`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_targetinvert.md),
 [`mlr_pipeops_targetmutate`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_targetmutate.md),
@@ -233,7 +234,7 @@ poe$train(list(task))[[1]]$data()
 #>         x           y.1        y.2
 #>    <fctr>         <num>      <num>
 #> 1:      a -7.071068e-01  0.4082483
-#> 2:      b -7.850462e-17 -0.8164966
+#> 2:      b -9.073800e-17 -0.8164966
 #> 3:      c  7.071068e-01  0.4082483
 
 poe$param_set$values$method = "sum"

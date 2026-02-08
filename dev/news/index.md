@@ -28,6 +28,8 @@
   `PipeOpClassWeights` to also support multiclass classification tasks
   as well as several methods of automatically determining weights based
   on the target class of a sample.
+- New PipeOp `PipeOpSplines` that expands numeric features into spline
+  basis columns.
 
 ## mlr3pipelines 0.10.0
 

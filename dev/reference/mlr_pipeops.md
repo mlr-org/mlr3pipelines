@@ -189,6 +189,7 @@ Other PipeOps:
 [`mlr_pipeops_smote`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_smote.md),
 [`mlr_pipeops_smotenc`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_smotenc.md),
 [`mlr_pipeops_spatialsign`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_spatialsign.md),
+[`mlr_pipeops_splines`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_splines.md),
 [`mlr_pipeops_subsample`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_subsample.md),
 [`mlr_pipeops_targetinvert`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_targetinvert.md),
 [`mlr_pipeops_targetmutate`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_targetmutate.md),
@@ -313,17 +314,18 @@ as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num", "packages")]
 #> 65:                 smote         1          1        mlr3pipelines,smotefamily
 #> 66:               smotenc         1          1             mlr3pipelines,themis
 #> 67:           spatialsign         1          1                    mlr3pipelines
-#> 68:             subsample         1          1                    mlr3pipelines
-#> 69:          targetinvert         2          1                    mlr3pipelines
-#> 70:          targetmutate         1          2                    mlr3pipelines
-#> 71: targettrafoscalerange         1          2                    mlr3pipelines
-#> 72:        textvectorizer         1          1 mlr3pipelines,quanteda,stopwords
-#> 73:             threshold         1          1                    mlr3pipelines
-#> 74:                 tomek         1          1             mlr3pipelines,themis
-#> 75:         tunethreshold         1          1              mlr3pipelines,bbotk
-#> 76:              unbranch        NA          1                    mlr3pipelines
-#> 77:                vtreat         1          1             mlr3pipelines,vtreat
-#> 78:            yeojohnson         1          1      mlr3pipelines,bestNormalize
+#> 68:               splines         1          1      mlr3pipelines,splines,stats
+#> 69:             subsample         1          1                    mlr3pipelines
+#> 70:          targetinvert         2          1                    mlr3pipelines
+#> 71:          targetmutate         1          2                    mlr3pipelines
+#> 72: targettrafoscalerange         1          2                    mlr3pipelines
+#> 73:        textvectorizer         1          1 mlr3pipelines,quanteda,stopwords
+#> 74:             threshold         1          1                    mlr3pipelines
+#> 75:                 tomek         1          1             mlr3pipelines,themis
+#> 76:         tunethreshold         1          1              mlr3pipelines,bbotk
+#> 77:              unbranch        NA          1                    mlr3pipelines
+#> 78:                vtreat         1          1             mlr3pipelines,vtreat
+#> 79:            yeojohnson         1          1      mlr3pipelines,bestNormalize
 #>                       key input.num output.num                         packages
 #>                    <char>     <int>      <int>                           <list>
 ```

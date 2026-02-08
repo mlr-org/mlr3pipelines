@@ -195,6 +195,7 @@ values enclosed by square brackets ("<code>[</code>", "<code>]</code>"), then th
 <code><a href="mlr_pipeops_smote.html">mlr_pipeops_smote</a></code>,
 <code><a href="mlr_pipeops_smotenc.html">mlr_pipeops_smotenc</a></code>,
 <code><a href="mlr_pipeops_spatialsign.html">mlr_pipeops_spatialsign</a></code>,
+<code><a href="mlr_pipeops_splines.html">mlr_pipeops_splines</a></code>,
 <code><a href="mlr_pipeops_subsample.html">mlr_pipeops_subsample</a></code>,
 <code><a href="mlr_pipeops_targetinvert.html">mlr_pipeops_targetinvert</a></code>,
 <code><a href="mlr_pipeops_targetmutate.html">mlr_pipeops_targetmutate</a></code>,
@@ -318,17 +319,18 @@ values enclosed by square brackets ("<code>[</code>", "<code>]</code>"), then th
 <span class="r-out co"><span class="r-pr">#&gt;</span> 65:                 smote         1          1        mlr3pipelines,smotefamily</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 66:               smotenc         1          1             mlr3pipelines,themis</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 67:           spatialsign         1          1                    mlr3pipelines</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68:             subsample         1          1                    mlr3pipelines</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69:          targetinvert         2          1                    mlr3pipelines</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70:          targetmutate         1          2                    mlr3pipelines</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71: targettrafoscalerange         1          2                    mlr3pipelines</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72:        textvectorizer         1          1 mlr3pipelines,quanteda,stopwords</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73:             threshold         1          1                    mlr3pipelines</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74:                 tomek         1          1             mlr3pipelines,themis</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75:         tunethreshold         1          1              mlr3pipelines,bbotk</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76:              unbranch        NA          1                    mlr3pipelines</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77:                vtreat         1          1             mlr3pipelines,vtreat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78:            yeojohnson         1          1      mlr3pipelines,bestNormalize</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68:               splines         1          1      mlr3pipelines,splines,stats</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69:             subsample         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70:          targetinvert         2          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71:          targetmutate         1          2                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72: targettrafoscalerange         1          2                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73:        textvectorizer         1          1 mlr3pipelines,quanteda,stopwords</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74:             threshold         1          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75:                 tomek         1          1             mlr3pipelines,themis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76:         tunethreshold         1          1              mlr3pipelines,bbotk</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77:              unbranch        NA          1                    mlr3pipelines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78:                vtreat         1          1             mlr3pipelines,vtreat</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79:            yeojohnson         1          1      mlr3pipelines,bestNormalize</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                       key input.num output.num                         packages</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    &lt;char&gt;     &lt;int&gt;      &lt;int&gt;                           &lt;list&gt;</span>
 </code></pre></div>

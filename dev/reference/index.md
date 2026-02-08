@@ -242,6 +242,9 @@
 - [`mlr_pipeops_spatialsign`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_spatialsign.md)
   [`PipeOpSpatialSign`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_spatialsign.md)
   : Normalize Data Row-wise
+- [`mlr_pipeops_splines`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_splines.md)
+  [`PipeOpSplines`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_splines.md)
+  : Transforms Numeric Features into Spline Basis Expansions
 - [`mlr_pipeops_subsample`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_subsample.md)
   [`PipeOpSubsample`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_subsample.md)
   : Subsampling
