@@ -97,7 +97,7 @@ pipe1  # contains o1, o2, and o3 now.
 
 o1 \%>>!\% o2
 
-o1  # not changed, becuase not a Graph.
+o1  # not changed, because not a Graph.
 }
 \seealso{
 Other Graph operators: 

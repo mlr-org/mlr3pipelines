@@ -44,8 +44,8 @@ parameter.
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{constrasts} :: named \code{list} of \code{matrix}\cr
-List of contrast matrices, one for each affected discrete feature. The rows of each matrix correspond to (training task) levels, the the
+\item \code{contrasts} :: named \code{list} of \code{matrix}\cr
+List of contrast matrices, one for each affected discrete feature. The rows of each matrix correspond to (training task) levels, the
 columns to the new columns that replace the old discrete feature. See \code{\link[stats:contrasts]{stats::contrasts}}.
 }
 }

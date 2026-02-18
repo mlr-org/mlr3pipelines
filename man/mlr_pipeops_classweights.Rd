@@ -69,7 +69,7 @@ Whether the created weights should be stored as a \code{weights_measure} column 
 Adds a \code{.WEIGHTS} column to the \code{\link[mlr3:Task]{Task}}, which is removed from the feature role and mapped to the requested weight roles.
 There will be a naming conflict if this column already exists and is \emph{not} a weight column already. For potentially pre-existing weight columns,
 the weight column role gets dropped, but they remain in the \code{\link[mlr3:DataBackend]{DataBackend}} of the \code{Task}.
-The \code{\link[mlr3:Learner]{Learner}} must support weights for this to have an effect.
+The \code{\link[mlr3:Learner]{Learner}} must support weights for this \code{PipeOp} to have an effect.
 }
 
 \section{Fields}{

@@ -34,7 +34,7 @@ test_that("update target regr to classif", {
 
 test_that("update target classif to regr", {
   # this is e.g. used in mlr3ordinal for casting
-  # orginal to regr
+  # original to regr
   trafo_fun = function(x) {map_dtc(x, as.numeric)}
   pom = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "quality", new_task_type = "regr"))
   expect_pipeop(pom)
@@ -53,7 +53,7 @@ test_that("update target classif to regr", {
 
 test_that("update target same target", {
   # this is e.g. used in mlr3ordinal for casting
-  # orginal to classif
+  # original to classif
   pom = PipeOpUpdateTarget$new(param_vals = list(new_target_name = "type", new_task_type = "classif"))
   expect_pipeop(pom)
   newtsk = pom$train(list(tsk("wine")))[[1]]
