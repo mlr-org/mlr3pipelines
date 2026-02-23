@@ -101,8 +101,8 @@ parameter.</p>
     <h2 id="state">State<a class="anchor" aria-label="anchor" href="#state"></a></h2>
 
 
-<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>, as well as:</p><ul><li><p><code>constrasts</code> :: named <code>list</code> of <code>matrix</code><br>
-List of contrast matrices, one for each affected discrete feature. The rows of each matrix correspond to (training task) levels, the the
+<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>, as well as:</p><ul><li><p><code>contrasts</code> :: named <code>list</code> of <code>matrix</code><br>
+List of contrast matrices, one for each affected discrete feature. The rows of each matrix correspond to (training task) levels, the
 columns to the new columns that replace the old discrete feature. See <code><a href="https://rdrr.io/r/stats/contrasts.html" class="external-link">stats::contrasts</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
@@ -266,7 +266,7 @@ Initialized to <code>"one-hot"</code>. One of:</p><ul><li><p><code>"one-hot"</co
 <span class="r-out co"><span class="r-pr">#&gt;</span>         x           y.1        y.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt;         &lt;num&gt;      &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      a -7.071068e-01  0.4082483</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      b -9.073800e-17 -0.8164966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      b -7.850462e-17 -0.8164966</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:      c  7.071068e-01  0.4082483</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">poe</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">method</span> <span class="op">=</span> <span class="st">"sum"</span></span></span>

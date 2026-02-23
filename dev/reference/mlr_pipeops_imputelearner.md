@@ -279,7 +279,7 @@ po$state$model$mass
 #> 
 #> 
 #> $log
-#> Empty data.table (0 rows and 3 cols): stage,class,msg
+#> Empty data.table (0 rows and 4 cols): stage,class,msg,condition
 #> 
 #> $train_time
 #> [1] 0.004
@@ -294,7 +294,7 @@ po$state$model$mass
 #> NULL
 #> 
 #> $mlr3_version
-#> [1] ‘1.3.0’
+#> [1] ‘1.4.0’
 #> 
 #> $data_prototype
 #> Empty data.table (0 rows and 8 cols): .impute_col,age,glucose,insulin,pedigree,pregnant...

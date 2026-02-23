@@ -89,7 +89,7 @@ weight column role gets dropped, but they remain in the
 [`DataBackend`](https://mlr3.mlr-org.com/reference/DataBackend.html) of
 the `Task`. The
 [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) must
-support weights for this to have an effect.
+support weights for this `PipeOp` to have an effect.
 
 ## Fields
 

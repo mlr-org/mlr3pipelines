@@ -129,7 +129,7 @@ graphs.
 - A very small number of packages listed in `Suggests:` used by some
   tests / examples is missing; ignore warnings in that regard. You will
   never be asked to work on things that require these packages.
-- Packages that we rely on; they generally have good documentation thta
+- Packages that we rely on; they generally have good documentation that
   can be queried, or they can be looked up on GitHub
   - `mlr3`, provides `Task`, `Learner`, `Measure`, `Prediction`, various
     `***Result` classes; basically the foundation on which we build.

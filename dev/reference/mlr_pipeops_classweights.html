@@ -134,7 +134,7 @@ Whether the created weights should be stored as a <code>weights_measure</code> c
 <p>Adds a <code>.WEIGHTS</code> column to the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>, which is removed from the feature role and mapped to the requested weight roles.
 There will be a naming conflict if this column already exists and is <em>not</em> a weight column already. For potentially pre-existing weight columns,
 the weight column role gets dropped, but they remain in the <code><a href="https://mlr3.mlr-org.com/reference/DataBackend.html" class="external-link">DataBackend</a></code> of the <code>Task</code>.
-The <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> must support weights for this to have an effect.</p>
+The <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> must support weights for this <code>PipeOp</code> to have an effect.</p>
     </div>
     <div class="section level2">
     <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>

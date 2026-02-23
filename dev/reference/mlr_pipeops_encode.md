@@ -55,10 +55,10 @@ The `$state` is a named `list` with the `$state` elements inherited from
 [`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md),
 as well as:
 
-- `constrasts` :: named `list` of `matrix`  
+- `contrasts` :: named `list` of `matrix`  
   List of contrast matrices, one for each affected discrete feature. The
-  rows of each matrix correspond to (training task) levels, the the
-  columns to the new columns that replace the old discrete feature. See
+  rows of each matrix correspond to (training task) levels, the columns
+  to the new columns that replace the old discrete feature. See
   [`stats::contrasts`](https://rdrr.io/r/stats/contrasts.html).
 
 ## Parameters
@@ -234,7 +234,7 @@ poe$train(list(task))[[1]]$data()
 #>         x           y.1        y.2
 #>    <fctr>         <num>      <num>
 #> 1:      a -7.071068e-01  0.4082483
-#> 2:      b -9.073800e-17 -0.8164966
+#> 2:      b -7.850462e-17 -0.8164966
 #> 3:      c  7.071068e-01  0.4082483
 
 poe$param_set$values$method = "sum"

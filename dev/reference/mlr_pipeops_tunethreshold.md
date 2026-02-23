@@ -238,7 +238,7 @@ pop$state
 #> 
 #> 
 #> $log
-#> Empty data.table (0 rows and 3 cols): stage,class,msg
+#> Empty data.table (0 rows and 4 cols): stage,class,msg,condition
 #> 
 #> $train_time
 #> [1] 0.003
@@ -253,7 +253,7 @@ pop$state
 #> NULL
 #> 
 #> $mlr3_version
-#> [1] ‘1.3.0’
+#> [1] ‘1.4.0’
 #> 
 #> $data_prototype
 #> Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width
