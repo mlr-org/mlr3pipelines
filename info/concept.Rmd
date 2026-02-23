@@ -182,12 +182,12 @@ Details:
 Connection operator, connects 2 partial graphs G and H.
 
 [Graph], [Graph] -> [Graph]
-If G or H are PipeOps, they the will leveled up to a Graph, containing a single node.
+If G or H are PipeOps, they will be leveled up to a Graph, containing a single node.
 
 We check that the ids(G) and ids(H) are disjoint (or throw an error), then
 we connect the rhs(G) to the lhs(H) as outlined below.
 Case 1-1: If length(rhs(G)) == 1 and length(lhs(H)) == 1, so G has a single sink and H has a single source, we directly connect them.
-Case n-1: If length(rhs(G)) == n and length(lhs(H)) == 1, so G has multiple sinks, and H a single source, we connect all nodes in rhs(G) withe the node lhs(H).
+Case n-1: If length(rhs(G)) == n and length(lhs(H)) == 1, so G has multiple sinks, and H a single source, we connect all nodes in rhs(G) with the node lhs(H).
 Case 1-n: If length(rhs(G)) == 1 and length(lhs(H)) == n, we require that the PipeOp in rhs(G) is a so-called broadcaster, see below. We connect
 this broadcaster with all elements in lhs(H).
 All other cases: Error.
@@ -245,7 +245,7 @@ Prediction on a graph works exactly the same. We feed the input object to the LH
 `predict` on each node, layer by layer, until we have done that also on the RHS.
 
 
-FIXME: we need to specifiy the concept of branching / multiplexing
+FIXME: we need to specify the concept of branching / multiplexing
 
 # Graph Operation Concepts
 

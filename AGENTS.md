@@ -68,7 +68,7 @@ Straightforwardness: Avoid ideological adherence to other programming principles
 - If `roxygenize()` / `document()` produce warnings that are unrelated to the code you wrote, ignore them. Do not fix code or formatting that is unrelated to what you are working on, but *do* mention bugs or problems that you noticed it in your final report.
 - When you write examples, make sure they work.
 - A very small number of packages listed in `Suggests:` used by some tests / examples is missing; ignore warnings in that regard. You will never be asked to work on things that require these packages.
-- Packages that we rely on; they generally have good documentation thta can be queried, or they can be looked up on GitHub
+- Packages that we rely on; they generally have good documentation that can be queried, or they can be looked up on GitHub
   - `mlr3`, provides `Task`, `Learner`, `Measure`, `Prediction`, various `***Result` classes; basically the foundation on which we build. <https://github.com/mlr-org/mlr3>
   - `mlr3misc`, provides a lot of helper functions that we prefer to use over base-R when available. <https://github.com/mlr-org/mlr3misc>
   - `paradox`, provides the hyperparameters-/configuration space: `ps()`, `p_int()`, `p_lgl()`, `p_fct()`, `p_uty()` etc. <https://github.com/mlr-org/paradox>

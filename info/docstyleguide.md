@@ -107,7 +107,7 @@ The `@family` tag creates a group of documentation pages that mutually link each
 
 ## @include
 
-It is a good idea to `@include` the file defining the the superclass, if any.
+It is a good idea to `@include` the file defining the superclass, if any.
 
 ## Example
 

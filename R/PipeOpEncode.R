@@ -34,8 +34,8 @@
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `constrasts` :: named `list` of `matrix`\cr
-#'   List of contrast matrices, one for each affected discrete feature. The rows of each matrix correspond to (training task) levels, the the
+#' * `contrasts` :: named `list` of `matrix`\cr
+#'   List of contrast matrices, one for each affected discrete feature. The rows of each matrix correspond to (training task) levels, the
 #'   columns to the new columns that replace the old discrete feature. See [`stats::contrasts`].
 #'
 #' @section Parameters:

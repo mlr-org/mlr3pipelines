@@ -551,7 +551,7 @@ test_that("FilterEnsemble - Error messages", {
     weights = c(0.5, 0.5)
   )
 
-  # Error if formal args are inccorect
+  # Error if formal args are incorrect
   expect_error(flt_ensemble$param_set$set_values(
     aggregator = function(x) mean(x)
   ), "Must have formal arguments: w")
