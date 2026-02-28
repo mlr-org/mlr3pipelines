@@ -1,4 +1,4 @@
-# mlr3pipelines 0.10.0-9000
+# mlr3pipelines 0.11.0
 
 * Fix: Made `FilterEnsemble` tests deterministic and more robust.
 * Fix: Made tests for `PipeOpLearnerCV` deterministic.
