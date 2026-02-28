@@ -149,7 +149,7 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
         fun = function(xs) private$.objfun(xs, pred = pred, measure = measure, paramname_to_column_map = paramname_to_column_map),
         domain = ps, codomain = codomain
       )
-      inst = bbotk::OptimInstanceSingleCrit$new(
+      inst = bbotk::OptimInstanceBatchSingleCrit$new(
         objective = objfun,
         terminator = bbotk::trm("combo", terminators = list(
           bbotk::trm("stagnation", iters = 20*ncol(pred$prob)),

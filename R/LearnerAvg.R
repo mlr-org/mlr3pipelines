@@ -204,7 +204,7 @@ optimize_weights_learneravg = function(self, task, n_weights, data) {
         fun = function(xs) learneravg_objfun(xs, task = task, measure = measure, avg_weight_fun = self$weighted_average_prediction, data = data),
         domain = ps, codomain = codomain
       )
-      inst = bbotk::OptimInstanceSingleCrit$new(
+      inst = bbotk::OptimInstanceBatchSingleCrit$new(
         objective = objfun,
         terminator = bbotk::trm("combo", terminators = list(
           bbotk::trm("stagnation", iters = 20 * n_weights),

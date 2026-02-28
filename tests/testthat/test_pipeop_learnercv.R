@@ -730,7 +730,8 @@ test_that("PipeOpLearnerCV cv ensemble aggregates SE like PipeOpRegrAvg", {
 test_that("PipeOpLearnerCV cv ensemble handles unsorted, subsetted row_ids (classif)",{
   skip_if_not_installed("rpart")
 
-  task = tsk("iris")$filter(c(1, 15, 3, 52, 88, 65, 120, 102, 98))  # unsorted, subsetted row_ids
+  set.seed(1)
+  task = tsk("iris")$filter(c(1, 15, 3, 42, 28, 52, 88, 65, 98, 73, 120, 102, 135, 141, 108))  # unsorted, subsetted row_ids
 
   learner = lrn("classif.rpart", predict_type = "prob")
   op = po("learner_cv", learner, 

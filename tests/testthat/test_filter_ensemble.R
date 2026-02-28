@@ -468,7 +468,7 @@ test_that("FilterEnsemble weight search space works with bbotk", {
   )
 
   terminator = bbotk::trm("evals", n_evals = 2)
-  instance = bbotk::OptimInstanceSingleCrit$new(
+  instance = bbotk::OptimInstanceBatchSingleCrit$new(
     objective = obj,
     terminator = terminator
   )
