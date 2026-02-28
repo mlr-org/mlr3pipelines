@@ -51,7 +51,7 @@ as well as:
   with one column. The return value is used as the new target of the
   resulting [`Task`](https://mlr3.mlr-org.com/reference/Task.html). To
   change target names, change the column name of the data using e.g.
-  [`setnames()`](https://rdatatable.gitlab.io/data.table/reference/setattr.html).  
+  [`setnames()`](https://rdrr.io/pkg/data.table/man/setattr.html).  
   Note that this function also gets called during prediction and should
   thus gracefully handle `NA` values.  
   Initialized to [`identity()`](https://rdrr.io/r/base/identity.html).
@@ -62,7 +62,7 @@ as well as:
   `data.table` created from a
   [`Prediction`](https://mlr3.mlr-org.com/reference/Prediction.html)
   using
-  [`as.data.table()`](https://rdatatable.gitlab.io/data.table/reference/as.data.table.html),
+  [`as.data.table()`](https://rdrr.io/pkg/data.table/man/as.data.table.html),
   without the `$row_ids` and `$truth` columns, and should return a
   `data.table` or named `list` that contains the new relevant slots of a
   [`Prediction`](https://mlr3.mlr-org.com/reference/Prediction.html)
@@ -112,6 +112,7 @@ Other PipeOps:
 [`mlr_pipeops_classbalancing`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classbalancing.md),
 [`mlr_pipeops_classifavg`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classifavg.md),
 [`mlr_pipeops_classweights`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweights.md),
+[`mlr_pipeops_classweightsex`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweightsex.md),
 [`mlr_pipeops_colapply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colapply.md),
 [`mlr_pipeops_collapsefactors`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_collapsefactors.md),
 [`mlr_pipeops_colroles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colroles.md),
@@ -169,6 +170,7 @@ Other PipeOps:
 [`mlr_pipeops_smote`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smote.md),
 [`mlr_pipeops_smotenc`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smotenc.md),
 [`mlr_pipeops_spatialsign`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_spatialsign.md),
+[`mlr_pipeops_splines`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_splines.md),
 [`mlr_pipeops_subsample`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_subsample.md),
 [`mlr_pipeops_targetinvert`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetinvert.md),
 [`mlr_pipeops_targettrafoscalerange`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targettrafoscalerange.md),
@@ -214,8 +216,8 @@ po$predict(list(task))
 #>     assert_list(inputs, len = 1L, types = "Prediction")
 #>     list(private$.invert(inputs[[1L]], predict_phase_state))
 #> }
-#> <bytecode: 0x56306af2e7c0>
-#> <environment: 0x5630706b5260>
+#> <bytecode: 0x55d1aacfeaa0>
+#> <environment: 0x55d1ad4c5c98>
 #> 
 #> $output
 #> 

@@ -5,8 +5,8 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Impute Features by their Mode — mlr_pipeops_imputemode"><meta name="description" content="Impute features by their mode. Supports factors as well as logical and numerical features.
-If multiple modes are present then imputed values are sampled randomly from them."><meta property="og:description" content="Impute features by their mode. Supports factors as well as logical and numerical features.
+</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Impute Features by their Mode — mlr_pipeops_imputemode"><meta name="description" content="Impute features by their mode. Supports factors, logical, numerical, POSIXct and Date features.
+If multiple modes are present then imputed values are sampled randomly from them."><meta property="og:description" content="Impute features by their mode. Supports factors, logical, numerical, POSIXct and Date features.
 If multiple modes are present then imputed values are sampled randomly from them."><meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
@@ -15,7 +15,7 @@ If multiple modes are present then imputed values are sampled randomly from them
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,12 +50,12 @@ If multiple modes are present then imputed values are sampled randomly from them
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Impute Features by their Mode</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.10.0/R/PipeOpImputeMode.R" class="external-link"><code>R/PipeOpImputeMode.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpImputeMode.R" class="external-link"><code>R/PipeOpImputeMode.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_imputemode.Rd</code></div>
     </div>
 
     <div class="ref-description section level2">
-    <p>Impute features by their mode. Supports factors as well as logical and numerical features.
+    <p>Impute features by their mode. Supports factors, logical, numerical, POSIXct and Date features.
 If multiple modes are present then imputed values are sampled randomly from them.</p>
     </div>
 
@@ -137,6 +137,7 @@ if multiple values are missing.</p>
 <code><a href="mlr_pipeops_classbalancing.html">mlr_pipeops_classbalancing</a></code>,
 <code><a href="mlr_pipeops_classifavg.html">mlr_pipeops_classifavg</a></code>,
 <code><a href="mlr_pipeops_classweights.html">mlr_pipeops_classweights</a></code>,
+<code><a href="mlr_pipeops_classweightsex.html">mlr_pipeops_classweightsex</a></code>,
 <code><a href="mlr_pipeops_colapply.html">mlr_pipeops_colapply</a></code>,
 <code><a href="mlr_pipeops_collapsefactors.html">mlr_pipeops_collapsefactors</a></code>,
 <code><a href="mlr_pipeops_colroles.html">mlr_pipeops_colroles</a></code>,
@@ -193,6 +194,7 @@ if multiple values are missing.</p>
 <code><a href="mlr_pipeops_smote.html">mlr_pipeops_smote</a></code>,
 <code><a href="mlr_pipeops_smotenc.html">mlr_pipeops_smotenc</a></code>,
 <code><a href="mlr_pipeops_spatialsign.html">mlr_pipeops_spatialsign</a></code>,
+<code><a href="mlr_pipeops_splines.html">mlr_pipeops_splines</a></code>,
 <code><a href="mlr_pipeops_subsample.html">mlr_pipeops_subsample</a></code>,
 <code><a href="mlr_pipeops_targetinvert.html">mlr_pipeops_targetinvert</a></code>,
 <code><a href="mlr_pipeops_targetmutate.html">mlr_pipeops_targetmutate</a></code>,

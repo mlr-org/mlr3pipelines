@@ -161,7 +161,7 @@ as well as:
   can be overloaded.
 
 - `.get_state_dt(dt)`  
-  ([`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html))
+  ([`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html))
   -\> named `list`  
   Create something that will be stored in `$state` during training phase
   of `PipeOpTaskPreprocSimple`. The state can then influence the
@@ -178,14 +178,13 @@ as well as:
   `private$.transform()` can be overloaded.
 
 - `.transform_dt(dt)`  
-  ([`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html))
-  -\>
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  ([`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html))
+  -\> [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   \| `data.frame` \| `matrix`  
   Predict on new data in `dt`, possibly using the stored `$state`. A
   transformed object must be returned that can be converted to a
   `data.table` using
-  [`as.data.table`](https://rdatatable.gitlab.io/data.table/reference/as.data.table.html).
+  [`as.data.table`](https://rdrr.io/pkg/data.table/man/as.data.table.html).
   `dt` does not need to be copied deliberately, it is possible and
   encouraged to change it in-place. This method is called both during
   training and prediction phase, and should essentially behave the same
@@ -220,6 +219,7 @@ Other PipeOps:
 [`mlr_pipeops_classbalancing`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classbalancing.md),
 [`mlr_pipeops_classifavg`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classifavg.md),
 [`mlr_pipeops_classweights`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweights.md),
+[`mlr_pipeops_classweightsex`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweightsex.md),
 [`mlr_pipeops_colapply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colapply.md),
 [`mlr_pipeops_collapsefactors`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_collapsefactors.md),
 [`mlr_pipeops_colroles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colroles.md),
@@ -277,6 +277,7 @@ Other PipeOps:
 [`mlr_pipeops_smote`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smote.md),
 [`mlr_pipeops_smotenc`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smotenc.md),
 [`mlr_pipeops_spatialsign`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_spatialsign.md),
+[`mlr_pipeops_splines`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_splines.md),
 [`mlr_pipeops_subsample`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_subsample.md),
 [`mlr_pipeops_targetinvert`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetinvert.md),
 [`mlr_pipeops_targetmutate`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetmutate.md),

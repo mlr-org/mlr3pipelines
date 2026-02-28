@@ -202,7 +202,7 @@ o1 %>>!% o2
 #> 
 #> ── Pipeline: <INPUT> -> scale -> pca -> <OUTPUT> 
 
-o1  # not changed, becuase not a Graph.
+o1  # not changed, because not a Graph.
 #> 
 #> ── PipeOp <scale>: not trained ─────────────────────────────────────────────────
 #> Values: robust=FALSE

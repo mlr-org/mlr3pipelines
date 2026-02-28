@@ -19,7 +19,7 @@ Missing values can be ignored or treated as a regular value distinct from non-mi
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@ Missing values can be ignored or treated as a regular value distinct from non-mi
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Remove Constant Features</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.10.0/R/PipeOpRemoveConstants.R" class="external-link"><code>R/PipeOpRemoveConstants.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpRemoveConstants.R" class="external-link"><code>R/PipeOpRemoveConstants.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_removeconstants.Rd</code></div>
     </div>
 
@@ -134,6 +134,7 @@ Initialized to <code>TRUE</code>.</p></li>
 <code><a href="mlr_pipeops_classbalancing.html">mlr_pipeops_classbalancing</a></code>,
 <code><a href="mlr_pipeops_classifavg.html">mlr_pipeops_classifavg</a></code>,
 <code><a href="mlr_pipeops_classweights.html">mlr_pipeops_classweights</a></code>,
+<code><a href="mlr_pipeops_classweightsex.html">mlr_pipeops_classweightsex</a></code>,
 <code><a href="mlr_pipeops_colapply.html">mlr_pipeops_colapply</a></code>,
 <code><a href="mlr_pipeops_collapsefactors.html">mlr_pipeops_collapsefactors</a></code>,
 <code><a href="mlr_pipeops_colroles.html">mlr_pipeops_colroles</a></code>,
@@ -190,6 +191,7 @@ Initialized to <code>TRUE</code>.</p></li>
 <code><a href="mlr_pipeops_smote.html">mlr_pipeops_smote</a></code>,
 <code><a href="mlr_pipeops_smotenc.html">mlr_pipeops_smotenc</a></code>,
 <code><a href="mlr_pipeops_spatialsign.html">mlr_pipeops_spatialsign</a></code>,
+<code><a href="mlr_pipeops_splines.html">mlr_pipeops_splines</a></code>,
 <code><a href="mlr_pipeops_subsample.html">mlr_pipeops_subsample</a></code>,
 <code><a href="mlr_pipeops_targetinvert.html">mlr_pipeops_targetinvert</a></code>,
 <code><a href="mlr_pipeops_targetmutate.html">mlr_pipeops_targetmutate</a></code>,
@@ -207,7 +209,7 @@ Initialized to <code>TRUE</code>.</p></li>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">data</span> <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>, c <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, each <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>, c <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, each <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskRegr.html" class="external-link">TaskRegr</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"example"</span>, <span class="va">data</span>, target <span class="op">=</span> <span class="st">"y"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>

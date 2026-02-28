@@ -110,7 +110,7 @@ as:
   details.
 
 - `edges` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   with columns `src_id` (`character`), `src_channel` (`character`),
   `dst_id` (`character`), `dst_channel` (`character`)  
   Table of connections between the
@@ -269,6 +269,27 @@ as:
   [`PipeOpUnbranch`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_unbranch.md)
   is treated as any other `PipeOp` with multiple inputs; all possible
   branch paths are considered equally.
+
+- `predict_newdata_fast(newdata, task = NULL)`  
+  (`data.frame`, [`Task`](https://mlr3.mlr-org.com/reference/Task.html)
+  \| `NULL`) -\>
+  [`Prediction`](https://mlr3.mlr-org.com/reference/Prediction.html)  
+  Predicts outcomes for new data in `newdata` using the model fitted
+  during `$train()`.  
+  For the moment, this is merely a thin wrapper around
+  [`Learner$predict_newdata()`](https://mlr3.mlr-org.com/reference/Learner.html)
+  to ensure compatibility, meaning that *no speedup* is currently
+  achieved. In the future, this method may be optimized to be faster
+  than `$predict_newdata()`.  
+  Unlike `$predict_newdata()`, this method does not return a
+  [mlr3::Prediction](https://mlr3.mlr-org.com/reference/Prediction.html)
+  object. Instead, it returns a list with elements depending on
+  `$task_type` and `$predict_type`:
+
+  - for `task_type = "classif"`: `response` and `prob`, or `quantiles`
+    (if `predict_type = "quantiles"`)
+
+  - for `task_type = "regr"`: `response` and `se`
 
 The following standard extractors as defined by the
 [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) class are

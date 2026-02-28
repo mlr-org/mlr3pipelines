@@ -82,13 +82,13 @@ Abstract [`R6Class`](https://r6.r-lib.org/reference/R6Class.html).
   [`list()`](https://rdrr.io/r/base/list.html).
 
 - `input` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   with columns `name` (`character`), `train` (`character`), `predict`
   (`character`)  
   Sets the `$input` slot of the resulting object; see description there.
 
 - `output` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   with columns `name` (`character`), `train` (`character`), `predict`
   (`character`)  
   Sets the `$output` slot of the resulting object; see description
@@ -169,7 +169,7 @@ to return the same identical-by-reference objects to multiple outputs.
   and [mlr3](https://CRAN.R-project.org/package=mlr3).
 
 - `input` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   with columns `name` (`character`), `train` (`character`), `predict`
   (`character`)  
   Input channels of `PipeOp`. Column `name` gives the names (and order)
@@ -201,7 +201,7 @@ to return the same identical-by-reference objects to multiple outputs.
   for more information.
 
 - `output` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   with columns `name` (`character`), `train` (`character`), `predict`
   (`character`)  
   Output channels of `PipeOp`, in the order in which they will be given
@@ -411,6 +411,7 @@ Other PipeOps:
 [`mlr_pipeops_classbalancing`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classbalancing.md),
 [`mlr_pipeops_classifavg`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classifavg.md),
 [`mlr_pipeops_classweights`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweights.md),
+[`mlr_pipeops_classweightsex`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweightsex.md),
 [`mlr_pipeops_colapply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colapply.md),
 [`mlr_pipeops_collapsefactors`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_collapsefactors.md),
 [`mlr_pipeops_colroles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colroles.md),
@@ -468,6 +469,7 @@ Other PipeOps:
 [`mlr_pipeops_smote`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smote.md),
 [`mlr_pipeops_smotenc`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smotenc.md),
 [`mlr_pipeops_spatialsign`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_spatialsign.md),
+[`mlr_pipeops_splines`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_splines.md),
 [`mlr_pipeops_subsample`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_subsample.md),
 [`mlr_pipeops_targetinvert`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetinvert.md),
 [`mlr_pipeops_targetmutate`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetmutate.md),

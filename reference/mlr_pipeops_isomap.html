@@ -19,7 +19,7 @@ dimensions (ndim) control the transformation."><meta property="og:image" content
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@ dimensions (ndim) control the transformation."><meta property="og:image" content
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Algorithm for Dimensionality Reduction</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.10.0/R/PipeOpIsomap.R" class="external-link"><code>R/PipeOpIsomap.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpIsomap.R" class="external-link"><code>R/PipeOpIsomap.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_isomap.Rd</code></div>
     </div>
 
@@ -149,6 +149,7 @@ Initialized to <code>NULL</code>.</p></li>
 <code><a href="mlr_pipeops_classbalancing.html">mlr_pipeops_classbalancing</a></code>,
 <code><a href="mlr_pipeops_classifavg.html">mlr_pipeops_classifavg</a></code>,
 <code><a href="mlr_pipeops_classweights.html">mlr_pipeops_classweights</a></code>,
+<code><a href="mlr_pipeops_classweightsex.html">mlr_pipeops_classweightsex</a></code>,
 <code><a href="mlr_pipeops_colapply.html">mlr_pipeops_colapply</a></code>,
 <code><a href="mlr_pipeops_collapsefactors.html">mlr_pipeops_collapsefactors</a></code>,
 <code><a href="mlr_pipeops_colroles.html">mlr_pipeops_colroles</a></code>,
@@ -205,6 +206,7 @@ Initialized to <code>NULL</code>.</p></li>
 <code><a href="mlr_pipeops_smote.html">mlr_pipeops_smote</a></code>,
 <code><a href="mlr_pipeops_smotenc.html">mlr_pipeops_smotenc</a></code>,
 <code><a href="mlr_pipeops_spatialsign.html">mlr_pipeops_spatialsign</a></code>,
+<code><a href="mlr_pipeops_splines.html">mlr_pipeops_splines</a></code>,
 <code><a href="mlr_pipeops_subsample.html">mlr_pipeops_subsample</a></code>,
 <code><a href="mlr_pipeops_targetinvert.html">mlr_pipeops_targetinvert</a></code>,
 <code><a href="mlr_pipeops_targetmutate.html">mlr_pipeops_targetmutate</a></code>,
@@ -224,10 +226,10 @@ Initialized to <code>NULL</code>.</p></li>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">po</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"isomap"</span>, .mute <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"message"</span>, <span class="st">"output"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-07 09:35:49.288202: Isomap START</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-07 09:35:49.288824: constructing knn graph</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-07 09:35:49.294898: calculating geodesic distances</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-07 09:35:49.306564: Classical Scaling</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-28 15:02:32.599672: Isomap START</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-28 15:02:32.600291: constructing knn graph</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-28 15:02:32.606322: calculating geodesic distances</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-28 15:02:32.618697: Classical Scaling</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species     iso 1       iso 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;     &lt;num&gt;       &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa  3.006919  0.07103516</span>
@@ -242,11 +244,11 @@ Initialized to <code>NULL</code>.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica -2.147343 -0.45132197</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica -1.496149 -0.38356003</span>
 <span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-07 09:35:49.328571: L-Isomap embed START</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-07 09:35:49.329042: constructing knn graph</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-07 09:35:49.394896: calculating geodesic distances</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-07 09:35:49.423932: embedding</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-07 09:35:49.424828: DONE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-28 15:02:32.645597: L-Isomap embed START</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-28 15:02:32.646226: constructing knn graph</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-28 15:02:32.654116: calculating geodesic distances</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-28 15:02:32.682522: embedding</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-28 15:02:32.683446: DONE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species     iso 1       iso 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;     &lt;num&gt;       &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa  3.116505  0.14031343</span>

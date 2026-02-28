@@ -38,7 +38,23 @@ inheriting from
 
 - `rank_transform` :: `logical(1)`  
   If `TRUE`, ranks of individual filter scores are used instead of the
-  raw scores before averaging. Initialized to `FALSE`.
+  raw scores. Initialized to `FALSE`.
+
+- `filter_score_transform` :: `function`  
+  Function to be applied to the vector of individual filter scores after
+  they were potentially transformed by `rank_transform` but before
+  weighting and aggregation. Initialized to `identity`.
+
+- `aggregator` :: `function`  
+  Function to aggregate the (potentially transformed) and weighted
+  filter scores across filters. Must take arguments `w` for weights and
+  `na.rm`, the latter of which is always set to `TRUE`. Defaults to
+  [`stats::weighted.mean`](https://rdrr.io/r/stats/weighted.mean.html).
+
+- `result_score_transform` :: `function`  
+  Function to be applied to the vector of aggregated scores after they
+  were potentially transformed by `rank_transform` and/or
+  `filter_score_transform`. Initialized to `identity`.
 
 Parameters of wrapped filters are available via `$param_set` and can be
 referenced using the wrapped filter id followed by `"."`, e.g.
@@ -75,8 +91,24 @@ referenced using the wrapped filter id followed by `"."`, e.g.
 
 All wrapped filters are called with `nfeat` equal to the number of
 features to ensure that complete score vectors are available for
-aggregation. Scores are combined per feature by computing the weighted
-(optionally rank-based) mean.
+aggregation. Scores are combined per feature by computing a weighted
+aggregation of transformed (default: `identity`) scores or ranks.
+Additionally, the final scores may also be transformed (default:
+`identity`).
+
+The order of transformations is as follows:
+
+1.  `$calculate` the filter's scores for all features;
+
+2.  If `rank_transform` is `TRUE`, convert filter scores to ranks;
+
+3.  Apply `filter_score_transform` to the scores / ranks;
+
+4.  Calculate the weighted aggregation across all filters using
+    `aggregator`;
+
+5.  Potentially apply `result_score_transform` to the vector of scores
+    for each feature aggreagted across filters.
 
 ## References
 
@@ -94,11 +126,11 @@ library("mlr3filters")
 
 task = tsk("sonar")
 
-flt = mlr_filters$get("ensemble",
+filter = flt("ensemble",
   filters = list(FilterVariance$new(), FilterAUC$new()))
-flt$param_set$values$weights = c(variance = 0.5, auc = 0.5)
-flt$calculate(task)
-head(as.data.table(flt))
+filter$param_set$values$weights = c(variance = 0.5, auc = 0.5)
+filter$calculate(task)
+head(as.data.table(filter))
 #>    feature     score
 #>     <char>     <num>
 #> 1:     V11 0.1493737
@@ -107,4 +139,38 @@ head(as.data.table(flt))
 #> 4:      V9 0.1224299
 #> 5:     V36 0.1174703
 #> 6:     V49 0.1162774
+
+# Weighted median as aggregator
+filter$param_set$set_values(aggregator = function(x, w, na.rm) {
+  if (na.rm) x <- x[!is.na(x)]
+  o <- order(x)
+  x <- x[o]
+  w <- w[o]
+  x[match(TRUE, which(cumsum(w) >= sum(w) / 2))]
+})
+filter$calculate(task)
+head(as.data.table(filter))
+#>    feature      score
+#>     <char>      <num>
+#> 1:     V36 0.06975989
+#> 2:     V20 0.06898649
+#> 3:     V35 0.06714950
+#> 4:     V19 0.06655799
+#> 5:     V21 0.06647019
+#> 6:     V22 0.06547617
+
+# Aggregate reciprocal ranking
+filter$param_set$set_values(rank_transform = TRUE, 
+  filter_score_transform = function(x) 1 / x, 
+  result_score_transform = function(x) rank(1 / x, ties.method = "average"))
+filter$calculate(task)
+head(as.data.table(filter))
+#>    feature score
+#>     <char> <num>
+#> 1:     V36  59.5
+#> 2:     V11  59.5
+#> 3:     V12  57.5
+#> 4:     V17  57.5
+#> 5:     V10  55.5
+#> 6:     V20  55.5
 ```

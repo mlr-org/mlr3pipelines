@@ -33,9 +33,8 @@ this would need to be written).
 
 A `Graph` is made up of a list of
 [`PipeOp`](https://mlr3pipelines.mlr-org.com/reference/PipeOp.md)s, and
-a
-[`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
-of edges. Both for training and prediction, the `Graph` performs
+a [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html) of
+edges. Both for training and prediction, the `Graph` performs
 topological sorting of the
 [`PipeOp`](https://mlr3pipelines.mlr-org.com/reference/PipeOp.md)s and
 executes their respective `$train()` or `$predict()` functions in order,
@@ -55,12 +54,12 @@ results along the edges as input to other
   `$id`s.
 
 - `edges` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   with columns `src_id` (`character`), `src_channel` (`character`),
   `dst_id` (`character`), `dst_channel` (`character`)  
   Table of connections between the
   [`PipeOp`](https://mlr3pipelines.mlr-org.com/reference/PipeOp.md)s. A
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html).
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html).
   `src_id` and `dst_id` are `$id`s of
   [`PipeOp`](https://mlr3pipelines.mlr-org.com/reference/PipeOp.md)s
   that must be present in the `$pipeops` list. `src_channel` and
@@ -86,7 +85,7 @@ results along the edges as input to other
   `Graph` output layer.
 
 - `input` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   with columns `name` (`character`), `train` (`character`), `predict`
   (`character`), `op.id` (`character`), `channel.name` (`character`)  
   Input channels of the `Graph`. For each channel lists the name, input
@@ -99,7 +98,7 @@ results along the edges as input to other
   knows it.
 
 - `output` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
   with columns `name` (`character`), `train` (`character`), `predict`
   (`character`), `op.id` (`character`), `channel.name` (`character`)  
   Output channels of the `Graph`. For each channel lists the name,

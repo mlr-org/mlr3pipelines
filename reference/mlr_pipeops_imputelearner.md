@@ -10,9 +10,9 @@ parameter is part of the
 base class and explained there.
 
 Additionally, only features supported by the learner can be imputed;
-i.e. learners of type `regr` can only impute features of type `integer`
-and `numeric`, while `classif` can impute features of type `factor`,
-`ordered` and `logical`.
+i.e. learners of type `regr` can only impute features of type `integer`,
+`numeric`, `POSIXct` and `Date`, while `classif` can impute features of
+type `factor`, `ordered` and `logical`.
 
 The [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) used
 for imputation is trained on all `context_columns`; if these contain
@@ -144,6 +144,7 @@ Other PipeOps:
 [`mlr_pipeops_classbalancing`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classbalancing.md),
 [`mlr_pipeops_classifavg`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classifavg.md),
 [`mlr_pipeops_classweights`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweights.md),
+[`mlr_pipeops_classweightsex`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweightsex.md),
 [`mlr_pipeops_colapply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colapply.md),
 [`mlr_pipeops_collapsefactors`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_collapsefactors.md),
 [`mlr_pipeops_colroles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colroles.md),
@@ -200,6 +201,7 @@ Other PipeOps:
 [`mlr_pipeops_smote`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smote.md),
 [`mlr_pipeops_smotenc`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smotenc.md),
 [`mlr_pipeops_spatialsign`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_spatialsign.md),
+[`mlr_pipeops_splines`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_splines.md),
 [`mlr_pipeops_subsample`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_subsample.md),
 [`mlr_pipeops_targetinvert`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetinvert.md),
 [`mlr_pipeops_targetmutate`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetmutate.md),
@@ -277,13 +279,14 @@ po$state$model$mass
 #> 
 #> 
 #> $log
-#> Empty data.table (0 rows and 3 cols): stage,class,msg
+#> Empty data.table (0 rows and 3 cols): stage,class,condition
 #> 
 #> $train_time
-#> [1] 0.004
+#> elapsed 
+#>   0.004 
 #> 
 #> $task_hash
-#> [1] "7682038aa5360fe2"
+#> [1] "103bfb27778d3e5d"
 #> 
 #> $feature_names
 #> [1] "age"      "glucose"  "insulin"  "pedigree" "pregnant" "pressure" "triceps" 
@@ -292,7 +295,7 @@ po$state$model$mass
 #> NULL
 #> 
 #> $mlr3_version
-#> [1] ‘1.2.0’
+#> [1] ‘1.5.0’
 #> 
 #> $data_prototype
 #> Empty data.table (0 rows and 8 cols): .impute_col,age,glucose,insulin,pedigree,pregnant...

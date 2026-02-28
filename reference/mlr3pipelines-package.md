@@ -47,3 +47,6 @@ Other contributors:
   ([ORCID](https://orcid.org/0009-0000-9432-9795)) \[contributor\]
 
 - Lona Koers <lona.koers@gmail.com> \[contributor\]
+
+- Alexander Winterstetter <alexander.winterstetter@gmail.com>
+  \[contributor\]

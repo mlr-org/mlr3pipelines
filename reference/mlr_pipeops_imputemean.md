@@ -1,6 +1,6 @@
-# Impute Numerical Features by their Mean
+# Impute Numeric, Integer, POSIXct or Date Features by their Mean
 
-Impute numerical features by their mean.
+Impute numeric, integer, POSIXct or Date features by their mean.
 
 ## Format
 
@@ -27,15 +27,17 @@ Input and output channels are inherited from
 
 The output is the input
 [`Task`](https://mlr3.mlr-org.com/reference/Task.html) with all affected
-numeric features missing values imputed by (column-wise) mean.
+numeric, integer, POSIXct and Date features missing values imputed by
+(column-wise) mean.
 
 ## State
 
 The `$state` is a named `list` with the `$state` elements inherited from
 [`PipeOpImpute`](https://mlr3pipelines.mlr-org.com/reference/PipeOpImpute.md).
 
-The `$state$model` is a named `list` of `numeric(1)` indicating the mean
-of the respective feature.
+The `$state$model` is a named `list` of either `numeric(1)`,
+`integer(1)`, `POSIXct(1)` or `Date(1)` indicating the mean of the
+respective feature.
 
 ## Parameters
 
@@ -78,6 +80,7 @@ Other PipeOps:
 [`mlr_pipeops_classbalancing`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classbalancing.md),
 [`mlr_pipeops_classifavg`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classifavg.md),
 [`mlr_pipeops_classweights`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweights.md),
+[`mlr_pipeops_classweightsex`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweightsex.md),
 [`mlr_pipeops_colapply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colapply.md),
 [`mlr_pipeops_collapsefactors`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_collapsefactors.md),
 [`mlr_pipeops_colroles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colroles.md),
@@ -134,6 +137,7 @@ Other PipeOps:
 [`mlr_pipeops_smote`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smote.md),
 [`mlr_pipeops_smotenc`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smotenc.md),
 [`mlr_pipeops_spatialsign`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_spatialsign.md),
+[`mlr_pipeops_splines`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_splines.md),
 [`mlr_pipeops_subsample`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_subsample.md),
 [`mlr_pipeops_targetinvert`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetinvert.md),
 [`mlr_pipeops_targetmutate`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetmutate.md),

@@ -23,7 +23,7 @@ and tuning."><meta property="og:image" content="https://mlr3pipelines.mlr-org.co
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@ and tuning."><meta property="og:image" content="https://mlr3pipelines.mlr-org.co
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Wrap a Learner into a PipeOp</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.10.0/R/PipeOpLearner.R" class="external-link"><code>R/PipeOpLearner.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpLearner.R" class="external-link"><code>R/PipeOpLearner.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_learner.Rd</code></div>
     </div>
 
@@ -105,11 +105,11 @@ trained on the training input data.</p>
 
 <p>The <code>$state</code> is set to the <code>$state</code> slot of the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> object. It is a named <code>list</code> with members:</p><ul><li><p><code>model</code> :: <code>any</code><br>
 Model created by the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>'s <code>$.train()</code> function.</p></li>
-<li><p><code>train_log</code> :: <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with columns <code>class</code> (<code>character</code>), <code>msg</code> (<code>character</code>)<br>
+<li><p><code>train_log</code> :: <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> with columns <code>class</code> (<code>character</code>), <code>msg</code> (<code>character</code>)<br>
 Errors logged during training.</p></li>
 <li><p><code>train_time</code> :: <code>numeric(1)</code><br>
 Training time, in seconds.</p></li>
-<li><p><code>predict_log</code> :: <code>NULL</code> | <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with columns <code>class</code> (<code>character</code>), <code>msg</code> (<code>character</code>)<br>
+<li><p><code>predict_log</code> :: <code>NULL</code> | <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> with columns <code>class</code> (<code>character</code>), <code>msg</code> (<code>character</code>)<br>
 Errors logged during prediction.</p></li>
 <li><p><code>predict_time</code> :: <code>NULL</code> | <code>numeric(1)</code>
 Prediction time, in seconds.</p></li>
@@ -170,6 +170,7 @@ The internal validation scores if the wrapped <code>Learner</code> supports inte
 <code><a href="mlr_pipeops_classbalancing.html">mlr_pipeops_classbalancing</a></code>,
 <code><a href="mlr_pipeops_classifavg.html">mlr_pipeops_classifavg</a></code>,
 <code><a href="mlr_pipeops_classweights.html">mlr_pipeops_classweights</a></code>,
+<code><a href="mlr_pipeops_classweightsex.html">mlr_pipeops_classweightsex</a></code>,
 <code><a href="mlr_pipeops_colapply.html">mlr_pipeops_colapply</a></code>,
 <code><a href="mlr_pipeops_collapsefactors.html">mlr_pipeops_collapsefactors</a></code>,
 <code><a href="mlr_pipeops_colroles.html">mlr_pipeops_colroles</a></code>,
@@ -226,6 +227,7 @@ The internal validation scores if the wrapped <code>Learner</code> supports inte
 <code><a href="mlr_pipeops_smote.html">mlr_pipeops_smote</a></code>,
 <code><a href="mlr_pipeops_smotenc.html">mlr_pipeops_smotenc</a></code>,
 <code><a href="mlr_pipeops_spatialsign.html">mlr_pipeops_spatialsign</a></code>,
+<code><a href="mlr_pipeops_splines.html">mlr_pipeops_splines</a></code>,
 <code><a href="mlr_pipeops_subsample.html">mlr_pipeops_subsample</a></code>,
 <code><a href="mlr_pipeops_targetinvert.html">mlr_pipeops_targetinvert</a></code>,
 <code><a href="mlr_pipeops_targetmutate.html">mlr_pipeops_targetmutate</a></code>,

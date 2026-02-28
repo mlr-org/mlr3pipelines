@@ -86,6 +86,7 @@ Other PipeOps:
 [`mlr_pipeops_classbalancing`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classbalancing.md),
 [`mlr_pipeops_classifavg`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classifavg.md),
 [`mlr_pipeops_classweights`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweights.md),
+[`mlr_pipeops_classweightsex`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweightsex.md),
 [`mlr_pipeops_colapply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colapply.md),
 [`mlr_pipeops_collapsefactors`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_collapsefactors.md),
 [`mlr_pipeops_colroles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colroles.md),
@@ -143,6 +144,7 @@ Other PipeOps:
 [`mlr_pipeops_smote`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smote.md),
 [`mlr_pipeops_smotenc`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smotenc.md),
 [`mlr_pipeops_spatialsign`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_spatialsign.md),
+[`mlr_pipeops_splines`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_splines.md),
 [`mlr_pipeops_subsample`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_subsample.md),
 [`mlr_pipeops_targetinvert`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetinvert.md),
 [`mlr_pipeops_targetmutate`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetmutate.md),
@@ -183,8 +185,8 @@ po$predict(list(task))
 #>     assert_list(inputs, len = 1L, types = "Prediction")
 #>     list(private$.invert(inputs[[1L]], predict_phase_state))
 #> }
-#> <bytecode: 0x56306af2e7c0>
-#> <environment: 0x56306e7a7e50>
+#> <bytecode: 0x55d1aacfeaa0>
+#> <environment: 0x55d1ac8127b8>
 #> 
 #> $output
 #> 
@@ -248,13 +250,14 @@ ttscalerange$state$regr.rpart
 #> 
 #> 
 #> $log
-#> Empty data.table (0 rows and 3 cols): stage,class,msg
+#> Empty data.table (0 rows and 3 cols): stage,class,condition
 #> 
 #> $train_time
-#> [1] 0.007
+#> elapsed 
+#>   0.008 
 #> 
 #> $task_hash
-#> [1] "88d153e8827d7aff"
+#> [1] "a097dd7c237a13cd"
 #> 
 #> $feature_names
 #>  [1] "age"     "b"       "chas"    "crim"    "dis"     "indus"   "lat"    
@@ -265,7 +268,7 @@ ttscalerange$state$regr.rpart
 #> NULL
 #> 
 #> $mlr3_version
-#> [1] ‘1.2.0’
+#> [1] ‘1.5.0’
 #> 
 #> $data_prototype
 #> Empty data.table (0 rows and 18 cols): cmedv.scaled,age,b,chas,crim,dis...

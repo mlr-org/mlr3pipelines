@@ -31,7 +31,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/mlr-org/mlr3pipelines/blob/v0.10.0/inst/CITATION)
+[`inst/CITATION`](https://github.com/mlr-org/mlr3pipelines/blob/master/inst/CITATION)
 
 Binder M, Pfisterer F, Lang M, Schneider L, Kotthoff L, Bischl B (2021).
 “mlr3pipelines - Flexible Machine Learning Pipelines in R.” *Journal of

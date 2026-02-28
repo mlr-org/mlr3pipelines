@@ -63,6 +63,9 @@
 - [`mlr_pipeops_classweights`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweights.md)
   [`PipeOpClassWeights`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweights.md)
   : Class Weights for Sample Weighting
+- [`mlr_pipeops_classweightsex`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweightsex.md)
+  [`PipeOpClassWeightsEx`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweightsex.md)
+  : Class Weights for Sample Weighting - Extended
 - [`mlr_pipeops_colapply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colapply.md)
   [`PipeOpColApply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colapply.md)
   : Apply a Function to each Column of a Task
@@ -116,16 +119,16 @@
   : Impute Features by a Constant
 - [`mlr_pipeops_imputehist`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputehist.md)
   [`PipeOpImputeHist`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputehist.md)
-  : Impute Numerical Features by Histogram
+  : Impute Numeric, Integer, POSIXct or Date Features by Histogram
 - [`mlr_pipeops_imputelearner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputelearner.md)
   [`PipeOpImputeLearner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputelearner.md)
   : Impute Features by Fitting a Learner
 - [`mlr_pipeops_imputemean`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputemean.md)
   [`PipeOpImputeMean`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputemean.md)
-  : Impute Numerical Features by their Mean
+  : Impute Numeric, Integer, POSIXct or Date Features by their Mean
 - [`mlr_pipeops_imputemedian`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputemedian.md)
   [`PipeOpImputeMedian`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputemedian.md)
-  : Impute Numerical Features by their Median
+  : Impute Numeric, Integer, POSIXct or Date Features by their Median
 - [`mlr_pipeops_imputemode`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputemode.md)
   [`PipeOpImputeMode`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_imputemode.md)
   : Impute Features by their Mode
@@ -239,6 +242,9 @@
 - [`mlr_pipeops_spatialsign`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_spatialsign.md)
   [`PipeOpSpatialSign`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_spatialsign.md)
   : Normalize Data Row-wise
+- [`mlr_pipeops_splines`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_splines.md)
+  [`PipeOpSplines`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_splines.md)
+  : Transforms Numeric Features into Spline Basis Expansions
 - [`mlr_pipeops_subsample`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_subsample.md)
   [`PipeOpSubsample`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_subsample.md)
   : Subsampling

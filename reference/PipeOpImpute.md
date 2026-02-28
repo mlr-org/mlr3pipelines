@@ -101,7 +101,7 @@ classes, the members are:
   Names of features being selected by the `context_columns` parameter.
 
 - `intasklayout` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)  
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)  
   Copy of the training
   [`Task`](https://mlr3.mlr-org.com/reference/Task.html)'s
   `$feature_types` slot. This is used during prediction to ensure that
@@ -110,7 +110,7 @@ classes, the members are:
   training.
 
 - `outtasklayout` ::
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html)  
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)  
   Copy of the trained
   [`Task`](https://mlr3.mlr-org.com/reference/Task.html)'s
   `$feature_types` slot. This is used during prediction to ensure that
@@ -227,7 +227,7 @@ well as:
 
 - `.train_imputer(feature, type, context)`  
   (`atomic`, `character(1)`,
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html))
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html))
   -\> `any`  
   Abstract function that must be overloaded when inheriting. Called once
   for each feature selected by `affect_columns` to create the model
@@ -236,7 +236,7 @@ well as:
 
 - `.train_nullmodel(feature, type, context)`  
   (`atomic`, `character(1)`,
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html))
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html))
   -\> `any`  
   Like `.train_imputer()`, but only called for each feature that only
   contains missing values. This is not an abstract function and, if not
@@ -246,7 +246,7 @@ well as:
 
 - `.impute(feature, type, model, context)`  
   (`atomic`, `character(1)`, `any`,
-  [`data.table`](https://rdatatable.gitlab.io/data.table/reference/data.table.html))
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html))
   -\> `atomic`  
   Imputes the features. `model` is the model created by
   `private$.train_imputer()`. Default behaviour is to assume `model` is
@@ -275,6 +275,7 @@ Other PipeOps:
 [`mlr_pipeops_classbalancing`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classbalancing.md),
 [`mlr_pipeops_classifavg`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classifavg.md),
 [`mlr_pipeops_classweights`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweights.md),
+[`mlr_pipeops_classweightsex`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweightsex.md),
 [`mlr_pipeops_colapply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colapply.md),
 [`mlr_pipeops_collapsefactors`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_collapsefactors.md),
 [`mlr_pipeops_colroles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colroles.md),
@@ -332,6 +333,7 @@ Other PipeOps:
 [`mlr_pipeops_smote`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smote.md),
 [`mlr_pipeops_smotenc`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smotenc.md),
 [`mlr_pipeops_spatialsign`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_spatialsign.md),
+[`mlr_pipeops_splines`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_splines.md),
 [`mlr_pipeops_subsample`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_subsample.md),
 [`mlr_pipeops_targetinvert`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetinvert.md),
 [`mlr_pipeops_targetmutate`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetmutate.md),

@@ -2,9 +2,10 @@
 
 Impute factorial features by adding a new level `".MISSING"`.
 
-Impute numerical features by constant values shifted below the minimum
-or above the maximum by using \\min(x) - offset - multiplier \*
-diff(range(x))\\ or \\max(x) + offset + multiplier \* diff(range(x))\\.
+Impute numeric, integer, POSIXct or Date features by constant values
+shifted below the minimum or above the maximum by using \\min(x) -
+offset - multiplier \* diff(range(x))\\ or \\max(x) + offset +
+multiplier \* diff(range(x))\\.
 
 This type of imputation is especially sensible in the context of
 tree-based methods, see also Ding & Simonoff (2010).
@@ -72,7 +73,8 @@ The `$state` is a named `list` with the `$state` elements inherited from
 
 The `$state$model` contains either `".MISSING"` used for `character` and
 `factor` (also `ordered`) features or `numeric(1)` indicating the
-constant value used for imputation of `integer` and `numeric` features.
+constant value used for imputation of `integer`, `numeric`, `POSIXct` or
+`Date` features.
 
 ## Parameters
 
@@ -87,11 +89,13 @@ as well as:
 
 - `offset` :: `numeric(1)`  
   Numerical non-negative offset as used in the description above for
-  `integer` and `numeric` features. Initialized to `1`.
+  `integer`, `numeric`, `POSIXCT` and `Date`. features. Initialized to
+  `1`.
 
 - `multiplier` :: `numeric(1)`  
   Numerical non-negative multiplier as used in the description above for
-  `integer` and `numeric` features. Initialized to `1`.
+  `integer`, `numeric`, `POSIXct` and `Date`. features. Initialized to
+  `1`.
 
 ## Internals
 
@@ -100,6 +104,8 @@ not to `character` features. For `integer` and `numeric` features uses
 the `min`, `max`, `diff` and `range` functions. `integer` and `numeric`
 features that are entirely `NA` are imputed as `0`. `factor` and
 `ordered` features that are entirely `NA` are imputed as `".MISSING"`.
+For `POSIXct` and `Date` features the value `0` is transformed into the
+respective data type.
 
 ## Fields
 
@@ -139,6 +145,7 @@ Other PipeOps:
 [`mlr_pipeops_classbalancing`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classbalancing.md),
 [`mlr_pipeops_classifavg`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classifavg.md),
 [`mlr_pipeops_classweights`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweights.md),
+[`mlr_pipeops_classweightsex`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweightsex.md),
 [`mlr_pipeops_colapply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colapply.md),
 [`mlr_pipeops_collapsefactors`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_collapsefactors.md),
 [`mlr_pipeops_colroles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colroles.md),
@@ -195,6 +202,7 @@ Other PipeOps:
 [`mlr_pipeops_smote`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smote.md),
 [`mlr_pipeops_smotenc`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smotenc.md),
 [`mlr_pipeops_spatialsign`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_spatialsign.md),
+[`mlr_pipeops_splines`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_splines.md),
 [`mlr_pipeops_subsample`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_subsample.md),
 [`mlr_pipeops_targetinvert`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetinvert.md),
 [`mlr_pipeops_targetmutate`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetmutate.md),

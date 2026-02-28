@@ -35,7 +35,7 @@ This inherits from PipeOpTaskPreproc and behaves essentially the same.'><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,7 @@ This inherits from PipeOpTaskPreproc and behaves essentially the same.'><meta pr
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Simple Task Preprocessing Base Class</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.10.0/R/PipeOpTaskPreproc.R" class="external-link"><code>R/PipeOpTaskPreproc.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpTaskPreproc.R" class="external-link"><code>R/PipeOpTaskPreproc.R</code></a></small>
       <div class="d-none name"><code>PipeOpTaskPreprocSimple.Rd</code></div>
     </div>
 
@@ -183,7 +183,7 @@ This method can be overloaded when inheriting from <code>PipeOpTaskPreprocSimple
 alternatively, <code>private$.get_state_dt()</code> (optional) and <code>private$.transform_dt()</code> (and possibly <code>private$.select_cols()</code>, from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>)
 can be overloaded.</p></li>
 <li><p><code>.get_state_dt(dt)</code> <br>
-(<code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>) -&gt; named <code>list</code><br>
+(<code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>) -&gt; named <code>list</code><br>
 Create something that will be stored in <code>$state</code> during training phase of <code>PipeOpTaskPreprocSimple</code>.
 The state can then influence the <code>private$.transform_dt()</code> function. Note that <code>private$.get_state_dt()</code> must <em>return</em> the state, and
 should not store it in <code>$state</code>. If neither <code>private$.get_state()</code> nor <code>private$.get_state_dt()</code> are overloaded, the state will
@@ -192,9 +192,9 @@ This method can optionally be overloaded when inheriting from <code>PipeOpTaskPr
 (and optionally <code>private$.select_cols()</code>, from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>); Alternatively, <code>private$.get_state()</code> (optional) and <code>private$.transform()</code>
 can be overloaded.</p></li>
 <li><p><code>.transform_dt(dt)</code> <br>
-(<code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>) -&gt; <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> | <code>data.frame</code> | <code>matrix</code> <br>
+(<code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>) -&gt; <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> | <code>data.frame</code> | <code>matrix</code> <br>
 Predict on new data in <code>dt</code>, possibly using the stored <code>$state</code>. A transformed object must be returned
-that can be converted to a <code>data.table</code> using <code><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
+that can be converted to a <code>data.table</code> using <code><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
 is possible and encouraged to change it in-place. This method is called both during training and prediction phase,
 and should essentially behave the same independently of phase.
 (If this is incongruent with the functionality to be implemented, then it should inherit from
@@ -222,6 +222,7 @@ can be overloaded.</p></li>
 <code><a href="mlr_pipeops_classbalancing.html">mlr_pipeops_classbalancing</a></code>,
 <code><a href="mlr_pipeops_classifavg.html">mlr_pipeops_classifavg</a></code>,
 <code><a href="mlr_pipeops_classweights.html">mlr_pipeops_classweights</a></code>,
+<code><a href="mlr_pipeops_classweightsex.html">mlr_pipeops_classweightsex</a></code>,
 <code><a href="mlr_pipeops_colapply.html">mlr_pipeops_colapply</a></code>,
 <code><a href="mlr_pipeops_collapsefactors.html">mlr_pipeops_collapsefactors</a></code>,
 <code><a href="mlr_pipeops_colroles.html">mlr_pipeops_colroles</a></code>,
@@ -279,6 +280,7 @@ can be overloaded.</p></li>
 <code><a href="mlr_pipeops_smote.html">mlr_pipeops_smote</a></code>,
 <code><a href="mlr_pipeops_smotenc.html">mlr_pipeops_smotenc</a></code>,
 <code><a href="mlr_pipeops_spatialsign.html">mlr_pipeops_spatialsign</a></code>,
+<code><a href="mlr_pipeops_splines.html">mlr_pipeops_splines</a></code>,
 <code><a href="mlr_pipeops_subsample.html">mlr_pipeops_subsample</a></code>,
 <code><a href="mlr_pipeops_targetinvert.html">mlr_pipeops_targetinvert</a></code>,
 <code><a href="mlr_pipeops_targetmutate.html">mlr_pipeops_targetmutate</a></code>,

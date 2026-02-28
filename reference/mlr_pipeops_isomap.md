@@ -98,6 +98,7 @@ Other PipeOps:
 [`mlr_pipeops_classbalancing`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classbalancing.md),
 [`mlr_pipeops_classifavg`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classifavg.md),
 [`mlr_pipeops_classweights`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweights.md),
+[`mlr_pipeops_classweightsex`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweightsex.md),
 [`mlr_pipeops_colapply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colapply.md),
 [`mlr_pipeops_collapsefactors`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_collapsefactors.md),
 [`mlr_pipeops_colroles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colroles.md),
@@ -154,6 +155,7 @@ Other PipeOps:
 [`mlr_pipeops_smote`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smote.md),
 [`mlr_pipeops_smotenc`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smotenc.md),
 [`mlr_pipeops_spatialsign`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_spatialsign.md),
+[`mlr_pipeops_splines`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_splines.md),
 [`mlr_pipeops_subsample`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_subsample.md),
 [`mlr_pipeops_targetinvert`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetinvert.md),
 [`mlr_pipeops_targetmutate`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetmutate.md),
@@ -173,10 +175,10 @@ Other PipeOps:
 library("mlr3")
 po = po("isomap", .mute = c("message", "output"))
 po$train(list(tsk("iris")))[[1]]$data()
-#> 2025-11-07 09:35:49.288202: Isomap START
-#> 2025-11-07 09:35:49.288824: constructing knn graph
-#> 2025-11-07 09:35:49.294898: calculating geodesic distances
-#> 2025-11-07 09:35:49.306564: Classical Scaling
+#> 2026-02-28 15:02:32.599672: Isomap START
+#> 2026-02-28 15:02:32.600291: constructing knn graph
+#> 2026-02-28 15:02:32.606322: calculating geodesic distances
+#> 2026-02-28 15:02:32.618697: Classical Scaling
 #>        Species     iso 1       iso 2
 #>         <fctr>     <num>       <num>
 #>   1:    setosa  3.006919  0.07103516
@@ -191,11 +193,11 @@ po$train(list(tsk("iris")))[[1]]$data()
 #> 149: virginica -2.147343 -0.45132197
 #> 150: virginica -1.496149 -0.38356003
 po$predict(list(tsk("iris")))[[1]]$data()
-#> 2025-11-07 09:35:49.328571: L-Isomap embed START
-#> 2025-11-07 09:35:49.329042: constructing knn graph
-#> 2025-11-07 09:35:49.394896: calculating geodesic distances
-#> 2025-11-07 09:35:49.423932: embedding
-#> 2025-11-07 09:35:49.424828: DONE
+#> 2026-02-28 15:02:32.645597: L-Isomap embed START
+#> 2026-02-28 15:02:32.646226: constructing knn graph
+#> 2026-02-28 15:02:32.654116: calculating geodesic distances
+#> 2026-02-28 15:02:32.682522: embedding
+#> 2026-02-28 15:02:32.683446: DONE
 #>        Species     iso 1       iso 2
 #>         <fctr>     <num>       <num>
 #>   1:    setosa  3.116505  0.14031343

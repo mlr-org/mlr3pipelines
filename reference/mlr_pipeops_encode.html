@@ -25,7 +25,7 @@ character-type features can be encoded by converting them factor features first,
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@ character-type features can be encoded by converting them factor features first,
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Factor Encoding</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.10.0/R/PipeOpEncode.R" class="external-link"><code>R/PipeOpEncode.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpEncode.R" class="external-link"><code>R/PipeOpEncode.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_encode.Rd</code></div>
     </div>
 
@@ -101,8 +101,8 @@ parameter.</p>
     <h2 id="state">State<a class="anchor" aria-label="anchor" href="#state"></a></h2>
 
 
-<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>, as well as:</p><ul><li><p><code>constrasts</code> :: named <code>list</code> of <code>matrix</code><br>
-List of contrast matrices, one for each affected discrete feature. The rows of each matrix correspond to (training task) levels, the the
+<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>, as well as:</p><ul><li><p><code>contrasts</code> :: named <code>list</code> of <code>matrix</code><br>
+List of contrast matrices, one for each affected discrete feature. The rows of each matrix correspond to (training task) levels, the
 columns to the new columns that replace the old discrete feature. See <code><a href="https://rdrr.io/r/stats/contrasts.html" class="external-link">stats::contrasts</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
@@ -155,6 +155,7 @@ Initialized to <code>"one-hot"</code>. One of:</p><ul><li><p><code>"one-hot"</co
 <code><a href="mlr_pipeops_classbalancing.html">mlr_pipeops_classbalancing</a></code>,
 <code><a href="mlr_pipeops_classifavg.html">mlr_pipeops_classifavg</a></code>,
 <code><a href="mlr_pipeops_classweights.html">mlr_pipeops_classweights</a></code>,
+<code><a href="mlr_pipeops_classweightsex.html">mlr_pipeops_classweightsex</a></code>,
 <code><a href="mlr_pipeops_colapply.html">mlr_pipeops_colapply</a></code>,
 <code><a href="mlr_pipeops_collapsefactors.html">mlr_pipeops_collapsefactors</a></code>,
 <code><a href="mlr_pipeops_colroles.html">mlr_pipeops_colroles</a></code>,
@@ -211,6 +212,7 @@ Initialized to <code>"one-hot"</code>. One of:</p><ul><li><p><code>"one-hot"</co
 <code><a href="mlr_pipeops_smote.html">mlr_pipeops_smote</a></code>,
 <code><a href="mlr_pipeops_smotenc.html">mlr_pipeops_smotenc</a></code>,
 <code><a href="mlr_pipeops_spatialsign.html">mlr_pipeops_spatialsign</a></code>,
+<code><a href="mlr_pipeops_splines.html">mlr_pipeops_splines</a></code>,
 <code><a href="mlr_pipeops_subsample.html">mlr_pipeops_subsample</a></code>,
 <code><a href="mlr_pipeops_targetinvert.html">mlr_pipeops_targetinvert</a></code>,
 <code><a href="mlr_pipeops_targetmutate.html">mlr_pipeops_targetmutate</a></code>,
@@ -229,7 +231,7 @@ Initialized to <code>"one-hot"</code>. One of:</p><ul><li><p><code>"one-hot"</co
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">data</span> <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"task"</span>, <span class="va">data</span>, <span class="st">"x"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">poe</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"encode"</span><span class="op">)</span></span></span>
@@ -276,7 +278,7 @@ Initialized to <code>"one-hot"</code>. One of:</p><ul><li><p><code>"one-hot"</co
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:      c    -1    -1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># converting character-columns</span></span></span>
-<span class="r-in"><span><span class="va">data_chr</span> <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data_chr</span> <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">task_chr</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"task_chr"</span>, <span class="va">data_chr</span>, <span class="st">"x"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">goe</span> <span class="op">=</span> <span class="fu"><a href="ppl.html">ppl</a></span><span class="op">(</span><span class="st">"convert_types"</span>, <span class="st">"character"</span>, <span class="st">"factor"</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"encode"</span><span class="op">)</span></span></span>

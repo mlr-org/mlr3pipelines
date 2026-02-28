@@ -43,11 +43,15 @@ The parameters are the parameters inherited from
 [`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/reference/PipeOpTaskPreproc.md),
 as well as:
 
-- `renaming` :: named `character`  
-  Named `character` vector. The names of the vector specify the old
-  column names that should be changed to the new column names as given
-  by the elements of the vector. Initialized to the empty character
-  vector.
+- `renaming` :: named `character` \| `function`  
+  Takes the form of either a named `character` or a `function`. For a
+  named `character` vector, the names of the vector elements specify the
+  old column names and the corresponding element values give the new
+  column names. A `function` specifies how the old column names should
+  be changed to the new column names. The function must return a
+  `character` vector with one entry per input column name so that each
+  selected column receives a new name. To choose columns use the
+  `affect_columns` parameter. Initialized to `character(0)`.
 
 - `ignore_missing` :: `logical(1)`  
   Ignore if columns named in `renaming` are not found in the input
@@ -59,8 +63,8 @@ as well as:
 ## Internals
 
 Uses the `$rename()` mutator of the
-[`Task`](https://mlr3.mlr-org.com/reference/Task.html) to set the new
-column names.
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html) to set new column
+names.
 
 ## Fields
 
@@ -93,6 +97,7 @@ Other PipeOps:
 [`mlr_pipeops_classbalancing`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classbalancing.md),
 [`mlr_pipeops_classifavg`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classifavg.md),
 [`mlr_pipeops_classweights`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweights.md),
+[`mlr_pipeops_classweightsex`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweightsex.md),
 [`mlr_pipeops_colapply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colapply.md),
 [`mlr_pipeops_collapsefactors`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_collapsefactors.md),
 [`mlr_pipeops_colroles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colroles.md),
@@ -149,6 +154,7 @@ Other PipeOps:
 [`mlr_pipeops_smote`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smote.md),
 [`mlr_pipeops_smotenc`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smotenc.md),
 [`mlr_pipeops_spatialsign`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_spatialsign.md),
+[`mlr_pipeops_splines`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_splines.md),
 [`mlr_pipeops_subsample`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_subsample.md),
 [`mlr_pipeops_targetinvert`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetinvert.md),
 [`mlr_pipeops_targetmutate`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetmutate.md),
@@ -178,5 +184,19 @@ pop$train(list(task))
 #> • Properties: multiclass
 #> • Features (4):
 #>   • dbl (4): PL, Petal.Width, Sepal.Length, Sepal.Width
+#> 
+
+pof = po("renamecolumns", param_vals = list(renaming = function(colnames) {
+  sub("Petal", "P", colnames)
+}))
+pof$train(list(task))
+#> $output
+#> 
+#> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
+#> • Target: Species
+#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
+#> • Properties: multiclass
+#> • Features (4):
+#>   • dbl (4): P.Length, P.Width, Sepal.Length, Sepal.Width
 #> 
 ```

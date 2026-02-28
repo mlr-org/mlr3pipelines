@@ -60,6 +60,7 @@
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classbalancing.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classifavg.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweights.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_classweightsex.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colapply.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_collapsefactors.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_colroles.html</loc></url>
@@ -118,6 +119,7 @@
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smote.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_smotenc.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_spatialsign.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_splines.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_subsample.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetinvert.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_targetmutate.html</loc></url>

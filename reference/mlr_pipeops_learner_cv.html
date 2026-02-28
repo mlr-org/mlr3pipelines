@@ -39,7 +39,7 @@ useful to use PipeOpFeatureUnion to bind the prediction Task to the original inp
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +74,7 @@ useful to use PipeOpFeatureUnion to bind the prediction Task to the original inp
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Wrap a Learner into a PipeOp with Cross-validated Predictions as Features</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/v0.10.0/R/PipeOpLearnerCV.R" class="external-link"><code>R/PipeOpLearnerCV.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpLearnerCV.R" class="external-link"><code>R/PipeOpLearnerCV.R</code></a></small>
       <div class="d-none name"><code>mlr_pipeops_learner_cv.Rd</code></div>
     </div>
 
@@ -132,11 +132,11 @@ ordinary prediction made on the data by a <code><a href="https://mlr3.mlr-org.co
 <p>The <code>$state</code> is set to the <code>$state</code> slot of the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> object, together with the <code>$state</code> elements inherited from the
 <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>. It is a named <code>list</code> with the inherited members, as well as:</p><ul><li><p><code>model</code> :: <code>any</code><br>
 Model created by the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>'s <code>$.train()</code> function.</p></li>
-<li><p><code>train_log</code> :: <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with columns <code>class</code> (<code>character</code>), <code>msg</code> (<code>character</code>)<br>
+<li><p><code>train_log</code> :: <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> with columns <code>class</code> (<code>character</code>), <code>msg</code> (<code>character</code>)<br>
 Errors logged during training.</p></li>
 <li><p><code>train_time</code> :: <code>numeric(1)</code><br>
 Training time, in seconds.</p></li>
-<li><p><code>predict_log</code> :: <code>NULL</code> | <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with columns <code>class</code> (<code>character</code>), <code>msg</code> (<code>character</code>)<br>
+<li><p><code>predict_log</code> :: <code>NULL</code> | <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> with columns <code>class</code> (<code>character</code>), <code>msg</code> (<code>character</code>)<br>
 Errors logged during prediction.</p></li>
 <li><p><code>predict_time</code> :: <code>NULL</code> | <code>numeric(1)</code>
 Prediction time, in seconds.</p></li>
@@ -156,7 +156,7 @@ Which resampling method do we want to use. Currently only supports <code>"cv"</c
 predictions with the model trained on all training data.</p></li>
 <li><p><code>resampling.folds</code> :: <code>numeric(1)</code><br>
 Number of cross validation folds. Initialized to 3. Only used for <code>resampling.method = "cv"</code>.</p></li>
-<li><p><code>keep_response</code> :: <code>logical(1)</code><br>
+<li><p><code>resampling.keep_response</code> :: <code>logical(1)</code><br>
 Only effective during <code>"prob"</code> prediction: Whether to keep response values, if available. Initialized to <code>FALSE</code>.</p></li>
 <li><p><code>resampling.predict_method</code> :: <code>character(1)</code><br>
 Controls how predictions are produced after training. <code>"full"</code> (default) fits the wrapped learner on the entire training data.

@@ -5,4 +5,4 @@ to see their documentation.
 
 - data.table:
 
-  [`as.data.table`](https://rdatatable.gitlab.io/data.table/reference/as.data.table.html)
+  [`as.data.table`](https://rdrr.io/pkg/data.table/man/as.data.table.html)
