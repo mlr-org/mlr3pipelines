@@ -1,6 +1,7 @@
 context("PipeOpLearnerCV")
-
 test_that("PipeOpLearnerCV - basic properties", {
+  skip_on_cran()
+
   lrn = mlr_learners$get("classif.featureless")
   po = PipeOpLearnerCV$new(lrn)
   expect_pipeop(po$clone(), check_ps_default_values = FALSE)
@@ -39,6 +40,7 @@ test_that("PipeOpLearnerCV - basic properties", {
 })
 
 test_that("PipeOpLearnerCV - param values", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   lrn = mlr_learners$get("classif.rpart")
   polrn = PipeOpLearnerCV$new(lrn)
@@ -68,6 +70,7 @@ test_that("PipeOpLearnerCV - param values", {
 })
 
 test_that("PipeOpLearnerCV se aggregation default matches learner predict_type", {
+  skip_on_cran()
   learner_resp = LearnerRegrDebug$new()
   learner_resp$predict_type = "response"
   po_resp = PipeOpLearnerCV$new(learner_resp)
@@ -86,6 +89,7 @@ test_that("PipeOpLearnerCV se aggregation default matches learner predict_type",
 })
 
 test_that("PipeOpLearnerCV - cv ensemble averages fold learners", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   task = tsk("iris")
   learner = lrn("classif.rpart", predict_type = "prob")
@@ -134,6 +138,7 @@ test_that("PipeOpLearnerCV - cv ensemble averages fold learners", {
 })
 
 test_that("PipeOpLearnerCV - cv ensemble drops response when requested", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   task = tsk("iris")
   learner = lrn("classif.rpart", predict_type = "prob")
@@ -149,6 +154,7 @@ test_that("PipeOpLearnerCV - cv ensemble drops response when requested", {
 })
 
 test_that("PipeOpLearnerCV - cv ensemble averages classif responses", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   task = tsk("iris")
   learner = lrn("classif.rpart", predict_type = "response")
@@ -194,6 +200,7 @@ test_that("PipeOpLearnerCV - cv ensemble averages classif responses", {
 })
 
 test_that("PipeOpLearnerCV - cv ensemble log prob aggregation", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   task = tsk("iris")
   learner = lrn("classif.rpart", predict_type = "prob")
@@ -239,6 +246,7 @@ test_that("PipeOpLearnerCV - cv ensemble log prob aggregation", {
 })
 
 test_that("PipeOpLearnerCV - log aggregation with zeros uses epsilon", {
+  skip_on_cran()
   backend = data.table::data.table(
     x = 1:2,
     y = factor(c("a", "b"), levels = c("a", "b"))
@@ -267,6 +275,7 @@ test_that("PipeOpLearnerCV - log aggregation with zeros uses epsilon", {
 })
 
 test_that("PipeOpLearnerCV - log aggregation epsilon controls shrinkage", {
+  skip_on_cran()
   backend = data.table::data.table(
     x = 1:3,
     y = factor(c("a", "b", "b"), levels = c("a", "b"))
@@ -320,6 +329,7 @@ test_that("PipeOpLearnerCV - log aggregation epsilon controls shrinkage", {
 })
 
 test_that("PipeOpLearnerCV - cv ensemble averages regression predictions", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   task = tsk("mtcars")
   learner = lrn("regr.rpart")
@@ -346,6 +356,7 @@ test_that("PipeOpLearnerCV - cv ensemble averages regression predictions", {
 })
 
 test_that("PipeOpLearnerCV - cv ensemble handles multiplicity", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   tasks = Multiplicity(tsk("iris"), tsk("sonar"))
   learner = lrn("classif.rpart", predict_type = "prob")
@@ -375,6 +386,7 @@ test_that("PipeOpLearnerCV - cv ensemble handles multiplicity", {
 })
 
 test_that("PipeOpLearnerCV - cv ensemble requires resampling method cv", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   po = PipeOpLearnerCV$new(
     lrn("classif.rpart"),
@@ -384,6 +396,7 @@ test_that("PipeOpLearnerCV - cv ensemble requires resampling method cv", {
 })
 
 test_that("PipeOpLearnerCV - learner_model returns averaged ensemble", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   task = tsk("iris")
   learner = lrn("classif.rpart", predict_type = "prob")
@@ -416,6 +429,7 @@ test_that("PipeOpLearnerCV - learner_model returns averaged ensemble", {
 })
 
 test_that("PipeOpLearnerCV - cv ensemble with predict_type = 'se'", {
+  skip_on_cran()
   skip_if_not_installed("mlr3learners")
   task = tsk("mtcars")
   learner = lrn("regr.lm", predict_type = "se")
@@ -455,6 +469,7 @@ test_that("PipeOpLearnerCV - cv ensemble with predict_type = 'se'", {
 })
 
 test_that("PipeOpLearnerCV - within resampling", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   lrn = mlr_learners$get("classif.rpart")
   gr = GraphLearner$new(PipeOpLearnerCV$new(lrn) %>>% po(id = "l2", lrn))
@@ -463,6 +478,7 @@ test_that("PipeOpLearnerCV - within resampling", {
 })
 
 test_that("PipeOpLearnerCV - insample resampling", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   lrn = mlr_learners$get("classif.featureless")
   iris_with_unambiguous_mode = mlr_tasks$get("iris")$filter(c(1:30, 70:150))  # want featureless learner without randomness
@@ -479,6 +495,7 @@ test_that("PipeOpLearnerCV - insample resampling", {
 })
 
 test_that("PipeOpLearnerCV - graph but no id", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   g = PipeOpNOP$new() %>>% PipeOpLearner$new(LearnerClassifRpart$new())
   po = PipeOpLearnerCV$new(g)
@@ -486,6 +503,7 @@ test_that("PipeOpLearnerCV - graph but no id", {
 })
 
 test_that("PipeOpLearnerCV - model active binding to state", {
+  skip_on_cran()
   lrn = mlr_learners$get("classif.featureless")
   po = PipeOpLearnerCV$new(lrn)
   task = mlr_tasks$get("iris")
@@ -509,6 +527,7 @@ test_that("PipeOpLearnerCV - model active binding to state", {
 })
 
 test_that("predict_type", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   expect_equal(po("learner_cv", lrn("classif.rpart", predict_type = "response"))$predict_type, "response")
   expect_equal(po("learner_cv", lrn("classif.rpart", predict_type = "prob"))$predict_type, "prob")
@@ -532,6 +551,7 @@ test_that("predict_type", {
 })
 
 test_that("marshal", {
+  skip_on_cran()
   task = tsk("iris")
   po_lrn = as_pipeop(po("learner_cv", learner = lrn("classif.debug")))
   po_lrn$train(list(task))
@@ -611,6 +631,7 @@ test_that("marshal multiplicity", {
 })
 
 test_that("marshal with cv ensemble", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   task = tsk("iris")
   po = po("learner_cv", learner = lrn("classif.rpart", predict_type = "prob"),
@@ -630,6 +651,7 @@ test_that("marshal with cv ensemble", {
 })
 
 test_that("state class and multiplicity", {
+  skip_on_cran()
   po = po("learner_cv", learner = lrn("classif.debug"))
   po$train(list(Multiplicity(tsk("iris"))))
   expect_class(po$state, "Multiplicity")
@@ -644,6 +666,7 @@ test_that("state class and multiplicity", {
 })
 
 test_that("PipeOpLearnerCV cv ensemble aggregates SE like PipeOpRegrAvg", {
+  skip_on_cran()
   task_backend = data.table::data.table(
     x1 = c(1, 2, 3, 4),
     x2 = c(4, 3, 2, 1),
@@ -728,6 +751,7 @@ test_that("PipeOpLearnerCV cv ensemble aggregates SE like PipeOpRegrAvg", {
 })
 
 test_that("PipeOpLearnerCV cv ensemble handles unsorted, subsetted row_ids (classif)",{
+  skip_on_cran()
   skip_if_not_installed("rpart")
 
   set.seed(1)
@@ -772,6 +796,7 @@ test_that("PipeOpLearnerCV cv ensemble handles unsorted, subsetted row_ids (clas
 })
 
 test_that("PipeOpLearnerCV cv ensemble handles unsorted, subsetted row_ids (regr)", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
 
   task = tsk("mtcars")$filter(c(10, 5, 20, 3, 15))  # unsorted, subsetted row_ids
@@ -799,6 +824,7 @@ test_that("PipeOpLearnerCV cv ensemble handles unsorted, subsetted row_ids (regr
 })
 
 test_that("PipeOpLearnerCV cv_ensemble resolves ties randomly", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
 
   set.seed(121325)
