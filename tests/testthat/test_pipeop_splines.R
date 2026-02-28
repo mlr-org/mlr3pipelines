@@ -1,5 +1,7 @@
 context("PipeOpSplines")
 
+skip_on_cran()
+
 test_that("PipeOpSplines - basic properties", {
   skip_if_not_installed("splines")
   task = mlr_tasks$get("iris")
