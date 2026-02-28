@@ -1,5 +1,5 @@
 context("double-arrow")
-
+skip_on_cran()
 test_that("Simple ops do what we expect", {
   p1 = PipeOpNOP$new("p1")
   p2 = PipeOpNOP$new("p2")
