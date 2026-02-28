@@ -134,7 +134,7 @@ PipeOpClassWeightsEx = R6Class("PipeOpClassWeightsEx",
       weights_by_class = switch(pv$weight_method,
         "inverse_class_frequency" = 1 / class_frequency,
         "inverse_square_root_of_frequency" = 1 / sqrt(class_frequency),
-        "median_frequency_balancing" = median(class_frequency) / class_frequency,
+        "median_frequency_balancing" = stats::median(class_frequency) / class_frequency,
         "explicit" = pv$mapping
       )
 
