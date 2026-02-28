@@ -213,7 +213,6 @@ task$data()
 #> 149: virginica          5.4         2.3          6.2         3.4
 #> 150: virginica          5.1         1.8          5.9         3.0
 pop$train(task)
-#> OptimInstanceSingleCrit is deprecated. Use OptimInstanceBatchSingleCrit instead.
 #> $tunethreshold.output
 #> NULL
 #> 
