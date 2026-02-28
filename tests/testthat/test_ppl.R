@@ -60,6 +60,7 @@ test_that("mlr_graphs multi-access works", {
 
 test_that("mlr3book authors don't sleepwalk through life", {
   skip_if_not_installed("rpart")
+  skip_on_cran()
 
   tasks = tsks(c("breast_cancer", "sonar"))
 
