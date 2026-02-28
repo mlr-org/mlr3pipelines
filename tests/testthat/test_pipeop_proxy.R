@@ -1,5 +1,5 @@
 context("PipeOpProxy")
-
+skip_on_cran()
 test_that("PipeOpProxy - basic properties", {
   task = mlr_tasks$get("iris")
   pop = PipeOpProxy$new(param_vals = list(content = PipeOpNOP$new()))
