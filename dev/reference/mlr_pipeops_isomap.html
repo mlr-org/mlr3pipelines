@@ -19,7 +19,7 @@ dimensions (ndim) control the transformation."><meta property="og:image" content
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.10.0-9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.11.0-9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -226,10 +226,10 @@ Initialized to <code>NULL</code>.</p></li>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">po</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"isomap"</span>, .mute <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"message"</span>, <span class="st">"output"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-23 09:19:17.720795: Isomap START</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-23 09:19:17.721453: constructing knn graph</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-23 09:19:17.728003: calculating geodesic distances</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-23 09:19:17.740417: Classical Scaling</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-03-01 08:52:05.510736: Isomap START</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-03-01 08:52:05.511302: constructing knn graph</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-03-01 08:52:05.533365: calculating geodesic distances</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-03-01 08:52:05.545832: Classical Scaling</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species     iso 1       iso 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;     &lt;num&gt;       &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa  3.006919  0.07103516</span>
@@ -244,11 +244,11 @@ Initialized to <code>NULL</code>.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica -2.147343 -0.45132197</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica -1.496149 -0.38356003</span>
 <span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-23 09:19:17.767093: L-Isomap embed START</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-23 09:19:17.767695: constructing knn graph</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-23 09:19:17.775693: calculating geodesic distances</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-23 09:19:17.804916: embedding</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-02-23 09:19:17.805949: DONE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-03-01 08:52:05.569884: L-Isomap embed START</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-03-01 08:52:05.570358: constructing knn graph</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-03-01 08:52:05.577769: calculating geodesic distances</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-03-01 08:52:05.607032: embedding</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-03-01 08:52:05.60768: DONE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species     iso 1       iso 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;     &lt;num&gt;       &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa  3.116505  0.14031343</span>

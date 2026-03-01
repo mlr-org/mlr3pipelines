@@ -1,6 +1,10 @@
 # Changelog
 
-## mlr3pipelines 0.10.0-9000
+## mlr3pipelines 0.11.0-9000
+
+## mlr3pipelines 0.11.0
+
+CRAN release: 2026-03-01
 
 - Fix: Made `FilterEnsemble` tests deterministic and more robust.
 - Fix: Made tests for `PipeOpLearnerCV` deterministic.
