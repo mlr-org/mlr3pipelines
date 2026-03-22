@@ -22,7 +22,7 @@ register_mlr3 = function() {
 register_mlr3filters = function() {
   if ("mlr3filters" %in% loadedNamespaces()) {
     x = utils::getFromNamespace("mlr_filters", ns = "mlr3filters")
-    x$add("ensemble", FilterEnsemble)
+    x$add("ensemble", FilterEnsemble, .prototype_args = list(filters = list(R6Class("Filter", public = list(id = "filter", task_types = character(), task_properties = character(), param_set = ps(), feature_types = character(), packages = "mlr3pipelines", label = NA_character_, man = NA_character_))$new()))) # nolint
   }
 }
 
