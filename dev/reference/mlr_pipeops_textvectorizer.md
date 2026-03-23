@@ -368,33 +368,33 @@ task = tsk("iris")$cbind(dt)
 pos = po("textvectorizer", param_vals = list(stopwords_language = "en"))
 
 pos$train(list(task))[[1]]$data()
-#>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.v txt.m
+#>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.d txt.f
 #>         <fctr>        <num>       <num>        <num>       <num> <num> <num>
 #>   1:    setosa          1.4         0.2          5.1         3.5     1     1
 #>   2:    setosa          1.4         0.2          4.9         3.0     0     0
 #>   3:    setosa          1.3         0.2          4.7         3.2     0     0
-#>   4:    setosa          1.5         0.2          4.6         3.1     0     0
+#>   4:    setosa          1.5         0.2          4.6         3.1     1     0
 #>   5:    setosa          1.4         0.2          5.0         3.6     0     0
 #>  ---                                                                        
 #> 146: virginica          5.2         2.3          6.7         3.0     0     0
 #> 147: virginica          5.0         1.9          6.3         2.5     0     0
-#> 148: virginica          5.2         2.0          6.5         3.0     0     0
+#> 148: virginica          5.2         2.0          6.5         3.0     1     0
 #> 149: virginica          5.4         2.3          6.2         3.4     0     0
-#> 150: virginica          5.1         1.8          5.9         3.0     0     0
-#>      txt.p txt.r txt.d txt.f txt.w txt.x txt.q txt.b txt.l txt.t txt.o txt.j
+#> 150: virginica          5.1         1.8          5.9         3.0     1     0
+#>      txt.w txt.x txt.q txt.b txt.l txt.t txt.o txt.j txt.e txt.g txt.h txt.m
 #>      <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num>
-#>   1:     1     0     0     0     0     0     0     0     0     0     0     0
-#>   2:     0     1     1     0     0     0     0     0     0     0     0     0
-#>   3:     0     0     0     1     1     1     0     0     0     0     0     0
-#>   4:     0     0     0     0     1     0     1     1     0     0     0     0
-#>   5:     0     0     1     0     0     0     0     0     1     1     0     0
+#>   1:     0     0     0     0     0     0     0     0     0     0     0     0
+#>   2:     1     1     1     0     0     0     0     0     0     0     0     0
+#>   3:     1     0     0     1     1     0     0     0     0     0     0     0
+#>   4:     0     0     0     0     1     1     0     0     0     0     0     0
+#>   5:     0     0     0     1     0     0     1     1     0     0     0     0
 #>  ---                                                                        
-#> 146:     0     0     0     0     0     0     0     0     0     0     0     0
-#> 147:     0     1     0     0     0     0     0     0     0     0     0     1
-#> 148:     1     0     0     0     0     0     0     0     0     0     0     0
-#> 149:     0     1     1     0     0     0     0     0     0     0     0     0
-#> 150:     0     0     0     0     1     0     0     0     0     0     0     0
-#>      txt.e txt.g txt.h txt.s txt.c txt.u txt.k txt.n txt.y txt.z
+#> 146:     0     0     0     0     0     0     0     1     0     1     0     0
+#> 147:     0     0     0     0     0     0     0     0     0     0     0     0
+#> 148:     0     0     0     0     0     0     0     0     0     0     0     0
+#> 149:     1     0     0     0     0     0     0     0     0     0     0     0
+#> 150:     0     0     0     0     0     0     0     0     0     0     0     0
+#>      txt.v txt.s txt.p txt.y txt.c txt.u txt.k txt.n txt.r txt.z
 #>      <num> <num> <num> <num> <num> <num> <num> <num> <num> <num>
 #>   1:     0     0     0     0     0     0     0     0     0     0
 #>   2:     0     0     0     0     0     0     0     0     0     0
@@ -402,27 +402,27 @@ pos$train(list(task))[[1]]$data()
 #>   4:     0     0     0     0     0     0     0     0     0     0
 #>   5:     0     0     0     0     0     0     0     0     0     0
 #>  ---                                                            
-#> 146:     0     1     1     0     1     0     0     0     0     0
-#> 147:     0     1     0     0     0     0     0     0     0     0
-#> 148:     0     0     0     1     0     1     0     0     0     0
-#> 149:     0     0     0     0     1     0     0     0     0     0
-#> 150:     0     0     0     1     1     0     0     0     0     0
+#> 146:     0     0     0     0     0     0     0     0     1     0
+#> 147:     0     1     1     0     0     1     0     0     0     0
+#> 148:     0     0     0     0     1     0     0     0     1     0
+#> 149:     0     1     0     0     1     0     0     0     0     0
+#> 150:     1     0     0     0     0     0     0     0     1     0
 
 one_line_of_iris = task$filter(13)
 
 one_line_of_iris$data()
 #>    Species Petal.Length Petal.Width Sepal.Length Sepal.Width    txt
 #>     <fctr>        <num>       <num>        <num>       <num> <char>
-#> 1:  setosa          1.4         0.1          4.8           3  t c d
+#> 1:  setosa          1.4         0.1          4.8           3  o w u
 
 pos$predict(list(one_line_of_iris))[[1]]$data()
-#>    Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.v txt.m txt.p
+#>    Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.d txt.f txt.w
 #>     <fctr>        <num>       <num>        <num>       <num> <num> <num> <num>
-#> 1:  setosa          1.4         0.1          4.8           3     0     0     0
-#>    txt.r txt.d txt.f txt.w txt.x txt.q txt.b txt.l txt.t txt.o txt.j txt.e
+#> 1:  setosa          1.4         0.1          4.8           3     0     0     1
+#>    txt.x txt.q txt.b txt.l txt.t txt.o txt.j txt.e txt.g txt.h txt.m txt.v
 #>    <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num>
-#> 1:     0     1     0     0     0     0     0     0     1     0     0     0
-#>    txt.g txt.h txt.s txt.c txt.u txt.k txt.n txt.y txt.z
+#> 1:     0     0     0     0     0     1     0     0     0     0     0     0
+#>    txt.s txt.p txt.y txt.c txt.u txt.k txt.n txt.r txt.z
 #>    <num> <num> <num> <num> <num> <num> <num> <num> <num>
-#> 1:     0     0     0     1     0     0     0     0     0
+#> 1:     0     0     0     0     1     0     0     0     0
 ```

@@ -187,27 +187,27 @@ task$data()
 #> 149: virginica          5.4         2.3          6.2         3.4
 #> 150: virginica          5.1         1.8          5.9         3.0
 pop$train(list(task))[[1]]$data()
-#>        Species       PR1       PR2
-#>         <fctr>     <num>     <num>
-#>   1:    setosa -3.940642 -4.540791
-#>   2:    setosa -3.553407 -4.199705
-#>   3:    setosa -3.610673 -4.179699
-#>   4:    setosa -3.619223 -4.012498
-#>   5:    setosa -3.993417 -4.516007
-#>  ---                              
-#> 146: virginica -4.676199 -5.418214
-#> 147: virginica -4.353197 -4.785079
-#> 148: virginica -4.787989 -5.121619
-#> 149: virginica -4.966248 -5.193520
-#> 150: virginica -4.731992 -4.643445
+#>        Species        PR1         PR2
+#>         <fctr>      <num>       <num>
+#>   1:    setosa -0.4955681  0.08462260
+#>   2:    setosa -0.4393064 -0.20005991
+#>   3:    setosa -0.4473164  0.04980026
+#>   4:    setosa -0.5784827 -0.11250409
+#>   5:    setosa -0.5324336  0.17917992
+#>  ---                                 
+#> 146: virginica -1.1222825 -3.65834408
+#> 147: virginica -1.2540461 -3.64088523
+#> 148: virginica -1.3710303 -3.50942034
+#> 149: virginica -1.4194810 -3.37473384
+#> 150: virginica -1.5565183 -3.22398959
 
 pop$state
 #> $projection
 #>                     PR1        PR2
-#> Petal.Length -0.4828504  0.2956250
-#> Petal.Width   0.4901167 -0.5457836
-#> Sepal.Length -0.1762255 -0.6642988
-#> Sepal.Width  -0.7039785 -0.4164531
+#> Petal.Length -0.6572081 -0.6074552
+#> Petal.Width   0.7071921 -0.3172657
+#> Sepal.Length  0.1829506 -0.2687201
+#> Sepal.Width  -0.1857038  0.6768531
 #> 
 #> $dt_columns
 #> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 

@@ -167,8 +167,8 @@ filter$calculate(task)
 head(as.data.table(filter))
 #>    feature score
 #>     <char> <num>
-#> 1:     V36  59.5
-#> 2:     V11  59.5
+#> 1:     V11  59.5
+#> 2:     V36  59.5
 #> 3:     V12  57.5
 #> 4:     V17  57.5
 #> 5:     V10  55.5

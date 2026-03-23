@@ -201,26 +201,26 @@ data = data.frame(
 )
 task = TaskClassif$new(id = "example", backend = data, target = "target")
 task$head()
-#>    target    feature
-#>    <fctr>      <num>
-#> 1:     c2 -0.1178783
-#> 2:     c2  0.2408954
-#> 3:     c2 -0.6975482
-#> 4:     c2 -0.2148461
-#> 5:     c2 -0.3994190
-#> 6:     c2  0.9182606
+#>    target      feature
+#>    <fctr>        <num>
+#> 1:     c2  0.394326464
+#> 2:     c1 -0.153864555
+#> 3:     c2  0.940811564
+#> 4:     c1 -0.007368289
+#> 5:     c2 -1.596925264
+#> 6:     c2  1.021341442
 table(task$data(cols = "target"))
 #> target
 #>  c1  c2 
-#>  19 181 
+#>  18 182 
 
 # Generate synthetic data for minority class
 pop = po("smotenc")
 smotenc_result = pop$train(list(task))[[1]]$data()
 nrow(smotenc_result)
-#> [1] 362
+#> [1] 364
 table(smotenc_result$target)
 #> 
 #>  c1  c2 
-#> 181 181 
+#> 182 182 
 ```

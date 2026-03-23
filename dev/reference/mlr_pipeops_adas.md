@@ -187,14 +187,14 @@ data = data.frame(
 )
 task = TaskClassif$new(id = "example", backend = data, target = "target")
 task$head()
-#>    target          x1          x2
-#>    <fctr>       <num>       <num>
-#> 1:     c2 -1.96128025 -0.25713974
-#> 2:     c2 -0.61834215  0.07129771
-#> 3:     c2  0.07262506  1.03912251
-#> 4:     c1  1.47680526 -0.69564839
-#> 5:     c2  0.10549260  1.40779680
-#> 6:     c1  0.80728303  0.52945893
+#>    target         x1         x2
+#>    <fctr>      <num>      <num>
+#> 1:     c2 -0.2044247 -0.0871060
+#> 2:     c2  0.3908654  1.2420805
+#> 3:     c1  0.3586867  1.1361390
+#> 4:     c2  1.0144447 -1.1946120
+#> 5:     c2 -0.8840646 -0.4110691
+#> 6:     c2 -1.9612803 -0.2571397
 table(task$data(cols = "target"))
 #> target
 #>  c1  c2 
@@ -204,9 +204,9 @@ table(task$data(cols = "target"))
 pop = po("adas")
 adas_result = pop$train(list(task))[[1]]$data()
 nrow(adas_result)
-#> [1] 556
+#> [1] 542
 table(adas_result$target)
 #> 
 #>  c1  c2 
-#> 283 273 
+#> 269 273 
 ```

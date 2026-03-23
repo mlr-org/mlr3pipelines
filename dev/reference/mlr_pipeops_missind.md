@@ -223,10 +223,10 @@ impgraph = list(
 tail(impgraph$train(task)[[1]]$data())
 #>    diabetes insulin triceps missing_insulin missing_triceps
 #>      <fctr>   <num>   <num>          <fctr>          <fctr>
-#> 1:      neg      49      39         missing         missing
+#> 1:      neg     152      23         missing         missing
 #> 2:      neg     180      48         present         present
-#> 3:      neg      75      27         missing         present
+#> 3:      neg     115      27         missing         present
 #> 4:      neg     112      23         present         present
-#> 5:      pos      44      40         missing         missing
-#> 6:      neg     415      31         missing         present
+#> 5:      pos     110      20         missing         missing
+#> 6:      neg      92      31         missing         present
 ```

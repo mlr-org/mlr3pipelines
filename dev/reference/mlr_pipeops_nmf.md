@@ -244,17 +244,17 @@ task$data()
 pop$train(list(task))[[1]]$data()
 #>        Species      NMF1       NMF2
 #>         <fctr>     <num>      <num>
-#>   1:    setosa 0.5808520 0.04741536
-#>   2:    setosa 0.5179125 0.06572959
-#>   3:    setosa 0.5312856 0.04639643
-#>   4:    setosa 0.4971806 0.06988613
-#>   5:    setosa 0.5832509 0.04280681
+#>   1:    setosa 0.6061689 0.05185076
+#>   2:    setosa 0.5506294 0.07488995
+#>   3:    setosa 0.5557515 0.05112528
+#>   4:    setosa 0.5315237 0.08018644
+#>   5:    setosa 0.6065945 0.04619412
 #>  ---                               
-#> 146: virginica 0.2290743 0.55676271
-#> 147: virginica 0.1866306 0.53550080
-#> 148: virginica 0.2279444 0.54191697
-#> 149: virginica 0.2142419 0.55788518
-#> 150: virginica 0.2018033 0.51875141
+#> 146: virginica 0.4717777 0.67794397
+#> 147: virginica 0.4197866 0.65240758
+#> 148: virginica 0.4642176 0.65981482
+#> 149: virginica 0.4573080 0.67947109
+#> 150: virginica 0.4278406 0.63178132
 
 pop$state
 #> $nmf
@@ -267,13 +267,13 @@ pop$state
 #>  # Details:
 #>   algorithm:  brunet 
 #>   seed:  random 
-#>   RNG: 10403L, 223L, ..., 581505866L [c6a8911f7b61c7ab6db7422cde75b137]
+#>   RNG: 10403L, 192L, ..., 581505866L [dde3c2251c21eaecefb3cfbc262707b5]
 #>   distance metric:  'KL' 
 #>   residuals:  3.084418 
-#>   Iterations: 440 
+#>   Iterations: 470 
 #>   Timing:
 #>      user  system elapsed 
-#>     0.063   0.003   0.067 
+#>     0.064   0.004   0.067 
 #> 
 #> $dt_columns
 #> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 

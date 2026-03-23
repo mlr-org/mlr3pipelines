@@ -226,12 +226,12 @@ pop = po("decode")
 train_out = pop$train(list(task_one_hot))[[1]]
 # x.1 and x.2 are collapsed into x, same for y; a is ignored.
 train_out$data()
-#>        target          a      x      y
-#>         <num>      <num> <fctr> <fctr>
-#> 1: 0.70246251 0.62041003      1      1
-#> 2: 0.16502764 0.16957677      2      2
-#> 3: 0.06445754 0.06221405      1      1
-#> 4: 0.75470562 0.10902927      2      2
+#>       target          a      x      y
+#>        <num>      <num> <fctr> <fctr>
+#> 1: 0.2779660 0.06445754      1      1
+#> 2: 0.7875405 0.75470562      2      2
+#> 3: 0.7024625 0.62041003      1      1
+#> 4: 0.1650276 0.16957677      2      2
 
 # Reverse treatment encoding from PipeOpEncode
 df = data.frame(
@@ -243,28 +243,28 @@ task = TaskRegr$new(id = "example", backend = df, target = "target")
 po_enc = po("encode", method = "treatment")
 task_encoded = po_enc$train(list(task))[[1]]
 task_encoded$data()
-#>       target fct.b fct.c
-#>        <num> <num> <num>
-#> 1: 0.3817164     0     0
-#> 2: 0.1693109     1     0
-#> 3: 0.2986525     0     1
-#> 4: 0.1922095     0     0
-#> 5: 0.2571700     1     0
-#> 6: 0.1812318     0     1
+#>        target fct.b fct.c
+#>         <num> <num> <num>
+#> 1: 0.06221405     0     0
+#> 2: 0.10902927     1     0
+#> 3: 0.38171635     0     1
+#> 4: 0.16931091     0     0
+#> 5: 0.29865254     1     0
+#> 6: 0.19220954     0     1
 
 po_dec = po("decode", treatment_encoding = TRUE)
 task_decoded = pop$train(list(task))[[1]]
 # x.1 and x.2 are collapsed into x. All rows where all values
 # are smaller or equal to 0, the level is set to the reference level.
 task_decoded$data()
-#>       target    fct
-#>        <num> <fctr>
-#> 1: 0.3817164      a
-#> 2: 0.1693109      b
-#> 3: 0.2986525      c
-#> 4: 0.1922095      a
-#> 5: 0.2571700      b
-#> 6: 0.1812318      c
+#>        target    fct
+#>         <num> <fctr>
+#> 1: 0.06221405      a
+#> 2: 0.10902927      b
+#> 3: 0.38171635      c
+#> 4: 0.16931091      a
+#> 5: 0.29865254      b
+#> 6: 0.19220954      c
 
 # Different group_pattern
 df = data.frame(
@@ -281,12 +281,12 @@ pop = po("decode", group_pattern = "^([^_]+)\\_")
 train_out = pop$train(list(task))[[1]]
 # x_1 and x_2 are collapsed into x, same for y
 train_out$data()
-#>        target      x      y
-#>         <num> <fctr> <fctr>
-#> 1: 0.47731371      1      1
-#> 2: 0.77073704      2      2
-#> 3: 0.02778712      1      1
-#> 4: 0.52731078      2      2
+#>       target      x      y
+#>        <num> <fctr> <fctr>
+#> 1: 0.2571700      1      1
+#> 2: 0.1812318      2      2
+#> 3: 0.4773137      1      1
+#> 4: 0.7707370      2      2
 
 # Empty string to collapse all matches into one factor column.
 pop$param_set$set_values(group_pattern = "")
@@ -295,10 +295,10 @@ train_out = pop$train(list(task))[[1]]
 # The level for each row is determined by the column with the largest value in that row.
 # By default, ties are resolved randomly.
 train_out$data()
-#>        target pipeop.decoded
-#>         <num>         <fctr>
-#> 1: 0.47731371            y_1
-#> 2: 0.77073704            x_2
-#> 3: 0.02778712            y_1
-#> 4: 0.52731078            y_2
+#>       target pipeop.decoded
+#>        <num>         <fctr>
+#> 1: 0.2571700            y_1
+#> 2: 0.1812318            y_2
+#> 3: 0.4773137            y_1
+#> 4: 0.7707370            x_2
 ```

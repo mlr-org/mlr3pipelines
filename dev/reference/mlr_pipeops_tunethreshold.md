@@ -303,7 +303,7 @@ pop$state
 #> $tunethreshold
 #> $tunethreshold$threshold
 #>     setosa versicolor  virginica 
-#>  0.5852014  0.3398626  0.6166942 
+#>  0.7712967  0.9797805  0.5447611 
 #> 
 #> 
 ```

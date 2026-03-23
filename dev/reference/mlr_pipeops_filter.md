@@ -277,34 +277,34 @@ gr = po("filter", filter = flt("auc"), filter.frac = 0.5) %>>%
 learner = GraphLearner$new(gr)
 rr = resample(task, learner, rsmp("holdout"), store_models = TRUE)
 rr$learners[[1]]$model$auc$scores
-#>   charExclamation       capitalLong        capitalAve              your 
-#>       0.328759080       0.306751518       0.288703808       0.279083484 
+#>   charExclamation       capitalLong              your        capitalAve 
+#>      0.3238152005      0.3042322800      0.2875033175      0.2871065413 
 #>        charDollar      capitalTotal              free               you 
-#>       0.273296589       0.263313380       0.230684960       0.215739152 
-#>               our            remove             money                hp 
-#>       0.213188551       0.204291119       0.179973626       0.176336364 
-#>               all            num000          business              over 
-#>       0.176079754       0.157094167       0.149369524       0.140389728 
-#>              mail            george               hpl          internet 
-#>       0.136271572       0.135293399       0.133370707       0.131148231 
-#>           receive             email           address             order 
-#>       0.129122806       0.127931640       0.127513404       0.113377057 
+#>      0.2764362681      0.2662379684      0.2320238685      0.2143728547 
+#>               our            remove             money               all 
+#>      0.2098176687      0.2046412205      0.1818790031      0.1816593829 
+#>                hp            num000          business              over 
+#>      0.1748898581      0.1585216214      0.1501428748      0.1415560087 
+#>          internet            george              mail               hpl 
+#>      0.1348769419      0.1342355533      0.1334216533      0.1326369475 
+#>             email           receive           address             order 
+#>      0.1325690488      0.1315892724      0.1237574755      0.1168579037 
 #>              make           num1999          charHash            credit 
-#>       0.106704315       0.102212867       0.101519423       0.096648263 
-#>            people              will         addresses              labs 
-#>       0.090943952       0.089247316       0.073828362       0.073427396 
-#>            num650             num85               edu               lab 
-#>       0.068441105       0.067097612       0.062289775       0.060257929 
-#>        technology            telnet           meeting              data 
-#>       0.054653251       0.052352619       0.052065676       0.048215864 
-#>                pm            report           project            num857 
-#>       0.041177580       0.038103133       0.037171012       0.034819678 
-#> charSquarebracket            num415          original        conference 
-#>       0.033739215       0.032761485       0.029735304       0.024965106 
-#>     charSemicolon                cs              font                re 
-#>       0.024724216       0.024623477       0.023837706       0.023239245 
+#>      0.1089995665      0.1046412205      0.0998692894      0.0988800028 
+#>              will            people         addresses              labs 
+#>      0.0958661400      0.0913733235      0.0742654995      0.0736150430 
+#>               edu            num650             num85               lab 
+#>      0.0700172954      0.0699748310      0.0686686100      0.0592269277 
+#>        technology           meeting            telnet              data 
+#>      0.0532025196      0.0529178757      0.0527411621      0.0435513907 
+#>                pm            report           project charSquarebracket 
+#>      0.0391912753      0.0380785767      0.0378828426      0.0351343820 
+#>            num857            num415          original        conference 
+#>      0.0343571959      0.0325759050      0.0297613150      0.0283529141 
+#>                cs     charSemicolon                re              font 
+#>      0.0268617962      0.0264183534      0.0260759846      0.0222261050 
 #>  charRoundbracket            direct             num3d             table 
-#>       0.020505763       0.012178452       0.008840974       0.005753906 
+#>      0.0219286334      0.0131568704      0.0093397236      0.0053856736 
 #>             parts 
-#>       0.001509991 
+#>      0.0007809459 
 ```

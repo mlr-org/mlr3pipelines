@@ -214,7 +214,7 @@ pop = po("subsample", frac = 0.7, use_groups = TRUE)
 pop$train(list(task))
 #> $output
 #> 
-#> ── <TaskRegr> (2092x3) ─────────────────────────────────────────────────────────
+#> ── <TaskRegr> (2104x3) ─────────────────────────────────────────────────────────
 #> • Target: target
 #> • Properties: groups
 #> • Features (2):
