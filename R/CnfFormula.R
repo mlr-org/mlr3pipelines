@@ -262,6 +262,7 @@ as.logical.CnfFormula = function(x, ...) {
   return(NA)
 }
 
+#' @method all.equal CnfFormula
 #' @export
 all.equal.CnfFormula = function(target, current, ...) {
   if (is.logical(target) && is.logical(current)) {
