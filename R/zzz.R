@@ -22,7 +22,7 @@ register_mlr3 = function() {
 register_mlr3filters = function() {
   if ("mlr3filters" %in% loadedNamespaces()) {
     x = utils::getFromNamespace("mlr_filters", ns = "mlr3filters")
-    x$add("ensemble", FilterEnsemble)
+    x$add("ensemble", FilterEnsemble, .prototype_args = list(filters = list(mlr3filters::FilterVariance$new(), mlr3filters::FilterAUC$new())))
   }
 }
 
