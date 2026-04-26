@@ -1,5 +1,7 @@
 # mlr3pipelines 0.11.0-9000
 
+* Switched from using `digest::digest()` to using `mlr3misc::calculate_hash()` for calculating the `hash` and `phash` of `PipeOp`s, `Graph`s, and `GraphLearner`s. 
+
 # mlr3pipelines 0.11.0
 
 * Fix: Made `FilterEnsemble` tests deterministic and more robust.
