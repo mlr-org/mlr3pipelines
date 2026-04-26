@@ -148,8 +148,13 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
 
     .train = function(inputs) {
       intask = inputs[[1L]]$clone(deep = TRUE)
+      internal_valid_task = intask$internal_valid_task
+      intask$internal_valid_task = NULL
       self$state = private$.get_state(intask)
       intask = private$.transform(intask, "train")
+      if (!is.null(internal_valid_task)) {
+        intask$internal_valid_task = private$.transform(internal_valid_task, "predict")
+      }
       list(NULL, intask)
     },
 
