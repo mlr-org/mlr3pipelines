@@ -58,3 +58,28 @@ test_that("PipeOpSmote - handling of feature named 'class'", {
   expect_equal(train_out, smote_out)
 
 })
+
+test_that("PipeOpSmote - handles name column", {
+  skip_if_not_installed("smotefamily")
+
+  op = PipeOpSmote$new()
+
+  set.seed(1234L)
+  df = data.frame(
+    row_name = sprintf("row_%03i", 1:200),
+    target = factor(sample(c("c1", "c2"), size = 200, replace = TRUE, prob = c(0.1, 0.9))),
+    x1 = rnorm(200),
+    x2 = rnorm(200)
+  )
+  task = TaskClassif$new(id = "test", backend = df, target = "target")
+  task$set_col_roles("row_name", roles = "name")
+
+  set.seed(1234L)
+  train_out = op$train(list(task))[[1L]]
+  row_names = train_out$data(cols = "row_name")$row_name
+
+  expect_gt(train_out$nrow, task$nrow)
+  expect_identical(train_out$col_roles$name, "row_name")
+  expect_identical(row_names[seq_len(task$nrow)], df$row_name)
+  expect_true(all(row_names[-seq_len(task$nrow)] == "synthetic.smote"))
+})

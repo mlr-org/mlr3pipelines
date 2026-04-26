@@ -96,6 +96,15 @@ task_filter_ex = function(task, row_ids) {
   task
 }
 
+add_synthetic_name_col = function(task, new_data, id) {
+  name_col = task$col_roles$name
+  if (length(name_col)) {
+    new_data = copy(new_data)
+    set(new_data, j = name_col, value = sprintf("synthetic.%s", id))
+  }
+  new_data
+}
+
 # these must be at the root and can not be anonymous functions because all.equal fails otherwise.
 check_function_or_null = function(x) check_function(x, null.ok = TRUE)
 check_numeric_valid_threshold = function(x) check_numeric(x, any.missing = FALSE, min.len = 1, lower = 0, upper = 1)
