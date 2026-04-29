@@ -217,11 +217,11 @@ Can be used to filter <code><a href="mlr_pipeops.html">as.data.table(mlr_pipeops
 <li><p><code>hash</code> :: <code>character(1)</code> <br>
 Checksum calculated on the <code>PipeOp</code>, depending on the <code>PipeOp</code>'s <code>class</code> and the slots <code>$id</code> and <code>$param_set$values</code>. If a
 <code>PipeOp</code>'s functionality may change depending on more than these values, it should inherit the <code>$hash</code> active
-binding and calculate the hash as <code>digest(list(super$hash, &lt;OTHER THINGS&gt;), algo = "xxhash64")</code>.</p></li>
+binding and calculate the hash as <code>mlr3misc::calculate_hash(super$hash, &lt;OTHER THINGS&gt;)</code>.</p></li>
 <li><p><code>phash</code> :: <code>character(1)</code> <br>
 Checksum calculated on the <code>PipeOp</code>, depending on the <code>PipeOp</code>'s <code>class</code> and the slots <code>$id</code> but ignoring <code>$param_set$values</code>. If a
 <code>PipeOp</code>'s functionality may change depending on more than these values, it should inherit the <code>$hash</code> active
-binding and calculate the hash as <code>digest(list(super$hash, &lt;OTHER THINGS&gt;), algo = "xxhash64")</code>.</p></li>
+binding and calculate the hash as <code>mlr3misc::calculate_hash(super$hash, &lt;OTHER THINGS&gt;)</code>.</p></li>
 <li><p><code>.result</code> :: <code>list</code> <br>
 If the <code><a href="Graph.html">Graph</a></code>'s <code>$keep_results</code> flag is set to <code>TRUE</code>, then the intermediate Results of <code>$train()</code> and <code>$predict()</code>
 are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes

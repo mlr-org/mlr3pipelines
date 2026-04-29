@@ -2,6 +2,12 @@
 
 ## mlr3pipelines 0.11.0-9000
 
+- Switched from using
+  [`digest::digest()`](https://eddelbuettel.github.io/digest/man/digest.html)
+  to using
+  [`mlr3misc::calculate_hash()`](https://mlr3misc.mlr-org.com/reference/calculate_hash.html)
+  for calculating the `hash` and `phash` of `PipeOp`s, `Graph`s, and
+  `GraphLearner`s.
 - Fix: Corrected registration of `FilterEnsemble` in `mlr_filters` using
   `.prototype_args`.
 
