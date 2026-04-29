@@ -185,8 +185,8 @@ po$predict(list(task))
 #>     assert_list(inputs, len = 1L, types = "Prediction")
 #>     list(private$.invert(inputs[[1L]], predict_phase_state))
 #> }
-#> <bytecode: 0x55b6f9b16030>
-#> <environment: 0x55b6f22f9e60>
+#> <bytecode: 0x5587caaefcf8>
+#> <environment: 0x5587cce9b3d8>
 #> 
 #> $output
 #> 
@@ -257,7 +257,7 @@ ttscalerange$state$regr.rpart
 #>   0.008 
 #> 
 #> $task_hash
-#> [1] "a097dd7c237a13cd"
+#> [1] "88d153e8827d7aff"
 #> 
 #> $feature_names
 #>  [1] "age"     "b"       "chas"    "crim"    "dis"     "indus"   "lat"    
@@ -268,7 +268,7 @@ ttscalerange$state$regr.rpart
 #> NULL
 #> 
 #> $mlr3_version
-#> [1] ‘1.5.0’
+#> [1] ‘1.6.0’
 #> 
 #> $data_prototype
 #> Empty data.table (0 rows and 18 cols): cmedv.scaled,age,b,chas,crim,dis...

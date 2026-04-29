@@ -2,6 +2,9 @@
 
 ## mlr3pipelines 0.11.0-9000
 
+- Fix: Corrected registration of `FilterEnsemble` in `mlr_filters` using
+  `.prototype_args`.
+
 ## mlr3pipelines 0.11.0
 
 CRAN release: 2026-03-01

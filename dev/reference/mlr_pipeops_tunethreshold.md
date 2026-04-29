@@ -244,7 +244,7 @@ pop$state
 #>   0.003 
 #> 
 #> $task_hash
-#> [1] "57242622e0015f6a"
+#> [1] "abc694dd29a7a8ce"
 #> 
 #> $feature_names
 #> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
@@ -253,7 +253,7 @@ pop$state
 #> NULL
 #> 
 #> $mlr3_version
-#> [1] ‘1.5.0’
+#> [1] ‘1.6.0’
 #> 
 #> $data_prototype
 #> Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width

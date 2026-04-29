@@ -189,6 +189,6 @@ predicted_task = preproc(task, po, predict = TRUE)
 levels(predicted_task$data()$installment_rate)
 #> [1] ">= 35"          "25 <= ... < 35" "20 <= ... < 25"
 summary(predicted_task$data()$installment_rate)
-#>          >= 35 25 <= ... < 35 20 <= ... < 25           NA's 
+#>          >= 35 25 <= ... < 35 20 <= ... < 25            NAs 
 #>            136            231            157            476 
 ```

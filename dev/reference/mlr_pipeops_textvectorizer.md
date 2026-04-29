@@ -359,6 +359,11 @@ Other PipeOps:
 ``` r
 library("mlr3")
 library("data.table")
+#> 
+#> Attaching package: ‘data.table’
+#> The following object is masked from ‘package:base’:
+#> 
+#>     %notin%
 # create some text data
 dt = data.table(
   txt = replicate(150, paste0(sample(letters, 3), collapse = " "))

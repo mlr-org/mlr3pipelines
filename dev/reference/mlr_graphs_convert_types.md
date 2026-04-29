@@ -100,7 +100,7 @@ str(task_chr$data())
 #>  $ x: Factor w/ 3 levels "a","b","c": 1 2 3
 #>  $ y: chr  "a" "b" "c"
 #>  $ z: chr  "a" "b" "c"
-#>  - attr(*, ".internal.selfref")=<externalptr> 
+#>  - attr(*, ".internal.selfref")=<pointer: 0x5587a094ea80> 
 
 graph = ppl("convert_types", "character", "factor")
 str(graph$train(task_chr)[[1]]$data())
@@ -108,7 +108,7 @@ str(graph$train(task_chr)[[1]]$data())
 #>  $ x: Factor w/ 3 levels "a","b","c": 1 2 3
 #>  $ y: Factor w/ 3 levels "a","b","c": 1 2 3
 #>  $ z: Factor w/ 3 levels "a","b","c": 1 2 3
-#>  - attr(*, ".internal.selfref")=<externalptr> 
+#>  - attr(*, ".internal.selfref")=<pointer: 0x5587a094ea80> 
 
 graph_z = ppl("convert_types", "character", "factor",
   affect_columns = selector_name("z"))

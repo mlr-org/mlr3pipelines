@@ -286,7 +286,7 @@ po$state$model$mass
 #>   0.004 
 #> 
 #> $task_hash
-#> [1] "103bfb27778d3e5d"
+#> [1] "7682038aa5360fe2"
 #> 
 #> $feature_names
 #> [1] "age"      "glucose"  "insulin"  "pedigree" "pregnant" "pressure" "triceps" 
@@ -295,7 +295,7 @@ po$state$model$mass
 #> NULL
 #> 
 #> $mlr3_version
-#> [1] ‘1.5.0’
+#> [1] ‘1.6.0’
 #> 
 #> $data_prototype
 #> Empty data.table (0 rows and 8 cols): .impute_col,age,glucose,insulin,pedigree,pregnant...
