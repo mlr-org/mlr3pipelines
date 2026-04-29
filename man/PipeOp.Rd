@@ -130,11 +130,11 @@ Can be used to filter \code{\link[=mlr_pipeops]{as.data.table(mlr_pipeops)}}.
 \item \code{hash} :: \code{character(1)} \cr
 Checksum calculated on the \code{PipeOp}, depending on the \code{PipeOp}'s \code{class} and the slots \verb{$id} and \verb{$param_set$values}. If a
 \code{PipeOp}'s functionality may change depending on more than these values, it should inherit the \verb{$hash} active
-binding and calculate the hash as \verb{digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")}.
+binding and calculate the hash as \verb{mlr3misc::calculate_hash(super$hash, <OTHER THINGS>)}.
 \item \code{phash} :: \code{character(1)} \cr
 Checksum calculated on the \code{PipeOp}, depending on the \code{PipeOp}'s \code{class} and the slots \verb{$id} but ignoring \verb{$param_set$values}. If a
 \code{PipeOp}'s functionality may change depending on more than these values, it should inherit the \verb{$hash} active
-binding and calculate the hash as \verb{digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")}.
+binding and calculate the hash as \verb{mlr3misc::calculate_hash(super$hash, <OTHER THINGS>)}.
 \item \code{.result} :: \code{list} \cr
 If the \code{\link{Graph}}'s \verb{$keep_results} flag is set to \code{TRUE}, then the intermediate Results of \verb{$train()} and \verb{$predict()}
 are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
