@@ -114,7 +114,7 @@ test_that("PipeOpUpdateTarget - transforms internal validation task", {
   task = tsk("boston_housing_classic")
   task$internal_valid_task = 1:10
 
-  validation_task = task$internal_valid_task$clone(deep = TRUE)
+  validation_task = task$internal_valid_task
   trafo_fun = function(x) {factor(ifelse(x < 25, "<25", ">=25"))}
   op = PipeOpUpdateTarget$new(param_vals = list(
     trafo = trafo_fun, new_target_name = "threshold_25", new_task_type = "classif"

@@ -101,7 +101,7 @@ test_that("PipeOpTargetTrafoScaleRange - transforms internal validation task", {
   task = tsk("boston_housing")
   task$internal_valid_task = 1:10
 
-  validation_task = task$internal_valid_task$clone(deep = TRUE)
+  validation_task = task$internal_valid_task
   po = PipeOpTargetTrafoScaleRange$new()
 
   train_out = po$train(list(task))[["output"]]

@@ -83,7 +83,7 @@ test_that("PipeOpTargetMutate - transforms internal validation task", {
   task = tsk("boston_housing")
   task$internal_valid_task = 1:10
 
-  validation_task = task$internal_valid_task$clone(deep = TRUE)
+  validation_task = task$internal_valid_task
   op = po("targetmutate",
     trafo = function(x) setNames(log(x), paste0(names(x), ".log"))
   )
