@@ -96,3 +96,21 @@ test_that("PipeOpTargetTrafoScaleRange - does not drop missing levels, #631", {
   expect_equal(task$levels(), train_out$levels())
   expect_equal(task$levels(), predict_out$levels())
 })
+
+test_that("PipeOpTargetTrafoScaleRange - transforms internal validation task", {
+  task = tsk("boston_housing")
+  task$internal_valid_task = 1:10
+
+  validation_task = task$internal_valid_task
+  po = PipeOpTargetTrafoScaleRange$new()
+
+  train_out = po$train(list(task))[["output"]]
+  predict_out = po$predict(list(validation_task))[["output"]]
+
+  cols = unname(unlist(train_out$col_roles[c("feature", "target")]))
+  expect_equal(
+    train_out$internal_valid_task$data(cols = cols),
+    predict_out$data(cols = cols),
+    ignore.col.order = TRUE
+  )
+})

@@ -109,3 +109,24 @@ test_that("make an existing feature a target", {
   newtsk2 = pom$predict(list(tsk("wine")))[[1]]
   expect_equivalent(newtsk$hash, newtsk2$hash)
 })
+
+test_that("PipeOpUpdateTarget - transforms internal validation task", {
+  task = tsk("boston_housing_classic")
+  task$internal_valid_task = 1:10
+
+  validation_task = task$internal_valid_task
+  trafo_fun = function(x) {factor(ifelse(x < 25, "<25", ">=25"))}
+  op = PipeOpUpdateTarget$new(param_vals = list(
+    trafo = trafo_fun, new_target_name = "threshold_25", new_task_type = "classif"
+  ))
+
+  train_out = op$train(list(task))[["output"]]
+  predict_out = op$predict(list(validation_task))[["output"]]
+
+  cols = unname(unlist(train_out$col_roles[c("feature", "target")]))
+  expect_equal(
+    train_out$internal_valid_task$data(cols = cols),
+    predict_out$data(cols = cols),
+    ignore.col.order = TRUE
+  )
+})
