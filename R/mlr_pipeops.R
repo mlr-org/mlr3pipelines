@@ -69,7 +69,10 @@ mlr_pipeops = R6Class("DictionaryPipeOp", inherit = Dictionary,
     add = function(key, value, metainf = NULL) {
       assert_false(grepl("_\\d+$", key))
       ret = super$add(key, value)
-      if (!is.null(metainf)) {
+
+      metainf_expr = substitute(metainf)
+
+      if (!identical(metainf_expr, NULL)) {
         # we save the *expression*, not the value, because we could otherwise get version conflicts from objects.
         metainf_envir = parent.frame()
         metainf_topenv = topenv(metainf_envir)
