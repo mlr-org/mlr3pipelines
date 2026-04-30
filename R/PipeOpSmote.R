@@ -113,6 +113,7 @@ PipeOpSmote = R6Class("PipeOpSmote",
       # We index by position (target should be last column) instead of indexing by name, which would lead to problems if a feature were called "class"
       st[[ncol(st)]] = as_factor(st[[ncol(st)]], levels = task$class_names)
       setnames(st, ncol(st), task$target_names)
+      # Assign generated rows a synthetic "name" value based on the PipeOp id.
       st = add_synthetic_name_col(task, st, self$id)
 
       task$rbind(st)

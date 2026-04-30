@@ -132,6 +132,7 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
       # Convert originally integer columns back to integer as SMOTENC treats them as numeric
       int_cols = task$feature_names[task$feature_types$type == "integer"]
       snc[, (int_cols) := lapply(.SD, function(x) as.integer(round(x))), .SDcols = int_cols]
+      # Assign generated rows a synthetic "name" value based on the PipeOp id.
       snc = add_synthetic_name_col(task, snc, self$id)
 
       # Re-add empty target levels

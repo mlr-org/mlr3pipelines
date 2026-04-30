@@ -99,7 +99,6 @@ task_filter_ex = function(task, row_ids) {
 add_synthetic_name_col = function(task, new_data, id) {
   name_col = task$col_roles$name
   if (length(name_col)) {
-    new_data = copy(new_data)
     set(new_data, j = name_col, value = sprintf("synthetic.%s", id))
   }
   new_data
