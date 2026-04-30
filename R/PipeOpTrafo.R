@@ -624,10 +624,16 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
   private = list(
     .train = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
+      internal_valid_task = intask$internal_valid_task
+      intask$internal_valid_task = NULL
       pv = self$param_set$values
       if (identical(pv$trafo, identity) && (pv$new_target_name %in% unlist(intask$col_roles, use.names = FALSE))) {
         self$state = list()
-        return(list(private$.update_target(intask, drop_levels = TRUE)))  # early exit
+        intask = private$.update_target(intask, drop_levels = TRUE)
+        if (!is.null(internal_valid_task)) {
+          intask$internal_valid_task = private$.predict(list(internal_valid_task))[[1L]]
+        }
+        return(list(intask))  # early exit
       }
       if (!identical(pv$trafo, identity) || !is.null(pv$new_target_name)) {
         # Apply fun to target, rename, cbind and convert task if required
@@ -640,7 +646,11 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
       } else {
         self$state = list()
       }
-      list(private$.update_target(intask, drop_levels = TRUE))
+      intask = private$.update_target(intask, drop_levels = TRUE)
+      if (!is.null(internal_valid_task)) {
+        intask$internal_valid_task = private$.predict(list(internal_valid_task))[[1L]]
+      }
+      list(intask)
     },
 
     .predict = function(inputs) {
