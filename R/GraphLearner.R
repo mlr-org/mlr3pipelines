@@ -370,14 +370,10 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     marshaled = function() {
       learner_marshaled(self)
     },
-    hash = function() {
-      digest(list(class(self), self$id, self$graph$hash, private$.predict_type, private$.validate,
-        self$fallback$hash, self$parallel_predict), algo = "xxhash64")
-    },
-    phash = function() {
-      digest(list(class(self), self$id, self$graph$phash, private$.predict_type, private$.validate,
-        self$fallback$hash, self$parallel_predict), algo = "xxhash64")
-    },
+    hash = function() calculate_hash(class(self), self$id, self$graph$hash, private$.predict_type, private$.validate, 
+      self$fallback$hash, self$parallel_predict),
+    phash = function() calculate_hash(class(self), self$id, self$graph$phash, private$.predict_type, private$.validate,
+      self$fallback$hash, self$parallel_predict),
     predict_type = function(rhs) {
       if (!missing(rhs)) {
         assert_subset(rhs, unlist(mlr_reflections$learner_predict_types[[self$task_type]], use.names = FALSE))
