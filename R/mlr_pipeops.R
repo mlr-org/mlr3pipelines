@@ -69,9 +69,21 @@ mlr_pipeops = R6Class("DictionaryPipeOp", inherit = Dictionary,
     add = function(key, value, metainf = NULL) {
       assert_false(grepl("_\\d+$", key))
       ret = super$add(key, value)
-      if (!is.null(metainf)) {
+
+      metainf_expr = substitute(metainf)
+
+      if (!identical(metainf_expr, NULL)) {
         # we save the *expression*, not the value, because we could otherwise get version conflicts from objects.
-        assign(x = key, value = substitute(metainf), envir = self$metainf)
+        metainf_envir = parent.frame()
+        metainf_topenv = topenv(metainf_envir)
+        if (isNamespace(metainf_topenv)) {
+          metainf_envir = metainf_topenv
+        }
+        assign(
+          x = key,
+          value = list(expr = substitute(metainf), envir = metainf_envir),
+          envir = self$metainf
+        )
       }
       invisible(self)
     },
@@ -90,7 +102,7 @@ as.data.table.DictionaryPipeOp = function(x, ...) {
   result = setkeyv(map_dtr(x$keys(), function(key) {
     metainf = x$metainf[[key]]
     if (!is.null(metainf)) {
-      metainfval = eval(metainf, envir = topenv())
+      metainfval = eval(metainf$expr, envir = metainf$envir)
       meta_one = lapply(metainfval, function(x) if (identical(x, "N")) 1 else x)
       meta_two = lapply(metainfval, function(x) if (identical(x, "N")) 2 else x)
       l1 = tryCatch(do.call(x$get, c(list(key), meta_one)), error = function(e) ".__error__")
