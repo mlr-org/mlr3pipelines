@@ -175,10 +175,10 @@ Other PipeOps:
 library("mlr3")
 po = po("isomap", .mute = c("message", "output"))
 po$train(list(tsk("iris")))[[1]]$data()
-#> 2026-04-29 10:30:45.036925: Isomap START
-#> 2026-04-29 10:30:45.037563: constructing knn graph
-#> 2026-04-29 10:30:45.045784: calculating geodesic distances
-#> 2026-04-29 10:30:45.059178: Classical Scaling
+#> 2026-05-04 10:37:17.864828: Isomap START
+#> 2026-05-04 10:37:17.865386: constructing knn graph
+#> 2026-05-04 10:37:17.872897: calculating geodesic distances
+#> 2026-05-04 10:37:17.885301: Classical Scaling
 #>        Species     iso 1       iso 2
 #>         <fctr>     <num>       <num>
 #>   1:    setosa  3.006919  0.07103516
@@ -193,11 +193,11 @@ po$train(list(tsk("iris")))[[1]]$data()
 #> 149: virginica -2.147343 -0.45132197
 #> 150: virginica -1.496149 -0.38356003
 po$predict(list(tsk("iris")))[[1]]$data()
-#> 2026-04-29 10:30:45.084442: L-Isomap embed START
-#> 2026-04-29 10:30:45.084975: constructing knn graph
-#> 2026-04-29 10:30:45.144807: calculating geodesic distances
-#> 2026-04-29 10:30:45.174887: embedding
-#> 2026-04-29 10:30:45.175942: DONE
+#> 2026-05-04 10:37:17.909835: L-Isomap embed START
+#> 2026-05-04 10:37:17.910281: constructing knn graph
+#> 2026-05-04 10:37:17.919608: calculating geodesic distances
+#> 2026-05-04 10:37:17.948869: embedding
+#> 2026-05-04 10:37:17.949562: DONE
 #>        Species     iso 1       iso 2
 #>         <fctr>     <num>       <num>
 #>   1:    setosa  3.116505  0.14031343

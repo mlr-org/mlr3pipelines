@@ -29,6 +29,7 @@ In principle, *mlr3pipelines* is about defining singular data and model
 manipulation steps as “PipeOps”:
 
 ``` r
+
 pca        = po("pca")
 filter     = po("filter", filter = mlr3filters::flt("variance"), filter.frac = 0.5)
 learner_po = po("learner", learner = lrn("classif.rpart"))
@@ -39,6 +40,7 @@ pipelines. These can be wrapped in a `GraphLearner` that behave like any
 other `Learner` in `mlr3`.
 
 ``` r
+
 graph = pca %>>% filter %>>% learner_po
 glrn = GraphLearner$new(graph)
 ```
@@ -46,6 +48,7 @@ glrn = GraphLearner$new(graph)
 This learner can be used for resampling, benchmarking, and even tuning.
 
 ``` r
+
 resample(tsk("iris"), glrn, rsmp("cv"))
 #> <ResampleResult> with 10 resampling iterations
 #>  task_id                 learner_id resampling_id iteration warnings errors

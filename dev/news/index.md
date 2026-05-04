@@ -2,6 +2,9 @@
 
 ## mlr3pipelines 0.11.0-9000
 
+- feat: `PipeOpSmote`, `PipeOpSmoteNC`, `PipeOpADAS`, and
+  `PipeOpBLSmote` can now handle columns with role `"name"` by assigning
+  the name `synthetic.<pipeop id>` to generated rows.
 - Switched from using
   [`digest::digest()`](https://eddelbuettel.github.io/digest/man/digest.html)
   to using
