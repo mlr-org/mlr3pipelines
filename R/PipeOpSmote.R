@@ -87,7 +87,7 @@ PipeOpSmote = R6Class("PipeOpSmote",
 
     .train_task = function(task) {
       cols = task$feature_names
-      unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
+      unsupported_cols = setdiff(unlist(task$col_roles), c(cols, task$target_names, task$col_roles$name))
       if (length(unsupported_cols)) {
         stopf("SMOTE cannot generate synthetic data for the following columns since they are neither features nor targets: %s.",
               str_collapse(unsupported_cols, quote = '"'))
@@ -113,6 +113,8 @@ PipeOpSmote = R6Class("PipeOpSmote",
       # We index by position (target should be last column) instead of indexing by name, which would lead to problems if a feature were called "class"
       st[[ncol(st)]] = as_factor(st[[ncol(st)]], levels = task$class_names)
       setnames(st, ncol(st), task$target_names)
+      # Assign generated rows a synthetic "name" value based on the PipeOp id.
+      st = add_synthetic_name_col(task, st, self$id)
 
       task$rbind(st)
     }
