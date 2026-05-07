@@ -34,14 +34,14 @@ is equivalent to \code{g1 \%>>!\% g2 \%>>!\% g3 \%>>!\% g4 \%>>!\% ...} (differi
 first operator being \verb{\%>>!\%} as well).
 }
 \seealso{
-Other Graph operators: 
-\code{\link{\%>>\%}()},
-\code{\link{as_graph}()},
-\code{\link{as_pipeop}()},
-\code{\link{assert_graph}()},
-\code{\link{assert_pipeop}()},
-\code{\link{greplicate}()},
-\code{\link{gunion}()},
+Other Graph operators:
+\code{\link{\%>>\%}},
+\code{\link[=as_graph]{as_graph()}},
+\code{\link[=as_pipeop]{as_pipeop()}},
+\code{\link[=assert_graph]{assert_graph()}},
+\code{\link[=assert_pipeop]{assert_pipeop()}},
+\code{\link[=greplicate]{greplicate()}},
+\code{\link[=gunion]{gunion()}},
 \code{\link{mlr_graphs_greplicate}}
 }
 \concept{Graph operators}

@@ -167,7 +167,7 @@ graph$train(task)
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other Meta PipeOps: 
+Other Meta PipeOps:
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},
 \code{\link{mlr_pipeops_learner_quantiles}}

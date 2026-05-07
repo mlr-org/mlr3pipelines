@@ -73,7 +73,7 @@ channels in \verb{$output}. The \code{private$.train()} and \code{private$.predi
 instead, a \verb{$train()} and \verb{$predict()} should be used. The most convenient usage is to add the \code{PipeOp}
 to a \code{\link{Graph}} (possibly as singleton in that \code{\link{Graph}}), and using the \code{\link{Graph}}'s \verb{$train()} / \verb{$predict()} methods.
 
-\code{private$.train()} and \code{private$.predict()} should treat their inputs as read-only. If they are \code{\link[R6:R6Class]{R6}} objects,
+\code{private$.train()} and \code{private$.predict()} should treat their inputs as read-only. If they are \code{\link[R6:R6]{R6}} objects,
 they should be cloned before being manipulated in-place. Objects, or parts of objects, that are not changed, do
 not need to be cloned, and it is legal to return the same identical-by-reference objects to multiple outputs.
 }
@@ -268,16 +268,17 @@ posum$predict(list(NULL, NULL))
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other mlr3pipelines backend related: 
+Other mlr3pipelines backend related:
 \code{\link{Graph}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_graphs}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_materialize}},
 \code{\link{mlr_pipeops_updatetarget}}
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
@@ -324,6 +325,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},
 \code{\link{mlr_pipeops_learner_quantiles}},
+\code{\link{mlr_pipeops_materialize}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
