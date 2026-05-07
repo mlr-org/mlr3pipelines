@@ -19,6 +19,8 @@
 #' active view. Columns without any column role are dropped, and for tasks containing
 #' the same observation more than once in `$row_ids`, the resulting backend contains
 #' that observation only once.
+#' 
+#' TODO: Check whether upsampling PipeOps duplicate rows or set new rows
 #'
 #' @section Construction:
 #' ```
