@@ -24,7 +24,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpMaterialize$new(id)
+#' PipeOpMaterialize$new(id = "materialize")
 #' ```
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object. See `$id` slot of [`PipeOp`].
@@ -71,7 +71,7 @@
 PipeOpMaterialize = R6Class("PipeOpMaterialize",
   inherit = PipeOp,
   public = list(
-    initialize = function(id) {
+    initialize = function(id = "materialize") {
       super$initialize(id = id, param_set = ps(), param_vals = list(),
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task"),
