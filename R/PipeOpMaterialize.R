@@ -21,7 +21,8 @@
 #' that observation only once.
 #' 
 #' TODO: Check whether upsampling PipeOps duplicate rows or set new rows
-#'
+#' TODO: Do we need any special handling for Multiplicities?
+#' 
 #' @section Construction:
 #' ```
 #' PipeOpMaterialize$new(id = "materialize")
