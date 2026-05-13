@@ -70,14 +70,14 @@ mlr_pipeops = R6Class("DictionaryPipeOp", inherit = Dictionary,
       assert_false(grepl("_\\d+$", key))
       ret = super$add(key, value)
 
+      # we save the *expression*, not the value, because we could otherwise get version conflicts from objects.
       metainf_expr = substitute(metainf)
-
       if (!identical(metainf_expr, NULL)) {
-        # we save the *expression*, not the value, because we could otherwise get version conflicts from objects.
-        metainf_envir = parent.frame()
-        metainf_topenv = topenv(metainf_envir)
-        if (isNamespace(metainf_topenv)) {
-          metainf_envir = metainf_topenv
+        # We save the original topenv if it is a namespace environment for the expression to be evaluated in later.
+        # If it is not a namespace, we want to default to the mlr3pipelines environment.
+        metainf_envir = topenv(parent.frame())
+        if (!isNamespace(metainf_envir)) {
+          metainf_envir = NULL
         }
         assign(
           x = key,
@@ -102,7 +102,7 @@ as.data.table.DictionaryPipeOp = function(x, ...) {
   result = setkeyv(map_dtr(x$keys(), function(key) {
     metainf = x$metainf[[key]]
     if (!is.null(metainf)) {
-      metainfval = eval(metainf$expr, envir = metainf$envir)
+      metainfval = eval(metainf$expr, envir = metainf$envir %??% topenv())  # default to mlr3pipelines environment
       meta_one = lapply(metainfval, function(x) if (identical(x, "N")) 1 else x)
       meta_two = lapply(metainfval, function(x) if (identical(x, "N")) 2 else x)
       l1 = tryCatch(do.call(x$get, c(list(key), meta_one)), error = function(e) ".__error__")
