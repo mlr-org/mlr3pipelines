@@ -22,8 +22,6 @@ Note that \code{\link[mlr3:Task]{Task}} \verb{$materialize_view()} only material
 active view. Columns without any column role are dropped, and for tasks containing
 the same observation more than once in \verb{$row_ids}, the resulting backend contains
 that observation only once.
-
-TODO: Check whether upsampling PipeOps duplicate rows or set new rows
 }
 \section{Construction}{
 
@@ -76,11 +74,12 @@ Only methods inherited from \code{\link{PipeOp}}.
 library("mlr3")
 
 task = tsk("iris")
-task$select("Petal.Length")
+task$select("Petal.Length")$filter(1:10)
 
 pom = PipeOpMaterialize$new("materialize")
 materialized = pom$train(list(task))[[1]]
-materialized$data()
+materialized$backend$colnames
+materialized$backend$nrow
 
 }
 \seealso{
