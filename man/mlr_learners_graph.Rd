@@ -105,8 +105,8 @@ Get IDs of all \code{\link{PipeOp}}s. This is in order that \code{\link{PipeOp}}
 \item \code{plot(html = FALSE, horizontal = FALSE)} \cr
 (\code{logical(1)}, \code{logical(1)}) -> \code{NULL} \cr
 Plot the \code{\link{Graph}}, using either the \CRANpkg{igraph} package (for \code{html = FALSE}, default) or
-the \code{visNetwork} package for \code{html = TRUE} producing a \code{\link[htmlwidgets:htmlwidgets-package]{htmlWidget}}.
-The \code{\link[htmlwidgets:htmlwidgets-package]{htmlWidget}} can be rescaled using \code{\link[visNetwork:visOptions]{visOptions}}.
+the \code{visNetwork} package for \code{html = TRUE} producing a \code{\link[htmlwidgets:htmlwidgets]{htmlWidget}}.
+The \code{\link[htmlwidgets:htmlwidgets]{htmlWidget}} can be rescaled using \code{\link[visNetwork:visOptions]{visOptions}}.
 For \code{html = FALSE}, the orientation of the plotted graph can be controlled through \code{horizontal}.
 \item \code{marshal}\cr
 (any) -> \code{self}\cr
@@ -136,7 +136,7 @@ If \code{resolve_branching} is \code{FALSE}, \code{\link{PipeOpUnbranch}} is tre
 Predicts outcomes for new data in \code{newdata} using the model fitted during \verb{$train()}.\cr
 For the moment, this is merely a thin wrapper around \code{\link[mlr3:Learner]{Learner$predict_newdata()}} to ensure compatibility, meaning that \emph{no speedup} is currently achieved.
 In the future, this method may be optimized to be faster than \verb{$predict_newdata()}.\cr
-Unlike \verb{$predict_newdata()}, this method does not return a \link[mlr3:Prediction]{mlr3::Prediction} object.
+Unlike \verb{$predict_newdata()}, this method does not return a \link[mlr3:Prediction]{Prediction} object.
 Instead, it returns a list with elements depending on \verb{$task_type} and \verb{$predict_type}:
 \itemize{
 \item for \code{task_type = "classif"}: \code{response} and \code{prob}, or \code{quantiles} (if \code{predict_type = "quantiles"})
@@ -208,7 +208,7 @@ lr$graph_model$pipeops$classif.rpart$learner_model$importance()
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other Learners: 
+Other Learners:
 \code{\link{mlr_learners_avg}}
 }
 \concept{Learners}

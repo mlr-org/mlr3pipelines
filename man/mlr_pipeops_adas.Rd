@@ -13,7 +13,7 @@ Generates a more balanced data set by creating synthetic instances of the minori
 The algorithm generates for each minority instance new data points based on its \code{K} nearest neighbors and the difficulty of learning for that data point.
 It can only be applied to tasks with numeric features that have no missing values.
 
-See \code{\link[smotefamily:adas]{smotefamily::ADAS}} for details.
+See \code{\link[smotefamily:ADAS]{smotefamily::ADAS}} for details.
 }
 \section{Construction}{
 
@@ -48,7 +48,7 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \itemize{
 \item \code{K} :: \code{numeric(1)} \cr
 The number of nearest neighbors used for sampling new values. Default is \code{5}.
-See \code{\link[smotefamily:adas]{ADAS()}}.
+See \code{\link[smotefamily:ADAS]{ADAS()}}.
 }
 }
 
@@ -98,7 +98,7 @@ In \emph{2008 IEEE International Joint Conference on Neural Networks (IEEE World
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
@@ -145,6 +145,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},
 \code{\link{mlr_pipeops_learner_quantiles}},
+\code{\link{mlr_pipeops_materialize}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},

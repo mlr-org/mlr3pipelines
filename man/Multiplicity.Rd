@@ -54,17 +54,17 @@ with a \code{\link{Multiplicity}}, then the \code{predict()} argument must be a 
 number of elements.
 }
 \seealso{
-Other Special Graph Messages: 
+Other Special Graph Messages:
 \code{\link{NO_OP}}
 
-Other Experimental Features: 
+Other Experimental Features:
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_ovrsplit}},
 \code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_replicate}}
 
-Other Multiplicity PipeOps: 
+Other Multiplicity PipeOps:
 \code{\link{PipeOpEnsemble}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_featureunion}},
