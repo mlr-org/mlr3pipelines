@@ -10,11 +10,13 @@
   `GraphLearner`s.
 - Fix: Corrected registration of `FilterEnsemble` in `mlr_filters` using
   `.prototype_args`.
-- - Fix: `PipeOpTargetMutate` and `PipeOpTargetTrafoScaleRange` now
-    correctly transform internal validation tasks during training.
+- Fix: `PipeOpTargetMutate` and `PipeOpTargetTrafoScaleRange` now
+  correctly transform internal validation tasks during training.
 - feat: `PipeOpSmote`, `PipeOpSmoteNC`, `PipeOpADAS`, and
   `PipeOpBLSmote` can now handle columns with role `"name"` by assigning
   the name `synthetic.<pipeop id>` to generated rows.
+- New `PipeOpMaterialize` that materializes the active `Task` view,
+  reducing size and simplifying structure of the `Task`’s `DataBackend`.
 
 ## mlr3pipelines 0.11.0
 

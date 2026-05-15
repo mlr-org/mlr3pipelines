@@ -1,7 +1,26 @@
-# Unbranch Different Paths
+# Materialize Task View
 
-Used to bring together different paths created by
-[`PipeOpBranch`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_branch.md).
+Materializes the active view of a
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html) by replacing its
+[`DataBackend`](https://mlr3.mlr-org.com/reference/DataBackend.html)
+with a new backend containing only the rows and columns currently used
+by the task.
+
+This can be useful after operations that create virtual task views, such
+as [`Task`](https://mlr3.mlr-org.com/reference/Task.html) `$filter()`,
+`$select()`, or `$cbind()`. In particular, many
+[`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md)
+operations use [`Task`](https://mlr3.mlr-org.com/reference/Task.html)
+`$cbind()` internally, which can create nested virtual backends.
+Materializing the view can reduce backend nesting and may free memory or
+speed up later data access.
+
+Note that [`Task`](https://mlr3.mlr-org.com/reference/Task.html)
+`$materialize_view()` only materializes the currently active view.
+Columns without any column role are dropped, and observations occuring
+more than once (duplicates in `$row_ids`), the resulting backend
+contains it only once, but the new task view will still contain it
+multiple times (duplicates in `$row_ids` are preserved).
 
 ## Format
 
@@ -11,40 +30,25 @@ inheriting from
 
 ## Construction
 
-    PipeOpUnbranch$new(options, id = "unbranch", param_vals = list())
-
-- `options` :: `numeric(1)` \| `character`  
-  If `options` is 0, a vararg input channel is created that can take any
-  number of inputs. If `options` is a nonzero integer number, it
-  determines the number of input channels / options that are created,
-  named `input1`...`input<n>`. The If `options` is a `character`, it
-  determines the names of channels directly. The difference between
-  these three is purely cosmetic if the user chooses to produce channel
-  names matching with the corresponding
-  [`PipeOpBranch`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_branch.md).
-  However, it is not necessary to have matching names and the *vararg*
-  option is always viable.
+    PipeOpMaterialize$new(id = "materialize")
 
 - `id` :: `character(1)`  
-  Identifier of resulting object, default `"unbranch"`.
+  Identifier of resulting object. See `$id` slot of
+  [`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md).
 
-- `param_vals` :: named `list`  
-  List of hyperparameter settings, overwriting the hyperparameter
-  settings that would otherwise be set during construction. Default
-  [`list()`](https://rdrr.io/r/base/list.html).
+## Input and Output Channels
 
-## Input and Output
-
-`PipeOpUnbranch` has multiple input channels depending on the `options`
-construction argument, named `"input1"`, `"input2"`, ... if `options` is
-a nonzero integer and named after each `options` value if `options` is a
-`character`; if `options` is 0, there is only one *vararg* input channel
-named `"..."`. All input channels take any argument (`"*"`) both during
+`PipeOpMaterialize` has one input channel named `"input"`, taking a
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html) both during
 training and prediction.
 
-`PipeOpUnbranch` has one output channel named `"output"`, producing the
-only [`NO_OP`](https://mlr3pipelines.mlr-org.com/dev/reference/NO_OP.md)
-object received as input (`"*"`), both during training and prediction.
+`PipeOpMaterialize` has one output channel named `"output"`, producing a
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html) both during
+training and prediction.
+
+The output is the input
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html) with the active
+view materialized.
 
 ## State
 
@@ -53,13 +57,16 @@ The `$state` is left empty
 
 ## Parameters
 
-`PipeOpUnbranch` has no parameters.
+`PipeOpMaterialize` has no parameters.
 
 ## Internals
 
-See
-[`PipeOpBranch`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_branch.md)
-Internals on how alternative path branching works.
+`PipeOpMaterialize` calls
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html)
+`$materialize_view()` on a clone of the input task, both during training
+and prediction. During training, the internal validation task is also
+materialized using `$materialize_view(internal_valid_task = TRUE)`, but
+not during prediction.
 
 ## Fields
 
@@ -74,6 +81,16 @@ Only methods inherited from
 ## See also
 
 https://mlr-org.com/pipeops.html
+
+Other mlr3pipelines backend related:
+[`Graph`](https://mlr3pipelines.mlr-org.com/dev/reference/Graph.md),
+[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md),
+[`PipeOpTargetTrafo`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTargetTrafo.md),
+[`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md),
+[`PipeOpTaskPreprocSimple`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreprocSimple.md),
+[`mlr_graphs`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs.md),
+[`mlr_pipeops`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops.md),
+[`mlr_pipeops_updatetarget`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_updatetarget.md)
 
 Other PipeOps:
 [`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md),
@@ -123,7 +140,6 @@ Other PipeOps:
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_pi_cvplus.md),
 [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_quantiles.md),
-[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_missind.md),
 [`mlr_pipeops_modelmatrix`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_modelmatrix.md),
 [`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_multiplicityexply.md),
@@ -160,24 +176,28 @@ Other PipeOps:
 [`mlr_pipeops_threshold`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_threshold.md),
 [`mlr_pipeops_tomek`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_tomek.md),
 [`mlr_pipeops_tunethreshold`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_tunethreshold.md),
+[`mlr_pipeops_unbranch`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_unbranch.md),
 [`mlr_pipeops_updatetarget`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_updatetarget.md),
 [`mlr_pipeops_vtreat`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_vtreat.md),
 [`mlr_pipeops_yeojohnson`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_yeojohnson.md)
 
-Other Path Branching:
-[`NO_OP`](https://mlr3pipelines.mlr-org.com/dev/reference/NO_OP.md),
-[`filter_noop()`](https://mlr3pipelines.mlr-org.com/dev/reference/filter_noop.md),
-[`is_noop()`](https://mlr3pipelines.mlr-org.com/dev/reference/is_noop.md),
-[`mlr_pipeops_branch`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_branch.md)
-
 ## Examples
 
 ``` r
-# See PipeOpBranch for a complete branching example
-pou = po("unbranch")
+library("mlr3")
 
-pou$train(list(NO_OP, NO_OP, "hello", NO_OP, NO_OP))
-#> $output
-#> [1] "hello"
-#> 
+task = tsk("iris")
+task$select("Petal.Length")$filter(1:10)
+task$backend$colnames
+#> [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width"  "Species"     
+#> [6] "..row_id"    
+task$backend$nrow
+#> [1] 150
+
+pom = PipeOpMaterialize$new("materialize")
+materialized = pom$train(list(task))[[1]]
+materialized$backend$colnames
+#> [1] "..row_id"     "Petal.Length" "Species"     
+materialized$backend$nrow
+#> [1] 10
 ```

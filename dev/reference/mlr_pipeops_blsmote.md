@@ -95,7 +95,7 @@ Only methods inherited from
 Han H, Wang W, Mao B (2005). “Borderline-SMOTE: A New Over-Sampling
 Method in Imbalanced Data Sets Learning.” In Huang D, Zhang X, Huang G
 (eds.), *Advances in Intelligent Computing*, 878–887. ISBN
-978-3-540-31902-3,
+978-3-540-31902-3.
 [doi:10.1007/11538059_91](https://doi.org/10.1007/11538059_91) .
 
 ## See also
@@ -149,6 +149,7 @@ Other PipeOps:
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_pi_cvplus.md),
 [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_quantiles.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_missind.md),
 [`mlr_pipeops_modelmatrix`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_modelmatrix.md),
 [`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_multiplicityexply.md),

@@ -285,7 +285,7 @@ as:
   achieved. In the future, this method may be optimized to be faster
   than `$predict_newdata()`.  
   Unlike `$predict_newdata()`, this method does not return a
-  [mlr3::Prediction](https://mlr3.mlr-org.com/reference/Prediction.html)
+  [Prediction](https://mlr3.mlr-org.com/reference/Prediction.html)
   object. Instead, it returns a list with elements depending on
   `$task_type` and `$predict_type`:
 

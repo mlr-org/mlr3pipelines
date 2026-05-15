@@ -196,7 +196,7 @@ If <code>resolve_branching</code> is <code>FALSE</code>, <code><a href="mlr_pipe
 Predicts outcomes for new data in <code>newdata</code> using the model fitted during <code>$train()</code>.<br>
 For the moment, this is merely a thin wrapper around <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner$predict_newdata()</a></code> to ensure compatibility, meaning that <em>no speedup</em> is currently achieved.
 In the future, this method may be optimized to be faster than <code>$predict_newdata()</code>.<br>
-Unlike <code>$predict_newdata()</code>, this method does not return a <a href="https://mlr3.mlr-org.com/reference/Prediction.html" class="external-link">mlr3::Prediction</a> object.
+Unlike <code>$predict_newdata()</code>, this method does not return a <a href="https://mlr3.mlr-org.com/reference/Prediction.html" class="external-link">Prediction</a> object.
 Instead, it returns a list with elements depending on <code>$task_type</code> and <code>$predict_type</code>:</p><ul><li><p>for <code>task_type = "classif"</code>: <code>response</code> and <code>prob</code>, or <code>quantiles</code> (if <code>predict_type = "quantiles"</code>)</p></li>
 <li><p>for <code>task_type = "regr"</code>: <code>response</code> and <code>se</code></p></li>
 </ul></li>

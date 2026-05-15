@@ -114,7 +114,9 @@ as well as:
 ## Internals
 
 Uses the [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html) function as
-well as `basis()`, [`coef()`](https://rdrr.io/r/stats/coef.html) and
+well as
+[`basis()`](https://rdrr.io/pkg/NMF/man/basis-coef-methods.html),
+[`coef()`](https://rdrr.io/r/stats/coef.html) and
 [`ginv()`](https://rdrr.io/pkg/MASS/man/ginv.html).
 
 ## Fields
@@ -179,6 +181,7 @@ Other PipeOps:
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_pi_cvplus.md),
 [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_quantiles.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_missind.md),
 [`mlr_pipeops_modelmatrix`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_modelmatrix.md),
 [`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_multiplicityexply.md),
@@ -273,7 +276,7 @@ pop$state
 #>   Iterations: 470 
 #>   Timing:
 #>      user  system elapsed 
-#>     0.070   0.009   0.079 
+#>     0.069   0.004   0.074 
 #> 
 #> $dt_columns
 #> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 

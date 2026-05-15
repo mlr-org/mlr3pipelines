@@ -296,6 +296,9 @@ the *[dplyr](https://github.com/tidyverse/dplyr)* package.
 - [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_quantiles.md)
   [`PipeOpLearnerQuantiles`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_quantiles.md)
   : Wrap a Learner into a PipeOp to predict multiple Quantiles
+- [`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_materialize.md)
+  [`PipeOpMaterialize`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_materialize.md)
+  : Materialize Task View
 - [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_missind.md)
   [`PipeOpMissInd`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_missind.md)
   : Add Missing Indicator Columns

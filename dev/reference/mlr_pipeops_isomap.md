@@ -128,6 +128,7 @@ Other PipeOps:
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_pi_cvplus.md),
 [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_quantiles.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_missind.md),
 [`mlr_pipeops_modelmatrix`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_modelmatrix.md),
 [`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_multiplicityexply.md),
@@ -175,10 +176,10 @@ Other PipeOps:
 library("mlr3")
 po = po("isomap", .mute = c("message", "output"))
 po$train(list(tsk("iris")))[[1]]$data()
-#> 2026-05-04 10:41:18.19515: Isomap START
-#> 2026-05-04 10:41:18.195792: constructing knn graph
-#> 2026-05-04 10:41:18.203785: calculating geodesic distances
-#> 2026-05-04 10:41:18.216456: Classical Scaling
+#> 2026-05-15 17:23:27.503656: Isomap START
+#> 2026-05-15 17:23:27.504325: constructing knn graph
+#> 2026-05-15 17:23:27.512711: calculating geodesic distances
+#> 2026-05-15 17:23:27.526062: Classical Scaling
 #>        Species     iso 1       iso 2
 #>         <fctr>     <num>       <num>
 #>   1:    setosa  3.006919  0.07103516
@@ -193,11 +194,11 @@ po$train(list(tsk("iris")))[[1]]$data()
 #> 149: virginica -2.147343 -0.45132197
 #> 150: virginica -1.496149 -0.38356003
 po$predict(list(tsk("iris")))[[1]]$data()
-#> 2026-05-04 10:41:18.24268: L-Isomap embed START
-#> 2026-05-04 10:41:18.243228: constructing knn graph
-#> 2026-05-04 10:41:18.253072: calculating geodesic distances
-#> 2026-05-04 10:41:18.282348: embedding
-#> 2026-05-04 10:41:18.283189: DONE
+#> 2026-05-15 17:23:27.5518: L-Isomap embed START
+#> 2026-05-15 17:23:27.552301: constructing knn graph
+#> 2026-05-15 17:23:27.580224: calculating geodesic distances
+#> 2026-05-15 17:23:27.609895: embedding
+#> 2026-05-15 17:23:27.610699: DONE
 #>        Species     iso 1       iso 2
 #>         <fctr>     <num>       <num>
 #>   1:    setosa  3.116505  0.14031343
