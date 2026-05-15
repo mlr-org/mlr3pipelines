@@ -16,9 +16,9 @@
 #' nesting and may free memory or speed up later data access.
 #'
 #' Note that [`Task`][mlr3::Task] `$materialize_view()` only materializes the currently
-#' active view. Columns without any column role are dropped, and for tasks containing
-#' the same observation more than once in `$row_ids`, the resulting backend contains
-#' that observation only once.
+#' active view. Columns without any column role are dropped, and observations occuring more 
+#' than once (duplicates in `$row_ids`), the resulting backend contains it only once, 
+#' but the new task view will still contain it multiple times (duplicates in `$row_ids` are preserved).
 #' 
 #' @section Construction:
 #' ```
@@ -43,7 +43,7 @@
 #' @section Internals:
 #' `PipeOpMaterialize` calls [`Task`][mlr3::Task] `$materialize_view()` on a clone of the input task,
 #' both during training and prediction. During training, the internal validation task is also materialized 
-#' using `$materialize_view(internal_valid_task = TRUE)`.
+#' using `$materialize_view(internal_valid_task = TRUE)`, but not during prediction.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -56,7 +56,9 @@
 #'
 #' task = tsk("iris")
 #' task$select("Petal.Length")$filter(1:10)
-#'
+#' task$backend$colnames
+#' task$backend$nrow
+#' 
 #' pom = PipeOpMaterialize$new("materialize")
 #' materialized = pom$train(list(task))[[1]]
 #' materialized$backend$colnames
