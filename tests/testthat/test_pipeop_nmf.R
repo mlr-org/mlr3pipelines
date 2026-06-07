@@ -17,6 +17,20 @@ test_that("PipeOpNMF - feature selector", {
   expect_setequal(c("Sepal.Length", "test", paste0("NMF", 1:2)), train_out$feature_names)
 })
 
+test_that("PipeOpNMF - feature selector rejects non-finite values, fix for #983", {
+  skip_if_not_installed("NMF")
+
+  for (value in list(NA_real_, Inf)) {
+    task = tsk("iris")
+    new_row = task$data(rows = 1L)[, Petal.Length := value]
+    task = task$rbind(new_row)
+
+    expect_error(
+      po("nmf")$train(list(task)),
+      "NMF does not support features with missing or infinite values.*Petal.Length"
+    )
+  }
+})
 
 test_that("PipeOpNMF - parameters", {
   skip_if_not_installed("NMF")

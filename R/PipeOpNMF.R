@@ -82,7 +82,7 @@
 #'
 #' @section Internals:
 #' Uses the [`nmf()`][NMF::nmf] function as well as [`basis()`][NMF::basis], [`coef()`][NMF::coef] and
-#' [`ginv()`][MASS::ginv].
+#' [`ginv()`][MASS::ginv]. Does not support features with missing or infinite values.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -206,8 +206,16 @@ PipeOpNMF = R6Class("PipeOpNMF",
     .select_cols = function(task) {
       # only use non-negative numerical features
       features = task$feature_types[get("type") %in% self$feature_types, get("id")]
-      non_negative = map(task$data(cols = features), function(x) all(x >= 0))  # could also be more precise
-      names(non_negative[unlist(non_negative)])
+      data = task$data(cols = features)
+      finite = map_lgl(data, function(x) all(is.finite(x)))
+      if (!all(finite)) {
+        stopf(
+          "NMF does not support features with missing or infinite values. Affected features: %s.",
+          str_collapse(names(finite)[!finite], quote = "'")
+        )
+      }
+      non_negative = map_lgl(data, function(x) all(is.finite(x)) && all(x >= 0))
+      names(non_negative)[non_negative]
     }
   )
 )
