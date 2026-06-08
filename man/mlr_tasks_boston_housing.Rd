@@ -6,7 +6,7 @@
 \format{
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link[mlr3:TaskRegr]{TaskRegr}}.
 
-The \code{\link[mlbench:BostonHousing2]{BostonHousing2}} dataset
+The \code{\link[mlbench:BostonHousing]{BostonHousing2}} dataset
 containing the corrected data from III AMF (1979).
 \dQuote{The Hedonic Price Approach to Measuring Demand for Neighborhood Characteristics.}
 In \emph{The Economics of Neighborhood}, 191--217.

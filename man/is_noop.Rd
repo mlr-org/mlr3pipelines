@@ -17,9 +17,9 @@ Object to test.}
 Test whether a given object is a \code{\link{NO_OP}}.
 }
 \seealso{
-Other Path Branching:
+Other Path Branching: 
 \code{\link{NO_OP}},
-\code{\link[=filter_noop]{filter_noop()}},
+\code{\link{filter_noop}()},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_unbranch}}
 }

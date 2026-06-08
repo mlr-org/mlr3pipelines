@@ -13,7 +13,7 @@ Generates a more balanced data set by creating synthetic instances of the minori
 The algorithm generates for each minority instance new data points based on its \code{K} nearest neighbors and the difficulty of learning for that data point.
 It can only be applied to tasks with numeric features that have no missing values.
 
-See \code{\link[smotefamily:ADAS]{smotefamily::ADAS}} for details.
+See \code{\link[smotefamily:adas]{smotefamily::ADAS}} for details.
 }
 \section{Construction}{
 
@@ -48,7 +48,7 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \itemize{
 \item \code{K} :: \code{numeric(1)} \cr
 The number of nearest neighbors used for sampling new values. Default is \code{5}.
-See \code{\link[smotefamily:ADAS]{ADAS()}}.
+See \code{\link[smotefamily:adas]{ADAS()}}.
 }
 }
 
@@ -69,7 +69,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{if (requireNamespace("smotefamily")) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("smotefamily")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 
 # Create example task
@@ -98,7 +98,7 @@ In \emph{2008 IEEE International Joint Conference on Neural Networks (IEEE World
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps:
+Other PipeOps: 
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},

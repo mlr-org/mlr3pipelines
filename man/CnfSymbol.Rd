@@ -45,11 +45,11 @@ X \%among\% c("a", "b", "c")
 
 }
 \seealso{
-Other CNF representation objects:
-\code{\link[=CnfAtom]{CnfAtom()}},
-\code{\link[=CnfClause]{CnfClause()}},
-\code{\link[=CnfFormula]{CnfFormula()}},
-\code{\link[=CnfUniverse]{CnfUniverse()}}
+Other CNF representation objects: 
+\code{\link{CnfAtom}()},
+\code{\link{CnfClause}()},
+\code{\link{CnfFormula}()},
+\code{\link{CnfUniverse}()}
 }
 \concept{CNF representation objects}
 \keyword{internal}

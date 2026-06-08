@@ -75,7 +75,7 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 # Create a binary class task from iris
 library(mlr3)
@@ -89,7 +89,7 @@ po$predict(list(tsk("iris")))
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other mlr3pipelines backend related:
+Other mlr3pipelines backend related: 
 \code{\link{Graph}},
 \code{\link{PipeOp}},
 \code{\link{PipeOpTargetTrafo}},
@@ -99,7 +99,7 @@ Other mlr3pipelines backend related:
 \code{\link{mlr_pipeops}},
 \code{\link{mlr_pipeops_materialize}}
 
-Other PipeOps:
+Other PipeOps: 
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},

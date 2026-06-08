@@ -84,11 +84,11 @@ X \%among\% "a" | X \%among\% "b"  # creates a CnfClause
 X \%among\% "a" & X \%among\% c("a", "b")  # creates a CnfFormula
 }
 \seealso{
-Other CNF representation objects:
-\code{\link[=CnfClause]{CnfClause()}},
-\code{\link[=CnfFormula]{CnfFormula()}},
-\code{\link[=CnfSymbol]{CnfSymbol()}},
-\code{\link[=CnfUniverse]{CnfUniverse()}}
+Other CNF representation objects: 
+\code{\link{CnfClause}()},
+\code{\link{CnfFormula}()},
+\code{\link{CnfSymbol}()},
+\code{\link{CnfUniverse}()}
 }
 \concept{CNF representation objects}
 \keyword{internal}
