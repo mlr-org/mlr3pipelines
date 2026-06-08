@@ -185,16 +185,17 @@ If this method is not overloaded, it defaults to selecting of type indicated by 
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other mlr3pipelines backend related: 
+Other mlr3pipelines backend related:
 \code{\link{Graph}},
 \code{\link{PipeOp}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_graphs}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_materialize}},
 \code{\link{mlr_pipeops_updatetarget}}
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
@@ -241,6 +242,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},
 \code{\link{mlr_pipeops_learner_quantiles}},
+\code{\link{mlr_pipeops_materialize}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},

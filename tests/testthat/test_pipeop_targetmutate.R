@@ -79,6 +79,26 @@ test_that("PipeOpTargetMutate - does not drop missing levels, #631", {
   expect_equal(task$levels(), predict_out$levels())
 })
 
+test_that("PipeOpTargetMutate - transforms internal validation task", {
+  task = tsk("boston_housing")
+  task$internal_valid_task = 1:10
+
+  validation_task = task$internal_valid_task
+  op = po("targetmutate",
+    trafo = function(x) setNames(log(x), paste0(names(x), ".log"))
+  )
+
+  train_out = op$train(list(task))[["output"]]
+  predict_out = op$predict(list(validation_task))[["output"]]
+
+  cols = unname(unlist(train_out$col_roles[c("feature", "target")]))
+  expect_equal(
+    train_out$internal_valid_task$data(cols = cols),
+    predict_out$data(cols = cols),
+    ignore.col.order = TRUE
+  )
+})
+
 test_that("PipeOpTargetMutate - error if trafo does not return dt/df/matrix", {
   task = tsk("boston_housing")
   op = po("targetmutate", trafo = function(x) 1)
