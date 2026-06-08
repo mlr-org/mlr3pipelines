@@ -2,6 +2,7 @@
 
 * Switched from using `digest::digest()` to using `mlr3misc::calculate_hash()` for calculating the `hash` and `phash` of `PipeOp`s, `Graph`s, and `GraphLearner`s. 
 * Fix: Corrected registration of `FilterEnsemble` in `mlr_filters` using `.prototype_args`.
+* Fix: `mlr_pipeops$add()` now saves the namespace environment from which it was called to allow delayed evaluation in `as.data.table(mlr_pipeops)`.
 
 # mlr3pipelines 0.11.0
 
