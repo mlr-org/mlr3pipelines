@@ -6,6 +6,7 @@
 * feat: `PipeOpSmote`, `PipeOpSmoteNC`, `PipeOpADAS`, and `PipeOpBLSmote` can now handle columns with role `"name"` by assigning the name `synthetic.<pipeop id>` to generated rows.
 * New `PipeOpMaterialize` that materializes the active `Task` view, reducing size and simplifying structure of the `Task`'s `DataBackend`.
 * Fix: `mlr_pipeops$add()` now saves the namespace environment from which it was called to allow delayed evaluation in `as.data.table(mlr_pipeops)`.
+* Simplified error messages from internal function `check_types()`. 
 
   
 # mlr3pipelines 0.11.0
