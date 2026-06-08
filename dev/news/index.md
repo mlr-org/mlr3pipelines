@@ -17,6 +17,9 @@
   the name `synthetic.<pipeop id>` to generated rows.
 - New `PipeOpMaterialize` that materializes the active `Task` view,
   reducing size and simplifying structure of the `Task`’s `DataBackend`.
+- Fix: `mlr_pipeops$add()` now saves the namespace environment from
+  which it was called to allow delayed evaluation in
+  `as.data.table(mlr_pipeops)`.
 
 ## mlr3pipelines 0.11.0
 
