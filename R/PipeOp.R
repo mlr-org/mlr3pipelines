@@ -546,7 +546,7 @@ check_types = function(self, data, direction, operation) {
       }, error = function(e) sprintf("\nConversion from given data to %s produced message:\n%s.", typereq, e$message))
     }
 
-    if (typereq %in% class(data_element)) {
+    if (inherits(data_element, typereq)) {
       return(data_element)
     } else {
       stop(sprintf(
