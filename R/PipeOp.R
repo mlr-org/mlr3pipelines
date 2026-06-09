@@ -548,15 +548,14 @@ check_types = function(self, data, direction, operation) {
 
     if (inherits(data_element, typereq)) {
       return(data_element)
-    } else {
-      stop(sprintf(
-        "Type mismatch for %s: Must inherit from class '%s', but has class(es) %s. %s",
-        varname,
-        typereq,
-        str_collapse(class(data_element), quote = "'"),
-        msg
-      ), call. = FALSE)
     }
+    stopf(
+      "Type mismatch for %s: Must inherit from class '%s', but has class(es) %s. %s",
+      varname,
+      typereq,
+      str_collapse(class(data_element), quote = "'"),
+      msg
+    )
   }
 
   for (idx in seq_along(data)) {
