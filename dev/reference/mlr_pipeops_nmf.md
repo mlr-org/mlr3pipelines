@@ -114,9 +114,7 @@ as well as:
 ## Internals
 
 Uses the [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html) function as
-well as
-[`basis()`](https://rdrr.io/pkg/NMF/man/basis-coef-methods.html),
-[`coef()`](https://rdrr.io/r/stats/coef.html) and
+well as `basis()`, [`coef()`](https://rdrr.io/r/stats/coef.html) and
 [`ginv()`](https://rdrr.io/pkg/MASS/man/ginv.html).
 
 ## Fields
@@ -276,7 +274,7 @@ pop$state
 #>   Iterations: 470 
 #>   Timing:
 #>      user  system elapsed 
-#>     0.062   0.003   0.066 
+#>     0.069   0.003   0.072 
 #> 
 #> $dt_columns
 #> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 

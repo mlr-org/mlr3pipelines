@@ -51,7 +51,7 @@ or a deep clone of it.
 
 ## See also
 
-Other Graph operators: `%>>%`,
+Other Graph operators: `%>>%()`,
 [`as_pipeop()`](https://mlr3pipelines.mlr-org.com/dev/reference/as_pipeop.md),
 [`assert_graph()`](https://mlr3pipelines.mlr-org.com/dev/reference/assert_graph.md),
 [`assert_pipeop()`](https://mlr3pipelines.mlr-org.com/dev/reference/assert_pipeop.md),

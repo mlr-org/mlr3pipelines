@@ -19,13 +19,7 @@ inheriting from
 ## Methods
 
 Methods inherited from
-[`Dictionary`](https://mlr3misc.mlr-org.com/reference/Dictionary.html),
-as well as:
-
-- `add(key, value)`  
-  (`character(1)`, `function`)  
-  Adds constructor `value` to the dictionary with key `key`, potentially
-  overwriting a previously stored item.
+[`Dictionary`](https://mlr3misc.mlr-org.com/reference/Dictionary.html).
 
 ## S3 methods
 

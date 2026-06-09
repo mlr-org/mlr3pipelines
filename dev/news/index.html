@@ -59,6 +59,8 @@
 <li>feat: <code>PipeOpSmote</code>, <code>PipeOpSmoteNC</code>, <code>PipeOpADAS</code>, and <code>PipeOpBLSmote</code> can now handle columns with role <code>"name"</code> by assigning the name <code>synthetic.&lt;pipeop id&gt;</code> to generated rows.</li>
 <li>New <code>PipeOpMaterialize</code> that materializes the active <code>Task</code> view, reducing size and simplifying structure of the <code>Task</code>’s <code>DataBackend</code>.</li>
 <li>Fix: <code>mlr_pipeops$add()</code> now saves the namespace environment from which it was called to allow delayed evaluation in <code>as.data.table(mlr_pipeops)</code>.</li>
+<li>
+<code>mlr_graphs</code> no longer overrides the inherited <code>$add()</code> method.</li>
 <li>Simplified error messages from internal function <code>check_types()</code>.</li>
 </ul></div>
     <div class="section level2">

@@ -22,8 +22,6 @@ Useful links:
 
 Authors:
 
-- Martin Binder <mlr.developer@mb706.com>
-
 - Florian Pfisterer <pfistererf@googlemail.com>
   ([ORCID](https://orcid.org/0000-0001-8867-762X))
 
