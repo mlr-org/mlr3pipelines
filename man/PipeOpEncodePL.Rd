@@ -101,7 +101,7 @@ In \emph{Advances in Neural Information Processing Systems}, volume 35, 24991--2
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps:
+Other PipeOps: 
 \code{\link{PipeOp}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
@@ -190,7 +190,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}}
 
-Other Piecewise Linear Encoding PipeOps:
+Other Piecewise Linear Encoding PipeOps: 
 \code{\link{mlr_pipeops_encodeplquantiles}},
 \code{\link{mlr_pipeops_encodepltree}}
 }

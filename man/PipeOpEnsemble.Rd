@@ -98,7 +98,7 @@ This method is abstract, it must be implemented by deriving classes.
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps:
+Other PipeOps: 
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpImpute}},
@@ -187,8 +187,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}}
 
-Other Multiplicity PipeOps:
-\code{\link[=Multiplicity]{Multiplicity()}},
+Other Multiplicity PipeOps: 
+\code{\link{Multiplicity}()},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_multiplicityexply}},
@@ -198,7 +198,7 @@ Other Multiplicity PipeOps:
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_replicate}}
 
-Other Ensembles:
+Other Ensembles: 
 \code{\link{mlr_learners_avg}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_ovrunite}},

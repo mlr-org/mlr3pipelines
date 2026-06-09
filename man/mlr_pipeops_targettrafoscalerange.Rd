@@ -66,7 +66,7 @@ Only methods inherited from \code{\link{PipeOpTargetTrafo}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(mlr3)
 task = tsk("boston_housing")
 po = PipeOpTargetTrafoScaleRange$new()
@@ -85,7 +85,7 @@ ttscalerange$state$regr.rpart
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps:
+Other PipeOps: 
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},

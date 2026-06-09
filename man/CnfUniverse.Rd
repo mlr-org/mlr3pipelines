@@ -36,11 +36,11 @@ Y \%among\% character(0)
 u$X \%among\% "a" | u$Y \%among\% "d"
 }
 \seealso{
-Other CNF representation objects:
-\code{\link[=CnfAtom]{CnfAtom()}},
-\code{\link[=CnfClause]{CnfClause()}},
-\code{\link[=CnfFormula]{CnfFormula()}},
-\code{\link[=CnfSymbol]{CnfSymbol()}}
+Other CNF representation objects: 
+\code{\link{CnfAtom}()},
+\code{\link{CnfClause}()},
+\code{\link{CnfFormula}()},
+\code{\link{CnfSymbol}()}
 }
 \concept{CNF representation objects}
 \keyword{internal}

@@ -75,7 +75,7 @@ gr$train(tsk("iris"))[[1]]$data()
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps:
+Other PipeOps: 
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
@@ -164,7 +164,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}}
 
-Other Placeholder Pipeops:
+Other Placeholder Pipeops: 
 \code{\link{mlr_pipeops_copy}}
 }
 \concept{PipeOps}
