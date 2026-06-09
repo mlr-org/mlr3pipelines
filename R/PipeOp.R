@@ -545,7 +545,18 @@ check_types = function(self, data, direction, operation) {
         ""
       }, error = function(e) sprintf("\nConversion from given data to %s produced message:\n%s.", typereq, e$message))
     }
-    assert_class(data_element, typereq, .var.name = paste0(varname, msg))
+
+    if (inherits(data_element, typereq)) {
+      return(data_element)
+    } else {
+      stop(sprintf(
+        "Type mismatch for %s: Must inherit from class '%s', but has class(es) %s. %s",
+        varname,
+        typereq,
+        str_collapse(class(data_element), quote = "'"),
+        msg
+      ), call. = FALSE)
+    }
   }
 
   for (idx in seq_along(data)) {

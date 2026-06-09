@@ -7,6 +7,7 @@
 * New `PipeOpMaterialize` that materializes the active `Task` view, reducing size and simplifying structure of the `Task`'s `DataBackend`.
 * Fix: `mlr_pipeops$add()` now saves the namespace environment from which it was called to allow delayed evaluation in `as.data.table(mlr_pipeops)`.
 * `mlr_graphs` no longer overrides the inherited `$add()` method.
+* Simplified error messages from internal function `check_types()`. 
 
   
 # mlr3pipelines 0.11.0
