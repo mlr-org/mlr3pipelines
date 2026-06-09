@@ -77,7 +77,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{if (requireNamespace("dimRed")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("dimRed") && requireNamespace("igraph") && requireNamespace("RSpectra")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 po = po("isomap", .mute = c("message", "output"))
 po$train(list(tsk("iris")))[[1]]$data()
@@ -88,7 +88,7 @@ po$predict(list(tsk("iris")))[[1]]$data()
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},

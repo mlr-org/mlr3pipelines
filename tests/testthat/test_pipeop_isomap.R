@@ -3,6 +3,7 @@ context("PipeOpIsomap")
 test_that("PipeOpIsomap - basic properties", {
   skip_if_not_installed("dimRed")
   skip_if_not_installed("RSpectra")
+  skip_if_not_installed("igraph")
   skip_if_not_installed("stats")
   op = po("isomap", .mute = "message")
   task = mlr_tasks$get("iris")
@@ -13,6 +14,7 @@ test_that("PipeOpIsomap - basic properties", {
 test_that("compare to dimRed::isomap", {
   skip_if_not_installed("dimRed")
   skip_if_not_installed("RSpectra")
+  skip_if_not_installed("igraph")
   skip_if_not_installed("stats")
   # Part 1 - Train-method
   # Version 1 - PipeOpIsomap
@@ -43,6 +45,7 @@ test_that("compare to dimRed::isomap", {
 test_that("isomap handles non-numeric features by leaving them untouched", {
   skip_if_not_installed("dimRed")
   skip_if_not_installed("RSpectra")
+  skip_if_not_installed("igraph")
   skip_if_not_installed("stats")
   po = po("isomap")
   task = tsk("penguins")
@@ -64,6 +67,7 @@ test_that("isomap handles non-numeric features by leaving them untouched", {
 test_that("isomap leaves non-numeric features untouched", {
   skip_if_not_installed("dimRed")
   skip_if_not_installed("RSpectra")
+  skip_if_not_installed("igraph")
   skip_if_not_installed("stats")
   backend = data.table::as.data.table(tsk("iris")$data())
   backend$species_factor = factor(rep(letters[1:3], length.out = nrow(backend)))
@@ -82,6 +86,7 @@ test_that("isomap leaves non-numeric features untouched", {
 test_that("hyperparameter ndim", {
   skip_if_not_installed("dimRed")
   skip_if_not_installed("RSpectra")
+  skip_if_not_installed("igraph")
   skip_if_not_installed("stats")
   for (i in seq_len(length(tsk("iris")$feature_names))) {
     po = po("isomap", ndim = i)
@@ -93,6 +98,7 @@ test_that("hyperparameter ndim", {
 test_that("hyperparameter get_geod", {
   skip_if_not_installed("dimRed")
   skip_if_not_installed("RSpectra")
+  skip_if_not_installed("igraph")
   skip_if_not_installed("stats")
   # Check 1 - get_geod = FALSE behaves as expected
   po_no_geod = po("isomap", get_geod = FALSE)
@@ -111,6 +117,7 @@ test_that("hyperparameter get_geod", {
 test_that("hyperparameter .mute", {
   skip_if_not_installed("dimRed")
   skip_if_not_installed("RSpectra")
+  skip_if_not_installed("igraph")
   skip_if_not_installed("stats")
   po = po("isomap", .mute = c("message", "output"))
 #  expect_silent(po$train(list(tsk("iris")))) # does not work because of testthat #1480

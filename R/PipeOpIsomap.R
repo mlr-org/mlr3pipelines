@@ -55,7 +55,7 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
-#' @examplesIf requireNamespace("dimRed")
+#' @examplesIf requireNamespace("dimRed") && requireNamespace("igraph") && requireNamespace("RSpectra")
 #' library("mlr3")
 #' po = po("isomap", .mute = c("message", "output"))
 #' po$train(list(tsk("iris")))[[1]]$data()
