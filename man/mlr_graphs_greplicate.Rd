@@ -37,7 +37,6 @@ Other Graph operators:
 \code{\link{assert_graph}()},
 \code{\link{assert_pipeop}()},
 \code{\link{chain_graphs}()},
-\code{\link{greplicate}()},
 \code{\link{gunion}()}
 }
 \concept{Graph operators}
