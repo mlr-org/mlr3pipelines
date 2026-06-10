@@ -27,7 +27,7 @@ All input arguments are cloned and have no references in common with the returne
 library("mlr3")
 
 po_pca = po("pca")
-pipeline_greplicate(po_pca, n = 2)
+ppl("greplicate", po_pca, n = 2)
 }
 \seealso{
 Other Graph operators: 
