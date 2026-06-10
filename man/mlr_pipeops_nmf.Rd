@@ -97,7 +97,9 @@ See \code{\link[NMF:nmf]{nmf()}}.
 \section{Internals}{
 
 Uses the \code{\link[NMF:nmf]{nmf()}} function as well as \code{\link[NMF:basis]{basis()}}, \code{\link[NMF:coef]{coef()}} and
-\code{\link[MASS:ginv]{ginv()}}. Does not support features with missing or infinite values.
+\code{\link[MASS:ginv]{ginv()}}. Does not support features with missing or infinite values. Features containing
+negative values are currently excluded with a warning, but this will become an error in a future release.
+Use \code{affect_columns = selector_non_negative()} to explicitly select non-negative features.
 }
 
 \section{Fields}{

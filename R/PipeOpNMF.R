@@ -82,7 +82,9 @@
 #'
 #' @section Internals:
 #' Uses the [`nmf()`][NMF::nmf] function as well as [`basis()`][NMF::basis], [`coef()`][NMF::coef] and
-#' [`ginv()`][MASS::ginv]. Does not support features with missing or infinite values.
+#' [`ginv()`][MASS::ginv]. Does not support features with missing or infinite values. Features containing
+#' negative values are currently excluded with a warning, but this will become an error in a future release.
+#' Use `affect_columns = selector_non_negative()` to explicitly select non-negative features.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -204,18 +206,30 @@ PipeOpNMF = R6Class("PipeOpNMF",
     },
 
     .select_cols = function(task) {
-      # only use non-negative numerical features
+      # only use fully observed, non-negative numerical features
       features = task$feature_types[get("type") %in% self$feature_types, get("id")]
       data = task$data(cols = features)
-      finite = map_lgl(data, function(x) all(is.finite(x)))
+      # Indicator for whether all observations for a feature are finite and non-missing
+      finite = map_lgl(data, function(x) all(is.finite(x)))  # is.finite also returns FALSE for NAs
       if (!all(finite)) {
         stopf(
           "NMF does not support features with missing or infinite values. Affected features: %s.",
           str_collapse(names(finite)[!finite], quote = "'")
         )
       }
-      non_negative = map_lgl(data, function(x) all(is.finite(x)) && all(x >= 0))
-      names(non_negative)[non_negative]
+      non_negative_features = selector_non_negative()(task)
+      negative_features = setdiff(features, non_negative_features)
+      if (length(negative_features)) {
+        warningf(
+          paste(
+            "PipeOpNMF currently drops features containing negative values: %s.",
+            "This will be an error in a future release.",
+            "Use `affect_columns = selector_non_negative()` to explicitly select non-negative features."
+          ),
+          str_collapse(negative_features, quote = "'")
+        )
+      }
+      non_negative_features
     }
   )
 )
