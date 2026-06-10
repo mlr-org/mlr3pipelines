@@ -132,18 +132,18 @@ test_that("Graph - add_edge", {
 test_that("Multiplicity checking", {
   p = po("pca")
 
-  expect_error(p$train(list(x = 1)), "Assertion on 'input 1 \\(\"input\"\\) of PipeOp pca's \\$train\\(\\)")
+  expect_error(p$train(list(x = 1)), "Must inherit from class.*Task.*but has class.*numeric")
   expect_task(p$train(list(x = tsk("iris")))[[1]])
 
   expect_task(p$predict(list(x = tsk("iris")))[[1]])
-  expect_error(p$predict(list(x = 1)), "Assertion on 'input 1 \\(\"input\"\\) of PipeOp pca's \\$predict\\(\\)")
+  expect_error(p$predict(list(x = 1)), "Must inherit from class.*Task.*but has class.*numeric")
 
   p$output$predict = "numeric"
 
   expect_task(p$train(list(x = tsk("iris")))[[1]])
-  expect_error(p$predict(list(x = tsk("iris")))[[1]], "Assertion on 'output 1 \\(\"output\"\\) of PipeOp pca's \\$predict\\(\\)")
+  expect_error(p$predict(list(x = tsk("iris")))[[1]], "Must inherit from class.*numeric.*but has class.*TaskClassif.*TaskSupervised.*Task.*R6'")
 
   p$output$train = "numeric"
-  expect_error(p$train(list(x = tsk("iris")))[[1]], "Assertion on 'output 1 \\(\"output\"\\) of PipeOp pca's \\$train\\(\\)")
+  expect_error(p$train(list(x = tsk("iris")))[[1]], "Must inherit from class.*numeric.*but has class.*TaskClassif.*TaskSupervised.*Task.*R6'")
 
 })

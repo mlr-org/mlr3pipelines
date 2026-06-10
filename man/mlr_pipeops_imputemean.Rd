@@ -72,7 +72,7 @@ po$state$model
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps:
+Other PipeOps: 
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
@@ -161,7 +161,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}}
 
-Other Imputation PipeOps:
+Other Imputation PipeOps: 
 \code{\link{PipeOpImpute}},
 \code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},

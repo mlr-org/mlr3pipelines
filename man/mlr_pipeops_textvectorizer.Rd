@@ -167,7 +167,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{if (mlr3misc::require_namespaces(c("stopwords", "quanteda"), quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (mlr3misc::require_namespaces(c("stopwords", "quanteda"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 library("data.table")
 # create some text data
@@ -190,7 +190,7 @@ pos$predict(list(one_line_of_iris))[[1]]$data()
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps:
+Other PipeOps: 
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},

@@ -94,11 +94,11 @@ X \%among\% "a" | Y \%among\% character(0)
   (X \%among\% c("a", "b") | Y \%among\% "d")
 }
 \seealso{
-Other CNF representation objects:
-\code{\link[=CnfAtom]{CnfAtom()}},
-\code{\link[=CnfFormula]{CnfFormula()}},
-\code{\link[=CnfSymbol]{CnfSymbol()}},
-\code{\link[=CnfUniverse]{CnfUniverse()}}
+Other CNF representation objects: 
+\code{\link{CnfAtom}()},
+\code{\link{CnfFormula}()},
+\code{\link{CnfSymbol}()},
+\code{\link{CnfUniverse}()}
 }
 \concept{CNF representation objects}
 \keyword{internal}

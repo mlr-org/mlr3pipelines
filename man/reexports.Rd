@@ -11,6 +11,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{data.table}{\code{\link[data.table:as.data.table]{as.data.table()}}}
+  \item{data.table}{\code{\link[data.table]{as.data.table}}}
 }}
 

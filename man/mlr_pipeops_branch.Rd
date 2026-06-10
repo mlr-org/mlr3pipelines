@@ -100,7 +100,7 @@ gr$train(tsk("iris"))
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps:
+Other PipeOps: 
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
@@ -189,10 +189,10 @@ Other PipeOps:
 \code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}}
 
-Other Path Branching:
+Other Path Branching: 
 \code{\link{NO_OP}},
-\code{\link[=filter_noop]{filter_noop()}},
-\code{\link[=is_noop]{is_noop()}},
+\code{\link{filter_noop}()},
+\code{\link{is_noop}()},
 \code{\link{mlr_pipeops_unbranch}}
 }
 \concept{Path Branching}

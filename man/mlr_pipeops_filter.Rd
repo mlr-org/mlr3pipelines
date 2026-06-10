@@ -98,7 +98,7 @@ Methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpT
 }
 
 \examples{
-\dontshow{if (mlr3misc::require_namespaces(c("mlr3filters", "rpart"), quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (mlr3misc::require_namespaces(c("mlr3filters", "rpart"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library("mlr3")
 library("mlr3filters")
 \dontshow{data.table::setDTthreads(1)}
@@ -142,7 +142,7 @@ Thomas J, Hepp T, Mayr A, Bischl B (2017).
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps:
+Other PipeOps: 
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},

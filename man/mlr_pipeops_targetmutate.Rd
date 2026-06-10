@@ -46,7 +46,7 @@ The parameters are the parameters inherited from \code{\link{PipeOpTargetTrafo}}
 Transformation function for the target. Should only be a function of the target, i.e., taking a
 single \code{data.table} argument, typically with one column. The return value is used as the new
 target of the resulting \code{\link[mlr3:Task]{Task}}. To change target names, change the column name of the data
-using e.g. \code{\link[data.table:setnames]{setnames()}}.\cr
+using e.g. \code{\link[data.table:setattr]{setnames()}}.\cr
 Note that this function also gets called during prediction and should thus gracefully handle \code{NA} values.\cr
 Initialized to \code{identity()}.
 \item \code{inverter} :: \code{function} \code{data.table} -> \code{data.table} | named \code{list}\cr
@@ -78,7 +78,7 @@ Only methods inherited from \code{\link{PipeOpTargetTrafo}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(mlr3)
 task = tsk("boston_housing")
 po = PipeOpTargetMutate$new("logtrafo", param_vals = list(
@@ -114,7 +114,7 @@ tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$re
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps:
+Other PipeOps: 
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},

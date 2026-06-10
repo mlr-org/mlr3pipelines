@@ -209,7 +209,7 @@ selgf(iris_task)
 selgf(bh_task)
 }
 \seealso{
-Other Selectors:
+Other Selectors: 
 \code{\link{mlr_pipeops_select}}
 }
 \concept{Selectors}

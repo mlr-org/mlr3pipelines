@@ -79,7 +79,7 @@ po$predict(list(Multiplicity(task1, task2)))
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps:
+Other PipeOps: 
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
@@ -168,8 +168,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}}
 
-Other Multiplicity PipeOps:
-\code{\link[=Multiplicity]{Multiplicity()}},
+Other Multiplicity PipeOps: 
+\code{\link{Multiplicity}()},
 \code{\link{PipeOpEnsemble}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_featureunion}},
@@ -179,8 +179,8 @@ Other Multiplicity PipeOps:
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_replicate}}
 
-Other Experimental Features:
-\code{\link[=Multiplicity]{Multiplicity()}},
+Other Experimental Features: 
+\code{\link{Multiplicity}()},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_ovrsplit}},
 \code{\link{mlr_pipeops_ovrunite}},

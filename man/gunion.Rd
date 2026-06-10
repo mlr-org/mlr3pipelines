@@ -37,14 +37,14 @@ This operation always creates deep copies of its input arguments, so they cannot
 To access individual \code{\link{PipeOp}}s after composition, use the resulting \code{\link{Graph}}'s \verb{$pipeops} list.
 }
 \seealso{
-Other Graph operators:
-\code{\link{\%>>\%}},
-\code{\link[=as_graph]{as_graph()}},
-\code{\link[=as_pipeop]{as_pipeop()}},
-\code{\link[=assert_graph]{assert_graph()}},
-\code{\link[=assert_pipeop]{assert_pipeop()}},
-\code{\link[=chain_graphs]{chain_graphs()}},
-\code{\link[=greplicate]{greplicate()}},
+Other Graph operators: 
+\code{\link{\%>>\%}()},
+\code{\link{as_graph}()},
+\code{\link{as_pipeop}()},
+\code{\link{assert_graph}()},
+\code{\link{assert_pipeop}()},
+\code{\link{chain_graphs}()},
+\code{\link{greplicate}()},
 \code{\link{mlr_graphs_greplicate}}
 }
 \concept{Graph operators}
