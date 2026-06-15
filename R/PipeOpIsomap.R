@@ -55,19 +55,16 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
-#' @examplesIf requireNamespace("dimRed") && requireNamespace("igraph") && requireNamespace("RSpectra")
+#' @examplesIf requireNamespace("dimRed") && requireNamespace("igraph") && requireNamespace("RSpectra") && requireNamespace("RANN")
 #' library("mlr3")
 #' po = po("isomap", .mute = c("message", "output"))
 #' po$train(list(tsk("iris")))[[1]]$data()
 #' po$predict(list(tsk("iris")))[[1]]$data()
 #'
-#'
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
-#'
-
 PipeOpIsomap = R6Class("PipeOpIsomap",
   inherit = PipeOpTaskPreproc,
   public = list(
@@ -79,7 +76,7 @@ PipeOpIsomap = R6Class("PipeOpIsomap",
         .mute = p_uty(init = NULL, tags = c("train", "isomap"))
       )
       super$initialize(id = id, param_set = ps, param_vals = param_vals,
-        packages = c("dimRed", "stats"), feature_types = c("numeric", "integer"))
+        packages = c("dimRed", "igraph", "RSpectra", "RANN", "stats"), feature_types = c("numeric", "integer"))
     }
   ),
   private = list(
