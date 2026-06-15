@@ -45,15 +45,15 @@ selector_non_missing()
 
 selector_cardinality_greater_than(min_cardinality)
 
-selector_positive(keep_na = FALSE)
+selector_positive(keep_na = TRUE)
 
-selector_negative(keep_na = FALSE)
+selector_negative(keep_na = TRUE)
 
-selector_non_negative(keep_na = FALSE)
+selector_non_negative(keep_na = TRUE)
 
-selector_non_positive(keep_na = FALSE)
+selector_non_positive(keep_na = TRUE)
 
-selector_non_zero(keep_na = FALSE)
+selector_non_zero(keep_na = TRUE)
 }
 \arguments{
 \item{types}{(\code{character}) \cr
@@ -91,7 +91,7 @@ Minimum number of levels required to be selected.}
 
 \item{keep_na}{(\code{logical(1)})\cr
 Whether features may also contain missing values and be selected. If \code{TRUE}, features may also contain missing values to
-be selected. If \code{FALSE}, features containing missing values are not selected.}
+be selected. If \code{FALSE}, features containing missing values are not selected. Defaults to \code{TRUE}.}
 }
 \value{
 \code{function}: A \code{\link{Selector}} function that takes a \code{\link[mlr3:Task]{Task}} and returns the feature names to be processed.
@@ -209,7 +209,7 @@ selgf(iris_task)
 selgf(bh_task)
 }
 \seealso{
-Other Selectors: 
+Other Selectors:
 \code{\link{mlr_pipeops_select}}
 }
 \concept{Selectors}

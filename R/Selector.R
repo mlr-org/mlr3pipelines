@@ -260,55 +260,55 @@ make_numeric_selector = function(predicate, name, keep_na) {
       (keep_na || !anyNA(x)) && all(predicate(x), na.rm = keep_na)
     })
     names(keep)[keep]
-  }, "%s(%s)", name, if (keep_na) "keep_na = TRUE" else "")
+  }, "%s(%s)", name, if (keep_na) "" else "keep_na = FALSE")
 }
 
 #' @describeIn Selector `selector_positive` selects integer and numeric features whose values are all greater than zero.
 #' @param keep_na (`logical(1)`)\cr
-#'   Whether features may also contain missing values and be selected. If `TRUE`, features may also contain missing values to 
-#'   be selected. If `FALSE`, features containing missing values are not selected.
+#'   Whether features may also contain missing values and be selected. If `TRUE`, features may also contain missing values to
+#'   be selected. If `FALSE`, features containing missing values are not selected. Defaults to `TRUE`.
 #' @export
-selector_positive = function(keep_na = FALSE) {
+selector_positive = function(keep_na = TRUE) {
   assert_flag(keep_na)
   make_numeric_selector(function(x) x > 0, "selector_positive", keep_na)
 }
 
 #' @describeIn Selector `selector_negative` selects integer and numeric features whose values are all less than zero.
 #' @param keep_na (`logical(1)`)\cr
-#'   Whether features may also contain missing values and be selected. If `TRUE`, features may also contain missing values to 
-#'   be selected. If `FALSE`, features containing missing values are not selected.
+#'   Whether features may also contain missing values and be selected. If `TRUE`, features may also contain missing values to
+#'   be selected. If `FALSE`, features containing missing values are not selected. Defaults to `TRUE`.
 #' @export
-selector_negative = function(keep_na = FALSE) {
+selector_negative = function(keep_na = TRUE) {
   assert_flag(keep_na)
   make_numeric_selector(function(x) x < 0, "selector_negative", keep_na)
 }
 
 #' @describeIn Selector `selector_non_negative` selects integer and numeric features whose values are all greater than or equal to zero.
 #' @param keep_na (`logical(1)`)\cr
-#'   Whether features may also contain missing values and be selected. If `TRUE`, features may also contain missing values to 
-#'   be selected. If `FALSE`, features containing missing values are not selected.
+#'   Whether features may also contain missing values and be selected. If `TRUE`, features may also contain missing values to
+#'   be selected. If `FALSE`, features containing missing values are not selected. Defaults to `TRUE`.
 #' @export
-selector_non_negative = function(keep_na = FALSE) {
+selector_non_negative = function(keep_na = TRUE) {
   assert_flag(keep_na)
   make_numeric_selector(function(x) x >= 0, "selector_non_negative", keep_na)
 }
 
 #' @describeIn Selector `selector_non_positive` selects integer and numeric features whose values are all less than or equal to zero.
 #' @param keep_na (`logical(1)`)\cr
-#'   Whether features may also contain missing values and be selected. If `TRUE`, features may also contain missing values to 
-#'   be selected. If `FALSE`, features containing missing values are not selected.
+#'   Whether features may also contain missing values and be selected. If `TRUE`, features may also contain missing values to
+#'   be selected. If `FALSE`, features containing missing values are not selected. Defaults to `TRUE`.
 #' @export
-selector_non_positive = function(keep_na = FALSE) {
+selector_non_positive = function(keep_na = TRUE) {
   assert_flag(keep_na)
   make_numeric_selector(function(x) x <= 0, "selector_non_positive", keep_na)
 }
 
 #' @describeIn Selector `selector_non_zero` selects integer and numeric features whose values are all non-zero.
 #' @param keep_na (`logical(1)`)\cr
-#'   Whether features may also contain missing values and be selected. If `TRUE`, features may also contain missing values to 
-#'   be selected. If `FALSE`, features containing missing values are not selected.
+#'   Whether features may also contain missing values and be selected. If `TRUE`, features may also contain missing values to
+#'   be selected. If `FALSE`, features containing missing values are not selected. Defaults to `TRUE`.
 #' @export
-selector_non_zero = function(keep_na = FALSE) {
+selector_non_zero = function(keep_na = TRUE) {
   assert_flag(keep_na)
   make_numeric_selector(function(x) x != 0, "selector_non_zero", keep_na)
 }

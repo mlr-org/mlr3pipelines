@@ -113,7 +113,7 @@ po$train(list(task2, task3))
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
@@ -202,8 +202,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}}
 
-Other Multiplicity PipeOps: 
-\code{\link{Multiplicity}()},
+Other Multiplicity PipeOps:
+\code{\link[=Multiplicity]{Multiplicity()}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_multiplicityexply}},

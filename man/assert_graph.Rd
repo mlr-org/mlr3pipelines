@@ -18,14 +18,14 @@ Function that checks that a given object is a \code{Graph} and
 throws an error if not.
 }
 \seealso{
-Other Graph operators: 
-\code{\link{\%>>\%}()},
-\code{\link{as_graph}()},
-\code{\link{as_pipeop}()},
-\code{\link{assert_pipeop}()},
-\code{\link{chain_graphs}()},
-\code{\link{greplicate}()},
-\code{\link{gunion}()},
+Other Graph operators:
+\code{\link{\%>>\%}},
+\code{\link[=as_graph]{as_graph()}},
+\code{\link[=as_pipeop]{as_pipeop()}},
+\code{\link[=assert_pipeop]{assert_pipeop()}},
+\code{\link[=chain_graphs]{chain_graphs()}},
+\code{\link[=greplicate]{greplicate()}},
+\code{\link[=gunion]{gunion()}},
 \code{\link{mlr_graphs_greplicate}}
 }
 \concept{Graph operators}

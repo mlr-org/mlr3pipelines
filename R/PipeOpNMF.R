@@ -205,6 +205,7 @@ PipeOpNMF = R6Class("PipeOpNMF",
       h_
     },
 
+    # This is called after affect_columns subsetting.
     .select_cols = function(task) {
       # only use fully observed, non-negative numerical features
       features = task$feature_types[get("type") %in% self$feature_types, get("id")]
@@ -217,14 +218,14 @@ PipeOpNMF = R6Class("PipeOpNMF",
           str_collapse(names(finite)[!finite], quote = "'")
         )
       }
-      non_negative_features = selector_non_negative()(task)
+      non_negative_features = selector_non_negative(keep_na = FALSE)(task)
       negative_features = setdiff(features, non_negative_features)
       if (length(negative_features)) {
         warningf(
           paste(
             "PipeOpNMF currently drops features containing negative values: %s.",
             "This will be an error in a future release.",
-            "Use `affect_columns = selector_non_negative()` to explicitly select non-negative features."
+            "Use `affect_columns = selector_non_negative(keep_na = FALSE)` to explicitly select non-negative features."
           ),
           str_collapse(negative_features, quote = "'")
         )

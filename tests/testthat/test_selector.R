@@ -107,15 +107,16 @@ test_that("numeric value selectors work", {
 
   for (name in names(selectors)) {
     selector = selectors[[name]]
-    expect_set_equal(selector()(task), expected[[name]], info = name)
+    expect_set_equal(selector()(task), expected_keep_na[[name]], info = name)
     expect_set_equal(selector(keep_na = FALSE)(task), expected[[name]], info = name)
     expect_set_equal(selector(keep_na = TRUE)(task), expected_keep_na[[name]], info = name)
     expect_output(print(selector()), sprintf("%s\\(\\)", name), info = name)
     expect_output(
-      print(selector(keep_na = TRUE)),
-      sprintf("%s\\(keep_na = TRUE\\)", name),
+      print(selector(keep_na = FALSE)),
+      sprintf("%s\\(keep_na = FALSE\\)", name),
       info = name
     )
+    expect_output(print(selector(keep_na = TRUE)), sprintf("%s\\(\\)", name), info = name)
     expect_error(selector(keep_na = NA), "Assertion on 'keep_na' failed", info = name)
   }
 })

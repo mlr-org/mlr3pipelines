@@ -54,7 +54,7 @@ This is done as follows:
 All input arguments are cloned and have no references in common with the returned \code{\link{Graph}}.
 }
 \examples{
-\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 \donttest{
 library(mlr3)
 lrn_po = po("learner", lrn("regr.rpart"))
