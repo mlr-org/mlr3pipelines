@@ -230,13 +230,13 @@ pop$train(list(task))
 #> 
 #> ── <TaskClassif> (150x14) ──────────────────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> • Properties: multiclass
 #> • Features (13):
 #>   • int (8): date.day_of_month, date.day_of_week, date.day_of_year, date.hour,
 #>   date.month, date.quarter, date.week_of_year, date.year
 #>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
 #>   • lgl (1): date.is_day
+#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> 
 pop$state
 #> $dt_columns

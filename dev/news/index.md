@@ -22,6 +22,8 @@
   `as.data.table(mlr_pipeops)`.
 - `mlr_graphs` no longer overrides the inherited `$add()` method.
 - Simplified error messages from internal function `check_types()`.
+- Removed deprecated `greplicate()` function. Use `ppl("greplicate")`
+  instead.
 
 ## mlr3pipelines 0.11.0
 
@@ -530,9 +532,8 @@ CRAN release: 2020-08-18
 - `Graph` new method `update_ids()`
 - `Graph` methods `train(single_input = FALSE)` and
   `predict(single_input = FALSE)` now handle vararg channels correctly.
-- Obsoleted
-  [`greplicate()`](https://mlr3pipelines.mlr-org.com/dev/reference/greplicate.md);
-  use `pipeline_greplicate` / `ppl("greplicate")` instead.
+- Obsoleted `greplicate()`; use `pipeline_greplicate` /
+  `ppl("greplicate")` instead.
 - [`po()`](https://mlr3pipelines.mlr-org.com/dev/reference/po.md) now
   automatically converts `Selector` to `PipeOpSelect`
 - [`po()`](https://mlr3pipelines.mlr-org.com/dev/reference/po.md) prints

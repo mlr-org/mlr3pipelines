@@ -172,23 +172,23 @@ opc$train(list(task))
 #> 
 #> ── <TaskClassif> (89x14): Wine Regions ─────────────────────────────────────────
 #> • Target: type
-#> • Target classes: 2 (43%), 1 (30%), 3 (27%)
 #> • Properties: multiclass
 #> • Features (13):
 #>   • dbl (11): alcalinity, alcohol, ash, color, dilution, flavanoids, hue,
 #>   malic, nonflavanoids, phenols, proanthocyanins
 #>   • int (2): magnesium, proline
+#> • Target classes: 2 (43%), 1 (30%), 3 (27%)
 #> 
 #> $output2
 #> 
 #> ── <TaskClassif> (89x14): Wine Regions ─────────────────────────────────────────
 #> • Target: type
-#> • Target classes: 2 (37%), 1 (36%), 3 (27%)
 #> • Properties: multiclass
 #> • Features (13):
 #>   • dbl (11): alcalinity, alcohol, ash, color, dilution, flavanoids, hue,
 #>   malic, nonflavanoids, phenols, proanthocyanins
 #>   • int (2): magnesium, proline
+#> • Target classes: 2 (37%), 1 (36%), 3 (27%)
 #> 
 
 # ... 178 during predict (task is copied)
@@ -197,22 +197,22 @@ opc$predict(list(task))
 #> 
 #> ── <TaskClassif> (178x14): Wine Regions ────────────────────────────────────────
 #> • Target: type
-#> • Target classes: 2 (40%), 1 (33%), 3 (27%)
 #> • Properties: multiclass
 #> • Features (13):
 #>   • dbl (11): alcalinity, alcohol, ash, color, dilution, flavanoids, hue,
 #>   malic, nonflavanoids, phenols, proanthocyanins
 #>   • int (2): magnesium, proline
+#> • Target classes: 2 (40%), 1 (33%), 3 (27%)
 #> 
 #> $output2
 #> 
 #> ── <TaskClassif> (178x14): Wine Regions ────────────────────────────────────────
 #> • Target: type
-#> • Target classes: 2 (40%), 1 (33%), 3 (27%)
 #> • Properties: multiclass
 #> • Features (13):
 #>   • dbl (11): alcalinity, alcohol, ash, color, dilution, flavanoids, hue,
 #>   malic, nonflavanoids, phenols, proanthocyanins
 #>   • int (2): magnesium, proline
+#> • Target classes: 2 (40%), 1 (33%), 3 (27%)
 #> 
 ```

@@ -27,8 +27,6 @@
   : PipeOp Composition Operator
 - [`gunion()`](https://mlr3pipelines.mlr-org.com/dev/reference/gunion.md)
   : Disjoint Union of Graphs
-- [`greplicate()`](https://mlr3pipelines.mlr-org.com/dev/reference/greplicate.md)
-  : Create Disjoint Graph Union of Copies of a Graph
 - [`chain_graphs()`](https://mlr3pipelines.mlr-org.com/dev/reference/chain_graphs.md)
   : Chain a Series of Graphs
 

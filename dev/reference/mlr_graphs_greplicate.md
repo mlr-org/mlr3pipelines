@@ -42,7 +42,6 @@ Other Graph operators: `%>>%()`,
 [`assert_graph()`](https://mlr3pipelines.mlr-org.com/dev/reference/assert_graph.md),
 [`assert_pipeop()`](https://mlr3pipelines.mlr-org.com/dev/reference/assert_pipeop.md),
 [`chain_graphs()`](https://mlr3pipelines.mlr-org.com/dev/reference/chain_graphs.md),
-[`greplicate()`](https://mlr3pipelines.mlr-org.com/dev/reference/greplicate.md),
 [`gunion()`](https://mlr3pipelines.mlr-org.com/dev/reference/gunion.md)
 
 ## Examples
@@ -51,7 +50,7 @@ Other Graph operators: `%>>%()`,
 library("mlr3")
 
 po_pca = po("pca")
-pipeline_greplicate(po_pca, n = 2)
+ppl("greplicate", po_pca, n = 2)
 #> 
 #> ── Graph with 2 PipeOps: ───────────────────────────────────────────────────────
 #>      ID         State sccssors prdcssors

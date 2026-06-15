@@ -227,11 +227,11 @@ gr$train(task1)
 #> 
 #> ── <TaskClassif> (150x9): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> • Properties: multiclass
 #> • Features (8):
 #>   • dbl (8): PC1, PC2, PC3, PC4, Petal.Length, Petal.Width, Sepal.Length,
 #>   Sepal.Width
+#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> 
 
 task2 = tsk("iris")
@@ -243,10 +243,10 @@ po$train(list(task2, task3))
 #> 
 #> ── <TaskClassif> (150x9): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> • Properties: multiclass
 #> • Features (8):
 #>   • dbl (8): a.Petal.Length, a.Petal.Width, a.Sepal.Length, a.Sepal.Width,
 #>   b.Petal.Length, b.Petal.Width, b.Sepal.Length, b.Sepal.Width
+#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> 
 ```

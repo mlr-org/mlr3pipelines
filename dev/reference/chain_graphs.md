@@ -72,6 +72,5 @@ Other Graph operators: `%>>%()`,
 [`as_pipeop()`](https://mlr3pipelines.mlr-org.com/dev/reference/as_pipeop.md),
 [`assert_graph()`](https://mlr3pipelines.mlr-org.com/dev/reference/assert_graph.md),
 [`assert_pipeop()`](https://mlr3pipelines.mlr-org.com/dev/reference/assert_pipeop.md),
-[`greplicate()`](https://mlr3pipelines.mlr-org.com/dev/reference/greplicate.md),
 [`gunion()`](https://mlr3pipelines.mlr-org.com/dev/reference/gunion.md),
 [`mlr_graphs_greplicate`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_greplicate.md)

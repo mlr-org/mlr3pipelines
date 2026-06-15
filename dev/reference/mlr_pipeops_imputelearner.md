@@ -296,12 +296,9 @@ po$state$model$mass
 #> NULL
 #> 
 #> $mlr3_version
-#> [1] ‘1.6.0’
+#> [1] ‘1.7.1’
 #> 
 #> $data_prototype
-#> Empty data.table (0 rows and 8 cols): .impute_col,age,glucose,insulin,pedigree,pregnant...
-#> 
-#> $task_prototype
 #> Empty data.table (0 rows and 8 cols): .impute_col,age,glucose,insulin,pedigree,pregnant...
 #> 
 #> $train_task

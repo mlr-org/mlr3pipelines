@@ -222,28 +222,28 @@ po$train(list(task))
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa (positive class, 33%), rest (67%)
 #> • Properties: twoclass
 #> • Features (4):
 #>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#> • Target classes: setosa (positive class, 33%), rest (67%)
 #> 
 #> $versicolor
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: versicolor (positive class, 33%), rest (67%)
 #> • Properties: twoclass
 #> • Features (4):
 #>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#> • Target classes: versicolor (positive class, 33%), rest (67%)
 #> 
 #> $virginica
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: virginica (positive class, 33%), rest (67%)
 #> • Properties: twoclass
 #> • Features (4):
 #>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#> • Target classes: virginica (positive class, 33%), rest (67%)
 #> 
 #> 
 po$predict(list(task))
@@ -254,28 +254,28 @@ po$predict(list(task))
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa (positive class, 33%), rest (67%)
 #> • Properties: twoclass
 #> • Features (4):
 #>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#> • Target classes: setosa (positive class, 33%), rest (67%)
 #> 
 #> $versicolor
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: versicolor (positive class, 33%), rest (67%)
 #> • Properties: twoclass
 #> • Features (4):
 #>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#> • Target classes: versicolor (positive class, 33%), rest (67%)
 #> 
 #> $virginica
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: virginica (positive class, 33%), rest (67%)
 #> • Properties: twoclass
 #> • Features (4):
 #>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#> • Target classes: virginica (positive class, 33%), rest (67%)
 #> 
 #> 
 ```

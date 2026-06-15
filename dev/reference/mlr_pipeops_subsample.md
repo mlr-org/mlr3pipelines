@@ -195,10 +195,10 @@ pop$train(list(tsk("iris")))
 #> 
 #> ── <TaskClassif> (105x5): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> • Properties: multiclass
 #> • Features (4):
 #>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> 
 
 # Subsample, respecting grouping

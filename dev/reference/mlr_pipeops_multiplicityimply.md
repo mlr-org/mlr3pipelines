@@ -211,10 +211,10 @@ po$train(list(task1, task2))
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> • Properties: multiclass
 #> • Features (4):
 #>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> 
 #> [[2]]
 #> 
@@ -233,10 +233,10 @@ po$predict(list(task1, task2))
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> • Properties: multiclass
 #> • Features (4):
 #>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> 
 #> [[2]]
 #> 

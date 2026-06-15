@@ -191,10 +191,10 @@ poca$train(list(task))[[1]]  # types are converted
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> • Properties: multiclass
 #> • Features (4):
 #>   • chr (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 
 # function that does not vectorize
 f1 = function(x) {

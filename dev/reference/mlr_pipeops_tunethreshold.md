@@ -254,22 +254,19 @@ pop$state
 #> NULL
 #> 
 #> $mlr3_version
-#> [1] ‘1.6.0’
+#> [1] ‘1.7.1’
 #> 
 #> $data_prototype
-#> Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width
-#> 
-#> $task_prototype
 #> Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width
 #> 
 #> $train_task
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa, versicolor, virginica
 #> • Properties: multiclass
 #> • Features (4):
 #>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#> • Target classes: setosa, versicolor, virginica
 #> 
 #> $predict_method
 #> [1] "full"
