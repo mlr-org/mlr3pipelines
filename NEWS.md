@@ -10,6 +10,7 @@
 * New selectors `selector_positive()`, `selector_negative()`, `selector_non_negative()`, `selector_non_positive()`, `selector_non_zero()`, and `selector_non_missing()`. The numeric selectors support `keep_na` to control whether features with missing values should be selected.
 * `mlr_graphs` no longer overrides the inherited `$add()` method.
 * Simplified error messages from internal function `check_types()`. 
+* Removed deprecated `greplicate()` function. Use `ppl("greplicate")` instead.
 
   
 # mlr3pipelines 0.11.0

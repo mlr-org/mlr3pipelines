@@ -44,7 +44,6 @@ Other Graph operators:
 \code{\link[=assert_graph]{assert_graph()}},
 \code{\link[=assert_pipeop]{assert_pipeop()}},
 \code{\link[=chain_graphs]{chain_graphs()}},
-\code{\link[=greplicate]{greplicate()}},
 \code{\link{mlr_graphs_greplicate}}
 }
 \concept{Graph operators}
