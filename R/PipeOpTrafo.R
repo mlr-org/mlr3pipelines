@@ -278,7 +278,12 @@ PipeOpTargetInvert = R6Class("PipeOpTargetInvert",
     },
 
     .predict = function(inputs) {
-      inputs[[1]](inputs[-1])
+      output = inputs[[1L]](inputs[-1L])
+      extra = inputs[[2L]]$data$extra
+      if (!is.null(extra) && is.null(output[[1L]]$data$extra)) {
+        output[[1L]]$data$extra = extra
+      }
+      output
     }
   )
 )
