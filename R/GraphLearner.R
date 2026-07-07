@@ -627,12 +627,12 @@ unmarshal_model.graph_learner_model_marshaled = function(model, inplace = FALSE,
 
 #' @export
 as_learner.Graph = function(x, clone = FALSE, ...) {
-  GraphLearner$new(x, clone_graph = clone)
+  GraphLearner$new(x, clone_graph = clone, ...)
 }
 
 #' @export
 as_learner.PipeOp = function(x, clone = FALSE, ...) {
-  as_learner(as_graph(x, clone = FALSE, ...), clone = clone)
+  as_learner(as_graph(x, clone = FALSE), clone = clone, ...)
 }
 
 

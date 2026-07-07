@@ -338,6 +338,7 @@ test_that("graphlearner type inference", {
   expect_equal(l_branch$predict_type, "prob")
 })
 
+
 test_that("graphlearner type inference - branched", {
   skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long
@@ -1350,26 +1351,26 @@ test_that("GraphLearner - predict_newdata_fast", {
   # Classification
   task = tsk("iris")
   newdata = task$data(cols = task$feature_names, rows = 1:10)
-  
+
   ## predict_type = "response"
   learner = lrn("classif.featureless")
   set.seed(20251117)
   lrn_pred = learner$train(task)$predict_newdata_fast(newdata)
   set.seed(20251117)
   glrn_pred = as_learner(po("learner", learner))$train(task)$predict_newdata_fast(newdata)
-  
+
   expect_equal(as.character(glrn_pred$response), lrn_pred$response)
   expect_equal(glrn_pred$prob, lrn_pred$prob)
-  
+
   ## predict_type = "prob"
   learner = lrn("classif.featureless", predict_type = "prob")
   set.seed(20251117)
   lrn_pred = learner$train(task)$predict_newdata_fast(newdata)
   set.seed(20251117)
   glrn_pred = as_learner(po("learner", learner))$train(task)$predict_newdata_fast(newdata)
-  
-  # Some Learners only return probs if predict_type is "prob" in .predict() and labels are inferred later, 
-  # so there is an acceptable difference between the two methods. 
+
+  # Some Learners only return probs if predict_type is "prob" in .predict() and labels are inferred later,
+  # so there is an acceptable difference between the two methods.
   expect_true(identical(glrn_pred$response, lrn_pred$response) || is.null(lrn_pred$response))
   expect_equal(glrn_pred$prob, lrn_pred$prob)
 
