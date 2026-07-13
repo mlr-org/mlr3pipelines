@@ -126,11 +126,21 @@ check_formula_structure = function(f, domains) {
       if (all(domains[[sym]] %in% rng)) probs = c(probs, sprintf("clause %d, symbol %s: full-domain (tautological) range", i, sym))
     }
   }
-  # exact duplicate clauses should have been subsumed
-  keys = vapply(b, function(cl) {
-    paste(vapply(sort(names(cl)), function(s) paste0(s, "=", paste(sort(cl[[s]]), collapse = ",")), ""), collapse = ";")
-  }, "")
-  if (anyDuplicated(keys)) probs = c(probs, "duplicate clauses in output")
+  # no output clause may be subsumed by another output clause (covers exact
+  # duplicates too). The pairwise phase eliminates subsumed pairs among
+  # non-units, and unit propagation (incl. at unit merges, since the
+  # 2026-07 register_unit fix) subsumes clauses whose range on a unit symbol
+  # is not a strict subset of the unit range.
+  subsumes = function(a, b) {
+    all(names(a) %in% names(b)) && all(vapply(names(a), function(s) all(a[[s]] %in% b[[s]]), NA))
+  }
+  for (i in seq_along(b)) {
+    for (j in seq_along(b)) {
+      if (i != j && subsumes(b[[i]], b[[j]])) {
+        probs = c(probs, sprintf("output clause %d is subsumed by output clause %d", j, i))
+      }
+    }
+  }
   probs
 }
 
