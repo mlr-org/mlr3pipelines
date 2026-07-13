@@ -239,6 +239,60 @@ test_that("simplify_cnf: directed regression cases for rare simplification paths
     "cascading contradiction")
 })
 
+test_that("unit merge during the pairwise phase still subsumption-eliminates equal-range clauses", {
+  # Regression (found by attic/cnf_verify/exp13_boundary_search.R): when a
+  # clause becomes a unit during the pairwise phase and is merged with an
+  # existing unit on the same symbol such that the intersection is *smaller*
+  # than the merging unit's own range, the is_not_subset_of-based skip in
+  # register_unit() used to be decided against the merging unit's own range.
+  # A clause whose range equals the intersection then hid inside "strict
+  # subset of the merging unit" and was never subsumption-eliminated, leaving
+  # a redundant clause in the output (semantically still correct).
+  # minimized reproducer (attic/cnf_verify/results/i3_minimized.rds): both V1
+  # units emerge mid-simplification from 2nd-order SSE; their merge intersects
+  # to {v1_1, v1_5}, and the first clause's V1 range -- equal to that
+  # intersection -- must be recognized as subsumed.
+  u = CnfUniverse()
+  V1 = CnfSymbol(u, "V1", paste0("v1_", 1:5))
+  V2 = CnfSymbol(u, "V2", c("v2_2", "v2_3", "v2_5"))
+  f = CnfFormula(list(
+    CnfClause(list(V2 %among% "v2_5", V1 %among% c("v1_2", "v1_1", "v1_5"))),
+    CnfClause(list(V1 %among% c("v1_1", "v1_3", "v1_5"), V2 %among% "v2_3")),
+    CnfClause(list(V1 %among% c("v1_4", "v1_1", "v1_5"), V2 %among% "v2_2"))
+  ))
+  expected = CnfFormula(list(CnfClause(list(V1 %among% c("v1_1", "v1_5")))))
+  expect_true(isTRUE(all.equal(f, expected)))
+
+  # the original found case: output must not contain a clause subsumed by
+  # another output clause, and must stay equivalent
+  domains = list(
+    V1 = c("v1_1", "v1_2", "v1_3", "v1_4", "v1_5"),
+    V2 = c("v2_1", "v2_2", "v2_3", "v2_4", "v2_5")
+  )
+  clauses = list(
+    list(V2 = c("v2_5", "v2_1", "v2_3"), V1 = c("v1_2", "v1_1")),
+    list(V2 = "v2_5", V1 = c("v1_2", "v1_1", "v1_5")),
+    list(V2 = c("v2_5", "v2_1", "v2_3"), V1 = c("v1_1", "v1_2", "v1_3")),
+    list(V1 = c("v1_1", "v1_3", "v1_5"), V2 = "v2_3"),
+    list(V1 = c("v1_4", "v1_1", "v1_5"), V2 = "v2_2"),
+    list(V2 = c("v2_5", "v2_1", "v2_3", "v2_2"))
+  )
+  f2 = cnf_test_check_case(domains, clauses, "exp13 boundary case")
+  bare = lapply(as.list(f2), function(clause) {
+    atoms = as.list(clause)
+    structure(lapply(atoms, `[[`, "values"), names = map_chr(atoms, `[[`, "symbol"))
+  })
+  subsumes = function(a, b) {
+    all(names(a) %in% names(b)) && all(vapply(names(a), function(s) all(a[[s]] %in% b[[s]]), NA))
+  }
+  for (i in seq_along(bare)) {
+    for (j in seq_along(bare)) {
+      expect_true(i == j || !subsumes(bare[[i]], bare[[j]]),
+        info = sprintf("output clause %d is subsumed by clause %d", j, i))
+    }
+  }
+})
+
 test_that("simplify_cnf: seeded random property test against truth tables", {
   skip_on_cran()
   # compact version of the fuzzers in attic/cnf_verify: random universes and

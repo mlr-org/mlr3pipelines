@@ -151,6 +151,45 @@ This machine runs R 3.6, where mixed-class Ops (atom & clause etc.) error with
 internal). Verified in an r-base 4.6.1 container (podman): all 67 ordered
 mixed-type &, |, ! combinations produce correct truth tables with no warnings.
 
+### FINDING (exp13 boundary search): missed subsumption elimination at unit merges
+The only defect found in simplify_cnf across the whole campaign -- a
+*completeness* gap, not a soundness bug (all outputs remained semantically
+equivalent):
+
+When a clause becomes a unit during the pairwise phase and register_unit()
+merges it with an existing unit on the same symbol, the effective restringent
+becomes the *intersection* of the two unit ranges, which can be strictly
+smaller than the merging unit's own range. The is_not_subset_of-based skip,
+however, was decided against the merging unit's own range (that is what the
+matrices describe). A clause whose range *equals the intersection* then hides
+inside "strict subset of the merging unit" and its subsumption elimination is
+skipped. The restriction itself can never be missed (earlier propagation keeps
+every registered clause inside the previous unit range, hence inside the
+intersection) -- only the equality/subsumption case. Consequences before the
+fix: output could retain a clause subsumed by a unit, and the properness
+assumption documented in the HLA-phase comment ("All symbols are proper
+subsets w/r/t units") was violated (I3-properness); by the M18 mutant study
+this was still sound, since every use of that invariant only needs
+subset-including-equality.
+
+Found by exp13 (boundary search around mutant-killing inputs, with the exp08
+invariant instrumentation -- 1 hit in 40,000 neighborhood trials); it had
+survived ~500k random/directed fuzz trials, ~13M exhaustive formulas, and the
+earlier campaign's ~2.8M tests, because it needs two units on the same symbol
+to *both* emerge mid-simplification with a specific overlap pattern.
+Minimized reproducer (3 clauses, no input units; see i3_minimized.rds and the
+regression test): domains V1 = 5 values, V2 = {2,3,5}-labels;
+  (V2=5 | V1 in {2,1,5}) & (V1 in {1,3,5} | V2=3) & (V1 in {4,1,5} | V2=2)
+must simplify to the single unit V1 in {1,5}; before the fix the redundant
+clause (V1 in {1,5} | V2=3) survived next to it.
+
+Fix (R/CnfFormula_simplify.R, register_unit): only allow the use_inso skip
+when the effective restringent equals the registering unit's own range
+(length(unit_domains[[nu]]) == length(unit[[1L]])). Verified after the fix:
+regression tests pass, exp08 40k invariant trials clean (I3 properness now
+holds), exp13 re-run with a fresh seed clean, exhaustive 3v-binary k<=6
+clean, mutation suite unchanged (all expectations met).
+
 ### testthat additions
 tests/testthat/test_CnfFormula_simplify.R gained directed regression cases
 (unit merge chains, use_inso shapes incl. the exact M14/M19 mutant-killer
