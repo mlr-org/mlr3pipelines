@@ -1,0 +1,129 @@
+running covr::file_coverage with 1500 fuzz trials (this is slow under instrumentation)...
+
+== per-file line coverage ==
+CnfFormula_simplify.R         353/ 359 lines hit (98.3%)
+CnfUniverse.R                   1/  13 lines hit (7.7%)
+CnfSymbol.R                     6/  10 lines hit (60.0%)
+CnfAtom.R                      27/  52 lines hit (51.9%)
+CnfClause.R                    62/ 102 lines hit (60.8%)
+CnfFormula.R                   88/ 113 lines hit (77.9%)
+
+== unexecuted lines ==
+-- CnfAtom.R --
+    74: entry = TRUE
+    76: entry = FALSE
+    90: cat("CnfAtom: <TRUE>\n")
+    92: cat("CnfAtom: <FALSE>\n")
+   102: return("CnfAtom: T")
+   104: return("CnfAtom: F")
+   115: UseMethod("%among%")
+   120: CnfAtom(e1, e2)
+   125: stop("%among% operation not defined for LHS. %among% should typically be used with a CnfSymbol.")
+   132: UseMethod("as.CnfAtom")
+   137: stop("Cannot convert object to CnfAtom.")
+   142: assert_flag(x)
+   143: structure(
+   152: x
+   157: if (is.logical(x)) {
+   158: return(unclass(x))
+   160: return(NA)
+   169: if (identical(c(target), c(current))) {
+   170: return(TRUE)
+   172: return("target and current are both logicals but not equal")
+   175: return("target and current are not both logicals")
+   178: return("current is not a CnfAtom")
+   186: chooseOpsMethod.CnfAtom <- function(x, y, mx, my, cl, reverse) TRUE
+   199: return(`|.CnfFormula`(e1, e2))
+   211: return(as.CnfAtom(!unclass(x)))
+-- CnfClause.R --
+    96: stop("All symbols must be in the same universe.")
+    99: entries = TRUE
+   100: break
+   103: next
+   108: entries = TRUE
+   109: break
+   113: for (sym in names(a)) {
+   114: entries[[sym]] = unique(c(entries[[sym]], a[[sym]]))
+   115: if (all(universe[[sym]] %in% entries[[sym]])) {
+   116: entries = TRUE
+   117: break
+   120: if (identical(entries, TRUE)) break
+   134: cat("CnfClause: TRUE\n")
+   136: cat("CnfClause: FALSE\n")
+   151: return("CnfClause: T")
+   153: return("CnfClause: F")
+   167: stop("Cannot convert object to CnfClause.")
+   172: assert_flag(x)
+   173: return(structure(
+   187: x
+   203: return(unclass(x))
+   222: stop("Invalid index type.")
+   225: return(as.CnfClause(structure(FALSE, universe = attr(x, "universe"))))
+   228: stop("Cannot subset a FALSE clause with anything other than 0, [], or 0-length-vector.")
+   231: if (identical(i, 1) || identical(i, TRUE)) return(x)
+   232: stop("Cannot subset a TRUE clause with anything other than 0, 1, [], or 0-length-vector.")
+   254: if (identical(c(target), c(current))) {
+   255: return(TRUE)
+   257: return("target and current are both logicals but not equal")
+   260: return("target and current are not both logicals")
+   263: return("current is not a CnfClause")
+   281: chooseOpsMethod.CnfClause <- function(x, y, mx, my, cl, reverse) TRUE
+   287: `&.CnfFormula`(e1, e2)
+   292: if (inherits(e2, "CnfFormula")) {
+   294: return(`|.CnfFormula`(e1, e2))
+   296: e1_bare = unclass(e1)
+   297: e2_bare = unclass(e2)
+   298: if (isFALSE(e1_bare) || isTRUE(e2_bare)) return(as.CnfClause(e2))
+   299: if (isFALSE(e2_bare) || isTRUE(e1_bare)) return(e1)
+   300: CnfClause(list(e1, e2))
+-- CnfFormula_simplify.R --
+   385: next
+   691: eliminate_clause_update_sr(clause_idx)
+   692: remaining_nonunit_entries = remaining_other_entries
+   693: break
+   752: eliminated[[clause_idx]] = TRUE
+   753: break
+-- CnfFormula.R --
+   155: entries = FALSE
+   156: break
+   159: next
+   164: stop("All clauses must be in the same universe.")
+   172: other_entries[[length(other_entries) + 1]] = cl
+   176: entries = c(entries, unlist(other_entries, recursive = FALSE))
+   185: cat("CnfFormula: TRUE\n")
+   206: return("CnfFormula: T")
+   222: stop("Cannot convert object to CnfFormula.")
+   227: assert_flag(x)
+   228: return(structure(
+   252: x_bare = unclass(x)
+   253: if (isTRUE(x_bare)) return(list())
+   254: lapply(x_bare, structure, class = "CnfClause", universe = attr(x, "universe"))
+   259: if (is.logical(x)) {
+   260: return(unclass(x))
+   262: return(NA)
+   271: if (identical(c(target), c(current))) {
+   272: return(TRUE)
+   274: return("target and current are both logicals but not equal")
+   280: return("current is not a CnfFormula")
+   306: chooseOpsMethod.CnfFormula <- function(x, y, mx, my, cl, reverse) TRUE
+   317: stop("Both formulas must be in the same universe.")
+   331: stop("Both formulas must be in the same universe.")
+   366: return(as.CnfFormula(!unclass(x)))
+-- CnfSymbol.R --
+    45: stopf("Variable '%s' already exists in the universe.", name)
+    57: cat(sprintf("CnfSymbol '%s' with domain {%s}.\n", unclass(x), paste(attr(x, "universe")[[x]], collapse = ", ")))
+    58: invisible(x)
+    63: sprintf("CnfSymbol(%s)", unclass(x))
+-- CnfUniverse.R --
+    37: assert_string(name)
+    38: if (!exists(name, universe)) {
+    39: stopf("Variable '%s' does not exist in the universe.", name)
+    41: structure(
+    50: if (!length(x)) {
+    51: cat("CnfUniverse (empty).\n")
+    52: return(invisible(x))
+    54: cat("CnfUniverse with variables:\n")
+    55: for (var in names(x)) {
+    56: cat(sprintf("  %s: {%s}\n", var, paste(get(var, x), collapse = ", ")))
+    58: invisible(x)
+    63: return(sprintf("CnfUniverse(%s)", length(x)))

@@ -74,6 +74,55 @@ can be scaled up on bigger machines.
   this regime is rare under random generation => targeted invariant
   instrumentation (exp08) is the more sensitive tool here.
 
-### exp04 exhaustive
-- 3-var binary pool (26 clauses), all formulas with k <= 4 clauses: 0 failures
-  (17,901 formulas). Larger runs pending.
+### exp04 exhaustive: complete small spaces are clean
+- 3-var binary pool (26 clauses), ALL formulas with k <= 8 clauses:
+  2,533,986 formulas, 0 failures.
+- 2-var domain-3 pool (48 clauses), ALL k <= 4: 213,052 formulas, 0 failures.
+- (further spaces: 2v-d3 k=5, 2v-d4 k<=3, 3v-d3 k<=3 -- see results/)
+
+### exp08 invariant-instrumented fuzzing: internal bookkeeping is consistent
+Hook calls injected at consistent phase boundaries (post_preprocess, pre_hla,
+final) assert: I1 unit registry consistency, I2 symbol registry exactness,
+I3 propagation completeness (every registered clause range strictly inside
+unit ranges -- the unit-HLA load-bearing invariant), I4 clause shape,
+I5 is_not_subset_of/not_subset_count consistency with entries (pre_hla).
+Detector power validated on mutants: catches M19 at trial 123 (semantic
+oracle needed 5982) and M14 at trial 6 (semantic: 1353) -- roughly 50-200x
+more sensitive for propagation bugs. Result: 150,000 trials (standard +
+directed unit-merge generators), 0 violations.
+
+### exp05 operator fuzz: 30,000 trials clean
+Random expression trees (&, |, ! via direct S3 method calls), logical
+identities (De Morgan, double negation, absorption, distributivity,
+complement), constructor round-trips (CnfClause(atoms), CnfClause(mixed),
+CnfFormula(formulas), as.list round-trip, clause subsetting): 0 failures.
+
+### exp06 coverage + exp09 reachability: HTE outcome is (almost certainly) dead code
+covr line coverage of CnfFormula_simplify.R under the fuzz workloads: 98.3%.
+The unexecuted lines are the *hidden tautology elimination* outcomes in BOTH
+HLA loops (non-unit: lines 691-693; unit: 752-753) plus rare defensive
+rechecks. Reachability probes over 200k fuzz trials + 83,681 exhaustive
+formulas: HTE fired 0 times, while hidden *subsumption* elimination fired
+thousands of times, and the defensive rechecks (P3/P5/P6/P7) did fire rarely
+(2/17/9/5 times) -- so they are reachable and correct, not dead.
+
+Analytic argument for HTE-unreachability: a donor is selected only while its
+exceptional symbol m satisfies donor[m] not-subset-of C[m] (matrix rows are
+kept accurate w.r.t. the virtually extended clause during the HLA loop, flips
+are paired with count decrements, and a count that reaches 0 triggers hidden
+subsumption elimination immediately). Then
+range_new = C[m] u (dom \ (C[m] u donor[m])) misses donor[m] \ C[m], which is
+nonempty -- so range_new can never equal the full domain. Even the documented
+"hidden tautology elimination" example in ?CnfFormula is actually eliminated
+through the HSE path (count reaching 0), not the HTE branch. The HTE branches
+are harmless belt-and-suspenders, but they appear to be unreachable given
+consistent bookkeeping. (Degenerate exception: duplicated values in a symbol
+domain -- which CnfSymbol currently accepts -- could theoretically distort the
+length comparison, another reason to reject duplicated domains at
+construction.)
+
+### exp07 scale testing via independent DPLL implication checker
+Multivalued DPLL (integer-encoded, unit propagation + branching), validated
+against truth tables on 800 small instances including deliberately perturbed
+results. Verifies F |= G and G |= F clause-wise for formulas with 8-20
+symbols, domains 2-8, 10-80 clauses -- far beyond truth-table reach.
