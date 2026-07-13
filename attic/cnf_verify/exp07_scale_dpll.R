@@ -174,15 +174,18 @@ for (i in 1:800) {
 cat("checker validated (800 instances incl. perturbed results)\n")
 
 # --- scale trials -------------------------------------------------------------
+syms_max = as.integer(Sys.getenv("CNF_SYMS_MAX", "20"))
+clauses_max = as.integer(Sys.getenv("CNF_CLAUSES_MAX", "60"))
+
 one_trial = function(i) {
   set.seed(base_seed() * 3000017L + i)
-  n_sym = sample(8:20, 1)
+  n_sym = sample(8:syms_max, 1)
   dom_sizes = sample(2:8, n_sym, replace = TRUE)
   uinfo = gen_universe(n_sym, dom_sizes, shared_values = runif(1) < 0.3)
   gen = sample(c("random", "redundant", "unit_heavy", "chain", "unit_merge", "mixed_big"), 1)
   max_lit = sample(2:5, 1)
   clauses = switch(gen,
-    random = gen_random_clauses(uinfo$domains, n_clauses = sample(10:60, 1), max_lit = max_lit),
+    random = gen_random_clauses(uinfo$domains, n_clauses = sample(10:clauses_max, 1), max_lit = max_lit),
     redundant = gen_redundant_clauses(uinfo$domains, n_base = sample(5:15, 1), n_extra = sample(5:25, 1), max_lit = max_lit),
     unit_heavy = gen_unit_heavy_clauses(uinfo$domains, n_units = sample(2:6, 1), n_other = sample(10:30, 1), max_lit = max_lit),
     chain = do.call(c, replicate(sample(3:6, 1), gen_chain_clauses(uinfo$domains, n_chain = sample(4:8, 1), max_lit = max_lit), simplify = FALSE)),

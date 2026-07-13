@@ -1,0 +1,3 @@
+validating DPLL checker against truth tables on small instances...
+checker validated (800 instances incl. perturbed results)
+exp07 scale DPLL: 2000 trials, seed 6
