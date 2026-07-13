@@ -86,4 +86,182 @@ test_that("CnfFormula Regression Tests", {
 
 })
 
+# Truth-table helpers for the directed regression cases and the property test
+# below. `clauses` is a list of named lists (symbol -> allowed values); the
+# formula is their conjunction, each clause the disjunction of its ranges.
+cnf_test_eval_clauses = function(clauses, assignments) {
+  Reduce(`&`, lapply(clauses, function(cl) {
+    Reduce(`|`, lapply(names(cl), function(s) assignments[[s]] %in% cl[[s]]))
+  }))
+}
+
+cnf_test_eval_formula = function(f, assignments) {
+  if (!is.na(as.logical(f))) return(rep(as.logical(f), nrow(assignments)))
+  Reduce(`&`, lapply(as.list(f), function(clause) {
+    Reduce(`|`, lapply(as.list(clause), function(atom) {
+      assignments[[atom$symbol]] %in% atom$values
+    }))
+  }))
+}
+
+# build a CnfFormula from bare clauses through the public API and compare its
+# truth table against the direct evaluation of the input clauses.
+cnf_test_check_case = function(domains, clauses, label) {
+  u = CnfUniverse()
+  syms = list()
+  for (nm in names(domains)) syms[[nm]] = CnfSymbol(u, nm, domains[[nm]])
+  clause_objs = lapply(clauses, function(cl) {
+    CnfClause(lapply(names(cl), function(s) syms[[s]] %among% cl[[s]]))
+  })
+  f = CnfFormula(clause_objs)
+  assignments = expand.grid(domains, stringsAsFactors = FALSE)
+  expect_identical(cnf_test_eval_formula(f, assignments), cnf_test_eval_clauses(clauses, assignments),
+    info = paste0(label, ": simplification must preserve the truth table"))
+  if (is.na(as.logical(f))) {
+    for (clause in as.list(f)) {
+      for (atom in as.list(clause)) {
+        expect_true(length(atom$values) > 0 && !all(domains[[atom$symbol]] %in% atom$values),
+          info = paste0(label, ": output ranges must be proper nonempty subsets"))
+      }
+    }
+  }
+  invisible(f)
+}
+
+test_that("simplify_cnf: directed regression cases for rare simplification paths", {
+  # Cases distilled from the verification campaign in attic/cnf_verify. They
+  # exercise unit merging, the use_inso skip in register_unit, propagation
+  # cascades that create units mid-simplification, both HLA phases (which rely
+  # on completed unit propagation for soundness), and 2nd-order SSE.
+
+  # documented resolution subsumption example (?CnfFormula)
+  cnf_test_check_case(
+    list(X = c("a", "b", "c"), Y = c("d", "e", "f")),
+    list(list(X = "a", Y = "d"), list(X = "b", Y = "e"), list(Y = c("d", "e"))),
+    "resolution subsumption")
+
+  # documented 'hidden tautology' example; eliminated through the hidden
+  # subsumption path in the HLA phase
+  cnf_test_check_case(
+    list(X = c("a", "b", "c"), Y = c("d", "e", "f"), Z = c("g", "h", "i")),
+    list(
+      list(X = c("a", "b"), Y = c("d", "e")),
+      list(X = "a", Z = c("g", "h")),
+      list(X = "b", Z = c("h", "i")),
+      list(Y = c("d", "e"), Z = c("g", "i"))
+    ),
+    "hidden subsumption via HLA")
+
+  # unit-HLA: donors force the unit to be implied by the rest (X = "c" is
+  # impossible given the two donors, so the unit clause is redundant)
+  cnf_test_check_case(
+    list(X = c("a", "b", "c"), Y = c("d", "e", "f")),
+    list(list(X = c("a", "b")), list(X = "a", Y = "d"), list(X = "b", Y = "e")),
+    "unit eliminated by unit-HLA")
+
+  # unit merge chain: propagation of the Y unit turns clause 3 into a second
+  # X unit mid-simplification, which must be intersected with clause 1
+  cnf_test_check_case(
+    list(X = c("a", "b", "c"), Y = c("d", "e", "f")),
+    list(
+      list(X = c("a", "b")),
+      list(Y = "d"),
+      list(X = c("a", "c"), Y = "e"),
+      list(X = c("b", "c"), Y = c("d", "f"))
+    ),
+    "unit created and merged mid-simplification")
+
+  # use_inso equality case: clause range on the unit symbol equals the unit
+  # range (subsumption elimination must fire, not be skipped)
+  cnf_test_check_case(
+    list(X = c("a", "b", "c"), Y = c("d", "e", "f")),
+    list(list(X = c("a", "b")), list(X = c("a", "b"), Y = c("d", "e")), list(Y = "d")),
+    "clause range equals unit range")
+
+  # regression: the exact 7-clause formula on which breaking unit propagation
+  # in register_unit (attic/cnf_verify exp03, mutant M14) makes the unit-HLA
+  # phase produce a semantically wrong result
+  cnf_test_check_case(
+    list(V1 = c("x1", "x2"), V2 = c("x1", "x2", "x3")),
+    list(
+      list(V2 = c("x1", "x2"), V1 = "x1"),
+      list(V2 = "x1", V1 = "x1"),
+      list(V1 = "x2", V2 = "x3"),
+      list(V1 = "x2", V2 = c("x3", "x2")),
+      list(V1 = "x1", V2 = c("x2", "x1")),
+      list(V1 = "x1", V2 = c("x2", "x1")),
+      list(V1 = "x1", V2 = "x2")
+    ),
+    "M14 killer (unit-HLA after propagation)")
+
+  # regression: 10-clause formula distinguishing the exact use_inso skip
+  # condition from a slightly-too-eager one (exp03, mutant M19)
+  cnf_test_check_case(
+    list(
+      V1 = c("x1", "x2", "x3", "x4"),
+      V2 = c("x1", "x2", "x3", "x4", "x5"),
+      V3 = c("x1", "x2", "x3"),
+      V4 = c("x1", "x2", "x3", "x4", "x5")
+    ),
+    list(
+      list(V1 = c("x1", "x4", "x2"), V2 = c("x2", "x4"), V4 = c("x2", "x4", "x1")),
+      list(V3 = "x3", V4 = "x2", V1 = "x3"),
+      list(V1 = c("x2", "x1")),
+      list(V4 = "x2", V2 = c("x2", "x3", "x4", "x1")),
+      list(V2 = "x1", V3 = c("x1", "x2"), V4 = c("x5", "x4", "x2", "x3")),
+      list(V1 = c("x4", "x1"), V2 = c("x1", "x3", "x2"), V3 = "x2"),
+      list(V1 = c("x1", "x4"), V2 = c("x5", "x4")),
+      list(V1 = c("x1", "x2")),
+      list(V1 = c("x3", "x4"), V4 = c("x3", "x1", "x5"), V2 = c("x2", "x3", "x1")),
+      list(V1 = c("x2", "x4", "x3"), V2 = c("x2", "x3", "x5", "x1"))
+    ),
+    "M19 killer (use_inso skip condition)")
+
+  # 2nd-order SSE with disjoint ranges outside the target (oneend/twoend)
+  cnf_test_check_case(
+    list(X = c("a", "b", "c"), Y = c("d", "e", "f"), Z = c("g", "h", "i")),
+    list(
+      list(X = "a", Y = "d"),
+      list(X = "b", Y = "e", Z = "g"),
+      list(Y = c("d", "e"), Z = c("g", "h"))
+    ),
+    "2nd-order self-subsumption")
+
+  # contradiction reached through cascading unit propagation
+  cnf_test_check_case(
+    list(X = c("a", "b"), Y = c("d", "e"), Z = c("g", "h")),
+    list(
+      list(X = "a"),
+      list(X = "b", Y = "d"),
+      list(Y = "e", Z = "g"),
+      list(Z = "h")
+    ),
+    "cascading contradiction")
+})
+
+test_that("simplify_cnf: seeded random property test against truth tables", {
+  skip_on_cran()
+  # compact version of the fuzzers in attic/cnf_verify: random universes and
+  # clause sets, exact truth-table comparison. Deterministic via set.seed.
+  set.seed(20260713)
+  for (trial in seq_len(150)) {
+    n_sym = sample(2:4, 1)
+    domains = list()
+    for (i in seq_len(n_sym)) {
+      domains[[paste0("V", i)]] = paste0("x", seq_len(sample(2:4, 1)))
+    }
+    n_clauses = sample(1:8, 1)
+    clauses = lapply(seq_len(n_clauses), function(j) {
+      cl_syms = sample(names(domains), sample.int(n_sym, 1))
+      cl = list()
+      for (s in cl_syms) {
+        d = domains[[s]]
+        cl[[s]] = sample(d, sample.int(length(d) - 1L, 1))
+      }
+      cl
+    })
+    cnf_test_check_case(domains, clauses, sprintf("property trial %d", trial))
+  }
+})
+
 
