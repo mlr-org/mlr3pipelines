@@ -193,5 +193,21 @@ clean, mutation suite unchanged (all expectations met).
 ### testthat additions
 tests/testthat/test_CnfFormula_simplify.R gained directed regression cases
 (unit merge chains, use_inso shapes incl. the exact M14/M19 mutant-killer
-formulas, unit-HLA donors, 2nd-order SSE, cascading contradiction) and a
-150-trial seeded truth-table property test (~2s runtime).
+formulas, unit-HLA donors, 2nd-order SSE, cascading contradiction), the
+minimized reproducer of the unit-merge subsumption gap, and a 150-trial
+seeded truth-table property test (~2s runtime).
+
+### Final soak on the fixed code
+run_all.sh seeds 10-15 (876,000 trials total: baseline fuzz, operator fuzz,
+DPLL scale, invariant-instrumented fuzz, negation-at-scale, misc): 0 failures.
+Existing 736-case cnf.xz corpus test: 0 mismatches (run via op-dispatch shims
+on R 3.6).
+
+## Overall totals (this campaign)
+- ~13-15M exhaustively enumerated formulas across five complete spaces
+- ~1.5M randomized trials across seven experiment families (truth-table,
+  invariant, DPLL oracles)
+- 19 code mutants for detector-power calibration
+- 1 defect found and fixed (completeness, not soundness): missed subsumption
+  elimination when unit merges shrink the propagated range
+- 0 soundness violations anywhere

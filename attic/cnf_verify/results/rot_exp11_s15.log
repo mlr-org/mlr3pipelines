@@ -1,0 +1,8 @@
+exp11 misc: 20000 trials, seed 15
+trials: 20000, failures: 0
+
+constructor universe-inference status:
+  CnfClause(list(FALSE-atom, atom)): ERROR: All symbols must be in the same universe. 
+  CnfClause(list(TRUE-atom, atom)):  works 
+  CnfFormula(list(FALSE-clause, clause)): works 
+  CnfFormula(list(TRUE-clause, clause)):  ERROR: All clauses must be in the same universe. 
