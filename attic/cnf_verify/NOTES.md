@@ -204,7 +204,10 @@ Existing 736-case cnf.xz corpus test: 0 mismatches (run via op-dispatch shims
 on R 3.6).
 
 ## Overall totals (this campaign)
-- ~13-15M exhaustively enumerated formulas across five complete spaces
+- ~18.1M exhaustively enumerated formulas across seven complete spaces:
+  3v-binary k<=8 (2.53M) and k=9 (3.12M), 2v-d3 k<=5 (1.93M), 2v-d4 k<=3
+  (1.87M), 3v-d3 k<=3 (6.67M), 4v-binary k<=4 (1.67M, fixed code),
+  3v-binary k<=6 rerun on fixed code (0.31M)
 - ~1.5M randomized trials across seven experiment families (truth-table,
   invariant, DPLL oracles)
 - 19 code mutants for detector-power calibration
