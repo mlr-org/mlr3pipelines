@@ -126,3 +126,33 @@ Multivalued DPLL (integer-encoded, unit propagation + branching), validated
 against truth tables on 800 small instances including deliberately perturbed
 results. Verifies F |= G and G |= F clause-wise for formulas with 8-20
 symbols, domains 2-8, 10-80 clauses -- far beyond truth-table reach.
+Results: 5,000 trials clean; big-formula batch (up to 30 symbols, up to 150
+clauses): 2,000 trials clean, no DPLL budget exhaustion.
+
+### exp10 negation / OR-distribution at scale (DPLL-checked): clean
+For formulas with 5-12 symbols: f & !f UNSAT, f | !f tautology, !!f
+equivalent to f, and f | g equivalent to an independently implemented naive
+cross-product distribution: 4,200 trials, 0 failures.
+
+### exp11 misc directed checks: clean
+Permutation invariance (semantic), large domains (10-30 values), OR operand
+symmetry, duplicate-clause stress, all.equal soundness (TRUE implies equal
+truth tables; reordered representations compare TRUE): 25,000 trials clean.
+Constructor universe-inference asymmetry documented: CnfClause() errors when a
+FALSE atom precedes real atoms, CnfFormula() errors when a TRUE clause
+precedes real clauses (each constructor trips over its *neutral* element,
+whose universe is NULL, while the absorbing element short-circuits safely) --
+this is the known bug-#3/#4 family.
+
+### exp12 mixed-class Ops dispatch on R >= 4.3: correct
+This machine runs R 3.6, where mixed-class Ops (atom & clause etc.) error with
+"Incompatible methods" -- the chooseOpsMethod fix only registers on R >= 4.3
+(relevant given DESCRIPTION declares R >= 3.3.0, though the CNF tooling is
+internal). Verified in an r-base 4.6.1 container (podman): all 67 ordered
+mixed-type &, |, ! combinations produce correct truth tables with no warnings.
+
+### testthat additions
+tests/testthat/test_CnfFormula_simplify.R gained directed regression cases
+(unit merge chains, use_inso shapes incl. the exact M14/M19 mutant-killer
+formulas, unit-HLA donors, 2nd-order SSE, cascading contradiction) and a
+150-trial seeded truth-table property test (~2s runtime).
