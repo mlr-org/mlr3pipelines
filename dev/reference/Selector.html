@@ -90,7 +90,19 @@ shown here. Each of these can be called with its arguments to create a <code>Sel
 <span></span>
 <span><span class="fu">selector_missing</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">selector_cardinality_greater_than</span><span class="op">(</span><span class="va">min_cardinality</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">selector_non_missing</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">selector_cardinality_greater_than</span><span class="op">(</span><span class="va">min_cardinality</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">selector_positive</span><span class="op">(</span>na_ignore <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">selector_negative</span><span class="op">(</span>na_ignore <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">selector_non_negative</span><span class="op">(</span>na_ignore <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">selector_non_positive</span><span class="op">(</span>na_ignore <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">selector_non_zero</span><span class="op">(</span>na_ignore <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -150,6 +162,13 @@ Second <code>Selector</code> to query.</p></dd>
 <dd><p>(<code>integer</code>) <br>
 Minimum number of levels required to be selected.</p></dd>
 
+
+<dt id="arg-na-ignore">na_ignore<a class="anchor" aria-label="anchor" href="#arg-na-ignore"></a></dt>
+<dd><p>(<code>logical(1)</code>)<br>
+Whether to ignore missing values when checking whether all values satisfy the selector's condition. If <code>TRUE</code>,
+missing values do not influence the check. If <code>FALSE</code>, features containing missing values are not selected.
+Defaults to <code>TRUE</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -159,7 +178,7 @@ Minimum number of levels required to be selected.</p></dd>
     <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a></h2>
 
 <ul><li><p><code>selector_all()</code>: <code>selector_all</code> selects all features.</p></li>
-<li><p><code>selector_none()</code>: <code>selector_none</code> selects none of the  features.</p></li>
+<li><p><code>selector_none()</code>: <code>selector_none</code> selects none of the features.</p></li>
 <li><p><code>selector_type()</code>: <code>selector_type</code> selects features according to type. Legal types are listed in <code>mlr_reflections$task_feature_types</code>.</p></li>
 <li><p><code>selector_grep()</code>: <code>selector_grep</code> selects features with names matching the <code><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep()</a></code> pattern.</p></li>
 <li><p><code>selector_name()</code>: <code>selector_name</code> selects features with names matching exactly the names listed.</p></li>
@@ -174,8 +193,14 @@ selected by either <code>Selector</code> are selected in the end.</p></li>
 selected by <code>selector_x</code> are selected, unless they are also selected
 by <code>selector_y</code>.</p></li>
 <li><p><code>selector_missing()</code>: <code>selector_missing</code> selects features with missing values.</p></li>
+<li><p><code>selector_non_missing()</code>: <code>selector_non_missing</code> selects features without missing values.</p></li>
 <li><p><code>selector_cardinality_greater_than()</code>: <code>selector_cardinality_greater_than</code> selects categorical features with cardinality
 greater then a given threshold.</p></li>
+<li><p><code>selector_positive()</code>: <code>selector_positive</code> selects integer and numeric features whose values are all greater than zero.</p></li>
+<li><p><code>selector_negative()</code>: <code>selector_negative</code> selects integer and numeric features whose values are all less than zero.</p></li>
+<li><p><code>selector_non_negative()</code>: <code>selector_non_negative</code> selects integer and numeric features whose values are all greater than or equal to zero.</p></li>
+<li><p><code>selector_non_positive()</code>: <code>selector_non_positive</code> selects integer and numeric features whose values are all less than or equal to zero.</p></li>
+<li><p><code>selector_non_zero()</code>: <code>selector_non_zero</code> selects integer and numeric features whose values are all non-zero.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

@@ -43,7 +43,7 @@ as_pipeop(x, clone = FALSE)
 
 ## See also
 
-Other Graph operators: `%>>%()`,
+Other Graph operators: `%>>%`,
 [`as_graph()`](https://mlr3pipelines.mlr-org.com/dev/reference/as_graph.md),
 [`assert_graph()`](https://mlr3pipelines.mlr-org.com/dev/reference/assert_graph.md),
 [`assert_pipeop()`](https://mlr3pipelines.mlr-org.com/dev/reference/assert_pipeop.md),

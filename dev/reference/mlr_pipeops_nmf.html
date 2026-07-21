@@ -147,8 +147,10 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>
 
 
-<p>Uses the <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">nmf()</a></code> function as well as <code>basis()</code>, <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> and
-<code><a href="https://rdrr.io/pkg/MASS/man/ginv.html" class="external-link">ginv()</a></code>.</p>
+<p>Uses the <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">nmf()</a></code> function as well as <code><a href="https://rdrr.io/pkg/NMF/man/basis-coef-methods.html" class="external-link">basis()</a></code>, <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> and
+<code><a href="https://rdrr.io/pkg/MASS/man/ginv.html" class="external-link">ginv()</a></code>. Does not support features with missing or infinite values. Features containing
+negative values are currently excluded with a warning, but this will become an error in a future release.
+Use <code>affect_columns = selector_non_negative()</code> to explicitly select non-negative features.</p>
     </div>
     <div class="section level2">
     <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>
@@ -308,7 +310,7 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Iterations: 470 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Timing:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      user  system elapsed </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.064   0.006   0.070 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.066   0.002   0.068 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dt_columns</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>

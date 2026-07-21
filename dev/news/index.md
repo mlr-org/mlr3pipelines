@@ -20,6 +20,24 @@
 - Fix: `mlr_pipeops$add()` now saves the namespace environment from
   which it was called to allow delayed evaluation in
   `as.data.table(mlr_pipeops)`.
+- `PipeOpNMF` now correctly rejects features containing missing or
+  infinite values with an informative error message. Features containing
+  negative values are still dropped implictly, but now this produces a
+  warning to use
+  [`selector_non_negative()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md)
+  for explicit column selection. This will become an error in the
+  future.
+- New selectors
+  [`selector_positive()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md),
+  [`selector_negative()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md),
+  [`selector_non_negative()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md),
+  [`selector_non_positive()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md),
+  [`selector_non_zero()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md),
+  and
+  [`selector_non_missing()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md).
+  The numeric selectors support `na_ignore` to control whether missing
+  values are ignored when checking if all values satisfy the selector’s
+  condition.
 - `mlr_graphs` no longer overrides the inherited `$add()` method.
 - Simplified error messages from internal function `check_types()`.
 - Removed deprecated `greplicate()` function. Use `ppl("greplicate")`

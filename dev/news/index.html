@@ -60,6 +60,9 @@
 <li>New <code>PipeOpMaterialize</code> that materializes the active <code>Task</code> view, reducing size and simplifying structure of the <code>Task</code>’s <code>DataBackend</code>.</li>
 <li>Fix: <code>mlr_pipeops$add()</code> now saves the namespace environment from which it was called to allow delayed evaluation in <code>as.data.table(mlr_pipeops)</code>.</li>
 <li>
+<code>PipeOpNMF</code> now correctly rejects features containing missing or infinite values with an informative error message. Features containing negative values are still dropped implictly, but now this produces a warning to use <code><a href="../reference/Selector.html">selector_non_negative()</a></code> for explicit column selection. This will become an error in the future.</li>
+<li>New selectors <code><a href="../reference/Selector.html">selector_positive()</a></code>, <code><a href="../reference/Selector.html">selector_negative()</a></code>, <code><a href="../reference/Selector.html">selector_non_negative()</a></code>, <code><a href="../reference/Selector.html">selector_non_positive()</a></code>, <code><a href="../reference/Selector.html">selector_non_zero()</a></code>, and <code><a href="../reference/Selector.html">selector_non_missing()</a></code>. The numeric selectors support <code>na_ignore</code> to control whether missing values are ignored when checking if all values satisfy the selector’s condition.</li>
+<li>
 <code>mlr_graphs</code> no longer overrides the inherited <code>$add()</code> method.</li>
 <li>Simplified error messages from internal function <code>check_types()</code>.</li>
 <li>Removed deprecated <code>greplicate()</code> function. Use <code>ppl("greplicate")</code> instead.</li>

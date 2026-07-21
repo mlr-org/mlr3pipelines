@@ -491,7 +491,13 @@ the *[dplyr](https://github.com/tidyverse/dplyr)* package.
   [`selector_union()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md)
   [`selector_setdiff()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md)
   [`selector_missing()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md)
+  [`selector_non_missing()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md)
   [`selector_cardinality_greater_than()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md)
+  [`selector_positive()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md)
+  [`selector_negative()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md)
+  [`selector_non_negative()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md)
+  [`selector_non_positive()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md)
+  [`selector_non_zero()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md)
   : Selector Functions
 - [`as_graph()`](https://mlr3pipelines.mlr-org.com/dev/reference/as_graph.md)
   : Conversion to mlr3pipelines Graph

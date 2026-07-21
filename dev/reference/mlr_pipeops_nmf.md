@@ -114,8 +114,15 @@ as well as:
 ## Internals
 
 Uses the [`nmf()`](https://rdrr.io/pkg/NMF/man/nmf.html) function as
-well as `basis()`, [`coef()`](https://rdrr.io/r/stats/coef.html) and
-[`ginv()`](https://rdrr.io/pkg/MASS/man/ginv.html).
+well as
+[`basis()`](https://rdrr.io/pkg/NMF/man/basis-coef-methods.html),
+[`coef()`](https://rdrr.io/r/stats/coef.html) and
+[`ginv()`](https://rdrr.io/pkg/MASS/man/ginv.html). Does not support
+features with missing or infinite values. Features containing negative
+values are currently excluded with a warning, but this will become an
+error in a future release. Use
+`affect_columns = selector_non_negative()` to explicitly select
+non-negative features.
 
 ## Fields
 
@@ -274,7 +281,7 @@ pop$state
 #>   Iterations: 470 
 #>   Timing:
 #>      user  system elapsed 
-#>     0.064   0.006   0.070 
+#>     0.066   0.002   0.068 
 #> 
 #> $dt_columns
 #> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 

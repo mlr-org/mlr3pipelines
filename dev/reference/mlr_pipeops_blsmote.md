@@ -95,7 +95,7 @@ Only methods inherited from
 Han H, Wang W, Mao B (2005). “Borderline-SMOTE: A New Over-Sampling
 Method in Imbalanced Data Sets Learning.” In Huang D, Zhang X, Huang G
 (eds.), *Advances in Intelligent Computing*, 878–887. ISBN
-978-3-540-31902-3,
+978-3-540-31902-3.
 [doi:10.1007/11538059_91](https://doi.org/10.1007/11538059_91) .
 
 ## See also

@@ -55,7 +55,7 @@ as well as:
 
 - `K` :: `numeric(1)`  
   The number of nearest neighbors used for sampling new values. Default
-  is `5`. See `ADAS()`.
+  is `5`. See [`ADAS()`](https://rdrr.io/pkg/smotefamily/man/adas.html).
 
 ## Internals
 
