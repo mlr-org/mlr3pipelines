@@ -88,7 +88,7 @@ test_that("numeric value selectors work", {
     selector_non_positive = c("negative", "negative_integer", "zero", "non_positive"),
     selector_non_zero = c("positive", "positive_integer", "negative", "negative_integer", "non_zero")
   )
-  expected_keep_na = list(
+  expected_na_ignore = list(
     selector_positive = c(expected$selector_positive, "positive_missing", "all_missing"),
     selector_negative = c(expected$selector_negative, "negative_missing", "all_missing"),
     selector_non_negative = c(
@@ -107,17 +107,17 @@ test_that("numeric value selectors work", {
 
   for (name in names(selectors)) {
     selector = selectors[[name]]
-    expect_set_equal(selector()(task), expected_keep_na[[name]], info = name)
-    expect_set_equal(selector(keep_na = FALSE)(task), expected[[name]], info = name)
-    expect_set_equal(selector(keep_na = TRUE)(task), expected_keep_na[[name]], info = name)
+    expect_set_equal(selector()(task), expected_na_ignore[[name]], info = name)
+    expect_set_equal(selector(na_ignore = FALSE)(task), expected[[name]], info = name)
+    expect_set_equal(selector(na_ignore = TRUE)(task), expected_na_ignore[[name]], info = name)
     expect_output(print(selector()), sprintf("%s\\(\\)", name), info = name)
     expect_output(
-      print(selector(keep_na = FALSE)),
-      sprintf("%s\\(keep_na = FALSE\\)", name),
+      print(selector(na_ignore = FALSE)),
+      sprintf("%s\\(na_ignore = FALSE\\)", name),
       info = name
     )
-    expect_output(print(selector(keep_na = TRUE)), sprintf("%s\\(\\)", name), info = name)
-    expect_error(selector(keep_na = NA), "Assertion on 'keep_na' failed", info = name)
+    expect_output(print(selector(na_ignore = TRUE)), sprintf("%s\\(\\)", name), info = name)
+    expect_error(selector(na_ignore = NA), "Assertion on 'na_ignore' failed", info = name)
   }
 })
 

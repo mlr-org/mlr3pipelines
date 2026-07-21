@@ -45,15 +45,15 @@ selector_non_missing()
 
 selector_cardinality_greater_than(min_cardinality)
 
-selector_positive(keep_na = TRUE)
+selector_positive(na_ignore = TRUE)
 
-selector_negative(keep_na = TRUE)
+selector_negative(na_ignore = TRUE)
 
-selector_non_negative(keep_na = TRUE)
+selector_non_negative(na_ignore = TRUE)
 
-selector_non_positive(keep_na = TRUE)
+selector_non_positive(na_ignore = TRUE)
 
-selector_non_zero(keep_na = TRUE)
+selector_non_zero(na_ignore = TRUE)
 }
 \arguments{
 \item{types}{(\code{character}) \cr
@@ -89,9 +89,10 @@ Second \code{\link{Selector}} to query.}
 \item{min_cardinality}{(\code{integer}) \cr
 Minimum number of levels required to be selected.}
 
-\item{keep_na}{(\code{logical(1)})\cr
-Whether features may also contain missing values and be selected. If \code{TRUE}, features may also contain missing values to
-be selected. If \code{FALSE}, features containing missing values are not selected. Defaults to \code{TRUE}.}
+\item{na_ignore}{(\code{logical(1)})\cr
+Whether to ignore missing values when checking whether all values satisfy the selector's condition. If \code{TRUE},
+missing values do not influence the check. If \code{FALSE}, features containing missing values are not selected.
+Defaults to \code{TRUE}.}
 }
 \value{
 \code{function}: A \code{\link{Selector}} function that takes a \code{\link[mlr3:Task]{Task}} and returns the feature names to be processed.
