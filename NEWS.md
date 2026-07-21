@@ -9,7 +9,8 @@
 * `mlr_graphs` no longer overrides the inherited `$add()` method.
 * Simplified error messages from internal function `check_types()`.
 * Removed deprecated `greplicate()` function. Use `ppl("greplicate")` instead.
-
+* Fix: `as_learner.Graph` now handles `...` as an argument.
+* feat: `as_learner.Graph` now suppots the `discard_state` argument, same as `as_learner.Learner`.
 
 # mlr3pipelines 0.11.0
 
