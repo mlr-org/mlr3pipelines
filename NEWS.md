@@ -9,7 +9,7 @@
 * `mlr_graphs` no longer overrides the inherited `$add()` method.
 * Simplified error messages from internal function `check_types()`. 
 * Removed deprecated `greplicate()` function. Use `ppl("greplicate")` instead.
-
+* `PipeOpTargetInvert` now propagates the `extra` slot of input prediction objects to the output prediction object, if the inverter `fun` does not handle it already.  
   
 # mlr3pipelines 0.11.0
 
