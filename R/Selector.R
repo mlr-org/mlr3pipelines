@@ -112,10 +112,10 @@ print.Selector = function(x, ...) {
 #' @describeIn Selector `selector_all` selects all features.
 #' @export
 selector_all = function() make_selector(function(task) {
-    task$feature_names
-  }, "selector_all()")
+  task$feature_names
+}, "selector_all()")
 
-#' @describeIn Selector `selector_none` selects none of the  features.
+#' @describeIn Selector `selector_none` selects none of the features.
 #' @export
 selector_none = function() make_selector(function(task) {
   character(0)
@@ -232,6 +232,14 @@ selector_missing = function() make_selector(function(task) {
   names(missings)[missings != 0]
 }, "selector_missing()")
 
+#' @describeIn Selector `selector_non_missing` selects features without missing values.
+#' @export
+selector_non_missing = function() make_selector(function(task) {
+  fn = task$feature_names
+  missings = task$missings()
+  fn[missings[fn] == 0L]
+}, "selector_non_missing()")
+
 #' @describeIn Selector `selector_cardinality_greater_than` selects categorical features with cardinality
 #' greater then a given threshold.
 #' @param min_cardinality (`integer`) \cr
@@ -243,4 +251,69 @@ selector_cardinality_greater_than = function(min_cardinality) {
     levlens = map_int(task$clone(deep = TRUE)$droplevels()$levels(), length)
     names(levlens[levlens > min_cardinality])
   }, "selector_cardinality_greater_than(%s)", min_cardinality)
+}
+
+make_numeric_selector = function(predicate, name, na_ignore) {
+  make_selector(function(task) {
+    features = task$feature_types[get("type") %in% c("integer", "numeric"), get("id")]
+    keep = map_lgl(task$data(cols = features), function(x) {
+      (na_ignore || !anyNA(x)) && all(predicate(x), na.rm = na_ignore)
+    })
+    names(keep)[keep]
+  }, "%s(%s)", name, if (na_ignore) "" else "na_ignore = FALSE")
+}
+
+#' @describeIn Selector `selector_positive` selects integer and numeric features whose values are all greater than zero.
+#' @param na_ignore (`logical(1)`)\cr
+#'   Whether to ignore missing values when checking whether all values satisfy the selector's condition. If `TRUE`,
+#'   missing values do not influence the check. If `FALSE`, features containing missing values are not selected.
+#'   Defaults to `TRUE`.
+#' @export
+selector_positive = function(na_ignore = TRUE) {
+  assert_flag(na_ignore)
+  make_numeric_selector(function(x) x > 0, "selector_positive", na_ignore)
+}
+
+#' @describeIn Selector `selector_negative` selects integer and numeric features whose values are all less than zero.
+#' @param na_ignore (`logical(1)`)\cr
+#'   Whether to ignore missing values when checking whether all values satisfy the selector's condition. If `TRUE`,
+#'   missing values do not influence the check. If `FALSE`, features containing missing values are not selected.
+#'   Defaults to `TRUE`.
+#' @export
+selector_negative = function(na_ignore = TRUE) {
+  assert_flag(na_ignore)
+  make_numeric_selector(function(x) x < 0, "selector_negative", na_ignore)
+}
+
+#' @describeIn Selector `selector_non_negative` selects integer and numeric features whose values are all greater than or equal to zero.
+#' @param na_ignore (`logical(1)`)\cr
+#'   Whether to ignore missing values when checking whether all values satisfy the selector's condition. If `TRUE`,
+#'   missing values do not influence the check. If `FALSE`, features containing missing values are not selected.
+#'   Defaults to `TRUE`.
+#' @export
+selector_non_negative = function(na_ignore = TRUE) {
+  assert_flag(na_ignore)
+  make_numeric_selector(function(x) x >= 0, "selector_non_negative", na_ignore)
+}
+
+#' @describeIn Selector `selector_non_positive` selects integer and numeric features whose values are all less than or equal to zero.
+#' @param na_ignore (`logical(1)`)\cr
+#'   Whether to ignore missing values when checking whether all values satisfy the selector's condition. If `TRUE`,
+#'   missing values do not influence the check. If `FALSE`, features containing missing values are not selected.
+#'   Defaults to `TRUE`.
+#' @export
+selector_non_positive = function(na_ignore = TRUE) {
+  assert_flag(na_ignore)
+  make_numeric_selector(function(x) x <= 0, "selector_non_positive", na_ignore)
+}
+
+#' @describeIn Selector `selector_non_zero` selects integer and numeric features whose values are all non-zero.
+#' @param na_ignore (`logical(1)`)\cr
+#'   Whether to ignore missing values when checking whether all values satisfy the selector's condition. If `TRUE`,
+#'   missing values do not influence the check. If `FALSE`, features containing missing values are not selected.
+#'   Defaults to `TRUE`.
+#' @export
+selector_non_zero = function(na_ignore = TRUE) {
+  assert_flag(na_ignore)
+  make_numeric_selector(function(x) x != 0, "selector_non_zero", na_ignore)
 }

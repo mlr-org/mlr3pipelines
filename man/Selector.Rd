@@ -12,7 +12,13 @@
 \alias{selector_union}
 \alias{selector_setdiff}
 \alias{selector_missing}
+\alias{selector_non_missing}
 \alias{selector_cardinality_greater_than}
+\alias{selector_positive}
+\alias{selector_negative}
+\alias{selector_non_negative}
+\alias{selector_non_positive}
+\alias{selector_non_zero}
 \title{Selector Functions}
 \usage{
 selector_all()
@@ -35,7 +41,19 @@ selector_setdiff(selector_x, selector_y)
 
 selector_missing()
 
+selector_non_missing()
+
 selector_cardinality_greater_than(min_cardinality)
+
+selector_positive(na_ignore = TRUE)
+
+selector_negative(na_ignore = TRUE)
+
+selector_non_negative(na_ignore = TRUE)
+
+selector_non_positive(na_ignore = TRUE)
+
+selector_non_zero(na_ignore = TRUE)
 }
 \arguments{
 \item{types}{(\code{character}) \cr
@@ -70,6 +88,11 @@ Second \code{\link{Selector}} to query.}
 
 \item{min_cardinality}{(\code{integer}) \cr
 Minimum number of levels required to be selected.}
+
+\item{na_ignore}{(\code{logical(1)})\cr
+Whether to ignore missing values when checking whether all values satisfy the selector's condition. If \code{TRUE},
+missing values do not influence the check. If \code{FALSE}, features containing missing values are not selected.
+Defaults to \code{TRUE}.}
 }
 \value{
 \code{function}: A \code{\link{Selector}} function that takes a \code{\link[mlr3:Task]{Task}} and returns the feature names to be processed.
@@ -86,7 +109,7 @@ shown here. Each of these can be called with its arguments to create a \code{\li
 \itemize{
 \item \code{selector_all()}: \code{selector_all} selects all features.
 
-\item \code{selector_none()}: \code{selector_none} selects none of the  features.
+\item \code{selector_none()}: \code{selector_none} selects none of the features.
 
 \item \code{selector_type()}: \code{selector_type} selects features according to type. Legal types are listed in \code{mlr_reflections$task_feature_types}.
 
@@ -110,8 +133,20 @@ by \code{selector_y}.
 
 \item \code{selector_missing()}: \code{selector_missing} selects features with missing values.
 
+\item \code{selector_non_missing()}: \code{selector_non_missing} selects features without missing values.
+
 \item \code{selector_cardinality_greater_than()}: \code{selector_cardinality_greater_than} selects categorical features with cardinality
 greater then a given threshold.
+
+\item \code{selector_positive()}: \code{selector_positive} selects integer and numeric features whose values are all greater than zero.
+
+\item \code{selector_negative()}: \code{selector_negative} selects integer and numeric features whose values are all less than zero.
+
+\item \code{selector_non_negative()}: \code{selector_non_negative} selects integer and numeric features whose values are all greater than or equal to zero.
+
+\item \code{selector_non_positive()}: \code{selector_non_positive} selects integer and numeric features whose values are all less than or equal to zero.
+
+\item \code{selector_non_zero()}: \code{selector_non_zero} selects integer and numeric features whose values are all non-zero.
 
 }}
 \section{Details}{
@@ -175,7 +210,7 @@ selgf(iris_task)
 selgf(bh_task)
 }
 \seealso{
-Other Selectors: 
+Other Selectors:
 \code{\link{mlr_pipeops_select}}
 }
 \concept{Selectors}

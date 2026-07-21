@@ -54,3 +54,88 @@ test_that("Selectors work", {
   expect_set_equal(selcgt(bh_task$filter(1:3)), character(0))
   expect_set_equal(selcgt(pima_task), character(0))
 })
+
+test_that("numeric value selectors work", {
+  task = mlr3::TaskUnsupervised$new("numeric_values", backend = data.table::data.table(
+    positive = c(1, 2, 3),
+    positive_integer = 1:3,
+    negative = c(-1, -2, -3),
+    negative_integer = -1:-3,
+    zero = c(0, 0, 0),
+    non_negative = c(0, 1, 2),
+    non_positive = c(0, -1, -2),
+    non_zero = c(-1, 1, 2),
+    positive_missing = c(1, NA, 3),
+    negative_missing = c(-1, NA, -3),
+    non_negative_missing = c(0, NA, 2),
+    non_positive_missing = c(0, NA, -2),
+    non_zero_missing = c(-1, NA, 2),
+    all_missing = rep(NA_real_, 3),
+    factor = factor(c("-1", "0", "1"))
+  ))
+
+  selectors = list(
+    selector_positive = selector_positive,
+    selector_negative = selector_negative,
+    selector_non_negative = selector_non_negative,
+    selector_non_positive = selector_non_positive,
+    selector_non_zero = selector_non_zero
+  )
+  expected = list(
+    selector_positive = c("positive", "positive_integer"),
+    selector_negative = c("negative", "negative_integer"),
+    selector_non_negative = c("positive", "positive_integer", "zero", "non_negative"),
+    selector_non_positive = c("negative", "negative_integer", "zero", "non_positive"),
+    selector_non_zero = c("positive", "positive_integer", "negative", "negative_integer", "non_zero")
+  )
+  expected_na_ignore = list(
+    selector_positive = c(expected$selector_positive, "positive_missing", "all_missing"),
+    selector_negative = c(expected$selector_negative, "negative_missing", "all_missing"),
+    selector_non_negative = c(
+      expected$selector_non_negative,
+      "positive_missing", "non_negative_missing", "all_missing"
+    ),
+    selector_non_positive = c(
+      expected$selector_non_positive,
+      "negative_missing", "non_positive_missing", "all_missing"
+    ),
+    selector_non_zero = c(
+      expected$selector_non_zero,
+      "positive_missing", "negative_missing", "non_zero_missing", "all_missing"
+    )
+  )
+
+  for (name in names(selectors)) {
+    selector = selectors[[name]]
+    expect_set_equal(selector()(task), expected_na_ignore[[name]], info = name)
+    expect_set_equal(selector(na_ignore = FALSE)(task), expected[[name]], info = name)
+    expect_set_equal(selector(na_ignore = TRUE)(task), expected_na_ignore[[name]], info = name)
+    expect_output(print(selector()), sprintf("%s\\(\\)", name), info = name)
+    expect_output(
+      print(selector(na_ignore = FALSE)),
+      sprintf("%s\\(na_ignore = FALSE\\)", name),
+      info = name
+    )
+    expect_output(print(selector(na_ignore = TRUE)), sprintf("%s\\(\\)", name), info = name)
+    expect_error(selector(na_ignore = NA), "Assertion on 'na_ignore' failed", info = name)
+  }
+})
+
+test_that("selector_non_missing works", {
+  task = mlr3::TaskUnsupervised$new("non_missing", backend = data.table::data.table(
+    numeric = c(1, 2, 3),
+    numeric_missing = c(1, NA, 3),
+    numeric_nan = c(1, NaN, 3),
+    integer = 1:3,
+    factor = factor(c("a", "b", "c")),
+    factor_missing = factor(c("a", NA, "c")),
+    character = c("a", "b", "c"),
+    logical = c(TRUE, FALSE, TRUE)
+  ))
+
+  expect_set_equal(
+    selector_non_missing()(task),
+    c("numeric", "integer", "factor", "character", "logical")
+  )
+  expect_output(print(selector_non_missing()), "selector_non_missing\\(\\)")
+})

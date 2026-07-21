@@ -32,7 +32,7 @@ Creates a \code{\link{Graph}} from \code{\link{mlr_graphs}} from given ID
 vector of any list and returns a \code{list} of possibly muliple \code{\link{Graph}}s.
 }
 \examples{
-\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
 gr = ppl("bagging", graph = po(lrn("regr.rpart")),
