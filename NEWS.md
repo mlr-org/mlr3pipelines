@@ -1,17 +1,18 @@
 # mlr3pipelines 0.11.0-9000
 
-* Switched from using `digest::digest()` to using `mlr3misc::calculate_hash()` for calculating the `hash` and `phash` of `PipeOp`s, `Graph`s, and `GraphLearner`s. 
+* Switched from using `digest::digest()` to using `mlr3misc::calculate_hash()` for calculating the `hash` and `phash` of `PipeOp`s, `Graph`s, and `GraphLearner`s.
 * Fix: Corrected registration of `FilterEnsemble` in `mlr_filters` using `.prototype_args`.
 * Fix: `PipeOpTargetMutate` and `PipeOpTargetTrafoScaleRange` now correctly transform internal validation tasks during training.
 * feat: `PipeOpSmote`, `PipeOpSmoteNC`, `PipeOpADAS`, and `PipeOpBLSmote` can now handle columns with role `"name"` by assigning the name `synthetic.<pipeop id>` to generated rows.
 * New `PipeOpMaterialize` that materializes the active `Task` view, reducing size and simplifying structure of the `Task`'s `DataBackend`.
 * Fix: `mlr_pipeops$add()` now saves the namespace environment from which it was called to allow delayed evaluation in `as.data.table(mlr_pipeops)`.
 * `mlr_graphs` no longer overrides the inherited `$add()` method.
-* Simplified error messages from internal function `check_types()`. 
+* Simplified error messages from internal function `check_types()`.
 * Removed deprecated `greplicate()` function. Use `ppl("greplicate")` instead.
 * Fix: `PipeOpIsomap` now explicitly requires `igraph`, `RSpectra`, and `RANN`; skip checks in tests were also updated.
+* Fix: `as_learner.Graph` now handles `...` as an argument.
+* feat: `as_learner.Graph` now suppots the `discard_state` argument, same as `as_learner.Learner`.
 
-  
 # mlr3pipelines 0.11.0
 
 * Fix: Made `FilterEnsemble` tests deterministic and more robust.
@@ -20,8 +21,8 @@
 * Fix: `PipeOpTextVectorizer` now uses coercion to `TsparseMatrix` instead of deprecated `dgTMatrix` to avoid `Matrix` deprecation warnings.
 * New method `$predict_newdata_fast()` for `GraphLearner`. Note that currently this is only a thin wrapper around `$predict_newdata()` to maintain compatibility, but in the future it may get optimized to enable faster predictions on new data.
 * feat: `PipeOpRenameColumns`'s hyperparameter `renaming` can now also take a function transforming old column names to new column names.
-* feat: Added new hyperparameters `filter_score_transform`, `result_score_transform`, and `aggregator` to `FilterEnsemble`. BREAKING CHANGE: The default behavior for handling NA scores in the aggregation has changed. Previously, NA scores were simply ignored and weights were not changed. Now, `weighted.mean` is used, which normalizes the weights for all non-NA scores. 
-* feat: Added new hyperparameters `weights_learner` and `weights_measure` to `PipeOpClassWeights` to allow specification which type of weight column to add to the `Task`. 
+* feat: Added new hyperparameters `filter_score_transform`, `result_score_transform`, and `aggregator` to `FilterEnsemble`. BREAKING CHANGE: The default behavior for handling NA scores in the aggregation has changed. Previously, NA scores were simply ignored and weights were not changed. Now, `weighted.mean` is used, which normalizes the weights for all non-NA scores.
+* feat: Added new hyperparameters `weights_learner` and `weights_measure` to `PipeOpClassWeights` to allow specification which type of weight column to add to the `Task`.
 * New PipeOp `PipeOpClassWeightEx` extends the functionality of `PipeOpClassWeights` to also support multiclass classification tasks as well as several methods of automatically determining weights based on the target class of a sample.
 * New PipeOp `PipeOpSplines` that expands numeric features into spline basis columns.
 
