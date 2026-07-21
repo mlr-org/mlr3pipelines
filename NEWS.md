@@ -11,6 +11,7 @@
 * `mlr_graphs` no longer overrides the inherited `$add()` method.
 * Simplified error messages from internal function `check_types()`. 
 * Removed deprecated `greplicate()` function. Use `ppl("greplicate")` instead.
+* Fix: `PipeOpIsomap` now explicitly requires `igraph`, `RSpectra`, and `RANN`; skip checks in tests were also updated.
 
   
 # mlr3pipelines 0.11.0
