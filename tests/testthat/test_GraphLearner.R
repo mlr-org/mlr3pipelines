@@ -132,6 +132,34 @@ test_that("GraphLearner clone_graph FALSE", {
 
 })
 
+test_that("as_learner.Graph forwards GraphLearner constructor arguments", {
+  graph = as_graph(lrn("classif.debug"))
+  learner = as_learner(
+    graph,
+    id = "custom_id",
+    param_vals = list(classif.debug.x = 0.5),
+    task_type = "classif",
+    predict_type = "prob"
+  )
+
+  expect_identical(learner$id, "custom_id")
+  expect_identical(learner$task_type, "classif")
+  expect_identical(learner$predict_type, "prob")
+  expect_identical(learner$param_set$values$classif.debug.x, 0.5)
+  expect_false(identical(learner$graph, graph))
+})
+
+test_that("as_learner.Graph supports discarding state", {
+  graph = as_graph(lrn("classif.debug"))
+  graph$train(tsk("iris"))
+
+  learner = as_learner(graph, discard_state = TRUE)
+
+  expect_true(graph$is_trained)
+  expect_null(learner$state)
+  expect_false(learner$graph$is_trained)
+})
+
 test_that("graphlearner parameters behave as they should", {
   dblrn = mlr_learners$get("classif.debug")
   dblrn$param_set$values$save_tasks = TRUE
