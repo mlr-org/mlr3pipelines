@@ -86,6 +86,27 @@ Should the second be extracted as a feature? Default \code{TRUE}.
 \item \code{is_day} :: \code{logical(1)}\cr
 Should a feature be extracted indicating whether it is day time (06:00am - 08:00pm)?
 Default \code{TRUE}.
+\item \code{is_month_start} :: \code{logical(1)}\cr
+Should a feature be extracted indicating whether it is the first day of the month?
+Default \code{TRUE}.
+\item \code{is_month_end} :: \code{logical(1)}\cr
+Should a feature be extracted indicating whether it is the last day of the month?
+Default \code{TRUE}.
+\item \code{is_quarter_start} :: \code{logical(1)}\cr
+Should a feature be extracted indicating whether it is the first day of the quarter?
+Default \code{TRUE}.
+\item \code{is_quarter_end} :: \code{logical(1)}\cr
+Should a feature be extracted indicating whether it is the last day of the quarter?
+Default \code{TRUE}.
+\item \code{is_year_start} :: \code{logical(1)}\cr
+Should a feature be extracted indicating whether it is the first day of the year?
+Default \code{TRUE}.
+\item \code{is_year_end} :: \code{logical(1)}\cr
+Should a feature be extracted indicating whether it is the last day of the year?
+Default \code{TRUE}.
+\item \code{is_leap_year} :: \code{logical(1)}\cr
+Should a feature be extracted indicating whether the year is a leap year?
+Default \code{TRUE}.
 }
 }
 
