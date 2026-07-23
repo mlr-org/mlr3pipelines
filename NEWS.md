@@ -12,8 +12,8 @@
 * Simplified error messages from internal function `check_types()`. 
 * Removed deprecated `greplicate()` function. Use `ppl("greplicate")` instead.
 * Fix: `PipeOpIsomap` now explicitly requires `igraph`, `RSpectra`, and `RANN`; skip checks in tests were also updated.
+* feat: `PipeOpTargetInvert` now propagates the `extra` slot of input prediction objects to the output prediction object, if the inverter `fun` does not handle it already.  
 
-  
 # mlr3pipelines 0.11.0
 
 * Fix: Made `FilterEnsemble` tests deterministic and more robust.
