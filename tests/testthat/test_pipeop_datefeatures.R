@@ -55,8 +55,7 @@ test_that("PipeOpDateFeatures - unaltered if no features specified", {
       is_quarter_end = FALSE,
       is_year_start = FALSE,
       is_year_end = FALSE,
-      is_leap_year = FALSE,
-      days_in_month = FALSE
+      is_leap_year = FALSE
     )
   )
   train_pipeop(po, inputs = list(task))
@@ -89,7 +88,6 @@ test_that("PipeOpDateFeatures - correct basic features", {
   expect_true(all(trained_data$date.is_year_start == (yday(dat$date) == 1L)))
   expect_true(all(trained_data$date.is_year_end == (month(dat$date) == 12L & mday(dat$date) == 31L)))
   expect_true(all(trained_data$date.is_leap_year))  # all dates lie in 2020
-  expect_true(all(trained_data$date.days_in_month == days_in_month))
 })
 
 test_that("PipeOpDateFeatures - correct cyclic features", {
@@ -145,7 +143,7 @@ test_that("PipeOpDateFeatures - feature selection works", {
         c("month", "week_of_year", "day_of_year", "day_of_month", "day_of_week",
           "hour", "minute", "is_day",
           "is_month_start", "is_month_end", "is_quarter_start", "is_quarter_end",
-          "is_year_start", "is_year_end", "is_leap_year", "days_in_month",
+          "is_year_start", "is_year_end", "is_leap_year",
           "month_sin", "month_cos", "week_of_year_sin", "week_of_year_cos",
           "day_of_year_sin", "day_of_year_cos", "day_of_month_sin", "day_of_month_cos",
           "day_of_week_sin", "day_of_week_cos",
@@ -217,7 +215,6 @@ test_that("PipeOpDateFeatures - only year and cyclic", {
   po$param_set$values$is_year_start = FALSE
   po$param_set$values$is_year_end = FALSE
   po$param_set$values$is_leap_year = FALSE
-  po$param_set$values$days_in_month = FALSE
   expect_true("date.year" %in% train_pipeop(po, inputs = list(task))$output$feature_names)
 })
 
@@ -230,11 +227,11 @@ test_that("PipeOpDateFeatures - two POSIXct variables", {
   po = PipeOpDateFeatures$new(param_vals = list(keep_date_var = TRUE, cyclic = TRUE, quarter = FALSE))
   expect_identical(train_pipeop(po, inputs = list(task))$output$feature_names,
     c("Petal.Length", "Petal.Width", "Sepal.Length", "Sepal.Width", "date1", "date2",
-      c(paste0(rep(c("date1.", "date2."), each = 18L),
+      c(paste0(rep(c("date1.", "date2."), each = 17L),
           c("year",  "month", "week_of_year", "day_of_year", "day_of_month", "day_of_week",
             "hour", "minute", "second", "is_day",
             "is_month_start", "is_month_end", "is_quarter_start", "is_quarter_end",
-            "is_year_start", "is_year_end", "is_leap_year", "days_in_month")),
+            "is_year_start", "is_year_end", "is_leap_year")),
         paste0(rep(c("date1.", "date2."), each = 16L),
           c("month_sin", "month_cos", "week_of_year_sin", "week_of_year_cos",
             "day_of_year_sin", "day_of_year_cos", "day_of_month_sin", "day_of_month_cos",
@@ -271,13 +268,11 @@ test_that("PipeOpDateFeatures - boundary date features", {
   expect_identical(trained_data$date.is_year_start, c(TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE))
   expect_identical(trained_data$date.is_year_end, c(FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE))
   expect_identical(trained_data$date.is_leap_year, c(TRUE, TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, FALSE))
-  expect_identical(trained_data$date.days_in_month, c(31L, 29L, 28L, 31L, 31L, 29L, 31L, 31L))
 
   new_features = paste0("date.", c("is_month_start", "is_month_end", "is_quarter_start", "is_quarter_end",
-    "is_year_start", "is_year_end", "is_leap_year", "days_in_month"))
+    "is_year_start", "is_year_end", "is_leap_year"))
   types = output$feature_types
-  expect_true(all(types[types$id %in% setdiff(new_features, "date.days_in_month"), ]$type == "logical"))
-  expect_identical(types[types$id == "date.days_in_month", ]$type, "integer")
+  expect_true(all(types[types$id %in% new_features, ]$type == "logical"))
 
   # POSIXct columns yield the same boundary features as Date columns
   dat_posixct = data.frame(y = dat$y, date = as.POSIXct(dates))

@@ -107,8 +107,6 @@ Default \code{TRUE}.
 \item \code{is_leap_year} :: \code{logical(1)}\cr
 Should a feature be extracted indicating whether the year is a leap year?
 Default \code{TRUE}.
-\item \code{days_in_month} :: \code{logical(1)}\cr
-Should the number of days in the month be extracted as a feature? Default \code{TRUE}.
 }
 }
 

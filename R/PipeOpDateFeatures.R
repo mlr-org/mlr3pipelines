@@ -95,8 +95,6 @@
 #' * `is_leap_year` :: `logical(1)`\cr
 #'   Should a feature be extracted indicating whether the year is a leap year?
 #'   Default `TRUE`.
-#' * `days_in_month` :: `logical(1)`\cr
-#'   Should the number of days in the month be extracted as a feature? Default `TRUE`.
 #'
 #' @section Internals:
 #' The cyclic feature transformation always assumes that values range from 0, so some values
@@ -147,8 +145,7 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
         is_quarter_end = p_lgl(tags = c("train", "predict", "datepart", "required")),
         is_year_start = p_lgl(tags = c("train", "predict", "datepart", "required")),
         is_year_end = p_lgl(tags = c("train", "predict", "datepart", "required")),
-        is_leap_year = p_lgl(tags = c("train", "predict", "datepart", "required")),
-        days_in_month = p_lgl(tags = c("train", "predict", "datepart", "required"))
+        is_leap_year = p_lgl(tags = c("train", "predict", "datepart", "required"))
       )
       ps$values = list(
         keep_date_var = FALSE,
@@ -170,8 +167,7 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
         is_quarter_end = TRUE,
         is_year_start = TRUE,
         is_year_end = TRUE,
-        is_leap_year = TRUE,
-        days_in_month = TRUE
+        is_leap_year = TRUE
       )
       super$initialize(
         id = id,
@@ -211,8 +207,7 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
         "is_quarter_end",
         "is_year_start",
         "is_year_end",
-        "is_leap_year",
-        "days_in_month"
+        "is_leap_year"
       )
       date_features = features[features %in% date_features]
       cyclic_features = features[
@@ -272,8 +267,7 @@ compute_date_features = function(x, features) {
       is_quarter_end = mday(x) == get_days_per_month(year(x), month(x)) & month(x) %% 3L == 0L,
       is_year_start = yday(x) == 1L,
       is_year_end = month(x) == 12L & mday(x) == 31L,
-      is_leap_year = is_leap_year(year(x)),
-      days_in_month = get_days_per_month(year(x), month(x))
+      is_leap_year = is_leap_year(year(x))
     )
   })
   set_names(res, features)

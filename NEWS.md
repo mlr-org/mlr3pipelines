@@ -1,6 +1,6 @@
 # mlr3pipelines 0.11.0-9000
 
-* feat: `PipeOpDateFeatures` gains new features `is_month_start`, `is_month_end`, `is_quarter_start`, `is_quarter_end`, `is_year_start`, `is_year_end`, `is_leap_year`, and `days_in_month`.
+* feat: `PipeOpDateFeatures` gains new features `is_month_start`, `is_month_end`, `is_quarter_start`, `is_quarter_end`, `is_year_start`, `is_year_end`, and `is_leap_year`.
 * Switched from using `digest::digest()` to using `mlr3misc::calculate_hash()` for calculating the `hash` and `phash` of `PipeOp`s, `Graph`s, and `GraphLearner`s. 
 * Fix: Corrected registration of `FilterEnsemble` in `mlr_filters` using `.prototype_args`.
 * Fix: `PipeOpTargetMutate` and `PipeOpTargetTrafoScaleRange` now correctly transform internal validation tasks during training.
