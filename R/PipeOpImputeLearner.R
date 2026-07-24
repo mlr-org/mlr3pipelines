@@ -72,7 +72,7 @@
 #' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
 #'
-#' task = tsk("pima")
+#' task = tsk("diabetes")
 #' task$missings()
 #'
 #' po = po("imputelearner", lrn("regr.rpart"))

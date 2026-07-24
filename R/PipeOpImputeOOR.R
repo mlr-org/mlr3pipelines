@@ -83,7 +83,7 @@
 #' @examples
 #' library("mlr3")
 #' set.seed(2409)
-#' data = tsk("pima")$data()
+#' data = tsk("diabetes")$data()
 #' data$y = factor(c(NA, sample(letters, size = 766, replace = TRUE), NA))
 #' data$z = ordered(c(NA, sample(1:10, size = 767, replace = TRUE)))
 #' task = TaskClassif$new("task", backend = data, target = "diabetes")

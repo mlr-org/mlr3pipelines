@@ -14,7 +14,7 @@ test_that("PipeOpClassWeights - basic properties", {
 test_that("PipeOpClassWeights", {
 
   op = po("classweights")
-  task = mlr_tasks$get("pima")
+  task = mlr_tasks$get("diabetes")
 
   op$param_set$values$minor_weight = 3
   nt = op$train(list(task))[[1L]]
@@ -33,7 +33,7 @@ test_that("PipeOpClassWeights - weight roles assigned", {
   )
 
   for (i in seq_along(configs)) {
-    task = tsk("pima")
+    task = tsk("diabetes")
     po_roles = po("classweights", param_vals = list(minor_weight = 2))
     po_roles$param_set$set_values(.values = configs[[i]])
     nt = po_roles$train(list(task))[[1L]]
