@@ -9,9 +9,19 @@ test_that("PipeOpSplines - basic properties", {
   # when we train we get the Boundary.knots, when we now predict on the same data the results will change
 })
 
-test_that("Error when trying to pass degree argument while type = natural", {
+test_that("degree follows the Paradox dormant-value contract", {
   skip_if_not_installed("splines")
-  expect_error(po("splines", type = "natural", degree = 3))
+  if (packageVersion("paradox") < "2.0.0") {
+    expect_error(po("splines", type = "natural", degree = 3))
+  } else {
+    splines = po("splines", type = "natural", degree = 3)
+
+    expect_identical(splines$param_set$values$degree, 3L)
+    expect_false("degree" %in% names(splines$param_set$get_values()))
+
+    splines$param_set$values$type = "polynomial"
+    expect_identical(splines$param_set$get_values()$degree, 3L)
+  }
 })
 
 test_that("results are identical as when calculating by hand", {
@@ -137,4 +147,3 @@ test_that("Boundary Knots and Knots", {
     }
   }
 })
-
