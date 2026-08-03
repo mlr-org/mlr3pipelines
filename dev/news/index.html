@@ -67,6 +67,8 @@
 <li>Simplified error messages from internal function <code>check_types()</code>.</li>
 <li>Removed deprecated <code>greplicate()</code> function. Use <code>ppl("greplicate")</code> instead.</li>
 <li>Fix: <code>PipeOpIsomap</code> now explicitly requires <code>igraph</code>, <code>RSpectra</code>, and <code>RANN</code>; skip checks in tests were also updated.</li>
+<li>Fix: <code>as_learner.Graph</code> now handles <code>...</code> as an argument.</li>
+<li>feat: <code>as_learner.Graph</code> now suppots the <code>discard_state</code> argument, same as <code>as_learner.Learner</code>.</li>
 <li>feat: <code>PipeOpTargetInvert</code> now propagates the <code>extra</code> slot of input prediction objects to the output prediction object, if the inverter <code>fun</code> does not handle it already.</li>
 </ul></div>
     <div class="section level2">

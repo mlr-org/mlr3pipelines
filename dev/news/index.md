@@ -44,6 +44,9 @@
   instead.
 - Fix: `PipeOpIsomap` now explicitly requires `igraph`, `RSpectra`, and
   `RANN`; skip checks in tests were also updated.
+- Fix: `as_learner.Graph` now handles `...` as an argument.
+- feat: `as_learner.Graph` now suppots the `discard_state` argument,
+  same as `as_learner.Learner`.
 - feat: `PipeOpTargetInvert` now propagates the `extra` slot of input
   prediction objects to the output prediction object, if the inverter
   `fun` does not handle it already.
