@@ -6,12 +6,15 @@
 * feat: `PipeOpSmote`, `PipeOpSmoteNC`, `PipeOpADAS`, and `PipeOpBLSmote` can now handle columns with role `"name"` by assigning the name `synthetic.<pipeop id>` to generated rows.
 * New `PipeOpMaterialize` that materializes the active `Task` view, reducing size and simplifying structure of the `Task`'s `DataBackend`.
 * Fix: `mlr_pipeops$add()` now saves the namespace environment from which it was called to allow delayed evaluation in `as.data.table(mlr_pipeops)`.
+* `PipeOpNMF` now correctly rejects features containing missing or infinite values with an informative error message. Features containing negative values are still dropped implictly, but now this produces a warning to use `selector_non_negative()` for explicit column selection. This will become an error in the future.
+* New selectors `selector_positive()`, `selector_negative()`, `selector_non_negative()`, `selector_non_positive()`, `selector_non_zero()`, and `selector_non_missing()`. The numeric selectors support `na_ignore` to control whether missing values are ignored when checking if all values satisfy the selector's condition.
 * `mlr_graphs` no longer overrides the inherited `$add()` method.
 * Simplified error messages from internal function `check_types()`.
 * Removed deprecated `greplicate()` function. Use `ppl("greplicate")` instead.
 * Fix: `PipeOpIsomap` now explicitly requires `igraph`, `RSpectra`, and `RANN`; skip checks in tests were also updated.
 * Fix: `as_learner.Graph` now handles `...` as an argument.
 * feat: `as_learner.Graph` now suppots the `discard_state` argument, same as `as_learner.Learner`.
+* feat: `PipeOpTargetInvert` now propagates the `extra` slot of input prediction objects to the output prediction object, if the inverter `fun` does not handle it already.  
 
 # mlr3pipelines 0.11.0
 

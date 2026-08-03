@@ -19,7 +19,7 @@ Returns a single \code{\link[mlr3:PredictionClassif]{PredictionClassif}}.
 This PipeOp should be used in conjunction with \code{\link{PipeOpLearnerCV}} in order to
 optimize thresholds of cross-validated predictions.
 In order to optimize thresholds without cross-validation, use \code{\link{PipeOpLearnerCV}}
-in conjunction with \code{\link[mlr3:mlr_resamplings_insample]{ResamplingInsample}}.
+in conjunction with \code{\link[mlr3:ResamplingInsample]{ResamplingInsample}}.
 }
 \section{Construction}{
 
@@ -89,7 +89,7 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{if (mlr3misc::require_namespaces(c("bbotk", "rpart", "GenSA"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (mlr3misc::require_namespaces(c("bbotk", "rpart", "GenSA"), quietly = TRUE)) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
 task = tsk("iris")
@@ -105,7 +105,7 @@ pop$state
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},

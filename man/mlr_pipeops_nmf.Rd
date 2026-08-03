@@ -96,8 +96,10 @@ See \code{\link[NMF:nmf]{nmf()}}.
 
 \section{Internals}{
 
-Uses the \code{\link[NMF:nmf]{nmf()}} function as well as \code{\link[NMF:basis-coef-methods]{basis()}}, \code{\link[NMF:basis-coef-methods]{coef()}} and
-\code{\link[MASS:ginv]{ginv()}}.
+Uses the \code{\link[NMF:nmf]{nmf()}} function as well as \code{\link[NMF:basis]{basis()}}, \code{\link[NMF:coef]{coef()}} and
+\code{\link[MASS:ginv]{ginv()}}. Does not support features with missing or infinite values. Features containing
+negative values are currently excluded with a warning, but this will become an error in a future release.
+Use \code{affect_columns = selector_non_negative()} to explicitly select non-negative features.
 }
 
 \section{Fields}{
@@ -111,7 +113,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{if (mlr3misc::require_namespaces(c("NMF", "MASS"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (mlr3misc::require_namespaces(c("NMF", "MASS"), quietly = TRUE)) withAutoprint(\{ # examplesIf}
 \dontshow{
 # NMF attaches these packages to search path on load, #929
 lapply(c("package:Biobase", "package:BiocGenerics", "package:generics"), detach, character.only = TRUE)
@@ -135,7 +137,7 @@ suppressWarnings(try(rm("format.list", envir = .BaseNamespaceEnv$.__S3MethodsTab
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},

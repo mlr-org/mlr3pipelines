@@ -62,7 +62,7 @@ Use \code{\link[base:Vectorize]{Vectorize}} to create a vectorizing function fro
 
 \section{Internals}{
 
-Calls \code{\link[mlr3misc:compat-map]{map}} on the data, using the value of \code{applicator} as \code{f.} and coerces the output via \code{\link{as.data.table}}.
+Calls \code{\link[mlr3misc:map]{map}} on the data, using the value of \code{applicator} as \code{f.} and coerces the output via \code{\link{as.data.table}}.
 }
 
 \section{Fields}{
@@ -109,7 +109,7 @@ poca$train(list(task))[[1]]$data()
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
