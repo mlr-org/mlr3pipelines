@@ -67,6 +67,7 @@
 <li>Simplified error messages from internal function <code>check_types()</code>.</li>
 <li>Removed deprecated <code>greplicate()</code> function. Use <code>ppl("greplicate")</code> instead.</li>
 <li>Fix: <code>PipeOpIsomap</code> now explicitly requires <code>igraph</code>, <code>RSpectra</code>, and <code>RANN</code>; skip checks in tests were also updated.</li>
+<li>feat: <code>PipeOpTargetInvert</code> now propagates the <code>extra</code> slot of input prediction objects to the output prediction object, if the inverter <code>fun</code> does not handle it already.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.11.0" id="mlr3pipelines-0110">mlr3pipelines 0.11.0<a class="anchor" aria-label="anchor" href="#mlr3pipelines-0110"></a></h2><p class="text-muted">CRAN release: 2026-03-01</p>

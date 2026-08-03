@@ -168,43 +168,17 @@ Other Imputation PipeOps:
 library("mlr3")
 
 task = tsk("pima")
+#> Warning: data set ‘PimaIndiansDiabetes2’ not found
+#> Error in UseMethod("as_data_backend"): no applicable method for 'as_data_backend' applied to an object of class "NULL"
 task$missings()
-#> diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
-#>        0        0        5      374       11        0        0       35 
-#>  triceps 
-#>      227 
+#> Error: object 'task' not found
 
 po = po("imputemean")
 new_task = po$train(list(task = task))[[1]]
+#> Error: object 'task' not found
 new_task$missings()
-#> diabetes      age pedigree pregnant  glucose  insulin     mass pressure 
-#>        0        0        0        0        0        0        0        0 
-#>  triceps 
-#>        0 
+#> Error: object 'new_task' not found
 
 po$state$model
-#> $age
-#> [1] 33.24089
-#> 
-#> $glucose
-#> [1] 121.6868
-#> 
-#> $insulin
-#> [1] 155.5482
-#> 
-#> $mass
-#> [1] 32.45746
-#> 
-#> $pedigree
-#> [1] 0.4718763
-#> 
-#> $pregnant
-#> [1] 3.845052
-#> 
-#> $pressure
-#> [1] 72.40518
-#> 
-#> $triceps
-#> [1] 29.15342
-#> 
+#> NULL
 ```

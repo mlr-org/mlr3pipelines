@@ -186,33 +186,21 @@ Other PipeOps:
 library("mlr3")
 
 task = tsk("pima")$select(c("insulin", "triceps"))
+#> Warning: data set ‘PimaIndiansDiabetes2’ not found
+#> Error in UseMethod("as_data_backend"): no applicable method for 'as_data_backend' applied to an object of class "NULL"
 sum(complete.cases(task$data()))
-#> [1] 394
+#> Error: object 'task' not found
 task$missings()
-#> diabetes  insulin  triceps 
-#>        0      374      227 
+#> Error: object 'task' not found
 tail(task$data())
-#>    diabetes insulin triceps
-#>      <fctr>   <num>   <num>
-#> 1:      neg      NA      NA
-#> 2:      neg     180      48
-#> 3:      neg      NA      27
-#> 4:      neg     112      23
-#> 5:      pos      NA      NA
-#> 6:      neg      NA      31
+#> Error: object 'task' not found
 
 po = po("missind")
 new_task = po$train(list(task))[[1]]
+#> Error: object 'task' not found
 
 tail(new_task$data())
-#>    diabetes missing_insulin missing_triceps
-#>      <fctr>          <fctr>          <fctr>
-#> 1:      neg         missing         missing
-#> 2:      neg         present         present
-#> 3:      neg         missing         present
-#> 4:      neg         present         present
-#> 5:      pos         missing         missing
-#> 6:      neg         missing         present
+#> Error: object 'new_task' not found
 
 # proper imputation + missing indicators
 
@@ -222,12 +210,5 @@ impgraph = list(
 ) %>>% po("featureunion")
 
 tail(impgraph$train(task)[[1]]$data())
-#>    diabetes insulin triceps missing_insulin missing_triceps
-#>      <fctr>   <num>   <num>          <fctr>          <fctr>
-#> 1:      neg     152      23         missing         missing
-#> 2:      neg     180      48         present         present
-#> 3:      neg     115      27         missing         present
-#> 4:      neg     112      23         present         present
-#> 5:      pos     110      20         missing         missing
-#> 6:      neg      92      31         missing         present
+#> Error: object 'task' not found
 ```

@@ -233,48 +233,23 @@ Other Imputation PipeOps:
 library("mlr3")
 set.seed(2409)
 data = tsk("pima")$data()
+#> Warning: data set ‘PimaIndiansDiabetes2’ not found
+#> Error in UseMethod("as_data_backend"): no applicable method for 'as_data_backend' applied to an object of class "NULL"
 data$y = factor(c(NA, sample(letters, size = 766, replace = TRUE), NA))
+#> Error in data$y = factor(c(NA, sample(letters, size = 766, replace = TRUE),     NA)): object of type 'closure' is not subsettable
 data$z = ordered(c(NA, sample(1:10, size = 767, replace = TRUE)))
+#> Error in data$z = ordered(c(NA, sample(1:10, size = 767, replace = TRUE))): object of type 'closure' is not subsettable
 task = TaskClassif$new("task", backend = data, target = "diabetes")
+#> Error in UseMethod("as_data_backend"): no applicable method for 'as_data_backend' applied to an object of class "function"
 task$missings()
-#> diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
-#>        0        0        5      374       11        0        0       35 
-#>  triceps        y        z 
-#>      227        2        1 
+#> Error: object 'task' not found
 po = po("imputeoor")
 new_task = po$train(list(task = task))[[1]]
+#> Error: object 'task' not found
 new_task$missings()
-#> diabetes      age pedigree pregnant  glucose  insulin     mass pressure 
-#>        0        0        0        0        0        0        0        0 
-#>  triceps        y        z 
-#>        0        0        0 
+#> Error: object 'new_task' not found
 new_task$data()
-#>      diabetes   age pedigree pregnant glucose insulin  mass pressure triceps
-#>        <fctr> <num>    <num>    <num>   <num>   <num> <num>    <num>   <num>
-#>   1:      pos    50    0.627        6     148    -819  33.6       72      35
-#>   2:      neg    31    0.351        1      85    -819  26.6       66      29
-#>   3:      pos    32    0.672        8     183    -819  23.3       64     -86
-#>   4:      neg    21    0.167        1      89      94  28.1       66      23
-#>   5:      pos    33    2.288        0     137     168  43.1       40      35
-#>  ---                                                                        
-#> 764:      neg    63    0.171       10     101     180  32.9       76      48
-#> 765:      neg    27    0.340        2     122    -819  36.8       70      27
-#> 766:      neg    30    0.245        5     121     112  26.2       72      23
-#> 767:      pos    47    0.349        1     126    -819  30.1       60     -86
-#> 768:      neg    23    0.315        1      93    -819  30.4       70      31
-#>             y        z
-#>        <fctr>    <ord>
-#>   1: .MISSING .MISSING
-#>   2:        l        9
-#>   3:        q        6
-#>   4:        f        3
-#>   5:        l        3
-#>  ---                  
-#> 764:        o        7
-#> 765:        n        5
-#> 766:        e        6
-#> 767:        c        8
-#> 768: .MISSING        9
+#> Error: object 'new_task' not found
 
 # recommended use when missing values are expected during prediction on
 # factor columns that had no missing values during training

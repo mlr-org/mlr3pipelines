@@ -232,85 +232,20 @@ Other Imputation PipeOps:
 library("mlr3")
 
 task = tsk("pima")
+#> Warning: data set ‘PimaIndiansDiabetes2’ not found
+#> Error in UseMethod("as_data_backend"): no applicable method for 'as_data_backend' applied to an object of class "NULL"
 task$missings()
-#> diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
-#>        0        0        5      374       11        0        0       35 
-#>  triceps 
-#>      227 
+#> Error: object 'task' not found
 
 po = po("imputelearner", lrn("regr.rpart"))
 new_task = po$train(list(task = task))[[1]]
+#> Error: object 'task' not found
 new_task$missings()
-#> diabetes      age pedigree pregnant  glucose  insulin     mass pressure 
-#>        0        0        0        0        0        0        0        0 
-#>  triceps 
-#>        0 
+#> Error: object 'new_task' not found
 
 # '$state' of the "regr.rpart" Learner, trained to predict the 'mass' column:
 po$state$model$mass
-#> $model
-#> n= 757 
-#> 
-#> node), split, n, deviance, yval
-#>       * denotes terminal node
-#> 
-#>  1) root 757 36254.3300 32.45746  
-#>    2) triceps< 25.5 219  5537.6560 27.93196  
-#>      4) triceps< 20.5 144  3140.7800 26.68333 *
-#>      5) triceps>=20.5 75  1741.3150 30.32933  
-#>       10) pressure< 83 64  1081.6090 29.37813 *
-#>       11) pressure>=83 11   264.8855 35.86364 *
-#>    3) triceps>=25.5 538 24405.7800 34.29963  
-#>      6) triceps< 35.5 380 14414.2500 32.50474  
-#>       12) pressure< 74.5 223  6772.1180 31.49013  
-#>         24) glucose< 73.5 8    44.1000 24.20000 *
-#>         25) glucose>=73.5 215  6287.0300 31.76140  
-#>           50) pregnant>=0.5 190  4822.6790 31.28947 *
-#>           51) pregnant< 0.5 25  1100.4420 35.34800 *
-#>       13) pressure>=74.5 157  7086.5100 33.94586  
-#>         26) insulin< 187 122  4736.5000 33.05656 *
-#>         27) insulin>=187 35  1917.2070 37.04571 *
-#>      7) triceps>=35.5 158  5822.9770 38.61646  
-#>       14) pregnant>=1.5 92  2351.3170 37.02174 *
-#>       15) pregnant< 1.5 66  2911.5580 40.83939 *
-#> 
-#> $param_vals
-#> $param_vals$xval
-#> [1] 0
-#> 
-#> 
-#> $log
-#> Empty data.table (0 rows and 3 cols): stage,class,condition
-#> 
-#> $train_time
-#> elapsed 
-#>   0.004 
-#> 
-#> $task_hash
-#> [1] "7682038aa5360fe2"
-#> 
-#> $feature_names
-#> [1] "age"      "glucose"  "insulin"  "pedigree" "pregnant" "pressure" "triceps" 
-#> 
-#> $validate
 #> NULL
-#> 
-#> $mlr3_version
-#> [1] ‘1.7.1’
-#> 
-#> $data_prototype
-#> Empty data.table (0 rows and 8 cols): .impute_col,age,glucose,insulin,pedigree,pregnant...
-#> 
-#> $train_task
-#> 
-#> ── <TaskRegr> (768x8) ──────────────────────────────────────────────────────────
-#> • Target: .impute_col
-#> • Properties: -
-#> • Features (7):
-#>   • dbl (7): age, glucose, insulin, pedigree, pregnant, pressure, triceps
-#> 
-#> attr(,"class")
-#> [1] "learner_state" "list"         
 
 library("mlr3learners")
 # To use the "regr.lm" Learner, prefix it with its own imputation method!
@@ -321,9 +256,7 @@ po = po("imputelearner",
 )
 
 new_task = po$train(list(task = task))[[1]]
+#> Error: object 'task' not found
 new_task$missings()
-#> diabetes      age pedigree pregnant  glucose  insulin     mass pressure 
-#>        0        0        0        0        0        0        0        0 
-#>  triceps 
-#>        0 
+#> Error: object 'new_task' not found
 ```

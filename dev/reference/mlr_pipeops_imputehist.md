@@ -177,83 +177,17 @@ Other Imputation PipeOps:
 library("mlr3")
 
 task = tsk("pima")
+#> Warning: data set ‘PimaIndiansDiabetes2’ not found
+#> Error in UseMethod("as_data_backend"): no applicable method for 'as_data_backend' applied to an object of class "NULL"
 task$missings()
-#> diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
-#>        0        0        5      374       11        0        0       35 
-#>  triceps 
-#>      227 
+#> Error: object 'task' not found
 
 po = po("imputehist")
 new_task = po$train(list(task = task))[[1]]
+#> Error: object 'task' not found
 new_task$missings()
-#> diabetes      age pedigree pregnant  glucose  insulin     mass pressure 
-#>        0        0        0        0        0        0        0        0 
-#>  triceps 
-#>        0 
+#> Error: object 'new_task' not found
 
 po$state$model
-#> $age
-#> $age$counts
-#>  [1] 267 150  81  76  76  37  31  23  14  11   1   0   1
-#> 
-#> $age$breaks
-#>  [1] 20 25 30 35 40 45 50 55 60 65 70 75 80 85
-#> 
-#> 
-#> $glucose
-#> $glucose$counts
-#> [1]   4  38 167 205 157  91  60  41
-#> 
-#> $glucose$breaks
-#> [1]  40  60  80 100 120 140 160 180 200
-#> 
-#> 
-#> $insulin
-#> $insulin$counts
-#> [1] 151 158  48  17  11   6   1   1   1
-#> 
-#> $insulin$breaks
-#>  [1]   0 100 200 300 400 500 600 700 800 900
-#> 
-#> 
-#> $mass
-#> $mass$counts
-#>  [1]  14  98 180 221 148  61  27   5   2   0   1
-#> 
-#> $mass$breaks
-#>  [1] 15 20 25 30 35 40 45 50 55 60 65 70
-#> 
-#> 
-#> $pedigree
-#> $pedigree$counts
-#>  [1] 128 282 154  99  54  22  16   4   4   1   1   2   1
-#> 
-#> $pedigree$breaks
-#>  [1] 0.0 0.2 0.4 0.6 0.8 1.0 1.2 1.4 1.6 1.8 2.0 2.2 2.4 2.6
-#> 
-#> 
-#> $pregnant
-#> $pregnant$counts
-#> [1] 349 143 107  83  52  20  12   1   1
-#> 
-#> $pregnant$breaks
-#>  [1]  0  2  4  6  8 10 12 14 16 18
-#> 
-#> 
-#> $pressure
-#> $pressure$counts
-#>  [1]   3   2  24  94 217 228 127  25  11   1   1
-#> 
-#> $pressure$breaks
-#>  [1]  20  30  40  50  60  70  80  90 100 110 120 130
-#> 
-#> 
-#> $triceps
-#> $triceps$counts
-#>  [1]   9 115 179 164  65   7   1   0   0   1
-#> 
-#> $triceps$breaks
-#>  [1]   0  10  20  30  40  50  60  70  80  90 100
-#> 
-#> 
+#> NULL
 ```
