@@ -467,13 +467,13 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     .can_validate = NULL,
     .can_internal_tuning = NULL,
     .extract_internal_tuned_values = function() {
-      if (!private$.can_validate) return(NULL)
+      if (!private$.can_internal_tuning) return(NULL)
       itvs = unlist(map(pos_with_property(self$graph_model, "internal_tuning"), "internal_tuned_values"), recursive = FALSE)
       if (!length(itvs)) return(named_list())
       itvs
     },
     .extract_internal_valid_scores = function(which = "last") {
-      if (!private$.can_internal_tuning) return(NULL)
+      if (!private$.can_validate) return(NULL)
       field = if (which == "best") "best_valid_scores" else "internal_valid_scores"
       ivs = unlist(map(pos_with_property(self$graph_model, "validation"), field), recursive = FALSE)
       if (!length(ivs)) return(named_list())
