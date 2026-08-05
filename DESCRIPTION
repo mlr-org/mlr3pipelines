@@ -110,6 +110,8 @@ Suggests:
     dimRed,
     RSpectra,
     RANN
+Remotes:
+    mlr-org/mlr3
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
