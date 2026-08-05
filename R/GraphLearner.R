@@ -64,6 +64,11 @@
 #'   The internal validation scores as retrieved from the [`PipeOp`]s.
 #'   The names are prefixed with the respective IDs of the [`PipeOp`]s.
 #'   `NULL` is returned if the learner is not trained or none of the wrapped learners supports internal validation.
+#' * `best_valid_scores` :: named `list()` or `NULL`\cr
+#'   The best internal validation scores as retrieved from the [`PipeOp`]s, i.e. the best scores that were observed
+#'   during training instead of those of the final model.
+#'   The names are prefixed with the respective IDs of the [`PipeOp`]s.
+#'   `NULL` is returned if the learner is not trained or none of the wrapped learners tracks them.
 #' * `validate` :: `numeric(1)`, `"predefined"`, `"test"` or `NULL`\cr
 #'   How to construct the validation data. This also has to be configured for the individual [`PipeOp`]s such as
 #'   `PipeOpLearner`, see [`set_validate.GraphLearner`].
@@ -354,6 +359,10 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       assert_ro_binding(rhs)
       self$state$internal_valid_scores
     },
+    best_valid_scores = function(rhs) {
+      assert_ro_binding(rhs)
+      self$state$best_valid_scores
+    },
     internal_tuned_values = function(rhs) {
       assert_ro_binding(rhs)
       self$state$internal_tuned_values
@@ -463,9 +472,10 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       if (!length(itvs)) return(named_list())
       itvs
     },
-    .extract_internal_valid_scores = function() {
+    .extract_internal_valid_scores = function(which = "last") {
       if (!private$.can_internal_tuning) return(NULL)
-      ivs = unlist(map(pos_with_property(self$graph_model, "validation"), "internal_valid_scores"), recursive = FALSE)
+      field = if (which == "best") "best_valid_scores" else "internal_valid_scores"
+      ivs = unlist(map(pos_with_property(self$graph_model, "validation"), field), recursive = FALSE)
       if (!length(ivs)) return(named_list())
       ivs
     },

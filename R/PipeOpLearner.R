@@ -73,6 +73,9 @@
 #'    The internally tuned values if the wrapped `Learner` supports internal tuning, `NULL` otherwise.
 #' * `internal_valid_scores` :: named `list()` or `NULL`\cr
 #'    The internal validation scores if the wrapped `Learner` supports internal validation, `NULL` otherwise.
+#' * `best_valid_scores` :: named `list()` or `NULL`\cr
+#'    The best internal validation scores observed during training if the wrapped `Learner` tracks them,
+#'    `NULL` otherwise.
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
@@ -125,6 +128,11 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       assert_ro_binding(rhs)
       if ("validation" %nin% self$properties) return(NULL)
       self$learner_model$internal_valid_scores
+    },
+    best_valid_scores = function(rhs) {
+      assert_ro_binding(rhs)
+      if ("validation" %nin% self$properties) return(NULL)
+      self$learner_model$best_valid_scores
     },
     validate = function(rhs) {
       if ("validation" %nin% self$properties) {

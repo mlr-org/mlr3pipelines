@@ -1,5 +1,7 @@
 # mlr3pipelines 0.11.0-9000
 
+* feat: `GraphLearner` and `PipeOpLearner` gained a `$best_valid_scores` field, and `GraphLearner` forwards the `which` argument of `$.extract_internal_valid_scores()` to the wrapped `PipeOp`s, so `msr("best_valid_score")` can be used with a `GraphLearner`.
+
 # mlr3pipelines 0.11.0
 
 * Fix: Made `FilterEnsemble` tests deterministic and more robust.

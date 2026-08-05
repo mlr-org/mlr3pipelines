@@ -966,6 +966,35 @@ test_that("validation, internal_valid_scores", {
   glrn2 = as_learner(as_graph(lrn("classif.debug")))
 })
 
+test_that("validation, best_valid_scores", {
+  glrn1 = as_learner(as_graph(lrn("classif.rpart")))$train(tsk("iris"))
+  expect_null(glrn1$best_valid_scores)
+
+  glrn2 = as_learner(as_graph(lrn("classif.debug", early_stopping = TRUE, iter = 5)))
+  set_validate(glrn2, 0.2)
+  glrn2$train(tsk("iris"))
+
+  expect_list(glrn2$best_valid_scores, types = "numeric")
+  expect_equal(names(glrn2$best_valid_scores), "classif.debug.acc")
+  # the ids are prefixed the same way as for the internal valid scores
+  expect_equal(names(glrn2$best_valid_scores), names(glrn2$internal_valid_scores))
+  # the debug learner's best score is at least as good as its final one
+  expect_true(glrn2$best_valid_scores[[1L]] >= glrn2$internal_valid_scores[[1L]])
+
+  # the measure resolves the prefixed name
+  rr = resample(tsk("iris"), glrn2, rsmp("holdout"))
+  expect_equal(
+    rr$score(msr("best_valid_score", select = "classif.debug.acc"))$classif.debug.acc,
+    rr$learners[[1]]$best_valid_scores$classif.debug.acc
+  )
+
+  # without validation, no scores are reported at all
+  glrn3 = as_learner(as_graph(lrn("classif.debug")))
+  glrn3$train(tsk("iris"))
+  expect_null(glrn3$best_valid_scores)
+  expect_null(glrn3$internal_valid_scores)
+})
+
 test_that("internal_tuned_values", {
   skip_if_not_installed("rpart")
   # no internal tuning support -> NULL
