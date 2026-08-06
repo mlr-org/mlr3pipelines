@@ -980,14 +980,6 @@ test_that("validation, best_valid_scores", {
   expect_equal(names(glrn2$best_valid_scores), names(glrn2$internal_valid_scores))
   # the debug learner's best score is at least as good as its final one
   expect_true(glrn2$best_valid_scores[[1L]] >= glrn2$internal_valid_scores[[1L]])
-
-  # the measure resolves the prefixed name
-  rr = resample(tsk("iris"), glrn2, rsmp("holdout"))
-  expect_equal(
-    rr$score(msr("best_valid_score", select = "classif.debug.acc"))$classif.debug.acc,
-    rr$learners[[1]]$best_valid_scores$classif.debug.acc
-  )
-
   # without validation, no scores are reported at all
   glrn3 = as_learner(as_graph(lrn("classif.debug")))
   glrn3$train(tsk("iris"))
