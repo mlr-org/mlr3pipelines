@@ -472,9 +472,14 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       if (!length(itvs)) return(named_list())
       itvs
     },
-    .extract_internal_valid_scores = function(which = "last") {
+    .extract_internal_valid_scores = function() {
+      private$.collect_valid_scores("internal_valid_scores")
+    },
+    .extract_best_valid_scores = function() {
+      private$.collect_valid_scores("best_valid_scores")
+    },
+    .collect_valid_scores = function(field) {
       if (!private$.can_validate) return(NULL)
-      field = if (which == "best") "best_valid_scores" else "internal_valid_scores"
       ivs = unlist(map(pos_with_property(self$graph_model, "validation"), field), recursive = FALSE)
       if (!length(ivs)) return(named_list())
       ivs
