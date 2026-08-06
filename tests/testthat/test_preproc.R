@@ -58,8 +58,8 @@ test_that("preproc - basic sanity checks", {
       .predict = function(inputs) list(as.character(inputs[[1L]]))
     )
   )
-  expect_error(preproc(task, PipeOpDebugNonTaskInput$new()), "Must inherit from class '.*', but has classes.*'Task'")
-  expect_error(preproc(task, po("regravg"), state = list(), predict = TRUE), "Must inherit from class '.*', but has classes.*'Task'")
+  expect_error(preproc(task, PipeOpDebugNonTaskInput$new()), "Must inherit from class '.*', but has class.*'Task'")
+  expect_error(preproc(task, po("regravg"), state = list(), predict = TRUE), "Must inherit from class '.*', but has class.*'Task'")
 
   # Test error for processors incapable of handling targetless tasks when indata is a data.frame
   expect_error(preproc(task$data(), po("smote")), "Must inherit from class 'TaskClassif'")

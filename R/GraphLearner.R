@@ -379,14 +379,10 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     marshaled = function() {
       learner_marshaled(self)
     },
-    hash = function() {
-      digest(list(class(self), self$id, self$graph$hash, private$.predict_type, private$.validate,
-        self$fallback$hash, self$parallel_predict), algo = "xxhash64")
-    },
-    phash = function() {
-      digest(list(class(self), self$id, self$graph$phash, private$.predict_type, private$.validate,
-        self$fallback$hash, self$parallel_predict), algo = "xxhash64")
-    },
+    hash = function() calculate_hash(class(self), self$id, self$graph$hash, private$.predict_type, private$.validate, 
+      self$fallback$hash, self$parallel_predict),
+    phash = function() calculate_hash(class(self), self$id, self$graph$phash, private$.predict_type, private$.validate,
+      self$fallback$hash, self$parallel_predict),
     predict_type = function(rhs) {
       if (!missing(rhs)) {
         assert_subset(rhs, unlist(mlr_reflections$learner_predict_types[[self$task_type]], use.names = FALSE))
@@ -645,13 +641,24 @@ unmarshal_model.graph_learner_model_marshaled = function(model, inplace = FALSE,
 }
 
 #' @export
-as_learner.Graph = function(x, clone = FALSE, ...) {
-  GraphLearner$new(x, clone_graph = clone)
+as_learner.Graph = function(x, clone = TRUE, discard_state = FALSE, ..., id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL) {
+  learner = GraphLearner$new(
+    x,
+    id = id,
+    param_vals = param_vals,
+    task_type = task_type,
+    predict_type = predict_type,
+    clone_graph = clone
+  )
+  if (clone && discard_state) {
+    learner$state = NULL
+  }
+  learner
 }
 
 #' @export
 as_learner.PipeOp = function(x, clone = FALSE, ...) {
-  as_learner(as_graph(x, clone = FALSE, ...), clone = clone)
+  as_learner(as_graph(x, clone = FALSE), clone = clone, ...)
 }
 
 

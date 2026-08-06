@@ -84,3 +84,28 @@ test_that("PipeOpSmoteNC - train works as intended", {
   expect_equal(train_out, smotenc_out)
 
 })
+
+test_that("PipeOpSmoteNC - handles name column", {
+  skip_if_not_installed("themis")
+
+  op = PipeOpSmoteNC$new()
+
+  set.seed(1234L)
+  df = data.frame(
+    row_name = sprintf("row_%03i", 1:200),
+    class = factor(rep(c("pos", "neg"), times = c(150, 50))),
+    x1 = rnorm(200),
+    x2 = factor(sample(c("a", "b"), replace = TRUE, size = 200))
+  )
+  task = TaskClassif$new(id = "test", backend = df, target = "class")
+  task$set_col_roles("row_name", roles = "name")
+
+  set.seed(1234L)
+  train_out = op$train(list(task))[[1L]]
+  row_names = train_out$data(cols = "row_name")$row_name
+
+  expect_gt(train_out$nrow, task$nrow)
+  expect_identical(train_out$col_roles$name, "row_name")
+  expect_identical(row_names[seq_len(task$nrow)], df$row_name)
+  expect_true(all(row_names[-seq_len(task$nrow)] == "synthetic.smotenc"))
+})

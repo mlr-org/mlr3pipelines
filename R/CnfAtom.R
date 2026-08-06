@@ -160,6 +160,7 @@ as.logical.CnfAtom = function(x, ...) {
   return(NA)
 }
 
+#' @method all.equal CnfAtom
 #' @export
 all.equal.CnfAtom = function(target, current, ...) {
   if (is.logical(target) && is.logical(current)) {

@@ -14,6 +14,9 @@ development:
 toc:
   depth: 3
 
+redirects:
+  - ["reference/greplicate.html", "reference/mlr_graphs_greplicate.html"]
+
 navbar:
   structure:
     left: [reference, articles, news, book]
@@ -64,7 +67,6 @@ reference:
     contents:
       - "%>>%"
       - gunion
-      - greplicate
       - chain_graphs
   - title: PipeOps
     contents:

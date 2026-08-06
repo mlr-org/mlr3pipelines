@@ -491,16 +491,8 @@ Graph = R6Class("Graph",
       graph_channels(self$edges$src_id, self$edges$src_channel, self$pipeops, "output")
     },
     packages = function() unique(unlist(map(self$pipeops, "packages"))),
-    hash = function() {
-      digest(
-        list(map(self$pipeops, "hash"), self$edges),
-        algo = "xxhash64")
-    },
-    phash = function() {
-      digest(
-        list(map(self$pipeops, "phash"), self$edges),
-        algo = "xxhash64")
-    },
+    hash = function() calculate_hash(map(self$pipeops, "hash"), self$edges),
+    phash = function() calculate_hash(map(self$pipeops, "phash"), self$edges),
     param_set = function(val) {
       # FIXME: It would be nice if we didn't need to do this.
       if (is.null(private$.param_set)) {

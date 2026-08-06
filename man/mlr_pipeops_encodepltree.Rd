@@ -23,8 +23,8 @@ column into account, and using decision boundaries as bin boundaries.
 \item \code{task_type} :: \code{character(1)}\cr
 The class of \code{\link[mlr3:Task]{Task}} that should be accepted as input, given as a \code{character(1)}. This is used to
 construct the appropriate \code{\link[mlr3:Learner]{Learner}} to be used for obtaining the bins for piecewise linear
-encoding. Supported options are \code{"TaskClassif"}for \code{\link[mlr3:mlr_learners_classif.rpart]{LearnerClassifRpart}} or
-\code{"TaskRegr"}for \code{\link[mlr3:mlr_learners_regr.rpart]{LearnerRegrRpart}}.
+encoding. Supported options are \code{"TaskClassif"}for \code{\link[mlr3:LearnerClassifRpart]{LearnerClassifRpart}} or
+\code{"TaskRegr"}for \code{\link[mlr3:LearnerRegrRpart]{LearnerRegrRpart}}.
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"encodeplquantiles"}.
 \item \code{param_vals} :: named \code{list}\cr
@@ -57,8 +57,8 @@ the \code{\link[mlr3:Learner]{Learner}} used for obtaining the bins for piecewis
 
 This overloads the \code{private$.get_bins()} method of \code{\link{PipeOpEncodePL}}. To derive the bins for each feature, the
 \code{\link[mlr3:Task]{Task}} is split into smaller \code{\link[mlr3:Task]{Tasks}} with only the target and respective feature as columns.
-On these \code{\link[mlr3:Task]{Tasks}} either a \code{\link[mlr3:mlr_learners_classif.rpart]{LearnerClassifRpart}} or
-\code{\link[mlr3:mlr_learners_regr.rpart]{LearnerRegrRpart}} gets trained and the respective splits extracted as bin boundaries used
+On these \code{\link[mlr3:Task]{Tasks}} either a \code{\link[mlr3:LearnerClassifRpart]{LearnerClassifRpart}} or
+\code{\link[mlr3:LearnerRegrRpart]{LearnerRegrRpart}} gets trained and the respective splits extracted as bin boundaries used
 for piecewise linear encodings.
 }
 
@@ -120,7 +120,7 @@ In \emph{Advances in Neural Information Processing Systems}, volume 35, 24991--2
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
@@ -167,6 +167,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},
 \code{\link{mlr_pipeops_learner_quantiles}},
+\code{\link{mlr_pipeops_materialize}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
@@ -208,7 +209,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}}
 
-Other Piecewise Linear Encoding PipeOps: 
+Other Piecewise Linear Encoding PipeOps:
 \code{\link{PipeOpEncodePL}},
 \code{\link{mlr_pipeops_encodeplquantiles}}
 }

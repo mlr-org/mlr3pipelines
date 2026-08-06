@@ -96,3 +96,26 @@ test_that("PipeOpBLSmote - handling of feature named 'class'", {
   expect_equal(train_out, blsmote_out)
 
 })
+
+test_that("PipeOpBLSmote - handles name column", {
+  skip_if_not_installed("smotefamily")
+
+  op = PipeOpBLSmote$new()
+
+  set.seed(1234L)
+  df = smotefamily::sample_generator(500, 0.8)
+  df$result = factor(df$result)
+  df$row_name = sprintf("row_%03i", seq_len(nrow(df)))
+  df = df[, c(4L, 3L, 1L, 2L)]
+  task = TaskClassif$new(id = "test", backend = df, target = "result")
+  task$set_col_roles("row_name", roles = "name")
+
+  set.seed(1234L)
+  train_out = op$train(list(task))[[1L]]
+  row_names = train_out$data(cols = "row_name")$row_name
+
+  expect_gt(train_out$nrow, task$nrow)
+  expect_identical(train_out$col_roles$name, "row_name")
+  expect_identical(row_names[seq_len(task$nrow)], df$row_name)
+  expect_true(all(row_names[-seq_len(task$nrow)] == "synthetic.blsmote"))
+})

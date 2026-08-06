@@ -245,6 +245,7 @@ as.logical.CnfClause = function(x, ...) {
   )
 }
 
+#' @method all.equal CnfClause
 #' @export
 all.equal.CnfClause = function(target, current, ...) {
   if (is.logical(target) && is.logical(current)) {
