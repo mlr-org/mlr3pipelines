@@ -48,53 +48,52 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `keep_date_var` :: `logical(1)`\cr
-#'   Should the `POSIXct` columns be kept as features? Default `FALSE`.
+#'   Whether `POSIXct` columns should be kept as features. Initialized to `FALSE`.
 #' * `cyclic` :: `logical(1)`\cr
-#'   Should cyclic features be computed? See Internals. Default `FALSE`.
+#'   Whether cyclic features should be computed. See Internals. Initialized to `FALSE`.
 #' * `year` :: `logical(1)`\cr
-#'   Should the year be extracted as a feature? Default `TRUE`.
+#'   Whether the year should be extracted as a feature. Initialized to `TRUE`.
 #' * `quarter` :: `logical(1)`\cr
-#'   Should the quarter be extracted as a feature? Default `TRUE`.
+#'   Whether the quarter should be extracted as a feature. Initialized to `TRUE`.
 #' * `month` :: `logical(1)`\cr
-#'   Should the month be extracted as a feature? Default `TRUE`.
+#'   Whether the month should be extracted as a feature. Initialized to `TRUE`.
 #' * `week_of_year` :: `logical(1)`\cr
-#'   Should the week of the year be extracted as a feature? Default `TRUE`.
+#'   Whether the week of the year should be extracted as a feature. Initialized to `TRUE`.
 #' * `day_of_year` :: `logical(1)`\cr
-#'   Should the day of the year be extracted as a feature? Default `TRUE`.
+#'   Whether the day of the year should be extracted as a feature. Initialized to `TRUE`.
 #' * `day_of_month` :: `logical(1)`\cr
-#'   Should the day of the month be extracted as a feature? Default `TRUE`.
+#'   Whether the day of the month should be extracted as a feature. Initialized to `TRUE`.
 #' * `day_of_week` :: `logical(1)`\cr
-#'   Should the day of the week (ISO 8601) be extracted as a feature? Default `TRUE`.
+#'   Whether the day of the week (ISO 8601) should be extracted as a feature. Initialized to `TRUE`.
 #' * `hour` :: `logical(1)`\cr
-#'   Should the hour be extracted as a feature? Default `TRUE`.
+#'   Whether the hour should be extracted as a feature. Initialized to `TRUE`.
 #' * `minute` :: `logical(1)`\cr
-#'   Should the minute be extracted as a feature? Default `TRUE`.
+#'   Whether the minute should be extracted as a feature. Initialized to `TRUE`.
 #' * `second` :: `logical(1)`\cr
-#'   Should the second be extracted as a feature? Default `TRUE`.
+#'   Whether the second should be extracted as a feature. Initialized to `TRUE`.
 #' * `is_day` :: `logical(1)`\cr
-#'   Should a feature be extracted indicating whether it is day time (06:00am - 08:00pm)?
-#'   Default `TRUE`.
+#'   Whether a feature indicating day time (06:00am - 08:00pm) should be extracted. Initialized to
+#'   `TRUE`.
 #' * `is_month_start` :: `logical(1)`\cr
-#'   Should a feature be extracted indicating whether it is the first day of the month?
-#'   Default `TRUE`.
+#'   Whether a feature indicating the first day of the month should be extracted. Initialized to
+#'   `FALSE`.
 #' * `is_month_end` :: `logical(1)`\cr
-#'   Should a feature be extracted indicating whether it is the last day of the month?
-#'   Default `TRUE`.
+#'   Whether a feature indicating the last day of the month should be extracted. Initialized to
+#'   `FALSE`.
 #' * `is_quarter_start` :: `logical(1)`\cr
-#'   Should a feature be extracted indicating whether it is the first day of the quarter?
-#'   Default `TRUE`.
+#'   Whether a feature indicating the first day of the quarter should be extracted. Initialized to
+#'   `FALSE`.
 #' * `is_quarter_end` :: `logical(1)`\cr
-#'   Should a feature be extracted indicating whether it is the last day of the quarter?
-#'   Default `TRUE`.
+#'   Whether a feature indicating the last day of the quarter should be extracted. Initialized to
+#'   `FALSE`.
 #' * `is_year_start` :: `logical(1)`\cr
-#'   Should a feature be extracted indicating whether it is the first day of the year?
-#'   Default `TRUE`.
+#'   Whether a feature indicating the first day of the year should be extracted. Initialized to
+#'   `FALSE`.
 #' * `is_year_end` :: `logical(1)`\cr
-#'   Should a feature be extracted indicating whether it is the last day of the year?
-#'   Default `TRUE`.
+#'   Whether a feature indicating the last day of the year should be extracted. Initialized to
+#'   `FALSE`.
 #' * `is_leap_year` :: `logical(1)`\cr
-#'   Should a feature be extracted indicating whether the year is a leap year?
-#'   Default `TRUE`.
+#'   Whether a feature indicating a leap year should be extracted. Initialized to `FALSE`.
 #'
 #' @section Internals:
 #' The cyclic feature transformation always assumes that values range from 0, so some values
@@ -161,13 +160,13 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
         minute = TRUE,
         second = TRUE,
         is_day = TRUE,
-        is_month_start = TRUE,
-        is_month_end = TRUE,
-        is_quarter_start = TRUE,
-        is_quarter_end = TRUE,
-        is_year_start = TRUE,
-        is_year_end = TRUE,
-        is_leap_year = TRUE
+        is_month_start = FALSE,
+        is_month_end = FALSE,
+        is_quarter_start = FALSE,
+        is_quarter_end = FALSE,
+        is_year_start = FALSE,
+        is_year_end = FALSE,
+        is_leap_year = FALSE
       )
       super$initialize(
         id = id,

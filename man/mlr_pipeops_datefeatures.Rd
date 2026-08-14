@@ -60,53 +60,52 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{keep_date_var} :: \code{logical(1)}\cr
-Should the \code{POSIXct} columns be kept as features? Default \code{FALSE}.
+Whether \code{POSIXct} columns should be kept as features. Initialized to \code{FALSE}.
 \item \code{cyclic} :: \code{logical(1)}\cr
-Should cyclic features be computed? See Internals. Default \code{FALSE}.
+Whether cyclic features should be computed. See Internals. Initialized to \code{FALSE}.
 \item \code{year} :: \code{logical(1)}\cr
-Should the year be extracted as a feature? Default \code{TRUE}.
+Whether the year should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{quarter} :: \code{logical(1)}\cr
-Should the quarter be extracted as a feature? Default \code{TRUE}.
+Whether the quarter should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{month} :: \code{logical(1)}\cr
-Should the month be extracted as a feature? Default \code{TRUE}.
+Whether the month should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{week_of_year} :: \code{logical(1)}\cr
-Should the week of the year be extracted as a feature? Default \code{TRUE}.
+Whether the week of the year should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{day_of_year} :: \code{logical(1)}\cr
-Should the day of the year be extracted as a feature? Default \code{TRUE}.
+Whether the day of the year should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{day_of_month} :: \code{logical(1)}\cr
-Should the day of the month be extracted as a feature? Default \code{TRUE}.
+Whether the day of the month should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{day_of_week} :: \code{logical(1)}\cr
-Should the day of the week (ISO 8601) be extracted as a feature? Default \code{TRUE}.
+Whether the day of the week (ISO 8601) should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{hour} :: \code{logical(1)}\cr
-Should the hour be extracted as a feature? Default \code{TRUE}.
+Whether the hour should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{minute} :: \code{logical(1)}\cr
-Should the minute be extracted as a feature? Default \code{TRUE}.
+Whether the minute should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{second} :: \code{logical(1)}\cr
-Should the second be extracted as a feature? Default \code{TRUE}.
+Whether the second should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{is_day} :: \code{logical(1)}\cr
-Should a feature be extracted indicating whether it is day time (06:00am - 08:00pm)?
-Default \code{TRUE}.
+Whether a feature indicating day time (06:00am - 08:00pm) should be extracted. Initialized to
+\code{TRUE}.
 \item \code{is_month_start} :: \code{logical(1)}\cr
-Should a feature be extracted indicating whether it is the first day of the month?
-Default \code{TRUE}.
+Whether a feature indicating the first day of the month should be extracted. Initialized to
+\code{FALSE}.
 \item \code{is_month_end} :: \code{logical(1)}\cr
-Should a feature be extracted indicating whether it is the last day of the month?
-Default \code{TRUE}.
+Whether a feature indicating the last day of the month should be extracted. Initialized to
+\code{FALSE}.
 \item \code{is_quarter_start} :: \code{logical(1)}\cr
-Should a feature be extracted indicating whether it is the first day of the quarter?
-Default \code{TRUE}.
+Whether a feature indicating the first day of the quarter should be extracted. Initialized to
+\code{FALSE}.
 \item \code{is_quarter_end} :: \code{logical(1)}\cr
-Should a feature be extracted indicating whether it is the last day of the quarter?
-Default \code{TRUE}.
+Whether a feature indicating the last day of the quarter should be extracted. Initialized to
+\code{FALSE}.
 \item \code{is_year_start} :: \code{logical(1)}\cr
-Should a feature be extracted indicating whether it is the first day of the year?
-Default \code{TRUE}.
+Whether a feature indicating the first day of the year should be extracted. Initialized to
+\code{FALSE}.
 \item \code{is_year_end} :: \code{logical(1)}\cr
-Should a feature be extracted indicating whether it is the last day of the year?
-Default \code{TRUE}.
+Whether a feature indicating the last day of the year should be extracted. Initialized to
+\code{FALSE}.
 \item \code{is_leap_year} :: \code{logical(1)}\cr
-Should a feature be extracted indicating whether the year is a leap year?
-Default \code{TRUE}.
+Whether a feature indicating a leap year should be extracted. Initialized to \code{FALSE}.
 }
 }
 
