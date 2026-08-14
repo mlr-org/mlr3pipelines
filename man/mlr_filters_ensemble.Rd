@@ -67,8 +67,8 @@ Read-only access to the wrapped filters.
 (\code{character(1)}, \code{character(1)}, \code{character(1)}) -> \code{\link[paradox:ParamSet]{ParamSet}}\cr
 Construct a \code{\link[paradox:ParamSet]{ParamSet}} describing a weight search space.
 \item \code{get_weights_tunetoken(normalize_weights = "uniform")}\cr
-(\code{character(1)}) -> \code{\link[paradox:to_tune]{TuneToken}}\cr
-Shortcut returning a \code{\link[paradox:to_tune]{TuneToken}} for tuning the weights.
+(\code{character(1)}) -> \code{\link[paradox:TuneToken]{TuneToken}}\cr
+Shortcut returning a \code{\link[paradox:TuneToken]{TuneToken}} for tuning the weights.
 \item \code{set_weights_to_tune(normalize_weights = "uniform")}\cr
 (\code{character(1)}) -> \code{self}\cr
 Convenience wrapper that stores the \code{TuneToken} returned by
@@ -102,7 +102,7 @@ In \emph{Proceedings of the 2020 Genetic and Evolutionary Computation Conference
 }
 
 \examples{
-\dontshow{if (mlr3misc::require_namespaces("mlr3filters", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (mlr3misc::require_namespaces("mlr3filters", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 library("mlr3")
 library("mlr3filters")
 

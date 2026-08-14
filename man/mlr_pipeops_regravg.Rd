@@ -146,7 +146,7 @@ Only methods inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 }
 
 \examples{
-\dontshow{if (requireNamespace("rpart")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
 # Simple Bagging for Regression
@@ -163,7 +163,7 @@ resample(tsk("mtcars"), GraphLearner$new(gr), rsmp("holdout"))
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
@@ -252,8 +252,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}}
 
-Other Multiplicity PipeOps: 
-\code{\link{Multiplicity}()},
+Other Multiplicity PipeOps:
+\code{\link[=Multiplicity]{Multiplicity()}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_featureunion}},
@@ -263,7 +263,7 @@ Other Multiplicity PipeOps:
 \code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_replicate}}
 
-Other Ensembles: 
+Other Ensembles:
 \code{\link{PipeOpEnsemble}},
 \code{\link{mlr_learners_avg}},
 \code{\link{mlr_pipeops_classifavg}},

@@ -137,11 +137,11 @@ contradiction
 !contradiction
 }
 \seealso{
-Other CNF representation objects: 
-\code{\link{CnfAtom}()},
-\code{\link{CnfClause}()},
-\code{\link{CnfSymbol}()},
-\code{\link{CnfUniverse}()}
+Other CNF representation objects:
+\code{\link[=CnfAtom]{CnfAtom()}},
+\code{\link[=CnfClause]{CnfClause()}},
+\code{\link[=CnfSymbol]{CnfSymbol()}},
+\code{\link[=CnfUniverse]{CnfUniverse()}}
 }
 \concept{CNF representation objects}
 \keyword{internal}

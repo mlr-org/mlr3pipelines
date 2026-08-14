@@ -43,7 +43,7 @@ features in order to predict the outcome.
 All input arguments are cloned and have no references in common with the returned \code{\link{Graph}}.
 }
 \examples{
-\dontshow{if (mlr3misc::require_namespaces("rpart", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (mlr3misc::require_namespaces("rpart", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 library(mlr3)
 library(mlr3learners)
 
