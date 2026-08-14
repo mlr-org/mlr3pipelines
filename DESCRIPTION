@@ -213,6 +213,7 @@ Collate:
     'PipeOpVtreat.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'
+    'TaskClassif_diabetes.R'
     'TaskRegr_boston_housing.R'
     'assert_graph.R'
     'bibentries.R'
@@ -233,5 +234,4 @@ Collate:
     'reexports.R'
     'typecheck.R'
     'zzz.R'
-Config/roxygen2/version: 8.0.0
-RoxygenNote: 7.3.2
+Config/roxygen2/version: 8.1.0
