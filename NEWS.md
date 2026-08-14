@@ -2,7 +2,7 @@
 
 * Added a temporary compatibility fallback for the synthetic `diabetes` task for released `mlr3` versions older than 1.8.0.
   Users should update to `mlr3` 1.8.0 or newer; this fallback will be removed in a later update of `mlr3pipelines`.
-* Switched from using `digest::digest()` to using `mlr3misc::calculate_hash()` for calculating the `hash` and `phash` of `PipeOp`s, `Graph`s, and `GraphLearner`s. 
+* Switched from using `digest::digest()` to using `mlr3misc::calculate_hash()` for calculating the `hash` and `phash` of `PipeOp`s, `Graph`s, and `GraphLearner`s.
 * Fix: Corrected registration of `FilterEnsemble` in `mlr_filters` using `.prototype_args`.
 * Fix: `PipeOpTargetMutate` and `PipeOpTargetTrafoScaleRange` now correctly transform internal validation tasks during training.
 * feat: `PipeOpSmote`, `PipeOpSmoteNC`, `PipeOpADAS`, and `PipeOpBLSmote` can now handle columns with role `"name"` by assigning the name `synthetic.<pipeop id>` to generated rows.
@@ -11,11 +11,13 @@
 * `PipeOpNMF` now correctly rejects features containing missing or infinite values with an informative error message. Features containing negative values are still dropped implictly, but now this produces a warning to use `selector_non_negative()` for explicit column selection. This will become an error in the future.
 * New selectors `selector_positive()`, `selector_negative()`, `selector_non_negative()`, `selector_non_positive()`, `selector_non_zero()`, and `selector_non_missing()`. The numeric selectors support `na_ignore` to control whether missing values are ignored when checking if all values satisfy the selector's condition.
 * `mlr_graphs` no longer overrides the inherited `$add()` method.
-* Simplified error messages from internal function `check_types()`. 
+* Simplified error messages from internal function `check_types()`.
 * Removed deprecated `greplicate()` function. Use `ppl("greplicate")` instead.
 * Fix: `PipeOpIsomap` now explicitly requires `igraph`, `RSpectra`, and `RANN`; skip checks in tests were also updated.
+* Fix: `as_learner.Graph` now handles `...` as an argument.
+* feat: `as_learner.Graph` now suppots the `discard_state` argument, same as `as_learner.Learner`.
+* feat: `PipeOpTargetInvert` now propagates the `extra` slot of input prediction objects to the output prediction object, if the inverter `fun` does not handle it already.  
 
-  
 # mlr3pipelines 0.11.0
 
 * Fix: Made `FilterEnsemble` tests deterministic and more robust.
@@ -24,8 +26,8 @@
 * Fix: `PipeOpTextVectorizer` now uses coercion to `TsparseMatrix` instead of deprecated `dgTMatrix` to avoid `Matrix` deprecation warnings.
 * New method `$predict_newdata_fast()` for `GraphLearner`. Note that currently this is only a thin wrapper around `$predict_newdata()` to maintain compatibility, but in the future it may get optimized to enable faster predictions on new data.
 * feat: `PipeOpRenameColumns`'s hyperparameter `renaming` can now also take a function transforming old column names to new column names.
-* feat: Added new hyperparameters `filter_score_transform`, `result_score_transform`, and `aggregator` to `FilterEnsemble`. BREAKING CHANGE: The default behavior for handling NA scores in the aggregation has changed. Previously, NA scores were simply ignored and weights were not changed. Now, `weighted.mean` is used, which normalizes the weights for all non-NA scores. 
-* feat: Added new hyperparameters `weights_learner` and `weights_measure` to `PipeOpClassWeights` to allow specification which type of weight column to add to the `Task`. 
+* feat: Added new hyperparameters `filter_score_transform`, `result_score_transform`, and `aggregator` to `FilterEnsemble`. BREAKING CHANGE: The default behavior for handling NA scores in the aggregation has changed. Previously, NA scores were simply ignored and weights were not changed. Now, `weighted.mean` is used, which normalizes the weights for all non-NA scores.
+* feat: Added new hyperparameters `weights_learner` and `weights_measure` to `PipeOpClassWeights` to allow specification which type of weight column to add to the `Task`.
 * New PipeOp `PipeOpClassWeightEx` extends the functionality of `PipeOpClassWeights` to also support multiclass classification tasks as well as several methods of automatically determining weights based on the target class of a sample.
 * New PipeOp `PipeOpSplines` that expands numeric features into spline basis columns.
 
