@@ -10,7 +10,7 @@
 * Simplified error messages from internal function `check_types()`. 
 * Removed deprecated `greplicate()` function. Use `ppl("greplicate")` instead.
 * Fix: `PipeOpIsomap` now explicitly requires `igraph`, `RSpectra`, and `RANN`; skip checks in tests were also updated.
-
+* Fix: `PipeOpDateFeatures` no longer creates all-`NA` cyclic time-of-day features for `Date` features.
   
 # mlr3pipelines 0.11.0
 
