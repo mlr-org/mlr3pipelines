@@ -13,7 +13,7 @@
 #' @source
 #' The data set is generated deterministically when the task is constructed.
 #' 
-#' #' @section Compatibility:
+#' @section Compatibility:
 #' This help page documents the temporary compatibility copy supplied by `mlr3pipelines` when the installed version of
 #' `mlr3` does not yet provide the `diabetes` task. Update to `mlr3` version 1.8.0 or newer to use the upstream task.
 #' This compatibility copy will be removed in a later update of `mlr3pipelines`.

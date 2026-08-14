@@ -8,11 +8,6 @@
 }
 \source{
 The data set is generated deterministically when the task is constructed.
-
-#' @section Compatibility:
-This help page documents the temporary compatibility copy supplied by \code{mlr3pipelines} when the installed version of
-\code{mlr3} does not yet provide the \code{diabetes} task. Update to \code{mlr3} version 1.8.0 or newer to use the upstream task.
-This compatibility copy will be removed in a later update of \code{mlr3pipelines}.
 }
 \description{
 A synthetic binary classification task that mimics the structure of the former \code{pima} task.
@@ -20,3 +15,10 @@ It has the same eight numeric features and a \code{diabetes} target with the pos
 Some feature columns contain missing values, which makes the task useful for preprocessing examples and tests.
 The data is fully synthetic and contains no real patient data.
 }
+\section{Compatibility}{
+
+This help page documents the temporary compatibility copy supplied by \code{mlr3pipelines} when the installed version of
+\code{mlr3} does not yet provide the \code{diabetes} task. Update to \code{mlr3} version 1.8.0 or newer to use the upstream task.
+This compatibility copy will be removed in a later update of \code{mlr3pipelines}.
+}
+
