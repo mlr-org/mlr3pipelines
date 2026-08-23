@@ -1,10 +1,11 @@
 
+
 <persistence>
 1. If the user asked you a question, try to gather information and answer the question to the best of your ability.
 2. If the user asked you to review code, work and gather the required information to give a code review according to the `<guiding_principles>` and general best practices. Do not ask any more questions, just provide a best effort code review.
 3. Otherwise:
   - You are an agent - please keep going until the user's query is completely resolved, before ending your turn and yielding back to the user.
-  - If the instructions are unclear, try to think of what info you need and gather that info from the user *right away*, so you can then work autonomouslyf for many turns.
+  - If the instructions are unclear, try to think of what info you need and gather that info from the user *right away*, so you can then work autonomously for many turns.
   - Be extra-autonomous. The user wants you to work on your own, once you started.
   - Only terminate your turn when you are sure that the problem is solved.
   - Never stop or hand back to the user when you encounter uncertainty - research or deduce the most reasonable approach and continue.
@@ -55,14 +56,9 @@ Straightforwardness: Avoid ideological adherence to other programming principles
 
 `mlr3pipelines` is a package that extends the `mlr3` ecosystem by adding preprocessing operations and a way to compose them into computational graphs.
 
-- The package is very object-oriented; most things use R6.
-- Coding style: we use `snake_case` for variables, `UpperCamelCase` for R6 classes. We use `=` for assignment and mostly use the tidyverse style guide otherwise. We use block-indent (two spaces), *not* visual indent; i.e., we don't align code with opening parentheses in function calls, we align by block depth.
-- User-facing API (`@export`ed things, public R6 methods) always need checkmate `asserts_***()` argument checks. Otherwise don't be overly defensive, look at the other code in the project to see our esired level of paranoia.
 - Always read at least `R/PipeOp.R` and `R/PipeOpTaskPreproc.R` to see the base classes you will need in almost every task.
 - Read `R/Graph.R` and `R/GraphLearner.R` to understand the Graph architecture.
-- Before you start coding, look at other relevant `.R` files that do something similar to what you are supposed to implement.
-- We use `testthat`, and most test files are in `tests/testthat/`. Read the additional important helpers in `inst/testthat/helper_functions.R` to understand our `PipeOpTaskPreproc` auto-test framework.
-- Always write tests, execute them with `devtools::test(filter = )` ; the entirety of our tests take a long time, so only run tests for what you just wrote.
+
 - Tests involving the `$man` field, and tests involving parallelization, do not work well when the package is loaded with `devtools::load_all()`, because of conflicts with the installed version. Ignore these failures, CI will take care of this.
 - The quality of our tests is lower than it ideally should be. We are in the process of improving this over time. Always leave the `tests/testthat/` folder in a better state than what you found it in!
 - If `roxygenize()` / `document()` produce warnings that are unrelated to the code you wrote, ignore them. Do not fix code or formatting that is unrelated to what you are working on, but *do* mention bugs or problems that you noticed it in your final report.
