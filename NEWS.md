@@ -1,5 +1,6 @@
 # mlr3pipelines 0.11.0-9000
 
+* feat: Exported `make_selector()`, which creates a `Selector` from a function with a printable representation, so extension packages no longer need to construct the `Selector` class attributes by hand.
 * Switched from using `digest::digest()` to using `mlr3misc::calculate_hash()` for calculating the `hash` and `phash` of `PipeOp`s, `Graph`s, and `GraphLearner`s.
 * Fix: Corrected registration of `FilterEnsemble` in `mlr_filters` using `.prototype_args`.
 * Fix: `PipeOpTargetMutate` and `PipeOpTargetTrafoScaleRange` now correctly transform internal validation tasks during training.

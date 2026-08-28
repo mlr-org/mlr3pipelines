@@ -70,7 +70,39 @@
 #' selgf(bh_task)
 NULL
 
+#' @title Create a Selector Function
+#'
+#' @description
+#' Creates a [`Selector`] from a function: sets the `Selector` class and attaches a printable
+#' representation.
+#'
+#' This is mainly useful for extension packages implementing their own [`Selector`]s; the
+#' representation makes custom `Selector`s print like the predefined ones and compose well with
+#' `Selector`s taking other `Selector`s as arguments, such as `selector_union()` or
+#' `selector_invert()`.
+#'
+#' @param fun (`function`)\cr
+#'   Function that takes a [`Task`][mlr3::Task] and returns a `character` vector of selected feature names.
+#' @param description (`character(1)`)\cr
+#'   [`sprintf()`] format string used for the printable representation, formatted with `...`.
+#' @param ... (any)\cr
+#'   Values inserted into the `description` format string.
+#' @return `function`: A [`Selector`] function that takes a [`Task`][mlr3::Task] and returns the feature names to be processed.
+#'
+#' @family Selectors
+#' @export
+#' @examples
+#' library("mlr3")
+#'
+#' selector_reverse_alphabetical = make_selector(
+#'   function(task) rev(sort(task$feature_names)),
+#'   "selector_reverse_alphabetical()"
+#' )
+#' selector_reverse_alphabetical
+#' selector_reverse_alphabetical(tsk("iris"))
 make_selector = function(fun, description, ...) {
+  assert_function(fun)
+  assert_string(description)
   structure(fun,
     repr = sprintf(description, ...),
     class = c("Selector", "function")
