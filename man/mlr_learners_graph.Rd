@@ -73,6 +73,11 @@ The internal tuned parameter values collected from all \code{\link{PipeOp}}s.
 The internal validation scores as retrieved from the \code{\link{PipeOp}}s.
 The names are prefixed with the respective IDs of the \code{\link{PipeOp}}s.
 \code{NULL} is returned if the learner is not trained or none of the wrapped learners supports internal validation.
+\item \code{best_valid_scores} :: named \code{list()} or \code{NULL}\cr
+The best internal validation scores as retrieved from the \code{\link{PipeOp}}s, i.e. the best scores that were observed
+during training instead of those of the final model.
+The names are prefixed with the respective IDs of the \code{\link{PipeOp}}s.
+\code{NULL} is returned if the learner is not trained or none of the wrapped learners tracks them.
 \item \code{validate} :: \code{numeric(1)}, \code{"predefined"}, \code{"test"} or \code{NULL}\cr
 How to construct the validation data. This also has to be configured for the individual \code{\link{PipeOp}}s such as
 \code{PipeOpLearner}, see \code{\link{set_validate.GraphLearner}}.
