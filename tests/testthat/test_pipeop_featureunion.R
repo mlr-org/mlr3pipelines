@@ -237,8 +237,8 @@ test_that("featureunion - collect_multiplicity", {
 
   train_out = po$train(list(as.Multiplicity(list(t1, t2))))
   predict_out = po$predict(list(as.Multiplicity(list(t1, t2))))
-  expect_equal(train_out[[1]]$data, tsk$data)
-  expect_equal(predict_out[[1]]$data, tsk$data)
+  expect_equal(train_out[[1]]$data(), tsk$data())
+  expect_equal(predict_out[[1]]$data(), tsk$data())
 })
 
 test_that("featureunion - cbind_tasks - duplicates", {
