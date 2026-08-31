@@ -58,7 +58,7 @@
 #' @examples
 #' library("mlr3")
 #'
-#' task = tsk("pima")
+#' task = tsk("diabetes")
 #' task$missings()
 #'
 #' # impute missing values of the numeric feature "glucose" by the constant value -999

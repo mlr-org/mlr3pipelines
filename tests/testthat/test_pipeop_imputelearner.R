@@ -3,8 +3,8 @@ context("PipeOpImputeLearner")
 test_that("PipeOpImputeLearner - simple tests", {
   skip_if_not_installed("rpart")
   set.seed(1)
-  # Pima has several missings
-  task = mlr_tasks$get("pima")
+  # the diabetes task has several missing values
+  task = mlr_tasks$get("diabetes")
   po = PipeOpImputeLearner$new(learner = lrn("regr.rpart"))
   tsk1 = po$train(list(task))[[1]]
   expect_true(all(tsk1$missings() == 0))
@@ -42,7 +42,7 @@ test_that("PipeOpImputeLearner", {
   skip_if_not_installed("rpart")
   skip_on_cran()  # slow test, so we don't do it on cran
   set.seed(2)
-  task = mlr_tasks$get("pima")
+  task = mlr_tasks$get("diabetes")
   expect_datapreproc_pipeop_class(PipeOpImputeLearner,
     constargs = list("learner" = lrn("regr.rpart")),
     task = task,
@@ -135,7 +135,7 @@ test_that("Test imputation matches, edge cases", {
 
 test_that("PipeOpImputeLearner - model active binding to state", {
   po = PipeOpImputeLearner$new(learner = lrn("regr.featureless"))
-  task = mlr_tasks$get("pima")
+  task = mlr_tasks$get("diabetes")
 
   # before training states are NULL and learner_models are list()
   expect_null(po$state)

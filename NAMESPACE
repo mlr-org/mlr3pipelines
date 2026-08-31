@@ -249,6 +249,8 @@ importFrom(R6,R6Class)
 importFrom(data.table,as.data.table)
 importFrom(digest,digest)
 importFrom(stats,setNames)
-importFrom(utils,bibentry)
-importFrom(utils,head)
-importFrom(utils,tail)
+importFrom(utils,
+  bibentry,
+  head,
+  tail
+)
