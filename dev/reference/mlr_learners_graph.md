@@ -164,6 +164,17 @@ as:
   `NULL` is returned if the learner is not trained or none of the
   wrapped learners supports internal validation.
 
+- `best_valid_scores` :: named
+  [`list()`](https://rdrr.io/r/base/list.html) or `NULL`  
+  The best internal validation scores as retrieved from the
+  [`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)s,
+  i.e. the best scores that were observed during training instead of
+  those of the final model. The names are prefixed with the respective
+  IDs of the
+  [`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)s.
+  `NULL` is returned if the learner is not trained or none of the
+  wrapped learners tracks them.
+
 - `validate` :: `numeric(1)`, `"predefined"`, `"test"` or `NULL`  
   How to construct the validation data. This also has to be configured
   for the individual

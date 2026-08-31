@@ -235,7 +235,8 @@ The properties of the <code>PipeOp</code>.
 Currently supported values are:</p><ul><li><p><code>"validation"</code>: the <code>PipeOp</code> can make use of the <code>$internal_valid_task</code> of an <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">mlr3::Task</a></code>.
 This is for example used for <code><a href="mlr_pipeops_learner.html">PipeOpLearner</a></code>s that wrap a <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> with this property, see <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">mlr3::Learner</a></code>.
 <code>PipeOp</code>s that have this property, also have a <code>$validate</code> field, which controls whether to use the validation task,
-as well as a <code>$internal_valid_scores</code> field, which allows to access the internal validation scores after training.</p></li>
+as well as a <code>$internal_valid_scores</code> field, which allows to access the internal validation scores after training,
+and a <code>$best_valid_scores</code> field for the best internal validation scores observed during training.</p></li>
 <li><p><code>"internal_tuning"</code>: the <code>PipeOp</code> is able to internally optimize hyperparameters.
 This works analogously to the internal tuning implementation for <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">mlr3::Learner</a></code>.
 <code>PipeOp</code>s with that property also implement the standardized accessor <code>$internal_tuned_values</code> and have at least one

@@ -284,7 +284,8 @@ to return the same identical-by-reference objects to multiple outputs.
     `PipeOp`s that have this property, also have a `$validate` field,
     which controls whether to use the validation task, as well as a
     `$internal_valid_scores` field, which allows to access the internal
-    validation scores after training.
+    validation scores after training, and a `$best_valid_scores` field
+    for the best internal validation scores observed during training.
 
   - `"internal_tuning"`: the `PipeOp` is able to internally optimize
     hyperparameters. This works analogously to the internal tuning

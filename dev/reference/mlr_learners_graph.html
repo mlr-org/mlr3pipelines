@@ -135,6 +135,11 @@ The internal tuned parameter values collected from all <code><a href="PipeOp.htm
 The internal validation scores as retrieved from the <code><a href="PipeOp.html">PipeOp</a></code>s.
 The names are prefixed with the respective IDs of the <code><a href="PipeOp.html">PipeOp</a></code>s.
 <code>NULL</code> is returned if the learner is not trained or none of the wrapped learners supports internal validation.</p></li>
+<li><p><code>best_valid_scores</code> :: named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> or <code>NULL</code><br>
+The best internal validation scores as retrieved from the <code><a href="PipeOp.html">PipeOp</a></code>s, i.e. the best scores that were observed
+during training instead of those of the final model.
+The names are prefixed with the respective IDs of the <code><a href="PipeOp.html">PipeOp</a></code>s.
+<code>NULL</code> is returned if the learner is not trained or none of the wrapped learners tracks them.</p></li>
 <li><p><code>validate</code> :: <code>numeric(1)</code>, <code>"predefined"</code>, <code>"test"</code> or <code>NULL</code><br>
 How to construct the validation data. This also has to be configured for the individual <code><a href="PipeOp.html">PipeOp</a></code>s such as
 <code>PipeOpLearner</code>, see <code><a href="set_validate.GraphLearner.html">set_validate.GraphLearner</a></code>.

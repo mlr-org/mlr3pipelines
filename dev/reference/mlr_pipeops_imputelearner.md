@@ -286,7 +286,7 @@ po$state$model$mass
 #> 
 #> $train_time
 #> elapsed 
-#>   0.013 
+#>   0.005 
 #> 
 #> $task_hash
 #> [1] "2ac44a951f63767e"

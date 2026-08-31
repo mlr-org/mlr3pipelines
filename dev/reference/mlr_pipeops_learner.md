@@ -145,6 +145,11 @@ as well as:
   The internal validation scores if the wrapped `Learner` supports
   internal validation, `NULL` otherwise.
 
+- `best_valid_scores` :: named
+  [`list()`](https://rdrr.io/r/base/list.html) or `NULL`  
+  The best internal validation scores observed during training if the
+  wrapped `Learner` tracks them, `NULL` otherwise.
+
 ## Methods
 
 Methods inherited from

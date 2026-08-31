@@ -242,7 +242,7 @@ pop$state
 #> 
 #> $train_time
 #> elapsed 
-#>   0.003 
+#>   0.002 
 #> 
 #> $task_hash
 #> [1] "abc694dd29a7a8ce"
