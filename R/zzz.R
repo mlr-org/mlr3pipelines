@@ -16,7 +16,7 @@ register_mlr3 = function() {
     c("abstract", "meta", "missings", "feature selection", "imbalanced data",
     "data transform", "target transform", "ensemble", "robustify", "learner", "encode",
      "multiplicity", "debug")))
-  x$pipeops$properties = c("validation", "internal_tuning")
+  x$pipeops$properties = unique(c(x$pipeops$properties, c("validation", "internal_tuning")))
 }
 
 register_mlr3filters = function() {
@@ -28,6 +28,21 @@ register_mlr3filters = function() {
 
 
 paradox_info <- list2env(list(is_old = FALSE), parent = emptyenv())
+
+supply_diabetes = function() {
+  if (tsk()$has("diabetes")) return(invisible(NULL))
+  tsk()$add("diabetes", function(id = "diabetes") {
+    warning(
+      paste(
+        "The installed version of mlr3 does not provide the 'diabetes' task; using the legacy 'pima' task instead.",
+        "Update mlr3 to version 1.8.0 or later to use the synthetic diabetes task.",
+        "This compatibility alias will be removed in the future."
+      ),
+      call. = FALSE
+    )
+    tsk("pima", id = id)
+  })
+}
 
 .onLoad = function(libname, pkgname) {  # nocov start
   register_mlr3()
@@ -46,6 +61,7 @@ paradox_info <- list2env(list(is_old = FALSE), parent = emptyenv())
     lg$set_threshold("warn")
   }
   supply_boston_housing()
+  supply_diabetes()
 }  # nocov end
 
 .onUnload = function(libpath) { # nocov start

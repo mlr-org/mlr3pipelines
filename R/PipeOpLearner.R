@@ -102,7 +102,6 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
           id
         )
       }
-      # FIXME: can be changed when mlr-org/mlr3#470 has an answer
       type = private$.learner$task_type
       task_type = mlr_reflections$task_types[type, mult = "first"]$task
       out_type = mlr_reflections$task_types[type, mult = "first"]$prediction
