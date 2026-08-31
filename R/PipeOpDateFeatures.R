@@ -169,8 +169,7 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
       )
       date_features = features[features %in% date_features]
       cyclic_features = features[
-        features %in%
-          c("month", "week_of_year", "day_of_year", "day_of_month", "day_of_week", "hour", "minute", "second")
+        features %in% c("month", "week_of_year", "day_of_year", "day_of_month", "day_of_week", "hour", "minute", "second")
       ]
 
       cols = copy(names(dt))
@@ -184,8 +183,16 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
       # cosine transformation of in general 2 * pi * x / max_x (x starting from 0)
       if (pv$cyclic && length(cyclic_features) > 0L) {
         for (j in cols) {
-          nm = paste0(j, ".", rep(cyclic_features, each = 2L), "_", c("sin", "cos"))
-          set(dt, j = nm, value = compute_cyclic_date_features(dt, cyclic_features, j))
+          column_cyclic_features = cyclic_features
+          if (inherits(dt[[j]], "Date")) {
+            column_cyclic_features = column_cyclic_features[
+              column_cyclic_features %nin% c("hour", "minute", "second")
+            ]
+          }
+          if (length(column_cyclic_features)) {
+            nm = paste0(j, ".", rep(column_cyclic_features, each = 2L), "_", c("sin", "cos"))
+            set(dt, j = nm, value = compute_cyclic_date_features(dt, column_cyclic_features, j))
+          }
         }
       }
 

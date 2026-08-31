@@ -116,6 +116,24 @@ test_that("PipeOpDateFeatures - correct cyclic features", {
   expect_identical(trained_data$date.second_sin, sin(value_scaled_second))
 })
 
+test_that("PipeOpDateFeatures - skips time features for Date columns", {
+  dat = data.frame(
+    target = 1:2,
+    date = as.Date(c("2020-01-01", "2020-02-01"))
+  )
+  task = TaskRegr$new("date", backend = dat, target = "target")
+  po = PipeOpDateFeatures$new(param_vals = list(cyclic = TRUE))
+
+  output = train_pipeop(po, inputs = list(task))$output
+
+  expect_setequal(output$feature_names, paste0("date.", c(
+    "year", "quarter", "month", "week_of_year", "day_of_year", "day_of_month", "day_of_week",
+    "month_sin", "month_cos", "week_of_year_sin", "week_of_year_cos",
+    "day_of_year_sin", "day_of_year_cos", "day_of_month_sin", "day_of_month_cos",
+    "day_of_week_sin", "day_of_week_cos"
+  )))
+})
+
 test_that("PipeOpDateFeatures - feature selection works", {
   dat = iris
   set.seed(1)

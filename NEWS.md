@@ -20,6 +20,7 @@
 * Fix: `as_learner.Graph` now handles `...` as an argument.
 * feat: `as_learner.Graph` now suppots the `discard_state` argument, same as `as_learner.Learner`.
 * feat: `PipeOpTargetInvert` now propagates the `extra` slot of input prediction objects to the output prediction object, if the inverter `fun` does not handle it already.  
+* Fix: `PipeOpDateFeatures` no longer creates all-`NA` cyclic time-of-day features for `Date` features.
 
 # mlr3pipelines 0.11.0
 
