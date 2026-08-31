@@ -6,10 +6,7 @@
 # To run code
 Rscript -e "devtools::load_all(); code"
 
-# To run all tests
-Rscript -e "devtools::test()"
-
-# To run all tests for files starting with {name}
+# To run all tests for files starting with {name}; omit filter to run all tests (expensive).
 Rscript -e "devtools::test(filter = '^{name}')"
 
 # To run all tests for R/{name}.R
@@ -49,8 +46,7 @@ Rscript -e "devtools::check()"
 ## File structure and naming
 
 * Name the file as the most important contained function / class
-* No whitespaces, no special chart in filenames
-* Usually one large function / class, per file, but adding multiple smaller helpers is ok
+* Usually one large function / class, per file; if auxiliary functions pertain almost exclusively to that, it they should go in the same file, not an auxiliary file.
 
 ## Collation order
 
@@ -58,9 +54,9 @@ Rscript -e "devtools::check()"
   This controls the `Collate:` field in DESCRIPTION so base classes load before derived classes.
 
 ## Core dependencies
+
 * Use `checkmate` for arg-checks
-* Use `data.table` for efficient table structures
-* For OOP-style use `R6`
+* Use `data.table` instead of `data.frame` or tibbles.
 * Use `cli` to format messages, warnings, errors and prints
 
 ## Testing
@@ -101,18 +97,6 @@ Rscript -e "devtools::check()"
 - A bullet can consist of multiple sentences but should not contain any new lines (i.e. DO NOT line wrap).
 - If the change is related to a function, put the name of the function early in the bullet.
 - Order bullets alphabetically by function name. Put all bullets that don't mention function names at the beginning.
-
-## GitHub
-
-- If you use `gh` to retrieve information about an issue, always use `--comments` to read all the comments.
-
-## Natural Language
-
-- The following applies to all natural language text, so docs, comments, NEWS, etc, but not code
-- Use American English
-- Use the Oxford comma
-- Do not capitalize normal nouns or method names. "Bayesian" is capitalized, "random forest" is not.
-- Use cspell to check against typos, and add needed words to .cspell/project-words.txt if reasonable
 
 ## Further agents files
 Make sure to **ALWAYS** read these files as well and follow their instructions:
