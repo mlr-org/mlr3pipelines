@@ -1,5 +1,6 @@
 # mlr3pipelines 0.11.0-9000
 
+* Fix: Re-running registration (e.g. when `mlr3` is reloaded) no longer removes `PipeOp` properties added to `mlr_reflections$pipeops$properties` by extension packages.
 * Switched from using `digest::digest()` to using `mlr3misc::calculate_hash()` for calculating the `hash` and `phash` of `PipeOp`s, `Graph`s, and `GraphLearner`s.
 * Fix: Corrected registration of `FilterEnsemble` in `mlr_filters` using `.prototype_args`.
 * Fix: `PipeOpTargetMutate` and `PipeOpTargetTrafoScaleRange` now correctly transform internal validation tasks during training.
