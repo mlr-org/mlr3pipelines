@@ -1,6 +1,56 @@
 context("meta")
 # test some helper functions
 
+test_that("expect_equal_data_table uses data.table comparison semantics", {
+  actual = data.table(
+    x = factor(c("a", "b"), levels = c("a", "b", "unused")),
+    y = 1:2
+  )
+  expected = data.table(x = factor(c("a", "b")), y = 1:2)
+
+  expect_success(expect_equal_data_table(actual, expected))
+  expect_failure(expect_equal_data_table(actual, expected, trim_levels = FALSE))
+
+  columns_reordered = actual[, .(y, x)]
+  expect_failure(expect_equal_data_table(actual, columns_reordered))
+  expect_success(expect_equal_data_table(actual, columns_reordered, ignore_col_order = TRUE))
+
+  rows_reordered = actual[2:1]
+  expect_failure(expect_equal_data_table(actual, rows_reordered))
+  expect_success(expect_equal_data_table(actual, rows_reordered, ignore_row_order = TRUE))
+
+  different_row_names = copy(actual)
+  attr(different_row_names, "row.names") = c(10L, 20L)
+  expect_success(expect_equal_data_table(actual, different_row_names))
+
+  keyed = copy(actual)
+  setkey(keyed, y)
+  expect_failure(expect_equal_data_table(actual, keyed))
+  expect_success(expect_equal_data_table(actual, keyed, check_attributes = FALSE))
+
+  different = copy(actual)
+  different$y[[1L]] = 10L
+  expect_failure(
+    expect_equal_data_table(actual, different),
+    "Expected `actual` to equal `different` as data.tables"
+  )
+})
+
+test_that("expect_equal_r6 does not evaluate active bindings", {
+  ActiveBindingClass = R6::R6Class(
+    "ActiveBindingClass",
+    public = list(value = 1),
+    active = list(problematic = function(value) stop("active binding was evaluated"))
+  )
+  object = ActiveBindingClass$new()
+  expected = ActiveBindingClass$new()
+
+  expect_success(expect_equal_r6(object, expected))
+
+  expected$value = 2
+  expect_failure(expect_equal_r6(object, expected))
+})
+
 
 test_that("expect_deep_clone catches non-deep clones", {
   po = PipeOpDebugBasic$new()

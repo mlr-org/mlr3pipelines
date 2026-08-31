@@ -237,8 +237,8 @@ test_that("featureunion - collect_multiplicity", {
 
   train_out = po$train(list(as.Multiplicity(list(t1, t2))))
   predict_out = po$predict(list(as.Multiplicity(list(t1, t2))))
-  expect_equal(train_out[[1]]$data, tsk$data)
-  expect_equal(predict_out[[1]]$data, tsk$data)
+  expect_equal(train_out[[1]]$data(), tsk$data())
+  expect_equal(predict_out[[1]]$data(), tsk$data())
 })
 
 test_that("featureunion - cbind_tasks - duplicates", {
@@ -298,7 +298,7 @@ test_that("PipeOpFeatureUnion - internal validation task", {
   )) %>>% op
   outtask = gr$train(task)[[1L]]
   desired_task = po("scale", affect_columns = selector_grep("Petal"))$train(list(task))[[1L]]$internal_valid_task
-  expect_equal(outtask$internal_valid_task$data(), desired_task$data(), ignore.col.order = TRUE)
+  expect_equal_data_table(outtask$internal_valid_task$data(), desired_task$data(), ignore_col_order = TRUE)
 
   # Multiplicity input
   outtask = po("featureunion", collect_multiplicity = TRUE)$train(list(Multiplicity(task, task)))[[1L]]
