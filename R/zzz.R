@@ -36,7 +36,7 @@ supply_diabetes = function() {
       paste(
         "The installed version of mlr3 does not provide the 'diabetes' task; using the legacy 'pima' task instead.",
         "Update mlr3 to version 1.8.0 or later to use the synthetic diabetes task.",
-        "This compatability alias will be removed in the future."
+        "This compatibility alias will be removed in the future."
       ),
       call. = FALSE
     )
