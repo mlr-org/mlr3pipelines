@@ -325,8 +325,8 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
     }
     if (predict_like_train) {
       # if deterministic_train is FALSE then `trained` may be different from `predicted`!
-      expect_equal(trained2$data(), predicted2$data(), ignore.col.order = TRUE, tolerance = tolerance)
-      expect_equal(trained3$data(), predicted3$data(), ignore.col.order = TRUE, tolerance = tolerance)
+      expect_equal_data_table(trained2$data(), predicted2$data(), ignore_col_order = TRUE, tolerance = tolerance)
+      expect_equal_data_table(trained3$data(), predicted3$data(), ignore_col_order = TRUE, tolerance = tolerance)
     }
   }
   if (predict_rows_independent) {
@@ -371,10 +371,10 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
     # NOTE: the following should ensure that data has not changed
     # but at least one pipeop adds a new column even with 0 affect_cols, so we only check that original task's features have not changed.
     trained = po2$train(list(task))[[1]]
-    expect_equal(trained$data(cols = task$feature_names), task$data(cols = task$feature_names), ignore.col.order = TRUE, tolerance = tolerance)
+    expect_equal_data_table(trained$data(cols = task$feature_names), task$data(cols = task$feature_names), ignore_col_order = TRUE, tolerance = tolerance)
 
     predicted = po2$predict(list(task))[[1]]
-    expect_equal(predicted$data(cols = task$feature_names), task$data(cols = task$feature_names), ignore.col.order = TRUE, tolerance = tolerance)
+    expect_equal_data_table(predicted$data(cols = task$feature_names), task$data(cols = task$feature_names), ignore_col_order = TRUE, tolerance = tolerance)
 
     predicted2 = po2$predict(list(emptytask))[[1]]
     expect_equal(sort(predicted2$feature_names), sort(emptytaskfnames))
@@ -409,21 +409,21 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
     explicitpredresL0 = cbind(po_orig$predict(list(halftask$clone()$filter(task$row_ids[0])))[[1]]$data(), otherhalf[integer(0), ])
 
     if (deterministic_train) {
-      expect_equal(halftrainres, explicittrainres, ignore.col.order = TRUE, tolerance = tolerance)
+      expect_equal_data_table(halftrainres, explicittrainres, ignore_col_order = TRUE, tolerance = tolerance)
     }
     if (deterministic_predict) {
       if (deterministic_train) {
-        expect_equal(halfpredres, explicitpredres, ignore.col.order = TRUE, tolerance = tolerance)
-        expect_equal(halfpredresL1, explicitpredresL1, ignore.col.order = TRUE, tolerance = tolerance)
+        expect_equal_data_table(halfpredres, explicitpredres, ignore_col_order = TRUE, tolerance = tolerance)
+        expect_equal_data_table(halfpredresL1, explicitpredresL1, ignore_col_order = TRUE, tolerance = tolerance)
       }
-      expect_equal(halfpredresL1, halfpredres[1, ], ignore.col.order = TRUE, tolerance = tolerance)
+      expect_equal_data_table(halfpredresL1, halfpredres[1, ], ignore_col_order = TRUE, tolerance = tolerance)
       if (predict_like_train) {
-        expect_equal(halfpredres, halftrainres, ignore.col.order = TRUE, tolerance = tolerance)
-        expect_equal(explicitpredres, explicittrainres, ignore.col.order = TRUE, tolerance = tolerance)
+        expect_equal_data_table(halfpredres, halftrainres, ignore_col_order = TRUE, tolerance = tolerance)
+        expect_equal_data_table(explicitpredres, explicittrainres, ignore_col_order = TRUE, tolerance = tolerance)
       }
     }
-    expect_equal(halfpredresL0, explicitpredresL0, ignore.col.order = TRUE, tolerance = tolerance)
-    expect_equal(halfpredresL0, halfpredres[integer(0), ], ignore.col.order = TRUE, tolerance = tolerance)
+    expect_equal_data_table(halfpredresL0, explicitpredresL0, ignore_col_order = TRUE, tolerance = tolerance)
+    expect_equal_data_table(halfpredresL0, halfpredres[integer(0), ], ignore_col_order = TRUE, tolerance = tolerance)
 
   }
 
@@ -453,7 +453,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   if (predict_rows_independent) {
     expect_equal(predicted$nrow, 1)
     if (deterministic_predict) {
-      expect_equal(predicted$data(), po$predict(list(task))[[1]]$filter(whichrow)$data(), ignore.col.order = TRUE, tolerance = tolerance)
+      expect_equal_data_table(predicted$data(), po$predict(list(task))[[1]]$filter(whichrow)$data(), ignore_col_order = TRUE, tolerance = tolerance)
     }
   }
 
@@ -551,11 +551,11 @@ predict_pipeop = function(po, inputs) {
 expect_pipeop_result_features = function(po, traintask, trainresult,
   predicttask = NULL, predictresult = NULL) {
   result = train_pipeop(po, list(traintask))
-  expect_equal(result$data(cols = result$feature_names), trainresult, ignore.col.order = TRUE, tolerance = tolerance)
+  expect_equal_data_table(result$data(cols = result$feature_names), trainresult, ignore_col_order = TRUE, tolerance = tolerance)
   assert(is.null(predicttask) == is.null(predictresult))
   if (!is.null(predicttask)) {
     result = predict_pipeop(po, list(traintask))
-    expect_equal(result$data(cols = result$feature_names), predicttask, ignore.col.order = TRUE, tolerance = tolerance)
+    expect_equal_data_table(result$data(cols = result$feature_names), predicttask, ignore_col_order = TRUE, tolerance = tolerance)
   }
 }
 
