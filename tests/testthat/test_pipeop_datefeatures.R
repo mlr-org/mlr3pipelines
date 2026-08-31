@@ -67,7 +67,15 @@ test_that("PipeOpDateFeatures - correct basic features", {
   set.seed(1)
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"), size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-  po = PipeOpDateFeatures$new()
+  po = PipeOpDateFeatures$new(param_vals = list(
+    is_month_start = TRUE,
+    is_month_end = TRUE,
+    is_quarter_start = TRUE,
+    is_quarter_end = TRUE,
+    is_year_start = TRUE,
+    is_year_end = TRUE,
+    is_leap_year = TRUE
+  ))
   trained_data = train_pipeop(po, inputs = list(task))$output$data()
   expect_true(all(trained_data$date.year == year(dat$date)))
   expect_true(all(trained_data$date.month == month(dat$date)))
@@ -136,7 +144,19 @@ test_that("PipeOpDateFeatures - feature selection works", {
   set.seed(1)
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"), size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-  po = PipeOpDateFeatures$new(param_vals = list(cyclic = TRUE, year = FALSE, quarter = FALSE, second = FALSE))
+  po = PipeOpDateFeatures$new(param_vals = list(
+    cyclic = TRUE,
+    year = FALSE,
+    quarter = FALSE,
+    second = FALSE,
+    is_month_start = TRUE,
+    is_month_end = TRUE,
+    is_quarter_start = TRUE,
+    is_quarter_end = TRUE,
+    is_year_start = TRUE,
+    is_year_end = TRUE,
+    is_leap_year = TRUE
+  ))
   expect_identical(train_pipeop(po, inputs = list(task))$output$feature_names,
     c("Petal.Length", "Petal.Width", "Sepal.Length", "Sepal.Width",
       paste0("date.",
@@ -224,7 +244,18 @@ test_that("PipeOpDateFeatures - two POSIXct variables", {
   dat$date2 = sample(seq(as.POSIXct("2020-02-29"), to = as.POSIXct("2020-04-01"), by = "sec"), size = 150L)
   dat$date1 = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"), size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-  po = PipeOpDateFeatures$new(param_vals = list(keep_date_var = TRUE, cyclic = TRUE, quarter = FALSE))
+  po = PipeOpDateFeatures$new(param_vals = list(
+    keep_date_var = TRUE,
+    cyclic = TRUE,
+    quarter = FALSE,
+    is_month_start = TRUE,
+    is_month_end = TRUE,
+    is_quarter_start = TRUE,
+    is_quarter_end = TRUE,
+    is_year_start = TRUE,
+    is_year_end = TRUE,
+    is_leap_year = TRUE
+  ))
   expect_identical(train_pipeop(po, inputs = list(task))$output$feature_names,
     c("Petal.Length", "Petal.Width", "Sepal.Length", "Sepal.Width", "date1", "date2",
       c(paste0(rep(c("date1.", "date2."), each = 17L),
@@ -257,7 +288,16 @@ test_that("PipeOpDateFeatures - boundary date features", {
   set.seed(1)
   dat = data.frame(y = rnorm(length(dates)), date = as.Date(dates))
   task = TaskRegr$new("dates", backend = dat, target = "y")
-  po = PipeOpDateFeatures$new()
+  boundary_param_vals = list(
+    is_month_start = TRUE,
+    is_month_end = TRUE,
+    is_quarter_start = TRUE,
+    is_quarter_end = TRUE,
+    is_year_start = TRUE,
+    is_year_end = TRUE,
+    is_leap_year = TRUE
+  )
+  po = PipeOpDateFeatures$new(param_vals = boundary_param_vals)
   output = train_pipeop(po, inputs = list(task))$output
   trained_data = output$data()
 
@@ -277,7 +317,7 @@ test_that("PipeOpDateFeatures - boundary date features", {
   # POSIXct columns yield the same boundary features as Date columns
   dat_posixct = data.frame(y = dat$y, date = as.POSIXct(dates))
   task_posixct = TaskRegr$new("dates_posixct", backend = dat_posixct, target = "y")
-  po_posixct = PipeOpDateFeatures$new()
+  po_posixct = PipeOpDateFeatures$new(param_vals = boundary_param_vals)
   trained_data_posixct = train_pipeop(po_posixct, inputs = list(task_posixct))$output$data()
   for (feature in new_features) {
     expect_identical(trained_data_posixct[[feature]], trained_data[[feature]])
