@@ -10,7 +10,7 @@ test_that("PipeOpClassBalancing - basic properties", {
 
 test_that("PipeOpClassBalancing", {
   op = PipeOpClassBalancing$new()
-  task = mlr_tasks$get("pima")
+  task = mlr_tasks$get("diabetes")
 
   op$param_set$values = list(ratio = 0.5, reference = "major", adjust = "major", shuffle = TRUE)
   nt = op$train(list(task))[[1L]]

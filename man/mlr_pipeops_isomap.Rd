@@ -77,12 +77,11 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-\dontshow{if (requireNamespace("dimRed")) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("dimRed") && requireNamespace("igraph") && requireNamespace("RSpectra") && requireNamespace("RANN")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 po = po("isomap", .mute = c("message", "output"))
 po$train(list(tsk("iris")))[[1]]$data()
 po$predict(list(tsk("iris")))[[1]]$data()
-
 \dontshow{\}) # examplesIf}
 }
 \seealso{
