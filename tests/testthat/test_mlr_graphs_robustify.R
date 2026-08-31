@@ -167,7 +167,12 @@ test_that("Robustify Pipeline factor to numeric", {
 
   expect_equal(ppl("robustify", learner = lfactor, makeTypeTask("numeric"))$train(alltask)[[1]]$feature_types, atft, ignore_attr = TRUE)
   expect_equal(ppl("robustify", learner = lnofactor, makeTypeTask("numeric"))$train(alltask)[[1]]$feature_types, atft, ignore_attr = TRUE)
-  expect_equal(ppl("robustify", learner = lfactor, alltask)$train(alltask)[[1]]$feature_types, cleanedatft, ignore.row.order = TRUE, ignore_attr = TRUE)
+  expect_equal_data_table(
+    ppl("robustify", learner = lfactor, alltask)$train(alltask)[[1]]$feature_types,
+    cleanedatft,
+    ignore_row_order = TRUE,
+    check_attributes = FALSE
+  )
 
 
   expect_equal(ppl("robustify", learner = lnofactor, alltask)$train(alltask)[[1]]$feature_types[, id := gsub("\\.[^.]*$", "", id)], vectoradft, ignore_attr = TRUE)

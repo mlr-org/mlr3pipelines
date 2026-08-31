@@ -298,7 +298,7 @@ test_that("PipeOpFeatureUnion - internal validation task", {
   )) %>>% op
   outtask = gr$train(task)[[1L]]
   desired_task = po("scale", affect_columns = selector_grep("Petal"))$train(list(task))[[1L]]$internal_valid_task
-  expect_equal(outtask$internal_valid_task$data(), desired_task$data(), ignore.col.order = TRUE)
+  expect_equal_data_table(outtask$internal_valid_task$data(), desired_task$data(), ignore_col_order = TRUE)
 
   # Multiplicity input
   outtask = po("featureunion", collect_multiplicity = TRUE)$train(list(Multiplicity(task, task)))[[1L]]
