@@ -36,6 +36,21 @@ test_that("expect_equal_data_table uses data.table comparison semantics", {
   )
 })
 
+test_that("expect_equal_r6 does not evaluate active bindings", {
+  ActiveBindingClass = R6::R6Class(
+    "ActiveBindingClass",
+    public = list(value = 1),
+    active = list(problematic = function(value) stop("active binding was evaluated"))
+  )
+  object = ActiveBindingClass$new()
+  expected = ActiveBindingClass$new()
+
+  expect_success(expect_equal_r6(object, expected))
+
+  expected$value = 2
+  expect_failure(expect_equal_r6(object, expected))
+})
+
 
 test_that("expect_deep_clone catches non-deep clones", {
   po = PipeOpDebugBasic$new()
