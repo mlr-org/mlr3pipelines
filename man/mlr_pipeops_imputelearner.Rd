@@ -93,7 +93,7 @@ Only methods inherited from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 \dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
-task = tsk("pima")
+task = tsk("diabetes")
 task$missings()
 
 po = po("imputelearner", lrn("regr.rpart"))
