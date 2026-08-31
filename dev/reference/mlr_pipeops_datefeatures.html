@@ -135,32 +135,52 @@ feature set (depending on the value of <code>keep_date_var</code>).</p>
 
 
 <p>The parameters are the parameters inherited from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>, as well as:</p><ul><li><p><code>keep_date_var</code> :: <code>logical(1)</code><br>
-Should the <code>POSIXct</code> columns be kept as features? Default <code>FALSE</code>.</p></li>
+Whether <code>POSIXct</code> columns should be kept as features. Initialized to <code>FALSE</code>.</p></li>
 <li><p><code>cyclic</code> :: <code>logical(1)</code><br>
-Should cyclic features be computed? See Internals. Default <code>FALSE</code>.</p></li>
+Whether cyclic features should be computed. See Internals. Initialized to <code>FALSE</code>.</p></li>
 <li><p><code>year</code> :: <code>logical(1)</code><br>
-Should the year be extracted as a feature? Default <code>TRUE</code>.</p></li>
+Whether the year should be extracted as a feature. Initialized to <code>TRUE</code>.</p></li>
 <li><p><code>quarter</code> :: <code>logical(1)</code><br>
-Should the quarter be extracted as a feature? Default <code>TRUE</code>.</p></li>
+Whether the quarter should be extracted as a feature. Initialized to <code>TRUE</code>.</p></li>
 <li><p><code>month</code> :: <code>logical(1)</code><br>
-Should the month be extracted as a feature? Default <code>TRUE</code>.</p></li>
+Whether the month should be extracted as a feature. Initialized to <code>TRUE</code>.</p></li>
 <li><p><code>week_of_year</code> :: <code>logical(1)</code><br>
-Should the week of the year be extracted as a feature? Default <code>TRUE</code>.</p></li>
+Whether the week of the year should be extracted as a feature. Initialized to <code>TRUE</code>.</p></li>
 <li><p><code>day_of_year</code> :: <code>logical(1)</code><br>
-Should the day of the year be extracted as a feature? Default <code>TRUE</code>.</p></li>
+Whether the day of the year should be extracted as a feature. Initialized to <code>TRUE</code>.</p></li>
 <li><p><code>day_of_month</code> :: <code>logical(1)</code><br>
-Should the day of the month be extracted as a feature? Default <code>TRUE</code>.</p></li>
+Whether the day of the month should be extracted as a feature. Initialized to <code>TRUE</code>.</p></li>
 <li><p><code>day_of_week</code> :: <code>logical(1)</code><br>
-Should the day of the week (ISO 8601) be extracted as a feature? Default <code>TRUE</code>.</p></li>
+Whether the day of the week (ISO 8601) should be extracted as a feature. Initialized to <code>TRUE</code>.</p></li>
 <li><p><code>hour</code> :: <code>logical(1)</code><br>
-Should the hour be extracted as a feature? Default <code>TRUE</code>.</p></li>
+Whether the hour should be extracted as a feature. Initialized to <code>TRUE</code>.</p></li>
 <li><p><code>minute</code> :: <code>logical(1)</code><br>
-Should the minute be extracted as a feature? Default <code>TRUE</code>.</p></li>
+Whether the minute should be extracted as a feature. Initialized to <code>TRUE</code>.</p></li>
 <li><p><code>second</code> :: <code>logical(1)</code><br>
-Should the second be extracted as a feature? Default <code>TRUE</code>.</p></li>
+Whether the second should be extracted as a feature. Initialized to <code>TRUE</code>.</p></li>
 <li><p><code>is_day</code> :: <code>logical(1)</code><br>
-Should a feature be extracted indicating whether it is day time (06:00am - 08:00pm)?
-Default <code>TRUE</code>.</p></li>
+Whether a feature indicating day time (06:00am - 08:00pm) should be extracted. Initialized to
+<code>TRUE</code>.</p></li>
+<li><p><code>is_month_start</code> :: <code>logical(1)</code><br>
+Whether a feature indicating the first day of the month should be extracted. Initialized to
+<code>FALSE</code>.</p></li>
+<li><p><code>is_month_end</code> :: <code>logical(1)</code><br>
+Whether a feature indicating the last day of the month should be extracted. Initialized to
+<code>FALSE</code>.</p></li>
+<li><p><code>is_quarter_start</code> :: <code>logical(1)</code><br>
+Whether a feature indicating the first day of the quarter should be extracted. Initialized to
+<code>FALSE</code>.</p></li>
+<li><p><code>is_quarter_end</code> :: <code>logical(1)</code><br>
+Whether a feature indicating the last day of the quarter should be extracted. Initialized to
+<code>FALSE</code>.</p></li>
+<li><p><code>is_year_start</code> :: <code>logical(1)</code><br>
+Whether a feature indicating the first day of the year should be extracted. Initialized to
+<code>FALSE</code>.</p></li>
+<li><p><code>is_year_end</code> :: <code>logical(1)</code><br>
+Whether a feature indicating the last day of the year should be extracted. Initialized to
+<code>FALSE</code>.</p></li>
+<li><p><code>is_leap_year</code> :: <code>logical(1)</code><br>
+Whether a feature indicating a leap year should be extracted. Initialized to <code>FALSE</code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>

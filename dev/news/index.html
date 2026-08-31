@@ -73,7 +73,8 @@
 <li>Fix: <code>PipeOpIsomap</code> now explicitly requires <code>igraph</code>, <code>RSpectra</code>, and <code>RANN</code>; skip checks in tests were also updated.</li>
 <li>Fix: <code>as_learner.Graph</code> now handles <code>...</code> as an argument.</li>
 <li>feat: <code>as_learner.Graph</code> now suppots the <code>discard_state</code> argument, same as <code>as_learner.Learner</code>.</li>
-<li>feat: <code>PipeOpTargetInvert</code> now propagates the <code>extra</code> slot of input prediction objects to the output prediction object, if the inverter <code>fun</code> does not handle it already.<br></li>
+<li>feat: <code>PipeOpTargetInvert</code> now propagates the <code>extra</code> slot of input prediction objects to the output prediction object, if the inverter <code>fun</code> does not handle it already.</li>
+<li>feat: <code>PipeOpDateFeatures</code> gains new features <code>is_month_start</code>, <code>is_month_end</code>, <code>is_quarter_start</code>, <code>is_quarter_end</code>, <code>is_year_start</code>, <code>is_year_end</code>, and <code>is_leap_year</code>.</li>
 <li>Fix: <code>PipeOpDateFeatures</code> no longer creates all-<code>NA</code> cyclic time-of-day features for <code>Date</code> features.</li>
 </ul></div>
     <div class="section level2">

@@ -64,7 +64,10 @@
   same as `as_learner.Learner`.
 - feat: `PipeOpTargetInvert` now propagates the `extra` slot of input
   prediction objects to the output prediction object, if the inverter
-  `fun` does not handle it already.  
+  `fun` does not handle it already.
+- feat: `PipeOpDateFeatures` gains new features `is_month_start`,
+  `is_month_end`, `is_quarter_start`, `is_quarter_end`, `is_year_start`,
+  `is_year_end`, and `is_leap_year`.
 - Fix: `PipeOpDateFeatures` no longer creates all-`NA` cyclic
   time-of-day features for `Date` features.
 
