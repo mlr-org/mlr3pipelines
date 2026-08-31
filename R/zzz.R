@@ -16,7 +16,7 @@ register_mlr3 = function() {
     c("abstract", "meta", "missings", "feature selection", "imbalanced data",
     "data transform", "target transform", "ensemble", "robustify", "learner", "encode",
      "multiplicity", "debug")))
-  x$pipeops$properties = c("validation", "internal_tuning")
+  x$pipeops$properties = unique(c(x$pipeops$properties, c("validation", "internal_tuning")))
 }
 
 register_mlr3filters = function() {
