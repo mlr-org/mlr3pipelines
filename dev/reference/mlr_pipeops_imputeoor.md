@@ -233,8 +233,7 @@ Other Imputation PipeOps:
 library("mlr3")
 set.seed(2409)
 data = tsk("pima")$data()
-#> Warning: data set ‘PimaIndiansDiabetes2’ not found
-#> Error in UseMethod("as_data_backend"): no applicable method for 'as_data_backend' applied to an object of class "NULL"
+#> Error: Element with key 'pima' not found in DictionaryTask!
 data$y = factor(c(NA, sample(letters, size = 766, replace = TRUE), NA))
 #> Error in data$y = factor(c(NA, sample(letters, size = 766, replace = TRUE),     NA)): object of type 'closure' is not subsettable
 data$z = ordered(c(NA, sample(1:10, size = 767, replace = TRUE)))

@@ -186,8 +186,7 @@ Other PipeOps:
 library("mlr3")
 
 task = tsk("pima")$select(c("insulin", "triceps"))
-#> Warning: data set ‘PimaIndiansDiabetes2’ not found
-#> Error in UseMethod("as_data_backend"): no applicable method for 'as_data_backend' applied to an object of class "NULL"
+#> Error: Element with key 'pima' not found in DictionaryTask!
 sum(complete.cases(task$data()))
 #> Error: object 'task' not found
 task$missings()

@@ -254,7 +254,7 @@ pop$state
 #> NULL
 #> 
 #> $mlr3_version
-#> [1] ‘1.7.1’
+#> [1] ‘1.8.0’
 #> 
 #> $data_prototype
 #> Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width

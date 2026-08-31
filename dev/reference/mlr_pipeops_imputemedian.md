@@ -168,8 +168,7 @@ Other Imputation PipeOps:
 library("mlr3")
 
 task = tsk("pima")
-#> Warning: data set ‘PimaIndiansDiabetes2’ not found
-#> Error in UseMethod("as_data_backend"): no applicable method for 'as_data_backend' applied to an object of class "NULL"
+#> Error: Element with key 'pima' not found in DictionaryTask!
 task$missings()
 #> Error: object 'task' not found
 
