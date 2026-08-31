@@ -995,6 +995,60 @@ test_that("validation, internal_valid_scores", {
   glrn2 = as_learner(as_graph(lrn("classif.debug")))
 })
 
+test_that("validation, best_valid_scores", {
+  glrn1 = as_learner(as_graph(lrn("classif.rpart")))$train(tsk("iris"))
+  expect_null(glrn1$best_valid_scores)
+
+  glrn2 = as_learner(as_graph(lrn("classif.debug", early_stopping = TRUE, iter = 5)))
+  set_validate(glrn2, 0.2)
+  glrn2$train(tsk("iris"))
+
+  expect_list(glrn2$best_valid_scores, types = "numeric")
+  expect_equal(names(glrn2$best_valid_scores), "classif.debug.acc")
+  # the ids are prefixed the same way as for the internal valid scores
+  expect_equal(names(glrn2$best_valid_scores), names(glrn2$internal_valid_scores))
+  # the debug learner's best score is at least as good as its final one
+  expect_true(glrn2$best_valid_scores[[1L]] >= glrn2$internal_valid_scores[[1L]])
+  # without validation, no scores are reported at all
+  glrn3 = as_learner(as_graph(lrn("classif.debug")))
+  glrn3$train(tsk("iris"))
+  expect_null(glrn3$best_valid_scores)
+  expect_null(glrn3$internal_valid_scores)
+})
+
+test_that("internal validation and internal tuning are extracted independently", {
+  # Regression test: the guards of the two extractors used to be swapped, so a Graph that
+  # supported only one of the two properties reported nothing for the property it did support.
+  # All learners currently shipping in the mlr3 ecosystem have both properties, which is why
+  # this needs learners that were stripped of one of them.
+
+  lrn_valid = lrn("classif.debug")
+  lrn_valid$properties = setdiff(lrn_valid$properties, "internal_tuning")
+  glrn_valid = as_learner(as_graph(lrn_valid))
+  expect_true("validation" %in% glrn_valid$properties)
+  expect_false("internal_tuning" %in% glrn_valid$properties)
+
+  set_validate(glrn_valid, 0.2)
+  glrn_valid$train(tsk("iris"))
+  expect_list(glrn_valid$internal_valid_scores, types = "numeric")
+  expect_equal(names(glrn_valid$internal_valid_scores), "classif.debug.acc")
+  # same values as the PipeOp reports, only the names are prefixed
+  expect_equal(
+    unname(glrn_valid$internal_valid_scores),
+    unname(glrn_valid$graph_model$pipeops[["classif.debug"]]$internal_valid_scores["acc"])
+  )
+
+  lrn_tune = lrn("classif.debug")
+  lrn_tune$properties = setdiff(lrn_tune$properties, "validation")
+  glrn_tune = as_learner(as_graph(lrn_tune))
+  expect_true("internal_tuning" %in% glrn_tune$properties)
+  expect_false("validation" %in% glrn_tune$properties)
+
+  glrn_tune$train(tsk("iris"))
+  # not NULL: the Graph does support internal tuning, it just has nothing tuned to report
+  expect_equal(glrn_tune$internal_tuned_values, named_list())
+})
+
 test_that("internal_tuned_values", {
   skip_if_not_installed("rpart")
   # no internal tuning support -> NULL

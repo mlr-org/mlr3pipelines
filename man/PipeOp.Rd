@@ -150,7 +150,8 @@ Currently supported values are:
 \item \code{"validation"}: the \code{PipeOp} can make use of the \verb{$internal_valid_task} of an \code{\link[mlr3:Task]{mlr3::Task}}.
 This is for example used for \code{\link{PipeOpLearner}}s that wrap a \code{\link[mlr3:Learner]{Learner}} with this property, see \code{\link[mlr3:Learner]{mlr3::Learner}}.
 \code{PipeOp}s that have this property, also have a \verb{$validate} field, which controls whether to use the validation task,
-as well as a \verb{$internal_valid_scores} field, which allows to access the internal validation scores after training.
+as well as a \verb{$internal_valid_scores} field, which allows to access the internal validation scores after training,
+and a \verb{$best_valid_scores} field for the best internal validation scores observed during training.
 \item \code{"internal_tuning"}: the \code{PipeOp} is able to internally optimize hyperparameters.
 This works analogously to the internal tuning implementation for \code{\link[mlr3:Learner]{mlr3::Learner}}.
 \code{PipeOp}s with that property also implement the standardized accessor \verb{$internal_tuned_values} and have at least one
