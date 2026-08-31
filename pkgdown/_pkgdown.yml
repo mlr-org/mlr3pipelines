@@ -86,7 +86,6 @@ reference:
   - title: Tasks
     contents:
       - mlr_tasks_boston_housing
-      - mlr_tasks_diabetes
   - title: Filters
     contents:
       - mlr_filters_ensemble

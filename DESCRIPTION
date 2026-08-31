@@ -211,7 +211,6 @@ Collate:
     'PipeOpVtreat.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'
-    'TaskClassif_diabetes.R'
     'TaskRegr_boston_housing.R'
     'assert_graph.R'
     'bibentries.R'

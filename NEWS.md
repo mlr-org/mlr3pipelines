@@ -1,7 +1,7 @@
 # mlr3pipelines 0.11.0-9000
 
-* Added a temporary compatibility fallback for the synthetic `diabetes` task for released `mlr3` versions older than 1.8.0.
-  Users should update to `mlr3` 1.8.0 or newer; this fallback will be removed in a later update of `mlr3pipelines`.
+* Added a temporary compatibility alias that registers the former `pima` task as `diabetes` for released `mlr3` versions older than 1.8.0.
+  Retrieving the alias warns users to update to `mlr3` 1.8.0 or newer. This alias will be removed in a later update of `mlr3pipelines`.
 * Switched from using `digest::digest()` to using `mlr3misc::calculate_hash()` for calculating the `hash` and `phash` of `PipeOp`s, `Graph`s, and `GraphLearner`s.
 * Fix: Corrected registration of `FilterEnsemble` in `mlr_filters` using `.prototype_args`.
 * Fix: `PipeOpTargetMutate` and `PipeOpTargetTrafoScaleRange` now correctly transform internal validation tasks during training.
