@@ -1,3 +1,42 @@
+# Compare data.tables using data.table's equality semantics.
+expect_equal_data_table = function(object, expected,
+  ignore_col_order = FALSE, ignore_row_order = FALSE, trim_levels = TRUE,
+  check_attributes = TRUE, tolerance = sqrt(.Machine$double.eps)) {
+  act = testthat::quasi_label(rlang::enquo(object), arg = "object")
+  exp = testthat::quasi_label(rlang::enquo(expected), arg = "expected")
+
+  checkmate::assert_data_table(act$val)
+  checkmate::assert_data_table(exp$val)
+  checkmate::assert_flag(ignore_col_order)
+  checkmate::assert_flag(ignore_row_order)
+  checkmate::assert_flag(trim_levels)
+  checkmate::assert_flag(check_attributes)
+  checkmate::assert_number(tolerance, lower = 0, finite = TRUE)
+
+  # delegates to all.equal.data.table
+  comparison = base::all.equal(
+    act$val,
+    exp$val,
+    trim.levels = trim_levels,
+    check.attributes = check_attributes,
+    ignore.col.order = ignore_col_order,
+    ignore.row.order = ignore_row_order,
+    tolerance = tolerance
+  )
+
+  if (isTRUE(comparison)) {
+    testthat::pass()
+  } else {
+    testthat::fail(c(
+      sprintf("Expected %s to equal %s as data.tables.", act$lab, exp$lab),
+      "Differences:",
+      paste0("- ", comparison)
+    ))
+  }
+
+  invisible(act$val)
+}
+
 # expect that 'one' is a deep clone of 'two'
 expect_deep_clone = function(one, two) {
   # is equal
