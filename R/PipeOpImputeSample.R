@@ -45,7 +45,7 @@
 #' @examples
 #' library("mlr3")
 #'
-#' task = tsk("pima")
+#' task = tsk("diabetes")
 #' task$missings()
 #'
 #' po = po("imputesample")

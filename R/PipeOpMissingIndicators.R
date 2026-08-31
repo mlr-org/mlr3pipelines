@@ -57,7 +57,7 @@
 #' library("mlr3")
 #' \dontshow{data.table::setDTthreads(1)}
 #'
-#' task = tsk("pima")$select(c("insulin", "triceps"))
+#' task = tsk("diabetes")$select(c("insulin", "triceps"))
 #' sum(complete.cases(task$data()))
 #' task$missings()
 #' tail(task$data())

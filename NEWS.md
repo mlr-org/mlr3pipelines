@@ -2,6 +2,9 @@
 
 * Fix: `GraphLearner` had the guards of its internal validation and internal tuning extractors swapped, so a `Graph` supporting only one of the two properties reported nothing for the property it did support.
 * feat: `GraphLearner` and `PipeOpLearner` gained a `$best_valid_scores` field, and `GraphLearner` collects it from the wrapped `PipeOp`s via `$.extract_best_valid_scores()`, so `msr("best_valid_score")` can be used with a `GraphLearner`.
+* Added a temporary compatibility alias that registers the former `pima` task as `diabetes` for released `mlr3` versions older than 1.8.0.
+  Retrieving the alias warns users to update to `mlr3` 1.8.0 or newer. This alias will be removed in a later update of `mlr3pipelines`.
+* Fix: Re-running registration (e.g. when `mlr3` is reloaded) no longer removes `PipeOp` properties added to `mlr_reflections$pipeops$properties` by extension packages.
 * Switched from using `digest::digest()` to using `mlr3misc::calculate_hash()` for calculating the `hash` and `phash` of `PipeOp`s, `Graph`s, and `GraphLearner`s.
 * Fix: Corrected registration of `FilterEnsemble` in `mlr_filters` using `.prototype_args`.
 * Fix: `PipeOpTargetMutate` and `PipeOpTargetTrafoScaleRange` now correctly transform internal validation tasks during training.
