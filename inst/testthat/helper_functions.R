@@ -37,10 +37,43 @@ expect_equal_data_table = function(object, expected,
   invisible(act$val)
 }
 
+# Waldo enumerates R6 environments by value, which evaluates active bindings.
+# Use the registered all.equal.R6 method, which deliberately excludes them.
+expect_equal_r6 = function(object, expected, ...) {
+  act = testthat::quasi_label(rlang::enquo(object), arg = "object")
+  exp = testthat::quasi_label(rlang::enquo(expected), arg = "expected")
+
+  checkmate::assert_true(R6::is.R6(act$val))
+  checkmate::assert_true(R6::is.R6(exp$val))
+
+  comparison = base::all.equal(
+    act$val,
+    exp$val,
+    ...,
+    check.environment = FALSE
+  )
+
+  if (isTRUE(comparison)) {
+    testthat::pass()
+  } else {
+    testthat::fail(c(
+      sprintf("Expected %s to equal %s as R6 objects.", act$lab, exp$lab),
+      "Differences:",
+      paste0("- ", comparison)
+    ))
+  }
+
+  invisible(act$val)
+}
+
 # expect that 'one' is a deep clone of 'two'
 expect_deep_clone = function(one, two) {
   # is equal
-  expect_equal(one, two)
+  if (R6::is.R6(one)) {
+    expect_equal_r6(one, two)
+  } else {
+    expect_equal(one, two)
+  }
   visited = new.env()
   visited_b = new.env()
   expect_references_differ = function(a, b, path) {
@@ -118,7 +151,11 @@ expect_deep_clone = function(one, two) {
 }
 
 expect_shallow_clone = function(one, two) {
-  expect_equal(one, two)
+  if (R6::is.R6(one)) {
+    expect_equal_r6(one, two)
+  } else {
+    expect_equal(one, two)
+  }
   if (base::is.environment(one)) {
     addr_a = data.table::address(one)
     addr_b = data.table::address(two)
