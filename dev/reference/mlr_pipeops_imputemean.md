@@ -167,17 +167,44 @@ Other Imputation PipeOps:
 ``` r
 library("mlr3")
 
-task = tsk("pima")
-#> Error: Element with key 'pima' not found in DictionaryTask!
+task = tsk("diabetes")
 task$missings()
-#> Error: object 'task' not found
+#> diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
+#>        0        0        5      405       13        0        0       35 
+#>  triceps 
+#>      251 
 
 po = po("imputemean")
 new_task = po$train(list(task = task))[[1]]
-#> Error: object 'task' not found
 new_task$missings()
-#> Error: object 'new_task' not found
+#> diabetes      age pedigree pregnant  glucose  insulin     mass pressure 
+#>        0        0        0        0        0        0        0        0 
+#>  triceps 
+#>        0 
 
 po$state$model
-#> NULL
+#> $age
+#> [1] 33.05078
+#> 
+#> $glucose
+#> [1] 125.2962
+#> 
+#> $insulin
+#> [1] 159.0468
+#> 
+#> $mass
+#> [1] 32.86503
+#> 
+#> $pedigree
+#> [1] 0.4791602
+#> 
+#> $pregnant
+#> [1] 4.584635
+#> 
+#> $pressure
+#> [1] 72.59345
+#> 
+#> $triceps
+#> [1] 29.46422
+#> 
 ```

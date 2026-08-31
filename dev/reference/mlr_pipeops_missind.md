@@ -185,21 +185,34 @@ Other PipeOps:
 ``` r
 library("mlr3")
 
-task = tsk("pima")$select(c("insulin", "triceps"))
-#> Error: Element with key 'pima' not found in DictionaryTask!
+task = tsk("diabetes")$select(c("insulin", "triceps"))
 sum(complete.cases(task$data()))
-#> Error: object 'task' not found
+#> [1] 363
 task$missings()
-#> Error: object 'task' not found
+#> diabetes  insulin  triceps 
+#>        0      405      251 
 tail(task$data())
-#> Error: object 'task' not found
+#>    diabetes insulin triceps
+#>      <fctr>   <num>   <num>
+#> 1:      pos      NA      34
+#> 2:      pos      NA      28
+#> 3:      pos     474      27
+#> 4:      neg     540      27
+#> 5:      neg      NA      NA
+#> 6:      neg      NA      NA
 
 po = po("missind")
 new_task = po$train(list(task))[[1]]
-#> Error: object 'task' not found
 
 tail(new_task$data())
-#> Error: object 'new_task' not found
+#>    diabetes missing_insulin missing_triceps
+#>      <fctr>          <fctr>          <fctr>
+#> 1:      pos         missing         present
+#> 2:      pos         missing         present
+#> 3:      pos         present         present
+#> 4:      neg         present         present
+#> 5:      neg         missing         missing
+#> 6:      neg         missing         missing
 
 # proper imputation + missing indicators
 
@@ -209,5 +222,12 @@ impgraph = list(
 ) %>>% po("featureunion")
 
 tail(impgraph$train(task)[[1]]$data())
-#> Error: object 'task' not found
+#>    diabetes insulin triceps missing_insulin missing_triceps
+#>      <fctr>   <num>   <num>          <fctr>          <fctr>
+#> 1:      pos     120      34         missing         present
+#> 2:      pos     135      28         missing         present
+#> 3:      pos     474      27         present         present
+#> 4:      neg     540      27         present         present
+#> 5:      neg     200      19         missing         missing
+#> 6:      neg      54      19         missing         missing
 ```

@@ -176,17 +176,84 @@ Other Imputation PipeOps:
 ``` r
 library("mlr3")
 
-task = tsk("pima")
-#> Error: Element with key 'pima' not found in DictionaryTask!
+task = tsk("diabetes")
 task$missings()
-#> Error: object 'task' not found
+#> diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
+#>        0        0        5      405       13        0        0       35 
+#>  triceps 
+#>      251 
 
 po = po("imputehist")
 new_task = po$train(list(task = task))[[1]]
-#> Error: object 'task' not found
 new_task$missings()
-#> Error: object 'new_task' not found
+#> diabetes      age pedigree pregnant  glucose  insulin     mass pressure 
+#>        0        0        0        0        0        0        0        0 
+#>  triceps 
+#>        0 
 
 po$state$model
-#> NULL
+#> $age
+#> $age$counts
+#>  [1] 266 176  80  53  71  40  30  22  14  12   2   0   2
+#> 
+#> $age$breaks
+#>  [1] 20 25 30 35 40 45 50 55 60 65 70 75 80 85
+#> 
+#> 
+#> $glucose
+#> $glucose$counts
+#>  [1]   3   2  19  75  90  82 120 101  58  47  29  47  24  34  32
+#> 
+#> $glucose$breaks
+#>  [1]  50  60  70  80  90 100 110 120 130 140 150 160 170 180 190 200
+#> 
+#> 
+#> $insulin
+#> $insulin$counts
+#> [1] 132 150  44  12  12  12   0   0   1
+#> 
+#> $insulin$breaks
+#>  [1]   0 100 200 300 400 500 600 700 800 900
+#> 
+#> 
+#> $mass
+#> $mass$counts
+#> [1]  14  87 182 217 153  68  23   5   6
+#> 
+#> $mass$breaks
+#>  [1] 15 20 25 30 35 40 45 50 55 60
+#> 
+#> 
+#> $pedigree
+#> $pedigree$counts
+#>  [1] 139 280 139  98  62  17  17   2   7   0   1   3   3
+#> 
+#> $pedigree$breaks
+#>  [1] 0.0 0.2 0.4 0.6 0.8 1.0 1.2 1.4 1.6 1.8 2.0 2.2 2.4 2.6
+#> 
+#> 
+#> $pregnant
+#> $pregnant$counts
+#>  [1] 218  61 117  55  52  35  73  31  14  29  13   8  62
+#> 
+#> $pregnant$breaks
+#>  [1]  0  1  2  3  4  5  6  7  8  9 10 11 12 13
+#> 
+#> 
+#> $pressure
+#> $pressure$counts
+#> [1]   3   0  24  90 211 235 127  35   8
+#> 
+#> $pressure$breaks
+#>  [1]  20  30  40  50  60  70  80  90 100 110
+#> 
+#> 
+#> $triceps
+#> $triceps$counts
+#>  [1]   7  43  57  66 117  85  61  57  16   2   3   3
+#> 
+#> $triceps$breaks
+#>  [1]  5 10 15 20 25 30 35 40 45 50 55 60 65
+#> 
+#> 
 ```

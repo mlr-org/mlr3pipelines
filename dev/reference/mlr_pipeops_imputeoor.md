@@ -232,23 +232,49 @@ Other Imputation PipeOps:
 ``` r
 library("mlr3")
 set.seed(2409)
-data = tsk("pima")$data()
-#> Error: Element with key 'pima' not found in DictionaryTask!
-data$y = factor(c(NA, sample(letters, size = 766, replace = TRUE), NA))
-#> Error in data$y = factor(c(NA, sample(letters, size = 766, replace = TRUE),     NA)): object of type 'closure' is not subsettable
-data$z = ordered(c(NA, sample(1:10, size = 767, replace = TRUE)))
-#> Error in data$z = ordered(c(NA, sample(1:10, size = 767, replace = TRUE))): object of type 'closure' is not subsettable
+data = tsk("diabetes")$data()
+data$y = factor(c(NA, sample(letters, size = nrow(data) - 2, replace = TRUE), NA))
+data$z = ordered(c(NA, sample(1:10, size = nrow(data) - 1, replace = TRUE)))
 task = TaskClassif$new("task", backend = data, target = "diabetes")
-#> Error in UseMethod("as_data_backend"): no applicable method for 'as_data_backend' applied to an object of class "function"
 task$missings()
-#> Error: object 'task' not found
+#> diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
+#>        0        0        5      405       13        0        0       35 
+#>  triceps        y        z 
+#>      251        2        1 
 po = po("imputeoor")
 new_task = po$train(list(task = task))[[1]]
-#> Error: object 'task' not found
 new_task$missings()
-#> Error: object 'new_task' not found
+#> diabetes      age pedigree pregnant  glucose  insulin     mass pressure 
+#>        0        0        0        0        0        0        0        0 
+#>  triceps        y        z 
+#>        0        0        0 
 new_task$data()
-#> Error: object 'new_task' not found
+#>      diabetes   age pedigree pregnant glucose insulin  mass pressure triceps
+#>        <fctr> <num>    <num>    <num>   <num>   <num> <num>    <num>   <num>
+#>   1:      neg    28    0.240        0     194    -819  28.5       50      45
+#>   2:      pos    44    0.828        8     129    -819  27.6       84     -50
+#>   3:      neg    26    0.696        2     132    -819  38.2       72      42
+#>   4:      neg    39    0.192        6     184    -819  24.7       62     -50
+#>   5:      neg    22    0.178        4     108    -819  31.6       58      32
+#>  ---                                                                        
+#> 764:      pos    43    0.346       10      92    -819  33.1       50      28
+#> 765:      pos    26    1.162        0     181     474  35.8       58      27
+#> 766:      neg    60    0.460        6     130     540  34.2      106      27
+#> 767:      neg    24    0.206        2     146    -819  27.7       72     -50
+#> 768:      neg    41    0.187        6     115    -819  27.6       72     -50
+#>             y        z
+#>        <fctr>    <ord>
+#>   1: .MISSING .MISSING
+#>   2:        l        9
+#>   3:        q        6
+#>   4:        f        3
+#>   5:        l        3
+#>  ---                  
+#> 764:        o        7
+#> 765:        n        5
+#> 766:        e        6
+#> 767:        c        8
+#> 768: .MISSING        9
 
 # recommended use when missing values are expected during prediction on
 # factor columns that had no missing values during training
