@@ -118,6 +118,8 @@ NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
 VignetteBuilder: knitr, rmarkdown
 Collate:
+    'DataBackendJoin.R'
+    'DataBackendMultiCbind.R'
     'CnfAtom.R'
     'CnfClause.R'
     'CnfFormula.R'
