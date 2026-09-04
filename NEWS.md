@@ -1,4 +1,4 @@
-# mlr3pipelines 0.11.0-9000
+# mlr3pipelines 0.12.0
 
 * Fix: `GraphLearner` had the guards of its internal validation and internal tuning extractors swapped, so a `Graph` supporting only one of the two properties reported nothing for the property it did support.
 * feat: `GraphLearner` and `PipeOpLearner` gained a `$best_valid_scores` field, and `GraphLearner` collects it from the wrapped `PipeOp`s via `$.extract_best_valid_scores()`, so `msr("best_valid_score")` can be used with a `GraphLearner`.
