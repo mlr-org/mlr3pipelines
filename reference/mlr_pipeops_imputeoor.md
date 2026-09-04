@@ -175,6 +175,7 @@ Other PipeOps:
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_pi_cvplus.md),
 [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_missind.md),
 [`mlr_pipeops_modelmatrix`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_modelmatrix.md),
 [`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_multiplicityexply.md),
@@ -231,15 +232,15 @@ Other Imputation PipeOps:
 ``` r
 library("mlr3")
 set.seed(2409)
-data = tsk("pima")$data()
-data$y = factor(c(NA, sample(letters, size = 766, replace = TRUE), NA))
-data$z = ordered(c(NA, sample(1:10, size = 767, replace = TRUE)))
+data = tsk("diabetes")$data()
+data$y = factor(c(NA, sample(letters, size = nrow(data) - 2, replace = TRUE), NA))
+data$z = ordered(c(NA, sample(1:10, size = nrow(data) - 1, replace = TRUE)))
 task = TaskClassif$new("task", backend = data, target = "diabetes")
 task$missings()
 #> diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
-#>        0        0        5      374       11        0        0       35 
+#>        0        0        5      405       13        0        0       35 
 #>  triceps        y        z 
-#>      227        2        1 
+#>      251        2        1 
 po = po("imputeoor")
 new_task = po$train(list(task = task))[[1]]
 new_task$missings()
@@ -250,17 +251,17 @@ new_task$missings()
 new_task$data()
 #>      diabetes   age pedigree pregnant glucose insulin  mass pressure triceps
 #>        <fctr> <num>    <num>    <num>   <num>   <num> <num>    <num>   <num>
-#>   1:      pos    50    0.627        6     148    -819  33.6       72      35
-#>   2:      neg    31    0.351        1      85    -819  26.6       66      29
-#>   3:      pos    32    0.672        8     183    -819  23.3       64     -86
-#>   4:      neg    21    0.167        1      89      94  28.1       66      23
-#>   5:      pos    33    2.288        0     137     168  43.1       40      35
+#>   1:      neg    28    0.240        0     194    -819  28.5       50      45
+#>   2:      pos    44    0.828        8     129    -819  27.6       84     -50
+#>   3:      neg    26    0.696        2     132    -819  38.2       72      42
+#>   4:      neg    39    0.192        6     184    -819  24.7       62     -50
+#>   5:      neg    22    0.178        4     108    -819  31.6       58      32
 #>  ---                                                                        
-#> 764:      neg    63    0.171       10     101     180  32.9       76      48
-#> 765:      neg    27    0.340        2     122    -819  36.8       70      27
-#> 766:      neg    30    0.245        5     121     112  26.2       72      23
-#> 767:      pos    47    0.349        1     126    -819  30.1       60     -86
-#> 768:      neg    23    0.315        1      93    -819  30.4       70      31
+#> 764:      pos    43    0.346       10      92    -819  33.1       50      28
+#> 765:      pos    26    1.162        0     181     474  35.8       58      27
+#> 766:      neg    60    0.460        6     130     540  34.2      106      27
+#> 767:      neg    24    0.206        2     146    -819  27.7       72     -50
+#> 768:      neg    41    0.187        6     115    -819  27.6       72     -50
 #>             y        z
 #>        <fctr>    <ord>
 #>   1: .MISSING .MISSING

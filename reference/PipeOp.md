@@ -240,14 +240,14 @@ to return the same identical-by-reference objects to multiple outputs.
   `class` and the slots `$id` and `$param_set$values`. If a `PipeOp`'s
   functionality may change depending on more than these values, it
   should inherit the `$hash` active binding and calculate the hash as
-  `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
+  `mlr3misc::calculate_hash(super$hash, <OTHER THINGS>)`.
 
 - `phash` :: `character(1)`  
   Checksum calculated on the `PipeOp`, depending on the `PipeOp`'s
   `class` and the slots `$id` but ignoring `$param_set$values`. If a
   `PipeOp`'s functionality may change depending on more than these
   values, it should inherit the `$hash` active binding and calculate the
-  hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
+  hash as `mlr3misc::calculate_hash(super$hash, <OTHER THINGS>)`.
 
 - `.result` :: `list`  
   If the
@@ -284,7 +284,8 @@ to return the same identical-by-reference objects to multiple outputs.
     `PipeOp`s that have this property, also have a `$validate` field,
     which controls whether to use the validation task, as well as a
     `$internal_valid_scores` field, which allows to access the internal
-    validation scores after training.
+    validation scores after training, and a `$best_valid_scores` field
+    for the best internal validation scores observed during training.
 
   - `"internal_tuning"`: the `PipeOp` is able to internally optimize
     hyperparameters. This works analogously to the internal tuning
@@ -393,6 +394,7 @@ Other mlr3pipelines backend related:
 [`PipeOpTaskPreprocSimple`](https://mlr3pipelines.mlr-org.com/reference/PipeOpTaskPreprocSimple.md),
 [`mlr_graphs`](https://mlr3pipelines.mlr-org.com/reference/mlr_graphs.md),
 [`mlr_pipeops`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_updatetarget`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_updatetarget.md)
 
 Other PipeOps:
@@ -442,6 +444,7 @@ Other PipeOps:
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_pi_cvplus.md),
 [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_missind.md),
 [`mlr_pipeops_modelmatrix`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_modelmatrix.md),
 [`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_multiplicityexply.md),

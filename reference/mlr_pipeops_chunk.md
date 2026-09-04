@@ -116,6 +116,7 @@ Other PipeOps:
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_pi_cvplus.md),
 [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_missind.md),
 [`mlr_pipeops_modelmatrix`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_modelmatrix.md),
 [`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_multiplicityexply.md),
@@ -171,23 +172,23 @@ opc$train(list(task))
 #> 
 #> ── <TaskClassif> (89x14): Wine Regions ─────────────────────────────────────────
 #> • Target: type
-#> • Target classes: 2 (43%), 1 (31%), 3 (26%)
 #> • Properties: multiclass
 #> • Features (13):
 #>   • dbl (11): alcalinity, alcohol, ash, color, dilution, flavanoids, hue,
 #>   malic, nonflavanoids, phenols, proanthocyanins
 #>   • int (2): magnesium, proline
+#> • Target classes: 2 (43%), 1 (30%), 3 (27%)
 #> 
 #> $output2
 #> 
 #> ── <TaskClassif> (89x14): Wine Regions ─────────────────────────────────────────
 #> • Target: type
-#> • Target classes: 2 (37%), 1 (35%), 3 (28%)
 #> • Properties: multiclass
 #> • Features (13):
 #>   • dbl (11): alcalinity, alcohol, ash, color, dilution, flavanoids, hue,
 #>   malic, nonflavanoids, phenols, proanthocyanins
 #>   • int (2): magnesium, proline
+#> • Target classes: 2 (37%), 1 (36%), 3 (27%)
 #> 
 
 # ... 178 during predict (task is copied)
@@ -196,22 +197,22 @@ opc$predict(list(task))
 #> 
 #> ── <TaskClassif> (178x14): Wine Regions ────────────────────────────────────────
 #> • Target: type
-#> • Target classes: 2 (40%), 1 (33%), 3 (27%)
 #> • Properties: multiclass
 #> • Features (13):
 #>   • dbl (11): alcalinity, alcohol, ash, color, dilution, flavanoids, hue,
 #>   malic, nonflavanoids, phenols, proanthocyanins
 #>   • int (2): magnesium, proline
+#> • Target classes: 2 (40%), 1 (33%), 3 (27%)
 #> 
 #> $output2
 #> 
 #> ── <TaskClassif> (178x14): Wine Regions ────────────────────────────────────────
 #> • Target: type
-#> • Target classes: 2 (40%), 1 (33%), 3 (27%)
 #> • Properties: multiclass
 #> • Features (13):
 #>   • dbl (11): alcalinity, alcohol, ash, color, dilution, flavanoids, hue,
 #>   malic, nonflavanoids, phenols, proanthocyanins
 #>   • int (2): magnesium, proline
+#> • Target classes: 2 (40%), 1 (33%), 3 (27%)
 #> 
 ```

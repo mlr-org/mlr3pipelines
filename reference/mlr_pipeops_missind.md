@@ -138,6 +138,7 @@ Other PipeOps:
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_pi_cvplus.md),
 [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_modelmatrix`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_modelmatrix.md),
 [`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_multiplicityexply.md),
 [`mlr_pipeops_multiplicityimply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_multiplicityimply.md),
@@ -183,21 +184,21 @@ Other PipeOps:
 ``` r
 library("mlr3")
 
-task = tsk("pima")$select(c("insulin", "triceps"))
+task = tsk("diabetes")$select(c("insulin", "triceps"))
 sum(complete.cases(task$data()))
-#> [1] 394
+#> [1] 363
 task$missings()
 #> diabetes  insulin  triceps 
-#>        0      374      227 
+#>        0      405      251 
 tail(task$data())
 #>    diabetes insulin triceps
 #>      <fctr>   <num>   <num>
-#> 1:      neg      NA      NA
-#> 2:      neg     180      48
-#> 3:      neg      NA      27
-#> 4:      neg     112      23
-#> 5:      pos      NA      NA
-#> 6:      neg      NA      31
+#> 1:      pos      NA      34
+#> 2:      pos      NA      28
+#> 3:      pos     474      27
+#> 4:      neg     540      27
+#> 5:      neg      NA      NA
+#> 6:      neg      NA      NA
 
 po = po("missind")
 new_task = po$train(list(task))[[1]]
@@ -205,12 +206,12 @@ new_task = po$train(list(task))[[1]]
 tail(new_task$data())
 #>    diabetes missing_insulin missing_triceps
 #>      <fctr>          <fctr>          <fctr>
-#> 1:      neg         missing         missing
-#> 2:      neg         present         present
-#> 3:      neg         missing         present
+#> 1:      pos         missing         present
+#> 2:      pos         missing         present
+#> 3:      pos         present         present
 #> 4:      neg         present         present
-#> 5:      pos         missing         missing
-#> 6:      neg         missing         present
+#> 5:      neg         missing         missing
+#> 6:      neg         missing         missing
 
 # proper imputation + missing indicators
 
@@ -222,10 +223,10 @@ impgraph = list(
 tail(impgraph$train(task)[[1]]$data())
 #>    diabetes insulin triceps missing_insulin missing_triceps
 #>      <fctr>   <num>   <num>          <fctr>          <fctr>
-#> 1:      neg      49      39         missing         missing
-#> 2:      neg     180      48         present         present
-#> 3:      neg      75      27         missing         present
-#> 4:      neg     112      23         present         present
-#> 5:      pos      44      40         missing         missing
-#> 6:      neg     415      31         missing         present
+#> 1:      pos     120      34         missing         present
+#> 2:      pos     135      28         missing         present
+#> 3:      pos     474      27         present         present
+#> 4:      neg     540      27         present         present
+#> 5:      neg     200      19         missing         missing
+#> 6:      neg      54      19         missing         missing
 ```

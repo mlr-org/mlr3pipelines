@@ -43,7 +43,19 @@ selector_setdiff(selector_x, selector_y)
 
 selector_missing()
 
+selector_non_missing()
+
 selector_cardinality_greater_than(min_cardinality)
+
+selector_positive(na_ignore = TRUE)
+
+selector_negative(na_ignore = TRUE)
+
+selector_non_negative(na_ignore = TRUE)
+
+selector_non_positive(na_ignore = TRUE)
+
+selector_non_zero(na_ignore = TRUE)
 ```
 
 ## Arguments
@@ -104,6 +116,14 @@ selector_cardinality_greater_than(min_cardinality)
   (`integer`)  
   Minimum number of levels required to be selected.
 
+- na_ignore:
+
+  (`logical(1)`)  
+  Whether to ignore missing values when checking whether all values
+  satisfy the selector's condition. If `TRUE`, missing values do not
+  influence the check. If `FALSE`, features containing missing values
+  are not selected. Defaults to `TRUE`.
+
 ## Value
 
 `function`: A `Selector` function that takes a
@@ -144,9 +164,27 @@ feature names to be processed.
 - `selector_missing()`: `selector_missing` selects features with missing
   values.
 
+- `selector_non_missing()`: `selector_non_missing` selects features
+  without missing values.
+
 - `selector_cardinality_greater_than()`:
   `selector_cardinality_greater_than` selects categorical features with
   cardinality greater then a given threshold.
+
+- `selector_positive()`: `selector_positive` selects integer and numeric
+  features whose values are all greater than zero.
+
+- `selector_negative()`: `selector_negative` selects integer and numeric
+  features whose values are all less than zero.
+
+- `selector_non_negative()`: `selector_non_negative` selects integer and
+  numeric features whose values are all greater than or equal to zero.
+
+- `selector_non_positive()`: `selector_non_positive` selects integer and
+  numeric features whose values are all less than or equal to zero.
+
+- `selector_non_zero()`: `selector_non_zero` selects integer and numeric
+  features whose values are all non-zero.
 
 ## Details
 

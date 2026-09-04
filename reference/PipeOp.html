@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="PipeOp Base Class — PipeOp"><meta name="description" content='A PipeOp represents a transformation of a given "input" into a given "output", with two stages: "training"
+</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="PipeOp Base Class — PipeOp"><meta name="description" content='A PipeOp represents a transformation of a given "input" into a given "output", with two stages: "training"
 and "prediction". It can be understood as a generalized function that not only has multiple inputs, but
 also multiple outputs (as well as two stages). The "training" stage is used when training a machine learning pipeline or
 fitting a statistical model, and the "predicting" stage is then used for making predictions on new data.
@@ -55,7 +55,7 @@ is not intended to be instantiated.'><meta property="og:image" content="https://
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -217,11 +217,11 @@ Can be used to filter <code><a href="mlr_pipeops.html">as.data.table(mlr_pipeops
 <li><p><code>hash</code> :: <code>character(1)</code> <br>
 Checksum calculated on the <code>PipeOp</code>, depending on the <code>PipeOp</code>'s <code>class</code> and the slots <code>$id</code> and <code>$param_set$values</code>. If a
 <code>PipeOp</code>'s functionality may change depending on more than these values, it should inherit the <code>$hash</code> active
-binding and calculate the hash as <code>digest(list(super$hash, &lt;OTHER THINGS&gt;), algo = "xxhash64")</code>.</p></li>
+binding and calculate the hash as <code>mlr3misc::calculate_hash(super$hash, &lt;OTHER THINGS&gt;)</code>.</p></li>
 <li><p><code>phash</code> :: <code>character(1)</code> <br>
 Checksum calculated on the <code>PipeOp</code>, depending on the <code>PipeOp</code>'s <code>class</code> and the slots <code>$id</code> but ignoring <code>$param_set$values</code>. If a
 <code>PipeOp</code>'s functionality may change depending on more than these values, it should inherit the <code>$hash</code> active
-binding and calculate the hash as <code>digest(list(super$hash, &lt;OTHER THINGS&gt;), algo = "xxhash64")</code>.</p></li>
+binding and calculate the hash as <code>mlr3misc::calculate_hash(super$hash, &lt;OTHER THINGS&gt;)</code>.</p></li>
 <li><p><code>.result</code> :: <code>list</code> <br>
 If the <code><a href="Graph.html">Graph</a></code>'s <code>$keep_results</code> flag is set to <code>TRUE</code>, then the intermediate Results of <code>$train()</code> and <code>$predict()</code>
 are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
@@ -235,7 +235,8 @@ The properties of the <code>PipeOp</code>.
 Currently supported values are:</p><ul><li><p><code>"validation"</code>: the <code>PipeOp</code> can make use of the <code>$internal_valid_task</code> of an <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">mlr3::Task</a></code>.
 This is for example used for <code><a href="mlr_pipeops_learner.html">PipeOpLearner</a></code>s that wrap a <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> with this property, see <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">mlr3::Learner</a></code>.
 <code>PipeOp</code>s that have this property, also have a <code>$validate</code> field, which controls whether to use the validation task,
-as well as a <code>$internal_valid_scores</code> field, which allows to access the internal validation scores after training.</p></li>
+as well as a <code>$internal_valid_scores</code> field, which allows to access the internal validation scores after training,
+and a <code>$best_valid_scores</code> field for the best internal validation scores observed during training.</p></li>
 <li><p><code>"internal_tuning"</code>: the <code>PipeOp</code> is able to internally optimize hyperparameters.
 This works analogously to the internal tuning implementation for <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">mlr3::Learner</a></code>.
 <code>PipeOp</code>s with that property also implement the standardized accessor <code>$internal_tuned_values</code> and have at least one
@@ -304,6 +305,7 @@ of the class, the id, the <code>$state</code>, and the <code>$param_set$values</
 <code><a href="PipeOpTaskPreprocSimple.html">PipeOpTaskPreprocSimple</a></code>,
 <code><a href="mlr_graphs.html">mlr_graphs</a></code>,
 <code><a href="mlr_pipeops.html">mlr_pipeops</a></code>,
+<code><a href="mlr_pipeops_materialize.html">mlr_pipeops_materialize</a></code>,
 <code><a href="mlr_pipeops_updatetarget.html">mlr_pipeops_updatetarget</a></code></p>
 <p>Other PipeOps:
 <code><a href="PipeOpEncodePL.html">PipeOpEncodePL</a></code>,
@@ -352,6 +354,7 @@ of the class, the id, the <code>$state</code>, and the <code>$param_set$values</
 <code><a href="mlr_pipeops_learner.html">mlr_pipeops_learner</a></code>,
 <code><a href="mlr_pipeops_learner_pi_cvplus.html">mlr_pipeops_learner_pi_cvplus</a></code>,
 <code><a href="mlr_pipeops_learner_quantiles.html">mlr_pipeops_learner_quantiles</a></code>,
+<code><a href="mlr_pipeops_materialize.html">mlr_pipeops_materialize</a></code>,
 <code><a href="mlr_pipeops_missind.html">mlr_pipeops_missind</a></code>,
 <code><a href="mlr_pipeops_modelmatrix.html">mlr_pipeops_modelmatrix</a></code>,
 <code><a href="mlr_pipeops_multiplicityexply.html">mlr_pipeops_multiplicityexply</a></code>,
@@ -468,7 +471,7 @@ of the class, the id, the <code>$state</code>, and the <code>$param_set$values</
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

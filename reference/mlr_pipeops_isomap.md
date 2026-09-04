@@ -128,6 +128,7 @@ Other PipeOps:
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_pi_cvplus.md),
 [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_missind.md),
 [`mlr_pipeops_modelmatrix`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_modelmatrix.md),
 [`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_multiplicityexply.md),
@@ -175,10 +176,10 @@ Other PipeOps:
 library("mlr3")
 po = po("isomap", .mute = c("message", "output"))
 po$train(list(tsk("iris")))[[1]]$data()
-#> 2026-03-01 08:47:58.086338: Isomap START
-#> 2026-03-01 08:47:58.086981: constructing knn graph
-#> 2026-03-01 08:47:58.09312: calculating geodesic distances
-#> 2026-03-01 08:47:58.105363: Classical Scaling
+#> 2026-09-04 09:59:41.264642: Isomap START
+#> 2026-09-04 09:59:41.26518: constructing knn graph
+#> 2026-09-04 09:59:41.272974: calculating geodesic distances
+#> 2026-09-04 09:59:41.285566: Classical Scaling
 #>        Species     iso 1       iso 2
 #>         <fctr>     <num>       <num>
 #>   1:    setosa  3.006919  0.07103516
@@ -193,11 +194,11 @@ po$train(list(tsk("iris")))[[1]]$data()
 #> 149: virginica -2.147343 -0.45132197
 #> 150: virginica -1.496149 -0.38356003
 po$predict(list(tsk("iris")))[[1]]$data()
-#> 2026-03-01 08:47:58.130806: L-Isomap embed START
-#> 2026-03-01 08:47:58.131356: constructing knn graph
-#> 2026-03-01 08:47:58.139335: calculating geodesic distances
-#> 2026-03-01 08:47:58.167947: embedding
-#> 2026-03-01 08:47:58.168816: DONE
+#> 2026-09-04 09:59:41.3108: L-Isomap embed START
+#> 2026-09-04 09:59:41.31129: constructing knn graph
+#> 2026-09-04 09:59:41.32088: calculating geodesic distances
+#> 2026-09-04 09:59:41.350487: embedding
+#> 2026-09-04 09:59:41.351151: DONE
 #>        Species     iso 1       iso 2
 #>         <fctr>     <num>       <num>
 #>   1:    setosa  3.116505  0.14031343

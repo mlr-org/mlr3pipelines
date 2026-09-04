@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Non-negative Matrix Factorization — mlr_pipeops_nmf"><meta name="description" content="Extracts non-negative components from data by performing non-negative matrix factorization. Only
+</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Non-negative Matrix Factorization — mlr_pipeops_nmf"><meta name="description" content="Extracts non-negative components from data by performing non-negative matrix factorization. Only
 affects non-negative numerical features. See nmf() for details."><meta property="og:description" content="Extracts non-negative components from data by performing non-negative matrix factorization. Only
 affects non-negative numerical features. See nmf() for details."><meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -15,7 +15,7 @@ affects non-negative numerical features. See nmf() for details."><meta property=
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -147,8 +147,10 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>
 
 
-<p>Uses the <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">nmf()</a></code> function as well as <code>basis()</code>, <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> and
-<code><a href="https://rdrr.io/pkg/MASS/man/ginv.html" class="external-link">ginv()</a></code>.</p>
+<p>Uses the <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">nmf()</a></code> function as well as <code><a href="https://rdrr.io/pkg/NMF/man/basis-coef-methods.html" class="external-link">basis()</a></code>, <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> and
+<code><a href="https://rdrr.io/pkg/MASS/man/ginv.html" class="external-link">ginv()</a></code>. Does not support features with missing or infinite values. Features containing
+negative values are currently excluded with a warning, but this will become an error in a future release.
+Use <code>affect_columns = selector_non_negative()</code> to explicitly select non-negative features.</p>
     </div>
     <div class="section level2">
     <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>
@@ -213,6 +215,7 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
 <code><a href="mlr_pipeops_learner.html">mlr_pipeops_learner</a></code>,
 <code><a href="mlr_pipeops_learner_pi_cvplus.html">mlr_pipeops_learner_pi_cvplus</a></code>,
 <code><a href="mlr_pipeops_learner_quantiles.html">mlr_pipeops_learner_quantiles</a></code>,
+<code><a href="mlr_pipeops_materialize.html">mlr_pipeops_materialize</a></code>,
 <code><a href="mlr_pipeops_missind.html">mlr_pipeops_missind</a></code>,
 <code><a href="mlr_pipeops_modelmatrix.html">mlr_pipeops_modelmatrix</a></code>,
 <code><a href="mlr_pipeops_multiplicityexply.html">mlr_pipeops_multiplicityexply</a></code>,
@@ -278,17 +281,17 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species      NMF1       NMF2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;     &lt;num&gt;      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa 0.5808520 0.04741536</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa 0.5179125 0.06572959</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa 0.5312856 0.04639643</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa 0.4971806 0.06988613</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa 0.5832509 0.04280681</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa 0.8742680 0.07745874</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa 0.7742977 0.10118389</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa 0.7989872 0.07499483</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa 0.7417827 0.10643201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa 0.8789506 0.07119948</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ---                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica 0.2290743 0.55676271</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica 0.1866306 0.53550080</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica 0.2279444 0.54191697</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica 0.2142419 0.55788518</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica 0.2018033 0.51875141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica 0.2245724 0.76748065</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica 0.1646659 0.73744491</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica 0.2261656 0.74712500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica 0.2017179 0.76870312</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica 0.1915139 0.71483660</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $nmf</span>
@@ -301,13 +304,13 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
 <span class="r-out co"><span class="r-pr">#&gt;</span>  # Details:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   algorithm:  brunet </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   seed:  random </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   RNG: 10403L, 223L, ..., 581505866L [c6a8911f7b61c7ab6db7422cde75b137]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   RNG: 10403L, 302L, ..., 581505866L [6f7558492606d166ff55eeb209b1d451]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   distance metric:  'KL' </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   residuals:  3.084418 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Iterations: 440 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   residuals:  3.084898 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Iterations: 430 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Timing:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      user  system elapsed </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.063   0.018   0.081 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.060   0.009   0.068 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dt_columns</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
@@ -347,7 +350,7 @@ See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">n
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

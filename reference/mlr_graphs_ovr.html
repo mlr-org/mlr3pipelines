@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Create A Graph to Perform " one vs. rest classification. mlr_graphs_ovr><meta name="description" content='Create a new Graph for a classification Task to
+</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Create A Graph to Perform " one vs. rest classification. mlr_graphs_ovr><meta name="description" content='Create a new Graph for a classification Task to
 perform "One vs. Rest" classification.
 All input arguments are cloned and have no references in common with the returned Graph.'><meta property="og:description" content='Create a new Graph for a classification Task to
 perform "One vs. Rest" classification.
@@ -17,7 +17,7 @@ All input arguments are cloned and have no references in common with the returne
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,13 +127,13 @@ The Graph should return <code>NULL</code> during training and a
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;PredictionClassif&gt;</span><span style="font-weight: bold;"> for </span><span style="color: #0000BB; font-weight: bold;">178</span><span style="font-weight: bold;"> observations:</span> <span style="color: #00BBBB;">───────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  row_ids truth response     prob.1     prob.2     prob.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        1     1        1 0.94621803 0.03347464 0.02030733</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        2     1        1 0.94621803 0.03347464 0.02030733</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        3     1        1 0.94621803 0.03347464 0.02030733</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        1     1        1 0.94197522 0.04966703 0.00835775</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        2     1        1 0.94197522 0.04966703 0.00835775</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        3     1        1 0.94197522 0.04966703 0.00835775</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      ---   ---      ---        ---        ---        ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      176     3        3 0.08543923 0.03170632 0.88285445</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      177     3        3 0.08543923 0.03170632 0.88285445</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      178     3        3 0.04848767 0.03298737 0.91852495</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      176     3        3 0.25562834 0.03620269 0.70816897</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      177     3        3 0.25562834 0.03620269 0.70816897</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      178     3        3 0.03414673 0.04697450 0.91887877</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Bagging outside OVR</span></span></span>
@@ -148,14 +148,14 @@ The Graph should return <code>NULL</code> during training and a
 <span class="r-out co"><span class="r-pr">#&gt;</span> $classifavg.output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;PredictionClassif&gt;</span><span style="font-weight: bold;"> for </span><span style="color: #0000BB; font-weight: bold;">178</span><span style="font-weight: bold;"> observations:</span> <span style="color: #00BBBB;">───────────────────────────────────</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  row_ids truth response     prob.1     prob.2     prob.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        1     1        1 0.95314545 0.03101051 0.01584404</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        2     1        1 0.95314545 0.03101051 0.01584404</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        3     1        1 0.95314545 0.03101051 0.01584404</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      ---   ---      ---        ---        ---        ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      176     3        3 0.05676624 0.02879565 0.91443811</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      177     3        3 0.05676624 0.02879565 0.91443811</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      178     3        3 0.01486811 0.02998338 0.95514851</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  row_ids truth response      prob.1     prob.2    prob.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        1     1        1 0.955836274 0.04416373 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        2     1        1 0.955836274 0.04416373 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        3     1        1 0.955836274 0.04416373 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ---   ---      ---         ---        ---       ---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      176     3        3 0.078403407 0.04290101 0.8786956</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      177     3        3 0.078403407 0.04290101 0.8786956</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      178     3        3 0.004406163 0.04519203 0.9504018</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
@@ -168,7 +168,7 @@ The Graph should return <code>NULL</code> during training and a
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

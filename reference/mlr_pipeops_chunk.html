@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Chunk Input into Multiple Outputs — mlr_pipeops_chunk"><meta name="description" content="Chunks its input into outnum chunks.
+</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Chunk Input into Multiple Outputs — mlr_pipeops_chunk"><meta name="description" content="Chunks its input into outnum chunks.
 Creates outnum Tasks during training, and
 simply passes on the input during outnum times during prediction."><meta property="og:description" content="Chunks its input into outnum chunks.
 Creates outnum Tasks during training, and
@@ -17,7 +17,7 @@ simply passes on the input during outnum times during prediction."><meta propert
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -169,6 +169,7 @@ Should the data be shuffled before chunking? Initialized to <code>TRUE</code>.</
 <code><a href="mlr_pipeops_learner.html">mlr_pipeops_learner</a></code>,
 <code><a href="mlr_pipeops_learner_pi_cvplus.html">mlr_pipeops_learner_pi_cvplus</a></code>,
 <code><a href="mlr_pipeops_learner_quantiles.html">mlr_pipeops_learner_quantiles</a></code>,
+<code><a href="mlr_pipeops_materialize.html">mlr_pipeops_materialize</a></code>,
 <code><a href="mlr_pipeops_missind.html">mlr_pipeops_missind</a></code>,
 <code><a href="mlr_pipeops_modelmatrix.html">mlr_pipeops_modelmatrix</a></code>,
 <code><a href="mlr_pipeops_multiplicityexply.html">mlr_pipeops_multiplicityexply</a></code>,
@@ -224,23 +225,23 @@ Should the data be shuffled before chunking? Initialized to <code>TRUE</code>.</
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (89x14): Wine Regions</span> <span style="color: #00BBBB;">─────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Target: type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: 2 (43%), 1 (31%), 3 (26%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Features (13):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (11): alcalinity, alcohol, ash, color, dilution, flavanoids, hue,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   malic, nonflavanoids, phenols, proanthocyanins</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   • int (2): magnesium, proline</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: 2 (43%), 1 (30%), 3 (27%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $output2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (89x14): Wine Regions</span> <span style="color: #00BBBB;">─────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Target: type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: 2 (37%), 1 (35%), 3 (28%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Features (13):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (11): alcalinity, alcohol, ash, color, dilution, flavanoids, hue,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   malic, nonflavanoids, phenols, proanthocyanins</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   • int (2): magnesium, proline</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: 2 (37%), 1 (36%), 3 (27%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># ... 178 during predict (task is copied)</span></span></span>
@@ -249,23 +250,23 @@ Should the data be shuffled before chunking? Initialized to <code>TRUE</code>.</
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (178x14): Wine Regions</span> <span style="color: #00BBBB;">────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Target: type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: 2 (40%), 1 (33%), 3 (27%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Features (13):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (11): alcalinity, alcohol, ash, color, dilution, flavanoids, hue,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   malic, nonflavanoids, phenols, proanthocyanins</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   • int (2): magnesium, proline</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: 2 (40%), 1 (33%), 3 (27%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $output2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (178x14): Wine Regions</span> <span style="color: #00BBBB;">────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Target: type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: 2 (40%), 1 (33%), 3 (27%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Features (13):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (11): alcalinity, alcohol, ash, color, dilution, flavanoids, hue,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   malic, nonflavanoids, phenols, proanthocyanins</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   • int (2): magnesium, proline</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: 2 (40%), 1 (33%), 3 (27%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
@@ -278,7 +279,7 @@ Should the data be shuffled before chunking? Initialized to <code>TRUE</code>.</
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

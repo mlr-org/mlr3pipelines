@@ -149,6 +149,7 @@ Other PipeOps:
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_pi_cvplus.md),
 [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_missind.md),
 [`mlr_pipeops_modelmatrix`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_modelmatrix.md),
 [`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_multiplicityexply.md),
@@ -244,7 +245,7 @@ pop$state
 #>   0.003 
 #> 
 #> $task_hash
-#> [1] "57242622e0015f6a"
+#> [1] "abc694dd29a7a8ce"
 #> 
 #> $feature_names
 #> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
@@ -253,22 +254,19 @@ pop$state
 #> NULL
 #> 
 #> $mlr3_version
-#> [1] ‘1.5.0’
+#> [1] ‘1.8.0’
 #> 
 #> $data_prototype
-#> Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width
-#> 
-#> $task_prototype
 #> Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width
 #> 
 #> $train_task
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa, versicolor, virginica
 #> • Properties: multiclass
 #> • Features (4):
 #>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#> • Target classes: setosa, versicolor, virginica
 #> 
 #> $predict_method
 #> [1] "full"
@@ -303,7 +301,7 @@ pop$state
 #> $tunethreshold
 #> $tunethreshold$threshold
 #>     setosa versicolor  virginica 
-#>  0.5852014  0.3398626  0.6166942 
+#>  0.7712967  0.9797805  0.5447611 
 #> 
 #> 
 ```

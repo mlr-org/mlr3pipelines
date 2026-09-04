@@ -111,10 +111,10 @@ preproc(task, pop)
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> • Properties: multiclass
 #> • Features (4):
 #>   • dbl (4): PC1, PC2, PC3, PC4
+#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 # Note that the PipeOp gets trained through this
 pop$is_trained
 #> [1] TRUE
@@ -124,10 +124,10 @@ preproc(task, pop, predict = TRUE)
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> • Properties: multiclass
 #> • Features (4):
 #>   • dbl (4): PC1, PC2, PC3, PC4
+#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 
 # Predicting using a given state
 # We use the state of the PipeOp from the last example and then reset it
@@ -137,10 +137,10 @@ preproc(task, pop, state)
 #> 
 #> ── <TaskClassif> (150x5): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> • Properties: multiclass
 #> • Features (4):
 #>   • dbl (4): PC1, PC2, PC3, PC4
+#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 
 # Note that the PipeOp's state may get overwritten inadvertently during
 # training or if a state is given
@@ -150,11 +150,11 @@ preproc(tsk("wine"), pop)
 #> 
 #> ── <TaskClassif> (178x14): Wine Regions ────────────────────────────────────────
 #> • Target: type
-#> • Target classes: 2 (40%), 1 (33%), 3 (27%)
 #> • Properties: multiclass
 #> • Features (13):
 #>   • dbl (13): PC1, PC10, PC11, PC12, PC13, PC2, PC3, PC4, PC5, PC6, PC7, PC8,
 #>   PC9
+#> • Target classes: 2 (40%), 1 (33%), 3 (27%)
 pop$state$sdev
 #>  [1] 314.9631558  13.1352680   3.0721513   2.2340946   1.1085329   0.9170953
 #>  [7]   0.5281794   0.3890775   0.3348085   0.2677734   0.1938452   0.1451632
@@ -167,12 +167,12 @@ tsk("penguins") |>
 #> 
 #> ── <TaskClassif> (344x8): Palmer Penguins ──────────────────────────────────────
 #> • Target: species
-#> • Target classes: Adelie (44%), Gentoo (36%), Chinstrap (20%)
 #> • Properties: multiclass
 #> • Features (7):
 #>   • int (3): body_mass, flipper_length, year
 #>   • dbl (2): bill_depth, bill_length
 #>   • fct (2): island, sex
+#> • Target classes: Adelie (44%), Gentoo (36%), Chinstrap (20%)
 
 # Use preproc with a Graph
 gr = po("pca", rank. = 4) %>>% po("learner", learner = lrn("classif.rpart"))

@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="ADAS Balancing — mlr_pipeops_adas"><meta name="description" content="Generates a more balanced data set by creating synthetic instances of the minority classes using the ADASYN algorithm.
+</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="ADAS Balancing — mlr_pipeops_adas"><meta name="description" content="Generates a more balanced data set by creating synthetic instances of the minority classes using the ADASYN algorithm.
 The algorithm generates for each minority instance new data points based on its K nearest neighbors and the difficulty of learning for that data point.
 It can only be applied to tasks with numeric features that have no missing values.
 See smotefamily::ADAS for details."><meta property="og:description" content="Generates a more balanced data set by creating synthetic instances of the minority classes using the ADASYN algorithm.
@@ -19,7 +19,7 @@ See smotefamily::ADAS for details."><meta property="og:image" content="https://m
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,7 +101,7 @@ The output during prediction is the unchanged input.</p>
 
 <p>The parameters are the parameters inherited from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>, as well as:</p><ul><li><p><code>K</code> :: <code>numeric(1)</code> <br>
 The number of nearest neighbors used for sampling new values. Default is <code>5</code>.
-See <code>ADAS()</code>.</p></li>
+See <code><a href="https://rdrr.io/pkg/smotefamily/man/adas.html" class="external-link">ADAS()</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>
@@ -180,6 +180,7 @@ In <em>2008 IEEE International Joint Conference on Neural Networks (IEEE World C
 <code><a href="mlr_pipeops_learner.html">mlr_pipeops_learner</a></code>,
 <code><a href="mlr_pipeops_learner_pi_cvplus.html">mlr_pipeops_learner_pi_cvplus</a></code>,
 <code><a href="mlr_pipeops_learner_quantiles.html">mlr_pipeops_learner_quantiles</a></code>,
+<code><a href="mlr_pipeops_materialize.html">mlr_pipeops_materialize</a></code>,
 <code><a href="mlr_pipeops_missind.html">mlr_pipeops_missind</a></code>,
 <code><a href="mlr_pipeops_modelmatrix.html">mlr_pipeops_modelmatrix</a></code>,
 <code><a href="mlr_pipeops_multiplicityexply.html">mlr_pipeops_multiplicityexply</a></code>,
@@ -234,14 +235,14 @@ In <em>2008 IEEE International Joint Conference on Neural Networks (IEEE World C
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"example"</span>, backend <span class="op">=</span> <span class="va">data</span>, target <span class="op">=</span> <span class="st">"target"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">head</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    target          x1          x2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt;       &lt;num&gt;       &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     c2 -1.96128025 -0.25713974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     c2 -0.61834215  0.07129771</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     c2  0.07262506  1.03912251</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     c1  1.47680526 -0.69564839</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     c2  0.10549260  1.40779680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     c1  0.80728303  0.52945893</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    target         x1         x2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt;      &lt;num&gt;      &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     c2 -0.2044247 -0.0871060</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     c2  0.3908654  1.2420805</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     c1  0.3586867  1.1361390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     c2  1.0144447 -1.1946120</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     c2 -0.8840646 -0.4110691</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     c2 -1.9612803 -0.2571397</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="st">"target"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> target</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  c1  c2 </span>
@@ -251,11 +252,11 @@ In <em>2008 IEEE International Joint Conference on Neural Networks (IEEE World C
 <span class="r-in"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"adas"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">adas_result</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">adas_result</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 542</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">adas_result</span><span class="op">$</span><span class="va">target</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  c1  c2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 283 273 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 269 273 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -267,7 +268,7 @@ In <em>2008 IEEE International Joint Conference on Neural Networks (IEEE World C
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

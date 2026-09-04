@@ -43,11 +43,10 @@ a deep clone of it.
 
 ## See also
 
-Other Graph operators: `%>>%()`,
+Other Graph operators: `%>>%`,
 [`as_graph()`](https://mlr3pipelines.mlr-org.com/reference/as_graph.md),
 [`assert_graph()`](https://mlr3pipelines.mlr-org.com/reference/assert_graph.md),
 [`assert_pipeop()`](https://mlr3pipelines.mlr-org.com/reference/assert_pipeop.md),
 [`chain_graphs()`](https://mlr3pipelines.mlr-org.com/reference/chain_graphs.md),
-[`greplicate()`](https://mlr3pipelines.mlr-org.com/reference/greplicate.md),
 [`gunion()`](https://mlr3pipelines.mlr-org.com/reference/gunion.md),
 [`mlr_graphs_greplicate`](https://mlr3pipelines.mlr-org.com/reference/mlr_graphs_greplicate.md)

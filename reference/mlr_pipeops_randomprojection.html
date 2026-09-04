@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Project Numeric Features onto a Randomly Sampled Subspace — mlr_pipeops_randomprojection"><meta name="description" content="Projects numeric features onto a randomly sampled subspace. All numeric features
+</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Project Numeric Features onto a Randomly Sampled Subspace — mlr_pipeops_randomprojection"><meta name="description" content="Projects numeric features onto a randomly sampled subspace. All numeric features
 (or the ones selected by affect_columns) are replaced by numeric features
 PR1, PR2, ... PRn
 Samples with features that contain missing values result in all PR1..PRn being
@@ -23,7 +23,7 @@ if missing values can be expected."><meta property="og:image" content="https://m
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -184,6 +184,7 @@ Approach, Pg. 234.</p>
 <code><a href="mlr_pipeops_learner.html">mlr_pipeops_learner</a></code>,
 <code><a href="mlr_pipeops_learner_pi_cvplus.html">mlr_pipeops_learner_pi_cvplus</a></code>,
 <code><a href="mlr_pipeops_learner_quantiles.html">mlr_pipeops_learner_quantiles</a></code>,
+<code><a href="mlr_pipeops_materialize.html">mlr_pipeops_materialize</a></code>,
 <code><a href="mlr_pipeops_missind.html">mlr_pipeops_missind</a></code>,
 <code><a href="mlr_pipeops_modelmatrix.html">mlr_pipeops_modelmatrix</a></code>,
 <code><a href="mlr_pipeops_multiplicityexply.html">mlr_pipeops_multiplicityexply</a></code>,
@@ -247,27 +248,27 @@ Approach, Pg. 234.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica          5.4         2.3          6.2         3.4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica          5.1         1.8          5.9         3.0</span>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        Species       PR1       PR2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;     &lt;num&gt;     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa -3.940642 -4.540791</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa -3.553407 -4.199705</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa -3.610673 -4.179699</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa -3.619223 -4.012498</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa -3.993417 -4.516007</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica -4.676199 -5.418214</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica -4.353197 -4.785079</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica -4.787989 -5.121619</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica -4.966248 -5.193520</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica -4.731992 -4.643445</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Species        PR1         PR2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;      &lt;num&gt;       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa -0.4955681  0.08462260</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa -0.4393064 -0.20005991</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa -0.4473164  0.04980026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa -0.5784827 -0.11250409</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa -0.5324336  0.17917992</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica -1.1222825 -3.65834408</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica -1.2540461 -3.64088523</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica -1.3710303 -3.50942034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica -1.4194810 -3.37473384</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica -1.5565183 -3.22398959</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $projection</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     PR1        PR2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Length -0.4828504  0.2956250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width   0.4901167 -0.5457836</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length -0.1762255 -0.6642988</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Width  -0.7039785 -0.4164531</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Length -0.6572081 -0.6074552</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width   0.7071921 -0.3172657</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length  0.1829506 -0.2687201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Width  -0.1857038  0.6768531</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dt_columns</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
@@ -305,7 +306,7 @@ Approach, Pg. 234.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

@@ -110,6 +110,7 @@ Other PipeOps:
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_pi_cvplus.md),
 [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_missind.md),
 [`mlr_pipeops_modelmatrix`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_modelmatrix.md),
 [`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_multiplicityexply.md),
@@ -166,12 +167,12 @@ Other Imputation PipeOps:
 ``` r
 library("mlr3")
 
-task = tsk("pima")
+task = tsk("diabetes")
 task$missings()
 #> diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
-#>        0        0        5      374       11        0        0       35 
+#>        0        0        5      405       13        0        0       35 
 #>  triceps 
-#>      227 
+#>      251 
 
 po = po("imputemean")
 new_task = po$train(list(task = task))[[1]]
@@ -183,27 +184,27 @@ new_task$missings()
 
 po$state$model
 #> $age
-#> [1] 33.24089
+#> [1] 33.05078
 #> 
 #> $glucose
-#> [1] 121.6868
+#> [1] 125.2962
 #> 
 #> $insulin
-#> [1] 155.5482
+#> [1] 159.0468
 #> 
 #> $mass
-#> [1] 32.45746
+#> [1] 32.86503
 #> 
 #> $pedigree
-#> [1] 0.4718763
+#> [1] 0.4791602
 #> 
 #> $pregnant
-#> [1] 3.845052
+#> [1] 4.584635
 #> 
 #> $pressure
-#> [1] 72.40518
+#> [1] 72.59345
 #> 
 #> $triceps
-#> [1] 29.15342
+#> [1] 29.46422
 #> 
 ```

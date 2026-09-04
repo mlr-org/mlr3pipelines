@@ -36,13 +36,12 @@ containing `n` copies of input `graph`.
 
 ## See also
 
-Other Graph operators: `%>>%()`,
+Other Graph operators: `%>>%`,
 [`as_graph()`](https://mlr3pipelines.mlr-org.com/reference/as_graph.md),
 [`as_pipeop()`](https://mlr3pipelines.mlr-org.com/reference/as_pipeop.md),
 [`assert_graph()`](https://mlr3pipelines.mlr-org.com/reference/assert_graph.md),
 [`assert_pipeop()`](https://mlr3pipelines.mlr-org.com/reference/assert_pipeop.md),
 [`chain_graphs()`](https://mlr3pipelines.mlr-org.com/reference/chain_graphs.md),
-[`greplicate()`](https://mlr3pipelines.mlr-org.com/reference/greplicate.md),
 [`gunion()`](https://mlr3pipelines.mlr-org.com/reference/gunion.md)
 
 ## Examples
@@ -51,7 +50,7 @@ Other Graph operators: `%>>%()`,
 library("mlr3")
 
 po_pca = po("pca")
-pipeline_greplicate(po_pca, n = 2)
+ppl("greplicate", po_pca, n = 2)
 #> 
 #> ── Graph with 2 PipeOps: ───────────────────────────────────────────────────────
 #>      ID         State sccssors prdcssors

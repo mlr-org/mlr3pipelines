@@ -19,13 +19,7 @@ inheriting from
 ## Methods
 
 Methods inherited from
-[`Dictionary`](https://mlr3misc.mlr-org.com/reference/Dictionary.html),
-as well as:
-
-- `add(key, value)`  
-  (`character(1)`, `function`)  
-  Adds constructor `value` to the dictionary with key `key`, potentially
-  overwriting a previously stored item.
+[`Dictionary`](https://mlr3misc.mlr-org.com/reference/Dictionary.html).
 
 ## S3 methods
 
@@ -44,6 +38,7 @@ Other mlr3pipelines backend related:
 [`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/reference/PipeOpTaskPreproc.md),
 [`PipeOpTaskPreprocSimple`](https://mlr3pipelines.mlr-org.com/reference/PipeOpTaskPreprocSimple.md),
 [`mlr_pipeops`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_updatetarget`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_updatetarget.md)
 
 Other Dictionaries:

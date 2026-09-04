@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simple Pre-processing — preproc"><meta name="description" content="Function that offers a simple and direct way to train or predict PipeOps and Graphs on Tasks,
+</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simple Pre-processing — preproc"><meta name="description" content="Function that offers a simple and direct way to train or predict PipeOps and Graphs on Tasks,
 data.frames or data.tables.
 Training happens if predict is set to FALSE and no state is passed to this function.
 Prediction happens if predict is set to TRUE and if the passed Graph or PipeOp is either trained or a state
@@ -23,7 +23,7 @@ The passed  PipeOp or Graph gets modified by-reference."><meta property="og:imag
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -139,10 +139,10 @@ of <code><a href="https://mlr3.mlr-org.com/reference/TaskSupervised.html" class=
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (150x5): Iris Flowers</span> <span style="color: #00BBBB;">─────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Target: Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: setosa (33%), versicolor (33%), virginica (33%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Features (4):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (4): PC1, PC2, PC3, PC4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: setosa (33%), versicolor (33%), virginica (33%)</span>
 <span class="r-in"><span><span class="co"># Note that the PipeOp gets trained through this</span></span></span>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">is_trained</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
@@ -152,10 +152,10 @@ of <code><a href="https://mlr3.mlr-org.com/reference/TaskSupervised.html" class=
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (150x5): Iris Flowers</span> <span style="color: #00BBBB;">─────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Target: Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: setosa (33%), versicolor (33%), virginica (33%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Features (4):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (4): PC1, PC2, PC3, PC4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: setosa (33%), versicolor (33%), virginica (33%)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Predicting using a given state</span></span></span>
 <span class="r-in"><span><span class="co"># We use the state of the PipeOp from the last example and then reset it</span></span></span>
@@ -165,10 +165,10 @@ of <code><a href="https://mlr3.mlr-org.com/reference/TaskSupervised.html" class=
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (150x5): Iris Flowers</span> <span style="color: #00BBBB;">─────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Target: Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: setosa (33%), versicolor (33%), virginica (33%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Features (4):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (4): PC1, PC2, PC3, PC4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: setosa (33%), versicolor (33%), virginica (33%)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Note that the PipeOp's state may get overwritten inadvertently during</span></span></span>
 <span class="r-in"><span><span class="co"># training or if a state is given</span></span></span>
@@ -178,11 +178,11 @@ of <code><a href="https://mlr3.mlr-org.com/reference/TaskSupervised.html" class=
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (178x14): Wine Regions</span> <span style="color: #00BBBB;">────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Target: type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: 2 (40%), 1 (33%), 3 (27%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Features (13):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (13): PC1, PC10, PC11, PC12, PC13, PC2, PC3, PC4, PC5, PC6, PC7, PC8,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   PC9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: 2 (40%), 1 (33%), 3 (27%)</span>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">state</span><span class="op">$</span><span class="va">sdev</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 314.9631558  13.1352680   3.0721513   2.2340946   1.1085329   0.9170953</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7]   0.5281794   0.3890775   0.3348085   0.2677734   0.1938452   0.1451632</span>
@@ -195,12 +195,12 @@ of <code><a href="https://mlr3.mlr-org.com/reference/TaskSupervised.html" class=
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #0000BB; font-weight: bold;">&lt;TaskClassif&gt;</span><span style="font-weight: bold;"> (344x8): Palmer Penguins</span> <span style="color: #00BBBB;">──────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Target: species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: Adelie (44%), Gentoo (36%), Chinstrap (20%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Properties: multiclass</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Features (7):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   • int (3): body_mass, flipper_length, year</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   • dbl (2): bill_depth, bill_length</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   • fct (2): island, sex</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Target classes: Adelie (44%), Gentoo (36%), Chinstrap (20%)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Use preproc with a Graph</span></span></span>
 <span class="r-in"><span><span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"pca"</span>, rank. <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"learner"</span>, learner <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -263,7 +263,7 @@ of <code><a href="https://mlr3.mlr-org.com/reference/TaskSupervised.html" class=
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

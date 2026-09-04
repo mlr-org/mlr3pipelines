@@ -1,5 +1,76 @@
 # Changelog
 
+## mlr3pipelines 0.12.0
+
+- Fix: `GraphLearner` had the guards of its internal validation and
+  internal tuning extractors swapped, so a `Graph` supporting only one
+  of the two properties reported nothing for the property it did
+  support.
+- feat: `GraphLearner` and `PipeOpLearner` gained a `$best_valid_scores`
+  field, and `GraphLearner` collects it from the wrapped `PipeOp`s via
+  `$.extract_best_valid_scores()`, so `msr("best_valid_score")` can be
+  used with a `GraphLearner`.
+- Added a temporary compatibility alias that registers the former `pima`
+  task as `diabetes` for released `mlr3` versions older than 1.8.0.
+  Retrieving the alias warns users to update to `mlr3` 1.8.0 or newer.
+  This alias will be removed in a later update of `mlr3pipelines`.
+- Fix: Re-running registration (e.g. when `mlr3` is reloaded) no longer
+  removes `PipeOp` properties added to
+  `mlr_reflections$pipeops$properties` by extension packages.
+- Switched from using
+  [`digest::digest()`](https://eddelbuettel.github.io/digest/man/digest.html)
+  to using
+  [`mlr3misc::calculate_hash()`](https://mlr3misc.mlr-org.com/reference/calculate_hash.html)
+  for calculating the `hash` and `phash` of `PipeOp`s, `Graph`s, and
+  `GraphLearner`s.
+- Fix: Corrected registration of `FilterEnsemble` in `mlr_filters` using
+  `.prototype_args`.
+- Fix: `PipeOpTargetMutate` and `PipeOpTargetTrafoScaleRange` now
+  correctly transform internal validation tasks during training.
+- feat: `PipeOpSmote`, `PipeOpSmoteNC`, `PipeOpADAS`, and
+  `PipeOpBLSmote` can now handle columns with role `"name"` by assigning
+  the name `synthetic.<pipeop id>` to generated rows.
+- New `PipeOpMaterialize` that materializes the active `Task` view,
+  reducing size and simplifying structure of the `Task`’s `DataBackend`.
+- Fix: `mlr_pipeops$add()` now saves the namespace environment from
+  which it was called to allow delayed evaluation in
+  `as.data.table(mlr_pipeops)`.
+- `PipeOpNMF` now correctly rejects features containing missing or
+  infinite values with an informative error message. Features containing
+  negative values are still dropped implictly, but now this produces a
+  warning to use
+  [`selector_non_negative()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  for explicit column selection. This will become an error in the
+  future.
+- New selectors
+  [`selector_positive()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md),
+  [`selector_negative()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md),
+  [`selector_non_negative()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md),
+  [`selector_non_positive()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md),
+  [`selector_non_zero()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md),
+  and
+  [`selector_non_missing()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md).
+  The numeric selectors support `na_ignore` to control whether missing
+  values are ignored when checking if all values satisfy the selector’s
+  condition.
+- `mlr_graphs` no longer overrides the inherited `$add()` method.
+- Simplified error messages from internal function `check_types()`.
+- Removed deprecated `greplicate()` function. Use `ppl("greplicate")`
+  instead.
+- Fix: `PipeOpIsomap` now explicitly requires `igraph`, `RSpectra`, and
+  `RANN`; skip checks in tests were also updated.
+- Fix: `as_learner.Graph` now handles `...` as an argument.
+- feat: `as_learner.Graph` now suppots the `discard_state` argument,
+  same as `as_learner.Learner`.
+- feat: `PipeOpTargetInvert` now propagates the `extra` slot of input
+  prediction objects to the output prediction object, if the inverter
+  `fun` does not handle it already.
+- feat: `PipeOpDateFeatures` gains new features `is_month_start`,
+  `is_month_end`, `is_quarter_start`, `is_quarter_end`, `is_year_start`,
+  `is_year_end`, and `is_leap_year`.
+- Fix: `PipeOpDateFeatures` no longer creates all-`NA` cyclic
+  time-of-day features for `Date` features.
+
 ## mlr3pipelines 0.11.0
 
 CRAN release: 2026-03-01
@@ -506,9 +577,8 @@ CRAN release: 2020-08-18
 - `Graph` new method `update_ids()`
 - `Graph` methods `train(single_input = FALSE)` and
   `predict(single_input = FALSE)` now handle vararg channels correctly.
-- Obsoleted
-  [`greplicate()`](https://mlr3pipelines.mlr-org.com/reference/greplicate.md);
-  use `pipeline_greplicate` / `ppl("greplicate")` instead.
+- Obsoleted `greplicate()`; use `pipeline_greplicate` /
+  `ppl("greplicate")` instead.
 - [`po()`](https://mlr3pipelines.mlr-org.com/reference/po.md) now
   automatically converts `Selector` to `PipeOpSelect`
 - [`po()`](https://mlr3pipelines.mlr-org.com/reference/po.md) prints

@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Changelog"><meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png"></head><body>
+</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Changelog"><meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,32 @@
       <small>Source: <a href="https://github.com/mlr-org/mlr3pipelines/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.12.0" id="mlr3pipelines-0120">mlr3pipelines 0.12.0<a class="anchor" aria-label="anchor" href="#mlr3pipelines-0120"></a></h2>
+<ul><li>Fix: <code>GraphLearner</code> had the guards of its internal validation and internal tuning extractors swapped, so a <code>Graph</code> supporting only one of the two properties reported nothing for the property it did support.</li>
+<li>feat: <code>GraphLearner</code> and <code>PipeOpLearner</code> gained a <code>$best_valid_scores</code> field, and <code>GraphLearner</code> collects it from the wrapped <code>PipeOp</code>s via <code>$.extract_best_valid_scores()</code>, so <code>msr("best_valid_score")</code> can be used with a <code>GraphLearner</code>.</li>
+<li>Added a temporary compatibility alias that registers the former <code>pima</code> task as <code>diabetes</code> for released <code>mlr3</code> versions older than 1.8.0. Retrieving the alias warns users to update to <code>mlr3</code> 1.8.0 or newer. This alias will be removed in a later update of <code>mlr3pipelines</code>.</li>
+<li>Fix: Re-running registration (e.g. when <code>mlr3</code> is reloaded) no longer removes <code>PipeOp</code> properties added to <code>mlr_reflections$pipeops$properties</code> by extension packages.</li>
+<li>Switched from using <code><a href="https://eddelbuettel.github.io/digest/man/digest.html" class="external-link">digest::digest()</a></code> to using <code><a href="https://mlr3misc.mlr-org.com/reference/calculate_hash.html" class="external-link">mlr3misc::calculate_hash()</a></code> for calculating the <code>hash</code> and <code>phash</code> of <code>PipeOp</code>s, <code>Graph</code>s, and <code>GraphLearner</code>s.</li>
+<li>Fix: Corrected registration of <code>FilterEnsemble</code> in <code>mlr_filters</code> using <code>.prototype_args</code>.</li>
+<li>Fix: <code>PipeOpTargetMutate</code> and <code>PipeOpTargetTrafoScaleRange</code> now correctly transform internal validation tasks during training.</li>
+<li>feat: <code>PipeOpSmote</code>, <code>PipeOpSmoteNC</code>, <code>PipeOpADAS</code>, and <code>PipeOpBLSmote</code> can now handle columns with role <code>"name"</code> by assigning the name <code>synthetic.&lt;pipeop id&gt;</code> to generated rows.</li>
+<li>New <code>PipeOpMaterialize</code> that materializes the active <code>Task</code> view, reducing size and simplifying structure of the <code>Task</code>’s <code>DataBackend</code>.</li>
+<li>Fix: <code>mlr_pipeops$add()</code> now saves the namespace environment from which it was called to allow delayed evaluation in <code>as.data.table(mlr_pipeops)</code>.</li>
+<li>
+<code>PipeOpNMF</code> now correctly rejects features containing missing or infinite values with an informative error message. Features containing negative values are still dropped implictly, but now this produces a warning to use <code><a href="../reference/Selector.html">selector_non_negative()</a></code> for explicit column selection. This will become an error in the future.</li>
+<li>New selectors <code><a href="../reference/Selector.html">selector_positive()</a></code>, <code><a href="../reference/Selector.html">selector_negative()</a></code>, <code><a href="../reference/Selector.html">selector_non_negative()</a></code>, <code><a href="../reference/Selector.html">selector_non_positive()</a></code>, <code><a href="../reference/Selector.html">selector_non_zero()</a></code>, and <code><a href="../reference/Selector.html">selector_non_missing()</a></code>. The numeric selectors support <code>na_ignore</code> to control whether missing values are ignored when checking if all values satisfy the selector’s condition.</li>
+<li>
+<code>mlr_graphs</code> no longer overrides the inherited <code>$add()</code> method.</li>
+<li>Simplified error messages from internal function <code>check_types()</code>.</li>
+<li>Removed deprecated <code>greplicate()</code> function. Use <code>ppl("greplicate")</code> instead.</li>
+<li>Fix: <code>PipeOpIsomap</code> now explicitly requires <code>igraph</code>, <code>RSpectra</code>, and <code>RANN</code>; skip checks in tests were also updated.</li>
+<li>Fix: <code>as_learner.Graph</code> now handles <code>...</code> as an argument.</li>
+<li>feat: <code>as_learner.Graph</code> now suppots the <code>discard_state</code> argument, same as <code>as_learner.Learner</code>.</li>
+<li>feat: <code>PipeOpTargetInvert</code> now propagates the <code>extra</code> slot of input prediction objects to the output prediction object, if the inverter <code>fun</code> does not handle it already.</li>
+<li>feat: <code>PipeOpDateFeatures</code> gains new features <code>is_month_start</code>, <code>is_month_end</code>, <code>is_quarter_start</code>, <code>is_quarter_end</code>, <code>is_year_start</code>, <code>is_year_end</code>, and <code>is_leap_year</code>.</li>
+<li>Fix: <code>PipeOpDateFeatures</code> no longer creates all-<code>NA</code> cyclic time-of-day features for <code>Date</code> features.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.11.0" id="mlr3pipelines-0110">mlr3pipelines 0.11.0<a class="anchor" aria-label="anchor" href="#mlr3pipelines-0110"></a></h2><p class="text-muted">CRAN release: 2026-03-01</p>
 <ul><li>Fix: Made <code>FilterEnsemble</code> tests deterministic and more robust.</li>
@@ -431,7 +457,7 @@
 </li>
 <li>
 <code>Graph</code> methods <code>train(single_input = FALSE)</code> and <code>predict(single_input = FALSE)</code> now handle vararg channels correctly.</li>
-<li>Obsoleted <code><a href="../reference/greplicate.html">greplicate()</a></code>; use <code>pipeline_greplicate</code> / <code>ppl("greplicate")</code> instead.</li>
+<li>Obsoleted <code>greplicate()</code>; use <code>pipeline_greplicate</code> / <code>ppl("greplicate")</code> instead.</li>
 <li>
 <code><a href="../reference/po.html">po()</a></code> now automatically converts <code>Selector</code> to <code>PipeOpSelect</code>
 </li>
@@ -478,7 +504,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

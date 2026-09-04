@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Encapsulate a Graph as a Learner — mlr_learners_graph"><meta name="description" content="A Learner that encapsulates a Graph to be used in
+</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Encapsulate a Graph as a Learner — mlr_learners_graph"><meta name="description" content="A Learner that encapsulates a Graph to be used in
 mlr3 resampling and benchmarks.
 The Graph must return a single Prediction on its $predict()
 call. The result of the $train() call is discarded, only the
@@ -33,7 +33,7 @@ non-NULL $state, it is ignored."><meta property="og:image" content="https://mlr3
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -135,6 +135,11 @@ The internal tuned parameter values collected from all <code><a href="PipeOp.htm
 The internal validation scores as retrieved from the <code><a href="PipeOp.html">PipeOp</a></code>s.
 The names are prefixed with the respective IDs of the <code><a href="PipeOp.html">PipeOp</a></code>s.
 <code>NULL</code> is returned if the learner is not trained or none of the wrapped learners supports internal validation.</p></li>
+<li><p><code>best_valid_scores</code> :: named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> or <code>NULL</code><br>
+The best internal validation scores as retrieved from the <code><a href="PipeOp.html">PipeOp</a></code>s, i.e. the best scores that were observed
+during training instead of those of the final model.
+The names are prefixed with the respective IDs of the <code><a href="PipeOp.html">PipeOp</a></code>s.
+<code>NULL</code> is returned if the learner is not trained or none of the wrapped learners tracks them.</p></li>
 <li><p><code>validate</code> :: <code>numeric(1)</code>, <code>"predefined"</code>, <code>"test"</code> or <code>NULL</code><br>
 How to construct the validation data. This also has to be configured for the individual <code><a href="PipeOp.html">PipeOp</a></code>s such as
 <code>PipeOpLearner</code>, see <code><a href="set_validate.GraphLearner.html">set_validate.GraphLearner</a></code>.
@@ -196,7 +201,7 @@ If <code>resolve_branching</code> is <code>FALSE</code>, <code><a href="mlr_pipe
 Predicts outcomes for new data in <code>newdata</code> using the model fitted during <code>$train()</code>.<br>
 For the moment, this is merely a thin wrapper around <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner$predict_newdata()</a></code> to ensure compatibility, meaning that <em>no speedup</em> is currently achieved.
 In the future, this method may be optimized to be faster than <code>$predict_newdata()</code>.<br>
-Unlike <code>$predict_newdata()</code>, this method does not return a <a href="https://mlr3.mlr-org.com/reference/Prediction.html" class="external-link">mlr3::Prediction</a> object.
+Unlike <code>$predict_newdata()</code>, this method does not return a <a href="https://mlr3.mlr-org.com/reference/Prediction.html" class="external-link">Prediction</a> object.
 Instead, it returns a list with elements depending on <code>$task_type</code> and <code>$predict_type</code>:</p><ul><li><p>for <code>task_type = "classif"</code>: <code>response</code> and <code>prob</code>, or <code>quantiles</code> (if <code>predict_type = "quantiles"</code>)</p></li>
 <li><p>for <code>task_type = "regr"</code>: <code>response</code> and <code>se</code></p></li>
 </ul></li>
@@ -293,7 +298,7 @@ recommended.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

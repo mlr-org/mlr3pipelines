@@ -65,45 +65,84 @@ The parameters are the parameters inherited from
 as well as:
 
 - `keep_date_var` :: `logical(1)`  
-  Should the `POSIXct` columns be kept as features? Default `FALSE`.
+  Whether `POSIXct` columns should be kept as features. Initialized to
+  `FALSE`.
 
 - `cyclic` :: `logical(1)`  
-  Should cyclic features be computed? See Internals. Default `FALSE`.
+  Whether cyclic features should be computed. See Internals. Initialized
+  to `FALSE`.
 
 - `year` :: `logical(1)`  
-  Should the year be extracted as a feature? Default `TRUE`.
+  Whether the year should be extracted as a feature. Initialized to
+  `TRUE`.
 
 - `quarter` :: `logical(1)`  
-  Should the quarter be extracted as a feature? Default `TRUE`.
+  Whether the quarter should be extracted as a feature. Initialized to
+  `TRUE`.
 
 - `month` :: `logical(1)`  
-  Should the month be extracted as a feature? Default `TRUE`.
+  Whether the month should be extracted as a feature. Initialized to
+  `TRUE`.
 
 - `week_of_year` :: `logical(1)`  
-  Should the week of the year be extracted as a feature? Default `TRUE`.
+  Whether the week of the year should be extracted as a feature.
+  Initialized to `TRUE`.
 
 - `day_of_year` :: `logical(1)`  
-  Should the day of the year be extracted as a feature? Default `TRUE`.
+  Whether the day of the year should be extracted as a feature.
+  Initialized to `TRUE`.
 
 - `day_of_month` :: `logical(1)`  
-  Should the day of the month be extracted as a feature? Default `TRUE`.
+  Whether the day of the month should be extracted as a feature.
+  Initialized to `TRUE`.
 
 - `day_of_week` :: `logical(1)`  
-  Should the day of the week (ISO 8601) be extracted as a feature?
-  Default `TRUE`.
+  Whether the day of the week (ISO 8601) should be extracted as a
+  feature. Initialized to `TRUE`.
 
 - `hour` :: `logical(1)`  
-  Should the hour be extracted as a feature? Default `TRUE`.
+  Whether the hour should be extracted as a feature. Initialized to
+  `TRUE`.
 
 - `minute` :: `logical(1)`  
-  Should the minute be extracted as a feature? Default `TRUE`.
+  Whether the minute should be extracted as a feature. Initialized to
+  `TRUE`.
 
 - `second` :: `logical(1)`  
-  Should the second be extracted as a feature? Default `TRUE`.
+  Whether the second should be extracted as a feature. Initialized to
+  `TRUE`.
 
 - `is_day` :: `logical(1)`  
-  Should a feature be extracted indicating whether it is day time
-  (06:00am - 08:00pm)? Default `TRUE`.
+  Whether a feature indicating day time (06:00am - 08:00pm) should be
+  extracted. Initialized to `TRUE`.
+
+- `is_month_start` :: `logical(1)`  
+  Whether a feature indicating the first day of the month should be
+  extracted. Initialized to `FALSE`.
+
+- `is_month_end` :: `logical(1)`  
+  Whether a feature indicating the last day of the month should be
+  extracted. Initialized to `FALSE`.
+
+- `is_quarter_start` :: `logical(1)`  
+  Whether a feature indicating the first day of the quarter should be
+  extracted. Initialized to `FALSE`.
+
+- `is_quarter_end` :: `logical(1)`  
+  Whether a feature indicating the last day of the quarter should be
+  extracted. Initialized to `FALSE`.
+
+- `is_year_start` :: `logical(1)`  
+  Whether a feature indicating the first day of the year should be
+  extracted. Initialized to `FALSE`.
+
+- `is_year_end` :: `logical(1)`  
+  Whether a feature indicating the last day of the year should be
+  extracted. Initialized to `FALSE`.
+
+- `is_leap_year` :: `logical(1)`  
+  Whether a feature indicating a leap year should be extracted.
+  Initialized to `FALSE`.
 
 ## Internals
 
@@ -172,6 +211,7 @@ Other PipeOps:
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_pi_cvplus.md),
 [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_missind.md),
 [`mlr_pipeops_modelmatrix`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_modelmatrix.md),
 [`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_multiplicityexply.md),
@@ -229,13 +269,13 @@ pop$train(list(task))
 #> 
 #> ── <TaskClassif> (150x14) ──────────────────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> • Properties: multiclass
 #> • Features (13):
 #>   • int (8): date.day_of_month, date.day_of_week, date.day_of_year, date.hour,
 #>   date.month, date.quarter, date.week_of_year, date.year
 #>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
 #>   • lgl (1): date.is_day
+#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> 
 pop$state
 #> $dt_columns

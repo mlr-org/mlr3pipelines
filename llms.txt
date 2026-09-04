@@ -29,6 +29,7 @@ In principle, *mlr3pipelines* is about defining singular data and model
 manipulation steps as “PipeOps”:
 
 ``` r
+
 pca        = po("pca")
 filter     = po("filter", filter = mlr3filters::flt("variance"), filter.frac = 0.5)
 learner_po = po("learner", learner = lrn("classif.rpart"))
@@ -39,6 +40,7 @@ pipelines. These can be wrapped in a `GraphLearner` that behave like any
 other `Learner` in `mlr3`.
 
 ``` r
+
 graph = pca %>>% filter %>>% learner_po
 glrn = GraphLearner$new(graph)
 ```
@@ -46,6 +48,7 @@ glrn = GraphLearner$new(graph)
 This learner can be used for resampling, benchmarking, and even tuning.
 
 ``` r
+
 resample(tsk("iris"), glrn, rsmp("cv"))
 #> <ResampleResult> with 10 resampling iterations
 #>  task_id                 learner_id resampling_id iteration warnings errors
@@ -159,8 +162,6 @@ the *[dplyr](https://github.com/tidyverse/dplyr)* package.
   : PipeOp Composition Operator
 - [`gunion()`](https://mlr3pipelines.mlr-org.com/reference/gunion.md) :
   Disjoint Union of Graphs
-- [`greplicate()`](https://mlr3pipelines.mlr-org.com/reference/greplicate.md)
-  : Create Disjoint Graph Union of Copies of a Graph
 - [`chain_graphs()`](https://mlr3pipelines.mlr-org.com/reference/chain_graphs.md)
   : Chain a Series of Graphs
 
@@ -293,6 +294,9 @@ the *[dplyr](https://github.com/tidyverse/dplyr)* package.
 - [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md)
   [`PipeOpLearnerQuantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md)
   : Wrap a Learner into a PipeOp to predict multiple Quantiles
+- [`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md)
+  [`PipeOpMaterialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md)
+  : Materialize Task View
 - [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_missind.md)
   [`PipeOpMissInd`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_missind.md)
   : Add Missing Indicator Columns
@@ -487,7 +491,13 @@ the *[dplyr](https://github.com/tidyverse/dplyr)* package.
   [`selector_union()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
   [`selector_setdiff()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
   [`selector_missing()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_non_missing()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
   [`selector_cardinality_greater_than()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_positive()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_negative()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_non_negative()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_non_positive()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_non_zero()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
   : Selector Functions
 - [`as_graph()`](https://mlr3pipelines.mlr-org.com/reference/as_graph.md)
   : Conversion to mlr3pipelines Graph

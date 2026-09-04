@@ -174,6 +174,7 @@ Other PipeOps:
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_pi_cvplus.md),
 [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_missind.md),
 [`mlr_pipeops_modelmatrix`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_modelmatrix.md),
 [`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_multiplicityexply.md),
@@ -230,12 +231,12 @@ Other Imputation PipeOps:
 ``` r
 library("mlr3")
 
-task = tsk("pima")
+task = tsk("diabetes")
 task$missings()
 #> diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
-#>        0        0        5      374       11        0        0       35 
+#>        0        0        5      405       13        0        0       35 
 #>  triceps 
-#>      227 
+#>      251 
 
 po = po("imputelearner", lrn("regr.rpart"))
 new_task = po$train(list(task = task))[[1]]
@@ -248,30 +249,32 @@ new_task$missings()
 # '$state' of the "regr.rpart" Learner, trained to predict the 'mass' column:
 po$state$model$mass
 #> $model
-#> n= 757 
+#> n= 755 
 #> 
 #> node), split, n, deviance, yval
 #>       * denotes terminal node
 #> 
-#>  1) root 757 36254.3300 32.45746  
-#>    2) triceps< 25.5 219  5537.6560 27.93196  
-#>      4) triceps< 20.5 144  3140.7800 26.68333 *
-#>      5) triceps>=20.5 75  1741.3150 30.32933  
-#>       10) pressure< 83 64  1081.6090 29.37813 *
-#>       11) pressure>=83 11   264.8855 35.86364 *
-#>    3) triceps>=25.5 538 24405.7800 34.29963  
-#>      6) triceps< 35.5 380 14414.2500 32.50474  
-#>       12) pressure< 74.5 223  6772.1180 31.49013  
-#>         24) glucose< 73.5 8    44.1000 24.20000 *
-#>         25) glucose>=73.5 215  6287.0300 31.76140  
-#>           50) pregnant>=0.5 190  4822.6790 31.28947 *
-#>           51) pregnant< 0.5 25  1100.4420 35.34800 *
-#>       13) pressure>=74.5 157  7086.5100 33.94586  
-#>         26) insulin< 187 122  4736.5000 33.05656 *
-#>         27) insulin>=187 35  1917.2070 37.04571 *
-#>      7) triceps>=35.5 158  5822.9770 38.61646  
-#>       14) pregnant>=1.5 92  2351.3170 37.02174 *
-#>       15) pregnant< 1.5 66  2911.5580 40.83939 *
+#>  1) root 755 37110.0000 32.86503  
+#>    2) triceps< 28.5 272  7845.6920 29.45551  
+#>      4) triceps< 21.5 129  2519.8400 27.53178 *
+#>      5) triceps>=21.5 143  4417.7980 31.19091  
+#>       10) glucose< 124 81  2762.1110 29.63827 *
+#>       11) glucose>=124 62  1205.3170 33.21935 *
+#>    3) triceps>=28.5 483 24321.7100 34.78509  
+#>      6) pressure< 74.5 278 10929.7900 32.81079  
+#>       12) pregnant>=3.5 159  6495.9200 31.63459  
+#>         24) age< 31.5 45  1189.1280 28.66000 *
+#>         25) age>=31.5 114  4751.4510 32.80877  
+#>           50) age>=49.5 28   807.7371 29.57143 *
+#>           51) age< 49.5 86  3554.7210 33.86279 *
+#>       13) pregnant< 3.5 119  3919.9930 34.38235  
+#>         26) triceps< 39.5 86  2481.2570 33.12907 *
+#>         27) triceps>=39.5 33   951.6224 37.64848 *
+#>      7) pressure>=74.5 205 10838.8400 37.46244  
+#>       14) triceps< 35.5 90  3074.9580 34.30444 *
+#>       15) triceps>=35.5 115  6163.8780 39.93391  
+#>         30) glucose< 162.5 80  3396.0090 38.11625 *
+#>         31) glucose>=162.5 35  1899.4150 44.08857 *
 #> 
 #> $param_vals
 #> $param_vals$xval
@@ -286,7 +289,7 @@ po$state$model$mass
 #>   0.004 
 #> 
 #> $task_hash
-#> [1] "103bfb27778d3e5d"
+#> [1] "2ac44a951f63767e"
 #> 
 #> $feature_names
 #> [1] "age"      "glucose"  "insulin"  "pedigree" "pregnant" "pressure" "triceps" 
@@ -295,12 +298,9 @@ po$state$model$mass
 #> NULL
 #> 
 #> $mlr3_version
-#> [1] ‘1.5.0’
+#> [1] ‘1.8.0’
 #> 
 #> $data_prototype
-#> Empty data.table (0 rows and 8 cols): .impute_col,age,glucose,insulin,pedigree,pregnant...
-#> 
-#> $task_prototype
 #> Empty data.table (0 rows and 8 cols): .impute_col,age,glucose,insulin,pedigree,pregnant...
 #> 
 #> $train_task

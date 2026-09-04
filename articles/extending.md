@@ -5,6 +5,7 @@ to include custom `PipeOp`s. To run the following examples, we will need
 a `Task`; we are using the well-known “Iris” task:
 
 ``` r
+
 library("mlr3")
 task = tsk("iris")
 task$data()
@@ -51,6 +52,7 @@ and a `.predict()` function, and that we probably want to have an
 `initialize()` as well:
 
 ``` r
+
 PipeOpCopyTwo = R6::R6Class("PipeOpCopyTwo",
   inherit = mlr3pipelines::PipeOp,
   public = list(
@@ -98,6 +100,7 @@ All of this is given to the `PipeOp` creator. Our `initialize()` will
 thus look as follows:
 
 ``` r
+
 initialize = function(id = "copy.two") {
   input = data.table::data.table(name = "input", train = "*", predict = "*")
   # the following will create two rows and automatically fill the `train`
@@ -139,6 +142,7 @@ Two things to consider:
 Our `.train()` and `.predict()` functions are now:
 
 ``` r
+
 .train = function(inputs) {
   self$state = list()
   c(inputs, inputs)
@@ -146,6 +150,7 @@ Our `.train()` and `.predict()` functions are now:
 ```
 
 ``` r
+
 .predict = function(inputs) {
   c(inputs, inputs)
 }
@@ -156,6 +161,7 @@ Our `.train()` and `.predict()` functions are now:
 The whole definition thus becomes
 
 ``` r
+
 PipeOpCopyTwo = R6::R6Class("PipeOpCopyTwo",
   inherit = mlr3pipelines::PipeOp,
   public = list(
@@ -184,6 +190,7 @@ We can create an instance of our `PipeOp`, put it in a graph, and see
 what happens when we train it on something:
 
 ``` r
+
 library("mlr3pipelines")
 poct = PipeOpCopyTwo$new()
 gr = Graph$new()
@@ -201,6 +208,7 @@ print(gr)
     ## ── Pipeline: <INPUT> -> copy.two -> <OUTPUT>
 
 ``` r
+
 result = gr$train(task)
 
 str(result)
@@ -266,6 +274,7 @@ that it inherits from `PipeOpTaskPreproc`, unlike the `PipeOpCopyTwo`
 example from above:
 
 ``` r
+
 PipeOpDropNA = R6::R6Class("PipeOpDropNA",
   inherit = mlr3pipelines::PipeOpTaskPreproc,
   public = list(
@@ -293,6 +302,7 @@ PipeOpDropNA = R6::R6Class("PipeOpDropNA",
 To test this `PipeOp`, we create a small task with missing values:
 
 ``` r
+
 smalliris = iris[(1:5) * 30, ]
 smalliris[1, 1] = NA
 smalliris[2, 2] = NA
@@ -311,6 +321,7 @@ print(sitask$data())
 We test this by feeding it to a new `Graph` that uses `PipeOpDropNA`.
 
 ``` r
+
 gr = Graph$new()
 gr$add_pipeop(PipeOpDropNA$new())
 
@@ -359,6 +370,7 @@ and center all data. Compare this `PipeOpScaleAlways` operator to the
 one defined inside the `mlr3pipelines` package, `PipeOpScale`.
 
 ``` r
+
 PipeOpScaleAlways = R6::R6Class("PipeOpScaleAlways",
   inherit = mlr3pipelines::PipeOpTaskPreproc,
   public = list(
@@ -400,6 +412,7 @@ Compare the resulting data to the original “iris” `Task` data printed at
 the beginning:
 
 ``` r
+
 gr = Graph$new()
 gr$add_pipeop(PipeOpScaleAlways$new())
 
@@ -483,6 +496,7 @@ keep.
 The full `PipeOp` could be written as follows:
 
 ``` r
+
 PipeOpDropConst = R6::R6Class("PipeOpDropConst",
   inherit = mlr3pipelines::PipeOpTaskPreprocSimple,
   public = list(
@@ -509,6 +523,7 @@ This can be tested using the first five rows of the “Iris” `Task`, for
 which one feature (`"Petal.Width"`) is constant:
 
 ``` r
+
 irishead = task$clone()$filter(1:5)
 irishead$data()
 ```
@@ -522,6 +537,7 @@ irishead$data()
     ## 5:  setosa          1.4         0.2          5.0         3.6
 
 ``` r
+
 gr = Graph$new()$add_pipeop(PipeOpDropConst$new())
 dropped_task = gr$train(irishead)[[1]]
 
@@ -541,6 +557,7 @@ We can also see that the `$state` was correctly set. Calling
 `Task`!) will still drop the `"Petal.Width"` column, as it should.
 
 ``` r
+
 gr$pipeops$drop.const$state
 ```
 
@@ -571,6 +588,7 @@ gr$pipeops$drop.const$state
     ## Empty data.table (0 rows and 4 cols): Species,Petal.Length,Sepal.Length,Sepal.Width
 
 ``` r
+
 dropped_predict = gr$predict(task)[[1]]
 
 dropped_predict$data()
@@ -603,6 +621,7 @@ above](#example-pipeopscalealways), we use `.select_cols()` so that we
 only work on numeric columns.
 
 ``` r
+
 PipeOpScaleAlwaysSimple = R6::R6Class("PipeOpScaleAlwaysSimple",
   inherit = mlr3pipelines::PipeOpTaskPreprocSimple,
   public = list(
@@ -634,6 +653,7 @@ We can compare this `PipeOp` to the one above to show that it behaves
 the same.
 
 ``` r
+
 gr = Graph$new()$add_pipeop(PipeOpScaleAlways$new())
 result_posa = gr$train(task)[[1]]
 
@@ -642,6 +662,7 @@ result_posa_simple = gr$train(task)[[1]]
 ```
 
 ``` r
+
 result_posa$data()
 ```
 
@@ -660,6 +681,7 @@ result_posa$data()
     ## 150: virginica    0.7602115   0.7880307   0.06843254 -0.13153881
 
 ``` r
+
 result_posa_simple$data()
 ```
 
@@ -732,6 +754,7 @@ hyperparameters. `PipeOpScale` constructs a `ParamSet` in its
 function:
 
 ``` r
+
 PipeOpScale$public_methods$initialize
 ```
 
@@ -744,6 +767,7 @@ The user has access to this and can set and get parameters. Types are
 automatically checked:
 
 ``` r
+
 pss = po("scale")
 print(pss$param_set)
 ```
@@ -757,6 +781,7 @@ print(pss$param_set)
     ## 4: affect_columns ParamUty    NA    NA     Inf  <Selector[1]> [NULL]
 
 ``` r
+
 pss$param_set$values$center = FALSE
 print(pss$param_set$values)
 ```
@@ -768,6 +793,7 @@ print(pss$param_set$values)
     ## [1] FALSE
 
 ``` r
+
 pss$param_set$values$scale = "TRUE" # bad input is checked!
 ```
 
@@ -784,6 +810,7 @@ parameter is not given, its default value from the `"scale()"` function
 will be used.
 
 ``` r
+
 PipeOpScale$private_methods$.train_dt
 ```
 
@@ -802,6 +829,7 @@ both `scale` and `center` set to `FALSE`, which returns the original
 dataset, unchanged.
 
 ``` r
+
 pss$param_set$values$scale = FALSE
 pss$param_set$values$center = FALSE
 

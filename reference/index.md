@@ -27,8 +27,6 @@
   : PipeOp Composition Operator
 - [`gunion()`](https://mlr3pipelines.mlr-org.com/reference/gunion.md) :
   Disjoint Union of Graphs
-- [`greplicate()`](https://mlr3pipelines.mlr-org.com/reference/greplicate.md)
-  : Create Disjoint Graph Union of Copies of a Graph
 - [`chain_graphs()`](https://mlr3pipelines.mlr-org.com/reference/chain_graphs.md)
   : Chain a Series of Graphs
 
@@ -161,6 +159,9 @@
 - [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md)
   [`PipeOpLearnerQuantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md)
   : Wrap a Learner into a PipeOp to predict multiple Quantiles
+- [`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md)
+  [`PipeOpMaterialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md)
+  : Materialize Task View
 - [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_missind.md)
   [`PipeOpMissInd`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_missind.md)
   : Add Missing Indicator Columns
@@ -355,7 +356,13 @@
   [`selector_union()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
   [`selector_setdiff()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
   [`selector_missing()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_non_missing()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
   [`selector_cardinality_greater_than()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_positive()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_negative()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_non_negative()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_non_positive()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
+  [`selector_non_zero()`](https://mlr3pipelines.mlr-org.com/reference/Selector.md)
   : Selector Functions
 - [`as_graph()`](https://mlr3pipelines.mlr-org.com/reference/as_graph.md)
   : Conversion to mlr3pipelines Graph

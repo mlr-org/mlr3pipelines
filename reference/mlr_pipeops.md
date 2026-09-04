@@ -112,6 +112,7 @@ Other mlr3pipelines backend related:
 [`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/reference/PipeOpTaskPreproc.md),
 [`PipeOpTaskPreprocSimple`](https://mlr3pipelines.mlr-org.com/reference/PipeOpTaskPreprocSimple.md),
 [`mlr_graphs`](https://mlr3pipelines.mlr-org.com/reference/mlr_graphs.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_updatetarget`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_updatetarget.md)
 
 Other PipeOps:
@@ -161,6 +162,7 @@ Other PipeOps:
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_pi_cvplus.md),
 [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_missind.md),
 [`mlr_pipeops_modelmatrix`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_modelmatrix.md),
 [`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_multiplicityexply.md),
@@ -244,87 +246,172 @@ po("learner", learner = lrn("classif.rpart"))
 # all PipeOps currently in the dictionary:
 as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num", "packages")]
 #> Key: <key>
-#>                       key input.num output.num                         packages
-#>                    <char>     <int>      <int>                           <list>
-#>  1:                  adas         1          1        mlr3pipelines,smotefamily
-#>  2:               blsmote         1          1        mlr3pipelines,smotefamily
-#>  3:                boxcox         1          1      mlr3pipelines,bestNormalize
-#>  4:                branch         1         NA                    mlr3pipelines
-#>  5:                 chunk         1         NA                    mlr3pipelines
-#>  6:        classbalancing         1          1                    mlr3pipelines
-#>  7:            classifavg        NA          1              mlr3pipelines,stats
-#>  8:          classweights         1          1                    mlr3pipelines
-#>  9:        classweightsex         1          1                    mlr3pipelines
-#> 10:              colapply         1          1                    mlr3pipelines
-#> 11:       collapsefactors         1          1                    mlr3pipelines
-#> 12:              colroles         1          1                    mlr3pipelines
-#> 13:                  copy         1         NA                    mlr3pipelines
-#> 14:          datefeatures         1          1                    mlr3pipelines
-#> 15:                decode         1          1                    mlr3pipelines
-#> 16:                encode         1          1              mlr3pipelines,stats
-#> 17:          encodeimpact         1          1                    mlr3pipelines
-#> 18:            encodelmer         1          1        mlr3pipelines,lme4,nloptr
-#> 19:     encodeplquantiles         1          1              mlr3pipelines,stats
-#> 20:          encodepltree         1          1         mlr3pipelines,mlr3,rpart
-#> 21:          featureunion        NA          1                    mlr3pipelines
-#> 22:                filter         1          1                    mlr3pipelines
-#> 23:            fixfactors         1          1                    mlr3pipelines
-#> 24:               histbin         1          1           mlr3pipelines,graphics
-#> 25:                   ica         1          1            mlr3pipelines,fastICA
-#> 26:        imputeconstant         1          1                    mlr3pipelines
-#> 27:            imputehist         1          1           mlr3pipelines,graphics
-#> 28:         imputelearner         1          1                    mlr3pipelines
-#> 29:            imputemean         1          1                    mlr3pipelines
-#> 30:          imputemedian         1          1              mlr3pipelines,stats
-#> 31:            imputemode         1          1                    mlr3pipelines
-#> 32:             imputeoor         1          1                    mlr3pipelines
-#> 33:          imputesample         1          1                    mlr3pipelines
-#> 34:                  info         1          1                    mlr3pipelines
-#> 35:                isomap         1          1       mlr3pipelines,dimRed,stats
-#> 36:             kernelpca         1          1            mlr3pipelines,kernlab
-#> 37:               learner         1          1                    mlr3pipelines
-#> 38:            learner_cv         1          1                    mlr3pipelines
-#> 39:     learner_pi_cvplus         1          1                    mlr3pipelines
-#> 40:     learner_quantiles         1          1                    mlr3pipelines
-#> 41:               missind         1          1                    mlr3pipelines
-#> 42:           modelmatrix         1          1              mlr3pipelines,stats
-#> 43:     multiplicityexply         1         NA                    mlr3pipelines
-#> 44:     multiplicityimply        NA          1                    mlr3pipelines
-#> 45:                mutate         1          1                    mlr3pipelines
-#> 46:              nearmiss         1          1             mlr3pipelines,themis
-#> 47:                   nmf         1          1               mlr3pipelines,MASS
-#> 48:                   nop         1          1                    mlr3pipelines
-#> 49:              ovrsplit         1          1                    mlr3pipelines
-#> 50:              ovrunite         1          1                    mlr3pipelines
-#> 51:                   pca         1          1                    mlr3pipelines
-#> 52:                 proxy        NA          1                    mlr3pipelines
-#> 53:           quantilebin         1          1              mlr3pipelines,stats
-#> 54:      randomprojection         1          1                    mlr3pipelines
-#> 55:        randomresponse         1          1                    mlr3pipelines
-#> 56:               regravg        NA          1                    mlr3pipelines
-#> 57:       removeconstants         1          1                    mlr3pipelines
-#> 58:         renamecolumns         1          1                    mlr3pipelines
-#> 59:             replicate         1          1                    mlr3pipelines
-#> 60:              rowapply         1          1                    mlr3pipelines
-#> 61:                 scale         1          1                    mlr3pipelines
-#> 62:           scalemaxabs         1          1                    mlr3pipelines
-#> 63:            scalerange         1          1                    mlr3pipelines
-#> 64:                select         1          1                    mlr3pipelines
-#> 65:                 smote         1          1        mlr3pipelines,smotefamily
-#> 66:               smotenc         1          1             mlr3pipelines,themis
-#> 67:           spatialsign         1          1                    mlr3pipelines
-#> 68:               splines         1          1      mlr3pipelines,splines,stats
-#> 69:             subsample         1          1                    mlr3pipelines
-#> 70:          targetinvert         2          1                    mlr3pipelines
-#> 71:          targetmutate         1          2                    mlr3pipelines
-#> 72: targettrafoscalerange         1          2                    mlr3pipelines
-#> 73:        textvectorizer         1          1 mlr3pipelines,quanteda,stopwords
-#> 74:             threshold         1          1                    mlr3pipelines
-#> 75:                 tomek         1          1             mlr3pipelines,themis
-#> 76:         tunethreshold         1          1              mlr3pipelines,bbotk
-#> 77:              unbranch        NA          1                    mlr3pipelines
-#> 78:                vtreat         1          1             mlr3pipelines,vtreat
-#> 79:            yeojohnson         1          1      mlr3pipelines,bestNormalize
-#>                       key input.num output.num                         packages
-#>                    <char>     <int>      <int>                           <list>
+#>                       key input.num output.num
+#>                    <char>     <int>      <int>
+#>  1:                  adas         1          1
+#>  2:               blsmote         1          1
+#>  3:                boxcox         1          1
+#>  4:                branch         1         NA
+#>  5:                 chunk         1         NA
+#>  6:        classbalancing         1          1
+#>  7:            classifavg        NA          1
+#>  8:          classweights         1          1
+#>  9:        classweightsex         1          1
+#> 10:              colapply         1          1
+#> 11:       collapsefactors         1          1
+#> 12:              colroles         1          1
+#> 13:                  copy         1         NA
+#> 14:          datefeatures         1          1
+#> 15:                decode         1          1
+#> 16:                encode         1          1
+#> 17:          encodeimpact         1          1
+#> 18:            encodelmer         1          1
+#> 19:     encodeplquantiles         1          1
+#> 20:          encodepltree         1          1
+#> 21:          featureunion        NA          1
+#> 22:                filter         1          1
+#> 23:            fixfactors         1          1
+#> 24:               histbin         1          1
+#> 25:                   ica         1          1
+#> 26:        imputeconstant         1          1
+#> 27:            imputehist         1          1
+#> 28:         imputelearner         1          1
+#> 29:            imputemean         1          1
+#> 30:          imputemedian         1          1
+#> 31:            imputemode         1          1
+#> 32:             imputeoor         1          1
+#> 33:          imputesample         1          1
+#> 34:                  info         1          1
+#> 35:                isomap         1          1
+#> 36:             kernelpca         1          1
+#> 37:               learner         1          1
+#> 38:            learner_cv         1          1
+#> 39:     learner_pi_cvplus         1          1
+#> 40:     learner_quantiles         1          1
+#> 41:           materialize         1          1
+#> 42:               missind         1          1
+#> 43:           modelmatrix         1          1
+#> 44:     multiplicityexply         1         NA
+#> 45:     multiplicityimply        NA          1
+#> 46:                mutate         1          1
+#> 47:              nearmiss         1          1
+#> 48:                   nmf         1          1
+#> 49:                   nop         1          1
+#> 50:              ovrsplit         1          1
+#> 51:              ovrunite         1          1
+#> 52:                   pca         1          1
+#> 53:                 proxy        NA          1
+#> 54:           quantilebin         1          1
+#> 55:      randomprojection         1          1
+#> 56:        randomresponse         1          1
+#> 57:               regravg        NA          1
+#> 58:       removeconstants         1          1
+#> 59:         renamecolumns         1          1
+#> 60:             replicate         1          1
+#> 61:              rowapply         1          1
+#> 62:                 scale         1          1
+#> 63:           scalemaxabs         1          1
+#> 64:            scalerange         1          1
+#> 65:                select         1          1
+#> 66:                 smote         1          1
+#> 67:               smotenc         1          1
+#> 68:           spatialsign         1          1
+#> 69:               splines         1          1
+#> 70:             subsample         1          1
+#> 71:          targetinvert         2          1
+#> 72:          targetmutate         1          2
+#> 73: targettrafoscalerange         1          2
+#> 74:        textvectorizer         1          1
+#> 75:             threshold         1          1
+#> 76:                 tomek         1          1
+#> 77:         tunethreshold         1          1
+#> 78:              unbranch        NA          1
+#> 79:                vtreat         1          1
+#> 80:            yeojohnson         1          1
+#>                       key input.num output.num
+#>                    <char>     <int>      <int>
+#>                                            packages
+#>                                              <list>
+#>  1:                       mlr3pipelines,smotefamily
+#>  2:                       mlr3pipelines,smotefamily
+#>  3:                     mlr3pipelines,bestNormalize
+#>  4:                                   mlr3pipelines
+#>  5:                                   mlr3pipelines
+#>  6:                                   mlr3pipelines
+#>  7:                             mlr3pipelines,stats
+#>  8:                                   mlr3pipelines
+#>  9:                                   mlr3pipelines
+#> 10:                                   mlr3pipelines
+#> 11:                                   mlr3pipelines
+#> 12:                                   mlr3pipelines
+#> 13:                                   mlr3pipelines
+#> 14:                                   mlr3pipelines
+#> 15:                                   mlr3pipelines
+#> 16:                             mlr3pipelines,stats
+#> 17:                                   mlr3pipelines
+#> 18:                       mlr3pipelines,lme4,nloptr
+#> 19:                             mlr3pipelines,stats
+#> 20:                        mlr3pipelines,mlr3,rpart
+#> 21:                                   mlr3pipelines
+#> 22:                                   mlr3pipelines
+#> 23:                                   mlr3pipelines
+#> 24:                          mlr3pipelines,graphics
+#> 25:                           mlr3pipelines,fastICA
+#> 26:                                   mlr3pipelines
+#> 27:                          mlr3pipelines,graphics
+#> 28:                                   mlr3pipelines
+#> 29:                                   mlr3pipelines
+#> 30:                             mlr3pipelines,stats
+#> 31:                                   mlr3pipelines
+#> 32:                                   mlr3pipelines
+#> 33:                                   mlr3pipelines
+#> 34:                                   mlr3pipelines
+#> 35: mlr3pipelines,dimRed,igraph,RSpectra,RANN,stats
+#> 36:                           mlr3pipelines,kernlab
+#> 37:                                   mlr3pipelines
+#> 38:                                   mlr3pipelines
+#> 39:                                   mlr3pipelines
+#> 40:                                   mlr3pipelines
+#> 41:                                   mlr3pipelines
+#> 42:                                   mlr3pipelines
+#> 43:                             mlr3pipelines,stats
+#> 44:                                   mlr3pipelines
+#> 45:                                   mlr3pipelines
+#> 46:                                   mlr3pipelines
+#> 47:                            mlr3pipelines,themis
+#> 48:                              mlr3pipelines,MASS
+#> 49:                                   mlr3pipelines
+#> 50:                                   mlr3pipelines
+#> 51:                                   mlr3pipelines
+#> 52:                                   mlr3pipelines
+#> 53:                                   mlr3pipelines
+#> 54:                             mlr3pipelines,stats
+#> 55:                                   mlr3pipelines
+#> 56:                                   mlr3pipelines
+#> 57:                                   mlr3pipelines
+#> 58:                                   mlr3pipelines
+#> 59:                                   mlr3pipelines
+#> 60:                                   mlr3pipelines
+#> 61:                                   mlr3pipelines
+#> 62:                                   mlr3pipelines
+#> 63:                                   mlr3pipelines
+#> 64:                                   mlr3pipelines
+#> 65:                                   mlr3pipelines
+#> 66:                       mlr3pipelines,smotefamily
+#> 67:                            mlr3pipelines,themis
+#> 68:                                   mlr3pipelines
+#> 69:                     mlr3pipelines,splines,stats
+#> 70:                                   mlr3pipelines
+#> 71:                                   mlr3pipelines
+#> 72:                                   mlr3pipelines
+#> 73:                                   mlr3pipelines
+#> 74:                mlr3pipelines,quanteda,stopwords
+#> 75:                                   mlr3pipelines
+#> 76:                            mlr3pipelines,themis
+#> 77:                             mlr3pipelines,bbotk
+#> 78:                                   mlr3pipelines
+#> 79:                            mlr3pipelines,vtreat
+#> 80:                     mlr3pipelines,bestNormalize
+#>                                            packages
+#>                                              <list>
 ```

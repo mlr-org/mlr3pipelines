@@ -255,11 +255,11 @@ graph$train(task)
 #> 
 #> ── <TaskClassif> (150x6): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> • Properties: multiclass
 #> • Features (5):
 #>   • dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
 #>   • fct (1): classif.rpart.response
+#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> 
 
 graph$pipeops$classif.rpart$learner$predict_type = "prob"
@@ -270,11 +270,11 @@ graph$train(task)
 #> 
 #> ── <TaskClassif> (150x8): Iris Flowers ─────────────────────────────────────────
 #> • Target: Species
-#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> • Properties: multiclass
 #> • Features (7):
 #>   • dbl (7): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width,
 #>   classif.rpart.prob.setosa, classif.rpart.prob.versicolor,
 #>   classif.rpart.prob.virginica
+#> • Target classes: setosa (33%), versicolor (33%), virginica (33%)
 #> 
 ```

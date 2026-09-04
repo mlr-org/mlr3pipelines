@@ -119,6 +119,7 @@ Other PipeOps:
 [`mlr_pipeops_learner`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner.md),
 [`mlr_pipeops_learner_pi_cvplus`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_pi_cvplus.md),
 [`mlr_pipeops_learner_quantiles`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_learner_quantiles.md),
+[`mlr_pipeops_materialize`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_materialize.md),
 [`mlr_pipeops_missind`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_missind.md),
 [`mlr_pipeops_modelmatrix`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_modelmatrix.md),
 [`mlr_pipeops_multiplicityexply`](https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_multiplicityexply.md),
@@ -175,12 +176,12 @@ Other Imputation PipeOps:
 ``` r
 library("mlr3")
 
-task = tsk("pima")
+task = tsk("diabetes")
 task$missings()
 #> diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
-#>        0        0        5      374       11        0        0       35 
+#>        0        0        5      405       13        0        0       35 
 #>  triceps 
-#>      227 
+#>      251 
 
 po = po("imputehist")
 new_task = po$train(list(task = task))[[1]]
@@ -193,7 +194,7 @@ new_task$missings()
 po$state$model
 #> $age
 #> $age$counts
-#>  [1] 267 150  81  76  76  37  31  23  14  11   1   0   1
+#>  [1] 266 176  80  53  71  40  30  22  14  12   2   0   2
 #> 
 #> $age$breaks
 #>  [1] 20 25 30 35 40 45 50 55 60 65 70 75 80 85
@@ -201,15 +202,15 @@ po$state$model
 #> 
 #> $glucose
 #> $glucose$counts
-#> [1]   4  38 167 205 157  91  60  41
+#>  [1]   3   2  19  75  90  82 120 101  58  47  29  47  24  34  32
 #> 
 #> $glucose$breaks
-#> [1]  40  60  80 100 120 140 160 180 200
+#>  [1]  50  60  70  80  90 100 110 120 130 140 150 160 170 180 190 200
 #> 
 #> 
 #> $insulin
 #> $insulin$counts
-#> [1] 151 158  48  17  11   6   1   1   1
+#> [1] 132 150  44  12  12  12   0   0   1
 #> 
 #> $insulin$breaks
 #>  [1]   0 100 200 300 400 500 600 700 800 900
@@ -217,15 +218,15 @@ po$state$model
 #> 
 #> $mass
 #> $mass$counts
-#>  [1]  14  98 180 221 148  61  27   5   2   0   1
+#> [1]  14  87 182 217 153  68  23   5   6
 #> 
 #> $mass$breaks
-#>  [1] 15 20 25 30 35 40 45 50 55 60 65 70
+#>  [1] 15 20 25 30 35 40 45 50 55 60
 #> 
 #> 
 #> $pedigree
 #> $pedigree$counts
-#>  [1] 128 282 154  99  54  22  16   4   4   1   1   2   1
+#>  [1] 139 280 139  98  62  17  17   2   7   0   1   3   3
 #> 
 #> $pedigree$breaks
 #>  [1] 0.0 0.2 0.4 0.6 0.8 1.0 1.2 1.4 1.6 1.8 2.0 2.2 2.4 2.6
@@ -233,26 +234,26 @@ po$state$model
 #> 
 #> $pregnant
 #> $pregnant$counts
-#> [1] 349 143 107  83  52  20  12   1   1
+#>  [1] 218  61 117  55  52  35  73  31  14  29  13   8  62
 #> 
 #> $pregnant$breaks
-#>  [1]  0  2  4  6  8 10 12 14 16 18
+#>  [1]  0  1  2  3  4  5  6  7  8  9 10 11 12 13
 #> 
 #> 
 #> $pressure
 #> $pressure$counts
-#>  [1]   3   2  24  94 217 228 127  25  11   1   1
+#> [1]   3   0  24  90 211 235 127  35   8
 #> 
 #> $pressure$breaks
-#>  [1]  20  30  40  50  60  70  80  90 100 110 120 130
+#>  [1]  20  30  40  50  60  70  80  90 100 110
 #> 
 #> 
 #> $triceps
 #> $triceps$counts
-#>  [1]   9 115 179 164  65   7   1   0   0   1
+#>  [1]   7  43  57  66 117  85  61  57  16   2   3   3
 #> 
 #> $triceps$breaks
-#>  [1]   0  10  20  30  40  50  60  70  80  90 100
+#>  [1]  5 10 15 20 25 30 35 40 45 50 55 60 65
 #> 
 #> 
 ```
