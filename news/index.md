@@ -2,6 +2,10 @@
 
 ## mlr3pipelines 0.12.0
 
+- Fix: Removed an R-devel deprecation warning from `PipeOpFilter` and
+  kept the
+  [`preproc()`](https://mlr3pipelines.mlr-org.com/reference/preproc.md)
+  examples compatible with the declared minimum R version.
 - Fix: `GraphLearner` had the guards of its internal validation and
   internal tuning extractors swapped, so a `Graph` supporting only one
   of the two properties reported nothing for the property it did

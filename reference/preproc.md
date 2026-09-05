@@ -160,10 +160,17 @@ pop$state$sdev
 #>  [7]   0.5281794   0.3890775   0.3348085   0.2677734   0.1938452   0.1451632
 #> [13]   0.0905743
 
-# Piping multiple preproc() calls, using dictionary sugar to set parameters
-tsk("penguins") |>
-  preproc(po("imputemode", affect_columns = selector_name("sex"))) |>
-  preproc(po("imputemean"))
+# Multiple preproc() calls can be piped, using dictionary sugar to set parameters:
+# tsk("penguins") |>
+#   preproc(po("imputemode", affect_columns = selector_name("sex"))) |>
+#   preproc(po("imputemean"))
+# This is equivalent to the following:
+task = tsk("penguins")
+impute_sex = po("imputemode", affect_columns = selector_name("sex"))
+task = preproc(task, impute_sex)
+impute_numeric = po("imputemean")
+task = preproc(task, impute_numeric)
+task
 #> 
 #> ── <TaskClassif> (344x8): Palmer Penguins ──────────────────────────────────────
 #> • Target: species
