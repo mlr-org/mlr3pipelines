@@ -1,5 +1,6 @@
 # mlr3pipelines 0.12.0
 
+* Fix: Removed an R-devel deprecation warning from `PipeOpFilter` and kept the `preproc()` examples compatible with the declared minimum R version.
 * Fix: `GraphLearner` had the guards of its internal validation and internal tuning extractors swapped, so a `Graph` supporting only one of the two properties reported nothing for the property it did support.
 * feat: `GraphLearner` and `PipeOpLearner` gained a `$best_valid_scores` field, and `GraphLearner` collects it from the wrapped `PipeOp`s via `$.extract_best_valid_scores()`, so `msr("best_valid_score")` can be used with a `GraphLearner`.
 * Added a temporary compatibility alias that registers the former `pima` task as `diabetes` for released `mlr3` versions older than 1.8.0.

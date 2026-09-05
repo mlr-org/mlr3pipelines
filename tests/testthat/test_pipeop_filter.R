@@ -45,6 +45,25 @@ test_that("PipeOpFilter", {
   expect_set_equal(tt$feature_names, c(setdiff(task$feature_names, po$param_set$values$affect_columns(task)), "chas", "b", "age"))
 })
 
+test_that("PipeOpFilter resets the wrapped filter scores without a warning", {
+  skip_if_not_installed("mlr3filters")
+
+  task = tsk("iris")
+  po = PipeOpFilter$new(
+    mlr3filters::FilterVariance$new(),
+    param_vals = list(filter.nfeat = 1)
+  )
+
+  po$filter$calculate(task)
+  expect_length(po$filter$scores, length(task$feature_names))
+
+  expect_no_warning(po$train(list(task)))
+  expect_identical(
+    po$filter$scores,
+    structure(numeric(0), names = character(0))
+  )
+})
+
 
 test_that("PipeOpFilter parameters", {
   skip_if_not_installed("mlr3filters")
