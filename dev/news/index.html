@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.11.0-9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.12.0-9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,8 +52,12 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.11.0-9000" id="mlr3pipelines-0110-9000">mlr3pipelines 0.11.0-9000<a class="anchor" aria-label="anchor" href="#mlr3pipelines-0110-9000"></a></h2>
-<ul><li>Fix: <code>GraphLearner</code> had the guards of its internal validation and internal tuning extractors swapped, so a <code>Graph</code> supporting only one of the two properties reported nothing for the property it did support.</li>
+<h2 class="pkg-version" data-toc-text="0.12.0-9000" id="mlr3pipelines-0120-9000">mlr3pipelines 0.12.0-9000<a class="anchor" aria-label="anchor" href="#mlr3pipelines-0120-9000"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.12.0" id="mlr3pipelines-0120">mlr3pipelines 0.12.0<a class="anchor" aria-label="anchor" href="#mlr3pipelines-0120"></a></h2>
+<ul><li>Fix: Removed an R-devel deprecation warning from <code>PipeOpFilter</code> and kept the <code><a href="../reference/preproc.html">preproc()</a></code> examples compatible with the declared minimum R version.</li>
+<li>Fix: <code>GraphLearner</code> had the guards of its internal validation and internal tuning extractors swapped, so a <code>Graph</code> supporting only one of the two properties reported nothing for the property it did support.</li>
 <li>feat: <code>GraphLearner</code> and <code>PipeOpLearner</code> gained a <code>$best_valid_scores</code> field, and <code>GraphLearner</code> collects it from the wrapped <code>PipeOp</code>s via <code>$.extract_best_valid_scores()</code>, so <code>msr("best_valid_score")</code> can be used with a <code>GraphLearner</code>.</li>
 <li>Added a temporary compatibility alias that registers the former <code>pima</code> task as <code>diabetes</code> for released <code>mlr3</code> versions older than 1.8.0. Retrieving the alias warns users to update to <code>mlr3</code> 1.8.0 or newer. This alias will be removed in a later update of <code>mlr3pipelines</code>.</li>
 <li>Fix: Re-running registration (e.g. when <code>mlr3</code> is reloaded) no longer removes <code>PipeOp</code> properties added to <code>mlr_reflections$pipeops$properties</code> by extension packages.</li>
