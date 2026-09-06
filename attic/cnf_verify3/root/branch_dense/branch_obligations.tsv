@@ -1,0 +1,109 @@
+"id"	"owner"	"condition"	"false"	"true"
+1	"return_entries"	"!length(entries)"	20016	1
+2	"simplify_cnf"	"is.logical(entries)"	20015	2
+3	"register_unit"	"is.null(ur)"	62099	48046
+4	"register_unit"	"!length(unit_isct)"	56147	5952
+5	"register_unit"	"!is.null(is_not_subset_of) && length(unit_domains[[nu]]) == length(unit[[1L]])"	37285	66908
+6	"register_unit"	"use_inso"	14653	52255
+7	"register_unit"	"eliminated[[s_clause_idx]]"	508716	142487
+8	"register_unit"	"use_inso"	109741	398975
+9	"register_unit"	"s_clause_idx_meta <= meta_idx_outer && inso_column[[s_clause_idx_meta]] && !is_not_subset_of[[s_clause_idx_meta]][unit_idx_meta, nu]"	338586	60389
+10	"register_unit"	"identical(adr, TRUE)"	433296	15031
+11	"apply_domain_restriction"	"is.na(symbol_idx)"	752327	458121
+12	"apply_domain_restriction"	"length(clause[[symbol_idx]]) == length(restringent)"	622587	129740
+13	"apply_domain_restriction"	"length(clause[[symbol_idx]]) == clause_symbol_length_before"	431319	191268
+14	"apply_domain_restriction"	"!length(clause[[symbol_idx]])"	213946	217373
+15	"apply_domain_restriction"	"is.null(is_not_subset_of)"	213572	374
+16	"apply_domain_restriction"	"meta_idx > meta_idx_outer"	113110	100462
+17	"apply_domain_restriction"	"!is_unit_propagation"	27774	85336
+18	"apply_domain_restriction"	"!is_not_subset_of[[other_meta_idx]][meta_idx, symbol] && !all(entries[[available[[other_meta_idx]]]][[symbol]] %in% entries[[clause_idx]][[symbol]])"	348375	43871
+19	"apply_domain_restriction"	"eliminated[[clause_idx_other]] || is_unit[[clause_idx_other]]"	454368	1778
+20	"apply_domain_restriction"	"!all(entries[[clause_idx]][[symbol]] %in% other_clause_range)"	177021	277347
+21	"apply_domain_restriction"	"!is_not_subset_of[[meta_idx]][other_meta_idx, is_not_subset_of_col]"	176909	112
+22	"apply_domain_restriction"	"rowsum > 1L + second_order_enabled"	125999	50910
+23	"apply_domain_restriction"	"identical(ousr, TRUE)"	125795	204
+24	"apply_domain_restriction"	"eliminated[[clause_idx]] || is_unit[[clause_idx]]"	124732	1063
+25	"apply_domain_restriction"	"second_order_enabled"	75930	35913
+26	"eliminate_symbol_from_clause"	"!length(clause)"	217373	0
+27	"eliminate_symbol_from_clause"	"length(clause) == 1"	135418	81955
+28	"eliminate_symbol_from_clause"	"register_unit(clause_idx)"	63417	18538
+29	"eliminate_symbol_from_clause"	"is.null(is_not_subset_of)"	135418	0
+30	"eliminate_symbol_from_clause"	"meta_idx > meta_idx_outer"	78666	56752
+31	"eliminate_symbol_from_clause"	"!is_not_subset_of[[meta_idx_other]][meta_idx, symbol]"	255707	31889
+32	"eliminate_symbol_from_clause"	"eliminated[[clause_idx_other]] || is_unit[[clause_idx_other]]"	474280	4610
+33	"eliminate_symbol_from_clause"	"not_subset_count[meta_idx, meta_idx_other] > 1L + second_order_enabled"	236140	238140
+34	"eliminate_symbol_from_clause"	"identical(ousr, TRUE)"	235820	320
+35	"eliminate_symbol_from_clause"	"eliminated[[clause_idx]] || is_unit[[clause_idx]]"	233859	1961
+36	"on_updated_subset_relations"	"rowsum > 1L + second_order_enabled"	1492982	7642
+37	"on_updated_subset_relations"	"rowsum == 2L"	769871	723111
+38	"on_updated_subset_relations"	"identical(hs2oo, TRUE)"	722766	345
+39	"on_updated_subset_relations"	"eliminated[[clause_other]] || is_unit[[clause_other]]"	716316	6450
+40	"on_updated_subset_relations"	"rowsum == 0"	710100	59771
+41	"on_updated_subset_relations"	"!second_order_only"	23604	686496
+42	"on_updated_subset_relations"	"is.null(adr)"	666101	20395
+43	"on_updated_subset_relations"	"adr"	662589	3512
+44	"on_updated_subset_relations"	"!second_order_enabled"	84652	577937
+45	"on_updated_subset_relations"	"!second_order_enabled_matrix[meta_idx, meta_idx_other]"	59974	48282
+46	"on_updated_subset_relations"	"eliminated[[clause_idx]] || is_unit[[clause_idx]]"	59898	76
+47	"on_updated_subset_relations"	"identical(hs2oo, TRUE)"	59868	30
+48	"on_updated_subset_relations"	"eliminated[[clause_other]] || is_unit[[clause_other]]"	59102	766
+49	"on_update_range"	"!second_order_enabled_matrix[meta_idx, meta_idx_target]"	29692	3690
+50	"on_update_range"	"is.null(hs2oo)"	28858	834
+51	"on_update_range"	"hs2oo"	28751	107
+52	"on_update_range"	"!second_order_enabled_matrix[meta_idx, meta_idx_target]"	83412	138075
+53	"on_update_range"	"is.null(hs2oo)"	83294	118
+54	"on_update_range"	"hs2oo"	83278	16
+55	"handle_sse_2nd_order_oneend"	"eliminated[[clause_idx_target]] || is_unit[[clause_idx_target]]"	89210	380
+56	"handle_sse_2nd_order_oneend"	"not_subset_count[meta_idx, meta_idx_target] != 1L || !is_not_subset_of[[meta_idx]][meta_idx_target, inso_symbol_col]"	337341	13
+57	"handle_sse_2nd_order_oneend"	"eliminated[[clause_idx_twoend]] || is_unit[[clause_idx_twoend]] || not_subset_count[meta_idx_twoend, meta_idx_target] != 2L"	336235	1106
+58	"handle_sse_2nd_order_oneend"	"length(symbol_target) != 1L"	328564	7671
+59	"handle_sse_2nd_order_oneend"	"!symbol_target %in% names(entries[[clause_idx_target]])"	128732	199832
+60	"handle_sse_2nd_order_oneend"	"identical(ts2o, TRUE)"	128595	137
+61	"handle_sse_2nd_order_oneend"	"eliminated[[clause_idx]] || is_unit[[clause_idx]]"	127174	1421
+62	"handle_sse_2nd_order_oneend"	"is.null(ts2o)"	126360	814
+63	"handle_sse_2nd_order_twoend"	"eliminated[[clause_idx_target]] || is_unit[[clause_idx_target]] || not_subset_count[meta_idx, meta_idx_target] != 2"	806158	365
+64	"handle_sse_2nd_order_twoend"	"!is.null(symbol) && !symbol %in% symbols_twoend"	806013	145
+65	"handle_sse_2nd_order_twoend"	"!symbol_other %in% names(entries[[clause_idx_target]])"	613501	994724
+66	"handle_sse_2nd_order_twoend"	"not_subset_count[meta_idx, meta_idx_target] != 2 || !all(is_not_subset_of[[meta_idx]][meta_idx_target, inso_symbols_cols])"	3115773	256
+67	"handle_sse_2nd_order_twoend"	"eliminated[[clause_idx_oneend]] || is_unit[[clause_idx_oneend]]"	3114965	808
+68	"handle_sse_2nd_order_twoend"	"not_subset_count[meta_idx_oneend, meta_idx_target] != sum(is_not_subset_of[[meta_idx_oneend]][meta_idx_target, symbols_twoend_idx])"	1278638	1836327
+69	"handle_sse_2nd_order_twoend"	"!symbol_other %in% names(entries[[clause_idx_target]])"	1268939	9699
+70	"handle_sse_2nd_order_twoend"	"identical(ts2o, TRUE)"	1268578	361
+71	"handle_sse_2nd_order_twoend"	"eliminated[[clause_idx]] || is_unit[[clause_idx]]"	1266124	2454
+72	"handle_sse_2nd_order_twoend"	"is.null(ts2o)"	1261332	4792
+73	"try_sse_2nd_order"	"!all(is_not_subset_of[[meta_idx_target]][c(meta_idx_oneend, meta_idx_twoends), symbol_target])"	828195	569476
+74	"try_sse_2nd_order"	"any(clause_oneend_symbol_intersect %in% clause_twoends[[symbol_intersect]] & !clause_oneend_symbol_intersect %in% entries[[idx_target]][[symbol_intersect]])"	57867	770328
+75	"eliminate_clause_update_sr"	"is_unit[[clause_idx]]"	203474	0
+76	"simplify_cnf"	"register_unit(unit_idx)"	25745	2445
+77	"simplify_cnf"	"length(unit_queue) == length(entries)"	17569	1
+78	"simplify_cnf"	"is.null(adr)"	680	17078
+79	"simplify_cnf"	"adr"	536	144
+80	"simplify_cnf"	"eliminated[[clause_idx]] || is_unit[[clause_idx]]"	382444	17078
+81	"simplify_cnf"	"is.null(sr_entry)"	1028507	71771
+82	"simplify_cnf"	"eliminated[[clause_idx]] || is_unit[[clause_idx]]"	238110	75057
+83	"simplify_cnf"	"eliminated[[clause_idx_inner]] || is_unit[[clause_idx_inner]]"	1428385	504421
+84	"simplify_cnf"	"inner_subset_of_outer"	1338610	579032
+85	"simplify_cnf"	"outer_subset_of_inner"	1346671	570971
+86	"simplify_cnf"	"rowsum <= 1"	1049036	379349
+87	"simplify_cnf"	"is.null(ousr)"	333095	46254
+88	"simplify_cnf"	"ousr"	330609	2486
+89	"simplify_cnf"	"eliminated[[clause_idx_inner]] || is_unit[[clause_idx_inner]]"	324649	5960
+90	"simplify_cnf"	"rowsum <= 1"	1209039	164646
+91	"simplify_cnf"	"identical(ousr, TRUE)"	163940	706
+92	"simplify_cnf"	"eliminated[[clause_idx]] || is_unit[[clause_idx]]"	163139	801
+93	"simplify_cnf"	"is.null(ousr)"	152775	10364
+94	"simplify_cnf"	"eliminated[[available[[meta_idx]]]] || is_unit[[available[[meta_idx]]]] || eliminated[[available[[meta_idx_other]]]] || is_unit[[available[[meta_idx_other]]]]"	594490	308861
+95	"simplify_cnf"	"identical(on_updated_subset_relations(meta_idx, meta_idx_other, TRUE), TRUE)"	594319	171
+96	"simplify_cnf"	"length(unit_domains)"	3152	10910
+97	"simplify_cnf"	"is.na(hla_clause_idx)"	262998	73171
+98	"simplify_cnf"	"length(range_new) == length(universe[[symbol]])"	262998	0
+99	"simplify_cnf"	"is_not_subset_of[[updating_clause_meta_idx]][meta_idx, symbol] && all(entries[[available[[updating_clause_meta_idx]]]][[symbol]] %in% range_new)"	1432880	256099
+100	"simplify_cnf"	"not_subset_count_current[[roe_idx]] == 0L"	242136	13963
+101	"simplify_cnf"	"eliminated[[clause_idx]]"	249035	13963
+102	"simplify_cnf"	"is.na(hla_clause_idx)"	31927	26588
+103	"simplify_cnf"	"is.null(is_not_subset_of_unit[[hla_clause_idx]])"	17233	14694
+104	"simplify_cnf"	"length(range_new) == length(universe[[symbol]])"	31927	0
+105	"simplify_cnf"	"is.null(is_not_subset_of_unit[[updating_hla_clause_idx]])"	82951	42113
+106	"simplify_cnf"	"is_not_subset_of_unit[[updating_hla_clause_idx]][[symbol]] && all(entries[[updating_clause_idx]][[symbol]] %in% range_new)"	95527	29537
+107	"simplify_cnf"	"not_subset_count[[updating_hla_clause_idx]] == 0"	24800	4737
+108	"simplify_cnf"	"eliminated[[clause_idx]]"	27190	4737

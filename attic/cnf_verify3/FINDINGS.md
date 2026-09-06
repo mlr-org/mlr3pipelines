@@ -72,8 +72,8 @@ implementation has been selected.
 
 ## 3. No fixed number of repeated passes repairs scheduling in general
 
-**Status: explicit family, source-level induction, independent review in
-progress.** For every positive integer `n`, the family in
+**Status: explicit family, source-level induction, completed independent
+review.** For every positive integer `n`, the family in
 [the repeated-pass proof](repeated_passes/PROOF.md) needs `n` productive
 passes. Each pass removes one value occurrence. The same family with its
 target clauses in forward order needs one pass. All its clauses are
@@ -84,6 +84,11 @@ The experiment confirms `n=1,2,3,4,5,8,12,16,24,32`. A reduced seven-clause
 example has only 64 valuations and needs three useful passes, followed by one
 pass that only changes storage order. Thus a blanket “run it twice” change
 would leave unbounded cases unfinished.
+
+The [independent review](quotient_review/REPEATED_PASS_REVIEW.md) checks the
+unique-useful-rule classification, source queue order and callback omissions.
+Its separate installed-package reconstruction confirms 27 frontier states,
+251 clause witnesses, 876 protected-value witnesses and 51,168 truth rows.
 
 Actual stored values only disappear. Their initial total count gives a
 finite upper bound on productive passes; a final sort-only pass may be needed
@@ -135,15 +140,35 @@ They are not credited as discoveries of this campaign.
 | Normally returning kernel on canonical finite character sets | Independently reviewed [source-level preservation proof](independent_solver/SEMANTIC_PRESERVATION_MAP.md). Contextual FALSE bits, chronological unit-birth certificates, quiescent exactness and lazy HLA rows supply the mutable-state premises. This is not a mechanization of R. |
 | At most two clauses, arbitrary symbols and finite domain sizes | Semantic preservation, first-order saturation, and idempotence modulo order proved in [TWO_CLAUSE_PROOF.md](independent_solver/TWO_CLAUSE_PROOF.md). |
 | At most three clauses and two occurring symbols, arbitrary finite domain sizes | Complete 520,200-execution membership quotient, independently reviewed lifting argument, and two distinct exact oracles on every result. No semantic failures; 32 known unit-equality leftovers. |
+| Three clauses of the `(3,3,2)` occurrence shape, arbitrary finite domain sizes | Complete 9,386,748-execution quotient and 547,476,480 valuation checks, with independently reviewed ordering, lifting and assignment grids. No semantic differences. Every proper input in this shape is satisfiable. |
 | Hidden domain-refutation opportunities among final survivors | [Independent HLA review](review_hla/REVIEW.md): every residual refutable clause is directly subsumed by a different surviving unit, and conversely. This excludes other residual HLA/domain-propagation cases, not arbitrary logical redundancy. |
 | Static second-order candidate pruning | Complete relative to saturated earlier rules; the demonstrated omissions are dynamic scheduling conditions. |
 | Duplicate domain labels | Submultiset argument excludes false-positive HTE coverage; exact live-donor bookkeeping makes the HTE full-domain branch unreachable and closes the remaining control-flow concern. |
 | Source versus package/bytecode execution | Exact agreement for the saved fixtures across 24 measured modes; not a universal compiler theorem. |
+| Formula AND/OR/negation on canonical operands | [Operator proof](operator_proof/README.md) establishes semantic and proper-representation closure on normal return, subject to the kernel theorem. Public constructor failure paths and Clause result-class loss remain explicit exceptions. |
+| Negation of a contradictory canonical formula | Complete distribution and individual-clause tautology removal force `!F` to be literal TRUE on normal return, even with an identity simplifier. This does not make the ordinary simplifier a complete SAT procedure. |
 
-The root's additional 9,386,748-case three-symbol shape quotient is still
-running when this ledger is created. Its scope and independent calibration
-are in [THREE_SYMBOL_QUOTIENT.md](root/THREE_SYMBOL_QUOTIENT.md); live counts
-must not be described as completed coverage.
+The three-symbol shape quotient completed at 13:29:03 UTC. Its exact scope,
+counts and independent calibration are in
+[THREE_SYMBOL_QUOTIENT.md](root/THREE_SYMBOL_QUOTIENT.md).
+
+Further structural source proofs are now undergoing independent review:
+incidence-forest saturation, incidence-pseudoforest and Boolean renamable-Horn
+contradiction recognition, and local saturation for binary clauses selecting
+equal-or-disjoint range blocks. An exact Boolean 2-CNF graph criterion predicts
+the final units from implication paths of at most three edges followed by
+unbounded unit propagation. The current source checks agree in 8,238 cases;
+the proof's independent review remains a separate obligation. See
+[structural classes](structural_classes/PROOF.md) and
+[Boolean graph criterion](structural_classes/BOOLEAN_2CNF_GRAPH.md).
+
+The conditional-site study has observed 212 of 216 outcomes across all 108
+kernel `if` sites, with exact output comparison against the original function
+in 30,034 cases. Four unobserved outcomes have proposed source exclusions:
+emptying a singleton through the nonunit deletion helper, deleting a unit
+through the ordinary deletion helper, and the two immediate HLA full-domain
+branches. These are being independently reviewed; see
+[branch obligations](root/BRANCH_OBLIGATIONS.md).
 
 The theorem does not cover malformed accepted selectors, arbitrary custom
 classes, changed universe bindings, non-total character operations, arithmetic

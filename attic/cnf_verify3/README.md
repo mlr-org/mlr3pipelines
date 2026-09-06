@@ -197,3 +197,45 @@ Four focused semantic regression tests were added earlier and passed with
 the actual current-R package dependencies: `devtools::test(filter="Cnf")`
 reported **3,815 passes, zero failures, warnings or skips**. The tests preserve
 known semantic expectations without requiring unfixed scheduling behavior.
+
+### 2026-09-06 14:06 UTC, completed quotient and another independent round
+
+The full three-symbol quotient finished at **13:29:03 UTC** with every one of
+193 outer profiles completed: **9,386,748 executions, 547,476,480 valuation
+checks, zero semantic differences or runtime errors**. Independent grid,
+renaming, refinement and schedule checks are in `quotient_review/`. The
+repeated-pass family's independent source and installed-package review also
+passed, including the distinction between a useful pass and a sort-only pass.
+
+New source proofs identify positive structural classes. Incidence forests
+become fully irreducible after initial unit propagation, with explicit models
+showing every surviving clause and literal value is necessary. A matching
+argument extends contradiction recognition to incidence pseudoforests.
+Equal-or-disjoint range blocks in clauses with at most two symbols exclude
+every proper nonempty range change; their surviving nonunits are immutable,
+which gives first-pass local saturation. Boolean renamable Horn formulas
+have complete contradiction recognition. The separate Boolean graph theorem
+characterizes exactly which unit seeds the first- and second-order rules can
+derive. These new theorems have distinct independent reviewers now.
+
+The operator study proves normal-return semantic/proper-representation closure
+for Formula AND, OR and negation, while explicitly preserving known constructor
+and Clause-class exceptions. It checks the local binding behavior in the OR
+distribution callback and a deliberately changed binding control. Negation
+detects contradictions even with an identity simplifier: complete distribution
+and tautology removal are sufficient. The old documented “unrecognized”
+three-clause contradiction is actually recognized now. A new eight-clause
+Boolean control remains unchanged by simplification, while its negation is
+TRUE and double negation FALSE.
+
+Root completed a new conditional-outcome catalog: **108 `if` sites, 62,634,404
+evaluations, 212 of 216 outcomes observed**, with identical original/observed
+outputs for all 30,034 inputs. All four remaining outcomes have source-level
+unreachability arguments; another reviewer is checking those arguments and
+the catalog independently. This measures individual condition outcomes,
+not all paths or short-circuit combinations.
+
+Another automated interruption affected the root while agents and experiments
+continued. All records were recovered and the next round launched at 13:57 UTC.
+The original ten-hour minimum and the obligation to resolve material open
+avenues remain in force; this is an integration checkpoint, not a conclusion.
