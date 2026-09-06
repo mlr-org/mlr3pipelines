@@ -1,0 +1,9 @@
+{
+  "stats": {
+    "formulas": 10000,
+    "output_clauses": 62322,
+    "known_unit_subsumption": 3
+  },
+  "findings": [],
+  "elapsed": 118.4081552028656
+}

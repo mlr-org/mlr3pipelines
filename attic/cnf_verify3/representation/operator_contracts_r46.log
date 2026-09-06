@@ -1,0 +1,6 @@
+R: R version 4.6.1 (2026-06-24)
+Ordered binary contracts: 578; class failures: 3; semantic failures: 0; errors: 0; warnings: 0
+list(list(label = "logical_true | CnfClause_FALSE_null", actual = "logical",
+    expected = "CnfClause"), list(label = "logical_true | CnfClause_FALSE_universe",
+    actual = "logical", expected = "CnfClause"), list(label = "logical_true | clause",
+    actual = "logical", expected = "CnfClause"))
