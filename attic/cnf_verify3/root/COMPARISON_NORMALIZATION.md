@@ -136,3 +136,19 @@ decision about normalizing that structural comparison as well. Existing tests
 explicitly distinguish reversed domain-vector order, so treating domains as
 unordered would be a separate policy change. Named logical constants likewise
 remain a documented metadata boundary, not an additional confirmed defect.
+
+## 5. Default TRUE results cannot hide different proper content
+
+The completed [independent one-sided proof](../comparison_soundness/PROOF.md)
+checks the actual base character/list methods on both runtimes. For proper
+ordinary objects in a consistent common universe, a default TRUE result
+implies equal symbol-to-value-set maps, and equal clause multisets for
+formulas. Every normalization step preserves those contents by permutation;
+the final comparison checks all actual names and character leaves. No
+collision-free hash or tie-free collation premise is needed. This closes the
+opposite comparison-error direction without extrapolating the finite bank.
+
+The guarantee excludes caller options that deliberately suppress names or
+attributes, ambiguous native symbol aliases, and custom leaf/sort methods.
+It is not a test for arbitrary Boolean equivalence or byte-for-byte storage
+identity. The independent controls explicitly exercise these distinctions.

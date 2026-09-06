@@ -151,6 +151,16 @@ extra notifications and strict unit-length guard, all listed local rules are
 saturated on normal return under the canonical-input prerequisites. This is
 a correctness result for those exact source copies, not a performance claim.
 
+The later [four-clause width family](wide_four_boundary/PROOF.md), with
+[independent source review](wide_four_review/REVIEW.md), shows that the SSE1
+gap persists at **every initial width at least three**. All four clauses
+have the same support; adding the same fresh proper literal block preserves
+the exact first and second outputs. The proof couples one padding literal
+with any positive number, checking uninitialized comparison columns and HLA
+explicitly. It does not equate the different zero-padding unit execution.
+Together with the three-clause theorem below, four clauses are the sharp
+threshold for a local-saturation failure in this initial-width class.
+
 ## 3. No fixed number of repeated passes repairs scheduling in general
 
 **Status: explicit family, source-level induction, completed independent
@@ -256,6 +266,17 @@ and array cases. A private flatten/unique/UTF-8/radix value normalizer passes
 these cases while retaining the original guards and rejecting unequal sets
 and symbols. The earlier encoding-only candidate still fails this boundary.
 
+The separate [one-sided comparison proof](comparison_soundness/PROOF.md)
+excludes the opposite failure under default arguments: for proper ordinary
+objects in a consistent common universe, a TRUE result implies equal
+symbol-to-value-set content, including clause multiplicities for formulas,
+and therefore equal truth. Sorting and digest keys only permute payloads;
+the final base comparison still checks every actual name and character leaf.
+Even a hypothetical digest collision could only cause a false negative in
+this scope. Caller options that deliberately suppress name/attribute checks
+do not have this guarantee. This is structural comparison, not a decision
+procedure for arbitrary logical equivalence.
+
 A concrete [private selector correction](root/SELECTOR_CANDIDATE.md) flattens
 atomic selectors before deduplication and rejects missing logical selections.
 It passed 111,695 calls on each R version: every accepted result was canonical,
@@ -287,6 +308,7 @@ counterexample makes that qualification necessary even for canonical shapes.
 | Ordinary repeated, named, dimensional and inertly attributed domain storage, with canonical actual clauses | [Domain normalization proof](domain_storage_contract/PROOF.md) and [independent review](normalization_component_review/REVIEW.md) establish exact actual output vectors and source decision schedules under flat-unique normalization. Virtual ranges may contain duplicates and partial multiplicities; bounded capacity plus a physically missing donor value keeps both HTE length predicates FALSE. |
 | Public constructors and Boolean operators over ordinary named/repeated/dimensional domain and atom storage, with faithful symbol identity | [Constructor closure proof](constructor_domain_closure/PROOF.md) and [independent review](constructor_closure_review/REVIEW.md) show the specified successful grammar establishes canonical actual ranges before each kernel entry. `unique.matrix` preserves scalar first-occurrence order; clause accumulation and both R versions' complement paths flatten/deduplicate. Known constant, selector and dispatch exceptions remain explicit. |
 | Equivalent valid string encodings and collation changes with faithful native symbol identity | [Source-prefix simulation](character_identity_review/PROOF.md) preserves exact ordered payloads and all inspected source decisions. Distinct precomposed/decomposed strings stay distinct. 2,080 public formulas per R version calibrate the proof; ordinary equality preservation alone is insufficient under C CTYPE. |
+| Default comparison of proper ordinary objects in a consistent common universe | [One-sided soundness proof](comparison_soundness/PROOF.md): TRUE implies equal symbol/value content and clause multisets, hence equal truth. Collation ties and digest collisions cannot conceal unequal payloads. Equal content can still compare unequal; deliberately weakened name/attribute options are outside the result. |
 | Disjoint input symbol components under arbitrary global clause interleaving | [Component simulation](root/COMPONENT_SEPARABILITY.md) and [independent review](normalization_component_review/REVIEW.md) establish exact ordered output projections, equivalence of actual FALSE recognition, and repeated-pass coupling. Productive global pass count is the maximum of component counts when none returns FALSE. Unused symbols have no effect. Runtime and complete global event streams are not claimed equal. |
 | Initial unit-propagation prefix on canonical unary-range disjunctions | [Source correspondence](root/SEMILATTICE_COMPLETENESS.md) and [independent relational review](semilattice_review/REVIEW.md) establish the greatest generalized arc-consistent domain box, or failure. The proof preserves all common GAC sub-boxes, not merely full models. Later cached-unit scheduling gaps are outside this prefix. |
 | Each literal range meet closed, with at most one non-downset range per clause in chosen finite semilattices | The same [reviewed theorem](semilattice_review/REVIEW.md) proves initial propagation decides satisfiability and permits external extraction of the least model. Ordered multivalued Horn is a special case; nonchain examples strictly extend it. Whole-formula meet closure alone does not suffice. |
@@ -397,5 +419,8 @@ Further independent rounds establish the following scoped results:
 
 The theorem does not cover malformed accepted selectors, arbitrary custom
 classes, changed universe bindings, non-total character operations, arithmetic
-overflow, or failed execution. The user explicitly requested continued rounds;
-the campaign remains active beyond this integration point.
+overflow, or failed execution. The public counterexamples identify why those
+contracts matter. The chronological journal retains rejected hypotheses,
+observer corrections, failed broader formulations, and the sequence of
+independent reviews; the [review guide](REVIEW_GUIDE.md) gives small entry
+points into the completed evidence.

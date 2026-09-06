@@ -12,6 +12,11 @@ streams alongside root work. Production source remains unchanged during the
 investigation so every finding has a stable baseline. Root integrates and
 commits research artifacts at coherent milestones.
 
+For the final finding ledger, proof scopes, and small reproductions, start
+with [FINDINGS.md](FINDINGS.md) and [REVIEW_GUIDE.md](REVIEW_GUIDE.md). The dated
+entries below preserve the actual sequence of hypotheses and revisions;
+their then-pending tasks are resolved in later entries.
+
 ## Evidence standards
 
 - A semantic defect needs an accepted input, independently evaluated expected
@@ -547,3 +552,32 @@ reviewer is checking the initialization and HLA details. A separate short
 source review is checking whether default comparison can ever return TRUE for
 different proper structural content under the stated common-universe contract.
 The mandatory minimum remains 18:16:41 UTC.
+
+### 2026-09-06 18:15 UTC, final independent proof reviews integrated
+
+The four-clause width-family review completed. It independently reconstructs
+every productive one-padding step, the sole manual SSE2 queue entry, and
+the HLA deletion. A first-divergence induction handles the retained core
+literal needed to exclude unit branches for every positive padding count.
+It explicitly keeps uninitialized default TRUE padding columns separate
+from completed pair rows. Five fresh configurations and 65,840 complete
+assignment rows pass per runtime; projected traces and every non-runtime
+result field compare exactly across R 3.6.3 and 4.6.1. The reviewed existence
+family makes the three-versus-four clause saturation boundary sharp at every
+initial width at least three.
+
+The separate default-comparison review also completed. TRUE implies equal
+proper structural content in a consistent common universe because sorting
+only permutes payloads and the final base methods check actual names and
+character leaves. This excludes comparison false positives even under a
+hypothetical digest collision. The 22 default controls, six caller-option
+controls, and four base controls pass on each runtime, with identical
+non-runtime result records. Suppressing names/attributes deliberately
+weakens the contract; equal Boolean functions need not have equal clause
+multisets. Neither distinction is mislabeled as a new defect.
+
+Root read and integrated both source arguments. `REVIEW_GUIDE.md` now maps
+each major result to small reproductions and its author/reviewer evidence.
+The six production source hashes remain identical to the baseline. The last
+focused package run remains 1,542 passing expectations; later additions are
+standalone research and review artifacts, not further production/test edits.
