@@ -1,0 +1,22 @@
+{"clauses": 2, "variables": 2, "counts": {"multigraphs": 1, "gauge_fixed_signings": 1, "signings_without_pure_literals": 1, "short_seed_free_signings": 1}, "witnesses": []}
+{"clauses": 3, "variables": 2, "counts": {}, "witnesses": []}
+{"clauses": 3, "variables": 3, "counts": {"multigraphs": 1, "gauge_fixed_signings": 8, "signings_without_pure_literals": 1, "short_seed_free_signings": 1}, "witnesses": []}
+{"clauses": 4, "variables": 2, "counts": {}, "witnesses": []}
+{"clauses": 4, "variables": 3, "counts": {"multigraphs": 2, "gauge_fixed_signings": 10, "signings_without_pure_literals": 6, "short_seed_free_signings": 4}, "witnesses": []}
+{"clauses": 4, "variables": 4, "counts": {"multigraphs": 3, "gauge_fixed_signings": 48, "signings_without_pure_literals": 3, "short_seed_free_signings": 3}, "witnesses": []}
+{"clauses": 5, "variables": 2, "counts": {}, "witnesses": []}
+{"clauses": 5, "variables": 3, "counts": {"multigraphs": 1, "gauge_fixed_signings": 8, "signings_without_pure_literals": 8, "short_seed_free_signings": 4}, "witnesses": []}
+{"clauses": 5, "variables": 4, "counts": {"multigraphs": 8, "gauge_fixed_signings": 152, "signings_without_pure_literals": 37, "short_seed_free_signings": 25}, "witnesses": []}
+{"clauses": 5, "variables": 5, "counts": {"multigraphs": 12, "gauge_fixed_signings": 384, "signings_without_pure_literals": 12, "short_seed_free_signings": 12}, "witnesses": []}
+{"clauses": 6, "variables": 2, "counts": {}, "witnesses": []}
+{"clauses": 6, "variables": 3, "counts": {"multigraphs": 1, "gauge_fixed_signings": 8, "signings_without_pure_literals": 8, "short_seed_free_signings": 4}, "witnesses": []}
+{"clauses": 6, "variables": 4, "counts": {"multigraphs": 17, "gauge_fixed_signings": 620, "signings_without_pure_literals": 293, "short_seed_free_signings": 160}, "witnesses": []}
+{"clauses": 6, "variables": 5, "counts": {"multigraphs": 40, "gauge_fixed_signings": 2096, "signings_without_pure_literals": 216, "short_seed_free_signings": 165}, "witnesses": []}
+{"clauses": 6, "variables": 6, "counts": {"multigraphs": 60, "gauge_fixed_signings": 3840, "signings_without_pure_literals": 60, "short_seed_free_signings": 60}, "witnesses": []}
+{"clauses": 7, "variables": 2, "counts": {}, "witnesses": []}
+{"clauses": 7, "variables": 3, "counts": {}, "witnesses": []}
+{"clauses": 7, "variables": 4, "counts": {"multigraphs": 14, "gauge_fixed_signings": 896, "signings_without_pure_literals": 608, "short_seed_free_signings": 166}, "witnesses": []}
+{"clauses": 7, "variables": 5, "counts": {"multigraphs": 111, "gauge_fixed_signings": 11256, "signings_without_pure_literals": 2569, "short_seed_free_signings": 1325}, "witnesses": []}
+{"clauses": 7, "variables": 6, "counts": {"multigraphs": 240, "gauge_fixed_signings": 30336, "signings_without_pure_literals": 1416, "short_seed_free_signings": 1152}, "witnesses": []}
+{"clauses": 7, "variables": 7, "counts": {"multigraphs": 360, "gauge_fixed_signings": 46080, "signings_without_pure_literals": 360, "short_seed_free_signings": 360}, "witnesses": []}
+{"totals": {"multigraphs": 871, "gauge_fixed_signings": 95743, "signings_without_pure_literals": 5598, "short_seed_free_signings": 3442}, "elapsed_seconds": 1.9004175513982773}

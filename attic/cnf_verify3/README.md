@@ -403,3 +403,36 @@ unreachable because the unit-HLA donor count is two. A third new stream is
 proving the smallest Boolean binary contradiction missed by the graph criterion.
 Root's finite clause-selection encoding currently establishes the four-symbol
 boundary of eight clauses; a larger-symbol bound and its lifting are ongoing.
+
+### 2026-09-06 17:01 UTC, new comparison findings and completeness boundaries
+
+Two new ordinary-string comparison failures reproduce in both R versions.
+A pair of two-clause formulas is `identical()` under UTF-8/Latin-1 string
+equivalence, but `all.equal()` reports four mismatches because serialized
+digest sorting reverses clause alignment. Separately, equal locale collation
+weights leave reversed orders of distinct Unicode values or names unnormalized.
+The first persists in locale C; the second appears in C.UTF-8 and en_US.UTF-8.
+An independent comparison review is checking both causes and the private
+UTF-8/radix candidate against unequal-set and symbol-association controls.
+
+The semilattice source correspondence passed independent relational review.
+The new review enumerates every labeled semilattice through size four and
+explicit small GAC boxes, supplies a support-tuple proof of least-model
+extraction, and makes the source unit-birth certificates preserve every GAC
+sub-box. This strengthens the earlier root explanation of greatestness.
+
+The exact minimum unrecognized Boolean unit/binary contradiction is now
+eight proper binary clauses and four used variables. A separate graph/sign
+enumeration closes every <=7-clause core; root independently reviews its
+symmetries and gives a second finite selection route, explicitly retaining
+the unhelpful larger-encoding timeouts. The four-variable parity witness is
+checked in 1,030 unchanged-source/public calls on each R version.
+
+The Boolean repeated-occurrence totality author also completed. Its lazy unit
+rows need not satisfy the canonical count equality, but no starting unit-HLA
+donor can exist. A physical-occurrence potential bounds finite helper depth.
+Its two-/three-clause examples show why the canonical clause-only helper cost
+bounds cannot transfer. A fresh reviewer is auditing proof dependencies and
+finite-prefix obligations, while another new stream checks public constructor
+closure with dimensional atom/domain storage and both R versions' set operations.
+The ten-hour minimum remains 18:16:41 UTC; active rounds continue.

@@ -169,6 +169,8 @@ machine-stack sizes or bounds on arbitrary caller computation.
 | `TRUE | proper_CnfClause` returns bare logical TRUE | `|.CnfClause` returns its raw left operand on one short circuit. Truth is correct; subsequent typed constructor composition fails. Reproduced across all 24 runtime configurations. |
 | Missing clause selectors are accepted | Missing `any.missing=FALSE` allows logical NA, and all-missing numeric or character selectors through the logical validator, to create an NA symbol name and NULL range. The resulting object has no well-defined ordinary finite-domain interpretation; a clause round trip can become TRUE. |
 | Byte-marked character mixtures are not uniformly operable | Accepted strings can fail membership or printing in base R. This is a representation/runtime boundary of total character equality, separate from ordinary finite-set semantics. |
+| Equivalent UTF-8/Latin-1 representations can make identical formulas compare unequal | A two-clause public example satisfies `identical(f,g)` but fails `all.equal(f,g)` on both R versions, even in locale C. Serialized digest ordering distinguishes encoding marks, reverses clause alignment and causes false differences. |
+| Locale collation ties defeat comparison normalization | Reversing a proper range containing distinct precomposed/decomposed Unicode values produces Atom/Clause/Formula comparison false negatives in C.UTF-8 and en_US.UTF-8. The analogous distinct-symbol-name ordering also fails. Formula truth is unchanged. |
 
 See [representation findings](representation/NOTES.md) and the independent
 [R-value review](r_values/NOTES.md). Existing issues in
@@ -176,6 +178,13 @@ See [representation findings](representation/NOTES.md) and the independent
 prior findings: TRUE-clause `as.list`, documented list names, universe lookup,
 neutral-constant universe selection, and FALSE after nested-formula flattening.
 They are not credited as discoveries of this campaign.
+
+The new [comparison reproductions](root/COMPARISON_NORMALIZATION.md) distinguish
+these ordinary Unicode normalization failures from byte-marked strings or
+different logical normal forms. All 24 pairs per R version preserve their
+independently specified meanings; 13 comparison false negatives occur. A
+private UTF-8/radix normalization candidate passes these examples, while an
+independent review is checking unequal-set and symbol-association controls.
 
 A concrete [private selector correction](root/SELECTOR_CANDIDATE.md) flattens
 atomic selectors before deduplication and rejects missing logical selections.
@@ -201,6 +210,8 @@ boundary proposal; no production repair or blanket public-API claim is made.
 | Static second-order candidate pruning | Complete relative to saturated earlier rules; the demonstrated omissions are dynamic scheduling conditions. |
 | Ordinary repeated, named, dimensional and inertly attributed domain storage, with canonical actual clauses | [Domain normalization proof](domain_storage_contract/PROOF.md) and [independent review](normalization_component_review/REVIEW.md) establish exact actual output vectors and source decision schedules under flat-unique normalization. Virtual ranges may contain duplicates and partial multiplicities; bounded capacity plus a physically missing donor value keeps both HTE length predicates FALSE. |
 | Disjoint input symbol components under arbitrary global clause interleaving | [Component simulation](root/COMPONENT_SEPARABILITY.md) and [independent review](normalization_component_review/REVIEW.md) establish exact ordered output projections, equivalence of actual FALSE recognition, and repeated-pass coupling. Productive global pass count is the maximum of component counts when none returns FALSE. Unused symbols have no effect. Runtime and complete global event streams are not claimed equal. |
+| Initial unit-propagation prefix on canonical unary-range disjunctions | [Source correspondence](root/SEMILATTICE_COMPLETENESS.md) and [independent relational review](semilattice_review/REVIEW.md) establish the greatest generalized arc-consistent domain box, or failure. The proof preserves all common GAC sub-boxes, not merely full models. Later cached-unit scheduling gaps are outside this prefix. |
+| Each literal range meet closed, with at most one non-downset range per clause in chosen finite semilattices | The same [reviewed theorem](semilattice_review/REVIEW.md) proves initial propagation decides satisfiability and permits external extraction of the least model. Ordered multivalued Horn is a special case; nonchain examples strictly extend it. Whole-formula meet closure alone does not suffice. |
 | Source versus package/bytecode execution | Exact agreement for the saved fixtures across 24 measured modes; not a universal compiler theorem. |
 | Formula AND/OR/negation on canonical operands | [Operator proof](operator_proof/README.md) establishes semantic and proper-representation closure on normal return, subject to the kernel theorem. Public constructor failure paths and Clause result-class loss remain explicit exceptions. |
 | Negation of a contradictory canonical formula | Complete distribution and individual-clause tautology removal force `!F` to be literal TRUE on normal return, even with an identity simplifier. This does not make the ordinary simplifier a complete SAT procedure. |
@@ -229,6 +240,18 @@ separately. Opposed four-edge cycles give an eight-clause contradiction with
 empty `K` that remains unchanged, separating this exact characterization
 from complete SAT recognition. The review checked 3,088 independent cases
 on each R version in addition to the author's 8,238 checks.
+
+The [minimum-boundary proof](binary_minimal_boundary/README.md) now sharpens
+this example: eight proper binary clauses and four used variables are both
+necessary and attainable for an unrecognized Boolean unit/binary contradiction.
+An inconsistent four-variable parity cycle attains both minima and is
+unchanged by production. The clause lower bound reduces to a seed-free
+minimal core and completely enumerates 95,743 finite signings; all 3,442
+seed-free candidates with at most seven clauses are satisfiable. Root's
+[independent review and second formulation](root/BINARY_MINIMUM_REVIEW.md)
+checks every reduction and reaches the same bound using separate finite
+clause-selection constraints plus a degree-two-cycle argument. Recorded
+solver timeouts are not counted as exclusions.
 
 The conditional-site study has observed 212 of 216 outcomes across all 108
 kernel `if` sites, with exact output comparison against the original function

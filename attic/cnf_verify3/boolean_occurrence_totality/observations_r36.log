@@ -1,0 +1,121 @@
+Completed exhaustive list width 1 cases 207
+Completed exhaustive list width 2 cases 463
+Completed exhaustive list width 3 cases 4559
+Completed random 100 elapsed 41.666
+Completed random 200 elapsed 44.031
+Completed random 300 elapsed 46.148
+Completed random 400 elapsed 47.906
+Completed random 500 elapsed 50.144
+Completed random 600 elapsed 52.313
+Completed random 700 elapsed 54.269
+$R
+[1] "R version 3.6.3 (2020-02-29)"
+
+$counts
+$counts$scalar_conditions
+[1] 608283
+
+$counts$helper_activations
+[1] 68356
+
+$counts$cases
+[1] 5259
+
+$counts$maximum_helper_depth
+[1] 13
+
+$counts$registry_boundaries
+[1] 87380
+
+$counts$cache_births
+[1] 8878
+
+$counts$initialized_pair_rows
+[1] 435958
+
+$counts$matrix_boundaries
+[1] 58480
+
+$counts$hla_local_count_boundaries
+[1] 6118
+
+$counts$unit_hla_initializations
+[1] 3604
+
+$counts$delete_copy_with_copies_remaining
+[1] 1338
+
+$counts$duplicate_registry_boundary
+[1] 81807
+
+$counts$first_pivot
+[1] 2856
+
+$counts$twoend_pivots
+[1] 4045
+
+$counts$zero_match_position
+[1] 615
+
+$counts$unit_snapshot_visits
+[1] 1735
+
+$counts$strict_restriction_ancestor_checks
+[1] 1323
+
+$counts$orphan_boundary
+[1] 3469
+
+$counts$same_name_two_pivots
+[1] 2495
+
+$counts$orphan_unit_skip
+[1] 383
+
+$counts$unreachable_lazy_count_mismatch
+[1] 49
+
+$counts$unreachable_all_false_lazy_row
+[1] 23
+
+$counts$hla_pivot
+[1] 377
+
+$counts$repeated_first_match_position
+[1] 7700
+
+$counts$hla_decrement
+[1] 172
+
+$counts$optional_future_short_circuit
+[1] 322
+
+$counts$stale_other_symbol_unit
+[1] 1
+
+$counts$hla_self_guard
+[1] 36
+
+$counts$future_unit_registration
+[1] 161
+
+
+$controls
+$controls$`empty first-order pivot`
+[1] "BOOLEAN TOTALITY: physical pivot cardinality first_pivot in control empty first-order pivot"
+
+$controls$`deleted-column double decrement`
+[1] "BOOLEAN TOTALITY: physical row/count equality in control deleted-column double decrement"
+
+$controls$`unit-HLA forced donor`
+[1] "BOOLEAN TOTALITY: unit HLA body reached in control unit-HLA forced donor"
+
+$controls$`HLA double decrement`
+[1] "BOOLEAN TOTALITY: HLA physical local count equality in control HLA double decrement"
+
+$controls$`future optional matrix read`
+[1] "invalid argument type"
+
+
+$seconds
+[1] 54.76
