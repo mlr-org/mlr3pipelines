@@ -139,3 +139,61 @@ root reproduction/integration. Additional random counts alone would not
 resolve the remaining proof and contract questions.
 
 This is a live investigation journal. The ten-hour minimum has not elapsed.
+
+### 2026-09-06 13:06 UTC, second integration and structural follow-ups
+
+The strongest current results are collected in [FINDINGS.md](FINDINGS.md).
+This includes the newly reduced **truth-value error through an accepted
+matrix clause selector**: a contradictory four-clause input returns the
+canonical satisfiable formula `X=c AND Y=a`. Three independent replays check
+the original selected disjunction and every assignment. The normal installed
+package reproduces it; flattening the same indices to a vector returns FALSE.
+The kernel's unique-symbol assumption is broken at public subsetting.
+
+The fresh execution-mode study compares 24 configurations: source,
+explicit compiler optimization levels, development namespace, installed
+bytecode and installation without bytecode, each across JIT levels 0–3.
+All 192 saved fixture executions, 1,752 constructor/operator paths and 384
+serialization cases agree. The result qualifies the source-harness evidence
+with actual package behavior. Serialization preserves shared universe identity
+inside a jointly serialized bundle but creates a new identity relative to
+the original environment, as expected from the documented combination rule.
+
+Independent source reviews have now discharged the proposed kernel proof's
+remaining presentation obligations: chronological frozen unit births,
+phase-bounded ambient unit assumptions, and lazy unit-HLA row initialization.
+The semantic composition document incorporates these reviews. The separate
+HLA review proves that residual domain-refutation opportunities among final
+survivors are exactly the known unit-subsumption leftovers. Static SSE2
+pruning is complete relative to saturated earlier rules; dynamic notification
+is the source of the recorded omissions.
+
+The repeated-pass stream constructs a family needing exactly `n` productive
+passes for every positive integer `n`, with measurements through `n=32` and
+explicit witnesses excluding HLA shortcuts. Reversing the target order gives
+one pass. A reduced seven-clause member has 64 assignments and three useful
+passes, then a sort-only pass. An independent reviewer is checking the
+unbounded induction while the author begins a new study of incidence forests,
+binary constraints and exact structural completeness classes.
+
+The unit-queue diagnostic handles reversed unit chains with 16,384 symbols
+and constant measured helper depth. A separately constructed common-guard
+family contains no units and still overflows through recursive nonunit SSE.
+Thus queueing only unit propagation does not resolve general stack depth.
+The source copy passes 1,019 independent SAT/MDD comparisons and its contextual
+matrix/physical-containment checks. No diagnostic implementation is installed.
+Its author now reviews operator and constructor semantic closure, including
+the R mutation/copy behavior in OR distribution.
+
+Root has started a complete new `(3,3,2)`-occurrence three-symbol quotient:
+9,386,748 source executions, with at most 256 valuations per representative.
+At this checkpoint 3,890,880 executions and 203,420,160 valuations have passed.
+Its independent reviewer observed that every proper input of this shape is
+satisfiable, by a direct three-clause matching assignment. This is therefore
+additional model-preservation coverage, not new contradiction coverage.
+The full run and its independent assignment-grid calibration remain active.
+
+Four focused semantic regression tests were added earlier and passed with
+the actual current-R package dependencies: `devtools::test(filter="Cnf")`
+reported **3,815 passes, zero failures, warnings or skips**. The tests preserve
+known semantic expectations without requiring unfixed scheduling behavior.

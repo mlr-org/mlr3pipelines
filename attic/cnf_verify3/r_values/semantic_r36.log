@@ -1,0 +1,28 @@
+R: R version 3.6.3 (2020-02-29) ; checkmate: 2.3.4
+Input: (X in {b,c}) AND (X=b OR Y=c) AND (X=c OR Y=b) AND (X=a OR Y=a).
+Only first clause uses a repeated index: matrix(c(1L, 1L), nrow=1L).
+Constructor output with matrix selectors:
+list(list(X = "c"), list(Y = "a"))
+Constructor output with the same selectors flattened to vectors:
+FALSE
+Independent truth table, including every input occurrence separately:
+  X Y input matrix vector
+1 a a FALSE  FALSE  FALSE
+2 b a FALSE  FALSE  FALSE
+3 c a FALSE   TRUE  FALSE
+4 a b FALSE  FALSE  FALSE
+5 b b FALSE  FALSE  FALSE
+6 c b FALSE  FALSE  FALSE
+7 a c FALSE  FALSE  FALSE
+8 b c FALSE  FALSE  FALSE
+9 c c FALSE  FALSE  FALSE
+
+Two-clause example: a stale repeated range changes positional OR semantics.
+list(list(Y = "c", X = "a", Y = c("c", "a")))
+  X Y input all_occurrences first_by_name vector
+1 a a  TRUE            TRUE          TRUE   TRUE
+2 b a FALSE            TRUE         FALSE  FALSE
+3 a b  TRUE            TRUE          TRUE   TRUE
+4 b b FALSE           FALSE         FALSE  FALSE
+5 a c  TRUE            TRUE          TRUE   TRUE
+6 b c  TRUE            TRUE          TRUE   TRUE
