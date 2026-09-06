@@ -78,8 +78,11 @@ question: group symbols by their initial support and pairwise inclusion
 signature. A group of three or more cannot undergo a first actual range
 change, because any exceptional donor would have at least three exceptions.
 Counting whole-clause deletions and fibers in the remaining small groups
-gives the coarse bound `m + m * 2^(m^2 + m)`. A fresh reviewer is checking the
-source-level first-change and transient-count obligations. The argument is
+gives the coarse bound `m + m * 2^(m^2 + m)`. The completed
+[independent review](../pass_bound_check/REVIEW.md) verifies the source-level
+first-change and transient-count obligations. Its separate observer checked
+2,033 cases and 4,686 paired calls, deliberately reaching inaccurate raw
+comparison bits while checking the narrower sufficient invariants. The argument is
 not a claim that replacing a large symbol group by two preserves behavior.
 
 The statement excludes malformed duplicate-name clauses and inconsistent

@@ -104,6 +104,16 @@ specific path; no such change was applied.
 
 ## Constructor contract and accepted values
 
+**Correction from the independent event-level follow-up, 2026-09-06:** the
+selector discussion below originally classified numeric and character NA as
+always rejected. Real checkmate's logical alternative accepts all-missing
+vectors of those types when the post-deduplication length matches the clause
+width. In particular a one-symbol proper clause accepts both `NA_real_` and
+`NA_character_` and returns an NA name/NULL range. The later
+[source trace and checks](../selector_semantic_trace/NOTES.md) establish this
+on both R versions. Ordinary nonmissing numeric/character cases and the
+earlier recorded finite counts are unaffected.
+
 The documentation describes a symbol's domain and an atom's range as sets
 of character values. Nonconstant clauses are named lists, and the clause
 constructor promises to unify atoms with the same symbol. The unique-name

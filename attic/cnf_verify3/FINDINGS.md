@@ -55,6 +55,15 @@ Both reproduce on R 3.6.3 and 4.6.1. One selected proper clause is unchanged,
 so two clauses are minimal for these two categories in that selector class.
 The four-clause canonical failure is not claimed globally minimal.
 
+The [event-level source trace](selector_semantic_trace/NOTES.md) identifies
+the first wrong operation precisely. SSE2 first narrows only c1's first X
+copy, leaving heterogeneous ranges. A later SSE1 callback selects the cached
+trailing occurrence but reads the first range by name and deletes c2; this
+first admits `X=c,Y=a` positionally. Removing c1's first occurrence later
+exposes the stale range and also breaks the first-name projection. Neither
+failure originates in HLA. The two R versions have identical lossless traces,
+and 103 focused expectations check exact states and current live contexts.
+
 ## 2. Four independent conditions fail to schedule useful simplification
 
 **Status: reduced canonical examples, source traces, independent truth-table,
@@ -113,8 +122,11 @@ occurrences gives the sharper reviewed bound
 `sum_s m_s * 2^(m_s - 1)`, where `m_s` counts input clauses mentioning symbol
 `s`. Thus fixed clause and symbol counts exclude unbounded productive passes
 even as domain sizes increase. See the [fiber potential](root/DOMAIN_INDEPENDENT_PASS_BOUND.md).
-A new [clause-count-only proof](pass_bound_review/PROOF.md) further removes
-symbol-count dependence; it is receiving a fresh independent review. A final
+A [clause-count-only proof](pass_bound_review/PROOF.md) further removes
+symbol-count dependence; its [independent review](pass_bound_check/REVIEW.md)
+confirms the coarse bound `m + m * 2^(m^2 + m)` and a sharper preorder-count
+bound. Groups of at least three symbols with the same original support and
+directed inclusion signature are frozen against actual range changes. A final
 sort-only pass may be needed for exact storage stability. These results do
 not claim a unique or logically minimal output.
 
@@ -140,12 +152,22 @@ the guarded non-unit family still overflows. Resource thresholds depend on
 the R environment; the linear recurrence is the general result. Finite
 mathematical descent does not guarantee successful bounded-stack execution.
 
+The new [recursive-progress proof](root/RECURSION_PROGRESS_BOUND.md), with
+[independent source review](pass_bound_check/RECURSION_REVIEW.md), excludes
+unpaid cycles of the kernel's local helper closures. Each active restriction
+ancestor commits a strict live fiber decrease before another restriction can
+be entered. There are at most `W0+1` active restriction frames and
+`6*W0+11` local helper frames, including the lazy union-evaluation edge.
+The alternative signature-class potential gives clause-count-only dependence.
+These are mathematical bounds for the inspected local graph, not sufficient
+machine-stack sizes or bounds on arbitrary caller computation.
+
 ## 5. Other public-boundary failures
 
 | Behavior | Evidence and scope |
 | --- | --- |
 | `TRUE | proper_CnfClause` returns bare logical TRUE | `|.CnfClause` returns its raw left operand on one short circuit. Truth is correct; subsequent typed constructor composition fails. Reproduced across all 24 runtime configurations. |
-| Logical NA clause selectors are accepted | Missing `any.missing=FALSE` allows an NA symbol name and NULL range to enter CnfFormula. The resulting object has no well-defined ordinary finite-domain interpretation; a clause round trip can become TRUE. |
+| Missing clause selectors are accepted | Missing `any.missing=FALSE` allows logical NA, and all-missing numeric or character selectors through the logical validator, to create an NA symbol name and NULL range. The resulting object has no well-defined ordinary finite-domain interpretation; a clause round trip can become TRUE. |
 | Byte-marked character mixtures are not uniformly operable | Accepted strings can fail membership or printing in base R. This is a representation/runtime boundary of total character equality, separate from ordinary finite-set semantics. |
 
 See [representation findings](representation/NOTES.md) and the independent
@@ -154,6 +176,14 @@ See [representation findings](representation/NOTES.md) and the independent
 prior findings: TRUE-clause `as.list`, documented list names, universe lookup,
 neutral-constant universe selection, and FALSE after nested-formula flattening.
 They are not credited as discoveries of this campaign.
+
+A concrete [private selector correction](root/SELECTOR_CANDIDATE.md) flattens
+atomic selectors before deduplication and rejects missing logical selections.
+It passed 111,695 calls on each R version: every accepted result was canonical,
+preserved the independently evaluated selected disjunction, and matched the
+existing flat nonmissing selector behavior. It also resolves the saved
+four-clause semantic failure and two-clause unit-HLA error. This is a tested
+boundary proposal; no production repair or blanket public-API claim is made.
 
 ## 6. What can be excluded, and under which assumptions
 
@@ -164,6 +194,7 @@ They are not credited as discoveries of this campaign.
 | At most two clauses, arbitrary symbols and finite domain sizes | Semantic preservation, first-order saturation, and idempotence modulo order proved in [TWO_CLAUSE_PROOF.md](independent_solver/TWO_CLAUSE_PROOF.md). |
 | At most three clauses and two occurring symbols, arbitrary finite domain sizes | Complete 520,200-execution membership quotient, independently reviewed lifting argument, and two distinct exact oracles on every result. No semantic failures; 32 known unit-equality leftovers. |
 | Three clauses of the `(3,3,2)` occurrence shape, arbitrary finite domain sizes | Complete 9,386,748-execution quotient and 547,476,480 valuation checks, with independently reviewed ordering, lifting and assignment grids. No semantic differences. Every proper input in this shape is satisfiable. |
+| Three clauses each containing all three symbols in aligned order, arbitrary finite domain sizes | Complete 7,189,057-input quotient, 9,731,786 production calls and 849,165,820 valuation checks. Truth preserved; at most one productive pass, hence first-result local saturation modulo clause order. A sort-only second call is possible. Arbitrary independent symbol orders are outside this enumeration. |
 | Hidden domain-refutation opportunities among final survivors | [Independent HLA review](review_hla/REVIEW.md): every residual refutable clause is directly subsumed by a different surviving unit, and conversely. This excludes other residual HLA/domain-propagation cases, not arbitrary logical redundancy. |
 | Static second-order candidate pruning | Complete relative to saturated earlier rules; the demonstrated omissions are dynamic scheduling conditions. |
 | Duplicate domain labels | Submultiset argument excludes false-positive HTE coverage; exact live-donor bookkeeping makes the HTE full-domain branch unreachable and closes the remaining control-flow concern. |
@@ -174,6 +205,9 @@ They are not credited as discoveries of this campaign.
 The three-symbol shape quotient completed at 13:29:03 UTC. Its exact scope,
 counts and independent calibration are in
 [THREE_SYMBOL_QUOTIENT.md](root/THREE_SYMBOL_QUOTIENT.md).
+The separate full-occurrence quotient completed at 15:50:08 UTC; its reviewed
+scope and final validated counts are in
+[FULL_THREE_SYMBOL_QUOTIENT.md](root/FULL_THREE_SYMBOL_QUOTIENT.md).
 
 The [independent structural review](structural_review/REVIEW.md) establishes
 incidence-forest saturation, incidence-pseudoforest and Boolean renamable-Horn
@@ -207,6 +241,38 @@ existing reentrancy guard is necessary. Removing it in a private source copy
 decrements a count twice for the same bit and fails on an 11-clause input.
 Production preserves its two models; the new focused regression passes.
 This is evidence supporting an existing correct guard, not a production bug.
+
+Further independent rounds establish the following scoped results:
+
+* [Value-set symmetry](set_symmetry/PROOF.md), with its
+  [independent review](symmetry_review/REVIEW.md), preserves every inspected
+  source decision and clause/symbol callback schedule under value renaming,
+  independent value ordering, and arbitrary unequal positive splitting of
+  membership cells. It also couples repeated passes. The positional
+  duplicate-occurrence extension preserves structural errors and makes no
+  semantic-correctness claim. Primitive cost, memory, and concrete vector
+  cardinalities need not agree.
+* [Boolean repeated occurrences](boolean_occurrences/PROOF_ATTEMPT.md), with
+  [independent review](occurrence_review/REVIEW.md), preserve positional truth
+  when every copied initial name has the same singleton range and all clauses
+  share one unchanged ordinary Boolean universe. Trailing copies can become
+  unregistered, and old unit snapshots can skip them; the proof handles both.
+  It excludes the multivalued unit-HLA empty-mask failure in this scope, but
+  does not assert unrestricted R error freedom. During HLA the needed cache
+  containment refers to the current virtual target, not all stored targets.
+* A [nonproductive call](root/FIXED_POINT_SATURATION.md) leaves no useful
+  implemented local rule under proper canonical finite-set premises. Thus
+  finite repeated calls reach full local saturation. The
+  [independent review](fixed_graph_review/REVIEW.md) checks this separately
+  from semantic preservation; local saturation still does not imply SAT
+  completeness or a minimum-size representation.
+* [Pure Boolean implications](root/PURE_IMPLICATION_GRAPH.md) have exact
+  ordered greedy alternative-path deletion semantics. Every final clause
+  and literal is indispensable. Directed acyclic inputs yield the unique
+  cover-edge set; cyclic inputs can have many fully irredundant fixed points.
+  Complete graphs can produce `(n-1)!` Hamiltonian-cycle outputs or a larger
+  bidirected star, purely from input ordering. These differences are genuine
+  alternative normal forms rather than the recorded scheduling omissions.
 
 The theorem does not cover malformed accepted selectors, arbitrary custom
 classes, changed universe bindings, non-total character operations, arithmetic

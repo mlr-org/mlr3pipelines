@@ -276,3 +276,60 @@ including precisely what a decision-schedule claim can mean in R.
 
 These new proof and representation tasks continue alongside root integration.
 The ten-hour minimum remains 18:16:41 UTC.
+
+### 2026-09-06 15:47 UTC, source bounds and independent closure results
+
+Fresh reviews completed the clause-count-only pass bound, the local-helper
+recursion bound, value-set/control-schedule symmetry, Boolean repeated-name
+truth preservation, fixed-point local saturation, and pure-implication graph
+characterization. The master ledger links the full statements and reviewers.
+The reviews narrowed important claims: live-target progress is needed for
+the recursion charge; HLA containment concerns the current virtual target;
+and sort-only calls must be distinguished from productive simplification.
+
+The Boolean repeated-occurrence result is stronger than the earlier bounded
+search: source reasoning covers arbitrarily many homogeneous singleton
+copies in one unchanged Boolean universe. It does not extend to the ternary
+selector failure or claim all R executions are free of errors. Separately,
+the graph result proves real nonconfluence among saturated irredundant
+outputs and excludes that phenomenon as evidence of missed scheduling.
+
+Root tested a two-expression private selector correction on 111,695 calls
+per R version. Flattening before deduplication and rejecting missing logical
+selections restore the canonical subsetting invariant and resolve both saved
+semantic/runtime examples. Real checkmate also accepts all-missing numeric
+selectors through the permissive logical alternative; the record and oracle
+now account for this additional boundary case. Production remains unchanged.
+
+A new full-three-symbol membership quotient remains active: every clause
+contains all three symbols in aligned order, with 7,189,057 representatives.
+Each result is repeatedly simplified until a nonproductive call, and every
+intermediate result has an independent exact truth-mask comparison. The
+independent review already checked profile completeness, bit masks, scope,
+and the final report validator. Partial counts do not certify the full space.
+
+Three new streams are still active: exact event-level semantic divergence in
+the selector counterexample; R index/scalar/initialization obligations under
+canonical finite storage; and a source proof for three full clauses with
+arbitrary within-clause symbol order. The last uses matching and projection
+properties, not just enlargement of the exhaustive bank. The ten-hour minimum
+is still 18:16:41 UTC, and the investigation continues.
+
+### 2026-09-06 15:51 UTC, full-occurrence quotient completed
+
+The full three-clause XYZ quotient completed at 15:50:08 UTC. Independent
+completion validation passed: all 7,189,057 inputs, 9,731,786 production
+calls, 849,165,820 all-pass valuation checks, and 1,930 SAT/MDD calibrations.
+Exactly 4,646,328 representatives need no productive call and 2,542,729 need
+one; none needs two. The reviewed simulation lifts this to arbitrary finite
+domains for the aligned symbol order. An explicit sort-only second-call
+witness prevents overstating this as exact ordered-object idempotence.
+See [the full result](root/FULL_THREE_SYMBOL_QUOTIENT.md).
+
+The selector trace also completed: the first positional semantic error is
+clause deletion at source line 474; a later literal removal at line 244
+exposes a stale range under first-name projection. The two R versions give
+identical full traces, with 103 focused expectations. Character NA selectors
+share the newly clarified all-missing numeric acceptance path. A new stream
+now examines whether all ordinary accepted domain storage can be normalized
+without changing source decisions, including HLA's duplicated virtual values.
