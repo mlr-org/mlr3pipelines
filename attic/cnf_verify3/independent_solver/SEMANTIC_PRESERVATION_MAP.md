@@ -16,6 +16,16 @@ nonempty finite domain. Assume ordinary total character membership, ordinary
 R list/copy/indexing semantics without user-defined replacement behavior,
 no external mutation of the universe during execution,
 and index/count arithmetic within the runtime's supported bounds.
+Symbol identity must also agree across character membership, list indexing,
+environment insertion/direct lookup, and environment name enumeration. In
+particular, enumerating the unit-domain map must preserve the clause symbol
+keys. This premise was implicit in the source's mathematical symbol-map
+interpretation and is now explicit after the
+[native-name counterexample](../character_identity_review/FINDING.md): valid
+Unicode names under `LC_CTYPE=C` can violate it even with canonical clause
+shapes and successful ordinary public construction. The new example normally
+returns a changed truth function. It refutes a strengthening to all ordinary
+R character names, not the pointwise set rules or this explicit map contract.
 
 **If the simplifier completes normally, its returned formula has exactly the
 same satisfying valuations as the input.** The source-level termination

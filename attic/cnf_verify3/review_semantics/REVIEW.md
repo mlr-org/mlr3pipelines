@@ -47,6 +47,16 @@ the proposed valuation semantics. These assumptions should be explicit rather
 than inferred from the presence of a `Cnf*` class. The public-API malformed
 selector examples therefore do not refute this kernel theorem.
 
+**Root addendum, 17:39 UTC:** the subsequent
+[character-identity study](../character_identity_review/FINDING.md) makes this
+consistency requirement concrete. Environment name enumeration must preserve
+the symbol identities used by clause membership and direct registry lookup.
+Valid Unicode names in `LC_CTYPE=C` can violate it and cause a wrong normal
+return despite canonical clause shapes. The composition now states that
+premise explicitly. This qualification is essential; the earlier phrase
+"ordinary R" by itself must not be read as covering every accepted character
+name in every locale.
+
 The fixed-domain map is read but never mutated by this kernel. The usual
 finite indexing/count bounds are necessary to interpret integer counts as
 natural numbers. Successful normal return excludes exceptions and allocation

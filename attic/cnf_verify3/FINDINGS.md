@@ -6,7 +6,9 @@ representation failures, and runtime limits. Older dated reports remain as
 the historical record; the links here point to the strongest current evidence.
 No production repair has been applied.
 
-## 1. Accepted clause subsetting can change a formula's truth function
+## 1. Two accepted public paths can change a formula's truth function
+
+### Dimensional clause subsetting
 
 **Status: independently reproduced on R 3.6.3 and R 4.6.1, including normal
 installed-package execution.** The four-clause input below is contradictory,
@@ -63,6 +65,54 @@ first admits `X=c,Y=a` positionally. Removing c1's first occurrence later
 exposes the stale range and also breaks the first-name projection. Neither
 failure originates in HLA. The two R versions have identical lossless traces,
 and 103 focused expectations check exact states and current live contexts.
+
+### Unicode symbol names in a C character locale
+
+**Status: independently reproduced on R 3.6.3 and R 4.6.1, including actual
+installed, uncompiled, and development package namespaces.** This later
+discovery has canonical clause shapes and needs no selector or mixed encoding.
+Under `LC_CTYPE=C`, use a marked UTF-8 name for X, ordinary name Y, and ASCII
+domain values:
+
+```r
+u = CnfUniverse()
+X = CnfSymbol(u, "\u00e9", c("a", "b", "c"))
+Y = CnfSymbol(u, "Y", c("a", "b"))
+CnfFormula(list(
+  as.CnfClause(X %among% "a"),
+  X %among% "b" | Y %among% "a",
+  X %among% "c" | Y %among% "b"
+))
+```
+
+The input is contradictory. The result drops the unit X=a and admits exactly
+X=c,Y=a and X=b,Y=b. In `LC_CTYPE=C.UTF-8`, the same construction returns FALSE.
+The [standalone reproduction](character_identity_review/reproduce_public.R)
+sets and restores the locale and independently checks all six assignments.
+
+R's native environment key for that name enumerates as literal ASCII
+`"<U+00E9>"`, while direct access by the original marked name still works.
+At source line 502, intersecting clause names with `names(unit_domains)` misses
+the registered unit. At unit HLA, the lazy counts then assume containment
+which propagation never established; line 777 first changes truth by deleting
+the unit. Both UTF-8 and Latin-1 names reproduce. Current R emits translation
+warnings and still returns the wrong result; R 3.6.3 is silent.
+
+Root's [independent finite boundary and package replay](root/CTYPE_UNIT_REVIEW.md)
+checks 33,684 public calls per runtime: every ordered list of at most three
+clauses over a ternary X/Boolean Y palette, crossed with ASCII/UTF-8 X names
+and C/C.UTF-8 character locales. Only the C/UTF-8 triples fail: 612 of 8,000,
+including 36 contradictory inputs becoming satisfiable and 576 satisfiable
+inputs gaining assignments. A private direct-binding lookup at line 502
+passes the same complete bank, but is not a complete public-name repair.
+
+The [character-identity study](character_identity_review/FINDING.md) separately
+shows accepted UTF-8/Latin-1 aliases can create duplicate ordinary names under
+C, and literal ASCII escape names can collide with Unicode native keys.
+The correctness proofs now explicitly require faithful symbol identity across
+membership, list access, environment access, and environment enumeration.
+Syntactic canonicality alone does not imply that contract. No production fix
+has been applied to either semantic failure.
 
 ## 2. Four independent conditions fail to schedule useful simplification
 
@@ -203,11 +253,16 @@ boundary proposal; no production repair or blanket public-API claim is made.
 
 ## 6. What can be excluded, and under which assumptions
 
+Unless a row explicitly studies a broken representation, the semantic and
+saturation theorems below use the ordinary finite-set contract, including
+faithful symbol identity across every list/registry operation. The C-locale
+counterexample makes that qualification necessary even for canonical shapes.
+
 | Scope | Evidence level and result |
 | --- | --- |
 | Every local unit, subsumption, SSE1, SSE2, and HLA inference | Universal pointwise set-algebra proofs, with exhaustive checks of the Boolean schemas. |
-| Normally returning kernel on canonical finite character sets | Independently reviewed [source-level preservation proof](independent_solver/SEMANTIC_PRESERVATION_MAP.md). Contextual FALSE bits, chronological unit-birth certificates, quiescent exactness and lazy HLA rows supply the mutable-state premises. This is not a mechanization of R. |
-| Canonical kernel with ordinary total primitives, representable arithmetic/indices and sufficient resources | Reviewed [total-correctness composition](root/TOTAL_CORRECTNESS_COMPOSITION.md): a prefix proof excludes consumed-index/shape/condition failures, finite progress bounds exclude infinite execution, and the semantic theorem then applies. The resource premise is necessary because the recorded stack failures are real. |
+| Normally returning kernel on canonical finite sets with faithful symbol-map identity | Independently reviewed [source-level preservation proof](independent_solver/SEMANTIC_PRESERVATION_MAP.md). Contextual FALSE bits, chronological unit-birth certificates, quiescent exactness and lazy HLA rows supply the mutable-state premises. Registry name enumeration must agree with clause identity; the new C-locale example violates that substantive premise. This is not a mechanization of R. |
+| Canonical kernel with faithful symbol-map identity, ordinary total primitives, representable arithmetic/indices and sufficient resources | Reviewed [total-correctness composition](root/TOTAL_CORRECTNESS_COMPOSITION.md): a prefix proof excludes consumed-index/shape/condition failures, finite progress bounds exclude infinite execution, and the semantic theorem then applies. The name-identity and resource premises are necessary because the Unicode and stack failures are real. |
 | At most two clauses, arbitrary symbols and finite domain sizes | Semantic preservation, first-order saturation, and idempotence modulo order proved in [TWO_CLAUSE_PROOF.md](independent_solver/TWO_CLAUSE_PROOF.md). |
 | At most three clauses and two occurring symbols, arbitrary finite domain sizes | Complete 520,200-execution membership quotient, independently reviewed lifting argument, and two distinct exact oracles on every result. No semantic failures; 32 known unit-equality leftovers. |
 | Three clauses of the `(3,3,2)` occurrence shape, arbitrary finite domain sizes | Complete 9,386,748-execution quotient and 547,476,480 valuation checks, with independently reviewed ordering, lifting and assignment grids. No semantic differences. Every proper input in this shape is satisfiable. |
@@ -216,6 +271,8 @@ boundary proposal; no production repair or blanket public-API claim is made.
 | Hidden domain-refutation opportunities among final survivors | [Independent HLA review](review_hla/REVIEW.md): every residual refutable clause is directly subsumed by a different surviving unit, and conversely. This excludes other residual HLA/domain-propagation cases, not arbitrary logical redundancy. |
 | Static second-order candidate pruning | Complete relative to saturated earlier rules; the demonstrated omissions are dynamic scheduling conditions. |
 | Ordinary repeated, named, dimensional and inertly attributed domain storage, with canonical actual clauses | [Domain normalization proof](domain_storage_contract/PROOF.md) and [independent review](normalization_component_review/REVIEW.md) establish exact actual output vectors and source decision schedules under flat-unique normalization. Virtual ranges may contain duplicates and partial multiplicities; bounded capacity plus a physically missing donor value keeps both HTE length predicates FALSE. |
+| Public constructors and Boolean operators over ordinary named/repeated/dimensional domain and atom storage, with faithful symbol identity | [Constructor closure proof](constructor_domain_closure/PROOF.md) and [independent review](constructor_closure_review/REVIEW.md) show the specified successful grammar establishes canonical actual ranges before each kernel entry. `unique.matrix` preserves scalar first-occurrence order; clause accumulation and both R versions' complement paths flatten/deduplicate. Known constant, selector and dispatch exceptions remain explicit. |
+| Equivalent valid string encodings and collation changes with faithful native symbol identity | [Source-prefix simulation](character_identity_review/PROOF.md) preserves exact ordered payloads and all inspected source decisions. Distinct precomposed/decomposed strings stay distinct. 2,080 public formulas per R version calibrate the proof; ordinary equality preservation alone is insufficient under C CTYPE. |
 | Disjoint input symbol components under arbitrary global clause interleaving | [Component simulation](root/COMPONENT_SEPARABILITY.md) and [independent review](normalization_component_review/REVIEW.md) establish exact ordered output projections, equivalence of actual FALSE recognition, and repeated-pass coupling. Productive global pass count is the maximum of component counts when none returns FALSE. Unused symbols have no effect. Runtime and complete global event streams are not claimed equal. |
 | Initial unit-propagation prefix on canonical unary-range disjunctions | [Source correspondence](root/SEMILATTICE_COMPLETENESS.md) and [independent relational review](semilattice_review/REVIEW.md) establish the greatest generalized arc-consistent domain box, or failure. The proof preserves all common GAC sub-boxes, not merely full models. Later cached-unit scheduling gaps are outside this prefix. |
 | Each literal range meet closed, with at most one non-downset range per clause in chosen finite semilattices | The same [reviewed theorem](semilattice_review/REVIEW.md) proves initial propagation decides satisfiability and permits external extraction of the least model. Ordered multivalued Horn is a special case; nonchain examples strictly extend it. Whole-formula meet closure alone does not suffice. |

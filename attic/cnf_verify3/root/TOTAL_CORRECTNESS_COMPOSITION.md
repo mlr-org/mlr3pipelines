@@ -18,7 +18,11 @@ Each actual literal is a nonempty proper finite set of distinct nonmissing
 character values. Its fixed domain is also an ordinary nonempty finite vector
 of distinct nonmissing character values. TRUE/FALSE are separate scalar
 constants, and the empty conjunction is allowed. Symbol names resolve to one
-unchanged universe. Equality and the set/index primitives have their ordinary
+unchanged universe. Symbol identity must agree across character membership,
+list indices, environment insertion/direct lookup, and environment name
+enumeration: enumerated names must remain equal to the original clause names
+and retrieve the same binding, with no collisions between distinct symbols.
+Equality and the set/index primitives have their ordinary
 consistent semantics; no custom method, active binding or external mutation
 changes the execution. All necessary arithmetic and storage indices are
 representable, and sufficient memory/stack resources are available.
@@ -28,6 +32,11 @@ expression is valid. Establishing that is the index proof's task. They also
 do not assume that the whole computation terminates or returns normally.
 The actual machine can violate the resource premises on the recorded long
 chains; this composition does not erase those observed failures.
+The later [native-name counterexample](../character_identity_review/FINDING.md)
+also demonstrates why the symbol-identity premise is substantive. Under
+`LC_CTYPE=C`, valid marked Unicode names can enumerate as ASCII escape text.
+That input has canonical clause shapes and normally returns a wrong truth
+function; syntactic normalization alone therefore does not meet this contract.
 
 ## 2. No first argument/shape failure
 

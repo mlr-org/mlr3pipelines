@@ -470,3 +470,46 @@ A separate source proof is examining arbitrary differing supports and callback
 tails. Another stream tests kernel character-identity invariance without using
 the now-known defective comparison methods, including native-encoding limits.
 The required minimum remains 18:16:41 UTC.
+
+### 2026-09-06 17:43 UTC, a second independent truth-preservation failure
+
+The character-identity stream found a new semantic failure with **canonical
+clause shapes**. Under `LC_CTYPE=C`, a valid UTF-8 symbol name enumerates from
+an environment as literal ASCII escape text. Initial propagation at source
+line 502 misses its unit. Unit HLA later assumes the missing containment and
+deletes that unit at line 777, changing a contradictory three-clause formula
+to one with two models. All domain values are ASCII; no selector, malformed
+clause, mixed encoding, or universe mutation is involved. Latin-1 names also
+reproduce. The stream traced the precise R native-key versus string-equality
+distinction against both official runtime source versions.
+
+Root independently enumerated all 8,421 ordered lists of up to three clauses
+over a 20-clause ternary/Boolean palette in four name/locale configurations.
+Each R version completed 33,684 public calls. Only the C/UTF-8 triples change
+truth: 612, including 36 unsatisfiable inputs becoming satisfiable and 576
+satisfiable inputs gaining assignments. The new witness also reproduces in
+108 calls across installed, uncompiled, and development package namespaces;
+all 56 CNF definitions match the current unchanged source.
+
+A private direct-binding lookup replacing the single enumerated-name
+intersection passes the same complete 33,684-call bank per runtime. The
+accepted alias-name construction problem is broader, so this is a diagnostic
+correction, not a complete public-name repair. The source proofs now explicitly
+require faithful identity across membership, list access, environment lookup,
+and registry name enumeration. The new counterexample refutes an unconditional
+all-locale reading of canonical-input correctness. A separate source reviewer
+is checking the first wrong transition, candidate scope, and two-clause lower
+boundary.
+
+The constructor-shape review completed positively with that explicit name
+premise: 4,570 independent order/shape cases, 1,645 crossed domain/value cases,
+246,650 positional valuation rows, and 58 grammar controls per runtime. This
+supports the scalar normalization lemmas while keeping the new name failure
+outside their semantic corollary.
+
+The wider three-clause saturation author also completed; its reviewer supports
+the pending initialization and arbitrary outside-coordinate arguments and is
+finishing fresh runtime controls. Another bounded route now asks whether four
+clauses can retain a scheduling gap at arbitrarily large initial widths by
+adding identical fresh literals. These distinct rounds continue until all
+material review obligations and the ten-hour minimum are satisfied.
