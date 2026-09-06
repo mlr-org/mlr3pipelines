@@ -6,6 +6,10 @@ diverse independent agents, repeated synthesis and redirection, and detailed
 records of both discoveries and exclusions. The earliest eligible completion
 time is **2026-09-06 18:16:41 UTC**; this timestamp is a minimum, not a deadline.
 
+**Completion audit: 2026-09-06 18:16:48 UTC**, ten hours and seven seconds
+after the recorded start. All launched reviews and their final integration
+checks are complete. The closing entry records the final repository state.
+
 The session exposes four concurrent agent slots, including the root, despite
 the user's allowance of 64. We therefore rotate three independent agent
 streams alongside root work. Production source remains unchanged during the
@@ -581,3 +585,32 @@ each major result to small reproductions and its author/reviewer evidence.
 The six production source hashes remain identical to the baseline. The last
 focused package run remains 1,542 passing expectations; later additions are
 standalone research and review artifacts, not further production/test edits.
+
+### 2026-09-06 18:16:48 UTC, completion audit
+
+The clock is beyond the required ten-hour minimum. Every final agent stream
+is completed, both late source proofs have been read and integrated, and no
+launched computation or material review question remains pending. Earlier
+journal entries saying a route is active describe their historical point;
+the finding ledger and review guide contain the final conclusions and scopes.
+
+Final checks: all six CNF source SHA-256 hashes match the original baseline;
+`git diff 09770eaa -- 'R/Cnf*.R'` is empty; the saved focused test log contains
+exactly 1,542 passing expectations; the 129 local Markdown links in the
+integration documents resolve; and staged whitespace checks pass. Commit
+`d978d4ac` contains the final substantive reviews and reproduction guide.
+The working tree was clean before this closing journal entry.
+
+The campaign produced two independent public paths that change truth,
+four distinct scheduling omissions, unbounded productive-pass and recursive
+resource families, representation/comparison counterexamples, and reviewed
+source-level exclusions. The correctness conclusions retain their explicit
+input, name-identity, primitive and resource premises. Finite enumerations
+are labeled as such, and no source proof is represented as a mechanized R
+proof. All repair proposals remain separate diagnostic copies; production
+fix selection and implementation were not part of this investigation.
+
+The persistent goal counter stopped at the first interruption and retained
+its earlier blocked status during resumed work. It is not an elapsed-time
+measurement for this campaign; the recorded UTC start, progress journal,
+completed computations and final clock check supply that record.
