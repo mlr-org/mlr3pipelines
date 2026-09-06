@@ -170,7 +170,7 @@ machine-stack sizes or bounds on arbitrary caller computation.
 | Missing clause selectors are accepted | Missing `any.missing=FALSE` allows logical NA, and all-missing numeric or character selectors through the logical validator, to create an NA symbol name and NULL range. The resulting object has no well-defined ordinary finite-domain interpretation; a clause round trip can become TRUE. |
 | Byte-marked character mixtures are not uniformly operable | Accepted strings can fail membership or printing in base R. This is a representation/runtime boundary of total character equality, separate from ordinary finite-set semantics. |
 | Equivalent UTF-8/Latin-1 representations can make identical formulas compare unequal | A two-clause public example satisfies `identical(f,g)` but fails `all.equal(f,g)` on both R versions, even in locale C. Serialized digest ordering distinguishes encoding marks, reverses clause alignment and causes false differences. |
-| Locale collation ties defeat comparison normalization | Reversing a proper range containing distinct precomposed/decomposed Unicode values produces Atom/Clause/Formula comparison false negatives in C.UTF-8 and en_US.UTF-8. The analogous distinct-symbol-name ordering also fails. Formula truth is unchanged. |
+| Locale collation ties defeat comparison normalization | Reversing a proper range containing distinct precomposed/decomposed Unicode values produces Atom/Clause/Formula comparison false negatives in C.UTF-8 and en_US.UTF-8. Distinct-symbol-name ordering also fails, including delegated comparison of equal universe binding maps built in opposite orders. Formula truth is unchanged. |
 
 See [representation findings](representation/NOTES.md) and the independent
 [R-value review](r_values/NOTES.md). Existing issues in
@@ -183,8 +183,15 @@ The new [comparison reproductions](root/COMPARISON_NORMALIZATION.md) distinguish
 these ordinary Unicode normalization failures from byte-marked strings or
 different logical normal forms. All 24 pairs per R version preserve their
 independently specified meanings; 13 comparison false negatives occur. A
-private UTF-8/radix normalization candidate passes these examples, while an
-independent review is checking unequal-set and symbol-association controls.
+private UTF-8/radix normalization candidate passes these examples. The completed
+[independent review](comparison_review/REVIEW.md) checks 39 reduced pairs and
+15,552 permutation/encoding comparisons per runtime, including 3,888 unequal
+controls. The latter bank has 5,256 production false negatives and no candidate
+disagreements. Private copies retaining the production guards preserve 36
+additional scope outcomes. Equal universe binding maps can still compare
+unequal through base environment sorting; payload-only normalization leaves
+that demonstrated residual case. No digest collision is needed for either
+confirmed cause, and no production correction has been installed.
 
 A concrete [private selector correction](root/SELECTOR_CANDIDATE.md) flattens
 atomic selectors before deduplication and rejects missing logical selections.
@@ -294,9 +301,15 @@ Further independent rounds establish the following scoped results:
   when every copied initial name has the same singleton range and all clauses
   share one unchanged ordinary Boolean universe. Trailing copies can become
   unregistered, and old unit snapshots can skip them; the proof handles both.
-  It excludes the multivalued unit-HLA empty-mask failure in this scope, but
-  does not assert unrestricted R error freedom. During HLA the needed cache
-  containment refers to the current virtual target, not all stored targets.
+  During HLA the needed cache containment refers to the current virtual
+  target, not all stored targets. The subsequent
+  [totality extension](boolean_occurrence_totality/PROOF.md) and
+  [independent dependency audit](proof_dependency_review/REVIEW.md) also exclude
+  consumed-index/shape failures and infinite source execution under explicit
+  primitive, representability and resource premises. A hypothetical unit-HLA
+  row can have the wrong count, but the unit phase provably cannot select its
+  first donor. Physical occurrence count supplies finite progress; canonical
+  helper-cost bounds depending on clause count alone do not extend.
 * A [nonproductive call](root/FIXED_POINT_SATURATION.md) leaves no useful
   implemented local rule under proper canonical finite-set premises. Thus
   finite repeated calls reach full local saturation. The

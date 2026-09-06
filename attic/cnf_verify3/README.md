@@ -436,3 +436,37 @@ bounds cannot transfer. A fresh reviewer is auditing proof dependencies and
 finite-prefix obligations, while another new stream checks public constructor
 closure with dimensional atom/domain storage and both R versions' set operations.
 The ten-hour minimum remains 18:16:41 UTC; active rounds continue.
+
+### 2026-09-06 17:22 UTC, proof dependency audit and comparison review
+
+The independent dependency audit found no circular reliance on whole-call
+return or semantic preservation in either the canonical totality composition
+or its homogeneous Boolean repeated-occurrence extension. It clarified the
+canonical domain-vector premise and supplied a simpler fallback termination
+potential: count all stored literal values, including eliminated slots.
+Strict restriction ancestry decreases this count, independently of the sharper
+membership-fiber and signature-class bounds. The Boolean unit-HLA no-start
+proof is structural and does not depend on the semantic orphan lemma.
+
+The comparison reviewer independently reproduced both ordinary Unicode
+failures and checked 15,552 permutation/encoding comparisons per runtime,
+including unequal-set and association controls. UTF-8/radix payload copies
+preserving the public guards pass that bank, but a new reduced case shows
+that delegated base environment comparison also misorders tied symbol names
+across identically populated universes. This is an explicit remaining limit
+of a payload-only correction; the root prototype is not a complete method
+replacement. Production methods remain unchanged.
+
+The constructor-storage author now closes the public grammar for ordinary
+named/repeated/dimensional domains and atom values, keeping the known constant,
+selector and dispatch exceptions explicit. The proof checks both R versions'
+different `setdiff` bodies and the direct complement-clause construction in
+formula negation. A fresh reviewer is challenging these normalization lemmas.
+
+Two other active routes extend beyond those completed results. Root checked
+20,000 three-clause inputs with initial widths at least three on each runtime,
+with 40,000 exact MDD comparisons per version and no productive second call.
+A separate source proof is examining arbitrary differing supports and callback
+tails. Another stream tests kernel character-identity invariance without using
+the now-known defective comparison methods, including native-encoding limits.
+The required minimum remains 18:16:41 UTC.

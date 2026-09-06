@@ -4,7 +4,8 @@ Found by root, 2026-09-06, after the canonical simplifier and indexing proofs
 had completed independent review. Both cases use unchanged public constructors
 and ordinary supported strings. They concern the representation comparison
 helpers, not changed formula truth or a kernel simplification inference.
-Independent review of these new examples is pending.
+The [independent review](../comparison_review/REVIEW.md) confirms both causes
+and records a related residual failure in delegated universe comparison.
 
 `comparison_normalization.R` is a standalone public reproduction with real
 checkmate, both R versions, and three installed collation locales. No fabricated
@@ -93,8 +94,13 @@ uses radix ordering for values and symbol names, and computes formula digest
 keys only after that normalization. It succeeds on all 24 pairs in both
 versions. This is a concrete candidate for the demonstrated boundary, not a
 production repair or a completed exhaustive comparison-helper contract.
-Any eventual repair must keep unequal finite sets and differently associated
-symbol ranges unequal; the next review should include those negative controls.
+The independent review checks 39 reduced pairs and 15,552 permutation/encoding
+comparisons per R version, including 3,888 unequal controls in the latter bank.
+Production has 5,256 false negatives in that bank; the prototype and private
+copies retaining the production guards have no disagreements on its proper
+objects. The guard-preserving copies also retain the original outcomes on 36
+separate scope cases and preserve argument forwarding. The root prototype
+alone is not a replacement for the complete public methods.
 
 The digest is only an ordering aid. With proper ordinary list comparison, a
 digest coincidence alone cannot make different clause payloads compare equal:
@@ -102,3 +108,24 @@ the final `all.equal.list` still compares the actual content. Its possible
 effect is a failure to align equal unordered clause collections. Likewise,
 the current collation issue produces incorrect differences, not a loss of
 the simplifier's already proved truth preservation.
+
+## 4. A payload-only correction does not normalize universe comparison
+
+The independent reviewer found a second venue for the collation-tie cause.
+Create two universes with names `c("38\u00e9", "38e\u0301")`, identical domain
+vectors `c("0", "1")`, and opposite insertion orders. Corresponding proper
+atoms have the same payload but compare unequal under the two Unicode
+collations on both R versions. The same applies to clauses and formulas.
+Base `all.equal.environment` delegates to sorted binding lists whose tied names
+remain oppositely ordered. All three classes compare successfully under C.
+This is ordinary public construction; the universe objects are distinct but
+their binding maps and domain-vector orders agree exactly.
+
+Both the root prototype and guard-preserving payload correction retain this
+failure, because they leave delegated universe-attribute comparison alone.
+The review saves a reduced reproduction in
+`../comparison_review/universe_residual.R`. Any complete correction needs a
+decision about normalizing that structural comparison as well. Existing tests
+explicitly distinguish reversed domain-vector order, so treating domains as
+unordered would be a separate policy change. Named logical constants likewise
+remain a documented metadata boundary, not an additional confirmed defect.

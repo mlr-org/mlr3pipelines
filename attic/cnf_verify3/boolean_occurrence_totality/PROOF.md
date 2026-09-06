@@ -14,6 +14,9 @@ its registry and unit-HLA invariants are false here. Replacing those
 invariants as specified in this note closes the consuming-operation
 obligations. I found no remaining indexing or termination gap in this
 scope. This is a human source argument, not a mechanized proof of R.
+The subsequent [independent dependency review](../proof_dependency_review/REVIEW.md)
+accepts this extension and separates the structural unit-HLA no-start argument
+from the stronger semantic orphan and containment lemmas.
 
 Input is a finite direct list of proper clauses in one unchanged universe.
 Every occurring symbol has a valid nonempty, nonmissing name and an ordinary

@@ -8,12 +8,15 @@ This note separates those obligations. The independent
 complete and support the claims under the stated contract. It is about the six
 unchanged CNF source files, specifically the local simplifier, not every
 accepted public constructor representation or the full R interpreter.
+The subsequent [dependency audit](../proof_dependency_review/REVIEW.md) checks
+that the prefix arguments do not assume whole-call return or preservation.
 
 ## 1. The ordinary finite-operation contract
 
 Input clauses are ordinary lists with distinct valid nonmissing symbol names.
 Each actual literal is a nonempty proper finite set of distinct nonmissing
-character values in its fixed nonempty domain. TRUE/FALSE are separate scalar
+character values. Its fixed domain is also an ordinary nonempty finite vector
+of distinct nonmissing character values. TRUE/FALSE are separate scalar
 constants, and the empty conjunction is allowed. Symbol names resolve to one
 unchanged universe. Equality and the set/index primitives have their ordinary
 consistent semantics; no custom method, active binding or external mutation
@@ -58,6 +61,16 @@ fiber occurrences before a further restriction can be entered. The remaining
 helper graph, including the delayed intersection-to-union edge, is acyclic.
 Its conclusion is `helper_depth <= 6*W0+11`, or the alternative
 `6*Phi0+11`, for the finite initial potentials defined in the cited proofs.
+
+For termination alone, the dependency audit supplies an independent weaker
+bound with fewer prerequisites. Let `Q0` count every initially stored literal
+value occurrence, including slots later marked eliminated. The only actual
+storage writes intersect a current range or remove a present range. Every
+restriction frame with a further restriction descendant has already performed
+one of those strict writes. Thus `helper_depth <= 6*Q0+11`, without needing
+fiber closure, signature freezing, semantic preservation, or target liveness
+as a descent premise. The [dependency graph and source argument](../proof_dependency_review/DEPENDENCIES.md)
+keep this simpler proof separate from the sharper cost bounds below.
 
 Consequently the helper invocation tree has finite height and each vertex has
 finitely many children. Such a tree is finite, by induction on its height:
