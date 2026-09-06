@@ -318,4 +318,93 @@ test_that("simplify_cnf: seeded random property test against truth tables", {
   }
 })
 
+test_that("nested unit propagation preserves deferred restrictions", {
+  # During the original order, X1 -> X0 -> X1 registration temporarily skips
+  # a stored X1 = 3 range under the new X1 = 6 unit. The older propagation
+  # frame must still finish its restriction before unit-HLA runs.
+  domains = list(X0 = c("1", "2", "5", "6"), X1 = c("0", "3", "5", "6"))
+  clauses = list(
+    list(X0 = c("2", "6"), X1 = "6"),
+    list(X0 = "2", X1 = c("6", "3")),
+    list(X0 = "5", X1 = c("3", "0")),
+    list(X1 = "3", X0 = c("5", "2")),
+    list(X0 = "1", X1 = c("6", "5"))
+  )
+  assignments = expand.grid(domains, stringsAsFactors = FALSE)
+  expected = assignments$X0 == "5" & assignments$X1 == "6"
+  expect_identical(cnf_test_eval_clauses(clauses, assignments), expected)
+  orders = list(1:5, 5:1, c(3:5, 1:2), c(2, 4, 1, 5, 3))
+  for (order in orders) {
+    for (reverse_symbols in c(FALSE, TRUE)) {
+      input = clauses[order]
+      if (reverse_symbols) input = lapply(input, rev)
+      formula = cnf_test_check_case(domains, input, "deferred unit restriction")
+      expect_identical(cnf_test_eval_formula(formula, assignments), expected)
+    }
+  }
+})
+
+test_that("resolution preserves models when an already-contained donor literal disappears", {
+  # The last two clauses allow removal of T = 1 from the second clause.
+  # That also changes a different resolution union. The current scheduler
+  # may leave that second reduction to another pass, but both passes must
+  # preserve every model. Completeness examples are recorded in attic/cnf_verify3.
+  domains = list(S = c("0", "1"), T = c("1", "2", "3"), U = c("0", "1"), R = c("0", "1"))
+  clauses = list(
+    list(T = c("1", "2"), R = "0"),
+    list(S = "0", T = "1", R = "0"),
+    list(S = "1", T = c("2", "3")),
+    list(U = "1", T = "2"),
+    list(S = "0", U = "0", R = "0")
+  )
+  assignments = expand.grid(domains, stringsAsFactors = FALSE)
+  expected = cnf_test_eval_clauses(clauses, assignments)
+  expect_equal(sum(expected), 9L)
+  formula = cnf_test_check_case(domains, clauses, "disappearing donor literal")
+  expect_identical(cnf_test_eval_formula(CnfFormula(as.list(formula)), assignments), expected)
+})
+
+test_that("splitting domain values into unequal numbers of labels preserves CNF semantics", {
+  domains = list(X = c("a", "b", "c", "d"), Y = c("a", "b", "c"))
+  clauses = list(
+    list(X = c("a", "b"), Y = "a"),
+    list(Y = "b", X = c("a", "c")),
+    list(Y = "c", X = c("a", "d"))
+  )
+  # Every old value gets a different, nonzero multiplicity. Length-based
+  # comparisons must still mean equality of contained sets, not cardinality
+  # comparisons between unrelated ranges.
+  refinements = lapply(domains, function(domain) {
+    set_names(lapply(seq_along(domain), function(i) paste0(domain[[i]], seq_len(i))), domain)
+  })
+  refined_domains = lapply(refinements, unlist, use.names = FALSE)
+  refined_clauses = lapply(clauses, function(clause) {
+    set_names(lapply(names(clause), function(symbol) {
+      unlist(refinements[[symbol]][clause[[symbol]]], use.names = FALSE)
+    }), names(clause))
+  })
+  formula = cnf_test_check_case(domains, clauses, "original value classes")
+  refined_formula = cnf_test_check_case(refined_domains, refined_clauses, "refined value classes")
+  assignments = expand.grid(refined_domains, stringsAsFactors = FALSE)
+  projected = assignments
+  for (symbol in names(domains)) {
+    labels = unlist(refinements[[symbol]], use.names = FALSE)
+    old_values = rep(names(refinements[[symbol]]), lengths(refinements[[symbol]]))
+    projected[[symbol]] = old_values[match(assignments[[symbol]], labels)]
+  }
+  expect_identical(cnf_test_eval_formula(refined_formula, assignments), cnf_test_eval_formula(formula, projected))
+})
+
+test_that("unit implication chains simplify in either clause order", {
+  universe = CnfUniverse()
+  symbols = lapply(seq_len(24L), function(i) CnfSymbol(universe, paste0("X", i), c("0", "1")))
+  clauses = lapply(seq_len(length(symbols) - 1L), function(i) {
+    CnfClause(list(CnfAtom(symbols[[i]], "0"), CnfAtom(symbols[[i + 1L]], "1")))
+  })
+  initial_unit = as.CnfClause(CnfAtom(symbols[[1L]], "1"))
+  expected = CnfFormula(lapply(symbols, function(symbol) as.CnfClause(CnfAtom(symbol, "1"))))
+  for (input in list(clauses, rev(clauses))) {
+    expect_equal(CnfFormula(c(list(initial_unit), input)), expected)
+  }
+})
 
