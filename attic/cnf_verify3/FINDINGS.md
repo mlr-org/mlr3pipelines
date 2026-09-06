@@ -191,13 +191,16 @@ boundary proposal; no production repair or blanket public-API claim is made.
 | --- | --- |
 | Every local unit, subsumption, SSE1, SSE2, and HLA inference | Universal pointwise set-algebra proofs, with exhaustive checks of the Boolean schemas. |
 | Normally returning kernel on canonical finite character sets | Independently reviewed [source-level preservation proof](independent_solver/SEMANTIC_PRESERVATION_MAP.md). Contextual FALSE bits, chronological unit-birth certificates, quiescent exactness and lazy HLA rows supply the mutable-state premises. This is not a mechanization of R. |
+| Canonical kernel with ordinary total primitives, representable arithmetic/indices and sufficient resources | Reviewed [total-correctness composition](root/TOTAL_CORRECTNESS_COMPOSITION.md): a prefix proof excludes consumed-index/shape/condition failures, finite progress bounds exclude infinite execution, and the semantic theorem then applies. The resource premise is necessary because the recorded stack failures are real. |
 | At most two clauses, arbitrary symbols and finite domain sizes | Semantic preservation, first-order saturation, and idempotence modulo order proved in [TWO_CLAUSE_PROOF.md](independent_solver/TWO_CLAUSE_PROOF.md). |
 | At most three clauses and two occurring symbols, arbitrary finite domain sizes | Complete 520,200-execution membership quotient, independently reviewed lifting argument, and two distinct exact oracles on every result. No semantic failures; 32 known unit-equality leftovers. |
 | Three clauses of the `(3,3,2)` occurrence shape, arbitrary finite domain sizes | Complete 9,386,748-execution quotient and 547,476,480 valuation checks, with independently reviewed ordering, lifting and assignment grids. No semantic differences. Every proper input in this shape is satisfiable. |
 | Three clauses each containing all three symbols in aligned order, arbitrary finite domain sizes | Complete 7,189,057-input quotient, 9,731,786 production calls and 849,165,820 valuation checks. Truth preserved; at most one productive pass, hence first-result local saturation modulo clause order. A sort-only second call is possible. Arbitrary independent symbol orders are outside this enumeration. |
+| Three clauses each containing the same three distinct symbols, with arbitrary clause and internal symbol orders | Separate [source proof](three_full_clauses/THREE_FULL_CLAUSES.md) and [independent scheduling review](three_full_review/REVIEW.md) establish first-call local saturation. Value projection excludes productive unit restrictions; incidence and exact initialization/deferred-tail arguments close the remaining SSE1/SSE2 obligations. This result does not depend on extrapolating the aligned-order enumeration. |
 | Hidden domain-refutation opportunities among final survivors | [Independent HLA review](review_hla/REVIEW.md): every residual refutable clause is directly subsumed by a different surviving unit, and conversely. This excludes other residual HLA/domain-propagation cases, not arbitrary logical redundancy. |
 | Static second-order candidate pruning | Complete relative to saturated earlier rules; the demonstrated omissions are dynamic scheduling conditions. |
-| Duplicate domain labels | Submultiset argument excludes false-positive HTE coverage; exact live-donor bookkeeping makes the HTE full-domain branch unreachable and closes the remaining control-flow concern. |
+| Ordinary repeated, named, dimensional and inertly attributed domain storage, with canonical actual clauses | [Domain normalization proof](domain_storage_contract/PROOF.md) and [independent review](normalization_component_review/REVIEW.md) establish exact actual output vectors and source decision schedules under flat-unique normalization. Virtual ranges may contain duplicates and partial multiplicities; bounded capacity plus a physically missing donor value keeps both HTE length predicates FALSE. |
+| Disjoint input symbol components under arbitrary global clause interleaving | [Component simulation](root/COMPONENT_SEPARABILITY.md) and [independent review](normalization_component_review/REVIEW.md) establish exact ordered output projections, equivalence of actual FALSE recognition, and repeated-pass coupling. Productive global pass count is the maximum of component counts when none returns FALSE. Unused symbols have no effect. Runtime and complete global event streams are not claimed equal. |
 | Source versus package/bytecode execution | Exact agreement for the saved fixtures across 24 measured modes; not a universal compiler theorem. |
 | Formula AND/OR/negation on canonical operands | [Operator proof](operator_proof/README.md) establishes semantic and proper-representation closure on normal return, subject to the kernel theorem. Public constructor failure paths and Clause result-class loss remain explicit exceptions. |
 | Negation of a contradictory canonical formula | Complete distribution and individual-clause tautology removal force `!F` to be literal TRUE on normal return, even with an identity simplifier. This does not make the ordinary simplifier a complete SAT procedure. |
@@ -241,6 +244,17 @@ existing reentrancy guard is necessary. Removing it in a private source copy
 decrements a count twice for the same bit and fails on an 11-clause input.
 Production preserves its two models; the new focused regression passes.
 This is evidence supporting an existing correct guard, not a production bug.
+
+The new [indexing review](index_contract_review/REVIEW.md) independently checked
+19,787 canonical inputs per R version and 7,176,512 row/count boundaries,
+including stale unit snapshots, optional matrix allocation, delayed inverses,
+and the matrix-to-vector phase transition. It also checks finite write/repair
+intervals separately from dispatch boundaries. Some intermediate `[` results
+contain intentional NA values; the source filters them before a consuming
+index operation. Eight changed copies calibrate these observations. The
+associated [composition review](index_contract_review/COMPOSITION_REVIEW.md)
+supplies a conservative finite bound on every local-helper activation, not
+only maximum active depth.
 
 Further independent rounds establish the following scoped results:
 

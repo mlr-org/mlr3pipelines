@@ -1,5 +1,12 @@
 # Diagnostic repairs and what can be proved about them
 
+**Later status, 2026-09-06:** the saturation obligations described as pending
+in this dated experiment record have now passed the separate
+[scheduler source review](../scheduler_review/REVIEW.md). That review adds
+the count-zero pending-visit and final comparison-stabilization arguments;
+the finite runs below alone did not establish those claims. The variants
+remain diagnostic source copies, with no production repair selected.
+
 These variants exist only in the source-copy R bridge. No production source
 has been changed. Their purpose is to challenge the diagnosed mechanisms and
 make a future repair reviewable, rather than to declare the investigation done.

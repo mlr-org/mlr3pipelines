@@ -441,3 +441,25 @@ test_that("simplification tolerates comparisons completed by nested callbacks", 
   formula = cnf_test_check_case(domains, clauses, "comparison completed by a nested callback")
   expect_identical(cnf_test_eval_formula(formula, assignments), expected)
 })
+
+test_that("unit propagation tolerates a queued clause becoming a different unit", {
+  # The last two clauses derive X in {0,1}. Its propagation through Y derives
+  # X = 0, and nested work turns the third clause into Z = 0 before the older
+  # X propagation frame reaches that same queued clause.
+  domains = list(X = c("0", "1", "2"), Y = c("0", "1"), Z = c("0", "1"), W = c("0", "1"))
+  clauses = list(
+    list(X = "2", Y = "0"),
+    list(Y = "1", X = "0"),
+    list(X = "2", Z = "0"),
+    list(X = c("0", "1"), W = "0"),
+    list(X = c("0", "1"), W = "1")
+  )
+  assignments = expand.grid(domains, stringsAsFactors = FALSE)
+  expected = assignments$X == "0" & assignments$Y == "0" & assignments$Z == "0"
+  expect_equal(sum(expected), 2L)
+  expect_identical(cnf_test_eval_clauses(clauses, assignments), expected)
+  for (order in list(1:5, 5:1, c(4, 5, 1, 2, 3))) {
+    formula = cnf_test_check_case(domains, clauses[order], "queued clause becomes a different unit")
+    expect_identical(cnf_test_eval_formula(formula, assignments), expected)
+  }
+})

@@ -333,3 +333,73 @@ identical full traces, with 103 focused expectations. Character NA selectors
 share the newly clarified all-missing numeric acceptance path. A new stream
 now examines whether all ordinary accepted domain storage can be normalized
 without changing source decisions, including HLA's duplicated virtual values.
+
+### 2026-09-06 16:13 UTC, argument validity and new simulation reviews
+
+The indexing author completed a source-prefix proof covering 340 indexing
+sites, 108 `if` sites and 34 short-circuit sites. Both R versions passed the
+same 3,596 canonical inputs, with 1,769,855 reads, 221,459 final writes and
+1,192,136 scalar checks per version. Seven changed-source controls and eight
+direct negative shape controls calibrated the observer. A fresh reviewer is
+now checking the proof independently, especially the boundary invariants
+which must hold before a possibly failing operation. A new public regression
+for a queued clause becoming a different-symbol unit passed within the
+1,542-expectation focused simplification test file.
+
+The three-full-clause author proposed an all-symbol-order saturation proof
+using individual-value incidence and a three-clause relay argument. Its 87
+SMT implications concern local set algebra, not the complete scheduler. The
+fresh reviewer is examining the exact initialization and deferred-callback
+cases; the completed aligned-order quotient is not used as a substitute.
+
+Another completed author study extends domain normalization to repeated,
+named, dimensional and inertly attributed domain storage while retaining
+canonical actual ranges. Both R versions agree over 10,128,063 source events
+and 264 inputs across 11 storage forms. Its bounded virtual-multiplicity
+argument explicitly refutes virtual uniqueness and full-fiber occupancy as
+unnecessary strengthenings. A fresh reviewer checks it and root's independent-
+component simulation. The latter passed 2,400 globally interleaved inputs on
+both R versions, including components with known multi-pass scheduling gaps.
+
+Root separately composes indexing validity, finite source execution, and
+normal-return semantic preservation, and proposes a conservative total helper-
+invocation bound depending only on initial clause count. Its child/root-count
+observer passed 1,023 cases on both R versions. These new composition/count
+claims are explicitly marked for review, separate from the already reviewed
+active-depth bound. Three independent review streams remain active, and the
+ten-hour minimum remains 18:16:41 UTC.
+
+### 2026-09-06 16:40 UTC, completed totality and simulation reviews
+
+The independent index reviewer completed 19,787 inputs on both R versions,
+including 7,176,512 row/count boundaries per version. Its prefix induction
+supports the no-first-consuming-error argument, and a separate source recount
+supports the finite-tree composition and helper invocation bound. The new
+[total-correctness composition](root/TOTAL_CORRECTNESS_COMPOSITION.md) is now
+reviewed under explicit ordinary-operation, representability and resource
+premises. This does not erase the demonstrated stack overflows or accepted
+malformed selector failures.
+
+The three-full-clause review closes arbitrary internal symbol ordering through
+a strengthened source argument. It distinguishes a pending reverse initialization
+visit from an uninitialized pair and assigns the final conservative comparison
+debt to its precise remaining source tail. Local SMT and the aligned quotient
+remain supporting evidence rather than substitutes for these scheduling cases.
+
+Independent domain/component reviews also completed. Per R version, there are
+810 exact normalization payload/decision comparisons and 9,274 exact projected
+component output/local-history comparisons. Complete saved records compare
+identically across R versions; binary serialization hashes themselves were
+not portable enough for that comparison, a documented observer limitation.
+
+A new root proof relates initial unit propagation to generalized arc
+consistency, then constructs a least model for a finite semilattice clause
+class that includes multivalued ordered Horn formulas. Its 12,000-input bank
+passed on both R versions, and a fresh reviewer is using explicit relation
+tuples and additional nonchain semilattices. Another fresh stream is extending
+the Boolean repeated-occurrence proof to all consumed-index/termination
+obligations; it has already isolated an all-FALSE lazy row which is safely
+unreachable because the unit-HLA donor count is two. A third new stream is
+proving the smallest Boolean binary contradiction missed by the graph criterion.
+Root's finite clause-selection encoding currently establishes the four-symbol
+boundary of eight clauses; a larger-symbol bound and its lifting are ongoing.

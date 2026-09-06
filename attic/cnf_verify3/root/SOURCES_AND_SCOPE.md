@@ -48,3 +48,15 @@ formula is false, but the returned canonical formula is true. Replacing the
 matrix selector with its vector entries or reconstructing its clause restores
 the correct FALSE result. Both are diagnostic evidence; production is not
 changed by this investigation.
+
+## Semilattices and domain propagation
+
+Bodirsky, Macpherson and Thapper, *Constraint Satisfaction Tractability from
+Semi-lattice Operations on Infinite Sets*, [arXiv:1111.6616](https://arxiv.org/abs/1111.6616).
+Section 2 recalls the finite-domain connection between semilattice operations
+and arc consistency. This is background for the independent
+[source-prefix completeness argument](SEMILATTICE_COMPLETENESS.md), not evidence
+that this particular implementation has the required propagation behavior.
+The latter correspondence is proved directly from the pre-matrix source and
+checked against a separate domain fixed-point calculation. No mathematical
+novelty is claimed for the established algebraic tractability principle.

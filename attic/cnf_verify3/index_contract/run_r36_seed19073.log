@@ -1,0 +1,79 @@
+random trial 500: 330393 checked reads
+random trial 1000: 620645 checked reads
+random trial 1500: 903757 checked reads
+random trial 2000: 1182366 checked reads
+random trial 2500: 1488495 checked reads
+random trial 3000: 1769855 checked reads
+$checked_conditions
+[1] 1192136
+
+$truth_tables
+[1] 3596
+
+$cases
+[1] 3596
+
+$checked_reads
+[1] 1769855
+
+$helper_register_unit
+[1] 9954
+
+$checked_writes
+[1] 221459
+
+$checked_write_ancestors
+[1] 49291
+
+$available_1
+[1] 279
+
+$helper_apply_domain_restriction
+[1] 21627
+
+$helper_eliminate_symbol_from_clause
+[1] 7140
+
+$available_0
+[1] 684
+
+$unallocated_unit_hla_rows
+[1] 6880
+
+$helper_on_updated_subset_relations
+[1] 16630
+
+$helper_eliminate_clause_update_sr
+[1] 6418
+
+$snapshot_became_other_symbol_unit
+[1] 1
+
+$helper_handle_sse_2nd_order_twoend
+[1] 9868
+
+$intentional_missing_vector_selector
+[1] 5154
+
+$helper_try_sse_2nd_order
+[1] 14384
+
+$future_unit_registration
+[1] 63
+
+$allocated_unit_hla_rows
+[1] 3495
+
+$helper_on_update_range
+[1] 219
+
+$helper_handle_sse_2nd_order_oneend
+[1] 353
+
+$future_matrix_guard
+[1] 171
+
+$negative_controls
+[1] 8
+
+PASS: 3596 exact-source cases; 8 negative controls.

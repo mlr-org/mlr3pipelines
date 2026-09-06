@@ -1,0 +1,914 @@
+{
+  "source_sha256": "7d34ad60035509a463168752bb5f6f82d87fd7182a94a0e48461be7cdbe35fdc",
+  "seed": 609202631,
+  "arguments": {
+    "current_r": false,
+    "random": 1200,
+    "trace": 1200,
+    "boolean": true
+  },
+  "examples": {
+    "debt_initialization": {
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ]
+        }
+      ],
+      "witness": {
+        "source": 1,
+        "target": 0,
+        "symbol": "X",
+        "event": {
+          "label": "source_begin",
+          "local": {
+            "clause_idx": 2,
+            "symbol": "X",
+            "restringent": [
+              "0",
+              "1"
+            ],
+            "is_unit_propagation": false,
+            "meta_idx": 2,
+            "meta_idx_other": null,
+            "other_meta_idx": 1,
+            "rows_to_check": null,
+            "rows_changed": null,
+            "meta_idx_target": null,
+            "second_order_only": null,
+            "potential_targets": null,
+            "targets_while_oneend": null,
+            "targets_while_twoend": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": [
+                  "0",
+                  "1"
+                ],
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "Z": "0"
+              },
+              {
+                "X": "0",
+                "Y": [
+                  "0",
+                  "1",
+                  "2"
+                ],
+                "Z": "0"
+              },
+              {
+                "X": [
+                  "1",
+                  "3"
+                ],
+                "Y": "0",
+                "Z": "0"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              false,
+              false,
+              false
+            ],
+            "available": [
+              1,
+              2,
+              3
+            ],
+            "not_subset_count": [
+              [
+                null,
+                1,
+                null
+              ],
+              [
+                2,
+                null,
+                null
+              ],
+              [
+                null,
+                null,
+                null
+              ]
+            ],
+            "is_not_subset_of": [
+              [
+                [
+                  false,
+                  false,
+                  false
+                ],
+                [
+                  true,
+                  false,
+                  false
+                ],
+                [
+                  true,
+                  true,
+                  true
+                ]
+              ],
+              [
+                [
+                  true,
+                  true,
+                  false
+                ],
+                [
+                  false,
+                  false,
+                  false
+                ],
+                [
+                  true,
+                  true,
+                  true
+                ]
+              ],
+              null
+            ],
+            "meta_idx_outer": 2,
+            "meta_idx_inner": 1,
+            "second_order_enabled": false,
+            "second_order_enabled_matrix": [
+              [
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false
+              ]
+            ],
+            "columns": [
+              [
+                "X",
+                "Y",
+                "Z"
+              ],
+              [
+                "X",
+                "Y",
+                "Z"
+              ],
+              null
+            ],
+            "symbol_registry": {
+              "X": [
+                1,
+                2,
+                3
+              ],
+              "Y": [
+                1,
+                2,
+                3
+              ],
+              "Z": [
+                1,
+                2,
+                3
+              ]
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "observed_simplify",
+            "on_updated_subset_relations",
+            "apply_domain_restriction",
+            "observe"
+          ]
+        }
+      }
+    },
+    "debt_enabled": {
+      "domains": {
+        "X": [
+          "0",
+          "5",
+          "7"
+        ],
+        "Y": [
+          "1",
+          "2",
+          "7"
+        ],
+        "Z": [
+          "2",
+          "3",
+          "4",
+          "7"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "1",
+            "7"
+          ],
+          "Z": [
+            "3",
+            "7"
+          ]
+        },
+        {
+          "X": [
+            "7"
+          ],
+          "Y": [
+            "2",
+            "7"
+          ],
+          "Z": [
+            "2",
+            "3",
+            "7"
+          ]
+        },
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ]
+        }
+      ],
+      "witness": {
+        "source": 0,
+        "target": 1,
+        "symbol": "Y",
+        "event": {
+          "label": "source_begin",
+          "local": {
+            "clause_idx": 1,
+            "symbol": "Y",
+            "restringent": [
+              "7",
+              "2"
+            ],
+            "is_unit_propagation": false,
+            "meta_idx": 1,
+            "meta_idx_other": null,
+            "other_meta_idx": 3,
+            "rows_to_check": null,
+            "rows_changed": null,
+            "meta_idx_target": null,
+            "second_order_only": null,
+            "potential_targets": null,
+            "targets_while_oneend": null,
+            "targets_while_twoend": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": [
+                  "5",
+                  "7"
+                ],
+                "Y": "7",
+                "Z": "7"
+              },
+              {
+                "X": "7",
+                "Y": [
+                  "2",
+                  "7"
+                ],
+                "Z": [
+                  "2",
+                  "3",
+                  "7"
+                ]
+              },
+              {
+                "X": [
+                  "5",
+                  "7"
+                ],
+                "Y": "7",
+                "Z": [
+                  "4",
+                  "7"
+                ]
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              false,
+              false,
+              false
+            ],
+            "available": [
+              1,
+              2,
+              3
+            ],
+            "not_subset_count": [
+              [
+                null,
+                2,
+                1
+              ],
+              [
+                2,
+                null,
+                2
+              ],
+              [
+                1,
+                2,
+                null
+              ]
+            ],
+            "is_not_subset_of": [
+              [
+                [
+                  false,
+                  false,
+                  false
+                ],
+                [
+                  true,
+                  true,
+                  false
+                ],
+                [
+                  false,
+                  true,
+                  false
+                ]
+              ],
+              [
+                [
+                  false,
+                  true,
+                  true
+                ],
+                [
+                  false,
+                  false,
+                  false
+                ],
+                [
+                  false,
+                  true,
+                  true
+                ]
+              ],
+              [
+                [
+                  false,
+                  false,
+                  true
+                ],
+                [
+                  true,
+                  false,
+                  true
+                ],
+                [
+                  false,
+                  false,
+                  false
+                ]
+              ]
+            ],
+            "meta_idx_outer": 3,
+            "meta_idx_inner": 2,
+            "second_order_enabled": true,
+            "second_order_enabled_matrix": [
+              [
+                null,
+                false,
+                true
+              ],
+              [
+                true,
+                null,
+                false
+              ],
+              [
+                true,
+                false,
+                null
+              ]
+            ],
+            "columns": [
+              [
+                "X",
+                "Y",
+                "Z"
+              ],
+              [
+                "X",
+                "Y",
+                "Z"
+              ],
+              [
+                "X",
+                "Y",
+                "Z"
+              ]
+            ],
+            "symbol_registry": {
+              "X": [
+                1,
+                2,
+                3
+              ],
+              "Y": [
+                1,
+                2,
+                3
+              ],
+              "Z": [
+                1,
+                2,
+                3
+              ]
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "observed_simplify",
+            "on_updated_subset_relations",
+            "handle_sse_2nd_order_twoend",
+            "try_sse_2nd_order",
+            "apply_domain_restriction",
+            "observe"
+          ]
+        }
+      }
+    },
+    "enabled_batch_pending_one": {
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "4",
+          "7"
+        ],
+        "Z": [
+          "1",
+          "2",
+          "4",
+          "7"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "1"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "1",
+            "7"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "2",
+            "7"
+          ]
+        },
+        {
+          "Y": [
+            "4",
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "X": [
+            "4"
+          ]
+        }
+      ],
+      "witness": {
+        "label": "symbol_batch",
+        "local": {
+          "clause_idx": 3,
+          "symbol": "X",
+          "restringent": null,
+          "is_unit_propagation": null,
+          "meta_idx": 3,
+          "meta_idx_other": 2,
+          "other_meta_idx": null,
+          "rows_to_check": null,
+          "rows_changed": [
+            1,
+            2
+          ],
+          "meta_idx_target": null,
+          "second_order_only": null,
+          "potential_targets": null,
+          "targets_while_oneend": null,
+          "targets_while_twoend": null
+        },
+        "state": {
+          "entries": [
+            {
+              "X": "1",
+              "Y": "7",
+              "Z": [
+                "1",
+                "7"
+              ]
+            },
+            {
+              "X": "2",
+              "Y": "7",
+              "Z": [
+                "2",
+                "7"
+              ]
+            },
+            {
+              "Y": [
+                "4",
+                "7"
+              ],
+              "Z": "7"
+            }
+          ],
+          "eliminated": [
+            false,
+            false,
+            false
+          ],
+          "is_unit": [
+            false,
+            false,
+            false
+          ],
+          "available": [
+            1,
+            2,
+            3
+          ],
+          "not_subset_count": [
+            [
+              null,
+              2,
+              2
+            ],
+            [
+              2,
+              null,
+              2
+            ],
+            [
+              1,
+              1,
+              null
+            ]
+          ],
+          "is_not_subset_of": [
+            [
+              [
+                false,
+                false,
+                false
+              ],
+              [
+                true,
+                false,
+                true
+              ],
+              [
+                true,
+                false,
+                true
+              ]
+            ],
+            [
+              [
+                true,
+                false,
+                true
+              ],
+              [
+                false,
+                false,
+                false
+              ],
+              [
+                true,
+                false,
+                true
+              ]
+            ],
+            [
+              [
+                true,
+                false,
+                false
+              ],
+              [
+                true,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false
+              ]
+            ]
+          ],
+          "meta_idx_outer": 3,
+          "meta_idx_inner": 2,
+          "second_order_enabled": true,
+          "second_order_enabled_matrix": [
+            [
+              null,
+              true,
+              true
+            ],
+            [
+              true,
+              null,
+              false
+            ],
+            [
+              true,
+              true,
+              null
+            ]
+          ],
+          "columns": [
+            [
+              "X",
+              "Y",
+              "Z"
+            ],
+            [
+              "X",
+              "Y",
+              "Z"
+            ],
+            [
+              "Y",
+              "Z",
+              "X"
+            ]
+          ],
+          "symbol_registry": {
+            "X": [
+              1,
+              2
+            ],
+            "Y": [
+              1,
+              2,
+              3
+            ],
+            "Z": [
+              1,
+              2,
+              3
+            ]
+          }
+        },
+        "stack": [
+          "tryCatch",
+          "tryCatchList",
+          "tryCatchOne",
+          "doTryCatch",
+          "observed_simplify",
+          "on_updated_subset_relations",
+          "handle_sse_2nd_order_twoend",
+          "try_sse_2nd_order",
+          "apply_domain_restriction",
+          "eliminate_symbol_from_clause",
+          "observe"
+        ]
+      }
+    }
+  },
+  "controls": [
+    {
+      "label": "three_binary_clauses_unit_equality",
+      "first": [
+        {
+          "X": "2"
+        },
+        {
+          "Y": "2",
+          "X": "2"
+        }
+      ],
+      "residual": [
+        {
+          "kind": "direct",
+          "target": 1,
+          "donor": 0
+        },
+        {
+          "kind": "sse1",
+          "target": 1,
+          "donor": 0,
+          "symbol": "Y"
+        },
+        {
+          "kind": "hla",
+          "target": 1
+        }
+      ]
+    },
+    {
+      "label": "five_clauses_missing_sse2",
+      "first": [
+        {
+          "T": [
+            "1",
+            "2"
+          ],
+          "R": "0"
+        },
+        {
+          "S": "1",
+          "T": [
+            "2",
+            "3"
+          ]
+        },
+        {
+          "U": "1",
+          "T": "2"
+        },
+        {
+          "S": "0",
+          "R": "0"
+        }
+      ],
+      "residual": [
+        {
+          "kind": "sse2",
+          "target": 0,
+          "donors": [
+            1,
+            3
+          ],
+          "pivot": "S",
+          "symbol": "T"
+        }
+      ]
+    }
+  ],
+  "r_version": "R version 3.6.3 (2020-02-29)",
+  "counts": {
+    "propagation_calibrations": 1536,
+    "rule_soundness_direct": 768,
+    "rule_soundness_hla": 744,
+    "calibration_formulas": 512,
+    "rule_soundness_sse1": 1344,
+    "rule_soundness_sse2": 708,
+    "formula_arrangements": 22002,
+    "ordinary_production_calls": 44004,
+    "truth_comparisons": 44004,
+    "truth_valuation_rows": 986924,
+    "known_gap_controls": 2,
+    "saturated_arrangements": 22000,
+    "event_init_ready": 11693,
+    "private_target_range_checks": 376294,
+    "constant_donor_intersection_checks": 752588,
+    "event_ordinary_enter": 13626,
+    "event_range_request": 5859,
+    "event_source_begin": 1210,
+    "debt_initialization": 2801,
+    "event_source_row": 1584,
+    "event_source_clear": 1235,
+    "event_source_tail": 1210,
+    "event_init_reverse": 11082,
+    "event_symbol_remove": 1580,
+    "event_symbol_batch": 1363,
+    "event_symbol_visit": 2087,
+    "event_enabled_boundary": 4080,
+    "event_hla_boundary": 4080,
+    "instrumentation_identity_calibrations": 4080,
+    "directed_arrangements": 648,
+    "event_queue_visit": 6996,
+    "event_twoend_enter": 7447,
+    "event_sse2_try": 19491,
+    "boolean_base_inputs": 512,
+    "random_base_inputs": 1200,
+    "event_notify_enter": 59,
+    "event_notify_targets": 59,
+    "event_notify_one": 4,
+    "event_notify_two": 30,
+    "debt_enabled": 150,
+    "enabled_batch_pending_one": 9,
+    "unit_no_narrowing_checks": 1
+  },
+  "elapsed_seconds": 267.01054549217224
+}
