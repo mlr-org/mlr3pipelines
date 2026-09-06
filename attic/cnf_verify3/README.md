@@ -513,3 +513,37 @@ finishing fresh runtime controls. Another bounded route now asks whether four
 clauses can retain a scheduling gap at arbitrarily large initial widths by
 adding identical fresh literals. These distinct rounds continue until all
 material review obligations and the ten-hour minimum are satisfied.
+
+### 2026-09-06 18:01 UTC, sharp structural bounds and comparison follow-through
+
+The independent wide-three review supports first-call local saturation for
+any three proper clauses whose initial widths are all at least three, with
+arbitrary supports and symbol orders. Its new width-four-through-nine controls
+exercise deferred comparisons and reject a known four-clause leftover. The
+review clarified that an SSE1-shaped bound can arrive through a repeated-donor
+SSE2 call; the proof now says so explicitly instead of implying one call site.
+
+The CTYPE source reviewer independently observed the exact missing propagation,
+false raw-containment counts, and first truth-changing deletion. It also proves
+at most two actual clauses preserve truth under stable injective native keys,
+even if enumeration changes their spelling. Thus the three-clause example is
+minimal in that scope. The direct-lookup candidate has a source simulation to
+an ASCII-named execution, with its alias and resource limits explicit.
+
+Crossing the constructor and comparator reviews found a further accepted-shape
+comparison failure. A one-row matrix containing two copies of `a` produces a
+proper atom selecting `{a}`, but compares unequal to the ordinary singleton
+atom. Matrix uniqueness removes rows and comparator sorting retains scalar
+multiplicity. Both R versions show 116 false negatives among 248 small pairs;
+an independent review confirms larger matrices/arrays, unequal controls, and
+the guard-preserving flatten/unique/UTF-8/radix correction. Conversion through
+Clause or Formula normalizes this storage and remains correct.
+
+The four-clause width-boundary author now gives a fixed family with an omitted
+SSE1 restriction at every initial width >=3, padding every clause by the same
+fresh proper literal block. Its proof couples one pad to any positive number;
+zero padding has different unit callbacks and is not silently equated. A fresh
+reviewer is checking the initialization and HLA details. A separate short
+source review is checking whether default comparison can ever return TRUE for
+different proper structural content under the stated common-universe contract.
+The mandatory minimum remains 18:16:41 UTC.

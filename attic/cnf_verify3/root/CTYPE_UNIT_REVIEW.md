@@ -5,6 +5,9 @@ root independently reconstructed it through public constructors and a separate
 positional valuation oracle. The source remains unchanged. The author's
 [finding and source trace](../character_identity_review/FINDING.md) identify
 the primitive mismatch and exact source transition.
+The subsequent [independent source review](../ctype_semantics_review/REVIEW.md)
+confirms the cause, proves the two-clause lower boundary, and supports the
+specific candidate under its narrower stable/injective-key contract.
 
 ## The failure has canonical clauses
 
@@ -80,6 +83,17 @@ binary clauses reversed. All cohort summaries and reduced examples are in
 and native enumeration strings. Finite absence through two clauses in this
 palette is not by itself a global minimality proof.
 
+The separate source review now supplies a clause-count proof under consistently
+encoded unique representatives and stable injective native binding keys,
+allowing enumeration to change their spelling. With at most two actual
+clauses, all-units inputs return before enumeration; no-initial-unit inputs
+only enumerate an empty registry; and one missed unit leaves at most one
+nonunit donor. That donor's complement cannot contain its own nonempty range
+or fill a domain, so unit HLA cannot commit an incorrect deletion. The stated
+three-clause example is therefore minimal within that exact scope. This is
+not a minimum claim for encoding aliases, malformed storage, domain sizes,
+or the number of outer list members before nested formulas are flattened.
+
 ## Actual installed-package execution
 
 [`ctype_package_modes.R`](ctype_package_modes.R) uses each actual R 4.6.1
@@ -119,6 +133,15 @@ the same order. Under the specific failed-enumeration contract here, repeated
 direct access by the consistently marked symbol still works, so the candidate
 restores the missing initial propagation. It changes no inference rule,
 registry write, or comparator.
+
+The independent review also proves a source simulation for the candidate:
+give every consistently represented variable a distinct ASCII name and pair
+registries through their stable injective native keys. The replacement makes
+initial unit selection agree; every other registry operation already uses
+direct keys. The remaining source decisions correspond. This transfers the
+canonical semantic theorem without requiring faithful name enumeration.
+Its 140 fresh controls per R version cover UTF-8, Latin-1, Greek, and two
+Unicode variables, and confirm that ambiguous aliases remain unrepaired.
 
 The same complete **33,684-call bank per R version** passes with zero truth
 differences and zero errors in candidate mode. Production failures are still

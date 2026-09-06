@@ -111,6 +111,13 @@ the simplifier's already proved truth preservation.
 
 ## 4. A payload-only correction does not normalize universe comparison
 
+A separate late [dimensional-atom study](ATOM_SHAPE_COMPARISON.md), with
+[independent review](../atom_shape_review/REVIEW.md), identifies another boundary
+of the earlier candidate: accepted matrix/array atom values can retain scalar
+duplicates. UTF-8/radix sorting preserves those multiplicities. Flattening and
+scalar deduplication are additionally required for that broader atom-storage
+class. This is distinct from the ordinary encoding/collation cases above.
+
 The independent reviewer found a second venue for the collation-tie cause.
 Create two universes with names `c("38\u00e9", "38e\u0301")`, identical domain
 vectors `c("0", "1")`, and opposite insertion orders. Corresponding proper

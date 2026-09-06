@@ -105,6 +105,10 @@ and C/C.UTF-8 character locales. Only the C/UTF-8 triples fail: 612 of 8,000,
 including 36 contradictory inputs becoming satisfiable and 576 satisfiable
 inputs gaining assignments. A private direct-binding lookup at line 502
 passes the same complete bank, but is not a complete public-name repair.
+The [independent causal/candidate review](ctype_semantics_review/REVIEW.md)
+also proves three actual clauses are minimal for this failure with consistently
+encoded unique names and stable injective native keys. Its candidate simulation
+restores the canonical theorem in that scope without relying on enumeration.
 
 The [character-identity study](character_identity_review/FINDING.md) separately
 shows accepted UTF-8/Latin-1 aliases can create duplicate ordinary names under
@@ -221,6 +225,7 @@ machine-stack sizes or bounds on arbitrary caller computation.
 | Byte-marked character mixtures are not uniformly operable | Accepted strings can fail membership or printing in base R. This is a representation/runtime boundary of total character equality, separate from ordinary finite-set semantics. |
 | Equivalent UTF-8/Latin-1 representations can make identical formulas compare unequal | A two-clause public example satisfies `identical(f,g)` but fails `all.equal(f,g)` on both R versions, even in locale C. Serialized digest ordering distinguishes encoding marks, reverses clause alignment and causes false differences. |
 | Locale collation ties defeat comparison normalization | Reversing a proper range containing distinct precomposed/decomposed Unicode values produces Atom/Clause/Formula comparison false negatives in C.UTF-8 and en_US.UTF-8. Distinct-symbol-name ordering also fails, including delegated comparison of equal universe binding maps built in opposite orders. Formula truth is unchanged. |
+| Accepted matrix/array atom values retain scalar multiplicities in comparison | A one-row `matrix(c("a", "a"), nrow=1)` and scalar `"a"` select the same atom set but compare unequal. Matrix uniqueness removes rows; comparator sorting preserves scalar repetitions. Public Clause/Formula conversion normalizes correctly. This also fails with all-ASCII strings in locale C. |
 
 See [representation findings](representation/NOTES.md) and the independent
 [R-value review](r_values/NOTES.md). Existing issues in
@@ -242,6 +247,14 @@ additional scope outcomes. Equal universe binding maps can still compare
 unequal through base environment sorting; payload-only normalization leaves
 that demonstrated residual case. No digest collision is needed for either
 confirmed cause, and no production correction has been installed.
+
+The [dimensional-atom comparison reproduction](root/ATOM_SHAPE_COMPARISON.md)
+adds a distinct multiplicity cause: 116 false negatives among 248 proper
+public pairs per R version, all with unchanged positional truth. Its
+[independent review](atom_shape_review/REVIEW.md) confirms nontrivial matrix
+and array cases. A private flatten/unique/UTF-8/radix value normalizer passes
+these cases while retaining the original guards and rejecting unequal sets
+and symbols. The earlier encoding-only candidate still fails this boundary.
 
 A concrete [private selector correction](root/SELECTOR_CANDIDATE.md) flattens
 atomic selectors before deduplication and rejects missing logical selections.
@@ -268,6 +281,7 @@ counterexample makes that qualification necessary even for canonical shapes.
 | Three clauses of the `(3,3,2)` occurrence shape, arbitrary finite domain sizes | Complete 9,386,748-execution quotient and 547,476,480 valuation checks, with independently reviewed ordering, lifting and assignment grids. No semantic differences. Every proper input in this shape is satisfiable. |
 | Three clauses each containing all three symbols in aligned order, arbitrary finite domain sizes | Complete 7,189,057-input quotient, 9,731,786 production calls and 849,165,820 valuation checks. Truth preserved; at most one productive pass, hence first-result local saturation modulo clause order. A sort-only second call is possible. Arbitrary independent symbol orders are outside this enumeration. |
 | Three clauses each containing the same three distinct symbols, with arbitrary clause and internal symbol orders | Separate [source proof](three_full_clauses/THREE_FULL_CLAUSES.md) and [independent scheduling review](three_full_review/REVIEW.md) establish first-call local saturation. Value projection excludes productive unit restrictions; incidence and exact initialization/deferred-tail arguments close the remaining SSE1/SSE2 obligations. This result does not depend on extrapolating the aligned-order enumeration. |
+| Any three proper clauses, each initially containing at least three distinct symbols | The [wider source proof](wide_three_saturation/WIDE_THREE_SATURATION.md) and [independent review](wide_three_review/REVIEW.md) establish first-call local saturation with arbitrary supports, widths, internal orders, and finite domains. Fixed-symbol matching excludes all units outside the common-triple shape; initial width sorting and precise deferred callback ownership close the remaining cases. A second call may only reorder clauses. |
 | Hidden domain-refutation opportunities among final survivors | [Independent HLA review](review_hla/REVIEW.md): every residual refutable clause is directly subsumed by a different surviving unit, and conversely. This excludes other residual HLA/domain-propagation cases, not arbitrary logical redundancy. |
 | Static second-order candidate pruning | Complete relative to saturated earlier rules; the demonstrated omissions are dynamic scheduling conditions. |
 | Ordinary repeated, named, dimensional and inertly attributed domain storage, with canonical actual clauses | [Domain normalization proof](domain_storage_contract/PROOF.md) and [independent review](normalization_component_review/REVIEW.md) establish exact actual output vectors and source decision schedules under flat-unique normalization. Virtual ranges may contain duplicates and partial multiplicities; bounded capacity plus a physically missing donor value keeps both HTE length predicates FALSE. |
