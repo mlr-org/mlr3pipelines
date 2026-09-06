@@ -5,6 +5,12 @@ same unchanged source and canonical, normal-execution assumptions, with
 exactly two values per symbol and at most two symbols per clause. Its graph
 is built from the **input**, before any simplification.
 
+The theorem below concerns a list of proper unit/binary clauses; the empty
+list is allowed and denotes TRUE. A proper binary clause uses two distinct
+symbols. Scalar logical TRUE and FALSE are returned unchanged by the kernel
+and are handled separately. In particular, an empty graph must not be used
+to predict the result for scalar FALSE.
+
 ## Statement
 
 Write `bar(l)` for the complement of Boolean literal `l`. For every input
@@ -58,8 +64,8 @@ value, so the call removes the literal and creates a unit. It cannot take
 the `empty restringent` clause-elimination route.
 
 This also removes the contextual-cache complication of general finite-domain
-executions. Every comparison between two live binary clauses describes
-unchanged actual ranges. A literal deletion takes the unit branch of
+executions. Every initialized comparison between two live binary clauses
+describes unchanged actual ranges. A literal deletion takes the unit branch of
 `eliminate_symbol_from_clause()` and returns before its nonunit matrix-update
 callbacks. Nested unit propagation can delete clauses or create further
 units, but cannot change a surviving binary range or its comparison. Thus the
@@ -208,3 +214,20 @@ counted 27,660 short-seed occurrences and 36,989 closure-unit occurrences.
 Results are in `implication_graph_results.json` and `implication_graph.log`.
 The earlier direct truth-table and SAT/MDD runs separately checked the
 production semantics and the unsatisfiable cycle obstruction.
+
+## 7. Completed independent review
+
+[`../boolean_graph_review/REVIEW.md`](../boolean_graph_review/REVIEW.md)
+independently discharges the unit-birth case split, original-edge preservation,
+short-path seed coverage and HLA unit-persistence obligations. Its separate
+matrix/Warshall formulation and source observers pass 3,088 cases identically
+on R 3.6.3 and R 4.6.1, including 12,260 unit births, 11,049 original-edge
+certificates, 22,098 edge-closure checks, 2,224,998 initialized live-pair
+comparisons and 4,610 units retained through HLA. The two statement
+qualifications identified by that review—scalar FALSE and initialized
+comparisons—are incorporated above.
+
+The review also records finite-domain examples showing that neither the
+Boolean seed criterion nor the unit-persistence conclusion can simply be
+extended to multivalued ranges. These boundaries are part of the theorem's
+scope, not failures of its Boolean case.

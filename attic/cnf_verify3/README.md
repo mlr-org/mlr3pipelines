@@ -239,3 +239,40 @@ Another automated interruption affected the root while agents and experiments
 continued. All records were recovered and the next round launched at 13:57 UTC.
 The original ten-hour minimum and the obligation to resolve material open
 avenues remain in force; this is an integration checkpoint, not a conclusion.
+
+### 2026-09-06 14:43 UTC, independent reviews and boundary reductions
+
+The structural, Boolean graph, conditional-outcome and diagnostic-scheduler
+reviews have completed. Each now includes an independent source argument,
+explicit exclusions, and fresh executable controls. In particular, the
+scheduler review closes the count-zero/zero-to-one pending-visit obligation;
+cache exactness alone would not establish the claimed saturation. The
+Boolean theorem keeps scalar FALSE separate and concerns initialized live
+binary comparisons, not every allocated matrix entry.
+
+The new small-selector stream checked 455,492 formulas and separately reran
+42,536 membership-profile cases on current R. It reduced unit-HLA failure to
+two selected clauses and retained a two-clause stale duplicate output. Its
+finite-to-arbitrary-domain exclusions keep their exact occurrence, clause and
+symbol bounds. No three-clause canonical error was found; there is no global
+minimality or all-size Boolean safety claim. A new independent stream now
+investigates the Boolean repeated-occurrence case directly at source level.
+
+Root removed an existing comparison guard in a private source copy and found
+a concrete count inconsistency caused by nested callbacks completing a queued
+comparison. A reduced 11-clause, four-symbol input distinguishes the changed
+copy on both R versions. Production has exactly two models among 360 valuations.
+The added public regression passed with the full simplification test file:
+1,525 expectations, no failures, warnings or skips. This validates an existing
+correct guard and is not counted as a production defect.
+
+The repeated-pass potential now counts original membership fibers instead of
+concrete labels, excluding domain-size-only unbounded families. Its reviewer
+found a stronger clause-count-only bound by freezing signature classes with
+at least three symbols. A fresh independent reviewer is challenging that
+first-change proof. Another new stream examines full source-level equivalence
+under value renaming, reordering and nonuniform membership-cell splitting,
+including precisely what a decision-schedule claim can mean in R.
+
+These new proof and representation tasks continue alongside root integration.
+The ten-hour minimum remains 18:16:41 UTC.

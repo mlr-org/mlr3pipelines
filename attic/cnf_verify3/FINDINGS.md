@@ -45,6 +45,16 @@ Evidence: [independent normalization study](r_values/NOTES.md),
 [root truth-table replay](root/reproduce_selector_semantics.R),
 [24-mode package/runtime comparison](execution_modes/NOTES.md).
 
+The [small-selector follow-up](small_selectors/NOTES.md) also gives a
+**two-clause runtime error**: duplicate a unary `X=a` clause with the matrix
+selector and conjoin the ordinary unit `X in {a,b}` on a ternary domain.
+Unit HLA computes count one but an all-FALSE mask, then tries an empty symbol
+lookup. A different two-clause input leaves a stale duplicate range whose
+positional disjunction is wrong even though first-name lookup hides it.
+Both reproduce on R 3.6.3 and 4.6.1. One selected proper clause is unchanged,
+so two clauses are minimal for these two categories in that selector class.
+The four-clause canonical failure is not claimed globally minimal.
+
 ## 2. Four independent conditions fail to schedule useful simplification
 
 **Status: reduced canonical examples, source traces, independent truth-table,
@@ -70,6 +80,14 @@ exercise focused scheduling changes without altering production. They are
 evidence about causes and possible repairs, not a claim that a final efficient
 implementation has been selected.
 
+The [independent scheduling review](scheduler_review/REVIEW.md) now completes
+the diagnostic saturation arguments. It proves the necessary pending-visit
+invariant for count-zero pairs, handles zero-to-one transitions, and establishes
+final comparison stabilization for a surviving SSE2 witness. With the stated
+extra notifications and strict unit-length guard, all listed local rules are
+saturated on normal return under the canonical-input prerequisites. This is
+a correctness result for those exact source copies, not a performance claim.
+
 ## 3. No fixed number of repeated passes repairs scheduling in general
 
 **Status: explicit family, source-level induction, completed independent
@@ -90,10 +108,15 @@ unique-useful-rule classification, source queue order and callback omissions.
 Its separate installed-package reconstruction confirms 27 frontier states,
 251 clause witnesses, 876 protected-value witnesses and 51,168 truth rows.
 
-Actual stored values only disappear. Their initial total count gives a
-finite upper bound on productive passes; a final sort-only pass may be needed
-for exact storage stability. This establishes finite convergence under normal
-completion, without claiming a unique or logically minimal result.
+Actual stored values only disappear. Counting original membership-cell
+occurrences gives the sharper reviewed bound
+`sum_s m_s * 2^(m_s - 1)`, where `m_s` counts input clauses mentioning symbol
+`s`. Thus fixed clause and symbol counts exclude unbounded productive passes
+even as domain sizes increase. See the [fiber potential](root/DOMAIN_INDEPENDENT_PASS_BOUND.md).
+A new [clause-count-only proof](pass_bound_review/PROOF.md) further removes
+symbol-count dependence; it is receiving a fresh independent review. A final
+sort-only pass may be needed for exact storage stability. These results do
+not claim a unique or logically minimal output.
 
 ## 4. Two separate recursive paths exhaust the runtime stack
 
@@ -152,23 +175,38 @@ The three-symbol shape quotient completed at 13:29:03 UTC. Its exact scope,
 counts and independent calibration are in
 [THREE_SYMBOL_QUOTIENT.md](root/THREE_SYMBOL_QUOTIENT.md).
 
-Further structural source proofs are now undergoing independent review:
+The [independent structural review](structural_review/REVIEW.md) establishes
 incidence-forest saturation, incidence-pseudoforest and Boolean renamable-Horn
 contradiction recognition, and local saturation for binary clauses selecting
-equal-or-disjoint range blocks. An exact Boolean 2-CNF graph criterion predicts
-the final units from implication paths of at most three edges followed by
-unbounded unit propagation. The current source checks agree in 8,238 cases;
-the proof's independent review remains a separate obligation. See
-[structural classes](structural_classes/PROOF.md) and
-[Boolean graph criterion](structural_classes/BOOLEAN_2CNF_GRAPH.md).
+equal-or-disjoint range blocks. Forests additionally have explicit witnesses
+for every surviving clause and literal value. The pseudoforest and Horn
+results do not imply complete forced-value extraction.
+
+The exact [Boolean 2-CNF graph criterion](structural_classes/BOOLEAN_2CNF_GRAPH.md)
+also passed its [independent source review](boolean_graph_review/REVIEW.md).
+For a proper unit/binary input list, let `K` be implication-graph closure of
+initial units and every literal reachable from its complement in at most
+three input edges. FALSE is returned exactly when `K` has both polarities;
+otherwise the final unit set is exactly `K`. Scalar FALSE is handled
+separately. Opposed four-edge cycles give an eight-clause contradiction with
+empty `K` that remains unchanged, separating this exact characterization
+from complete SAT recognition. The review checked 3,088 independent cases
+on each R version in addition to the author's 8,238 checks.
 
 The conditional-site study has observed 212 of 216 outcomes across all 108
 kernel `if` sites, with exact output comparison against the original function
-in 30,034 cases. Four unobserved outcomes have proposed source exclusions:
+in 30,034 cases. Four unobserved outcomes have independently reviewed source exclusions:
 emptying a singleton through the nonunit deletion helper, deleting a unit
 through the ordinary deletion helper, and the two immediate HLA full-domain
-branches. These are being independently reviewed; see
-[branch obligations](root/BRANCH_OBLIGATIONS.md).
+branches. See [branch obligations](root/BRANCH_OBLIGATIONS.md) and the
+[independent catalog/source review](branch_review/REVIEW.md). This covers
+feasible individual `if` outcomes, not all paths or short-circuit combinations.
+
+The [nested-comparison control](root/QUEUED_COMPARISON_CONTROL.md) proves why an
+existing reentrancy guard is necessary. Removing it in a private source copy
+decrements a count twice for the same bit and fails on an 11-clause input.
+Production preserves its two models; the new focused regression passes.
+This is evidence supporting an existing correct guard, not a production bug.
 
 The theorem does not cover malformed accepted selectors, arbitrary custom
 classes, changed universe bindings, non-total character operations, arithmetic

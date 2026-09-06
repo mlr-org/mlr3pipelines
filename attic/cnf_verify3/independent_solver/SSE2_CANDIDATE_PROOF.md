@@ -14,6 +14,11 @@ The aim is to exclude a useful independent second-order restriction in the
 returned formula. Local soundness of every extra callback is separate and
 already follows from the existing inference handler's premises.
 
+The [independent scheduling review](../scheduler_review/REVIEW.md), completed
+2026-09-06, validates the exact source-copy variants under these prerequisites.
+It strengthens the last-change step to stabilize every final TRUE exception
+among the three survivors and audits callback/manual-queue coverage directly.
+
 ## 1. Reduce a final opportunity to an enumerated donor pattern
 
 Take surviving distinct donors A,B and target T, an intersection symbol s,

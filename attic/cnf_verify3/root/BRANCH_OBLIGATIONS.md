@@ -5,7 +5,8 @@ SHA-256 `7d34ad60035509a463168752bb5f6f82d87fd7182a94a0e48461be7cdbe35fdc`.
 The source contains **108 executable `if` sites** in the kernel and its local
 helpers. Across two completed workloads, 212 of their 216 Boolean outcomes
 were observed. The four remaining TRUE outcomes have the source-level
-exclusions below. An independent review is in progress in `../branch_review/`.
+exclusions below. The completed independent review is
+[`../branch_review/REVIEW.md`](../branch_review/REVIEW.md).
 
 This is outcome coverage for `if` conditions. It is not coverage of every
 short-circuit operand, iteration count, execution path, or combination of
@@ -160,3 +161,20 @@ initial logical-input return.
 This local origin classification complements the semantic theorem. It does
 not imply completeness of contradiction detection: canonical contradictions
 without a derivable unit conflict can remain unchanged.
+
+## 6. Independent review and witness replay
+
+The reviewer used R's parser independently of the rewriting walker: exactly
+108 IF tokens occur in 14 function definitions, and their order, owner and
+condition text match the recorded catalog. TSV and RDS counts agree. After
+deduplicating the saved first inputs, 57 exact inputs reproduce every claimed
+outcome and return exactly the original objects under fresh observation.
+
+Additional contracts pass at 2,165 restrictions with a present symbol, 609
+symbol deletions, 454 ordinary clause deletions and 718 HLA selections. The
+review explicitly observes the legitimate stale-unit/absent-symbol call from
+Section 2, avoiding the incorrect stronger claim that every restriction call
+must start on a nonunit. Another 77,540 finite HLA set checks corroborate the
+universal missing-value argument. All four exclusions are supported by the
+independent source review under the stated representation/lifecycle/cache
+assumptions.

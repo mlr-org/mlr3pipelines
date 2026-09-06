@@ -1,0 +1,41 @@
+R version 3.6.3 (2020-02-29) ; checkmate 2.3.4
+
+ONE CLAUSE: correct positional semantics, duplicated representation
+list(list(X = "a", X = "a"))
+
+TWO CLAUSES: accepted clause selector; formula construction errors
+attempt to select less than one element in get1index
+list(c("tryCatch(withCallingHandlers(CnfFormula(list(one$clause, unit$clause)), ",
+"    error = function(e) calls <<- lapply(sys.calls(), deparse)), ",
+"    error = identity)"), "tryCatchList(expr, classes, parentenv, handlers)",
+    "tryCatchOne(expr, names, parentenv, handlers[[1L]])", "doTryCatch(return(expr), name, parentenv, handler)",
+    c("withCallingHandlers(CnfFormula(list(one$clause, unit$clause)), ",
+    "    error = function(e) calls <<- lapply(sys.calls(), deparse))"
+    ), "CnfFormula(list(one$clause, unit$clause))", "simplify_cnf(entries, universe)",
+    c(".handleSimpleError(function (e) ", "calls <<- lapply(sys.calls(), deparse), \"attempt to select less than one element in get1index\", ",
+    "    base::quote(clause[[symbol]]))"), "h(simpleError(msg, call))")
+
+TWO CLAUSES: stale repeated range; first-occurrence projection is correct
+list(list(Y = "c", X = "a", Y = c("c", "a")))
+  X Y expected positional named
+1 a a     TRUE       TRUE  TRUE
+2 b a    FALSE       TRUE FALSE
+3 a b     TRUE       TRUE  TRUE
+4 b b    FALSE      FALSE FALSE
+5 a c     TRUE       TRUE  TRUE
+6 b c     TRUE       TRUE  TRUE
+
+FOUR CLAUSES: wrong canonical satisfying output for contradictory input
+list(list(X = "c"), list(Y = "a"))
+  X Y expected positional named
+1 a a    FALSE      FALSE FALSE
+2 b a    FALSE      FALSE FALSE
+3 c a    FALSE       TRUE  TRUE
+4 a b    FALSE      FALSE FALSE
+5 b b    FALSE      FALSE FALSE
+6 c b    FALSE      FALSE FALSE
+7 a c    FALSE      FALSE FALSE
+8 b c    FALSE      FALSE FALSE
+9 c c    FALSE      FALSE FALSE
+
+All observed-behavior assertions and flattened-selector controls passed.

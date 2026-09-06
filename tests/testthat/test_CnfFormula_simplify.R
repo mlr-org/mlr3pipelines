@@ -408,3 +408,36 @@ test_that("unit implication chains simplify in either clause order", {
   }
 })
 
+test_that("simplification tolerates comparisons completed by nested callbacks", {
+  # A recursive restriction clears a comparison that an older update loop
+  # still has queued. Counting that transition twice breaks this example.
+  # The independent source-copy control and reduction are in attic/cnf_verify3/root.
+  domains = list(
+    X3 = c("v3", "v4", "v6"),
+    X1 = c("v1", "v3", "v4", "v5", "v6"),
+    X4 = paste0("v", 1:6),
+    X2 = paste0("v", 1:4)
+  )
+  clauses = list(
+    list(X3 = "v6", X1 = c("v3", "v5")),
+    list(X4 = "v2", X1 = c("v6", "v4")),
+    list(X2 = "v4", X4 = "v6"),
+    list(X2 = c("v2", "v4", "v1"), X1 = "v1", X3 = "v3"),
+    list(X2 = "v3", X4 = c("v2", "v4")),
+    list(X1 = c("v3", "v5"), X2 = c("v4", "v3", "v2"), X4 = "v3"),
+    list(X3 = c("v3", "v6"), X4 = "v5"),
+    list(X2 = "v2", X1 = "v5", X4 = c("v4", "v1")),
+    list(X4 = "v2", X3 = c("v6", "v4"), X2 = c("v2", "v3")),
+    list(X1 = "v6", X3 = c("v3", "v4")),
+    list(X1 = "v3", X3 = c("v6", "v3"))
+  )
+  assignments = expand.grid(domains, stringsAsFactors = FALSE)
+  expected = assignments$X2 == "v4" & (
+    (assignments$X1 == "v5" & assignments$X3 == "v3" & assignments$X4 == "v2") |
+      (assignments$X1 == "v6" & assignments$X3 == "v6" & assignments$X4 == "v4")
+  )
+  expect_equal(sum(expected), 2L)
+  expect_identical(cnf_test_eval_clauses(clauses, assignments), expected)
+  formula = cnf_test_check_case(domains, clauses, "comparison completed by a nested callback")
+  expect_identical(cnf_test_eval_formula(formula, assignments), expected)
+})

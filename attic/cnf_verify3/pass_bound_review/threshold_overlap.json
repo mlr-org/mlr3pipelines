@@ -1,0 +1,162 @@
+{
+  "2": {
+    "check": {
+      "name": "overlapping_threshold_2",
+      "clauses": 3,
+      "symbols": 2,
+      "initial_signature_groups": 2,
+      "frozen_symbols": 0,
+      "small_class_symbols": 2,
+      "productive_passes": 1,
+      "potential": [15, 3, 3],
+      "actual_mutation_checks": 5,
+      "full_worlds": 16,
+      "truth_rows": 32
+    },
+    "domains": {
+      "s1": ["a", "b", "c", "d"],
+      "s2": ["a", "b", "c", "d"]
+    },
+    "clauses": [
+      {
+        "s1": ["a", "b"],
+        "s2": ["a", "b"]
+      },
+      {
+        "s1": ["b", "c"],
+        "s2": ["b", "c"]
+      },
+      {
+        "s1": ["b", "d"],
+        "s2": ["b", "d"]
+      }
+    ],
+    "output": [
+      {
+        "s1": "b",
+        "s2": "b"
+      }
+    ],
+    "models": 7,
+    "worlds": 16
+  },
+  "3": {
+    "check": {
+      "name": "overlapping_threshold_3",
+      "clauses": 3,
+      "symbols": 3,
+      "initial_signature_groups": 3,
+      "frozen_symbols": 3,
+      "small_class_symbols": 0,
+      "productive_passes": 0,
+      "potential": [3, 3],
+      "actual_mutation_checks": 1,
+      "full_worlds": 64,
+      "truth_rows": 64
+    },
+    "domains": {
+      "s1": ["a", "b", "c", "d"],
+      "s2": ["a", "b", "c", "d"],
+      "s3": ["a", "b", "c", "d"]
+    },
+    "clauses": [
+      {
+        "s1": ["a", "b"],
+        "s2": ["a", "b"],
+        "s3": ["a", "b"]
+      },
+      {
+        "s1": ["b", "c"],
+        "s2": ["b", "c"],
+        "s3": ["b", "c"]
+      },
+      {
+        "s1": ["b", "d"],
+        "s2": ["b", "d"],
+        "s3": ["b", "d"]
+      }
+    ],
+    "output": [
+      {
+        "s1": ["a", "b"],
+        "s2": ["a", "b"],
+        "s3": ["a", "b"]
+      },
+      {
+        "s1": ["b", "c"],
+        "s2": ["b", "c"],
+        "s3": ["b", "c"]
+      },
+      {
+        "s1": ["b", "d"],
+        "s2": ["b", "d"],
+        "s3": ["b", "d"]
+      }
+    ],
+    "models": 43,
+    "worlds": 64
+  },
+  "4": {
+    "check": {
+      "name": "overlapping_threshold_4",
+      "clauses": 3,
+      "symbols": 4,
+      "initial_signature_groups": 4,
+      "frozen_symbols": 4,
+      "small_class_symbols": 0,
+      "productive_passes": 0,
+      "potential": [3, 3],
+      "actual_mutation_checks": 1,
+      "full_worlds": 256,
+      "truth_rows": 256
+    },
+    "domains": {
+      "s1": ["a", "b", "c", "d"],
+      "s2": ["a", "b", "c", "d"],
+      "s3": ["a", "b", "c", "d"],
+      "s4": ["a", "b", "c", "d"]
+    },
+    "clauses": [
+      {
+        "s1": ["a", "b"],
+        "s2": ["a", "b"],
+        "s3": ["a", "b"],
+        "s4": ["a", "b"]
+      },
+      {
+        "s1": ["b", "c"],
+        "s2": ["b", "c"],
+        "s3": ["b", "c"],
+        "s4": ["b", "c"]
+      },
+      {
+        "s1": ["b", "d"],
+        "s2": ["b", "d"],
+        "s3": ["b", "d"],
+        "s4": ["b", "d"]
+      }
+    ],
+    "output": [
+      {
+        "s1": ["a", "b"],
+        "s2": ["a", "b"],
+        "s3": ["a", "b"],
+        "s4": ["a", "b"]
+      },
+      {
+        "s1": ["b", "c"],
+        "s2": ["b", "c"],
+        "s3": ["b", "c"],
+        "s4": ["b", "c"]
+      },
+      {
+        "s1": ["b", "d"],
+        "s2": ["b", "d"],
+        "s3": ["b", "d"],
+        "s4": ["b", "d"]
+      }
+    ],
+    "models": 211,
+    "worlds": 256
+  }
+}

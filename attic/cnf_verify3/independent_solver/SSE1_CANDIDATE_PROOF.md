@@ -6,6 +6,11 @@ It extends the local soundness argument in `CANDIDATE_REPAIRS.md` into a propose
 normal-return saturation proof. The independent lifecycle/cache lemmas and
 their canonical finite-set assumptions remain prerequisites.
 
+The [independent scheduling review](../scheduler_review/REVIEW.md), completed
+2026-09-06, validates this conclusion and supplies the explicit count-zero
+pending-visit invariant needed for the zero-to-one case. Its stronger
+obligation formulation is the reviewed version of this argument.
+
 ## Desired quiescent property
 
 For every two distinct surviving nonunit clauses A,T, if A is contained in T

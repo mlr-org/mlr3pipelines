@@ -1,0 +1,4 @@
+R version 3.6.3 (2020-02-29) : both original copies preserve 2 models in 360 assignments.
+Changed copy: subscript out of bounds
+already cleared : donor 11 target 10 symbol X2 stored 2 actual 2
+count differs from row : donor 11 target 10 symbol X2 stored 1 actual 2
