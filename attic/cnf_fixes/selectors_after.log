@@ -1,0 +1,8 @@
+Console output with transient progress-spinner lines removed.
+ℹ Testing mlr3pipelines
+✔ | F W  S  OK | Context
+
+✔ |         34 | CnfSelectors
+
+══ Results ═════════════════════════════════════════════════════════════════════
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 34 ]

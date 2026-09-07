@@ -1,10 +1,13 @@
 # Finding ledger and evidence boundaries
 
-Live synthesis for the unchanged `09770eaa` CNF sources. This ledger separates
+Archived synthesis for the `09770eaa` CNF sources. This ledger separates
 changed truth values, incomplete application of implemented rules, public
 representation failures, and runtime limits. Older dated reports remain as
-the historical record; the links here point to the strongest current evidence.
-No production repair has been applied.
+the historical record; the links here point to the strongest campaign evidence.
+No production repair was applied during the investigation. The subsequent
+[fix record and current open-bug list](../cnf_fixes/README.md) supersedes this
+ledger's repair status. Some reproductions below intentionally assert the old
+defects and should be run against the recorded baseline.
 
 ## 1. Two accepted public paths can change a formula's truth function
 

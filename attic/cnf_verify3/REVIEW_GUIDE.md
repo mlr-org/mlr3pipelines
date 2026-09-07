@@ -1,10 +1,13 @@
 # Reading and reproducing the CNF investigation
 
-Start with [FINDINGS.md](FINDINGS.md) for the current finding ledger and exact
+Start with [the fix record](../cnf_fixes/README.md) for current repair status and
+the remaining open bugs. [FINDINGS.md](FINDINGS.md) preserves the campaign ledger and exact
 proof scopes. [README.md](README.md) is the chronological investigation journal.
-Production CNF source is unchanged from `09770eaa`; coherent commits contain
+During the investigation, production CNF source was unchanged from `09770eaa`; coherent commits contain
 research scripts, lossless records, source proofs, independent reviews, and
 focused tests protecting already-correct behavior.
+The subsequent production repairs are recorded separately; baseline-defect
+reproductions below are historical, not tests of the repaired behavior.
 
 ## Small reproductions before large enumerations
 

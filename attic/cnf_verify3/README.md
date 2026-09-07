@@ -1,5 +1,9 @@
 # CNF correctness investigation, campaign 3
 
+For the subsequent production repairs and the remaining open bugs, see
+[the current fix record](../cnf_fixes/README.md). This journal preserves the
+investigation of the original baseline, including its then-open findings.
+
 Started **2026-09-06 08:16:41 UTC**, on branch `cnf-verify2`, source commit
 `09770eaa`. The user requested at least ten hours of active investigation,
 diverse independent agents, repeated synthesis and redirection, and detailed

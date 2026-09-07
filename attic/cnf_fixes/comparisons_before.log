@@ -1,0 +1,279 @@
+Console output with transient progress-spinner lines removed.
+ℹ Testing mlr3pipelines
+✔ | F W  S  OK | Context
+
+✖ | 11       22 | CnfComparisons [1.2s]
+────────────────────────────────────────────────────────────────────────────────
+Failure ('test_CnfComparisons.R:39:7'): CnfFormula comparison ignores equivalent text encodings
+Expected `all.equal(f, legacy)` to be TRUE.
+Differences:
+`actual` is a character vector ('Component 1: Component 1: 1 string mismatch', 'Component 1: Component 2: 1 string mismatch', 'Component 2: Component 1: 1 string mismatch', 'Component 2: Component 2: 1 string mismatch')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:17:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(f, legacy)) at test_CnfComparisons.R:39:7
+
+Failure ('test_CnfComparisons.R:39:7'): CnfFormula comparison ignores equivalent text encodings
+Expected `all.equal(f, legacy)` to be TRUE.
+Differences:
+`actual` is a character vector ('Component 1: Component 1: 1 string mismatch', 'Component 1: Component 2: 1 string mismatch', 'Component 2: Component 1: 1 string mismatch', 'Component 2: Component 2: 1 string mismatch')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:17:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(f, legacy)) at test_CnfComparisons.R:39:7
+
+Failure ('test_CnfComparisons.R:54:7'): CNF comparisons distinguish strings even when their collation ties
+Expected `all.equal(coerce(a), coerce(b))` to be TRUE.
+Differences:
+`actual` is a character vector ('Component "values": 2 string mismatches')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:46:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(coerce(a), coerce(b))) at test_CnfComparisons.R:54:7
+
+Failure ('test_CnfComparisons.R:54:7'): CNF comparisons distinguish strings even when their collation ties
+Expected `all.equal(coerce(a), coerce(b))` to be TRUE.
+Differences:
+`actual` is a character vector ('Component "X": 2 string mismatches')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:46:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(coerce(a), coerce(b))) at test_CnfComparisons.R:54:7
+
+Failure ('test_CnfComparisons.R:54:7'): CNF comparisons distinguish strings even when their collation ties
+Expected `all.equal(coerce(a), coerce(b))` to be TRUE.
+Differences:
+`actual` is a character vector ('Component 1: Component 1: 2 string mismatches')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:46:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(coerce(a), coerce(b))) at test_CnfComparisons.R:54:7
+
+Failure ('test_CnfComparisons.R:64:7'): CNF comparisons distinguish strings even when their collation ties
+Expected `all.equal(coerce(left), coerce(right))` to be TRUE.
+Differences:
+`actual` is a character vector ('Names: 2 string mismatches', 'Component 1: 1 string mismatch', 'Component 2: 1 string mismatch')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:46:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(coerce(left), coerce(right))) at test_CnfComparisons.R:64:7
+
+Failure ('test_CnfComparisons.R:64:7'): CNF comparisons distinguish strings even when their collation ties
+Expected `all.equal(coerce(left), coerce(right))` to be TRUE.
+Differences:
+`actual` is a character vector ('Component 1: Names: 2 string mismatches', 'Component 1: Component 1: 1 string mismatch', 'Component 1: Component 2: 1 string mismatch')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:46:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(coerce(left), coerce(right))) at test_CnfComparisons.R:64:7
+
+Failure ('test_CnfComparisons.R:84:5'): CNF universe comparison preserves symbol and domain associations
+Expected `all.equal(u, v)` to be TRUE.
+Differences:
+`actual` is a character vector ('Names: 2 string mismatches', 'Component 1: Lengths (3, 2) differ (string compare on first 2)', 'Component 2: Lengths (2, 3) differ (string compare on first 2)')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:71:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(u, v)) at test_CnfComparisons.R:84:5
+
+Failure ('test_CnfComparisons.R:90:7'): CNF universe comparison preserves symbol and domain associations
+Expected `all.equal(coerce(a), coerce(b))` to be TRUE.
+Differences:
+`actual` is a character vector ('Attributes: < Component "universe": Names: 2 string mismatches >', 'Attributes: < Component "universe": Component 1: Lengths (3, 2) differ (string compare on first 2) >', 'Attributes: < Component "universe": Component 2: Lengths (2, 3) differ (string compare on first 2) >')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:71:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(coerce(a), coerce(b))) at test_CnfComparisons.R:90:7
+
+Failure ('test_CnfComparisons.R:90:7'): CNF universe comparison preserves symbol and domain associations
+Expected `all.equal(coerce(a), coerce(b))` to be TRUE.
+Differences:
+`actual` is a character vector ('Attributes: < Component "universe": Names: 2 string mismatches >', 'Attributes: < Component "universe": Component 1: Lengths (3, 2) differ (string compare on first 2) >', 'Attributes: < Component "universe": Component 2: Lengths (2, 3) differ (string compare on first 2) >')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:71:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(coerce(a), coerce(b))) at test_CnfComparisons.R:90:7
+
+Failure ('test_CnfComparisons.R:90:7'): CNF universe comparison preserves symbol and domain associations
+Expected `all.equal(coerce(a), coerce(b))` to be TRUE.
+Differences:
+`actual` is a character vector ('Attributes: < Component "universe": Names: 2 string mismatches >', 'Attributes: < Component "universe": Component 1: Lengths (3, 2) differ (string compare on first 2) >', 'Attributes: < Component "universe": Component 2: Lengths (2, 3) differ (string compare on first 2) >')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:71:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(coerce(a), coerce(b))) at test_CnfComparisons.R:90:7
+────────────────────────────────────────────────────────────────────────────────
+
+══ Results ═════════════════════════════════════════════════════════════════════
+Duration: 1.5 s
+
+── Failed tests ────────────────────────────────────────────────────────────────
+Failure ('test_CnfComparisons.R:39:7'): CnfFormula comparison ignores equivalent text encodings
+Expected `all.equal(f, legacy)` to be TRUE.
+Differences:
+`actual` is a character vector ('Component 1: Component 1: 1 string mismatch', 'Component 1: Component 2: 1 string mismatch', 'Component 2: Component 1: 1 string mismatch', 'Component 2: Component 2: 1 string mismatch')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:17:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(f, legacy)) at test_CnfComparisons.R:39:7
+
+Failure ('test_CnfComparisons.R:39:7'): CnfFormula comparison ignores equivalent text encodings
+Expected `all.equal(f, legacy)` to be TRUE.
+Differences:
+`actual` is a character vector ('Component 1: Component 1: 1 string mismatch', 'Component 1: Component 2: 1 string mismatch', 'Component 2: Component 1: 1 string mismatch', 'Component 2: Component 2: 1 string mismatch')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:17:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(f, legacy)) at test_CnfComparisons.R:39:7
+
+Failure ('test_CnfComparisons.R:54:7'): CNF comparisons distinguish strings even when their collation ties
+Expected `all.equal(coerce(a), coerce(b))` to be TRUE.
+Differences:
+`actual` is a character vector ('Component "values": 2 string mismatches')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:46:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(coerce(a), coerce(b))) at test_CnfComparisons.R:54:7
+
+Failure ('test_CnfComparisons.R:54:7'): CNF comparisons distinguish strings even when their collation ties
+Expected `all.equal(coerce(a), coerce(b))` to be TRUE.
+Differences:
+`actual` is a character vector ('Component "X": 2 string mismatches')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:46:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(coerce(a), coerce(b))) at test_CnfComparisons.R:54:7
+
+Failure ('test_CnfComparisons.R:54:7'): CNF comparisons distinguish strings even when their collation ties
+Expected `all.equal(coerce(a), coerce(b))` to be TRUE.
+Differences:
+`actual` is a character vector ('Component 1: Component 1: 2 string mismatches')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:46:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(coerce(a), coerce(b))) at test_CnfComparisons.R:54:7
+
+Failure ('test_CnfComparisons.R:64:7'): CNF comparisons distinguish strings even when their collation ties
+Expected `all.equal(coerce(left), coerce(right))` to be TRUE.
+Differences:
+`actual` is a character vector ('Names: 2 string mismatches', 'Component 1: 1 string mismatch', 'Component 2: 1 string mismatch')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:46:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(coerce(left), coerce(right))) at test_CnfComparisons.R:64:7
+
+Failure ('test_CnfComparisons.R:64:7'): CNF comparisons distinguish strings even when their collation ties
+Expected `all.equal(coerce(left), coerce(right))` to be TRUE.
+Differences:
+`actual` is a character vector ('Component 1: Names: 2 string mismatches', 'Component 1: Component 1: 1 string mismatch', 'Component 1: Component 2: 1 string mismatch')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:46:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(coerce(left), coerce(right))) at test_CnfComparisons.R:64:7
+
+Failure ('test_CnfComparisons.R:84:5'): CNF universe comparison preserves symbol and domain associations
+Expected `all.equal(u, v)` to be TRUE.
+Differences:
+`actual` is a character vector ('Names: 2 string mismatches', 'Component 1: Lengths (3, 2) differ (string compare on first 2)', 'Component 2: Lengths (2, 3) differ (string compare on first 2)')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:71:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(u, v)) at test_CnfComparisons.R:84:5
+
+Failure ('test_CnfComparisons.R:90:7'): CNF universe comparison preserves symbol and domain associations
+Expected `all.equal(coerce(a), coerce(b))` to be TRUE.
+Differences:
+`actual` is a character vector ('Attributes: < Component "universe": Names: 2 string mismatches >', 'Attributes: < Component "universe": Component 1: Lengths (3, 2) differ (string compare on first 2) >', 'Attributes: < Component "universe": Component 2: Lengths (2, 3) differ (string compare on first 2) >')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:71:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(coerce(a), coerce(b))) at test_CnfComparisons.R:90:7
+
+Failure ('test_CnfComparisons.R:90:7'): CNF universe comparison preserves symbol and domain associations
+Expected `all.equal(coerce(a), coerce(b))` to be TRUE.
+Differences:
+`actual` is a character vector ('Attributes: < Component "universe": Names: 2 string mismatches >', 'Attributes: < Component "universe": Component 1: Lengths (3, 2) differ (string compare on first 2) >', 'Attributes: < Component "universe": Component 2: Lengths (2, 3) differ (string compare on first 2) >')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:71:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(coerce(a), coerce(b))) at test_CnfComparisons.R:90:7
+
+Failure ('test_CnfComparisons.R:90:7'): CNF universe comparison preserves symbol and domain associations
+Expected `all.equal(coerce(a), coerce(b))` to be TRUE.
+Differences:
+`actual` is a character vector ('Attributes: < Component "universe": Names: 2 string mismatches >', 'Attributes: < Component "universe": Component 1: Lengths (3, 2) differ (string compare on first 2) >', 'Attributes: < Component "universe": Component 2: Lengths (2, 3) differ (string compare on first 2) >')
+`expected` is a logical vector (TRUE)
+
+Backtrace:
+    ▆
+ 1. ├─mlr3pipelines (local) with_cnf_comparison_locale(...) at test_CnfComparisons.R:71:3
+ 2. │ └─base::force(code) at test_CnfComparisons.R:11:5
+ 3. └─testthat::expect_true(all.equal(coerce(a), coerce(b))) at test_CnfComparisons.R:90:7
+
+[ FAIL 11 | WARN 0 | SKIP 0 | PASS 22 ]
+Error:
+! Test failures.
+Execution halted
