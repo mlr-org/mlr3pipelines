@@ -288,31 +288,7 @@ all.equal.CnfClause = function(target, current, ...) {
   all.equal.list(target, current, ...)
 }
 
-#' @rawNamespace if (getRversion() >= "4.3.0") S3method(chooseOpsMethod,CnfClause)
-chooseOpsMethod.CnfClause <- function(x, y, mx, my, cl, reverse) TRUE
-
-#' @export
-`&.CnfClause` = function(e1, e2) {
-  # Will return a CnfFormula, so we can just delegate to there.
-  # `&.CnfFormula` handles conversion.
-  `&.CnfFormula`(e1, e2)
-}
-
-#' @export
-`|.CnfClause` = function(e1, e2) {
-  if (inherits(e2, "CnfFormula")) {
-    # `|.CnfFormula` handles conversion
-    return(`|.CnfFormula`(e1, e2))
-  }
-  e1_bare = unclass(e1)
-  e2_bare = unclass(e2)
-  if (isFALSE(e1_bare) || isTRUE(e2_bare)) return(as.CnfClause(e2))
-  if (isFALSE(e2_bare) || isTRUE(e1_bare)) return(as.CnfClause(e1))
-  CnfClause(list(e1, e2))
-}
-
 #' @export
 `!.CnfClause` = function(x) {
   !as.CnfFormula(x)
 }
-

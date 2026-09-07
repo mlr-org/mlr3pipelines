@@ -309,11 +309,12 @@ all.equal.CnfFormula = function(target, current, ...) {
   all.equal.list(target, current, ...)
 }
 
-#' @rawNamespace if (getRversion() >= "4.3.0") S3method(chooseOpsMethod,CnfFormula)
-chooseOpsMethod.CnfFormula <- function(x, y, mx, my, cl, reverse) TRUE
-
-#' @export
-`&.CnfFormula` = function(e1, e2) {
+# Both operands must dispatch to the same function, including on R < 4.3.
+#' @noRd
+#' @rawNamespace S3method("&", CnfAtom, cnf_and)
+#' @rawNamespace S3method("&", CnfClause, cnf_and)
+#' @rawNamespace S3method("&", CnfFormula, cnf_and)
+cnf_and = function(e1, e2) {
   e1_bare = unclass(e1)
   e2_bare = unclass(e2)
   e1 = as.CnfFormula(e1)
@@ -326,10 +327,18 @@ chooseOpsMethod.CnfFormula <- function(x, y, mx, my, cl, reverse) TRUE
   simplify_cnf(c(e1, e2), attr(e1, "universe"))
 }
 
-#' @export
-`|.CnfFormula` = function(e1, e2) {
+#' @noRd
+#' @rawNamespace S3method("|", CnfAtom, cnf_or)
+#' @rawNamespace S3method("|", CnfClause, cnf_or)
+#' @rawNamespace S3method("|", CnfFormula, cnf_or)
+cnf_or = function(e1, e2) {
   e1_bare = unclass(e1)
   e2_bare = unclass(e2)
+  if (!inherits(e1, "CnfFormula") && !inherits(e2, "CnfFormula")) {
+    if (isFALSE(e1_bare) || isTRUE(e2_bare)) return(as.CnfClause(e2))
+    if (isFALSE(e2_bare) || isTRUE(e1_bare)) return(as.CnfClause(e1))
+    return(CnfClause(list(e1, e2)))
+  }
   e1 = as.CnfFormula(e1)
   if (isFALSE(e2_bare) || isTRUE(e1_bare)) return(e1)
   e2 = as.CnfFormula(e2)

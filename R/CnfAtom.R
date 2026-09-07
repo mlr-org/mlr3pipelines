@@ -190,29 +190,6 @@ all.equal.CnfAtom = function(target, current, ...) {
   all.equal.list(target, current, ...)
 }
 
-#' @rawNamespace if (getRversion() >= "4.3.0") S3method(chooseOpsMethod,CnfAtom)
-chooseOpsMethod.CnfAtom <- function(x, y, mx, my, cl, reverse) TRUE
-
-#' @export
-`&.CnfAtom` = function(e1, e2) {
-  # Will return a CnfFormula, so we can just delegate to there.
-  # `&.CnfFormula` handles conversion.
-  `&.CnfFormula`(e1, e2)
-}
-
-#' @export
-`|.CnfAtom` = function(e1, e2) {
-  if (inherits(e2, "CnfFormula")) {
-    # `|.CnfFormula` handles conversion
-    return(`|.CnfFormula`(e1, e2))
-  }
-  if (isFALSE(e1) || isTRUE(e2)) return(as.CnfClause(e2))
-  if (isFALSE(e2) || isTRUE(e1)) return(as.CnfClause(e1))
-
-  # either two proper CnfAtoms, or e2 is a CnfClause.
-  CnfClause(list(e1, e2))
-}
-
 #' @export
 `!.CnfAtom` = function(x) {
   if (is.logical(x)) {
