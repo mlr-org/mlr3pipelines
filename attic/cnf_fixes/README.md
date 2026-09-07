@@ -1,12 +1,13 @@
 # CNF fixes and remaining open bugs
 
-Status: **2026-09-07**, implementation commit **`7f4ffb71`**. The numbers below preserve the user's 19-item open-bug
+Status: **2026-09-07**, implementation commits **`7f4ffb71`** and **`9fb17923`**. The numbers below preserve the user's 19-item open-bug
 list. They are not the older experiment numbers or section numbers in the
 investigation diaries.
 
 This follow-up implements the requested fixes for **1, 2, 7, 8, 11, 12, 13,
-14, 15, and 16**. The remaining open bugs are **3, 4, 5, 6, 9, 10, 17, 18,
-and 19**. The historical investigation used production baseline `09770eaa`
+14, 15, and 16**, followed by **19** through shared operator registrations.
+The remaining open bugs are **3, 4, 5, 6, 9, 10, 17, and 18**.
+The historical investigation used production baseline `09770eaa`
 and ended at `d5ccd1be`; its deliberately failing reproductions describe that
 baseline. Use the package regression tests for the repaired behavior.
 
@@ -24,6 +25,7 @@ baseline. Use the package regression tests for the repaired behavior.
 | 14 | Equivalent UTF-8/Latin-1 text produces different serialized clause-order keys and false comparison differences. | Normalize constructor text and comparison names/ranges to UTF-8 before hashing. Comparisons also handle proper older stored objects that retain Latin-1 marks. |
 | 15 | Locale collation ties make ordering depend on input order, including delegated universe comparison. | Use radix ordering for normalized values, symbol names, and clause keys. Add `all.equal.CnfUniverse()` to compare binding maps in the same deterministic name order. |
 | 16 | Dimensional atom values retain repeated scalar values and compare unequal to the same ordinary set. | Reject matrices/arrays and classed character inputs at creation. Proper ordinary vectors retain scalar deduplication. |
+| 19 | Mixed CNF classes select different binary operator methods and fail on R < 4.3. | Register one shared handler per operator for all three classes, using roxygen2 `@rawNamespace` tags. The generated registrations point directly to `cnf_and`/`cnf_or`; class-specific wrappers and `chooseOpsMethod()` hooks are removed. R >= 3.3 is retained. |
 
 The changes are confined to the five CNF representation files, their namespace
 registration and documentation, and focused regression tests. The simplifier
@@ -84,22 +86,19 @@ requires arbitrarily many productive passes as the input grows.
 | 9 | `as.list(as.CnfClause(TRUE))` calls an unsupported `as.CnfAtom()` conversion and errors. The return should also consistently have list shape. | [Original reproduction and cause](../cnf/CLAUDE.md#bug-1-aslistcnfclause-crashes-on-true-clauses). |
 | 10 | `as.list()` on a proper clause drops the documented symbol names, preventing the documented named-list access/commutation. | [Independent earlier review](../cnf/review_5_2_pro.md), [representation review](../cnf_verify3/representation/NOTES.md). |
 
-### Runtime depth and version compatibility
+### Runtime depth
 
 | Number | Remaining behavior | Evidence |
 | --- | --- | --- |
 | 17 | Reversed implication chains create linearly nested unit propagation and exhaust the R/C stack. | [Unit-chain source recurrence and queue experiment](../cnf_verify3/unit_queue/README.md). Recorded failures were around 256 symbols on R 3.6 and 1,024 on R 4.6; thresholds depend on the environment. |
 | 18 | Guarded implication chains whose clauses remain non-unit exhaust the stack through restriction/subset-update callbacks. Fixing only unit propagation does not address this path. | [Separate non-unit family](../cnf_verify3/unit_queue/README.md#6-independent-nonunit-recursion-family). |
-| 19 | Mixed `CnfAtom`/`CnfClause`/`CnfFormula` Boolean operators fail with incompatible S3 methods on R < 4.3, while DESCRIPTION allows R >= 3.3. | [Version/dispatch review](../cnf_verify3/execution_modes/NOTES.md), [earlier API review](../cnf/review_5_2_pro.md). |
 
-The kernel and mixed-class dispatch registrations have not changed in this
-follow-up, so the recorded recursion and older-R dispatch limitations remain.
+The kernel has not changed in this follow-up, so the recorded recursion
+limitations remain.
 The two clause-to-list methods are likewise unchanged.
-The current R 3.6 public-call recheck of bugs 9, 10 and 19 is recorded in
-[open_api_r36.log](open_api_r36.log).
-A [shared-method dispatch prototype](ops_dispatch/README.md) subsequently
-confirmed a repair route for 19 without raising the minimum R version.
-Production dispatch is still unchanged.
+The R 3.6 public-call recheck of bugs 9, 10 and 19 before the operator fix is
+recorded in [open_api_r36.log](open_api_r36.log). Bug 19 is now closed; see the
+[shared-method implementation and compiled-package checks](ops_dispatch/README.md).
 
 ## Regression and review record
 
@@ -163,6 +162,11 @@ Documentation was regenerated with roxygen2 8.1.0; it reported pre-existing
 missing-Suggests cross-reference warnings. Only the CNF documentation and new
 S3 registration were retained; unrelated generated changes were discarded.
 
+The later operator repair has its own [validation record](ops_dispatch/README.md),
+including the new `test_CnfOperators.R` file and actual installed, byte-compiled
+CNF namespace checks on both R 3.6.3 and R 4.6.1. The initial 4,255-expectation
+record above predates this separate fix.
+
 ## Evidence boundaries
 
 The earlier source proofs retain their stated kernel assumptions because the
@@ -175,5 +179,5 @@ The unchanged kernel's SHA-256 is
 Missing `universe[[name]]` returning NULL, ordinary domain repetitions, domain
 order sensitivity, alternative equivalent fixed points, and hypothetical hash
 collisions are not additional confirmed open bugs. Older diaries sometimes
-listed these more broadly; the current nine-item list above is the supported
+listed these more broadly; the current eight-item list above is the supported
 open-bug inventory.

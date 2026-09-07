@@ -1,6 +1,10 @@
 suppressPackageStartupMessages({ library(checkmate); library(mlr3misc) })
+# Preserve the pre-fix comparison now that production has shared handlers.
+baseline = "da252ba5"
 for (file in c("CnfUniverse", "CnfSymbol", "CnfAtom", "CnfClause", "CnfFormula", "CnfFormula_simplify")) {
-  source(file.path("R", paste0(file, ".R")))
+  code = system2("git", c("show", paste0(baseline, ":R/", file, ".R")), stdout = TRUE)
+  stopifnot(is.null(attr(code, "status")))
+  eval(parse(text = code), envir = globalenv())
 }
 options(warn = 2)
 u = CnfUniverse()
