@@ -97,6 +97,9 @@ follow-up, so the recorded recursion and older-R dispatch limitations remain.
 The two clause-to-list methods are likewise unchanged.
 The current R 3.6 public-call recheck of bugs 9, 10 and 19 is recorded in
 [open_api_r36.log](open_api_r36.log).
+A [shared-method dispatch prototype](ops_dispatch/README.md) subsequently
+confirmed a repair route for 19 without raising the minimum R version.
+Production dispatch is still unchanged.
 
 ## Regression and review record
 
