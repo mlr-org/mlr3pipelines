@@ -98,8 +98,7 @@ table(bls_result$result)
 Han H, Wang W, Mao B (2005).
 \dQuote{Borderline-SMOTE: A New Over-Sampling Method in Imbalanced Data Sets Learning.}
 In Huang D, Zhang X, Huang G (eds.), \emph{Advances in Intelligent Computing}, 878--887.
-ISBN 978-3-540-31902-3.
-\doi{10.1007/11538059_91}.
+ISBN 978-3-540-31902-3, \doi{10.1007/11538059_91}.
 }
 \seealso{
 https://mlr-org.com/pipeops.html
