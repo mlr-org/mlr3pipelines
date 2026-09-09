@@ -1,76 +1,41 @@
-context("ppl - pipeline_bagging")
+context("ppl - pipeline_bagging (deprecated)")
 
+test_that("Bagging warns through all entry points and preserves its defaults", {
+  constructors = list(
+    pipeline_bagging,
+    function(...) ppl("bagging", ...),
+    function(...) mlr_graphs$get("bagging", ...)
+  )
+  for (constructor in constructors) {
+    expect_warning({p = constructor(graph = po("nop"))},
+      'deprecated.*removed.*ppl\\("bag"\\).*different default.*frac = 1.*replace = TRUE',
+      class = "deprecatedWarning")
+    expect_equal(p$param_set$values$replicate.reps, 10)
+    expect_equal(p$param_set$values$subsample.frac, 0.7)
+    expect_false(p$param_set$values$subsample.replace)
+    expect_equal(touch(p), touch(pipeline_bag(po("nop"), frac = 0.7, replace = FALSE)))
+  }
 
-test_that("Bagging Pipeline", {
-  skip_if_not_installed("rpart")
-  skip_on_cran()  # takes too long
-
-  expect_error(ppl("bagging", graph = lrn("classif.rpart"), averager = po("classifavg", collect_multiplicity = FALSE)),
-    regexp = "must collect multiplicities")
-
-
-  # classif
-  tsk = tsk("iris")
-  lrn = lrn("classif.rpart")
-  p = ppl("bagging", graph = po(lrn), averager = po("classifavg", collect_multiplicity = TRUE))
-  expect_graph(p)
-
-  # regr
-  tsk = tsk("boston_housing_classic")
-  lrn = lrn("regr.rpart")
-  p = ppl("bagging", graph = po(lrn), iterations = 5L, averager = po("regravg", collect_multiplicity = TRUE))
-  expect_graph(p)
-
-  # graph instead of po(lrn)
-  gr = po("pca") %>>% po(lrn)
-  p = pipeline_bagging(graph = gr, iterations = 2L, averager = po("regravg", collect_multiplicity = TRUE))
-  expect_graph(p)
-  res = resample(tsk$filter(1:50), GraphLearner$new(p), rsmp("holdout"))
-  expect_resample_result(res)
-
-  # no averager
-  tsk = tsk("iris")
-  lrn = lrn("classif.rpart")
-  p = pipeline_bagging(graph = po(lrn))
-  expect_graph(p)
-  train_out = p$train(tsk)[[1L]]
-  predict_out = p$predict(tsk)[[1L]]
+  task = tsk("iris")
+  train_out = p$train(task)[[1L]]
+  predict_out = p$predict(task)[[1L]]
   expect_length(train_out, 10L)
   expect_length(predict_out, 10L)
-  expect_true(all(map_lgl(predict_out, function(x) "PredictionClassif" %in% class(x))))
+  for (sample in train_out) {
+    expect_equal(sample$nrow, 105)
+    expect_subset(sample$row_ids, task$row_ids)
+    expect_equal(anyDuplicated(sample$row_ids), 0L)
+  }
+  for (prediction_task in predict_out) {
+    expect_equal(prediction_task$data(), task$data())
+  }
 })
 
-test_that("Bagging with replacement", {
-  skip_if_not_installed("rpart")
-  tsk = tsk("iris")
-  lrn = lrn("classif.rpart")
-  p = ppl("bagging", graph = po(lrn), replace = TRUE, averager = po("classifavg", collect_multiplicity = TRUE))
-  expect_graph(p)
-  res = resample(tsk, GraphLearner$new(p), rsmp("holdout"))
-  expect_resample_result(res)
-
-  tsk$filter(1:140)
-  expect_equal(anyDuplicated(tsk$data()), 0)  # make sure no duplicates
-
-  p = ppl("bagging", iterations = 2, frac = 1,
-    graph = lrn("classif.debug", save_tasks = TRUE),
-    replace = TRUE, averager = po("classifavg", collect_multiplicity = TRUE)
-  )
-  p$train(tsk)
-
-  expect_true(anyDuplicated(p$pipeops$classif.debug$state[[1]]$model$task_train$data()) != 0)
-
-  getOrigId = function(data) {
-    tsk$data()[, origline := .I][data, on = colnames(tsk$data()), origline]
-  }
-  orig_id_1 = getOrigId(p$pipeops$classif.debug$state[[1]]$model$task_train$data())
-  orig_id_2 = getOrigId(p$pipeops$classif.debug$state[[2]]$model$task_train$data())
-
-  expect_equal(length(orig_id_1), 140)
-  expect_equal(length(orig_id_2), 140)
-  # if we sampled the same values twice, the all.equal() would just give TRUE
-  expect_string(all.equal(orig_id_1, orig_id_2))
-
-  expect_true(length(unique(orig_id_1)) < 140)
-  expect_true(length(unique(orig_id_2)) < 140)
+test_that("Bagging forwards explicit arguments to bag", {
+  graph = lrn("classif.debug")
+  averager = po("classifavg", collect_multiplicity = TRUE)
+  expect_warning({p = pipeline_bagging(graph, 3, 0.8, averager, TRUE)}, "deprecated")
+  expect_equal(p, pipeline_bag(graph, 3, 0.8, averager, TRUE))
+  p$train(tsk("iris"))
+  expect_prediction_classif(p$predict(tsk("iris"))[[1L]])
 })

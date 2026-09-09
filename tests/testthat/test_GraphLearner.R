@@ -811,7 +811,7 @@ test_that("base_learner() works", {
   expect_error(as_learner(po("nop"))$base_learner(), "No base learner found in Graph.")
 
 
-  bagger = as_learner(ppl("bagging", iterations = 1, lrn("classif.rpart"),
+  bagger = as_learner(ppl("bag", iterations = 1, lrn("classif.rpart"),
     averager = po("classifavg", collect_multiplicity = TRUE)))
 
   expect_identical(bagger$base_learner(), bagger$graph_model$pipeops$classif.rpart$learner_model)
@@ -827,8 +827,8 @@ test_that("base_learner() works", {
 
   expect_error(bagger$base_learner(), "Multiplicity that does not contain exactly one Learner")
 
-  metabagger = as_learner(ppl("bagging", iterations = 1,
-      ppl("bagging", iterations = 1, lrn("classif.rpart"),
+  metabagger = as_learner(ppl("bag", iterations = 1,
+      ppl("bag", iterations = 1, lrn("classif.rpart"),
         averager = po("classifavg_1", collect_multiplicity = TRUE))$set_names(c("replicate", "subsample"), c("replicate_1", "subsample_1")),
     averager = po("classifavg_2", collect_multiplicity = TRUE)))
 
@@ -1209,7 +1209,7 @@ test_that("GraphLearner Importance", {
 
   expect_equal(g_importance$importance(), c(Petal.Length = 1, Petal.Width = 1, Sepal.Length = 1, Sepal.Width = 1))
 
-  g_bagging = as_learner(ppl("bagging", DebugWithImportance$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
+  g_bagging = as_learner(ppl("bag", DebugWithImportance$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
 
   expect_true("importance" %in% g_bagging$properties)
   g_bagging$train(tsk("iris"))
@@ -1290,7 +1290,7 @@ test_that("GraphLearner Selected Features", {
   g_featsel$impute_selected_features = TRUE
   expect_equal(g_featsel$selected_features(), tsk("iris")$feature_names[[1]])
 
-  g_bagging = as_learner(ppl("bagging", DebugWithSelectedFeatures$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
+  g_bagging = as_learner(ppl("bag", DebugWithSelectedFeatures$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
 
   expect_true("selected_features" %in% g_bagging$properties)
   g_bagging$train(tsk("iris"))
@@ -1388,7 +1388,7 @@ test_that("GraphLearner other properties", {
   expect_equal(g_properties$loglik(), 1)
   expect_equal(g_properties$oob_error(), 2)
 
-  g_bagging = as_learner(ppl("bagging", DebugWithProperties$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
+  g_bagging = as_learner(ppl("bag", DebugWithProperties$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
 
   expect_true(all(c("loglik", "oob_error") %in% g_bagging$properties))
   g_bagging$train(tsk("iris"))
