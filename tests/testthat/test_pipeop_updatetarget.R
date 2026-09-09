@@ -124,9 +124,9 @@ test_that("PipeOpUpdateTarget - transforms internal validation task", {
   predict_out = op$predict(list(validation_task))[["output"]]
 
   cols = unname(unlist(train_out$col_roles[c("feature", "target")]))
-  expect_equal(
+  expect_equal_data_table(
     train_out$internal_valid_task$data(cols = cols),
     predict_out$data(cols = cols),
-    ignore.col.order = TRUE
+    ignore_col_order = TRUE
   )
 })

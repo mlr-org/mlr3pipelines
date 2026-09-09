@@ -119,7 +119,7 @@ test_that("PipeOpImpactEncode on Regression", {
   op = PipeOpEncodeImpact$new()
   op$param_set$values$smoothing = 0
 
-  expect_equal(op$train(list(testtask))[[1]]$data(), expect, ignore.col.order = TRUE)
+  expect_equal_data_table(op$train(list(testtask))[[1]]$data(), expect, ignore_col_order = TRUE)
 
 
   expect_equal(op$state$impact$a, t(t(c(a = 0, b = 0, .TEMP.MISSING = NA))))
@@ -147,7 +147,7 @@ test_that("PipeOpImpactEncode on Regression", {
   expectdf2 = expect
   expectdf2$b[6] = 0
 
-  expect_equal(op$predict(list(testtask2))[[1]]$data(), expectdf2, ignore.col.order = TRUE)
+  expect_equal_data_table(op$predict(list(testtask2))[[1]]$data(), expectdf2, ignore_col_order = TRUE)
 
   encoded = op$train(list(testtask2))[[1]]$data()
 
@@ -157,7 +157,7 @@ test_that("PipeOpImpactEncode on Regression", {
   expectdf3 = expect
   expectdf3$b = c(-2 / 3, 0.5, 0.5, -2 / 3, -2 / 3, 0)
 
-  expect_equal(encoded, expectdf3, ignore.col.order = TRUE)
+  expect_equal_data_table(encoded, expectdf3, ignore_col_order = TRUE)
 
 
   op$param_set$values$impute_zero = FALSE
