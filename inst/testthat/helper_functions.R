@@ -5,8 +5,14 @@ expect_equal_data_table = function(object, expected,
   act = testthat::quasi_label(rlang::enquo(object), arg = "object")
   exp = testthat::quasi_label(rlang::enquo(expected), arg = "expected")
 
-  checkmate::assert_data_table(act$val)
-  checkmate::assert_data_table(exp$val)
+  # Test instead of asserts since an input of wrong type should be a failure.
+  if (!data.table::is.data.table(act$val)) {
+    testthat::fail(sprintf("Expected %s to be a data.table.", act$lab))
+  }
+  if (!data.table::is.data.table(exp$val)) {
+    testthat::fail(sprintf("Expected %s to be a data.table.", exp$lab))
+  }
+
   checkmate::assert_flag(ignore_col_order)
   checkmate::assert_flag(ignore_row_order)
   checkmate::assert_flag(trim_levels)
@@ -43,8 +49,13 @@ expect_equal_r6 = function(object, expected, ...) {
   act = testthat::quasi_label(rlang::enquo(object), arg = "object")
   exp = testthat::quasi_label(rlang::enquo(expected), arg = "expected")
 
-  checkmate::assert_true(R6::is.R6(act$val))
-  checkmate::assert_true(R6::is.R6(exp$val))
+  # Test instead of asserts since an input of wrong type should be a failure.
+  if (!R6::is.R6(act$val)) {
+    testthat::fail(sprintf("Expected %s to be an R6 object.", act$lab))
+  }
+  if (!R6::is.R6(exp$val)) {
+    testthat::fail(sprintf("Expected %s to be an R6 object.", exp$lab))
+  }
 
   comparison = base::all.equal(
     act$val,
