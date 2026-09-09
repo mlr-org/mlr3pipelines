@@ -277,6 +277,7 @@ all.equal.CnfClause = function(target, current, ...) {
   all.equal.list(target, current, ...)
 }
 
+#' @exportS3Method NULL
 #' @rawNamespace if (getRversion() >= "4.3.0") S3method(chooseOpsMethod,CnfClause)
 chooseOpsMethod.CnfClause <- function(x, y, mx, my, cl, reverse) TRUE
 

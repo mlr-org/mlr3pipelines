@@ -182,6 +182,7 @@ all.equal.CnfAtom = function(target, current, ...) {
   all.equal.list(target, current, ...)
 }
 
+#' @exportS3Method NULL
 #' @rawNamespace if (getRversion() >= "4.3.0") S3method(chooseOpsMethod,CnfAtom)
 chooseOpsMethod.CnfAtom <- function(x, y, mx, my, cl, reverse) TRUE
 

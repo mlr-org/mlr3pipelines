@@ -302,6 +302,7 @@ all.equal.CnfFormula = function(target, current, ...) {
   all.equal.list(target, current, ...)
 }
 
+#' @exportS3Method NULL
 #' @rawNamespace if (getRversion() >= "4.3.0") S3method(chooseOpsMethod,CnfFormula)
 chooseOpsMethod.CnfFormula <- function(x, y, mx, my, cl, reverse) TRUE
 
