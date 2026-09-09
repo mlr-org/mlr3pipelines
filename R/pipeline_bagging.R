@@ -51,7 +51,8 @@
 pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL, replace = FALSE) {
   warningf(paste(
     'ppl("bagging") / pipeline_bagging() is deprecated and will be removed in the future.',
-    'Use ppl("bag") / pipeline_bag() instead, which does real bagging with frac = 1 and replace = TRUE by default.'
+    'Use ppl("bag") / pipeline_bag() instead, which does real bagging with changed default argument values:',
+    'frac = 1 and replace = TRUE (instead of frac = 0.7 and replace = FALSE).'
   ))
   pipeline_bag(graph = graph, iterations = iterations, frac = frac, averager = averager, replace = replace)
 }
