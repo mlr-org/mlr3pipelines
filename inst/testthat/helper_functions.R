@@ -667,9 +667,17 @@ expect_multiplicity = function(x) {
 # See https://github.com/r-lib/R6/issues/208
 # This is quite sloppy right now.
 r6_to_list = function(x) {
-  actives = c(".__enclos_env__", names(x[[".__enclos_env__"]][[".__active__"]]))
+  active_bindings = x[[".__enclos_env__"]][[".__active__"]]
+  active_names = names(active_bindings)
+  actives = c(".__enclos_env__", active_names)
   ll = sapply(setdiff(names(x), actives), get, x, simplify = FALSE)
-  ll[[".__enclos_env__"]] = list(`.__active__` = x[[".__enclos_env__"]][[".__active__"]], private = x[[".__enclos_env__"]][["private"]])
+  private = x[[".__enclos_env__"]][["private"]]
+  if ("label" %in% active_names) {
+    # .label lazily caches the value of the active label binding and is not state.
+    private_names = sort(setdiff(names(private), ".label"))
+    private = sapply(private_names, get, private, simplify = FALSE)
+  }
+  ll[[".__enclos_env__"]] = list(`.__active__` = active_bindings, private = private)
   if (!is.null(x[[".__enclos_env__"]][["super"]])) {
     ll[[".__enclos_env__"]][["super"]] = r6_to_list(x[[".__enclos_env__"]][["super"]])
   }
