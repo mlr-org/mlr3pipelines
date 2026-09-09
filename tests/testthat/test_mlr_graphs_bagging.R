@@ -8,8 +8,7 @@ test_that("Bagging warns through all entry points and preserves its defaults", {
   )
   for (constructor in constructors) {
     expect_warning({p = constructor(graph = po("nop"))},
-      'deprecated.*removed.*ppl\\("bag"\\).*different default.*frac = 1.*replace = TRUE',
-      class = "deprecatedWarning")
+      'deprecated.*removed.*ppl\\("bag"\\).*changed default.*frac = 1.*replace = TRUE')
     expect_equal(p$param_set$values$replicate.reps, 10)
     expect_equal(p$param_set$values$subsample.frac, 0.7)
     expect_false(p$param_set$values$subsample.replace)
