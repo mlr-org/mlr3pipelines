@@ -1,5 +1,6 @@
 # mlr3pipelines 0.12.0-9000
 
+* Fix: `pos()` now returns an unnamed list, preventing duplicated PipeOp IDs such as `pca.pca` when passed to `as_graph()`.
 
 # mlr3pipelines 0.12.0
 
