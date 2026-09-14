@@ -142,7 +142,8 @@
 #'     * `"validation"`: the `PipeOp` can make use of the `$internal_valid_task` of an [`mlr3::Task`].
 #'        This is for example used for [`PipeOpLearner`]s that wrap a [`Learner`][mlr3::Learner] with this property, see [`mlr3::Learner`].
 #'        `PipeOp`s that have this property, also have a `$validate` field, which controls whether to use the validation task,
-#'        as well as a `$internal_valid_scores` field, which allows to access the internal validation scores after training.
+#'        as well as a `$internal_valid_scores` field, which allows to access the internal validation scores after training,
+#'        and a `$best_valid_scores` field for the best internal validation scores observed during training.
 #'     * `"internal_tuning"`: the `PipeOp` is able to internally optimize hyperparameters.
 #'        This works analogously to the internal tuning implementation for [`mlr3::Learner`].
 #'        `PipeOp`s with that property also implement the standardized accessor `$internal_tuned_values` and have at least one

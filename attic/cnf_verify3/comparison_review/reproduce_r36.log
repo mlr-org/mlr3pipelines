@@ -1,0 +1,1030 @@
+{
+  "metadata": {
+    "runtime": "3.6.3",
+    "locale": "LC_CTYPE=C.UTF-8;LC_NUMERIC=C;LC_TIME=C.UTF-8;LC_COLLATE=C.UTF-8;LC_MONETARY=C.UTF-8;LC_MESSAGES=C.UTF-8;LC_PAPER=C.UTF-8;LC_NAME=C;LC_ADDRESS=C;LC_TELEPHONE=C;LC_MEASUREMENT=C.UTF-8;LC_IDENTIFICATION=C",
+    "package_versions": {
+      "checkmate": "2.3.4",
+      "mlr3misc": "0.22.0",
+      "digest": "0.6.39",
+      "jsonlite": "2.0.0"
+    },
+    "source_md5": {
+      "attic/cnf_verify3/root/comparison_normalization.R": "cf41f193f045b086c2ae48fbc128e665",
+      "R/CnfAtom.R": "58699a7eb88f45c6aa5cdb8b77cc7c41",
+      "R/CnfClause.R": "f6c9659b31a511e696dc9d8d7cfa9349",
+      "R/CnfFormula.R": "7609c11610bbe9de566d9d9b448a07f7"
+    }
+  },
+  "summary": {
+    "comparisons": 39,
+    "expected_equal": 24,
+    "expected_unequal": 15,
+    "production_false_negatives": 13,
+    "production_false_positives": 0,
+    "candidate_errors": 0,
+    "candidate_disagreements": 0,
+    "guarded_disagreements": 0
+  },
+  "collation_traces": {
+    "C": {
+      "distinct_values": true,
+      "ordinary_orders_agree": true,
+      "radix_orders_agree": true,
+      "input_codepoints": [
+        233,
+        [101, 769]
+      ],
+      "ordered_codepoints": [
+        [101, 769],
+        233
+      ],
+      "reverse_ordered_codepoints": [
+        [101, 769],
+        233
+      ]
+    },
+    "C.UTF-8": {
+      "distinct_values": true,
+      "ordinary_orders_agree": false,
+      "radix_orders_agree": true,
+      "input_codepoints": [
+        233,
+        [101, 769]
+      ],
+      "ordered_codepoints": [
+        233,
+        [101, 769]
+      ],
+      "reverse_ordered_codepoints": [
+        [101, 769],
+        233
+      ]
+    },
+    "en_US.UTF-8": {
+      "distinct_values": true,
+      "ordinary_orders_agree": false,
+      "radix_orders_agree": true,
+      "input_codepoints": [
+        233,
+        [101, 769]
+      ],
+      "ordered_codepoints": [
+        233,
+        [101, 769]
+      ],
+      "reverse_ordered_codepoints": [
+        [101, 769],
+        233
+      ]
+    }
+  },
+  "encoding_traces": {
+    "C": {
+      "utf8_keys": ["X.__.Y642497de15345ba5", "X.__.Y828c0d82bc749a8f"],
+      "latin1_keys": ["X.__.Yaafaa05d165a4a0c", "X.__.Y7f88ef91f2f6f955"],
+      "utf8_clause_order": [1, 2],
+      "latin1_clause_order": [2, 1],
+      "utf8_marks": [
+        {
+          "X": "UTF-8",
+          "Y": "unknown"
+        },
+        {
+          "X": "UTF-8",
+          "Y": "unknown"
+        }
+      ],
+      "latin1_marks": [
+        {
+          "X": "latin1",
+          "Y": "unknown"
+        },
+        {
+          "X": "latin1",
+          "Y": "unknown"
+        }
+      ],
+      "assignments": 9,
+      "models": 2,
+      "truth_agrees": true
+    },
+    "C.UTF-8": {
+      "utf8_keys": ["X.__.Y642497de15345ba5", "X.__.Y828c0d82bc749a8f"],
+      "latin1_keys": ["X.__.Yaafaa05d165a4a0c", "X.__.Y7f88ef91f2f6f955"],
+      "utf8_clause_order": [1, 2],
+      "latin1_clause_order": [2, 1],
+      "utf8_marks": [
+        {
+          "X": "UTF-8",
+          "Y": "unknown"
+        },
+        {
+          "X": "UTF-8",
+          "Y": "unknown"
+        }
+      ],
+      "latin1_marks": [
+        {
+          "X": "latin1",
+          "Y": "unknown"
+        },
+        {
+          "X": "latin1",
+          "Y": "unknown"
+        }
+      ],
+      "assignments": 9,
+      "models": 2,
+      "truth_agrees": true
+    },
+    "en_US.UTF-8": {
+      "utf8_keys": ["X.__.Y642497de15345ba5", "X.__.Y828c0d82bc749a8f"],
+      "latin1_keys": ["X.__.Yaafaa05d165a4a0c", "X.__.Y7f88ef91f2f6f955"],
+      "utf8_clause_order": [1, 2],
+      "latin1_clause_order": [2, 1],
+      "utf8_marks": [
+        {
+          "X": "UTF-8",
+          "Y": "unknown"
+        },
+        {
+          "X": "UTF-8",
+          "Y": "unknown"
+        }
+      ],
+      "latin1_marks": [
+        {
+          "X": "latin1",
+          "Y": "unknown"
+        },
+        {
+          "X": "latin1",
+          "Y": "unknown"
+        }
+      ],
+      "assignments": 9,
+      "models": 2,
+      "truth_agrees": true
+    }
+  },
+  "records": [
+    {
+      "label": "collation_atom_values",
+      "locale": "C",
+      "class": "CnfAtom",
+      "expected": true,
+      "identical": false,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "collation_clause_values",
+      "locale": "C",
+      "class": "CnfClause",
+      "expected": true,
+      "identical": false,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "collation_formula_values",
+      "locale": "C",
+      "class": "CnfFormula",
+      "expected": true,
+      "identical": false,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "unequal_atom_values",
+      "locale": "C",
+      "class": "CnfAtom",
+      "expected": false,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component “values”: 1 string mismatch",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Component “values”: 1 string mismatch",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Component “values”: 1 string mismatch",
+        "error": null
+      }
+    },
+    {
+      "label": "unequal_clause_values",
+      "locale": "C",
+      "class": "CnfClause",
+      "expected": false,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component “X”: 1 string mismatch",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Component “X”: 1 string mismatch",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Component “X”: 1 string mismatch",
+        "error": null
+      }
+    },
+    {
+      "label": "unequal_formula_values",
+      "locale": "C",
+      "class": "CnfFormula",
+      "expected": false,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component 1: Component 1: 1 string mismatch",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Component 1: Component 1: 1 string mismatch",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Component 1: Component 1: 1 string mismatch",
+        "error": null
+      }
+    },
+    {
+      "label": "collation_clause_symbols",
+      "locale": "C",
+      "class": "CnfClause",
+      "expected": true,
+      "identical": false,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "collation_formula_symbols",
+      "locale": "C",
+      "class": "CnfFormula",
+      "expected": true,
+      "identical": false,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "unequal_symbol_association_clause",
+      "locale": "C",
+      "class": "CnfClause",
+      "expected": false,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": ["Component “é”: 1 string mismatch", "Component “é”: 1 string mismatch"],
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": ["Component “é”: 1 string mismatch", "Component “é”: 1 string mismatch"],
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": ["Component “é”: 1 string mismatch", "Component “é”: 1 string mismatch"],
+        "error": null
+      }
+    },
+    {
+      "label": "unequal_symbol_association_formula",
+      "locale": "C",
+      "class": "CnfFormula",
+      "expected": false,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": ["Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch"],
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": ["Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch"],
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": ["Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch"],
+        "error": null
+      }
+    },
+    {
+      "label": "encoding_identical_formula",
+      "locale": "C",
+      "class": "CnfFormula",
+      "expected": true,
+      "identical": true,
+      "original": {
+        "equal": false,
+        "message": ["Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch", "Component 2: Component 1: 1 string mismatch", "Component 2: Component 2: 1 string mismatch"],
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "encoding_clause_1",
+      "locale": "C",
+      "class": "CnfClause",
+      "expected": true,
+      "identical": true,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "encoding_clause_2",
+      "locale": "C",
+      "class": "CnfClause",
+      "expected": true,
+      "identical": true,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "collation_atom_values",
+      "locale": "C.UTF-8",
+      "class": "CnfAtom",
+      "expected": true,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component “values”: 2 string mismatches",
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "collation_clause_values",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "expected": true,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component “X”: 2 string mismatches",
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "collation_formula_values",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "expected": true,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component 1: Component 1: 2 string mismatches",
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "unequal_atom_values",
+      "locale": "C.UTF-8",
+      "class": "CnfAtom",
+      "expected": false,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component “values”: 1 string mismatch",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Component “values”: 1 string mismatch",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Component “values”: 1 string mismatch",
+        "error": null
+      }
+    },
+    {
+      "label": "unequal_clause_values",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "expected": false,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component “X”: 1 string mismatch",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Component “X”: 1 string mismatch",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Component “X”: 1 string mismatch",
+        "error": null
+      }
+    },
+    {
+      "label": "unequal_formula_values",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "expected": false,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component 1: Component 1: 1 string mismatch",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Component 1: Component 1: 1 string mismatch",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Component 1: Component 1: 1 string mismatch",
+        "error": null
+      }
+    },
+    {
+      "label": "collation_clause_symbols",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "expected": true,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": ["Names: 2 string mismatches", "Component 1: 1 string mismatch", "Component 2: 1 string mismatch"],
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "collation_formula_symbols",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "expected": true,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": ["Component 1: Names: 2 string mismatches", "Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch"],
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "unequal_symbol_association_clause",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "expected": false,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Names: 2 string mismatches",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": ["Component “é”: 1 string mismatch", "Component “é”: 1 string mismatch"],
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": ["Component “é”: 1 string mismatch", "Component “é”: 1 string mismatch"],
+        "error": null
+      }
+    },
+    {
+      "label": "unequal_symbol_association_formula",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "expected": false,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component 1: Names: 2 string mismatches",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": ["Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch"],
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": ["Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch"],
+        "error": null
+      }
+    },
+    {
+      "label": "encoding_identical_formula",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "expected": true,
+      "identical": true,
+      "original": {
+        "equal": false,
+        "message": ["Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch", "Component 2: Component 1: 1 string mismatch", "Component 2: Component 2: 1 string mismatch"],
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "encoding_clause_1",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "expected": true,
+      "identical": true,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "encoding_clause_2",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "expected": true,
+      "identical": true,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "collation_atom_values",
+      "locale": "en_US.UTF-8",
+      "class": "CnfAtom",
+      "expected": true,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component “values”: 2 string mismatches",
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "collation_clause_values",
+      "locale": "en_US.UTF-8",
+      "class": "CnfClause",
+      "expected": true,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component “X”: 2 string mismatches",
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "collation_formula_values",
+      "locale": "en_US.UTF-8",
+      "class": "CnfFormula",
+      "expected": true,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component 1: Component 1: 2 string mismatches",
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "unequal_atom_values",
+      "locale": "en_US.UTF-8",
+      "class": "CnfAtom",
+      "expected": false,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component “values”: 1 string mismatch",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Component “values”: 1 string mismatch",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Component “values”: 1 string mismatch",
+        "error": null
+      }
+    },
+    {
+      "label": "unequal_clause_values",
+      "locale": "en_US.UTF-8",
+      "class": "CnfClause",
+      "expected": false,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component “X”: 1 string mismatch",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Component “X”: 1 string mismatch",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Component “X”: 1 string mismatch",
+        "error": null
+      }
+    },
+    {
+      "label": "unequal_formula_values",
+      "locale": "en_US.UTF-8",
+      "class": "CnfFormula",
+      "expected": false,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component 1: Component 1: 1 string mismatch",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Component 1: Component 1: 1 string mismatch",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Component 1: Component 1: 1 string mismatch",
+        "error": null
+      }
+    },
+    {
+      "label": "collation_clause_symbols",
+      "locale": "en_US.UTF-8",
+      "class": "CnfClause",
+      "expected": true,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": ["Names: 2 string mismatches", "Component 1: 1 string mismatch", "Component 2: 1 string mismatch"],
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "collation_formula_symbols",
+      "locale": "en_US.UTF-8",
+      "class": "CnfFormula",
+      "expected": true,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": ["Component 1: Names: 2 string mismatches", "Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch"],
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "unequal_symbol_association_clause",
+      "locale": "en_US.UTF-8",
+      "class": "CnfClause",
+      "expected": false,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Names: 2 string mismatches",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": ["Component “é”: 1 string mismatch", "Component “é”: 1 string mismatch"],
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": ["Component “é”: 1 string mismatch", "Component “é”: 1 string mismatch"],
+        "error": null
+      }
+    },
+    {
+      "label": "unequal_symbol_association_formula",
+      "locale": "en_US.UTF-8",
+      "class": "CnfFormula",
+      "expected": false,
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Component 1: Names: 2 string mismatches",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": ["Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch"],
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": ["Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch"],
+        "error": null
+      }
+    },
+    {
+      "label": "encoding_identical_formula",
+      "locale": "en_US.UTF-8",
+      "class": "CnfFormula",
+      "expected": true,
+      "identical": true,
+      "original": {
+        "equal": false,
+        "message": ["Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch", "Component 2: Component 1: 1 string mismatch", "Component 2: Component 2: 1 string mismatch"],
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "encoding_clause_1",
+      "locale": "en_US.UTF-8",
+      "class": "CnfClause",
+      "expected": true,
+      "identical": true,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "encoding_clause_2",
+      "locale": "en_US.UTF-8",
+      "class": "CnfClause",
+      "expected": true,
+      "identical": true,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    }
+  ]
+}

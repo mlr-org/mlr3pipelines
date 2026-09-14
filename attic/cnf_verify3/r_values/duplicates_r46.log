@@ -1,0 +1,8 @@
+duplicate-domain trials 250 of 1000
+duplicate-domain trials 500 of 1000
+duplicate-domain trials 750 of 1000
+duplicate-domain trials 1000 of 1000
+R: R version 4.6.1 (2026-06-24)
+              formulas                 worlds structural_differences
+                  4000                 289224                      0
+All independently evaluated truth tables and final range/name invariants passed.

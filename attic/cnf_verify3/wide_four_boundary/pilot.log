@@ -1,0 +1,45 @@
+minimized_first_order_phase_sse1.json 0 changed TRUE
+list(list(X1 = "0", X0 = "5"), list(X0 = "0", X1 = c("4", "0"
+)))
+list(list(X1 = "0", X0 = "5"), list(X1 = c("4", "0")))
+minimized_first_order_phase_sse1.json 1 changed TRUE
+list(list(X1 = "0", X0 = "5"), list(X0 = "0", X1 = c("4", "0"
+)))
+list(list(X1 = "0", X0 = "5"), list(X1 = c("4", "0")))
+minimized_first_order_phase_sse1.json 2 changed TRUE
+list(list(X1 = "0", X0 = "5"), list(X0 = "0", X1 = c("4", "0"
+)))
+list(list(X1 = "0", X0 = "5"), list(X1 = c("4", "0")))
+minimized_first_order_phase_sse1.json 5 changed TRUE
+list(list(X1 = "0", X0 = "5"), list(X0 = "0", X1 = c("4", "0"
+)))
+list(list(X1 = "0", X0 = "5"), list(X1 = c("4", "0")))
+minimized_first_order_phase_sse1.json 64 changed TRUE
+list(list(X1 = "0", X0 = "5"), list(X0 = "0", X1 = c("4", "0"
+)))
+list(list(X1 = "0", X0 = "5"), list(X1 = c("4", "0")))
+minimized_sse1.json 0 changed TRUE
+list(list(X0 = "3", X2 = "4"), list(X1 = "3", X0 = "2"), list(
+    X0 = "5", X2 = c("4", "2")))
+list(list(X0 = "3", X2 = "4"), list(X1 = "3", X0 = "2"), list(
+    X2 = c("4", "2")))
+minimized_sse1.json 1 changed TRUE
+list(list(X0 = "3", X2 = "4"), list(X1 = "3", X0 = "2"), list(
+    X0 = "5", X2 = c("4", "2")))
+list(list(X0 = "3", X2 = "4"), list(X1 = "3", X0 = "2"), list(
+    X2 = c("4", "2")))
+minimized_sse1.json 2 changed TRUE
+list(list(X0 = "3", X2 = "4"), list(X1 = "3", X0 = "2"), list(
+    X0 = "5", X2 = c("4", "2")))
+list(list(X0 = "3", X2 = "4"), list(X1 = "3", X0 = "2"), list(
+    X2 = c("4", "2")))
+minimized_sse1.json 5 changed TRUE
+list(list(X0 = "3", X2 = "4"), list(X1 = "3", X0 = "2"), list(
+    X0 = "5", X2 = c("4", "2")))
+list(list(X0 = "3", X2 = "4"), list(X1 = "3", X0 = "2"), list(
+    X2 = c("4", "2")))
+minimized_sse1.json 64 changed TRUE
+list(list(X0 = "3", X2 = "4"), list(X1 = "3", X0 = "2"), list(
+    X0 = "5", X2 = c("4", "2")))
+list(list(X0 = "3", X2 = "4"), list(X1 = "3", X0 = "2"), list(
+    X2 = c("4", "2")))

@@ -1,0 +1,71 @@
+trials: 250 births: 311 frozen skips: 154
+trials: 500 births: 644 frozen skips: 289
+trials: 750 births: 951 frozen skips: 420
+trials: 1000 births: 1274 frozen skips: 558
+trials: 1250 births: 1622 frozen skips: 727
+trials: 1500 births: 1917 frozen skips: 882
+trials: 1750 births: 2257 frozen skips: 1032
+trials: 2000 births: 2566 frozen skips: 1186
+trials: 2250 births: 2898 frozen skips: 1354
+trials: 2500 births: 3220 frozen skips: 1502
+trials: 2750 births: 3558 frozen skips: 1654
+trials: 3000 births: 3821 frozen skips: 1771
+trials: 3250 births: 4166 frozen skips: 1938
+trials: 3500 births: 4499 frozen skips: 2084
+trials: 3750 births: 4817 frozen skips: 2260
+trials: 4000 births: 5141 frozen skips: 2457
+trials: 4250 births: 5475 frozen skips: 2589
+trials: 4500 births: 5793 frozen skips: 2732
+trials: 4750 births: 6143 frozen skips: 2915
+trials: 5000 births: 6492 frozen skips: 3063
+$seed
+[1] 6137
+
+$trials
+[1] 5000
+
+$source_md5
+[1] "376aac6eb81334e751e9351f9eddc02f"
+
+$R_version
+[1] "R version 3.6.3 (2020-02-29)"
+
+$counts
+$counts$semantic_mutations
+[1] 41694
+
+$counts$unit_births
+[1] 6492
+
+$counts$incoming_false_birth_certificates
+[1] 4275
+
+$counts$frozen_birth_skips
+[1] 3063
+
+$counts$physically_deferred_skips
+[1] 1
+
+$counts$hla_boundaries
+[1] 4854
+
+$counts$unit_hla_iterations
+[1] 6935
+
+$counts$source_cases
+[1] 5002
+
+$counts$satisfiable_cases
+[1] 4862
+
+$counts$final_birth_containment
+[1] 7934
+
+$counts$unallocated_unit_hla_rows
+[1] 7432
+
+$counts$unit_hla_rows
+[1] 15141
+
+
+All source-copy and model checks passed.

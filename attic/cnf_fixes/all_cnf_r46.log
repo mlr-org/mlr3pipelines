@@ -1,0 +1,30 @@
+Console output with transient progress-spinner lines removed.
+ℹ Testing mlr3pipelines
+Starting 2 test processes.
+✔ | F W  S  OK | Context
+
+✔ |         52 | CnfAtom [1.5s]
+
+✔ |         93 | CnfClause [1.8s]
+
+✔ |         44 | CnfComparisons
+
+✔ |        206 | CnfConstructors [1.6s]
+
+✔ |        1542 | CnfFormula_simplify [157.9s]
+
+✔ |        128 | CnfInputs [1.4s]
+
+✔ |        2121 | CnfFormula [158.3s]
+
+✔ |         34 | CnfSelectors
+
+✔ |         17 | CnfSymbol
+
+✔ |         18 | CnfUniverse
+
+
+══ Results ═════════════════════════════════════════════════════════════════════
+Duration: 165.1 s
+
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 4255 ]

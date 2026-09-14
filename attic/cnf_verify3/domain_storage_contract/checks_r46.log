@@ -1,0 +1,83 @@
+Completed 10 of 264 inputs; 25245 events
+Completed 20 of 264 inputs; 122980 events
+Completed 30 of 264 inputs; 834130 events
+Completed 40 of 264 inputs; 1634325 events
+Completed 50 of 264 inputs; 2382413 events
+Completed 60 of 264 inputs; 5202637 events
+Completed 70 of 264 inputs; 6578583 events
+Completed 80 of 264 inputs; 6742076 events
+Completed 90 of 264 inputs; 7149318 events
+Completed 100 of 264 inputs; 7430005 events
+Completed 110 of 264 inputs; 7665284 events
+Completed 120 of 264 inputs; 7969709 events
+Completed 130 of 264 inputs; 8145940 events
+Completed 140 of 264 inputs; 8227153 events
+Completed 150 of 264 inputs; 8434536 events
+Completed 160 of 264 inputs; 8537727 events
+Completed 170 of 264 inputs; 8684115 events
+Completed 180 of 264 inputs; 8785656 events
+Completed 190 of 264 inputs; 8842724 events
+Completed 200 of 264 inputs; 8979817 events
+Completed 210 of 264 inputs; 9341233 events
+Completed 220 of 264 inputs; 9614011 events
+Completed 230 of 264 inputs; 9709909 events
+Completed 240 of 264 inputs; 9787085 events
+Completed 250 of 264 inputs; 9974481 events
+Completed 260 of 264 inputs; 10085493 events
+{
+  "source_sha256": "7d34ad60035509a463168752bb5f6f82d87fd7182a94a0e48461be7cdbe35fdc",
+  "version": "R version 4.6.1 (2026-06-24)",
+  "checkmate_version": "2.3.4",
+  "seed": 860601,
+  "saved_cases": 57,
+  "basic_cases": 7,
+  "generated_cases": 200,
+  "variants": ["plain", "reordered", "repeated", "named", "repeated_named", "matrix", "array", "repeated_matrix", "repeated_array", "attributed", "inert_class"],
+  "counts": {
+    "cases": 264,
+    "runs": 2904,
+    "paired_trace_checks": 2640,
+    "events": 10128063,
+    "actual_write_events": 30635,
+    "pair_rows": 56958,
+    "unit_containments": 3861,
+    "nonunit_hla": 15059,
+    "unit_hla": 2640,
+    "repeated_virtual_ranges": 9124,
+    "named_virtual_ranges": 8045,
+    "truth_assignments": 172320,
+    "virtual_support_comparisons": 16090
+  },
+  "sites": {
+    "&&_left": 8,
+    "&&_right": 8,
+    "||_left": 26,
+    "||_right": 26,
+    "actual_write": 4,
+    "decision_!=": 15,
+    "decision_<=": 6,
+    "decision_==": 18,
+    "decision_>": 5,
+    "decision_all": 8,
+    "decision_any": 1,
+    "for_iteration": 23,
+    "for_sequence": 23,
+    "helper_entry": 13,
+    "hla_hook": 2,
+    "if": 108,
+    "repeat_iteration": 2
+  },
+  "feasible_if_outcomes": 212,
+  "controls": {
+    "schedule_only_detected": true,
+    "difference_mutation_detected": "!any(missing %in% new) is not TRUE",
+    "standalone_full_support_length_equivalence_refuted": {
+      "domain": ["a", "a", "b"],
+      "old": "a",
+      "donor": [],
+      "new": ["a", "b"],
+      "covers": true,
+      "length_equal": false
+    }
+  }
+}

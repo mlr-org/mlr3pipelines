@@ -1,9 +1,16 @@
 # mlr3pipelines 0.12.0-9000
 
 * Tests in `inst/testthat` no longer override `expect_equal`.
+* Fix: `pos()` now returns an unnamed list, preventing duplicated PipeOp IDs such as `pca.pca` when passed to `as_graph()`.
+* New `ppl("bag")` / `pipeline_bag()` performs real bagging with `frac = 1` and `replace = TRUE` by default. `ppl("bagging")` / `pipeline_bagging()` is deprecated and will be removed in the future.
 
-# mlr3pipelines 0.11.0-9000
+# mlr3pipelines 0.12.0
 
+* Fix: Removed an R-devel deprecation warning from `PipeOpFilter` and kept the `preproc()` examples compatible with the declared minimum R version.
+* Fix: `GraphLearner` had the guards of its internal validation and internal tuning extractors swapped, so a `Graph` supporting only one of the two properties reported nothing for the property it did support.
+* feat: `GraphLearner` and `PipeOpLearner` gained a `$best_valid_scores` field, and `GraphLearner` collects it from the wrapped `PipeOp`s via `$.extract_best_valid_scores()`, so `msr("best_valid_score")` can be used with a `GraphLearner`.
+* Added a temporary compatibility alias that registers the former `pima` task as `diabetes` for released `mlr3` versions older than 1.8.0.
+  Retrieving the alias warns users to update to `mlr3` 1.8.0 or newer. This alias will be removed in a later update of `mlr3pipelines`.
 * Fix: Re-running registration (e.g. when `mlr3` is reloaded) no longer removes `PipeOp` properties added to `mlr_reflections$pipeops$properties` by extension packages.
 * Switched from using `digest::digest()` to using `mlr3misc::calculate_hash()` for calculating the `hash` and `phash` of `PipeOp`s, `Graph`s, and `GraphLearner`s.
 * Fix: Corrected registration of `FilterEnsemble` in `mlr_filters` using `.prototype_args`.
@@ -19,7 +26,9 @@
 * Fix: `PipeOpIsomap` now explicitly requires `igraph`, `RSpectra`, and `RANN`; skip checks in tests were also updated.
 * Fix: `as_learner.Graph` now handles `...` as an argument.
 * feat: `as_learner.Graph` now suppots the `discard_state` argument, same as `as_learner.Learner`.
-* feat: `PipeOpTargetInvert` now propagates the `extra` slot of input prediction objects to the output prediction object, if the inverter `fun` does not handle it already.  
+* feat: `PipeOpTargetInvert` now propagates the `extra` slot of input prediction objects to the output prediction object, if the inverter `fun` does not handle it already.
+* feat: `PipeOpDateFeatures` gains new features `is_month_start`, `is_month_end`, `is_quarter_start`, `is_quarter_end`, `is_year_start`, `is_year_end`, and `is_leap_year`.
+* Fix: `PipeOpDateFeatures` no longer creates all-`NA` cyclic time-of-day features for `Date` features.
 
 # mlr3pipelines 0.11.0
 

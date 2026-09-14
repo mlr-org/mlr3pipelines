@@ -1,0 +1,28 @@
+Completed 1000 graph cases
+Completed 2000 graph cases
+Completed 3000 graph cases
+Completed 4000 graph cases
+Completed 5000 graph cases
+Completed 6000 graph cases
+Completed 7000 graph cases
+Completed 8000 graph cases
+Completed 9000 graph cases
+Completed 10000 graph cases
+Completed 11000 graph cases
+Completed 12000 graph cases
+Completed 13000 graph cases
+Completed 14000 graph cases
+$cases
+[1] 14261
+
+$assignment_rows
+[1] 213400
+
+$dag_cases
+[1] 1696
+
+$duplicate_cases
+[1] 1
+
+$clause_essentiality_checks
+[1] 57726

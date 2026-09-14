@@ -13,7 +13,7 @@ test_that("Robustify Pipeline", {
   expect_true("fixfactors" %nin% names(p$pipeops))
   expect_true(length(p$pipeops) == 3)
 
-  tsk = tsk("pima")
+  tsk = tsk("diabetes")
   # missings with scaling (rpart can do missings)
   p = ppl("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
@@ -103,7 +103,7 @@ test_that("Robustify Pipeline", {
 
 test_that("Robustify Pipeline Impute Missings", {
   skip_if_not_installed("rpart")
-  tmissings = tsk("pima")
+  tmissings = tsk("diabetes")
   tnomissings = tsk("iris")
 
   lmissings = lrn("classif.rpart")

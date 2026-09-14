@@ -11,7 +11,7 @@ test_that("basic properties", {
 
   expect_datapreproc_pipeop_class(PipeOpScale, task = mlr_tasks$get("boston_housing_classic"))
 
-  expect_datapreproc_pipeop_class(PipeOpScale, task = mlr_tasks$get("pima"))
+  expect_datapreproc_pipeop_class(PipeOpScale, task = mlr_tasks$get("diabetes"))
 
   expect_datapreproc_pipeop_class(PipeOpScale, list(param_vals = list(robust = TRUE)), task = mlr_tasks$get("iris"))
 

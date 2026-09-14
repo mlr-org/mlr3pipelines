@@ -67,7 +67,7 @@ Only methods inherited from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 \examples{
 library("mlr3")
 
-task = tsk("pima")
+task = tsk("diabetes")
 task$missings()
 
 po = po("imputemode")

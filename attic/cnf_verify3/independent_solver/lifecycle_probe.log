@@ -1,0 +1,3 @@
+{"elapsed": 32.06870460510254, "stats": {"sse1": 4057, "sse2": 8580, "hla": 15790, "formulas": 250, "subsumption": 219, "unit_skip": 182, "unit_skip_proper": 182, "unit_hla": 148, "contextual_sse1": 1}}
+{"elapsed": 58.74732947349548, "stats": {"sse1": 8162, "sse2": 14847, "hla": 31207, "formulas": 500, "subsumption": 427, "unit_skip": 468, "unit_skip_proper": 453, "unit_hla": 385, "contextual_sse1": 1, "unit_skip_outside": 15, "contextual_sse2": 3}}
+{"elapsed": 80.48898124694824, "stats": {"sse1": 11203, "sse2": 18419, "hla": 39421, "formulas": 750, "subsumption": 644, "unit_skip": 738, "unit_skip_proper": 723, "unit_hla": 610, "contextual_sse1": 1, "unit_skip_outside": 15, "contextual_sse2": 3}}

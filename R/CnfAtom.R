@@ -35,7 +35,11 @@
 #' @param symbol ([`CnfSymbol`]) \cr
 #'   The symbol to which the atom refers.
 #' @param values (`character`) \cr
-#'   The values that the symbol can take.
+#'   The values that the symbol can take, as a character vector without dimensions
+#'   or custom classes, missing values, byte-marked strings, or invalid encodings.
+#'   Accepted text is converted to UTF-8 and repeated values are removed.
+#'   Use `character(0)` for the empty selection; other unclassed zero-length vectors
+#'   and `NULL` are also accepted.
 #' @param e1 (`CnfSymbol`) \cr
 #'   Left-hand side of the `%among%` operator.
 #'   Passed as `symbol` to `CnfAtom()`.
@@ -68,6 +72,10 @@
 #' @export
 CnfAtom = function(symbol, values) {
   assert_class(symbol, "CnfSymbol")
+  if (is.object(values) || !is.null(dim(values))) {
+    stop("Argument 'values' must be a character vector without dimensions or custom classes.")
+  }
+  if (length(values)) values = normalize_cnf_text(values, "values")
   domain = attr(symbol, "universe")[[symbol]]
   assert_subset(values, domain)
   if (all(domain %in% values)) {
@@ -177,32 +185,9 @@ all.equal.CnfAtom = function(target, current, ...) {
   if (!inherits(current, "CnfAtom")) {
     return("current is not a CnfAtom")
   }
-  target$values = sort(target$values)
-  current$values = sort(current$values)
+  target$values = sort(enc2utf8(target$values), method = "radix")
+  current$values = sort(enc2utf8(current$values), method = "radix")
   all.equal.list(target, current, ...)
-}
-
-#' @rawNamespace if (getRversion() >= "4.3.0") S3method(chooseOpsMethod,CnfAtom)
-chooseOpsMethod.CnfAtom <- function(x, y, mx, my, cl, reverse) TRUE
-
-#' @export
-`&.CnfAtom` = function(e1, e2) {
-  # Will return a CnfFormula, so we can just delegate to there.
-  # `&.CnfFormula` handles conversion.
-  `&.CnfFormula`(e1, e2)
-}
-
-#' @export
-`|.CnfAtom` = function(e1, e2) {
-  if (inherits(e2, "CnfFormula")) {
-    # `|.CnfFormula` handles conversion
-    return(`|.CnfFormula`(e1, e2))
-  }
-  if (isFALSE(e1) || isTRUE(e2)) return(as.CnfClause(e2))
-  if (isFALSE(e2) || isTRUE(e1)) return(as.CnfClause(e1))
-
-  # either two proper CnfAtoms, or e2 is a CnfClause.
-  CnfClause(list(e1, e2))
 }
 
 #' @export

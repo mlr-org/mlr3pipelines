@@ -96,7 +96,7 @@ test_that("PipeOpImpute", {
     )
   )
 
-  task = mlr_tasks$get("pima")
+  task = mlr_tasks$get("diabetes")
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(param_vals = list(innum = c("a", "b", "c", "d", "e", "f", "g"))), task = task)
 
@@ -449,7 +449,7 @@ test_that("More tests for Integers", {
 
 test_that("impute, test rows and affect_columns", {
   po_impute = po("imputeconstant", affect_columns = selector_name("insulin"), constant = 2)
-  task = tsk("pima")
+  task = tsk("diabetes")
   ids = 1:30
   task$internal_valid_task = task$clone(deep = TRUE)$filter(ids)
   task$row_roles$use = setdiff(task$row_roles$use, 1:30)
