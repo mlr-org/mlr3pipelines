@@ -1,0 +1,8 @@
+category	count
+canonical_correct	8673
+noncanonical_correct	89730
+noncanonical_stale	89
+noncanonical_named_wrong	0
+noncanonical_both_wrong	0
+canonical_wrong	0
+error	1508

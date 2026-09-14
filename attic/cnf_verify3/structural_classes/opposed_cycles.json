@@ -1,0 +1,2358 @@
+[
+  {
+    "cycle_sizes": [
+      3,
+      3
+    ],
+    "domains": {
+      "x": [
+        "0",
+        "1"
+      ],
+      "a1": [
+        "0",
+        "1"
+      ],
+      "a2": [
+        "0",
+        "1"
+      ],
+      "b1": [
+        "0",
+        "1"
+      ],
+      "b2": [
+        "0",
+        "1"
+      ]
+    },
+    "clauses": [
+      {
+        "x": [
+          "1"
+        ],
+        "a1": [
+          "1"
+        ]
+      },
+      {
+        "a1": [
+          "0"
+        ],
+        "a2": [
+          "1"
+        ]
+      },
+      {
+        "a2": [
+          "0"
+        ],
+        "x": [
+          "1"
+        ]
+      },
+      {
+        "x": [
+          "0"
+        ],
+        "b1": [
+          "1"
+        ]
+      },
+      {
+        "b1": [
+          "0"
+        ],
+        "b2": [
+          "1"
+        ]
+      },
+      {
+        "b2": [
+          "0"
+        ],
+        "x": [
+          "0"
+        ]
+      }
+    ],
+    "result": false,
+    "incidence_cycle_ranks": [
+      2
+    ],
+    "events": [
+      {
+        "kind": "sse1",
+        "donor": {
+          "x": "1",
+          "a1": "1"
+        },
+        "target": {
+          "a2": "0",
+          "x": "1"
+        },
+        "symbol": "a1",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "a2": "0",
+          "x": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1"
+        },
+        "symbol": "a2",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "x": "0",
+          "b1": "1"
+        },
+        "target": {
+          "b2": "0",
+          "x": "0"
+        },
+        "symbol": "b1",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "b2": "0",
+          "x": "0"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1"
+        },
+        "symbol": "b2",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse2",
+        "donor_a": {
+          "a2": "0",
+          "x": "1"
+        },
+        "donor_b": {
+          "a1": "0",
+          "a2": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1"
+        },
+        "intersect_symbol": "a2",
+        "restrict_symbol": "a1",
+        "active_donors": [
+          true,
+          true
+        ],
+        "active_target": true,
+        "units": []
+      }
+    ]
+  },
+  {
+    "cycle_sizes": [
+      3,
+      4
+    ],
+    "domains": {
+      "x": [
+        "0",
+        "1"
+      ],
+      "a1": [
+        "0",
+        "1"
+      ],
+      "a2": [
+        "0",
+        "1"
+      ],
+      "b1": [
+        "0",
+        "1"
+      ],
+      "b2": [
+        "0",
+        "1"
+      ],
+      "b3": [
+        "0",
+        "1"
+      ]
+    },
+    "clauses": [
+      {
+        "x": [
+          "1"
+        ],
+        "a1": [
+          "1"
+        ]
+      },
+      {
+        "a1": [
+          "0"
+        ],
+        "a2": [
+          "1"
+        ]
+      },
+      {
+        "a2": [
+          "0"
+        ],
+        "x": [
+          "1"
+        ]
+      },
+      {
+        "x": [
+          "0"
+        ],
+        "b1": [
+          "1"
+        ]
+      },
+      {
+        "b1": [
+          "0"
+        ],
+        "b2": [
+          "1"
+        ]
+      },
+      {
+        "b2": [
+          "0"
+        ],
+        "b3": [
+          "1"
+        ]
+      },
+      {
+        "b3": [
+          "0"
+        ],
+        "x": [
+          "0"
+        ]
+      }
+    ],
+    "result": false,
+    "incidence_cycle_ranks": [
+      2
+    ],
+    "events": [
+      {
+        "kind": "sse1",
+        "donor": {
+          "x": "1",
+          "a1": "1"
+        },
+        "target": {
+          "a2": "0",
+          "x": "1"
+        },
+        "symbol": "a1",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "a2": "0",
+          "x": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1"
+        },
+        "symbol": "a2",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "x": "0",
+          "b1": "1"
+        },
+        "target": {
+          "b3": "0",
+          "x": "0"
+        },
+        "symbol": "b1",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "b3": "0",
+          "x": "0"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1"
+        },
+        "symbol": "b3",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse2",
+        "donor_a": {
+          "a2": "0",
+          "x": "1"
+        },
+        "donor_b": {
+          "a1": "0",
+          "a2": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1"
+        },
+        "intersect_symbol": "a2",
+        "restrict_symbol": "a1",
+        "active_donors": [
+          true,
+          true
+        ],
+        "active_target": true,
+        "units": []
+      }
+    ]
+  },
+  {
+    "cycle_sizes": [
+      4,
+      4
+    ],
+    "domains": {
+      "x": [
+        "0",
+        "1"
+      ],
+      "a1": [
+        "0",
+        "1"
+      ],
+      "a2": [
+        "0",
+        "1"
+      ],
+      "a3": [
+        "0",
+        "1"
+      ],
+      "b1": [
+        "0",
+        "1"
+      ],
+      "b2": [
+        "0",
+        "1"
+      ],
+      "b3": [
+        "0",
+        "1"
+      ]
+    },
+    "clauses": [
+      {
+        "x": [
+          "1"
+        ],
+        "a1": [
+          "1"
+        ]
+      },
+      {
+        "a1": [
+          "0"
+        ],
+        "a2": [
+          "1"
+        ]
+      },
+      {
+        "a2": [
+          "0"
+        ],
+        "a3": [
+          "1"
+        ]
+      },
+      {
+        "a3": [
+          "0"
+        ],
+        "x": [
+          "1"
+        ]
+      },
+      {
+        "x": [
+          "0"
+        ],
+        "b1": [
+          "1"
+        ]
+      },
+      {
+        "b1": [
+          "0"
+        ],
+        "b2": [
+          "1"
+        ]
+      },
+      {
+        "b2": [
+          "0"
+        ],
+        "b3": [
+          "1"
+        ]
+      },
+      {
+        "b3": [
+          "0"
+        ],
+        "x": [
+          "0"
+        ]
+      }
+    ],
+    "result": [
+      {
+        "x": "1",
+        "a1": "1"
+      },
+      {
+        "a1": "0",
+        "a2": "1"
+      },
+      {
+        "a2": "0",
+        "a3": "1"
+      },
+      {
+        "a3": "0",
+        "x": "1"
+      },
+      {
+        "x": "0",
+        "b1": "1"
+      },
+      {
+        "b1": "0",
+        "b2": "1"
+      },
+      {
+        "b2": "0",
+        "b3": "1"
+      },
+      {
+        "b3": "0",
+        "x": "0"
+      }
+    ],
+    "incidence_cycle_ranks": [
+      2
+    ],
+    "events": [
+      {
+        "kind": "sse1",
+        "donor": {
+          "x": "1",
+          "a1": "1"
+        },
+        "target": {
+          "a3": "0",
+          "x": "1"
+        },
+        "symbol": "a1",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "a3": "0",
+          "x": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1"
+        },
+        "symbol": "a3",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "x": "0",
+          "b1": "1"
+        },
+        "target": {
+          "b3": "0",
+          "x": "0"
+        },
+        "symbol": "b1",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "b3": "0",
+          "x": "0"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1"
+        },
+        "symbol": "b3",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a3": "0",
+          "x": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1"
+        },
+        "target_id": 1,
+        "donor_id": 4,
+        "symbol": "a3",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a2": "0",
+          "a3": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1",
+          "a3": "1"
+        },
+        "target_id": 1,
+        "donor_id": 3,
+        "symbol": "a2",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a1": "0",
+          "a2": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1",
+          "a3": "1",
+          "a2": "1"
+        },
+        "target_id": 1,
+        "donor_id": 2,
+        "symbol": "a1",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "x": "1",
+          "a1": "1"
+        },
+        "target": {
+          "a3": "0",
+          "x": "1"
+        },
+        "target_id": 4,
+        "donor_id": 1,
+        "symbol": "a1",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a1": "0",
+          "a2": "1"
+        },
+        "target": {
+          "a3": "0",
+          "x": "1",
+          "a1": "0"
+        },
+        "target_id": 4,
+        "donor_id": 2,
+        "symbol": "a2",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a2": "0",
+          "a3": "1"
+        },
+        "target": {
+          "a3": "0",
+          "x": "1",
+          "a1": "0",
+          "a2": "0"
+        },
+        "target_id": 4,
+        "donor_id": 3,
+        "symbol": "a3",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b3": "0",
+          "x": "0"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1"
+        },
+        "target_id": 5,
+        "donor_id": 8,
+        "symbol": "b3",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b2": "0",
+          "b3": "1"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1",
+          "b3": "1"
+        },
+        "target_id": 5,
+        "donor_id": 7,
+        "symbol": "b2",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b1": "0",
+          "b2": "1"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1",
+          "b3": "1",
+          "b2": "1"
+        },
+        "target_id": 5,
+        "donor_id": 6,
+        "symbol": "b1",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "x": "0",
+          "b1": "1"
+        },
+        "target": {
+          "b3": "0",
+          "x": "0"
+        },
+        "target_id": 8,
+        "donor_id": 5,
+        "symbol": "b1",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b1": "0",
+          "b2": "1"
+        },
+        "target": {
+          "b3": "0",
+          "x": "0",
+          "b1": "0"
+        },
+        "target_id": 8,
+        "donor_id": 6,
+        "symbol": "b2",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b2": "0",
+          "b3": "1"
+        },
+        "target": {
+          "b3": "0",
+          "x": "0",
+          "b1": "0",
+          "b2": "0"
+        },
+        "target_id": 8,
+        "donor_id": 7,
+        "symbol": "b3",
+        "extended": "0",
+        "units": []
+      }
+    ]
+  },
+  {
+    "cycle_sizes": [
+      4,
+      5
+    ],
+    "domains": {
+      "x": [
+        "0",
+        "1"
+      ],
+      "a1": [
+        "0",
+        "1"
+      ],
+      "a2": [
+        "0",
+        "1"
+      ],
+      "a3": [
+        "0",
+        "1"
+      ],
+      "b1": [
+        "0",
+        "1"
+      ],
+      "b2": [
+        "0",
+        "1"
+      ],
+      "b3": [
+        "0",
+        "1"
+      ],
+      "b4": [
+        "0",
+        "1"
+      ]
+    },
+    "clauses": [
+      {
+        "x": [
+          "1"
+        ],
+        "a1": [
+          "1"
+        ]
+      },
+      {
+        "a1": [
+          "0"
+        ],
+        "a2": [
+          "1"
+        ]
+      },
+      {
+        "a2": [
+          "0"
+        ],
+        "a3": [
+          "1"
+        ]
+      },
+      {
+        "a3": [
+          "0"
+        ],
+        "x": [
+          "1"
+        ]
+      },
+      {
+        "x": [
+          "0"
+        ],
+        "b1": [
+          "1"
+        ]
+      },
+      {
+        "b1": [
+          "0"
+        ],
+        "b2": [
+          "1"
+        ]
+      },
+      {
+        "b2": [
+          "0"
+        ],
+        "b3": [
+          "1"
+        ]
+      },
+      {
+        "b3": [
+          "0"
+        ],
+        "b4": [
+          "1"
+        ]
+      },
+      {
+        "b4": [
+          "0"
+        ],
+        "x": [
+          "0"
+        ]
+      }
+    ],
+    "result": [
+      {
+        "x": "1",
+        "a1": "1"
+      },
+      {
+        "a1": "0",
+        "a2": "1"
+      },
+      {
+        "a2": "0",
+        "a3": "1"
+      },
+      {
+        "a3": "0",
+        "x": "1"
+      },
+      {
+        "x": "0",
+        "b1": "1"
+      },
+      {
+        "b1": "0",
+        "b2": "1"
+      },
+      {
+        "b2": "0",
+        "b3": "1"
+      },
+      {
+        "b3": "0",
+        "b4": "1"
+      },
+      {
+        "b4": "0",
+        "x": "0"
+      }
+    ],
+    "incidence_cycle_ranks": [
+      2
+    ],
+    "events": [
+      {
+        "kind": "sse1",
+        "donor": {
+          "x": "1",
+          "a1": "1"
+        },
+        "target": {
+          "a3": "0",
+          "x": "1"
+        },
+        "symbol": "a1",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "a3": "0",
+          "x": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1"
+        },
+        "symbol": "a3",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "x": "0",
+          "b1": "1"
+        },
+        "target": {
+          "b4": "0",
+          "x": "0"
+        },
+        "symbol": "b1",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "b4": "0",
+          "x": "0"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1"
+        },
+        "symbol": "b4",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a3": "0",
+          "x": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1"
+        },
+        "target_id": 1,
+        "donor_id": 4,
+        "symbol": "a3",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a2": "0",
+          "a3": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1",
+          "a3": "1"
+        },
+        "target_id": 1,
+        "donor_id": 3,
+        "symbol": "a2",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a1": "0",
+          "a2": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1",
+          "a3": "1",
+          "a2": "1"
+        },
+        "target_id": 1,
+        "donor_id": 2,
+        "symbol": "a1",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "x": "1",
+          "a1": "1"
+        },
+        "target": {
+          "a3": "0",
+          "x": "1"
+        },
+        "target_id": 4,
+        "donor_id": 1,
+        "symbol": "a1",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a1": "0",
+          "a2": "1"
+        },
+        "target": {
+          "a3": "0",
+          "x": "1",
+          "a1": "0"
+        },
+        "target_id": 4,
+        "donor_id": 2,
+        "symbol": "a2",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a2": "0",
+          "a3": "1"
+        },
+        "target": {
+          "a3": "0",
+          "x": "1",
+          "a1": "0",
+          "a2": "0"
+        },
+        "target_id": 4,
+        "donor_id": 3,
+        "symbol": "a3",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b4": "0",
+          "x": "0"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1"
+        },
+        "target_id": 5,
+        "donor_id": 9,
+        "symbol": "b4",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b3": "0",
+          "b4": "1"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1",
+          "b4": "1"
+        },
+        "target_id": 5,
+        "donor_id": 8,
+        "symbol": "b3",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b2": "0",
+          "b3": "1"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1",
+          "b4": "1",
+          "b3": "1"
+        },
+        "target_id": 5,
+        "donor_id": 7,
+        "symbol": "b2",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b1": "0",
+          "b2": "1"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1",
+          "b4": "1",
+          "b3": "1",
+          "b2": "1"
+        },
+        "target_id": 5,
+        "donor_id": 6,
+        "symbol": "b1",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "x": "0",
+          "b1": "1"
+        },
+        "target": {
+          "b4": "0",
+          "x": "0"
+        },
+        "target_id": 9,
+        "donor_id": 5,
+        "symbol": "b1",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b1": "0",
+          "b2": "1"
+        },
+        "target": {
+          "b4": "0",
+          "x": "0",
+          "b1": "0"
+        },
+        "target_id": 9,
+        "donor_id": 6,
+        "symbol": "b2",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b2": "0",
+          "b3": "1"
+        },
+        "target": {
+          "b4": "0",
+          "x": "0",
+          "b1": "0",
+          "b2": "0"
+        },
+        "target_id": 9,
+        "donor_id": 7,
+        "symbol": "b3",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b3": "0",
+          "b4": "1"
+        },
+        "target": {
+          "b4": "0",
+          "x": "0",
+          "b1": "0",
+          "b2": "0",
+          "b3": "0"
+        },
+        "target_id": 9,
+        "donor_id": 8,
+        "symbol": "b4",
+        "extended": "0",
+        "units": []
+      }
+    ]
+  },
+  {
+    "cycle_sizes": [
+      5,
+      5
+    ],
+    "domains": {
+      "x": [
+        "0",
+        "1"
+      ],
+      "a1": [
+        "0",
+        "1"
+      ],
+      "a2": [
+        "0",
+        "1"
+      ],
+      "a3": [
+        "0",
+        "1"
+      ],
+      "a4": [
+        "0",
+        "1"
+      ],
+      "b1": [
+        "0",
+        "1"
+      ],
+      "b2": [
+        "0",
+        "1"
+      ],
+      "b3": [
+        "0",
+        "1"
+      ],
+      "b4": [
+        "0",
+        "1"
+      ]
+    },
+    "clauses": [
+      {
+        "x": [
+          "1"
+        ],
+        "a1": [
+          "1"
+        ]
+      },
+      {
+        "a1": [
+          "0"
+        ],
+        "a2": [
+          "1"
+        ]
+      },
+      {
+        "a2": [
+          "0"
+        ],
+        "a3": [
+          "1"
+        ]
+      },
+      {
+        "a3": [
+          "0"
+        ],
+        "a4": [
+          "1"
+        ]
+      },
+      {
+        "a4": [
+          "0"
+        ],
+        "x": [
+          "1"
+        ]
+      },
+      {
+        "x": [
+          "0"
+        ],
+        "b1": [
+          "1"
+        ]
+      },
+      {
+        "b1": [
+          "0"
+        ],
+        "b2": [
+          "1"
+        ]
+      },
+      {
+        "b2": [
+          "0"
+        ],
+        "b3": [
+          "1"
+        ]
+      },
+      {
+        "b3": [
+          "0"
+        ],
+        "b4": [
+          "1"
+        ]
+      },
+      {
+        "b4": [
+          "0"
+        ],
+        "x": [
+          "0"
+        ]
+      }
+    ],
+    "result": [
+      {
+        "x": "1",
+        "a1": "1"
+      },
+      {
+        "a1": "0",
+        "a2": "1"
+      },
+      {
+        "a2": "0",
+        "a3": "1"
+      },
+      {
+        "a3": "0",
+        "a4": "1"
+      },
+      {
+        "a4": "0",
+        "x": "1"
+      },
+      {
+        "x": "0",
+        "b1": "1"
+      },
+      {
+        "b1": "0",
+        "b2": "1"
+      },
+      {
+        "b2": "0",
+        "b3": "1"
+      },
+      {
+        "b3": "0",
+        "b4": "1"
+      },
+      {
+        "b4": "0",
+        "x": "0"
+      }
+    ],
+    "incidence_cycle_ranks": [
+      2
+    ],
+    "events": [
+      {
+        "kind": "sse1",
+        "donor": {
+          "x": "1",
+          "a1": "1"
+        },
+        "target": {
+          "a4": "0",
+          "x": "1"
+        },
+        "symbol": "a1",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "a4": "0",
+          "x": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1"
+        },
+        "symbol": "a4",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "x": "0",
+          "b1": "1"
+        },
+        "target": {
+          "b4": "0",
+          "x": "0"
+        },
+        "symbol": "b1",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "b4": "0",
+          "x": "0"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1"
+        },
+        "symbol": "b4",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a4": "0",
+          "x": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1"
+        },
+        "target_id": 1,
+        "donor_id": 5,
+        "symbol": "a4",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a3": "0",
+          "a4": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1",
+          "a4": "1"
+        },
+        "target_id": 1,
+        "donor_id": 4,
+        "symbol": "a3",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a2": "0",
+          "a3": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1",
+          "a4": "1",
+          "a3": "1"
+        },
+        "target_id": 1,
+        "donor_id": 3,
+        "symbol": "a2",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a1": "0",
+          "a2": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1",
+          "a4": "1",
+          "a3": "1",
+          "a2": "1"
+        },
+        "target_id": 1,
+        "donor_id": 2,
+        "symbol": "a1",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "x": "1",
+          "a1": "1"
+        },
+        "target": {
+          "a4": "0",
+          "x": "1"
+        },
+        "target_id": 5,
+        "donor_id": 1,
+        "symbol": "a1",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a1": "0",
+          "a2": "1"
+        },
+        "target": {
+          "a4": "0",
+          "x": "1",
+          "a1": "0"
+        },
+        "target_id": 5,
+        "donor_id": 2,
+        "symbol": "a2",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a2": "0",
+          "a3": "1"
+        },
+        "target": {
+          "a4": "0",
+          "x": "1",
+          "a1": "0",
+          "a2": "0"
+        },
+        "target_id": 5,
+        "donor_id": 3,
+        "symbol": "a3",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a3": "0",
+          "a4": "1"
+        },
+        "target": {
+          "a4": "0",
+          "x": "1",
+          "a1": "0",
+          "a2": "0",
+          "a3": "0"
+        },
+        "target_id": 5,
+        "donor_id": 4,
+        "symbol": "a4",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b4": "0",
+          "x": "0"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1"
+        },
+        "target_id": 6,
+        "donor_id": 10,
+        "symbol": "b4",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b3": "0",
+          "b4": "1"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1",
+          "b4": "1"
+        },
+        "target_id": 6,
+        "donor_id": 9,
+        "symbol": "b3",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b2": "0",
+          "b3": "1"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1",
+          "b4": "1",
+          "b3": "1"
+        },
+        "target_id": 6,
+        "donor_id": 8,
+        "symbol": "b2",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b1": "0",
+          "b2": "1"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1",
+          "b4": "1",
+          "b3": "1",
+          "b2": "1"
+        },
+        "target_id": 6,
+        "donor_id": 7,
+        "symbol": "b1",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "x": "0",
+          "b1": "1"
+        },
+        "target": {
+          "b4": "0",
+          "x": "0"
+        },
+        "target_id": 10,
+        "donor_id": 6,
+        "symbol": "b1",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b1": "0",
+          "b2": "1"
+        },
+        "target": {
+          "b4": "0",
+          "x": "0",
+          "b1": "0"
+        },
+        "target_id": 10,
+        "donor_id": 7,
+        "symbol": "b2",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b2": "0",
+          "b3": "1"
+        },
+        "target": {
+          "b4": "0",
+          "x": "0",
+          "b1": "0",
+          "b2": "0"
+        },
+        "target_id": 10,
+        "donor_id": 8,
+        "symbol": "b3",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b3": "0",
+          "b4": "1"
+        },
+        "target": {
+          "b4": "0",
+          "x": "0",
+          "b1": "0",
+          "b2": "0",
+          "b3": "0"
+        },
+        "target_id": 10,
+        "donor_id": 9,
+        "symbol": "b4",
+        "extended": "0",
+        "units": []
+      }
+    ]
+  },
+  {
+    "cycle_sizes": [
+      4,
+      8
+    ],
+    "domains": {
+      "x": [
+        "0",
+        "1"
+      ],
+      "a1": [
+        "0",
+        "1"
+      ],
+      "a2": [
+        "0",
+        "1"
+      ],
+      "a3": [
+        "0",
+        "1"
+      ],
+      "b1": [
+        "0",
+        "1"
+      ],
+      "b2": [
+        "0",
+        "1"
+      ],
+      "b3": [
+        "0",
+        "1"
+      ],
+      "b4": [
+        "0",
+        "1"
+      ],
+      "b5": [
+        "0",
+        "1"
+      ],
+      "b6": [
+        "0",
+        "1"
+      ],
+      "b7": [
+        "0",
+        "1"
+      ]
+    },
+    "clauses": [
+      {
+        "x": [
+          "1"
+        ],
+        "a1": [
+          "1"
+        ]
+      },
+      {
+        "a1": [
+          "0"
+        ],
+        "a2": [
+          "1"
+        ]
+      },
+      {
+        "a2": [
+          "0"
+        ],
+        "a3": [
+          "1"
+        ]
+      },
+      {
+        "a3": [
+          "0"
+        ],
+        "x": [
+          "1"
+        ]
+      },
+      {
+        "x": [
+          "0"
+        ],
+        "b1": [
+          "1"
+        ]
+      },
+      {
+        "b1": [
+          "0"
+        ],
+        "b2": [
+          "1"
+        ]
+      },
+      {
+        "b2": [
+          "0"
+        ],
+        "b3": [
+          "1"
+        ]
+      },
+      {
+        "b3": [
+          "0"
+        ],
+        "b4": [
+          "1"
+        ]
+      },
+      {
+        "b4": [
+          "0"
+        ],
+        "b5": [
+          "1"
+        ]
+      },
+      {
+        "b5": [
+          "0"
+        ],
+        "b6": [
+          "1"
+        ]
+      },
+      {
+        "b6": [
+          "0"
+        ],
+        "b7": [
+          "1"
+        ]
+      },
+      {
+        "b7": [
+          "0"
+        ],
+        "x": [
+          "0"
+        ]
+      }
+    ],
+    "result": [
+      {
+        "x": "1",
+        "a1": "1"
+      },
+      {
+        "a1": "0",
+        "a2": "1"
+      },
+      {
+        "a2": "0",
+        "a3": "1"
+      },
+      {
+        "a3": "0",
+        "x": "1"
+      },
+      {
+        "x": "0",
+        "b1": "1"
+      },
+      {
+        "b1": "0",
+        "b2": "1"
+      },
+      {
+        "b2": "0",
+        "b3": "1"
+      },
+      {
+        "b3": "0",
+        "b4": "1"
+      },
+      {
+        "b4": "0",
+        "b5": "1"
+      },
+      {
+        "b5": "0",
+        "b6": "1"
+      },
+      {
+        "b6": "0",
+        "b7": "1"
+      },
+      {
+        "b7": "0",
+        "x": "0"
+      }
+    ],
+    "incidence_cycle_ranks": [
+      2
+    ],
+    "events": [
+      {
+        "kind": "sse1",
+        "donor": {
+          "x": "1",
+          "a1": "1"
+        },
+        "target": {
+          "a3": "0",
+          "x": "1"
+        },
+        "symbol": "a1",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "a3": "0",
+          "x": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1"
+        },
+        "symbol": "a3",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "x": "0",
+          "b1": "1"
+        },
+        "target": {
+          "b7": "0",
+          "x": "0"
+        },
+        "symbol": "b1",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "b7": "0",
+          "x": "0"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1"
+        },
+        "symbol": "b7",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a3": "0",
+          "x": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1"
+        },
+        "target_id": 1,
+        "donor_id": 4,
+        "symbol": "a3",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a2": "0",
+          "a3": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1",
+          "a3": "1"
+        },
+        "target_id": 1,
+        "donor_id": 3,
+        "symbol": "a2",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a1": "0",
+          "a2": "1"
+        },
+        "target": {
+          "x": "1",
+          "a1": "1",
+          "a3": "1",
+          "a2": "1"
+        },
+        "target_id": 1,
+        "donor_id": 2,
+        "symbol": "a1",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "x": "1",
+          "a1": "1"
+        },
+        "target": {
+          "a3": "0",
+          "x": "1"
+        },
+        "target_id": 4,
+        "donor_id": 1,
+        "symbol": "a1",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a1": "0",
+          "a2": "1"
+        },
+        "target": {
+          "a3": "0",
+          "x": "1",
+          "a1": "0"
+        },
+        "target_id": 4,
+        "donor_id": 2,
+        "symbol": "a2",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "a2": "0",
+          "a3": "1"
+        },
+        "target": {
+          "a3": "0",
+          "x": "1",
+          "a1": "0",
+          "a2": "0"
+        },
+        "target_id": 4,
+        "donor_id": 3,
+        "symbol": "a3",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b7": "0",
+          "x": "0"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1"
+        },
+        "target_id": 5,
+        "donor_id": 12,
+        "symbol": "b7",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b6": "0",
+          "b7": "1"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1",
+          "b7": "1"
+        },
+        "target_id": 5,
+        "donor_id": 11,
+        "symbol": "b6",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b5": "0",
+          "b6": "1"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1",
+          "b7": "1",
+          "b6": "1"
+        },
+        "target_id": 5,
+        "donor_id": 10,
+        "symbol": "b5",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b4": "0",
+          "b5": "1"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1",
+          "b7": "1",
+          "b6": "1",
+          "b5": "1"
+        },
+        "target_id": 5,
+        "donor_id": 9,
+        "symbol": "b4",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b3": "0",
+          "b4": "1"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1",
+          "b7": "1",
+          "b6": "1",
+          "b5": "1",
+          "b4": "1"
+        },
+        "target_id": 5,
+        "donor_id": 8,
+        "symbol": "b3",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b2": "0",
+          "b3": "1"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1",
+          "b7": "1",
+          "b6": "1",
+          "b5": "1",
+          "b4": "1",
+          "b3": "1"
+        },
+        "target_id": 5,
+        "donor_id": 7,
+        "symbol": "b2",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b1": "0",
+          "b2": "1"
+        },
+        "target": {
+          "x": "0",
+          "b1": "1",
+          "b7": "1",
+          "b6": "1",
+          "b5": "1",
+          "b4": "1",
+          "b3": "1",
+          "b2": "1"
+        },
+        "target_id": 5,
+        "donor_id": 6,
+        "symbol": "b1",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "x": "0",
+          "b1": "1"
+        },
+        "target": {
+          "b7": "0",
+          "x": "0"
+        },
+        "target_id": 12,
+        "donor_id": 5,
+        "symbol": "b1",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b1": "0",
+          "b2": "1"
+        },
+        "target": {
+          "b7": "0",
+          "x": "0",
+          "b1": "0"
+        },
+        "target_id": 12,
+        "donor_id": 6,
+        "symbol": "b2",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b2": "0",
+          "b3": "1"
+        },
+        "target": {
+          "b7": "0",
+          "x": "0",
+          "b1": "0",
+          "b2": "0"
+        },
+        "target_id": 12,
+        "donor_id": 7,
+        "symbol": "b3",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b3": "0",
+          "b4": "1"
+        },
+        "target": {
+          "b7": "0",
+          "x": "0",
+          "b1": "0",
+          "b2": "0",
+          "b3": "0"
+        },
+        "target_id": 12,
+        "donor_id": 8,
+        "symbol": "b4",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b4": "0",
+          "b5": "1"
+        },
+        "target": {
+          "b7": "0",
+          "x": "0",
+          "b1": "0",
+          "b2": "0",
+          "b3": "0",
+          "b4": "0"
+        },
+        "target_id": 12,
+        "donor_id": 9,
+        "symbol": "b5",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b5": "0",
+          "b6": "1"
+        },
+        "target": {
+          "b7": "0",
+          "x": "0",
+          "b1": "0",
+          "b2": "0",
+          "b3": "0",
+          "b4": "0",
+          "b5": "0"
+        },
+        "target_id": 12,
+        "donor_id": 10,
+        "symbol": "b6",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "b6": "0",
+          "b7": "1"
+        },
+        "target": {
+          "b7": "0",
+          "x": "0",
+          "b1": "0",
+          "b2": "0",
+          "b3": "0",
+          "b4": "0",
+          "b5": "0",
+          "b6": "0"
+        },
+        "target_id": 12,
+        "donor_id": 11,
+        "symbol": "b7",
+        "extended": "0",
+        "units": []
+      }
+    ]
+  }
+]

@@ -1,0 +1,16 @@
+{"mask": 16, "elapsed": 4.186338424682617, "stats": {"formulas": 768}}
+{"mask": 32, "elapsed": 7.935080289840698, "stats": {"formulas": 1536, "unit_skip": 128, "unit_skip_proper": 128}}
+{"mask": 48, "elapsed": 12.161151647567749, "stats": {"formulas": 2304, "unit_skip": 464, "unit_skip_proper": 464}}
+{"mask": 64, "elapsed": 16.620609283447266, "stats": {"formulas": 3072, "unit_skip": 864, "unit_skip_proper": 864}}
+{"mask": 80, "elapsed": 20.76723885536194, "stats": {"formulas": 3840, "unit_skip": 1200, "unit_skip_proper": 1200}}
+{"mask": 96, "elapsed": 25.364584922790527, "stats": {"formulas": 4608, "unit_skip": 1600, "unit_skip_proper": 1600}}
+{"mask": 112, "elapsed": 30.87496519088745, "stats": {"formulas": 5376, "unit_skip": 1904, "unit_skip_proper": 1904}}
+{"mask": 128, "elapsed": 36.4649600982666, "stats": {"formulas": 6144, "unit_skip": 2208, "unit_skip_proper": 2208}}
+{"mask": 144, "elapsed": 40.7406165599823, "stats": {"formulas": 6912, "unit_skip": 2848, "unit_skip_proper": 2848}}
+{"mask": 160, "elapsed": 45.217185258865356, "stats": {"formulas": 7680, "unit_skip": 3664, "unit_skip_proper": 3616, "unit_skip_equal": 48, "residual_formula": 48, "residual_subsumption": 48}}
+{"mask": 176, "elapsed": 50.16488170623779, "stats": {"formulas": 8448, "unit_skip": 4352, "unit_skip_proper": 4304, "unit_skip_equal": 48, "residual_formula": 48, "residual_subsumption": 48}}
+{"mask": 192, "elapsed": 55.33747625350952, "stats": {"formulas": 9216, "unit_skip": 5248, "unit_skip_proper": 5200, "unit_skip_equal": 48, "residual_formula": 48, "residual_subsumption": 48}}
+{"mask": 208, "elapsed": 60.084125995635986, "stats": {"formulas": 9984, "unit_skip": 5936, "unit_skip_proper": 5888, "unit_skip_equal": 48, "residual_formula": 48, "residual_subsumption": 48}}
+{"mask": 224, "elapsed": 65.21961379051208, "stats": {"formulas": 10752, "unit_skip": 6832, "unit_skip_proper": 6784, "unit_skip_equal": 48, "residual_formula": 48, "residual_subsumption": 48}}
+{"mask": 240, "elapsed": 71.04570317268372, "stats": {"formulas": 11520, "unit_skip": 7136, "unit_skip_proper": 7088, "unit_skip_equal": 48, "residual_formula": 48, "residual_subsumption": 48}}
+{"elapsed": 76.80105257034302, "stats": {"formulas": 12240, "unit_skip": 7440, "unit_skip_proper": 7392, "unit_skip_equal": 48, "residual_formula": 48, "residual_subsumption": 48}}

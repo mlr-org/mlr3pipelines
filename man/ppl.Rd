@@ -35,7 +35,7 @@ vector of any list and returns a \code{list} of possibly muliple \code{\link{Gra
 \dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
-gr = ppl("bagging", graph = po(lrn("regr.rpart")),
+gr = ppl("bag", graph = po(lrn("regr.rpart")),
   averager = po("regravg", collect_multiplicity = TRUE))
 \dontshow{\}) # examplesIf}
 }

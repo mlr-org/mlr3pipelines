@@ -1,0 +1,9 @@
+{
+  "R_version": "R version 3.6.3 (2020-02-29)",
+  "cases": 1023,
+  "helper_calls": 61029,
+  "helper_roots": 26853,
+  "max_helper_depth": 141,
+  "max_children": [1, 0, 0, 0, 11, 5, 47, 2, 5, 4, 10, 1, 0],
+  "negative_controls": ["Direct helper child bound exceeded", "Top-level helper root bound exceeded"]
+}

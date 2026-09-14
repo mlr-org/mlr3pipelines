@@ -1,0 +1,16 @@
+{
+  "elapsed": 4.409392833709717,
+  "stats": {
+    "sse1": 525,
+    "sse2": 1427,
+    "hla": 1484,
+    "formulas": 3,
+    "unit_skip": 46,
+    "unit_skip_proper": 35,
+    "unit_skip_outside": 10,
+    "contextual_sse2": 1,
+    "unit_skip_absent": 1,
+    "unit_hla": 6
+  },
+  "found_trial": 2
+}

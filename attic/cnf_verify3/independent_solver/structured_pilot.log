@@ -1,0 +1,25 @@
+{"trials": 20, "elapsed": 10.193909883499146, "stats": {"family_nonunit_hla_chain": 5, "sat_equivalences": 20, "known_consequences": 13, "mdd_equivalences": 20, "event_sse1": 441, "event_hla": 2643, "value_refinement_naturality": 7, "max_variables": 62, "max_clauses": 78, "max_log10_assignments": 48.24537752378591, "family_unit_hla_chain": 5, "event_unit_hla": 159, "family_second_order_bundle": 5, "event_sse2": 1452, "family_permutation_cycle": 5}}
+{"trials": 40, "elapsed": 20.665503978729248, "stats": {"family_nonunit_hla_chain": 10, "sat_equivalences": 40, "known_consequences": 25, "mdd_equivalences": 40, "event_sse1": 741, "event_hla": 5979, "value_refinement_naturality": 13, "max_variables": 83, "max_clauses": 85, "max_log10_assignments": 70.14313732118326, "family_unit_hla_chain": 10, "event_unit_hla": 244, "family_second_order_bundle": 10, "event_sse2": 2034, "family_permutation_cycle": 10}}
+{
+  "seed": 20260906,
+  "requested_trials": 40,
+  "elapsed": 20.681137323379517,
+  "stats": {
+    "family_nonunit_hla_chain": 10,
+    "sat_equivalences": 40,
+    "known_consequences": 25,
+    "mdd_equivalences": 40,
+    "event_sse1": 741,
+    "event_hla": 5979,
+    "value_refinement_naturality": 13,
+    "max_variables": 83,
+    "max_clauses": 85,
+    "max_log10_assignments": 70.14313732118326,
+    "family_unit_hla_chain": 10,
+    "event_unit_hla": 244,
+    "family_second_order_bundle": 10,
+    "event_sse2": 2034,
+    "family_permutation_cycle": 10
+  },
+  "failures": []
+}

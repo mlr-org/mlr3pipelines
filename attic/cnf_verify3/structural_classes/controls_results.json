@@ -1,0 +1,24 @@
+{
+  "partition_blocks": {
+    "cases": 1024,
+    "unsatisfiable": 766,
+    "recognized_unsatisfiable": 766
+  },
+  "larger_forest_clauses": {
+    "cases": 192,
+    "unsatisfiable": 0,
+    "essential_clauses": 556,
+    "essential_values": 900
+  },
+  "signed_horn": {
+    "cases": 2592,
+    "unsatisfiable": 832
+  },
+  "overlapping_pseudoforests": {
+    "cases": 1512,
+    "unsatisfiable": 20,
+    "residual_rule": 0,
+    "second_productive": 0
+  },
+  "seconds": 26.23617124557495
+}

@@ -1,0 +1,17 @@
+{"ctype":"C","name_kind":"ascii","clause_count":0,"stats":{"calls":1,"errors":0,"truth_differences":0,"false_unsat":0,"missed_unsat":0,"changed_satisfiable":0,"added_assignments":0,"removed_assignments":0}}
+{"ctype":"C","name_kind":"ascii","clause_count":1,"stats":{"calls":20,"errors":0,"truth_differences":0,"false_unsat":0,"missed_unsat":0,"changed_satisfiable":0,"added_assignments":0,"removed_assignments":0}}
+{"ctype":"C","name_kind":"ascii","clause_count":2,"stats":{"calls":400,"errors":0,"truth_differences":0,"false_unsat":0,"missed_unsat":0,"changed_satisfiable":0,"added_assignments":0,"removed_assignments":0}}
+{"ctype":"C","name_kind":"ascii","clause_count":3,"stats":{"calls":8000,"errors":0,"truth_differences":0,"false_unsat":0,"missed_unsat":0,"changed_satisfiable":0,"added_assignments":0,"removed_assignments":0}}
+{"ctype":"C","name_kind":"utf8","clause_count":0,"stats":{"calls":1,"errors":0,"truth_differences":0,"false_unsat":0,"missed_unsat":0,"changed_satisfiable":0,"added_assignments":0,"removed_assignments":0}}
+{"ctype":"C","name_kind":"utf8","clause_count":1,"stats":{"calls":20,"errors":0,"truth_differences":0,"false_unsat":0,"missed_unsat":0,"changed_satisfiable":0,"added_assignments":0,"removed_assignments":0}}
+{"ctype":"C","name_kind":"utf8","clause_count":2,"stats":{"calls":400,"errors":0,"truth_differences":0,"false_unsat":0,"missed_unsat":0,"changed_satisfiable":0,"added_assignments":0,"removed_assignments":0}}
+{"ctype":"C","name_kind":"utf8","clause_count":3,"stats":{"calls":8000,"errors":0,"truth_differences":0,"false_unsat":0,"missed_unsat":0,"changed_satisfiable":0,"added_assignments":0,"removed_assignments":0}}
+{"ctype":"C.UTF-8","name_kind":"ascii","clause_count":0,"stats":{"calls":1,"errors":0,"truth_differences":0,"false_unsat":0,"missed_unsat":0,"changed_satisfiable":0,"added_assignments":0,"removed_assignments":0}}
+{"ctype":"C.UTF-8","name_kind":"ascii","clause_count":1,"stats":{"calls":20,"errors":0,"truth_differences":0,"false_unsat":0,"missed_unsat":0,"changed_satisfiable":0,"added_assignments":0,"removed_assignments":0}}
+{"ctype":"C.UTF-8","name_kind":"ascii","clause_count":2,"stats":{"calls":400,"errors":0,"truth_differences":0,"false_unsat":0,"missed_unsat":0,"changed_satisfiable":0,"added_assignments":0,"removed_assignments":0}}
+{"ctype":"C.UTF-8","name_kind":"ascii","clause_count":3,"stats":{"calls":8000,"errors":0,"truth_differences":0,"false_unsat":0,"missed_unsat":0,"changed_satisfiable":0,"added_assignments":0,"removed_assignments":0}}
+{"ctype":"C.UTF-8","name_kind":"utf8","clause_count":0,"stats":{"calls":1,"errors":0,"truth_differences":0,"false_unsat":0,"missed_unsat":0,"changed_satisfiable":0,"added_assignments":0,"removed_assignments":0}}
+{"ctype":"C.UTF-8","name_kind":"utf8","clause_count":1,"stats":{"calls":20,"errors":0,"truth_differences":0,"false_unsat":0,"missed_unsat":0,"changed_satisfiable":0,"added_assignments":0,"removed_assignments":0}}
+{"ctype":"C.UTF-8","name_kind":"utf8","clause_count":2,"stats":{"calls":400,"errors":0,"truth_differences":0,"false_unsat":0,"missed_unsat":0,"changed_satisfiable":0,"added_assignments":0,"removed_assignments":0}}
+{"ctype":"C.UTF-8","name_kind":"utf8","clause_count":3,"stats":{"calls":8000,"errors":0,"truth_differences":0,"false_unsat":0,"missed_unsat":0,"changed_satisfiable":0,"added_assignments":0,"removed_assignments":0}}
+COMPLETE candidate_r36 15.936 seconds

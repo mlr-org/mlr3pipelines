@@ -1,0 +1,13 @@
+{
+  "R_version": "R version 4.6.1 (2026-06-24)",
+  "stats": {
+    "calls": 111695,
+    "candidate_accepted": 5891,
+    "rejected_missing_selectors": 48200,
+    "baseline_noncanonical": 2272,
+    "exact_flat_reference_matches": 5891
+  },
+  "canonical_contradiction_repaired": true,
+  "unary_HLA_error_repaired": true,
+  "production_subset_unchanged": true
+}

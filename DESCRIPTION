@@ -217,6 +217,7 @@ Collate:
     'gunion.R'
     'mlr_graphs.R'
     'operators.R'
+    'pipeline_bag.R'
     'pipeline_bagging.R'
     'pipeline_branch.R'
     'pipeline_convert_types.R'

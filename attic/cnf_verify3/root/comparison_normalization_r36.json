@@ -1,0 +1,227 @@
+{
+  "runtime": "3.6.3",
+  "original_locale": "C.UTF-8",
+  "records": [
+    {
+      "kind": "collation_value_order",
+      "locale": "C.UTF-8",
+      "class": "CnfAtom",
+      "identical": false,
+      "original_equal": false,
+      "original_message": "Component “values”: 2 string mismatches",
+      "candidate_equal": true
+    },
+    {
+      "kind": "collation_value_order",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "identical": false,
+      "original_equal": false,
+      "original_message": "Component “X”: 2 string mismatches",
+      "candidate_equal": true
+    },
+    {
+      "kind": "collation_value_order",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "identical": false,
+      "original_equal": false,
+      "original_message": "Component 1: Component 1: 2 string mismatches",
+      "candidate_equal": true
+    },
+    {
+      "kind": "collation_symbol_order",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "identical": false,
+      "original_equal": false,
+      "original_message": ["Names: 2 string mismatches", "Component 1: 1 string mismatch", "Component 2: 1 string mismatch"],
+      "candidate_equal": true
+    },
+    {
+      "kind": "collation_symbol_order",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "identical": false,
+      "original_equal": false,
+      "original_message": ["Component 1: Names: 2 string mismatches", "Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch"],
+      "candidate_equal": true
+    },
+    {
+      "kind": "encoding_hash_order",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "identical": true,
+      "original_equal": false,
+      "original_message": ["Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch", "Component 2: Component 1: 1 string mismatch", "Component 2: Component 2: 1 string mismatch"],
+      "candidate_equal": true
+    },
+    {
+      "kind": "encoding_hash_clause_control",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "identical": true,
+      "original_equal": true,
+      "original_message": {},
+      "candidate_equal": true
+    },
+    {
+      "kind": "encoding_hash_clause_control",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "identical": true,
+      "original_equal": true,
+      "original_message": {},
+      "candidate_equal": true
+    },
+    {
+      "kind": "collation_value_order",
+      "locale": "C",
+      "class": "CnfAtom",
+      "identical": false,
+      "original_equal": true,
+      "original_message": {},
+      "candidate_equal": true
+    },
+    {
+      "kind": "collation_value_order",
+      "locale": "C",
+      "class": "CnfClause",
+      "identical": false,
+      "original_equal": true,
+      "original_message": {},
+      "candidate_equal": true
+    },
+    {
+      "kind": "collation_value_order",
+      "locale": "C",
+      "class": "CnfFormula",
+      "identical": false,
+      "original_equal": true,
+      "original_message": {},
+      "candidate_equal": true
+    },
+    {
+      "kind": "collation_symbol_order",
+      "locale": "C",
+      "class": "CnfClause",
+      "identical": false,
+      "original_equal": true,
+      "original_message": {},
+      "candidate_equal": true
+    },
+    {
+      "kind": "collation_symbol_order",
+      "locale": "C",
+      "class": "CnfFormula",
+      "identical": false,
+      "original_equal": true,
+      "original_message": {},
+      "candidate_equal": true
+    },
+    {
+      "kind": "encoding_hash_order",
+      "locale": "C",
+      "class": "CnfFormula",
+      "identical": true,
+      "original_equal": false,
+      "original_message": ["Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch", "Component 2: Component 1: 1 string mismatch", "Component 2: Component 2: 1 string mismatch"],
+      "candidate_equal": true
+    },
+    {
+      "kind": "encoding_hash_clause_control",
+      "locale": "C",
+      "class": "CnfClause",
+      "identical": true,
+      "original_equal": true,
+      "original_message": {},
+      "candidate_equal": true
+    },
+    {
+      "kind": "encoding_hash_clause_control",
+      "locale": "C",
+      "class": "CnfClause",
+      "identical": true,
+      "original_equal": true,
+      "original_message": {},
+      "candidate_equal": true
+    },
+    {
+      "kind": "collation_value_order",
+      "locale": "en_US.UTF-8",
+      "class": "CnfAtom",
+      "identical": false,
+      "original_equal": false,
+      "original_message": "Component “values”: 2 string mismatches",
+      "candidate_equal": true
+    },
+    {
+      "kind": "collation_value_order",
+      "locale": "en_US.UTF-8",
+      "class": "CnfClause",
+      "identical": false,
+      "original_equal": false,
+      "original_message": "Component “X”: 2 string mismatches",
+      "candidate_equal": true
+    },
+    {
+      "kind": "collation_value_order",
+      "locale": "en_US.UTF-8",
+      "class": "CnfFormula",
+      "identical": false,
+      "original_equal": false,
+      "original_message": "Component 1: Component 1: 2 string mismatches",
+      "candidate_equal": true
+    },
+    {
+      "kind": "collation_symbol_order",
+      "locale": "en_US.UTF-8",
+      "class": "CnfClause",
+      "identical": false,
+      "original_equal": false,
+      "original_message": ["Names: 2 string mismatches", "Component 1: 1 string mismatch", "Component 2: 1 string mismatch"],
+      "candidate_equal": true
+    },
+    {
+      "kind": "collation_symbol_order",
+      "locale": "en_US.UTF-8",
+      "class": "CnfFormula",
+      "identical": false,
+      "original_equal": false,
+      "original_message": ["Component 1: Names: 2 string mismatches", "Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch"],
+      "candidate_equal": true
+    },
+    {
+      "kind": "encoding_hash_order",
+      "locale": "en_US.UTF-8",
+      "class": "CnfFormula",
+      "identical": true,
+      "original_equal": false,
+      "original_message": ["Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: 1 string mismatch", "Component 2: Component 1: 1 string mismatch", "Component 2: Component 2: 1 string mismatch"],
+      "candidate_equal": true
+    },
+    {
+      "kind": "encoding_hash_clause_control",
+      "locale": "en_US.UTF-8",
+      "class": "CnfClause",
+      "identical": true,
+      "original_equal": true,
+      "original_message": {},
+      "candidate_equal": true
+    },
+    {
+      "kind": "encoding_hash_clause_control",
+      "locale": "en_US.UTF-8",
+      "class": "CnfClause",
+      "identical": true,
+      "original_equal": true,
+      "original_message": {},
+      "candidate_equal": true
+    }
+  ],
+  "calls": 24,
+  "false_negatives": 13,
+  "identical_false_negatives": 3,
+  "candidate_equal": true,
+  "production_unchanged": true
+}

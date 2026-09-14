@@ -1,0 +1,35 @@
+{
+  "preorder_counts": {
+    "1": 1,
+    "2": 4,
+    "3": 29,
+    "4": 355
+  },
+  "checked_set_realizations": 389,
+  "bounds": [
+    {
+      "clauses": 1,
+      "signatures": 1,
+      "sharper_bound": 3,
+      "coarse_bound": 5
+    },
+    {
+      "clauses": 2,
+      "signatures": 6,
+      "sharper_bound": 38,
+      "coarse_bound": 130
+    },
+    {
+      "clauses": 3,
+      "signatures": 44,
+      "sharper_bound": 801,
+      "coarse_bound": 12291
+    },
+    {
+      "clauses": 4,
+      "signatures": 499,
+      "sharper_bound": 25708,
+      "coarse_bound": 4194308
+    }
+  ]
+}

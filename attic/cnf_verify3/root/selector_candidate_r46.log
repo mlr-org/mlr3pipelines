@@ -1,0 +1,28 @@
+$R_version
+[1] "R version 4.6.1 (2026-06-24)"
+
+$stats
+$stats$calls
+[1] 111695
+
+$stats$candidate_accepted
+[1] 5891
+
+$stats$rejected_missing_selectors
+[1] 48200
+
+$stats$baseline_noncanonical
+[1] 2272
+
+$stats$exact_flat_reference_matches
+[1] 5891
+
+
+$canonical_contradiction_repaired
+[1] TRUE
+
+$unary_HLA_error_repaired
+[1] TRUE
+
+$production_subset_unchanged
+[1] TRUE

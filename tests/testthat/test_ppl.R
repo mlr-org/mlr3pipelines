@@ -18,8 +18,8 @@ test_that("mlr_graphs access works", {
   )
 
   expect_equal(
-    ppl("bagging", graph = po("nop")),
-    mlr_graphs$get("bagging", graph = po("nop"))
+    ppl("bag", graph = po("nop")),
+    mlr_graphs$get("bag", graph = po("nop"))
   )
 
   expect_equal(ppl(), mlr_graphs)
@@ -44,8 +44,8 @@ test_that("mlr_graphs multi-access works", {
   )
 
   expect_equal(
-    ppls("bagging", graph = po("nop")),
-    list(mlr_graphs$get("bagging", graph = po("nop")))
+    ppls("bag", graph = po("nop")),
+    list(mlr_graphs$get("bag", graph = po("nop")))
   )
 
   expect_equal(
