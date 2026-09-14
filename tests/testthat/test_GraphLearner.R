@@ -540,25 +540,25 @@ test_that("GraphLearner model", {
 
   lr = GraphLearner$new(graph)
 
-  expect_equal(lr$graph, graph)
-  expect_equal(lr$graph_model, graph)
+  expect_equal_r6(lr$graph, graph)
+  expect_equal_r6(lr$graph_model, graph)
 
   graph2$train(tsk("iris"))
 
   lr$train(tsk("iris"))
 
-  expect_equal(graph, graph_orig)
+  expect_equal_r6(graph, graph_orig)
   expect_null(graph$state$pca)
 
-  # behind-the-scenes param_set cache ruins expect_equal if we don't do this:
+  # behind-the-scenes param_set cache ruins equality if we don't do this:
   graph_orig$param_set
 
-  expect_equal(lr$graph, graph_orig)
+  expect_equal_r6(lr$graph, graph_orig)
 
   graph2$state$classif.rpart$train_time = 0
   lr$state$model$classif.rpart$train_time = 0
 
-  expect_equal(lr$graph_model, graph2)
+  expect_equal_r6(lr$graph_model, graph2)
 
   imp = graph2$pipeops$classif.rpart$learner_model$importance()
 

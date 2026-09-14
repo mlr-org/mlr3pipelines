@@ -271,7 +271,7 @@ test_that("PipeOpImpute", {
   task_trained = po$train(list(task$clone(deep = TRUE)$filter(5:6)))[[1]]$data()
   task_predicted = po$predict(list(task$clone(deep = TRUE)$filter(1:3)))[[1]]$data()
 
-  expect_equal(task_predicted, task$clone(deep = TRUE)$filter(1:3)$data(), ignore.col.order = TRUE)
+  expect_equal_data_table(task_predicted, task$clone(deep = TRUE)$filter(1:3)$data(), ignore_col_order = TRUE)
 
   po = PipeOpTestImpute$new(param_vals = list(
     method_num = "hist", method_fct = "oor", add_dummy = "missing_train"))
@@ -734,4 +734,3 @@ test_that("PipeOpImputeSample - impute missings for unseen factor levels", {
   expect_no_error(glrn$predict(task_NA))
 
 })
-
