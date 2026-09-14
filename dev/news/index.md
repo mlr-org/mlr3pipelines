@@ -2,6 +2,10 @@
 
 ## mlr3pipelines 0.12.0-9000
 
+- Fix: [`pos()`](https://mlr3pipelines.mlr-org.com/dev/reference/po.md)
+  now returns an unnamed list, preventing duplicated PipeOp IDs such as
+  `pca.pca` when passed to
+  [`as_graph()`](https://mlr3pipelines.mlr-org.com/dev/reference/as_graph.md).
 - New `ppl("bag")` /
   [`pipeline_bag()`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_bag.md)
   performs real bagging with `frac = 1` and `replace = TRUE` by default.

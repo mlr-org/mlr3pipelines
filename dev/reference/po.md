@@ -20,7 +20,7 @@ The object is initialized with given parameters and `param_vals`.
 converts it to a
 [`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md).
 `pos()` (with plural-s) takes either a `character`-vector, or a list of
-objects, and creates a `list` of
+objects, and creates an unnamed `list` of
 [`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)s.
 
 ## Usage
@@ -59,14 +59,14 @@ pos(.objs, ...)
   [`mlr_pipeops`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops.md),
   or a list of other objects to be converted to a
   [`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md).
-  If this is a named `list`, then the names are used as `$id` slot for
-  the resulting
+  If this is a named `character` or `list`, then the names are used as
+  `$id` slot for the resulting
   [`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)s.
 
 ## Value
 
 A [`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)
-(for `po()`), or a `list` of
+(for `po()`), or an unnamed `list` of
 [`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)s
 (for `pos()`).
 
@@ -123,7 +123,7 @@ mlr_pipeops$get("learner", lrn("classif.rpart"),
 #>  output   NULL PredictionClassif
 
 mlr3pipelines::pos(c("pca", original = "nop"))
-#> $pca
+#> [[1]]
 #> 
 #> ── PipeOp <pca>: not trained ───────────────────────────────────────────────────
 #> Values: list()
@@ -138,7 +138,7 @@ mlr3pipelines::pos(c("pca", original = "nop"))
 #>  <char> <char>  <char>
 #>  output   Task    Task
 #> 
-#> $original
+#> [[2]]
 #> 
 #> ── PipeOp <original>: not trained ──────────────────────────────────────────────
 #> Values: list()

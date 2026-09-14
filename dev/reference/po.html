@@ -16,7 +16,7 @@ a clone of a PipeOp from a given PipeOp (possibly with changed settings)
 The object is initialized with given parameters and param_vals.
 po() taks a single obj (PipeOp id, Learner, ...) and converts
 it to a PipeOp. pos() (with plural-s) takes either a character-vector, or a
-list of objects, and creates a list of PipeOps."><meta property="og:description" content="Create
+list of objects, and creates an unnamed list of PipeOps."><meta property="og:description" content="Create
 a PipeOp from mlr_pipeops from given ID
 a PipeOpLearner from a Learner object
 a PipeOpFilter from a Filter object
@@ -27,7 +27,7 @@ a clone of a PipeOp from a given PipeOp (possibly with changed settings)
 The object is initialized with given parameters and param_vals.
 po() taks a single obj (PipeOp id, Learner, ...) and converts
 it to a PipeOp. pos() (with plural-s) takes either a character-vector, or a
-list of objects, and creates a list of PipeOps."><meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png"><meta name="robots" content="noindex"></head><body>
+list of objects, and creates an unnamed list of PipeOps."><meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png"><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -83,7 +83,7 @@ list of objects, and creates a list of PipeOps."><meta property="og:image" conte
 </ul><p>The object is initialized with given parameters and <code>param_vals</code>.</p>
 <p><code>po()</code> taks a single <code>obj</code> (<code>PipeOp</code> id, <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>, ...) and converts
 it to a <code><a href="PipeOp.html">PipeOp</a></code>. <code>pos()</code> (with plural-s) takes either a <code>character</code>-vector, or a
-list of objects, and creates a <code>list</code> of <code><a href="PipeOp.html">PipeOp</a></code>s.</p>
+list of objects, and creates an unnamed <code>list</code> of <code><a href="PipeOp.html">PipeOp</a></code>s.</p>
     </div>
 
     <div class="section level2">
@@ -117,13 +117,13 @@ given to the <code>param_vals</code> argument of the constructor.</p></dd>
 <dd><p><code>character</code> | <code>list</code><br>
 Either a <code>character</code> of <code><a href="PipeOp.html">PipeOp</a></code>s to look up in <code><a href="mlr_pipeops.html">mlr_pipeops</a></code>,
 or a list of other objects to be converted to a <code><a href="PipeOp.html">PipeOp</a></code>.
-If this is a named <code>list</code>, then the names are used as <code>$id</code> slot for the resulting
+If this is a named <code>character</code> or <code>list</code>, then the names are used as <code>$id</code> slot for the resulting
 <code><a href="PipeOp.html">PipeOp</a></code>s.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code><a href="PipeOp.html">PipeOp</a></code> (for <code>po()</code>), or a <code>list</code> of <code><a href="PipeOp.html">PipeOp</a></code>s (for <code>pos()</code>).</p>
+    <p>A <code><a href="PipeOp.html">PipeOp</a></code> (for <code>po()</code>), or an unnamed <code>list</code> of <code><a href="PipeOp.html">PipeOp</a></code>s (for <code>pos()</code>).</p>
     </div>
 
     <div class="section level2">
@@ -178,7 +178,7 @@ If this is a named <code>list</code>, then the names are used as <code>$id</code
 <span class="r-out co"><span class="r-pr">#&gt;</span>  output   NULL PredictionClassif</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">mlr3pipelines</span><span class="fu">::</span><span class="fu">pos</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pca"</span>, original <span class="op">=</span> <span class="st">"nop"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $pca</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">PipeOp </span><span style="color: #0000BB; font-weight: bold;">&lt;pca&gt;</span><span style="font-weight: bold;">: not trained</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Values: list()</span>
@@ -193,7 +193,7 @@ If this is a named <code>list</code>, then the names are used as <code>$id</code
 <span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;char&gt; &lt;char&gt;  &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  output   Task    Task</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $original</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">PipeOp </span><span style="color: #0000BB; font-weight: bold;">&lt;original&gt;</span><span style="font-weight: bold;">: not trained</span> <span style="color: #00BBBB;">──────────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Values: list()</span>
