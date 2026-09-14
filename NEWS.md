@@ -1,3 +1,7 @@
+# mlr3pipelines 0.12.0-9000
+
+* Tests in `inst/testthat` no longer override `expect_equal`.
+
 # mlr3pipelines 0.11.0-9000
 
 * Fix: Re-running registration (e.g. when `mlr3` is reloaded) no longer removes `PipeOp` properties added to `mlr_reflections$pipeops$properties` by extension packages.
