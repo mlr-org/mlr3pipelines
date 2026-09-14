@@ -1,0 +1,442 @@
+{
+  "mode": "development",
+  "runtime": "R version 4.6.1 (2026-06-24)",
+  "checked_definitions": 56,
+  "kernel_environment": "mlr3pipelines",
+  "calls": 36,
+  "wrong_truth_calls": 12,
+  "records": [
+    {
+      "ctype": "C",
+      "encoding": "utf8",
+      "order": [1, 2, 3],
+      "source_models": 0,
+      "output_models": 2,
+      "witnesses": [
+        {
+          "X": "c",
+          "Y": "a"
+        },
+        {
+          "X": "b",
+          "Y": "b"
+        }
+      ],
+      "warnings": "unable to translate '<U+00E9>' to native encoding"
+    },
+    {
+      "ctype": "C",
+      "encoding": "utf8",
+      "order": [1, 3, 2],
+      "source_models": 0,
+      "output_models": 2,
+      "witnesses": [
+        {
+          "X": "c",
+          "Y": "a"
+        },
+        {
+          "X": "b",
+          "Y": "b"
+        }
+      ],
+      "warnings": "unable to translate '<U+00E9>' to native encoding"
+    },
+    {
+      "ctype": "C",
+      "encoding": "utf8",
+      "order": [2, 1, 3],
+      "source_models": 0,
+      "output_models": 2,
+      "witnesses": [
+        {
+          "X": "c",
+          "Y": "a"
+        },
+        {
+          "X": "b",
+          "Y": "b"
+        }
+      ],
+      "warnings": "unable to translate '<U+00E9>' to native encoding"
+    },
+    {
+      "ctype": "C",
+      "encoding": "utf8",
+      "order": [2, 3, 1],
+      "source_models": 0,
+      "output_models": 2,
+      "witnesses": [
+        {
+          "X": "c",
+          "Y": "a"
+        },
+        {
+          "X": "b",
+          "Y": "b"
+        }
+      ],
+      "warnings": "unable to translate '<U+00E9>' to native encoding"
+    },
+    {
+      "ctype": "C",
+      "encoding": "utf8",
+      "order": [3, 1, 2],
+      "source_models": 0,
+      "output_models": 2,
+      "witnesses": [
+        {
+          "X": "c",
+          "Y": "a"
+        },
+        {
+          "X": "b",
+          "Y": "b"
+        }
+      ],
+      "warnings": "unable to translate '<U+00E9>' to native encoding"
+    },
+    {
+      "ctype": "C",
+      "encoding": "utf8",
+      "order": [3, 2, 1],
+      "source_models": 0,
+      "output_models": 2,
+      "witnesses": [
+        {
+          "X": "c",
+          "Y": "a"
+        },
+        {
+          "X": "b",
+          "Y": "b"
+        }
+      ],
+      "warnings": "unable to translate '<U+00E9>' to native encoding"
+    },
+    {
+      "ctype": "C",
+      "encoding": "latin1",
+      "order": [1, 2, 3],
+      "source_models": 0,
+      "output_models": 2,
+      "witnesses": [
+        {
+          "X": "c",
+          "Y": "a"
+        },
+        {
+          "X": "b",
+          "Y": "b"
+        }
+      ],
+      "warnings": "unable to translate '<e9>' to native encoding"
+    },
+    {
+      "ctype": "C",
+      "encoding": "latin1",
+      "order": [1, 3, 2],
+      "source_models": 0,
+      "output_models": 2,
+      "witnesses": [
+        {
+          "X": "c",
+          "Y": "a"
+        },
+        {
+          "X": "b",
+          "Y": "b"
+        }
+      ],
+      "warnings": "unable to translate '<e9>' to native encoding"
+    },
+    {
+      "ctype": "C",
+      "encoding": "latin1",
+      "order": [2, 1, 3],
+      "source_models": 0,
+      "output_models": 2,
+      "witnesses": [
+        {
+          "X": "c",
+          "Y": "a"
+        },
+        {
+          "X": "b",
+          "Y": "b"
+        }
+      ],
+      "warnings": "unable to translate '<e9>' to native encoding"
+    },
+    {
+      "ctype": "C",
+      "encoding": "latin1",
+      "order": [2, 3, 1],
+      "source_models": 0,
+      "output_models": 2,
+      "witnesses": [
+        {
+          "X": "c",
+          "Y": "a"
+        },
+        {
+          "X": "b",
+          "Y": "b"
+        }
+      ],
+      "warnings": "unable to translate '<e9>' to native encoding"
+    },
+    {
+      "ctype": "C",
+      "encoding": "latin1",
+      "order": [3, 1, 2],
+      "source_models": 0,
+      "output_models": 2,
+      "witnesses": [
+        {
+          "X": "c",
+          "Y": "a"
+        },
+        {
+          "X": "b",
+          "Y": "b"
+        }
+      ],
+      "warnings": "unable to translate '<e9>' to native encoding"
+    },
+    {
+      "ctype": "C",
+      "encoding": "latin1",
+      "order": [3, 2, 1],
+      "source_models": 0,
+      "output_models": 2,
+      "witnesses": [
+        {
+          "X": "c",
+          "Y": "a"
+        },
+        {
+          "X": "b",
+          "Y": "b"
+        }
+      ],
+      "warnings": "unable to translate '<e9>' to native encoding"
+    },
+    {
+      "ctype": "C",
+      "encoding": "ascii",
+      "order": [1, 2, 3],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C",
+      "encoding": "ascii",
+      "order": [1, 3, 2],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C",
+      "encoding": "ascii",
+      "order": [2, 1, 3],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C",
+      "encoding": "ascii",
+      "order": [2, 3, 1],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C",
+      "encoding": "ascii",
+      "order": [3, 1, 2],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C",
+      "encoding": "ascii",
+      "order": [3, 2, 1],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "utf8",
+      "order": [1, 2, 3],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "utf8",
+      "order": [1, 3, 2],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "utf8",
+      "order": [2, 1, 3],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "utf8",
+      "order": [2, 3, 1],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "utf8",
+      "order": [3, 1, 2],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "utf8",
+      "order": [3, 2, 1],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "latin1",
+      "order": [1, 2, 3],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "latin1",
+      "order": [1, 3, 2],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "latin1",
+      "order": [2, 1, 3],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "latin1",
+      "order": [2, 3, 1],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "latin1",
+      "order": [3, 1, 2],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "latin1",
+      "order": [3, 2, 1],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "ascii",
+      "order": [1, 2, 3],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "ascii",
+      "order": [1, 3, 2],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "ascii",
+      "order": [2, 1, 3],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "ascii",
+      "order": [2, 3, 1],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "ascii",
+      "order": [3, 1, 2],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "ascii",
+      "order": [3, 2, 1],
+      "source_models": 0,
+      "output_models": 0,
+      "witnesses": [],
+      "warnings": []
+    }
+  ]
+}

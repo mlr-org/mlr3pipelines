@@ -1,0 +1,20 @@
+{
+  "stats": {
+    "global_calls": 6125,
+    "isolated_calls": 12706,
+    "contradictory_cases": 531,
+    "cases": 2400,
+    "ordered_component_checks": 11045,
+    "nonconstant_fixed_points": 1869,
+    "independent_solver_checks": 26
+  },
+  "productive_pass_counts": {
+    "1": 1822,
+    "2": 17,
+    "0": 30
+  },
+  "source_scope": "ordinary disjoint symbol groups; exact projected clause/range order",
+  "fixture_count": 7,
+  "seed": 772031,
+  "runtime": "R4.6.1 container"
+}

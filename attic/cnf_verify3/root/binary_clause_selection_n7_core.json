@@ -1,0 +1,24 @@
+{
+  "reports": [
+    {
+      "symbols": 7,
+      "clause_bound": 6,
+      "verdict": "unsat",
+      "seconds": 25.6237620562315
+    },
+    {
+      "symbols": 7,
+      "clause_bound": 7,
+      "verdict": "unknown",
+      "seconds": 120.00062945485115,
+      "reason": "canceled"
+    }
+  ],
+  "symbols": 7,
+  "selected_clause_variables": 84,
+  "every_symbol_both_polarities": true,
+  "short_path_forbidden_subsets": 924,
+  "base_assertions": 1067,
+  "z3_version": "4.12.2",
+  "scope": "Proper binary clauses; no short complement path anywhere; exact full assignment coverage"
+}

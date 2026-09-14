@@ -1,0 +1,617 @@
+{
+  "source_sha256": "7d34ad60035509a463168752bb5f6f82d87fd7182a94a0e48461be7cdbe35fdc",
+  "counts": {
+    "used_donor_checks": 7658,
+    "virtual_pair_checks": 44425,
+    "boundaries": 1352,
+    "unit_containments": 4406,
+    "registries": 6041,
+    "targets": 6118,
+    "live_pair_checks": 17070,
+    "formulas": 2015,
+    "output_targets": 5974
+  },
+  "residual_refutations": [
+    {
+      "label": "equality_transpose_0",
+      "target": 1,
+      "result": [
+        [
+          0,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "subsuming_units": [
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "label": "equality_transpose_1",
+      "target": 1,
+      "result": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "subsuming_units": [
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "label": "equality_transpose_2",
+      "target": 1,
+      "result": [
+        [
+          0,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "subsuming_units": [
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "label": "equality_transpose_3",
+      "target": 1,
+      "result": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "subsuming_units": [
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "label": "equality_transpose_4",
+      "target": 1,
+      "result": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "subsuming_units": [
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "label": "equality_transpose_5",
+      "target": 1,
+      "result": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "subsuming_units": [
+        [
+          0,
+          1
+        ]
+      ]
+    }
+  ],
+  "directed_outputs": [
+    {
+      "label": "unit_equality",
+      "sizes": [
+        4,
+        3
+      ],
+      "formula": [
+        [
+          3,
+          1
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          9,
+          4
+        ]
+      ],
+      "result": [
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "label": "deletion_order",
+      "sizes": [
+        2,
+        2,
+        2
+      ],
+      "formula": [
+        [
+          2,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          2
+        ],
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          0,
+          2,
+          1
+        ]
+      ],
+      "result": [
+        [
+          2,
+          0,
+          2
+        ],
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          0,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "label": "multivalued_chain",
+      "sizes": [
+        4,
+        3,
+        3
+      ],
+      "formula": [
+        [
+          3,
+          0,
+          0
+        ],
+        [
+          1,
+          3,
+          0
+        ],
+        [
+          0,
+          6,
+          1
+        ],
+        [
+          0,
+          5,
+          2
+        ],
+        [
+          2,
+          0,
+          4
+        ]
+      ],
+      "result": [
+        [
+          1,
+          3,
+          0
+        ],
+        [
+          0,
+          6,
+          1
+        ],
+        [
+          0,
+          5,
+          2
+        ],
+        [
+          2,
+          0,
+          4
+        ]
+      ]
+    },
+    {
+      "label": "equality_order_0",
+      "sizes": [
+        4,
+        3
+      ],
+      "formula": [
+        [
+          3,
+          1
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          9,
+          4
+        ]
+      ],
+      "result": [
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "label": "equality_transpose_0",
+      "sizes": [
+        3,
+        4
+      ],
+      "formula": [
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          4,
+          9
+        ]
+      ],
+      "result": [
+        [
+          0,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "label": "equality_order_1",
+      "sizes": [
+        4,
+        3
+      ],
+      "formula": [
+        [
+          3,
+          1
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          5,
+          2
+        ]
+      ],
+      "result": [
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "label": "equality_transpose_1",
+      "sizes": [
+        3,
+        4
+      ],
+      "formula": [
+        [
+          1,
+          3
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "result": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "label": "equality_order_2",
+      "sizes": [
+        4,
+        3
+      ],
+      "formula": [
+        [
+          5,
+          2
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          9,
+          4
+        ]
+      ],
+      "result": [
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "label": "equality_transpose_2",
+      "sizes": [
+        3,
+        4
+      ],
+      "formula": [
+        [
+          2,
+          5
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          4,
+          9
+        ]
+      ],
+      "result": [
+        [
+          0,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "label": "equality_order_3",
+      "sizes": [
+        4,
+        3
+      ],
+      "formula": [
+        [
+          5,
+          2
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "result": [
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "label": "equality_transpose_3",
+      "sizes": [
+        3,
+        4
+      ],
+      "formula": [
+        [
+          2,
+          5
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          1,
+          3
+        ]
+      ],
+      "result": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "label": "equality_order_4",
+      "sizes": [
+        4,
+        3
+      ],
+      "formula": [
+        [
+          9,
+          4
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          5,
+          2
+        ]
+      ],
+      "result": [
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "label": "equality_transpose_4",
+      "sizes": [
+        3,
+        4
+      ],
+      "formula": [
+        [
+          4,
+          9
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "result": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "label": "equality_order_5",
+      "sizes": [
+        4,
+        3
+      ],
+      "formula": [
+        [
+          9,
+          4
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "result": [
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "label": "equality_transpose_5",
+      "sizes": [
+        3,
+        4
+      ],
+      "formula": [
+        [
+          4,
+          9
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1,
+          3
+        ]
+      ],
+      "result": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  ]
+}

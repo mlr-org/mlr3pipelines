@@ -1,0 +1,157 @@
+$R
+[1] "R version 4.6.1 (2026-06-24)"
+
+$words
+$words[[1]]
+[1] -1  2
+
+$words[[2]]
+[1]  3 -2
+
+$words[[3]]
+[1] 1 1 1
+
+$words[[4]]
+[1] -3 -1
+
+
+$public_clauses
+$public_clauses[[1]]
+$public_clauses[[1]]$X1
+[1] "0"
+
+$public_clauses[[1]]$X2
+[1] "1"
+
+
+$public_clauses[[2]]
+$public_clauses[[2]]$X3
+[1] "1"
+
+$public_clauses[[2]]$X2
+[1] "0"
+
+
+$public_clauses[[3]]
+$public_clauses[[3]]$X1
+[1] "1"
+
+$public_clauses[[3]]$X1
+[1] "1"
+
+$public_clauses[[3]]$X1
+[1] "1"
+
+
+$public_clauses[[4]]
+$public_clauses[[4]]$X3
+[1] "0"
+
+$public_clauses[[4]]$X1
+[1] "0"
+
+
+
+$output
+$output[[1]]
+$output[[1]]$X1
+[1] "0"
+
+
+$output[[2]]
+$output[[2]]$X3
+[1] "1"
+
+$output[[2]]$X2
+[1] "0"
+
+
+$output[[3]]
+$output[[3]]$X1
+[1] "1"
+
+$output[[3]]$X1
+[1] "1"
+
+
+
+$unit_hla
+$unit_hla$unit
+[1] "X1"
+
+$unit_hla$entries
+$unit_hla$entries[[1]]
+$unit_hla$entries[[1]]$X1
+[1] "0"
+
+
+$unit_hla$entries[[2]]
+$unit_hla$entries[[2]]$X3
+[1] "1"
+
+$unit_hla$entries[[2]]$X2
+[1] "0"
+
+
+$unit_hla$entries[[3]]
+$unit_hla$entries[[3]]$X3
+[1] "0"
+
+$unit_hla$entries[[3]]$X1
+[1] "0"
+
+
+$unit_hla$entries[[4]]
+$unit_hla$entries[[4]]$X1
+[1] "1"
+
+$unit_hla$entries[[4]]$X1
+[1] "1"
+
+
+
+$unit_hla$eliminated
+[1] FALSE FALSE  TRUE FALSE
+
+$unit_hla$registry
+$unit_hla$registry$X1
+integer(0)
+
+$unit_hla$registry$X2
+[1] 2
+
+$unit_hla$registry$X3
+[1] 2
+
+
+$unit_hla$remaining
+[1] 2 4
+
+$unit_hla$counts
+[1] 2 2
+
+$unit_hla$used
+[1] FALSE FALSE
+
+$unit_hla$selected
+[1] NA
+
+
+$hypothetical_lazy
+   X1    X1
+FALSE FALSE
+
+$hypothetical_pivot
+character(0)
+
+$input_truth
+[1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+
+$output_truth
+[1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+
+$forced_donor_error
+[1] "attempt to select less than one element in get1index"
+
+$reduced_shape_checks
+[1] 20

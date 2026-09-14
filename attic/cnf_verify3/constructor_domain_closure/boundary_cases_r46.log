@@ -1,0 +1,43 @@
+R version 4.6.1 (2026-06-24); checkmate 2.3.4
+
+A publicly constructed atom can retain repeated matrix elements:
+structure(c("b", "b"), dim = 1:2)
+Its negation is a flat unique complement:
+c("a", "c")
+The ordinary Clause constructor globally deduplicates and flattens:
+list(X = "b")
+Formula negation constructs the same canonical complement directly:
+list(list(X = c("a", "c")))
+
+Double atom negation preserves support, but uses stored domain order:
+structure(c("b", "a", "b", "a"), dim = c(2L, 2L))
+c("a", "b")
+
+Six ordinary scalar symbol-name representations produced the same canonical name.
+
+Previously recorded constructor exceptions, reproduced as exclusion controls:
+clause_free_false_first: All symbols must be in the same universe.
+clause_free_false_last: All symbols must be in the same universe.
+formula_free_true_first: All clauses must be in the same universe.
+nested_formula_then_false: wrong arguments for subsetting an environment
+Previously recorded TRUE | proper_clause result class: logical
+Native mixed Atom & Clause dispatch returned a canonical Formula.
+Direct Formula method has correct truth on all nine valuations on both runtimes.
+{
+  "R": "R version 4.6.1 (2026-06-24)",
+  "checkmate": "2.3.4",
+  "source_md5": {
+    "R/CnfUniverse.R": "45fa56698900fc42440b5dda34fbe4ff",
+    "R/CnfSymbol.R": "d1aa6bcd59ced1aa4e5ea3317d640897",
+    "R/CnfAtom.R": "58699a7eb88f45c6aa5cdb8b77cc7c41",
+    "R/CnfClause.R": "f6c9659b31a511e696dc9d8d7cfa9349",
+    "R/CnfFormula.R": "7609c11610bbe9de566d9d9b448a07f7",
+    "R/CnfFormula_simplify.R": "376aac6eb81334e751e9351f9eddc02f"
+  },
+  "counts": {
+    "symbol_name_variants": 6,
+    "known_constructor_errors": 4,
+    "known_class_loss": 1,
+    "valuation_rows": 9
+  }
+}

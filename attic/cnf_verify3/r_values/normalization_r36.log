@@ -1,0 +1,158 @@
+R: R version 3.6.3 (2020-02-29) ; checkmate: 2.3.4
+                      section                           input                     status
+                       domain                        ordinary accepted; clause canonical
+                       domain                           named accepted; clause canonical
+                       domain                   missing_names accepted; clause canonical
+                       domain                        repeated accepted; clause canonical
+                       domain                          matrix accepted; clause canonical
+                       domain                           array accepted; clause canonical
+                       domain                      attributed accepted; clause canonical
+                       domain                           as_is accepted; clause canonical
+                       domain                         missing                   rejected
+                       domain                           empty                   rejected
+                       domain                         logical                   rejected
+                       domain                         numeric                   rejected
+                       domain                          factor                   rejected
+                       domain                            list                   rejected
+                       domain                            null                   rejected
+                       domain                     empty_label accepted; clause canonical
+                  symbol name                        ordinary accepted; clause canonical
+                  symbol name                           named accepted; clause canonical
+                  symbol name          missing_name_attribute accepted; clause canonical
+                  symbol name                          matrix accepted; clause canonical
+                  symbol name                           as_is accepted; clause canonical
+                  symbol name                           blank accepted; clause canonical
+                  symbol name                           empty                   rejected
+                  symbol name                         missing                   rejected
+                  symbol name                        multiple                   rejected
+                  symbol name                          factor                   rejected
+                  symbol name                         numeric                   rejected
+                  atom values                        ordinary accepted; clause canonical
+                  atom values                           named accepted; clause canonical
+                  atom values                   missing_names accepted; clause canonical
+                  atom values                        repeated accepted; clause canonical
+                  atom values               matrix_duplicates accepted; clause canonical
+                  atom values                array_duplicates accepted; clause canonical
+                  atom values                      attributed accepted; clause canonical
+                  atom values                           as_is accepted; clause canonical
+                  atom values                         missing                   rejected
+                  atom values                         outside                   rejected
+                  atom values                          factor                   rejected
+                  atom values                         numeric                   rejected
+                  atom values                         logical                   rejected
+                  atom values                             raw                   rejected
+                  atom values                         complex                   rejected
+                  atom values                            list                   rejected
+                  atom values                 empty_character accepted; clause canonical
+                  atom values                   empty_numeric accepted; clause canonical
+                  atom values                   empty_logical accepted; clause canonical
+                  atom values                       empty_raw accepted; clause canonical
+                  atom values                   empty_complex accepted; clause canonical
+                  atom values                      empty_list accepted; clause canonical
+                  atom values                            null accepted; clause canonical
+                  atom values                   full_repeated accepted; clause canonical
+                   list names       duplicate atom-list names                    ignored
+                   list names    duplicate formula-list names                    ignored
+              clause selector                            null                  canonical
+              clause selector                   empty_integer                  canonical
+              clause selector                 empty_character                  canonical
+              clause selector                       empty_raw                  canonical
+              clause selector                   empty_complex                  canonical
+              clause selector                            zero                  canonical
+              clause selector                      zero_named                  canonical
+              clause selector                 fractional_zero                  canonical
+              clause selector                         numeric                  canonical
+              clause selector              numeric_duplicates                  canonical
+              clause selector              numeric_fractional                  canonical
+              clause selector                       character                  canonical
+              clause selector            character_duplicates                  canonical
+              clause selector                 named_character                  canonical
+              clause selector                   named_numeric                  canonical
+              clause selector                        negative                   rejected
+              clause selector                 numeric_missing                   rejected
+              clause selector               character_missing                   rejected
+              clause selector                        infinite                   rejected
+              clause selector                    not_a_number                   rejected
+              clause selector                   out_of_bounds                   rejected
+              clause selector                  unknown_symbol                   rejected
+              clause selector                           false                  canonical
+              clause selector                     named_false                   rejected
+              clause selector                         logical                  canonical
+              clause selector                   named_logical                  canonical
+              clause selector                   recycled_true                   rejected
+              clause selector                 logical_missing                  MALFORMED
+              clause selector            logical_missing_only                   rejected
+              clause selector                logical_too_long                   rejected
+              clause selector                  logical_matrix                  canonical
+              clause selector          logical_matrix_missing                  MALFORMED
+              clause selector          numeric_row_duplicates                  MALFORMED
+              clause selector       numeric_column_duplicates                  canonical
+              clause selector       numeric_matrix_duplicates                  MALFORMED
+              clause selector        numeric_array_duplicates                  MALFORMED
+              clause selector        character_row_duplicates                  MALFORMED
+              clause selector     character_column_duplicates                  canonical
+              clause selector      character_array_duplicates                  MALFORMED
+              clause selector                             raw                   rejected
+              clause selector                         complex                   rejected
+              clause selector                          factor                  canonical
+              clause selector                 as_is_character                  canonical
+              clause selector                            date                  canonical
+              clause selector                            list                   rejected
+              clause selector                      expression                   rejected
+         exhaustive selectors vectors/matrices of length 1..4                    checked
+           logical conversion                    CnfAtom true                   accepted
+           logical conversion                   CnfAtom false                   accepted
+           logical conversion              CnfAtom named_true                   accepted
+           logical conversion             CnfAtom named_false                   accepted
+           logical conversion             CnfAtom matrix_true                   accepted
+           logical conversion            CnfAtom matrix_false                   accepted
+           logical conversion         CnfAtom attributed_true                   accepted
+           logical conversion             CnfAtom as_is_false                   rejected
+           logical conversion                 CnfAtom missing                   rejected
+           logical conversion                   CnfAtom empty                   rejected
+           logical conversion                  CnfAtom longer                   rejected
+           logical conversion                  CnfClause true                   accepted
+           logical conversion                 CnfClause false                   accepted
+           logical conversion            CnfClause named_true                   accepted
+           logical conversion           CnfClause named_false                   accepted
+           logical conversion           CnfClause matrix_true                   accepted
+           logical conversion          CnfClause matrix_false                   accepted
+           logical conversion       CnfClause attributed_true                   accepted
+           logical conversion           CnfClause as_is_false                   rejected
+           logical conversion               CnfClause missing                   rejected
+           logical conversion                 CnfClause empty                   rejected
+           logical conversion                CnfClause longer                   rejected
+           logical conversion                 CnfFormula true                   accepted
+           logical conversion                CnfFormula false                   accepted
+           logical conversion           CnfFormula named_true                   accepted
+           logical conversion          CnfFormula named_false                   accepted
+           logical conversion          CnfFormula matrix_true                   accepted
+           logical conversion         CnfFormula matrix_false                   accepted
+           logical conversion      CnfFormula attributed_true                   accepted
+           logical conversion          CnfFormula as_is_false                   rejected
+           logical conversion              CnfFormula missing                   rejected
+           logical conversion                CnfFormula empty                   rejected
+           logical conversion               CnfFormula longer                   rejected
+            constant selector                       TRUE zero                   accepted
+            constant selector                       TRUE null                   accepted
+            constant selector                      TRUE false                   accepted
+            constant selector                TRUE named_false                   rejected
+            constant selector       TRUE logical_missing_only                   rejected
+            constant selector     TRUE numeric_row_duplicates                   rejected
+            constant selector                      FALSE zero                   accepted
+            constant selector                      FALSE null                   accepted
+            constant selector                     FALSE false                   rejected
+            constant selector               FALSE named_false                   rejected
+            constant selector      FALSE logical_missing_only                   rejected
+            constant selector    FALSE numeric_row_duplicates                   rejected
+             logical operator           unnamed TRUE | clause                 class lost
+             logical operator             named TRUE | clause                 class lost
+             logical operator            matrix TRUE | clause                 class lost
+         constant constructor            raw FALSE atom entry                   rejected
+         constant constructor  wrapped FALSE then proper atom                   rejected
+         constant constructor  proper atom then wrapped FALSE                   rejected
+         constant constructor           raw TRUE clause entry                   rejected
+         constant constructor wrapped TRUE then proper clause                   rejected
+         constant constructor proper clause then wrapped TRUE                   accepted
+ missing selector consequence                      logical NA malformed formula accepted
+All constructor, selector, and constant checks passed.

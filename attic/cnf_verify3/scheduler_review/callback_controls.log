@@ -1,0 +1,4 @@
+PASS: a pending zero-to-one ordinary visit reads count one and restricts the current pivot.
+PASS: a queued pair now at count one is enabled before the current oneend handler.
+PASS: an ordinary count-two callback dispatches even while the manual flag is FALSE.
+PASS: a zero-count manual visit still deletes the target.

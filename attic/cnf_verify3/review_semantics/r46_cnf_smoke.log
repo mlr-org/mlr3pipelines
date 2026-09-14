@@ -1,0 +1,799 @@
+ℹ Testing mlr3pipelines
+Starting 2 test processes.
+✔ | F W  S  OK | Context
+
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 0 ] Starting up...
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 24 ] @ CnfAtom, CnfClause
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 33 ] @ CnfAtom, CnfClause
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 33 ] @ CnfAtom, CnfClause
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 33 ] @ CnfAtom, CnfClause
+✔ |         52 | CnfAtom [1.2s]
+
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 92 ] @ CnfClause
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 92 ] @ CnfClause
+✔ |         93 | CnfClause [1.5s]
+
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 145 ] @ CnfFormula_simplify
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 146 ] @ CnfFormula_simplify
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1352 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1354 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1356 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1356 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1364 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1370 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1372 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1382 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1391 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1393 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1397 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1399 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1404 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1407 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1411 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1414 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1436 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1446 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1448 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1457 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1468 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1484 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1487 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1489 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1505 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1507 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1517 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1522 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1530 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1532 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1542 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1550 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1568 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1568 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1570 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1571 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1573 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1581 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1588 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1590 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1593 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1599 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1603 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1607 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1614 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1616 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1620 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1623 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1624 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1628 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1630 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1631 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1636 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1640 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1641 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1643 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1645 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1648 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1649 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1651 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1651 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1653 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1655 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1656 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1658 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1658 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1660 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1662 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1664 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1666 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1667 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1669 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1671 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1672 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1672 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1674 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1677 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1679 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1681 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1684 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1685 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1686 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1690 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1691 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1694 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1698 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1699 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1699 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1704 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1705 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1706 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1710 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1713 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1713 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1714 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1719 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1720 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1726 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1728 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1731 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1733 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1734 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1736 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1737 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1739 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1741 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1745 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1746 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1749 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1750 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1753 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1753 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1756 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1757 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1759 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1760 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1762 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1763 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1764 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1766 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1768 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1770 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1775 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1776 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1778 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1779 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1781 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1781 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1785 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1787 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1788 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1791 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1792 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1793 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1798 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1800 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1802 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1803 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1804 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1808 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1809 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1812 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1814 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1817 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1822 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1823 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1824 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1826 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1827 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1829 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1831 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1833 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1835 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1836 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1839 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1840 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1842 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1843 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1847 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1849 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1851 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1852 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1854 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1854 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1855 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1859 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1860 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1862 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1864 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1865 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1867 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1868 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1869 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1872 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1874 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1876 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1878 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1879 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1881 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1882 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1884 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1887 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1889 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1890 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1891 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1895 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1896 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1899 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1900 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1902 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1905 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1909 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1911 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1914 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1915 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1917 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1918 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1923 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1923 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1924 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1927 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1927 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1928 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1930 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1931 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1932 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1934 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1936 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1938 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1939 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1942 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1942 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1943 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1945 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1946 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1946 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1948 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1949 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1949 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1952 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1953 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1954 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1955 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1957 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1959 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1960 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1961 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1963 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1964 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1965 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1967 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1968 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1968 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1970 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1971 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1973 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1973 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1974 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1976 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1977 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1978 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1979 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1980 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1984 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1986 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1987 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1989 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1991 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1994 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1995 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1997 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1998 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1999 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 1999 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2001 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2004 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2006 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2008 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2012 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2015 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2018 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2019 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2021 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2024 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2026 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2028 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2029 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2029 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2031 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2032 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2035 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2040 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2041 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2042 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2043 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2044 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2045 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2046 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2047 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2048 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2051 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2055 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2056 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2058 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2059 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2062 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2063 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2063 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2066 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2068 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2071 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2071 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2072 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2075 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2075 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2077 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2078 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2080 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2083 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2084 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2087 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2089 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2090 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2093 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2097 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2098 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2100 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2100 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2103 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2105 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2106 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2106 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2108 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2110 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2111 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2113 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2114 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2115 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2116 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2116 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2118 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2119 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2120 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2120 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2122 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2126 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2126 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2127 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2129 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2131 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2131 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2132 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2133 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2134 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2136 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2136 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2140 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2141 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2143 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2143 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2144 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2146 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2147 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2149 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2152 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2155 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2155 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2155 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2156 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2158 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2161 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2165 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2166 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2168 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2170 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2171 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2173 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2174 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2177 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2179 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2181 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2181 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2182 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2185 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2188 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2189 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2196 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2196 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2198 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2201 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2204 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2206 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2207 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2207 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2210 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2211 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2211 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2214 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2217 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2218 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2218 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2220 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2220 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2222 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2224 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2226 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2228 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2228 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2229 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2231 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2231 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2233 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2234 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2235 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2236 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2239 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2240 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2243 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2245 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2245 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2247 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2248 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2248 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2250 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2252 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2252 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2256 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2256 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2258 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2258 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2262 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2263 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2266 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2267 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2267 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2269 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2271 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2272 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2274 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2275 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2276 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2278 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2279 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2279 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2281 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2281 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2283 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2286 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2288 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2289 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2291 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2293 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2295 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2297 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2300 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2302 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2303 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2304 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2306 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2307 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2309 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2311 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2312 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2314 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2315 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2315 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2317 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2318 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2320 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2321 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2323 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2327 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2328 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2329 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2330 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2331 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2336 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2337 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2339 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2339 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2341 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2343 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2345 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2346 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2348 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2351 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2352 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2354 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2355 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2355 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2357 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2360 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2362 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2363 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2363 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2366 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2367 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2369 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2371 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2373 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2374 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2374 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2376 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2379 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2381 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2382 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2383 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2383 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2385 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2385 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2387 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2388 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2391 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2391 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2395 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2396 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2397 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2399 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2401 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2402 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2403 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2404 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2406 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2410 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2411 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2413 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2415 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2417 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2419 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2419 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2421 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2422 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2422 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2424 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2428 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2429 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2430 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2431 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2432 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2434 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2435 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2437 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2437 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2439 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2441 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2442 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2442 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2445 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2447 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2448 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2449 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2451 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2452 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2456 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2457 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2457 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2459 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2464 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2466 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2470 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2471 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2474 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2475 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2476 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2477 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2479 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2482 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2484 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2486 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2486 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2491 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2493 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2494 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2496 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2497 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2498 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2499 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2500 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2501 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2502 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2504 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2506 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2506 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2508 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2509 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2509 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2511 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2513 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2513 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2518 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2518 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2520 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2524 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2525 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2527 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2528 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2531 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2533 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2534 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2535 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2537 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2541 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2542 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2542 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2545 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2547 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2548 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2549 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2552 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2553 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2556 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2558 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2558 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2560 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2561 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2561 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2563 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2564 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2566 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2566 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2567 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2571 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2573 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2574 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2575 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2577 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2579 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2581 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2583 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2586 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2587 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2589 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2591 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2592 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2592 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2594 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2595 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2600 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2603 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2605 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2606 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2609 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2610 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2611 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2612 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2614 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2616 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2617 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2618 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2620 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2622 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2623 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2625 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2626 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2628 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2628 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2630 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2631 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2633 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2634 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2636 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2637 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2639 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2643 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2645 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2646 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2646 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2652 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2653 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2654 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2654 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2656 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2657 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2660 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2663 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2665 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2666 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2668 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2669 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2671 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2673 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2674 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2675 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2676 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2677 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2680 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2681 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2683 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2684 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2686 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2687 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2687 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2689 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2689 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2690 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2692 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2694 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2694 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2696 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2696 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2697 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2699 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2701 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2702 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2702 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2704 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2704 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2706 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2707 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2707 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2709 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2710 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2711 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2712 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2713 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2714 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2715 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2717 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2718 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2719 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2721 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2722 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2722 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2724 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2726 ] @ CnfFormula_simplify, CnfFormula
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2729 ] @ CnfFormula_simplify, CnfFormula
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2731 ] @ CnfFormula_simplify, CnfFormula
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2732 ] @ CnfFormula_simplify, CnfFormula
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2734 ] @ CnfFormula_simplify, CnfFormula
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2734 ] @ CnfFormula_simplify, CnfFormula
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2735 ] @ CnfFormula_simplify, CnfFormula
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2737 ] @ CnfFormula_simplify, CnfFormula
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2742 ] @ CnfFormula_simplify, CnfFormula
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2745 ] @ CnfFormula_simplify, CnfFormula
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2747 ] @ CnfFormula_simplify, CnfFormula
+✔ |        2121 | CnfFormula [115.4s]
+
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2982 ] @ CnfFormula_simplify
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 2982 ] @ CnfFormula_simplify
+✔ |         17 | CnfSymbol
+
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3001 ] @ CnfFormula_simplify
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3001 ] @ CnfFormula_simplify
+✔ |         18 | CnfUniverse
+
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3020 ] @ CnfFormula_simplify
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3020 ] @ CnfFormula_simplify
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3021 ] @ CnfFormula_simplify
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3022 ] @ CnfFormula_simplify
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3022 ] @ CnfFormula_simplify
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3022 ] @ CnfFormula_simplify
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3023 ] @ CnfFormula_simplify
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3024 ] @ CnfFormula_simplify
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3025 ] @ CnfFormula_simplify
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3026 ] @ CnfFormula_simplify
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3027 ] @ CnfFormula_simplify
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3028 ] @ CnfFormula_simplify
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3028 ] @ CnfFormula_simplify
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3028 ] @ CnfFormula_simplify
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3029 ] @ CnfFormula_simplify
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3029 ] @ CnfFormula_simplify
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3031 ] @ CnfFormula_simplify
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3032 ] @ CnfFormula_simplify
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3032 ] @ CnfFormula_simplify
+⠇ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3033 ] @ CnfFormula_simplify
+⠏ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3034 ] @ CnfFormula_simplify
+⠋ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3034 ] @ CnfFormula_simplify
+⠙ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3035 ] @ CnfFormula_simplify
+⠹ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3035 ] @ CnfFormula_simplify
+⠸ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3035 ] @ CnfFormula_simplify
+⠼ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3036 ] @ CnfFormula_simplify
+⠴ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3036 ] @ CnfFormula_simplify
+⠦ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3036 ] @ CnfFormula_simplify
+✔ |        1514 | CnfFormula_simplify [124.1s]
+
+⠧ [ FAIL 0 | WARN 0 | SKIP 0 | PASS 3815 ] Starting up...
+
+══ Results ═════════════════════════════════════════════════════════════════════
+Duration: 127.6 s
+
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 3815 ]

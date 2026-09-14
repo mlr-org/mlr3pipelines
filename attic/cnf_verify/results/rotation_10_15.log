@@ -1,0 +1,43 @@
+=== seed 10 ===
+  seed 10: trials: 50000, failures: 0
+  seed 10: trials: 20000, failures: 0
+  seed 10: trials: 3000, failures: 0, skipped (budget): 0
+  seed 10: trials: 50000, failures: 0
+  seed 10: trials: 3000, failures: 0, skipped (budget): 0
+  seed 10: trials: 20000, failures: 0
+=== seed 11 ===
+  seed 11: trials: 50000, failures: 0
+  seed 11: trials: 20000, failures: 0
+  seed 11: trials: 3000, failures: 0, skipped (budget): 0
+  seed 11: trials: 50000, failures: 0
+  seed 11: trials: 3000, failures: 0, skipped (budget): 0
+  seed 11: trials: 20000, failures: 0
+=== seed 12 ===
+  seed 12: trials: 50000, failures: 0
+  seed 12: trials: 20000, failures: 0
+  seed 12: trials: 3000, failures: 0, skipped (budget): 0
+  seed 12: trials: 50000, failures: 0
+  seed 12: trials: 3000, failures: 0, skipped (budget): 0
+  seed 12: trials: 20000, failures: 0
+=== seed 13 ===
+  seed 13: trials: 50000, failures: 0
+  seed 13: trials: 20000, failures: 0
+  seed 13: trials: 3000, failures: 0, skipped (budget): 0
+  seed 13: trials: 50000, failures: 0
+  seed 13: trials: 3000, failures: 0, skipped (budget): 0
+  seed 13: trials: 20000, failures: 0
+=== seed 14 ===
+  seed 14: trials: 50000, failures: 0
+  seed 14: trials: 20000, failures: 0
+  seed 14: trials: 3000, failures: 0, skipped (budget): 0
+  seed 14: trials: 50000, failures: 0
+  seed 14: trials: 3000, failures: 0, skipped (budget): 0
+  seed 14: trials: 20000, failures: 0
+=== seed 15 ===
+  seed 15: trials: 50000, failures: 0
+  seed 15: trials: 20000, failures: 0
+  seed 15: trials: 3000, failures: 0, skipped (budget): 0
+  seed 15: trials: 50000, failures: 0
+  seed 15: trials: 3000, failures: 0, skipped (budget): 0
+  seed 15: trials: 20000, failures: 0
+rotation done (seeds 10..15), overall failure flag: 0

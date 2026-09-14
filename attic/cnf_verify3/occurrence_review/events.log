@@ -1,0 +1,74 @@
+directed family 1 formulas 80
+directed family 2 formulas 144
+directed family 3 formulas 232
+directed family 4 formulas 320
+directed family 5 formulas 392
+directed family 6 formulas 472
+directed family 7 formulas 552
+random 100 elapsed 72.141
+random 200 elapsed 78.969
+random 300 elapsed 85.914
+random 400 elapsed 90.786
+random 500 elapsed 98.769
+random 600 elapsed 104.619
+random 700 elapsed 111.106
+random 800 elapsed 116.756
+random 900 elapsed 123.508
+random 1000 elapsed 130.714
+random 1100 elapsed 139.08
+random 1200 elapsed 144.615
+random 1300 elapsed 152.76
+random 1400 elapsed 160.487
+random 1500 elapsed 167.119
+$R
+[1] "R version 3.6.3 (2020-02-29)"
+
+$counts
+$counts$semantic_boundaries
+[1] 65780
+
+$counts$cached_pairs
+[1] 839680
+
+$counts$first_copy_removed
+[1] 1770
+
+$counts$orphan
+[1] 7006
+
+$counts$unit_snapshot_skip
+[1] 63
+
+$counts$hla_virtual_semantics
+[1] 8643
+
+$counts$hla_cached_pairs
+[1] 31598
+
+$counts$hla_starting_donor
+[1] 1094
+
+$counts$unit_hla_initializations
+[1] 598
+
+$counts$formulas
+[1] 2067
+
+$counts$assignment_rows
+[1] 52962
+
+$counts$same_name_sse2
+[1] 3464
+
+$counts$orphan_clause_deleted
+[1] 626
+
+$counts$hla_clause_deleted
+[1] 13
+
+$counts$same_name_unrelated_exception
+[1] 132
+
+
+$seconds
+[1] 167.119

@@ -1,0 +1,72 @@
+R version 3.6.3 (2020-02-29) bank 44
+FIRST boolean_1_clauses noncanonical_correct at 2
+list(category = "noncanonical_correct", domains = list(X = c("a",
+"b"), Y = c("a", "b")), raw = list(list(X = "a")), selectors = list(
+    c(1L, 1L)), selected = list(list(X = "a", X = "a")), output = list(
+    list(X = "a", X = "a")), truth = structure(list(X = c("a",
+"b", "a", "b"), Y = c("a", "a", "b", "b"), expected = c(TRUE,
+FALSE, TRUE, FALSE), positional = c(TRUE, FALSE, TRUE, FALSE),
+    named = c(TRUE, FALSE, TRUE, FALSE)), class = "data.frame", row.names = c(NA,
+-4L)))
+PROGRESS 1 5 of 44 seconds 0.596
+PROGRESS 1 10 of 44 seconds 0.599
+PROGRESS 1 15 of 44 seconds 0.601
+PROGRESS 1 20 of 44 seconds 0.604
+PROGRESS 1 25 of 44 seconds 0.606
+PROGRESS 1 30 of 44 seconds 0.609
+PROGRESS 1 35 of 44 seconds 0.611
+PROGRESS 1 40 of 44 seconds 0.614
+       canonical_correct     noncanonical_correct       noncanonical_stale
+                      12                       32                        0
+noncanonical_named_wrong  noncanonical_both_wrong          canonical_wrong
+                       0                        0                        0
+                   error
+                       0
+FIRST boolean_2_clauses noncanonical_correct at 8
+list(category = "noncanonical_correct", domains = list(X = c("a",
+"b"), Y = c("a", "b")), raw = list(list(X = "a"), list(Y = "a")),
+    selectors = list(1L, c(1L, 1L)), selected = list(list(X = "a"),
+        list(Y = "a", Y = "a")), output = list(list(X = "a"),
+        list(Y = "a", Y = "a")), truth = structure(list(X = c("a",
+    "b", "a", "b"), Y = c("a", "a", "b", "b"), expected = c(TRUE,
+    FALSE, FALSE, FALSE), positional = c(TRUE, FALSE, FALSE,
+    FALSE), named = c(TRUE, FALSE, FALSE, FALSE)), class = "data.frame", row.names = c(NA,
+    -4L)))
+PROGRESS 2 5 of 44 seconds 0.171
+PROGRESS 2 10 of 44 seconds 0.323
+PROGRESS 2 15 of 44 seconds 0.494
+PROGRESS 2 20 of 44 seconds 0.66
+PROGRESS 2 25 of 44 seconds 0.834
+PROGRESS 2 30 of 44 seconds 0.984
+PROGRESS 2 35 of 44 seconds 1.157
+PROGRESS 2 40 of 44 seconds 1.309
+       canonical_correct     noncanonical_correct       noncanonical_stale
+                     512                     1424                        0
+noncanonical_named_wrong  noncanonical_both_wrong          canonical_wrong
+                       0                        0                        0
+                   error
+                       0
+FIRST boolean_3_clauses noncanonical_correct at 8
+list(category = "noncanonical_correct", domains = list(X = c("a",
+"b"), Y = c("a", "b")), raw = list(list(X = "a"), list(X = "a"),
+    list(Y = "a")), selectors = list(1L, 1L, c(1L, 1L)), selected = list(
+    list(X = "a"), list(X = "a"), list(Y = "a", Y = "a")), output = list(
+    list(X = "a"), list(Y = "a", Y = "a")), truth = structure(list(
+    X = c("a", "b", "a", "b"), Y = c("a", "a", "b", "b"), expected = c(TRUE,
+    FALSE, FALSE, FALSE), positional = c(TRUE, FALSE, FALSE,
+    FALSE), named = c(TRUE, FALSE, FALSE, FALSE)), class = "data.frame", row.names = c(NA,
+-4L)))
+PROGRESS 3 5 of 44 seconds 5.9
+PROGRESS 3 10 of 44 seconds 12.443
+PROGRESS 3 15 of 44 seconds 19.589
+PROGRESS 3 20 of 44 seconds 26.442
+PROGRESS 3 25 of 44 seconds 34.044
+PROGRESS 3 30 of 44 seconds 40.24
+PROGRESS 3 35 of 44 seconds 47.619
+PROGRESS 3 40 of 44 seconds 54.521
+       canonical_correct     noncanonical_correct       noncanonical_stale
+                   25016                    60168                        0
+noncanonical_named_wrong  noncanonical_both_wrong          canonical_wrong
+                       0                        0                        0
+                   error
+                       0

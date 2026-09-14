@@ -1,0 +1,1193 @@
+{
+  "stats": {
+    "cases": 8238,
+    "contradiction": 4851,
+    "short_seed_occurrences": 27660,
+    "closure_unit_occurrences": 36989
+  },
+  "cycle_controls": [
+    {
+      "cycle_sizes": [
+        3,
+        3
+      ],
+      "prediction": {
+        "contradiction": true,
+        "units": [
+          [
+            "a1",
+            "0"
+          ],
+          [
+            "a1",
+            "1"
+          ],
+          [
+            "a2",
+            "0"
+          ],
+          [
+            "a2",
+            "1"
+          ],
+          [
+            "b1",
+            "0"
+          ],
+          [
+            "b1",
+            "1"
+          ],
+          [
+            "b2",
+            "0"
+          ],
+          [
+            "b2",
+            "1"
+          ],
+          [
+            "x",
+            "0"
+          ],
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "short_seeds": [
+          [
+            "x",
+            "0"
+          ],
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        3,
+        4
+      ],
+      "prediction": {
+        "contradiction": true,
+        "units": [
+          [
+            "a1",
+            "0"
+          ],
+          [
+            "a1",
+            "1"
+          ],
+          [
+            "a2",
+            "0"
+          ],
+          [
+            "a2",
+            "1"
+          ],
+          [
+            "b1",
+            "0"
+          ],
+          [
+            "b1",
+            "1"
+          ],
+          [
+            "b2",
+            "0"
+          ],
+          [
+            "b2",
+            "1"
+          ],
+          [
+            "b3",
+            "0"
+          ],
+          [
+            "b3",
+            "1"
+          ],
+          [
+            "x",
+            "0"
+          ],
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "short_seeds": [
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        3,
+        5
+      ],
+      "prediction": {
+        "contradiction": true,
+        "units": [
+          [
+            "a1",
+            "0"
+          ],
+          [
+            "a1",
+            "1"
+          ],
+          [
+            "a2",
+            "0"
+          ],
+          [
+            "a2",
+            "1"
+          ],
+          [
+            "b1",
+            "0"
+          ],
+          [
+            "b1",
+            "1"
+          ],
+          [
+            "b2",
+            "0"
+          ],
+          [
+            "b2",
+            "1"
+          ],
+          [
+            "b3",
+            "0"
+          ],
+          [
+            "b3",
+            "1"
+          ],
+          [
+            "b4",
+            "0"
+          ],
+          [
+            "b4",
+            "1"
+          ],
+          [
+            "x",
+            "0"
+          ],
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "short_seeds": [
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        3,
+        6
+      ],
+      "prediction": {
+        "contradiction": true,
+        "units": [
+          [
+            "a1",
+            "0"
+          ],
+          [
+            "a1",
+            "1"
+          ],
+          [
+            "a2",
+            "0"
+          ],
+          [
+            "a2",
+            "1"
+          ],
+          [
+            "b1",
+            "0"
+          ],
+          [
+            "b1",
+            "1"
+          ],
+          [
+            "b2",
+            "0"
+          ],
+          [
+            "b2",
+            "1"
+          ],
+          [
+            "b3",
+            "0"
+          ],
+          [
+            "b3",
+            "1"
+          ],
+          [
+            "b4",
+            "0"
+          ],
+          [
+            "b4",
+            "1"
+          ],
+          [
+            "b5",
+            "0"
+          ],
+          [
+            "b5",
+            "1"
+          ],
+          [
+            "x",
+            "0"
+          ],
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "short_seeds": [
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        3,
+        7
+      ],
+      "prediction": {
+        "contradiction": true,
+        "units": [
+          [
+            "a1",
+            "0"
+          ],
+          [
+            "a1",
+            "1"
+          ],
+          [
+            "a2",
+            "0"
+          ],
+          [
+            "a2",
+            "1"
+          ],
+          [
+            "b1",
+            "0"
+          ],
+          [
+            "b1",
+            "1"
+          ],
+          [
+            "b2",
+            "0"
+          ],
+          [
+            "b2",
+            "1"
+          ],
+          [
+            "b3",
+            "0"
+          ],
+          [
+            "b3",
+            "1"
+          ],
+          [
+            "b4",
+            "0"
+          ],
+          [
+            "b4",
+            "1"
+          ],
+          [
+            "b5",
+            "0"
+          ],
+          [
+            "b5",
+            "1"
+          ],
+          [
+            "b6",
+            "0"
+          ],
+          [
+            "b6",
+            "1"
+          ],
+          [
+            "x",
+            "0"
+          ],
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "short_seeds": [
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        3,
+        8
+      ],
+      "prediction": {
+        "contradiction": true,
+        "units": [
+          [
+            "a1",
+            "0"
+          ],
+          [
+            "a1",
+            "1"
+          ],
+          [
+            "a2",
+            "0"
+          ],
+          [
+            "a2",
+            "1"
+          ],
+          [
+            "b1",
+            "0"
+          ],
+          [
+            "b1",
+            "1"
+          ],
+          [
+            "b2",
+            "0"
+          ],
+          [
+            "b2",
+            "1"
+          ],
+          [
+            "b3",
+            "0"
+          ],
+          [
+            "b3",
+            "1"
+          ],
+          [
+            "b4",
+            "0"
+          ],
+          [
+            "b4",
+            "1"
+          ],
+          [
+            "b5",
+            "0"
+          ],
+          [
+            "b5",
+            "1"
+          ],
+          [
+            "b6",
+            "0"
+          ],
+          [
+            "b6",
+            "1"
+          ],
+          [
+            "b7",
+            "0"
+          ],
+          [
+            "b7",
+            "1"
+          ],
+          [
+            "x",
+            "0"
+          ],
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "short_seeds": [
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        4,
+        3
+      ],
+      "prediction": {
+        "contradiction": true,
+        "units": [
+          [
+            "a1",
+            "0"
+          ],
+          [
+            "a1",
+            "1"
+          ],
+          [
+            "a2",
+            "0"
+          ],
+          [
+            "a2",
+            "1"
+          ],
+          [
+            "a3",
+            "0"
+          ],
+          [
+            "a3",
+            "1"
+          ],
+          [
+            "b1",
+            "0"
+          ],
+          [
+            "b1",
+            "1"
+          ],
+          [
+            "b2",
+            "0"
+          ],
+          [
+            "b2",
+            "1"
+          ],
+          [
+            "x",
+            "0"
+          ],
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "short_seeds": [
+          [
+            "x",
+            "0"
+          ]
+        ],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        4,
+        4
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        4,
+        5
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        4,
+        6
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        4,
+        7
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        4,
+        8
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        5,
+        3
+      ],
+      "prediction": {
+        "contradiction": true,
+        "units": [
+          [
+            "a1",
+            "0"
+          ],
+          [
+            "a1",
+            "1"
+          ],
+          [
+            "a2",
+            "0"
+          ],
+          [
+            "a2",
+            "1"
+          ],
+          [
+            "a3",
+            "0"
+          ],
+          [
+            "a3",
+            "1"
+          ],
+          [
+            "a4",
+            "0"
+          ],
+          [
+            "a4",
+            "1"
+          ],
+          [
+            "b1",
+            "0"
+          ],
+          [
+            "b1",
+            "1"
+          ],
+          [
+            "b2",
+            "0"
+          ],
+          [
+            "b2",
+            "1"
+          ],
+          [
+            "x",
+            "0"
+          ],
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "short_seeds": [
+          [
+            "x",
+            "0"
+          ]
+        ],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        5,
+        4
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        5,
+        5
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        5,
+        6
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        5,
+        7
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        5,
+        8
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        6,
+        3
+      ],
+      "prediction": {
+        "contradiction": true,
+        "units": [
+          [
+            "a1",
+            "0"
+          ],
+          [
+            "a1",
+            "1"
+          ],
+          [
+            "a2",
+            "0"
+          ],
+          [
+            "a2",
+            "1"
+          ],
+          [
+            "a3",
+            "0"
+          ],
+          [
+            "a3",
+            "1"
+          ],
+          [
+            "a4",
+            "0"
+          ],
+          [
+            "a4",
+            "1"
+          ],
+          [
+            "a5",
+            "0"
+          ],
+          [
+            "a5",
+            "1"
+          ],
+          [
+            "b1",
+            "0"
+          ],
+          [
+            "b1",
+            "1"
+          ],
+          [
+            "b2",
+            "0"
+          ],
+          [
+            "b2",
+            "1"
+          ],
+          [
+            "x",
+            "0"
+          ],
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "short_seeds": [
+          [
+            "x",
+            "0"
+          ]
+        ],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        6,
+        4
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        6,
+        5
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        6,
+        6
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        6,
+        7
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        6,
+        8
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        7,
+        3
+      ],
+      "prediction": {
+        "contradiction": true,
+        "units": [
+          [
+            "a1",
+            "0"
+          ],
+          [
+            "a1",
+            "1"
+          ],
+          [
+            "a2",
+            "0"
+          ],
+          [
+            "a2",
+            "1"
+          ],
+          [
+            "a3",
+            "0"
+          ],
+          [
+            "a3",
+            "1"
+          ],
+          [
+            "a4",
+            "0"
+          ],
+          [
+            "a4",
+            "1"
+          ],
+          [
+            "a5",
+            "0"
+          ],
+          [
+            "a5",
+            "1"
+          ],
+          [
+            "a6",
+            "0"
+          ],
+          [
+            "a6",
+            "1"
+          ],
+          [
+            "b1",
+            "0"
+          ],
+          [
+            "b1",
+            "1"
+          ],
+          [
+            "b2",
+            "0"
+          ],
+          [
+            "b2",
+            "1"
+          ],
+          [
+            "x",
+            "0"
+          ],
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "short_seeds": [
+          [
+            "x",
+            "0"
+          ]
+        ],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        7,
+        4
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        7,
+        5
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        7,
+        6
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        7,
+        7
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        7,
+        8
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        8,
+        3
+      ],
+      "prediction": {
+        "contradiction": true,
+        "units": [
+          [
+            "a1",
+            "0"
+          ],
+          [
+            "a1",
+            "1"
+          ],
+          [
+            "a2",
+            "0"
+          ],
+          [
+            "a2",
+            "1"
+          ],
+          [
+            "a3",
+            "0"
+          ],
+          [
+            "a3",
+            "1"
+          ],
+          [
+            "a4",
+            "0"
+          ],
+          [
+            "a4",
+            "1"
+          ],
+          [
+            "a5",
+            "0"
+          ],
+          [
+            "a5",
+            "1"
+          ],
+          [
+            "a6",
+            "0"
+          ],
+          [
+            "a6",
+            "1"
+          ],
+          [
+            "a7",
+            "0"
+          ],
+          [
+            "a7",
+            "1"
+          ],
+          [
+            "b1",
+            "0"
+          ],
+          [
+            "b1",
+            "1"
+          ],
+          [
+            "b2",
+            "0"
+          ],
+          [
+            "b2",
+            "1"
+          ],
+          [
+            "x",
+            "0"
+          ],
+          [
+            "x",
+            "1"
+          ]
+        ],
+        "short_seeds": [
+          [
+            "x",
+            "0"
+          ]
+        ],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        8,
+        4
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        8,
+        5
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        8,
+        6
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        8,
+        7
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    },
+    {
+      "cycle_sizes": [
+        8,
+        8
+      ],
+      "prediction": {
+        "contradiction": false,
+        "units": [],
+        "short_seeds": [],
+        "initial_units": []
+      }
+    }
+  ],
+  "seconds": 18.836394548416138
+}

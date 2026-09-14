@@ -1,0 +1,79 @@
+$R
+[1] "R version 3.6.3 (2020-02-29)"
+
+$sha256
+[1] "7d34ad60035509a463168752bb5f6f82d87fd7182a94a0e48461be7cdbe35fdc"
+
+$cases
+[1] 31
+
+$helper_entries
+[1] 2267
+
+$nested_apply_entries
+[1] 362
+
+$max_helpers
+[1] 36
+
+$max_apply
+[1] 12
+
+$max_apply_free_segment
+[1] 4
+
+$helper_counts
+              char_intersect                 char_setdiff
+                         336                          418
+                  char_union               return_entries
+                           9                           31
+               register_unit     apply_domain_restriction
+                         124                          579
+eliminate_symbol_from_clause  on_updated_subset_relations
+                         146                          493
+             on_update_range  handle_sse_2nd_order_oneend
+                           9                           12
+ handle_sse_2nd_order_twoend            try_sse_2nd_order
+                          32                           72
+  eliminate_clause_update_sr
+                           6
+
+$observed_edges
+                 apply_domain_restriction -> char_intersect
+                                                        166
+     apply_domain_restriction -> eliminate_clause_update_sr
+                                                          3
+   apply_domain_restriction -> eliminate_symbol_from_clause
+                                                        146
+              eliminate_symbol_from_clause -> register_unit
+                                                        102
+    on_updated_subset_relations -> apply_domain_restriction
+                                                        462
+ on_updated_subset_relations -> handle_sse_2nd_order_twoend
+                                                         27
+           handle_sse_2nd_order_twoend -> try_sse_2nd_order
+                                                         54
+              try_sse_2nd_order -> apply_domain_restriction
+                                                          9
+                               char_intersect -> char_union
+                                                          9
+    apply_domain_restriction -> on_updated_subset_relations
+                                                         12
+ on_updated_subset_relations -> handle_sse_2nd_order_oneend
+                                                          6
+           handle_sse_2nd_order_oneend -> try_sse_2nd_order
+                                                         18
+  on_updated_subset_relations -> eliminate_clause_update_sr
+                                                          1
+                apply_domain_restriction -> on_update_range
+                                                          9
+eliminate_symbol_from_clause -> on_updated_subset_relations
+                                                        285
+                  register_unit -> apply_domain_restriction
+                                                         73
+             on_update_range -> handle_sse_2nd_order_oneend
+                                                          6
+             on_update_range -> handle_sse_2nd_order_twoend
+                                                          5
+
+All actual-frame, dynamic-edge, dual-potential and paired-output checks passed.
