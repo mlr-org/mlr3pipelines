@@ -227,10 +227,10 @@ Initialized to <code>NULL</code>.</p></li>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">po</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"isomap"</span>, .mute <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"message"</span>, <span class="st">"output"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:24:41.366182: Isomap START</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:24:41.366773: constructing knn graph</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:24:41.374728: calculating geodesic distances</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:24:41.388046: Classical Scaling</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:30:06.263897: Isomap START</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:30:06.264421: constructing knn graph</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:30:06.27102: calculating geodesic distances</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:30:06.280444: Classical Scaling</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species     iso 1       iso 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;     &lt;num&gt;       &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa  3.006919  0.07103516</span>
@@ -245,11 +245,11 @@ Initialized to <code>NULL</code>.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica -2.147343 -0.45132197</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica -1.496149 -0.38356003</span>
 <span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:24:41.412866: L-Isomap embed START</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:24:41.413369: constructing knn graph</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:24:41.423342: calculating geodesic distances</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:24:41.452528: embedding</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:24:41.467547: DONE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:30:06.301032: L-Isomap embed START</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:30:06.301446: constructing knn graph</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:30:06.309446: calculating geodesic distances</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:30:06.330597: embedding</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-09-14 10:30:06.331228: DONE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species     iso 1       iso 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;     &lt;num&gt;       &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa  3.116505  0.14031343</span>
