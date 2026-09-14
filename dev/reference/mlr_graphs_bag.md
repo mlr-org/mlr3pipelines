@@ -1,9 +1,5 @@
 # Create a bagging learner
 
-Deprecated in favor of
-[`pipeline_bag()`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_bag.md)
-(`ppl("bag")`), which has different defaults.
-
 Creates a
 [`Graph`](https://mlr3pipelines.mlr-org.com/dev/reference/Graph.md) that
 performs bagging for a supplied graph. This is done as follows:
@@ -16,7 +12,7 @@ performs bagging for a supplied graph. This is done as follows:
   [multiplicities](https://mlr3pipelines.mlr-org.com/dev/reference/Multiplicity.md))
 
 - Average outputs of replicated `graph`s predictions using the
-  `averager` (note that setting `collect_multipliciy = TRUE` is
+  `averager` (note that setting `collect_multiplicity = TRUE` is
   required)
 
 All input arguments are cloned and have no references in common with the
@@ -26,13 +22,7 @@ returned
 ## Usage
 
 ``` r
-pipeline_bagging(
-  graph,
-  iterations = 10,
-  frac = 0.7,
-  averager = NULL,
-  replace = FALSE
-)
+pipeline_bag(graph, iterations = 10, frac = 1, averager = NULL, replace = TRUE)
 ```
 
 ## Arguments
@@ -45,8 +35,8 @@ pipeline_bagging(
   A
   [`PipeOpLearner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner.md)
   or [`Graph`](https://mlr3pipelines.mlr-org.com/dev/reference/Graph.md)
-  to create a robustifying pipeline for. Outputs from the replicated
-  `graph`s are connected with the `averager`.
+  to create a bagging pipeline for. Outputs from the replicated `graph`s
+  are connected with the `averager`.
 
 - iterations:
 
@@ -58,7 +48,7 @@ pipeline_bagging(
   `numeric(1)`  
   Percentage of rows to keep during subsampling. See
   [`PipeOpSubsample`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_subsample.md)
-  for more information. Defaults to 0.7.
+  for more information. Defaults to 1.
 
 - averager:
 
@@ -73,13 +63,13 @@ pipeline_bagging(
   can be used in order to perform simple averaging of classification and
   regression predictions respectively. If `NULL` (default), no averager
   is added to the end of the graph. Note that setting
-  `collect_multipliciy = TRUE` during construction of the averager is
+  `collect_multiplicity = TRUE` during construction of the averager is
   required.
 
 - replace:
 
   `logical(1)`  
-  Whether to sample with replacement. Default `FALSE`.
+  Whether to sample with replacement. Default `TRUE`.
 
 ## Value
 
@@ -92,18 +82,16 @@ pipeline_bagging(
 library(mlr3)
 lrn_po = po("learner", lrn("regr.rpart"))
 task = mlr_tasks$get("boston_housing")
-gr = pipeline_bagging(lrn_po, 3, averager = po("regravg", collect_multiplicity = TRUE))
-#> Warning: ppl("bagging") / pipeline_bagging() is deprecated and will be removed in the future. Use ppl("bag") / pipeline_bag() instead, which does real bagging with changed default argument values: frac = 1 and replace = TRUE (instead of frac = 0.7 and replace = FALSE).
+gr = pipeline_bag(lrn_po, 3, averager = po("regravg", collect_multiplicity = TRUE))
 resample(task, GraphLearner$new(gr), rsmp("holdout"))$aggregate()
 #> regr.mse 
-#> 16.31965 
+#> 17.32365 
 
-# The original bagging method uses boosting by sampling with replacement.
-gr = ppl("bagging", lrn_po, frac = 1, replace = TRUE,
+# The original bagging method uses bootstrapping by sampling with replacement.
+gr = ppl("bag", lrn_po,
   averager = po("regravg", collect_multiplicity = TRUE))
-#> Warning: ppl("bagging") / pipeline_bagging() is deprecated and will be removed in the future. Use ppl("bag") / pipeline_bag() instead, which does real bagging with changed default argument values: frac = 1 and replace = TRUE (instead of frac = 0.7 and replace = FALSE).
 resample(task, GraphLearner$new(gr), rsmp("holdout"))$aggregate()
 #> regr.mse 
-#> 32.59695 
+#> 14.22536 
 # }
 ```

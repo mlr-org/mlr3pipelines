@@ -8,7 +8,7 @@ dictionary contains a collection of often-used graph structures, and
 it's aim is solely to make often-used functions more accessible. Each
 `Graph` has an associated help page, which can be accessed via
 `?mlr_graphs_<key>`, i.e.
-[`?mlr_graphs_bagging`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_bagging.md).
+[`?mlr_graphs_bag`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_bag.md).
 
 ## Format
 
@@ -63,12 +63,13 @@ as.data.table(mlr_graphs)
 #> Key: <key>
 #>              key
 #>           <char>
-#> 1:       bagging
-#> 2:        branch
-#> 3: convert_types
-#> 4:    greplicate
-#> 5:           ovr
-#> 6:     robustify
-#> 7:      stacking
-#> 8:   targettrafo
+#> 1:           bag
+#> 2:       bagging
+#> 3:        branch
+#> 4: convert_types
+#> 5:    greplicate
+#> 6:           ovr
+#> 7:     robustify
+#> 8:      stacking
+#> 9:   targettrafo
 ```

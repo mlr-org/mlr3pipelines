@@ -304,6 +304,8 @@
 - [`ppl()`](https://mlr3pipelines.mlr-org.com/dev/reference/ppl.md)
   [`ppls()`](https://mlr3pipelines.mlr-org.com/dev/reference/ppl.md) :
   Shorthand Graph Constructor
+- [`pipeline_bag()`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_bag.md)
+  : Create a bagging learner
 - [`pipeline_bagging()`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_bagging.md)
   : Create a bagging learner
 - [`pipeline_branch()`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_branch.md)

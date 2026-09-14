@@ -76,19 +76,19 @@ graph_stack = pipeline_stacking(base_learners, super_learner)
 graph_learner = as_learner(graph_stack)
 graph_learner$train(tsk("german_credit"))
 #> # weights:  172
-#> initial  value 701.303602 
+#> initial  value 611.078433 
 #> final  value 610.864302 
 #> converged
 #> # weights:  172
-#> initial  value 446.880385 
-#> final  value 418.899974 
+#> initial  value 689.038355 
+#> final  value 406.155497 
 #> converged
 #> # weights:  172
-#> initial  value 411.263072 
-#> final  value 403.912325 
+#> initial  value 432.392154 
+#> final  value 416.262173 
 #> converged
 #> # weights:  172
-#> initial  value 510.544915 
-#> final  value 397.596845 
+#> initial  value 398.534159 
+#> final  value 398.521020 
 #> converged
 ```

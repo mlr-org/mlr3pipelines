@@ -57,6 +57,6 @@ ppls(.keys, ...)
 ``` r
 library("mlr3")
 
-gr = ppl("bagging", graph = po(lrn("regr.rpart")),
+gr = ppl("bag", graph = po(lrn("regr.rpart")),
   averager = po("regravg", collect_multiplicity = TRUE))
 ```

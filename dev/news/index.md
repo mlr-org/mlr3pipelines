@@ -2,7 +2,16 @@
 
 ## mlr3pipelines 0.12.0-9000
 
+- New `ppl("bag")` /
+  [`pipeline_bag()`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_bag.md)
+  performs real bagging with `frac = 1` and `replace = TRUE` by default.
+  `ppl("bagging")` /
+  [`pipeline_bagging()`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_bagging.md)
+  is deprecated and will be removed in the future.
+
 ## mlr3pipelines 0.12.0
+
+CRAN release: 2026-09-05
 
 - Fix: Removed an R-devel deprecation warning from `PipeOpFilter` and
   kept the

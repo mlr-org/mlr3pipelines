@@ -135,8 +135,7 @@ No error is raised; the unobserved class is simply ignored.</p>
     <p>Han H, Wang W, Mao B (2005).
 “Borderline-SMOTE: A New Over-Sampling Method in Imbalanced Data Sets Learning.”
 In Huang D, Zhang X, Huang G (eds.), <em>Advances in Intelligent Computing</em>, 878–887.
-ISBN 978-3-540-31902-3.
-<a href="https://doi.org/10.1007/11538059_91" class="external-link">doi:10.1007/11538059_91</a>
+ISBN 978-3-540-31902-3, <a href="https://doi.org/10.1007/11538059_91" class="external-link">doi:10.1007/11538059_91</a>
 .</p>
     </div>
     <div class="section level2">
@@ -241,18 +240,18 @@ ISBN 978-3-540-31902-3.
 <span class="r-in"><span><span class="va">data</span><span class="op">$</span><span class="va">result</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">result</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"example"</span>, backend <span class="op">=</span> <span class="va">data</span>, target <span class="op">=</span> <span class="st">"result"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">head</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    result         X1        X2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt;      &lt;num&gt;     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      n 0.89096686 0.4350642</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      p 0.61604954 0.5169550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      n 0.75346643 0.6728432</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      n 0.97733653 0.7166821</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:      n 0.03001554 0.5581452</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:      n 0.29513631 0.7934140</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    result        X1        X2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt;     &lt;num&gt;     &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      n 0.7326868 0.1460545</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      p 0.4555009 0.4664394</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      p 0.5291742 0.5833408</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      n 0.1787265 0.1763954</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:      n 0.8481240 0.8016283</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:      n 0.3922017 0.9391362</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="st">"result"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> result</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   n   p </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 393 107 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 397 103 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Generate synthetic data for minority class</span></span></span>
 <span class="r-in"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"blsmote"</span><span class="op">)</span></span></span>
@@ -262,7 +261,7 @@ ISBN 978-3-540-31902-3.
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">bls_result</span><span class="op">$</span><span class="va">result</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   n   p </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 393 393 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 397 389 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

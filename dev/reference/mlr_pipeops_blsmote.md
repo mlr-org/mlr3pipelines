@@ -95,7 +95,7 @@ Only methods inherited from
 Han H, Wang W, Mao B (2005). “Borderline-SMOTE: A New Over-Sampling
 Method in Imbalanced Data Sets Learning.” In Huang D, Zhang X, Huang G
 (eds.), *Advances in Intelligent Computing*, 878–887. ISBN
-978-3-540-31902-3.
+978-3-540-31902-3,
 [doi:10.1007/11538059_91](https://doi.org/10.1007/11538059_91) .
 
 ## See also
@@ -201,18 +201,18 @@ data = smotefamily::sample_generator(500, 0.8)
 data$result = factor(data$result)
 task = TaskClassif$new(id = "example", backend = data, target = "result")
 task$head()
-#>    result         X1        X2
-#>    <fctr>      <num>     <num>
-#> 1:      n 0.89096686 0.4350642
-#> 2:      p 0.61604954 0.5169550
-#> 3:      n 0.75346643 0.6728432
-#> 4:      n 0.97733653 0.7166821
-#> 5:      n 0.03001554 0.5581452
-#> 6:      n 0.29513631 0.7934140
+#>    result        X1        X2
+#>    <fctr>     <num>     <num>
+#> 1:      n 0.7326868 0.1460545
+#> 2:      p 0.4555009 0.4664394
+#> 3:      p 0.5291742 0.5833408
+#> 4:      n 0.1787265 0.1763954
+#> 5:      n 0.8481240 0.8016283
+#> 6:      n 0.3922017 0.9391362
 table(task$data(cols = "result"))
 #> result
 #>   n   p 
-#> 393 107 
+#> 397 103 
 
 # Generate synthetic data for minority class
 pop = po("blsmote")
@@ -222,5 +222,5 @@ nrow(bls_result)
 table(bls_result$result)
 #> 
 #>   n   p 
-#> 393 393 
+#> 397 389 
 ```

@@ -177,7 +177,7 @@ opc$train(list(task))
 #>   • dbl (11): alcalinity, alcohol, ash, color, dilution, flavanoids, hue,
 #>   malic, nonflavanoids, phenols, proanthocyanins
 #>   • int (2): magnesium, proline
-#> • Target classes: 2 (43%), 1 (30%), 3 (27%)
+#> • Target classes: 2 (37%), 1 (36%), 3 (27%)
 #> 
 #> $output2
 #> 
@@ -188,7 +188,7 @@ opc$train(list(task))
 #>   • dbl (11): alcalinity, alcohol, ash, color, dilution, flavanoids, hue,
 #>   malic, nonflavanoids, phenols, proanthocyanins
 #>   • int (2): magnesium, proline
-#> • Target classes: 2 (37%), 1 (36%), 3 (27%)
+#> • Target classes: 2 (43%), 1 (30%), 3 (27%)
 #> 
 
 # ... 178 during predict (task is copied)
