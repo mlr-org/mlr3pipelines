@@ -37,6 +37,11 @@ be converted to, and from, `logical(1)` values using
 [`as.logical()`](https://rdrr.io/r/base/logical.html) and
 `as.CnfFormula()`.
 
+Nonconstant inputs must belong to the same universe. Constant inputs
+adopt that universe regardless of their own universe. If all inputs are
+constant, the first available universe is retained, or `NULL` if none
+has a universe.
+
 `CnfFormula` objects can be negated using the `!` operator. Beware that
 this may lead to an exponential blow-up in the number of clauses.
 

@@ -4,7 +4,11 @@ A symbol table for CNF formulas. The `CnfUniverse` is a by-reference
 object that stores the domain of each symbol. Symbols are created with
 [`CnfSymbol()`](https://mlr3pipelines.mlr-org.com/dev/reference/CnfSymbol.md)
 and can be retrieved with `$`. Using `[[` retrieves a given symbol's
-domain.
+domain. Symbol lookup with `$` uses the same name checks and UTF-8
+normalization as
+[`CnfSymbol()`](https://mlr3pipelines.mlr-org.com/dev/reference/CnfSymbol.md).
+Keep the character locale (`LC_CTYPE`) unchanged while a universe is in
+use.
 
 It is only possible to combine symbols from the same (identical)
 universe.

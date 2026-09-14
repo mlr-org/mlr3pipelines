@@ -60,7 +60,11 @@ as.CnfAtom(x)
 - values:
 
   (`character`)  
-  The values that the symbol can take.
+  The values that the symbol can take, as a character vector without
+  dimensions or custom classes, missing values, byte-marked strings, or
+  invalid encodings. Accepted text is converted to UTF-8 and repeated
+  values are removed. Use `character(0)` for the empty selection; other
+  unclassed zero-length vectors and `NULL` are also accepted.
 
 - e1:
 

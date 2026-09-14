@@ -9,12 +9,16 @@
 that stores the domain of each symbol. Symbols are created with CnfSymbol()
 and can be retrieved with $.
 Using [[ retrieves a given symbol's domain.
+Symbol lookup with $ uses the same name checks and UTF-8 normalization as
+CnfSymbol(). Keep the character locale (LC_CTYPE) unchanged while a universe is in use.
 It is only possible to combine symbols from the same (identical) universe.
 This is part of the CNF representation tooling, which is currently considered
 experimental; it is for internal use."><meta property="og:description" content="A symbol table for CNF formulas. The CnfUniverse is a by-reference object
 that stores the domain of each symbol. Symbols are created with CnfSymbol()
 and can be retrieved with $.
 Using [[ retrieves a given symbol's domain.
+Symbol lookup with $ uses the same name checks and UTF-8 normalization as
+CnfSymbol(). Keep the character locale (LC_CTYPE) unchanged while a universe is in use.
 It is only possible to combine symbols from the same (identical) universe.
 This is part of the CNF representation tooling, which is currently considered
 experimental; it is for internal use."><meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png"><meta name="robots" content="noindex"></head><body>
@@ -68,7 +72,9 @@ experimental; it is for internal use."><meta property="og:image" content="https:
     <p>A symbol table for CNF formulas. The <code>CnfUniverse</code> is a by-reference object
 that stores the domain of each symbol. Symbols are created with <code><a href="CnfSymbol.html">CnfSymbol()</a></code>
 and can be retrieved with <code>$</code>.
-Using <code>[[</code> retrieves a given symbol's domain.</p>
+Using <code>[[</code> retrieves a given symbol's domain.
+Symbol lookup with <code>$</code> uses the same name checks and UTF-8 normalization as
+<code><a href="CnfSymbol.html">CnfSymbol()</a></code>. Keep the character locale (<code>LC_CTYPE</code>) unchanged while a universe is in use.</p>
 <p>It is only possible to combine symbols from the same (identical) universe.</p>
 <p>This is part of the CNF representation tooling, which is currently considered
 experimental; it is for internal use.</p>

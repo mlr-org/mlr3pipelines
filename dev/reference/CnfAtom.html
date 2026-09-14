@@ -130,7 +130,11 @@ The symbol to which the atom refers.</p></dd>
 
 <dt id="arg-values">values<a class="anchor" aria-label="anchor" href="#arg-values"></a></dt>
 <dd><p>(<code>character</code>) <br>
-The values that the symbol can take.</p></dd>
+The values that the symbol can take, as a character vector without dimensions
+or custom classes, missing values, byte-marked strings, or invalid encodings.
+Accepted text is converted to UTF-8 and repeated values are removed.
+Use <code>character(0)</code> for the empty selection; other unclassed zero-length vectors
+and <code>NULL</code> are also accepted.</p></dd>
 
 
 <dt id="arg-e-">e1<a class="anchor" aria-label="anchor" href="#arg-e-"></a></dt>

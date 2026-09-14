@@ -25,6 +25,9 @@ If it contains at least one clause that is, by itself, always false, the formula
 Not all contradictions between clauses are recognized, however.
 These values can be converted to, and from, logical(1) values using as.logical()
 and as.CnfFormula().
+Nonconstant inputs must belong to the same universe. Constant inputs adopt that
+universe regardless of their own universe. If all inputs are constant, the first
+available universe is retained, or NULL if none has a universe.
 CnfFormula objects can be negated using the ! operator. Beware that this
 may lead to an exponential blow-up in the number of clauses.
 This is part of the CNF representation tooling, which is currently considered
@@ -48,6 +51,9 @@ If it contains at least one clause that is, by itself, always false, the formula
 Not all contradictions between clauses are recognized, however.
 These values can be converted to, and from, logical(1) values using as.logical()
 and as.CnfFormula().
+Nonconstant inputs must belong to the same universe. Constant inputs adopt that
+universe regardless of their own universe. If all inputs are constant, the first
+available universe is retained, or NULL if none has a universe.
 CnfFormula objects can be negated using the ! operator. Beware that this
 may lead to an exponential blow-up in the number of clauses.
 This is part of the CNF representation tooling, which is currently considered
@@ -118,6 +124,9 @@ If it contains at least one clause that is, by itself, always false, the formula
 Not all contradictions between clauses are recognized, however.
 These values can be converted to, and from, <code>logical(1)</code> values using <code><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical()</a></code>
 and <code>as.CnfFormula()</code>.</p>
+<p>Nonconstant inputs must belong to the same universe. Constant inputs adopt that
+universe regardless of their own universe. If all inputs are constant, the first
+available universe is retained, or <code>NULL</code> if none has a universe.</p>
 <p><code>CnfFormula</code> objects can be negated using the <code>!</code> operator. Beware that this
 may lead to an exponential blow-up in the number of clauses.</p>
 <p>This is part of the CNF representation tooling, which is currently considered

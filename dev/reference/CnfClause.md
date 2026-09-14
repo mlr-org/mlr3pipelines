@@ -15,7 +15,8 @@ or other `CnfClause` objects.
 `CnfClause` objects which are not tautologies or contradictions are
 named lists; the value ranges of each symbol can be accessed using `[[`,
 and these clauses can be subset using `[` to get clauses containing only
-the indicated symbols. However, to get a list of
+the indicated symbols. Indices must be atomic vectors without missing
+values; matrices and arrays are not supported. However, to get a list of
 [`CnfAtom`](https://mlr3pipelines.mlr-org.com/dev/reference/CnfAtom.md)
 objects, use [`as.list()`](https://rdrr.io/r/base/list.html). Note that
 the simplified form of a clause containing a contradiction is the empty
@@ -35,6 +36,11 @@ clause evaluates to `TRUE`. These values can be converted to, and from,
 `logical(1)` values using
 [`as.logical()`](https://rdrr.io/r/base/logical.html) and
 `as.CnfClause()`.
+
+Nonconstant inputs must belong to the same universe. Constant inputs
+adopt that universe regardless of their own universe. If all inputs are
+constant, the first available universe is retained, or `NULL` if none
+has a universe.
 
 `CnfClause` objects can be negated using the `!` operator, and combined
 using the `&` operator. Both of these operations return a

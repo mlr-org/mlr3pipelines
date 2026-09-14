@@ -5,6 +5,8 @@ a domain (a set of possible values), and are stored in a
 [`CnfUniverse`](https://mlr3pipelines.mlr-org.com/dev/reference/CnfUniverse.md).
 
 Once created, it is currently not intended to modify or delete symbols.
+Keep the character locale (`LC_CTYPE`) unchanged while a universe is in
+use.
 
 Symbols can be used in CNF formulas by creating
 [`CnfAtom`](https://mlr3pipelines.mlr-org.com/dev/reference/CnfAtom.md)
@@ -31,13 +33,18 @@ CnfSymbol(universe, name, domain)
 - name:
 
   (`character(1)`)  
-  The name of the symbol.
+  The nonempty name of the symbol. It must be representable without
+  substitution in the current character locale so that environment
+  bindings preserve its identity.
 
 - domain:
 
   (`character`)  
   The domain, i.e. the set of possible values for the symbol. Must not
-  be empty.
+  be empty. Names and domains must be character vectors without
+  dimensions or custom classes, missing values, byte-marked strings, or
+  invalid encodings. Accepted text is converted to UTF-8; distinct
+  Unicode code-point sequences remain distinct.
 
 ## Value
 

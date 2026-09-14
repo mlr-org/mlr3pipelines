@@ -14,6 +14,7 @@ or implicitly, by using the | operator on CnfAtoms or other CnfClause objects.
 CnfClause objects which are not tautologies or contradictions are named lists;
 the value ranges of each symbol can be accessed using [[, and these clauses
 can be subset using [ to get clauses containing only the indicated symbols.
+Indices must be atomic vectors without missing values; matrices and arrays are not supported.
 However, to get a list of CnfAtom objects, use as.list().
 Note that the simplified form of a clause containing a contradiction is the empty list.
 Upon construction, the CnfClause is simplified by (1) removing contradictions, (2) unifying
@@ -25,6 +26,9 @@ If a CnfClause contains no atoms, or only FALSE atoms, it evaluates to FALSE.
 If it contains at least one atom that is always true, the clause evaluates to TRUE.
 These values can be converted to, and from, logical(1) values using as.logical()
 and as.CnfClause().
+Nonconstant inputs must belong to the same universe. Constant inputs adopt that
+universe regardless of their own universe. If all inputs are constant, the first
+available universe is retained, or NULL if none has a universe.
 CnfClause objects can be negated using the ! operator, and combined using the
 &amp;amp; operator. Both of these operations return a CnfFormula, even if the result
 could in principle be represented as a single CnfClause.
@@ -38,6 +42,7 @@ or implicitly, by using the | operator on CnfAtoms or other CnfClause objects.
 CnfClause objects which are not tautologies or contradictions are named lists;
 the value ranges of each symbol can be accessed using [[, and these clauses
 can be subset using [ to get clauses containing only the indicated symbols.
+Indices must be atomic vectors without missing values; matrices and arrays are not supported.
 However, to get a list of CnfAtom objects, use as.list().
 Note that the simplified form of a clause containing a contradiction is the empty list.
 Upon construction, the CnfClause is simplified by (1) removing contradictions, (2) unifying
@@ -49,6 +54,9 @@ If a CnfClause contains no atoms, or only FALSE atoms, it evaluates to FALSE.
 If it contains at least one atom that is always true, the clause evaluates to TRUE.
 These values can be converted to, and from, logical(1) values using as.logical()
 and as.CnfClause().
+Nonconstant inputs must belong to the same universe. Constant inputs adopt that
+universe regardless of their own universe. If all inputs are constant, the first
+available universe is retained, or NULL if none has a universe.
 CnfClause objects can be negated using the ! operator, and combined using the
 &amp;amp; operator. Both of these operations return a CnfFormula, even if the result
 could in principle be represented as a single CnfClause.
@@ -109,6 +117,7 @@ or implicitly, by using the <code>|</code> operator on <code><a href="CnfAtom.ht
 <p><code>CnfClause</code> objects which are not tautologies or contradictions are named lists;
 the value ranges of each symbol can be accessed using <code>[[</code>, and these clauses
 can be subset using <code>[</code> to get clauses containing only the indicated symbols.
+Indices must be atomic vectors without missing values; matrices and arrays are not supported.
 However, to get a list of <code><a href="CnfAtom.html">CnfAtom</a></code> objects, use <code><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list()</a></code>.
 Note that the simplified form of a clause containing a contradiction is the empty list.</p>
 <p>Upon construction, the <code>CnfClause</code> is simplified by (1) removing contradictions, (2) unifying
@@ -120,6 +129,9 @@ a clause that is the disjunction of all atoms in all clauses.</p>
 If it contains at least one atom that is always true, the clause evaluates to <code>TRUE</code>.
 These values can be converted to, and from, <code>logical(1)</code> values using <code><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical()</a></code>
 and <code>as.CnfClause()</code>.</p>
+<p>Nonconstant inputs must belong to the same universe. Constant inputs adopt that
+universe regardless of their own universe. If all inputs are constant, the first
+available universe is retained, or <code>NULL</code> if none has a universe.</p>
 <p><code>CnfClause</code> objects can be negated using the <code>!</code> operator, and combined using the
 <code>&amp;</code> operator. Both of these operations return a <code><a href="CnfFormula.html">CnfFormula</a></code>, even if the result
 could in principle be represented as a single <code>CnfClause</code>.</p>
