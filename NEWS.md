@@ -1,5 +1,6 @@
 # mlr3pipelines 0.12.0-9000
 
+* New `ppl("bag")` / `pipeline_bag()` performs real bagging with `frac = 1` and `replace = TRUE` by default. `ppl("bagging")` / `pipeline_bagging()` is deprecated and will be removed in the future.
 
 # mlr3pipelines 0.12.0
 

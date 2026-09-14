@@ -20,7 +20,7 @@
 #' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
 #'
-#' gr = ppl("bagging", graph = po(lrn("regr.rpart")),
+#' gr = ppl("bag", graph = po(lrn("regr.rpart")),
 #'   averager = po("regravg", collect_multiplicity = TRUE))
 ppl = function(.key, ...) {
   dictionary_sugar_get(dict = mlr_graphs, .key = .key, ..., .dicts_suggest = list("po()" = mlr_pipeops))
