@@ -1,93 +1,148 @@
+# R package development
+
+## Key commands
+
+```
+# To run code
+Rscript -e "devtools::load_all(); code"
+
+# To run all tests for files starting with {name}; omit filter to run all tests (expensive).
+Rscript -e "devtools::test(filter = '^{name}')"
+
+# To run all tests for R/{name}.R
+Rscript -e "devtools::test_active_file('R/{name}.R')"
+
+# To run a single test "blah" for R/{name}.R
+Rscript -e "devtools::test_active_file('R/{name}.R', desc = 'blah')"
+
+# To redocument the package
+Rscript -e "devtools::document()"
+
+# To check pkgdown documentation
+Rscript -e "pkgdown::check_pkgdown()"
+
+# To check the package with R CMD check
+Rscript -e "devtools::check()"
+```
+
+## Code Style
+
+* Always use `=` for assignment, never `<-`.
+* 2-space indentation, 120-character line limit.
+* Block-indent, never visual-indent, i.e. code aligned with opening parentheses.
+* `snake_case` for functions and variables, `CamelCase` for R6 classes.
+* When calling a function from imported package `foo` do not write `foo::bar()` but `bar()`
+* Double quotes for strings, explicit `TRUE`/`FALSE` (never `T`/`F`), explicit `1L` for integers.
+* Use implicit return values for functions.
+* Prefer `result = if (...) ... else ...` over `if (...) { result = ... } else { result = ... }`
+  when the only difference between branches is the assigned value.
+* User-facing API (exported functions, public R6 methods) must have `checkmate` `assert_*()` argument checks.
+  For internal code, match the existing level of defensiveness.
+* Use these mlr3misc utilities when appropriate:
+  `map()`, `map_chr()`, `invoke()`, `calculate_hash()`, `str_collapse()`, `%nin%`, `%??%`.
+* Before implementing something, read similar existing files first to match the established patterns.
+* Always use `# nolint next` to disable linters for the next line instead of `# nolint` on the same line.
+
+## File naming
+
+* Name the file as the most important contained function / class
+* Usually one large function / class, per file; if auxiliary functions pertain almost exclusively to that, it they should go in the same file, not an auxiliary file.
+
+## Collation order
+
+* Derived classes must declare `#' @include ParentClass.R` in their roxygen header.
+  This controls the `Collate:` field in DESCRIPTION so base classes load before derived classes.
+
+## Testing
+
+* Tests for `R/{name}.R` go in `tests/testthat/test_{name}.R`.
+* All new code should have an accompanying test.
+* If there are existing tests, place new tests next to similar existing tests.
+* Strive to keep your tests minimal with few comments.
+* Read the additional important helpers in `inst/testthat/helper_functions.R` to understand our `PipeOpTaskPreproc` auto-test framework.
+* The full test suite takes a long time. Only run tests relevant to your changes with `devtools::test(filter = '^{name}')`.
+* Shared test infrastructure lives in `inst/testthat/` and is sourced by extension packages too.
+* New PipeOps must pass `expect_pipeop_class`, or, in case of preprocessing PipeOps that inherit from `PipeOpTaskPreproc[Simple]`,  `expect_datapreproc_pipeop_class`. The latter calls the former, and both call `expect_pipeop`, which should not be necessary by itself in most cases.
+* Use `skip_if_not_installed(<package_name>)` to skip tests that require suggested packages.
+* Use shared assertion helpers where sensible: `expect_learner()`, `expect_task()`, `expect_resampling()`, `expect_measure()`, `expect_prediction()`.
+* Tests involving the `$man` field, and tests involving parallelization, do not work well when the package is loaded with `devtools::load_all()`, because of conflicts with the installed version. Ignore these failures, CI will take care of this.
+
+## Documentation
+
+* Every user-facing function should be exported and have `roxygen2` documentation.
+* Wrap roxygen comments at 120 characters.
+* Write one sentence per line.
+* If a sentence exceeds the limit, break at a comma, "and", "or", "but", or other appropriate point.
+* Internal functions should not have roxygen documentation.
+* Always re-document the package after changing a `roxygen2` comment.
+* Don’t hand-edit generated artifacts: `man/`, or `NAMESPACE`.
+* Never edit `README.md` directly -- it is generated from `README.Rmd`. Always edit `README.Rmd` and then run `devtools::build_readme()` to regenerate `README.md`.
+* When adding a new S3 method (such as `print.<ClassName>`), always run `devtools::document()` afterwards to re-generate the NAMESPACE.
+* Environment variables and options are documented in package-level documentation (typically `R/package.R`).
+* Use `pkgdown::check_pkgdown()` to check that all topics are included in the reference index.
+* For functions, always document the return value (section `#' @return`).
+* Bibliographic references go in `R/bibentries.R` and are cited with `` `r format_bib("key")` ``.
+* Man page names for dictionary objects follow `mlr_learners_classif.rpart`, `mlr_tasks_iris`, etc.
+* Wrap parts of examples that use suggested packages in `if (mlr3misc::require_namespaces(<package_names_vector>, quietly = TRUE)) {..}` blocks. When essentially the entire example needs the package, use `#' @examplesIf mlr3misc::require_namespaces(<package_names_vector>, quietly = TRUE)` instead of `#' @examples`, which inserts the `if` automatically.
+* Roxygen templates live in `man-roxygen/` (e.g., `@template learner`, `@template param_id`). Use `@templateVar` to pass values.
+* If `roxygenize()` / `document()` produce warnings that are unrelated to the code you wrote, ignore them. Do not fix code or formatting that is unrelated to what you are working on, but *do* mention bugs or problems that you noticed it in your final report.
+* A very small number of packages listed in `Suggests:` used by some tests / examples is missing; ignore warnings in that regard. You will never be asked to work on things that require these packages.
+
+## Pkgdown
+
+* When adding a new exported function, ensure it's in the `_pkgdown.yml` file.
+
+## `NEWS.md`
+
+* Every user-facing change should be given a bullet in `NEWS.md`.
+  Do not add bullets for small documentation changes or internal refactorings.
+* Each bullet should briefly describe the change to the end user and mention the related issue in parentheses.
+* A bullet can consist of multiple sentences but should not contain any new lines (i.e. DO NOT line wrap).
+* If the change is related to a function, put the name of the function early in the bullet.
+* Order bullets alphabetically by function name. Put all bullets that don't mention function names at the beginning.
 
 
-<persistence>
-1. If the user asked you a question, try to gather information and answer the question to the best of your ability.
-2. If the user asked you to review code, work and gather the required information to give a code review according to the `<guiding_principles>` and general best practices. Do not ask any more questions, just provide a best effort code review.
-3. Otherwise:
-  - You are an agent - please keep going until the user's query is completely resolved, before ending your turn and yielding back to the user.
-  - If the instructions are unclear, try to think of what info you need and gather that info from the user *right away*, so you can then work autonomously for many turns.
-  - Be extra-autonomous. The user wants you to work on your own, once you started.
-  - Only terminate your turn when you are sure that the problem is solved.
-  - Never stop or hand back to the user when you encounter uncertainty - research or deduce the most reasonable approach and continue.
-  - Do not ask the human to confirm or clarify assumptions except at the very beginning, as this can always be adjusted later - decide what the most reasonable assumption is, proceed with it, and document it for the user's reference after you finish acting
-  - You are working inside a secure container, you cannot break anything vital, so do not ask for permission and be bold.
-</persistence>
-<work_loop>
-- At the beginning:
-  - When asked a question about the code or in general, or asked for code review, gather the necessary information and answer right away and finish.
-  - When instructions are unclear, ask clarifying questions at the beginning.
-- During work:
-  - Think before you act. Plan ahead. Feel free to think more than you would otherwise; look at things from different angles, consider different scenarios.
-  - If possible, write a few tests *before* implementing a feature or fixing a bug.
-    - For a bug fix, write a test that captures the bug before fixing the bug.
-    - For a feature, create tests to the degree it is possible. Try really hard. If it is not possible, at least create test-stubs in the form of empty `test_that()` blocks to be filled in later.
-    - Tests should be sensibly thorough. Write more thorough tests only when asked by the user to write tests.
-  - Work and solve upcoming issues independently, using your best judgment
-  - Package progress into organic git commits. You may overwrite commits that are not on 'origin' yet, but do so only if it has great benefit. If you are on git branch `master`, create a new aptly named branch; never commit into `master`. Otherwise, do not leave the current git branch.
-  - Again: create git commits at organic points. In the past, you tended to make too few git commits.
-- If any issues pop up:
-  - If you noticed any things that surprised you, anything that would have helped you substantially with your work if you had known it right away, add it to the `<agent_notes>` section of the `AGENTS.md` file. Future agents will then have access to this information. Use it to capture technical insights, failed approaches, user preferences, and other things future agents should know.
-- After feature implementation, write tests:
-  - If you were asked to implement a feature and have not yet done so, fill in the test_that stubs created earlier or create new tests, to the degree that they make sense.
-  - If you were asked to fix a bug, check again that there are regression tests.
-- When you are done:
-  - Write a short summary of what you did, and what decisions you had to make that went beyond what the user asked of you, and other things the user should know about, as chat response to the user.
-  - Unless you were working on something minor, or you are leaving things as an obvious work-in-progress, do a git commit.
-</work_loop>
-<debugging>
-When fixing problems, always make sure you know the actual reason of the problem first:
+# `mlr3pipelines` architecture
 
-1. Form hypotheses about what the issue could be.
-2. Find a way to test these hypotheses and test them. If necessary, ask for assistance from the human, who e.g. may need to interact manually with the software
-3. If you accept a hypothesis, apply an appropriate fix. The fix may not work and the hypothesis may turn out to be false; in that case, undo the fix unless it actually improves code quality overall. Do not leave unnecessary fixes for imaginary issues that never materialized clog up the code.
-</debugging>
-<guiding_principles>
-Straightforwardness: Avoid ideological adherence to other programming principles when something can be solved in a simple, short, straightforward way. Otherwise:
+## Dictionary system
 
-- Simplicity: Favor small, focused components and avoid unnecessary complexity in design or logic.
-- This also means: avoid overly defensive code. Observe the typical level of defensiveness when looking at the code.
-- Idiomaticity: Solve problems the way they "should" be solved, in the respective language: the way a professional in that language would have approached it.
-- Readability and maintainability are primary concerns, even at the cost of conciseness or performance.
-- Doing it right is better than doing it fast. You are not in a rush. Never skip steps or take shortcuts.
-- Tedious, systematic work is often the correct solution. Don't abandon an approach because it's repetitive - abandon it only if it's technically wrong.
-- Honesty is a core value. Be honest about changes you have made and potential negative effects, these are okay. Be honest about shortcomings of other team members' plans and implementations, we all care more about the project than our egos. Be honest if you don't know something: say "I don't know" when appropriate.
-</guiding_principles>
-<project_info>
+Objects are registered in dictionaries and accessed via sugar functions:
 
-`mlr3pipelines` is a package that extends the `mlr3` ecosystem by adding preprocessing operations and a way to compose them into computational graphs.
+| Dictionary            | Sugar                | Example                          |
+|-----------------------|----------------------|----------------------------------|
+| `mlr_learners`        | `lrn()` / `lrns()`   | `lrn("classif.rpart", cp = 0.1)` |
+| `mlr_pipeops`         | `po()` / `pos()`     | `po("pca")`                      |
+| `mlr_graphs`          | `ppl()` / `ppls()`   | `ppl("robustify")`               |
 
-- Always read at least `R/PipeOp.R` and `R/PipeOpTaskPreproc.R` to see the base classes you will need in almost every task.
-- Read `R/Graph.R` and `R/GraphLearner.R` to understand the Graph architecture.
+etc. New objects must be registered in the respective dictionary; this works differently for external (e.g. `mlr_learners`) than for package-owned (`mlr_pipeops`, `mlr_graphs`) dictionaries.
 
-- Tests involving the `$man` field, and tests involving parallelization, do not work well when the package is loaded with `devtools::load_all()`, because of conflicts with the installed version. Ignore these failures, CI will take care of this.
-- The quality of our tests is lower than it ideally should be. We are in the process of improving this over time. Always leave the `tests/testthat/` folder in a better state than what you found it in!
-- If `roxygenize()` / `document()` produce warnings that are unrelated to the code you wrote, ignore them. Do not fix code or formatting that is unrelated to what you are working on, but *do* mention bugs or problems that you noticed it in your final report.
-- When you write examples, make sure they work.
-- A very small number of packages listed in `Suggests:` used by some tests / examples is missing; ignore warnings in that regard. You will never be asked to work on things that require these packages.
-- Semantics of paradox ParamSet parameters to pay attention to:
-In rare cases, this can differ from default, e.g. if the underlying default behaviour is suboptimal for the use for preprocessing (e.g. it stores training data unnecessarily by default).
-  - a parameter can be marked as "required" by having the tag `"required"`. It is a special tag that causes an error if the value is not set. A "required" parameter *can not* have a "default", since semantically this is a contradiction: "default" would describe what happens when the param is not set, but param-not-set is an error.
-  - When we write preprocessing method ourselves we usually don't do "default" behaviour and instead mark most things as "required". "default" is mostly if we wrap some other library's function which itself has a function argument default value.
-- Minor things to be aware of:
-  - Errors that are thrown in PipeOps are automatically wrapped by Graph to also mention the PipeOp ID, so it is not necessary to include that in error messages.
+## Hyperparameters (paradox)
 
-</project_info>
-<agent_notes>
+Parameters are defined with `paradox::ps()` and should usually be tagged `"train"`, `"predict"`, or both.
 
-# Notes by Agents to other Agents
+In `.train()` / `.predict()`, retrieve values with `self$param_set$get_values(tags = "train")`.
+Use additional tags for additional grouping (e.g. parameters that get passed to different library functions.
 
-- R unit tests in this repo assume helper `expect_man_exists()` is available. If you need to call it in a new test and you are working without mlr3pipelines installed, define a local fallback at the top of that test file before `expect_learner()` is used.
-- Revdep helper scripts live in `attic/revdeps/`. `download_revdeps.R` downloads reverse dependency source tarballs; `install_revdep_suggests.R` installs Suggests for those revdeps without pulling the revdeps themselves.
-- When writing `paradox::ParamSet` custom checks (e.g. `p_uty(custom_check = ...)`), you do not need to special-case `TuneToken`s. `paradox` skips custom validators for `TuneToken` inputs before evaluating them, so the check only sees concrete values.
+There is a distinction between `default` and `init` values:
+* `default` describes the behavior when a parameter is not set at all (i.e., the upstream function's default). It is informational only.
+* `init` (via `p_xxx(init = ...)`) sets the parameter to a value upon construction. Use this when our own default should differ from the upstream default, or when upstream is `"required"` but there is a reasonable default. For functions that we implement in our own package, this is typically the way we go. The `init` functionality is new, some old code does the initialization differently, via `ps$values = ...`; do not copy the old style.
+* A parameter tagged `"required"` causes an error if not set. A required parameter cannot have a `default` (that would be contradictory). For functionality that we implement ourselves, we usually use the `"required"` route.
+* paradox does type-checking and range-checking automatically; `get_values()` checks that required params are present. Additional feasibility checks are rarely needed.
 
-</agent_notes>
-<your_task>
-Again, when implementing something, focus on:
+## Public fields as active bindings
 
-1. Think things through and plan ahead.
-2. Tests before implementation, if possible. In any case, write high quality tests, try to be better than the tests you find in this project.
-3. Once you started, work independently; we can always undo things if necessary.
-4. Create sensible intermediate commits.
-5. Check your work, make sure tests pass. But do not run *all* tests, they take a long time.
-6. Write a report to the user at the end, informing about decisoins that were made autonomously, unexpected issues etc.
-</your_task>
+Public fields on `R6` classes are exposed as active bindings backed by a private `.field`.
+
+For mutable fields, the binding returns the private value when called without arguments and validates the new value with an `assert_*()` call when set. For read-only fields, call `assert_ro_binding(rhs)` to raise an error on any assignment attempt.
+
+## Core dependencies
+
+`data.table`, `checkmate`, `mlr3misc`, `paradox`, `R6`, and `cli` are imported wholesale. Use their functions directly without `::`. Key mlr3misc utilities: `map()`, `map_chr()`, `invoke()`, `calculate_hash()`, `str_collapse()`, `%nin%`, `%??%`.
+
+# Further resources
+
+* Read `R/Graph.R` and `R/GraphLearner.R` to understand the Graph architecture.
+* When working on PipeOps, read `R/PipeOp.R` beforehand.
+* When working on PipeOps inheriting from `PipeOpTaskPreproc` or `PipeOpTaskPreprocSimple`, read `R/PipeOpTaskPreproc.R` beforehand.
+* When commiting changes via git, make sure to read @extra-rules/commit-messages.md and follow its instructions.
+
