@@ -43,11 +43,6 @@ Rscript -e "devtools::check()"
 * Before implementing something, read similar existing files first to match the established patterns.
 * Always use `# nolint next` to disable linters for the next line instead of `# nolint` on the same line.
 
-## File structure and naming
-
-* Name the file as the most important contained function / class
-* Usually one large function / class, per file; if auxiliary functions pertain almost exclusively to that, it they should go in the same file, not an auxiliary file.
-
 ## Collation order
 
 * Derived classes must declare `#' @include ParentClass.R` in their roxygen header.
