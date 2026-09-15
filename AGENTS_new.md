@@ -99,8 +99,4 @@ Rscript -e "devtools::check()"
 - Order bullets alphabetically by function name. Put all bullets that don't mention function names at the beginning.
 
 ## Further agents files
-Make sure to **ALWAYS** read these files as well and follow their instructions:
-
-@extra-rules/commit-messages.md
-@extra-rules/mlr3.md
-@extra-rules/mlr3pipelines.md
+Make sure to read @extra-rules/commit-messages.md and follow its instructions when commiting changes via git.
