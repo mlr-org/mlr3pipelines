@@ -7,13 +7,9 @@ Objects are registered in dictionaries and accessed via sugar functions:
 | Dictionary            | Sugar                | Example                          |
 |-----------------------|----------------------|----------------------------------|
 | `mlr_learners`        | `lrn()` / `lrns()`   | `lrn("classif.rpart", cp = 0.1)` |
-| `mlr_pipeops`           | `po()` / `pos()`   | `po("pca")`                    |
+| `mlr_pipeops`         | `po()` / `pos()`     | `po("pca")`                      |
 
 etc. New objects must be registered in the respective dictionary; this works differently for external (e.g. `mlr_learners`) than for package-owned (`mlr_pipeops`) dictionaries.
-
-#### Collation order
-
-Derived classes must declare `#' @include ParentClass.R` in their roxygen header. This controls the `Collate:` field in DESCRIPTION so base classes load before derived classes.
 
 #### Hyperparameters (paradox)
 
@@ -54,13 +50,12 @@ For mutable fields, the binding returns the private value when called without ar
 - Write one sentence per line.
 - If a sentence exceeds the limit, break at a comma, "and", "or", "but", or other appropriate point.
 - Internal functions should not have roxygen documentation.
-- Whenever you add a new (non-internal) documentation topic, also add the topic to `_pkgdown.yml`.
+- Man page names for dictionary objects follow `mlr_pipeops_pca`, `mlr_graphs_robustify`, etc.
+- Whenever you add a new non-internal documentation topic, add it to the appropriate reference section in `_pkgdown.yml`. Run `pkgdown::check_pkgdown()` to verify that all reference topics are included in the index.
 - Always rerefresh documentation via `roxygen2::roxygenize()` after changing a roxygen2 comment.
-- Use `pkgdown::check_pkgdown()` to check that all topics are included in the reference index.
-- Roxygen templates live in `man-roxygen/` (e.g., `@template learner`, `@template param_id`). Use `@templateVar` to pass values.
-- Bibliographic references go in `R/bibentries.R` and are cited with `` `r format_bib("key")` ``.
-- Man page names for dictionary objects follow `mlr_learners_classif.rpart`, `mlr_tasks_iris`, etc.
+- Roxygen templates live in `man-roxygen/` (e.g., `@template seealso_pipeopslist`). Use `@templateVar` to pass values.
 - Wrap parts of examples that use suggested packages in `if (mlr3misc::require_namespaces(<package_names_vector>, quietly = TRUE)) {..}` blocks. When essentially the entire example needs the package, use `#' @examplesIf mlr3misc::require_namespaces(<package_names_vector>, quietly = TRUE)` instead of `#' @examples`, which inserts the `if` automatically.
+- Bibliographic references go in `R/bibentries.R` and are cited with `` `r format_bib("key")` ``.
 
 ### `NEWS.md`
 
