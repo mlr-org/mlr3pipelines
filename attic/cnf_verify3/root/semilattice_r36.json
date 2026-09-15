@@ -1,0 +1,221 @@
+{
+  "stats": {
+    "characterized_relations": 484,
+    "characterized_model_pairs": 47459,
+    "gac_domain_comparisons": 12000,
+    "mdd_equivalence_checks": 24000,
+    "sat_equivalence_checks": 162,
+    "complete_class_cases": 11456,
+    "complete_class_sat": 9687,
+    "least_models": 9687,
+    "enumerated_least_model_checks": 26183,
+    "cases": 12000,
+    "exhaustive_boolean_cases": 1539,
+    "complete_class_unsat": 1769,
+    "constants_cases": 3,
+    "outside_cases": 913,
+    "outside_class_unrecognized_prefix_unsat": 4,
+    "horn_projection_control_cases": 1,
+    "exhaustive_ternary_chain_cases": 6544,
+    "semilattice_cases": 1000,
+    "chain_cases": 2000
+  },
+  "examples": {
+    "exhaustive_boolean": {
+      "domains": {
+        "X": [
+          "0",
+          "1"
+        ],
+        "Y": [
+          "0",
+          "1"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "Z": [
+            "0"
+          ]
+        }
+      ],
+      "prefix": [
+        {
+          "Z": "0"
+        }
+      ],
+      "least_model": {
+        "X": "0",
+        "Y": "0",
+        "Z": "0"
+      }
+    },
+    "outside": {
+      "domains": {
+        "X": [
+          "0",
+          "1"
+        ],
+        "Y": [
+          "0",
+          "1"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "Z": [
+            "0"
+          ]
+        }
+      ],
+      "prefix": [
+        {
+          "Z": "0"
+        }
+      ],
+      "least_model": {
+        "X": "0",
+        "Y": "0",
+        "Z": "0"
+      }
+    },
+    "exhaustive_ternary_chain": {
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2"
+        ]
+      },
+      "clauses": [
+        {
+          "Y": [
+            "0"
+          ]
+        }
+      ],
+      "prefix": [
+        {
+          "Y": "0"
+        }
+      ],
+      "least_model": {
+        "X": "0",
+        "Y": "0"
+      }
+    },
+    "chain": {
+      "domains": {
+        "S0": [
+          "2",
+          "1",
+          "0",
+          "3"
+        ]
+      },
+      "clauses": [
+        {
+          "S0": [
+            "2",
+            "1",
+            "3"
+          ]
+        }
+      ],
+      "prefix": [
+        {
+          "S0": [
+            "2",
+            "1",
+            "3"
+          ]
+        }
+      ],
+      "least_model": {
+        "S0": "2"
+      }
+    },
+    "semilattice": {
+      "domains": {
+        "S0": [
+          "0",
+          "3",
+          "1",
+          "2"
+        ],
+        "S1": [
+          "6",
+          "7",
+          "0",
+          "3",
+          "4",
+          "2",
+          "1",
+          "5"
+        ],
+        "S2": [
+          "1",
+          "3",
+          "2",
+          "0"
+        ],
+        "S3": [
+          "6",
+          "7",
+          "4",
+          "5",
+          "0",
+          "2",
+          "1",
+          "3"
+        ]
+      },
+      "clauses": [
+        {
+          "S3": [
+            "2",
+            "4",
+            "1",
+            "3",
+            "0",
+            "5"
+          ]
+        }
+      ],
+      "prefix": [
+        {
+          "S3": [
+            "2",
+            "4",
+            "1",
+            "3",
+            "0",
+            "5"
+          ]
+        }
+      ],
+      "least_model": {
+        "S0": "0",
+        "S1": "0",
+        "S2": "0",
+        "S3": "0"
+      }
+    }
+  },
+  "seed": 2609061629,
+  "runtime": "R3.6.3",
+  "source": "Unchanged full kernel; private source copy returns at the initial UP boundary"
+}

@@ -1,0 +1,2 @@
+140 semantic records, all actual-write trace events, and the excluded alias control agree across runtimes.
+Only explicitly recorded native-translation warning counts were omitted from the comparison.

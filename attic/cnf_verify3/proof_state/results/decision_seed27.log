@@ -1,0 +1,245 @@
+decision invariants: n=20000 seed=27
+100/20000 trials; elapsed 2.0s; pairs 341; projected certificates 269
+200/20000 trials; elapsed 2.8s; pairs 799; projected certificates 601
+300/20000 trials; elapsed 3.4s; pairs 1097; projected certificates 908
+400/20000 trials; elapsed 4.1s; pairs 1368; projected certificates 1103
+500/20000 trials; elapsed 4.9s; pairs 1986; projected certificates 1499
+600/20000 trials; elapsed 5.6s; pairs 2277; projected certificates 1743
+700/20000 trials; elapsed 6.1s; pairs 2369; projected certificates 1827
+800/20000 trials; elapsed 6.8s; pairs 2647; projected certificates 2045
+900/20000 trials; elapsed 7.4s; pairs 2741; projected certificates 2126
+1000/20000 trials; elapsed 8.0s; pairs 3045; projected certificates 2517
+1100/20000 trials; elapsed 8.6s; pairs 3380; projected certificates 2774
+1200/20000 trials; elapsed 9.2s; pairs 3748; projected certificates 3041
+1300/20000 trials; elapsed 9.9s; pairs 4050; projected certificates 3232
+1400/20000 trials; elapsed 10.6s; pairs 4380; projected certificates 3564
+1500/20000 trials; elapsed 11.2s; pairs 4590; projected certificates 3683
+1600/20000 trials; elapsed 11.8s; pairs 4933; projected certificates 3919
+1700/20000 trials; elapsed 12.5s; pairs 5351; projected certificates 4254
+1800/20000 trials; elapsed 13.1s; pairs 5569; projected certificates 4457
+1900/20000 trials; elapsed 13.7s; pairs 5767; projected certificates 4637
+2000/20000 trials; elapsed 14.3s; pairs 5924; projected certificates 4825
+2100/20000 trials; elapsed 15.0s; pairs 6467; projected certificates 5188
+2200/20000 trials; elapsed 15.6s; pairs 6673; projected certificates 5275
+2300/20000 trials; elapsed 16.3s; pairs 7053; projected certificates 5673
+2400/20000 trials; elapsed 17.3s; pairs 7822; projected certificates 6345
+2500/20000 trials; elapsed 17.8s; pairs 8168; projected certificates 6677
+2600/20000 trials; elapsed 18.7s; pairs 8686; projected certificates 7117
+2700/20000 trials; elapsed 19.3s; pairs 8814; projected certificates 7263
+2800/20000 trials; elapsed 20.0s; pairs 9007; projected certificates 7497
+2900/20000 trials; elapsed 20.9s; pairs 9654; projected certificates 8025
+3000/20000 trials; elapsed 21.5s; pairs 9861; projected certificates 8198
+3100/20000 trials; elapsed 22.5s; pairs 10901; projected certificates 9453
+3200/20000 trials; elapsed 23.3s; pairs 11558; projected certificates 9965
+3300/20000 trials; elapsed 24.0s; pairs 11808; projected certificates 10145
+3400/20000 trials; elapsed 24.7s; pairs 12103; projected certificates 10347
+3500/20000 trials; elapsed 25.4s; pairs 12373; projected certificates 10571
+3600/20000 trials; elapsed 26.2s; pairs 12692; projected certificates 10733
+3700/20000 trials; elapsed 27.1s; pairs 13390; projected certificates 11263
+3800/20000 trials; elapsed 27.8s; pairs 13707; projected certificates 11534
+3900/20000 trials; elapsed 28.5s; pairs 13988; projected certificates 11884
+4000/20000 trials; elapsed 29.2s; pairs 14334; projected certificates 12137
+4100/20000 trials; elapsed 29.8s; pairs 14595; projected certificates 12309
+4200/20000 trials; elapsed 30.4s; pairs 14815; projected certificates 12496
+4300/20000 trials; elapsed 31.1s; pairs 15010; projected certificates 12683
+4400/20000 trials; elapsed 31.7s; pairs 15276; projected certificates 12927
+4500/20000 trials; elapsed 32.5s; pairs 15637; projected certificates 13248
+4600/20000 trials; elapsed 33.3s; pairs 16052; projected certificates 13700
+4700/20000 trials; elapsed 34.0s; pairs 16436; projected certificates 14052
+4800/20000 trials; elapsed 34.7s; pairs 16752; projected certificates 14251
+4900/20000 trials; elapsed 35.3s; pairs 17032; projected certificates 14520
+5000/20000 trials; elapsed 36.0s; pairs 17462; projected certificates 15004
+5100/20000 trials; elapsed 36.7s; pairs 17915; projected certificates 15471
+5200/20000 trials; elapsed 37.4s; pairs 18357; projected certificates 15764
+5300/20000 trials; elapsed 38.0s; pairs 18551; projected certificates 15906
+5400/20000 trials; elapsed 38.6s; pairs 18864; projected certificates 16146
+5500/20000 trials; elapsed 39.2s; pairs 19110; projected certificates 16338
+5600/20000 trials; elapsed 39.7s; pairs 19253; projected certificates 16489
+5700/20000 trials; elapsed 40.4s; pairs 19584; projected certificates 16684
+5800/20000 trials; elapsed 41.0s; pairs 19833; projected certificates 16937
+5900/20000 trials; elapsed 41.7s; pairs 20270; projected certificates 17380
+6000/20000 trials; elapsed 42.4s; pairs 20564; projected certificates 17628
+6100/20000 trials; elapsed 43.0s; pairs 20886; projected certificates 17882
+6200/20000 trials; elapsed 43.7s; pairs 21409; projected certificates 18372
+6300/20000 trials; elapsed 44.4s; pairs 21786; projected certificates 18651
+6400/20000 trials; elapsed 44.9s; pairs 21927; projected certificates 18802
+6500/20000 trials; elapsed 45.6s; pairs 22434; projected certificates 19061
+6600/20000 trials; elapsed 46.3s; pairs 22756; projected certificates 19360
+6700/20000 trials; elapsed 47.0s; pairs 23063; projected certificates 19704
+6800/20000 trials; elapsed 48.0s; pairs 23978; projected certificates 20184
+6900/20000 trials; elapsed 48.8s; pairs 24638; projected certificates 20641
+7000/20000 trials; elapsed 49.4s; pairs 24785; projected certificates 20726
+7100/20000 trials; elapsed 50.1s; pairs 25188; projected certificates 21056
+7200/20000 trials; elapsed 50.7s; pairs 25531; projected certificates 21296
+7300/20000 trials; elapsed 51.5s; pairs 25880; projected certificates 21495
+7400/20000 trials; elapsed 52.3s; pairs 26358; projected certificates 21786
+7500/20000 trials; elapsed 52.9s; pairs 26538; projected certificates 21952
+7600/20000 trials; elapsed 53.5s; pairs 26910; projected certificates 22194
+7700/20000 trials; elapsed 54.3s; pairs 27426; projected certificates 22824
+7800/20000 trials; elapsed 54.9s; pairs 27766; projected certificates 23080
+7900/20000 trials; elapsed 55.7s; pairs 28181; projected certificates 23388
+8000/20000 trials; elapsed 56.3s; pairs 28384; projected certificates 23509
+8100/20000 trials; elapsed 57.1s; pairs 28707; projected certificates 23742
+8200/20000 trials; elapsed 57.7s; pairs 29020; projected certificates 23963
+8300/20000 trials; elapsed 58.3s; pairs 29168; projected certificates 24104
+8400/20000 trials; elapsed 59.1s; pairs 29755; projected certificates 24573
+8500/20000 trials; elapsed 59.8s; pairs 30260; projected certificates 24841
+8600/20000 trials; elapsed 60.5s; pairs 30538; projected certificates 25098
+8700/20000 trials; elapsed 61.2s; pairs 30950; projected certificates 25556
+8800/20000 trials; elapsed 61.8s; pairs 31246; projected certificates 25689
+8900/20000 trials; elapsed 62.6s; pairs 31643; projected certificates 26021
+9000/20000 trials; elapsed 63.2s; pairs 31767; projected certificates 26148
+9100/20000 trials; elapsed 63.8s; pairs 31935; projected certificates 26336
+9200/20000 trials; elapsed 64.4s; pairs 32226; projected certificates 26644
+9300/20000 trials; elapsed 65.0s; pairs 32372; projected certificates 26786
+9400/20000 trials; elapsed 65.8s; pairs 32776; projected certificates 27075
+9500/20000 trials; elapsed 66.4s; pairs 32946; projected certificates 27270
+9600/20000 trials; elapsed 67.1s; pairs 33267; projected certificates 27526
+9700/20000 trials; elapsed 67.7s; pairs 33426; projected certificates 27714
+9800/20000 trials; elapsed 68.3s; pairs 33698; projected certificates 27937
+9900/20000 trials; elapsed 68.8s; pairs 33896; projected certificates 28090
+10000/20000 trials; elapsed 69.4s; pairs 34158; projected certificates 28364
+10100/20000 trials; elapsed 70.3s; pairs 34628; projected certificates 28833
+10200/20000 trials; elapsed 71.0s; pairs 35002; projected certificates 29188
+10300/20000 trials; elapsed 71.7s; pairs 35248; projected certificates 29339
+10400/20000 trials; elapsed 72.2s; pairs 35380; projected certificates 29523
+10500/20000 trials; elapsed 73.0s; pairs 35931; projected certificates 30036
+10600/20000 trials; elapsed 73.9s; pairs 36430; projected certificates 30415
+10700/20000 trials; elapsed 74.5s; pairs 36719; projected certificates 30715
+10800/20000 trials; elapsed 75.1s; pairs 36993; projected certificates 31033
+10900/20000 trials; elapsed 75.8s; pairs 37250; projected certificates 31215
+11000/20000 trials; elapsed 76.4s; pairs 37473; projected certificates 31395
+11100/20000 trials; elapsed 77.0s; pairs 37623; projected certificates 31544
+11200/20000 trials; elapsed 77.6s; pairs 37794; projected certificates 31703
+11300/20000 trials; elapsed 78.2s; pairs 38041; projected certificates 31934
+11400/20000 trials; elapsed 78.8s; pairs 38324; projected certificates 32171
+11500/20000 trials; elapsed 79.5s; pairs 38672; projected certificates 32443
+11600/20000 trials; elapsed 80.2s; pairs 39218; projected certificates 32886
+11700/20000 trials; elapsed 80.8s; pairs 39498; projected certificates 33049
+11800/20000 trials; elapsed 81.4s; pairs 39708; projected certificates 33269
+11900/20000 trials; elapsed 82.2s; pairs 40051; projected certificates 33506
+12000/20000 trials; elapsed 82.8s; pairs 40387; projected certificates 33778
+12100/20000 trials; elapsed 83.6s; pairs 40701; projected certificates 34016
+12200/20000 trials; elapsed 84.2s; pairs 41038; projected certificates 34315
+12300/20000 trials; elapsed 84.8s; pairs 41398; projected certificates 34622
+12400/20000 trials; elapsed 85.7s; pairs 42032; projected certificates 35127
+12500/20000 trials; elapsed 86.4s; pairs 42550; projected certificates 35628
+12600/20000 trials; elapsed 87.2s; pairs 43137; projected certificates 35933
+12700/20000 trials; elapsed 87.8s; pairs 43383; projected certificates 36199
+12800/20000 trials; elapsed 88.5s; pairs 43769; projected certificates 36498
+12900/20000 trials; elapsed 89.1s; pairs 44059; projected certificates 36672
+13000/20000 trials; elapsed 89.7s; pairs 44285; projected certificates 36900
+13100/20000 trials; elapsed 90.5s; pairs 44835; projected certificates 37229
+13200/20000 trials; elapsed 91.1s; pairs 45008; projected certificates 37425
+13300/20000 trials; elapsed 91.9s; pairs 45589; projected certificates 38092
+13400/20000 trials; elapsed 92.5s; pairs 45899; projected certificates 38370
+13500/20000 trials; elapsed 93.3s; pairs 46318; projected certificates 38721
+13600/20000 trials; elapsed 94.0s; pairs 46835; projected certificates 39031
+13700/20000 trials; elapsed 94.7s; pairs 47054; projected certificates 39236
+13800/20000 trials; elapsed 95.4s; pairs 47307; projected certificates 39518
+13900/20000 trials; elapsed 96.1s; pairs 47848; projected certificates 40035
+14000/20000 trials; elapsed 96.8s; pairs 48239; projected certificates 40422
+14100/20000 trials; elapsed 97.4s; pairs 48589; projected certificates 40697
+14200/20000 trials; elapsed 98.0s; pairs 48814; projected certificates 40852
+14300/20000 trials; elapsed 98.7s; pairs 49072; projected certificates 41112
+14400/20000 trials; elapsed 99.4s; pairs 49366; projected certificates 41330
+14500/20000 trials; elapsed 99.9s; pairs 49525; projected certificates 41513
+14600/20000 trials; elapsed 100.5s; pairs 49749; projected certificates 41741
+14700/20000 trials; elapsed 101.1s; pairs 50081; projected certificates 41934
+14800/20000 trials; elapsed 101.8s; pairs 50275; projected certificates 42139
+14900/20000 trials; elapsed 102.5s; pairs 50557; projected certificates 42359
+15000/20000 trials; elapsed 103.3s; pairs 51028; projected certificates 42776
+15100/20000 trials; elapsed 103.9s; pairs 51178; projected certificates 42897
+15200/20000 trials; elapsed 104.5s; pairs 51357; projected certificates 43157
+15300/20000 trials; elapsed 105.2s; pairs 51659; projected certificates 43455
+15400/20000 trials; elapsed 105.9s; pairs 52221; projected certificates 44010
+15500/20000 trials; elapsed 106.5s; pairs 52698; projected certificates 44354
+15600/20000 trials; elapsed 107.2s; pairs 53040; projected certificates 44682
+15700/20000 trials; elapsed 107.8s; pairs 53276; projected certificates 44904
+15800/20000 trials; elapsed 108.4s; pairs 53471; projected certificates 45172
+15900/20000 trials; elapsed 109.0s; pairs 53689; projected certificates 45298
+16000/20000 trials; elapsed 109.5s; pairs 54106; projected certificates 45643
+16100/20000 trials; elapsed 110.4s; pairs 54642; projected certificates 45993
+16200/20000 trials; elapsed 111.2s; pairs 55170; projected certificates 46623
+16300/20000 trials; elapsed 112.0s; pairs 55709; projected certificates 47035
+16400/20000 trials; elapsed 112.8s; pairs 56280; projected certificates 47460
+16500/20000 trials; elapsed 113.7s; pairs 57078; projected certificates 48026
+16600/20000 trials; elapsed 114.4s; pairs 57335; projected certificates 48260
+16700/20000 trials; elapsed 115.1s; pairs 57674; projected certificates 48542
+16800/20000 trials; elapsed 115.8s; pairs 57853; projected certificates 48768
+16900/20000 trials; elapsed 116.4s; pairs 58089; projected certificates 48955
+17000/20000 trials; elapsed 117.1s; pairs 58270; projected certificates 49154
+17100/20000 trials; elapsed 117.8s; pairs 58754; projected certificates 49479
+17200/20000 trials; elapsed 118.4s; pairs 59013; projected certificates 49709
+17300/20000 trials; elapsed 119.1s; pairs 59635; projected certificates 50068
+17400/20000 trials; elapsed 119.7s; pairs 59915; projected certificates 50312
+17500/20000 trials; elapsed 120.5s; pairs 60354; projected certificates 50629
+17600/20000 trials; elapsed 121.3s; pairs 60852; projected certificates 51226
+17700/20000 trials; elapsed 122.0s; pairs 61154; projected certificates 51458
+17800/20000 trials; elapsed 122.6s; pairs 61410; projected certificates 51660
+17900/20000 trials; elapsed 123.4s; pairs 62009; projected certificates 52518
+18000/20000 trials; elapsed 124.0s; pairs 62197; projected certificates 52624
+18100/20000 trials; elapsed 124.8s; pairs 62552; projected certificates 52941
+18200/20000 trials; elapsed 125.6s; pairs 63087; projected certificates 53527
+18300/20000 trials; elapsed 126.3s; pairs 63398; projected certificates 53728
+18400/20000 trials; elapsed 127.0s; pairs 63731; projected certificates 54085
+18500/20000 trials; elapsed 127.7s; pairs 64312; projected certificates 54559
+18600/20000 trials; elapsed 128.5s; pairs 64652; projected certificates 54748
+18700/20000 trials; elapsed 129.1s; pairs 64882; projected certificates 54959
+18800/20000 trials; elapsed 129.8s; pairs 65190; projected certificates 55157
+18900/20000 trials; elapsed 130.7s; pairs 65447; projected certificates 55420
+19000/20000 trials; elapsed 131.2s; pairs 65592; projected certificates 55567
+19100/20000 trials; elapsed 132.0s; pairs 65901; projected certificates 55820
+19200/20000 trials; elapsed 132.7s; pairs 66403; projected certificates 56126
+19300/20000 trials; elapsed 133.4s; pairs 66843; projected certificates 56459
+19400/20000 trials; elapsed 134.0s; pairs 67050; projected certificates 56619
+19500/20000 trials; elapsed 134.7s; pairs 67367; projected certificates 56781
+19600/20000 trials; elapsed 135.4s; pairs 67963; projected certificates 57310
+19700/20000 trials; elapsed 136.1s; pairs 68569; projected certificates 57738
+19800/20000 trials; elapsed 136.9s; pairs 68983; projected certificates 58156
+19900/20000 trials; elapsed 138.0s; pairs 69634; projected certificates 58689
+20000/20000 trials; elapsed 138.8s; pairs 70286; projected certificates 59272
+$enter_on_updated_subset_relations
+[1] 23374
+
+$equivalence_checks
+[1] 435330
+
+$projected_certificates
+[1] 59272
+
+$pair_checks
+[1] 70286
+
+$enter_eliminate_clause_update_sr
+[1] 27129
+
+$enter_register_unit
+[1] 68016
+
+$outermost_unit_postconditions
+[1] 59250
+
+$enter_apply_domain_restriction
+[1] 62435
+
+$enter_eliminate_symbol_from_clause
+[1] 19716
+
+$enter_handle_sse_2nd_order_twoend
+[1] 6906
+
+$enter_try_sse_2nd_order
+[1] 9855
+
+$matrix_skips
+[1] 444
+
+$nested_same_symbol_register_exit
+[1] 81
+
+$enter_handle_sse_2nd_order_oneend
+[1] 143
+
+$enter_on_update_range
+[1] 91

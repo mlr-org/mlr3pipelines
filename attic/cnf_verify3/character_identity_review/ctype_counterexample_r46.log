@@ -1,0 +1,4 @@
+C.UTF-8 utf8 source_models 0 output_models 0 changed FALSE
+C.UTF-8 latin1 source_models 0 output_models 0 changed FALSE
+C utf8 source_models 0 output_models 2 changed TRUE
+C latin1 source_models 0 output_models 2 changed TRUE

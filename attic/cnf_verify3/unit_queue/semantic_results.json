@@ -1,0 +1,1906 @@
+{
+  "formulas": 1019,
+  "source_sha256": "7d34ad60035509a463168752bb5f6f82d87fd7182a94a0e48461be7cdbe35fdc",
+  "counters": {
+    "production": {
+      "before_hla": 895,
+      "on_updated_subset_relations": 27752,
+      "contextual_false_comparisons": 95093,
+      "eliminate_symbol_from_clause": 3317,
+      "try_sse_2nd_order": 38199,
+      "apply_domain_restriction": 16727,
+      "quiescent_pair_checks": 38362,
+      "residual_refutations": 1,
+      "residual_sse1": 2,
+      "residual_sse2": 5,
+      "register_unit": 1840,
+      "unit_containments": 1028
+    },
+    "no_skip": {
+      "before_hla": 895,
+      "on_updated_subset_relations": 27751,
+      "contextual_false_comparisons": 94954,
+      "eliminate_symbol_from_clause": 3322,
+      "try_sse_2nd_order": 38061,
+      "apply_domain_restriction": 17601,
+      "quiescent_pair_checks": 38362,
+      "residual_refutations": 0,
+      "residual_sse1": 2,
+      "residual_sse2": 5,
+      "register_unit": 1845,
+      "unit_containments": 1027
+    },
+    "queued": {
+      "before_hla": 895,
+      "on_updated_subset_relations": 27769,
+      "contextual_false_comparisons": 94759,
+      "eliminate_symbol_from_clause": 3272,
+      "try_sse_2nd_order": 37750,
+      "apply_domain_restriction": 17728,
+      "quiescent_pair_checks": 38362,
+      "residual_refutations": 0,
+      "residual_sse1": 2,
+      "residual_sse2": 5,
+      "unit_dequeued": 1561,
+      "register_unit": 1801,
+      "queue_drained": 1072,
+      "unit_enqueued": 1677,
+      "unit_containments": 3968
+    }
+  },
+  "saved_examples": [
+    {
+      "label": "directed_oneend_shrink.json",
+      "input_clauses": 5,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "T": [
+                "0",
+                "2"
+              ],
+              "C": "0"
+            },
+            {
+              "S": "1",
+              "T": [
+                "2",
+                "3"
+              ]
+            },
+            {
+              "U": "1",
+              "T": "0"
+            },
+            {
+              "S": "0",
+              "T": "0"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "T": [
+                "0",
+                "2"
+              ],
+              "C": "0"
+            },
+            {
+              "S": "1",
+              "T": [
+                "2",
+                "3"
+              ]
+            },
+            {
+              "U": "1",
+              "T": "0"
+            },
+            {
+              "S": "0",
+              "T": "0"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "T": [
+                "0",
+                "2"
+              ],
+              "C": "0"
+            },
+            {
+              "S": "1",
+              "T": [
+                "2",
+                "3"
+              ]
+            },
+            {
+              "U": "1",
+              "T": "0"
+            },
+            {
+              "S": "0",
+              "T": "0"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "directed_oneend_shrink2.json",
+      "input_clauses": 5,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "T": [
+                "0",
+                "1",
+                "2"
+              ],
+              "C": "0"
+            },
+            {
+              "S": "0",
+              "T": "0"
+            },
+            {
+              "S": "1",
+              "T": [
+                "2",
+                "3"
+              ]
+            },
+            {
+              "U": "1",
+              "T": "0"
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse2",
+              "donor_a": 1,
+              "donor_b": 2,
+              "target": 0,
+              "intersect_symbol": "S",
+              "restrict_symbol": "T",
+              "removed": [
+                "1"
+              ]
+            }
+          ],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "T": [
+                "0",
+                "1",
+                "2"
+              ],
+              "C": "0"
+            },
+            {
+              "S": "0",
+              "T": "0"
+            },
+            {
+              "S": "1",
+              "T": [
+                "2",
+                "3"
+              ]
+            },
+            {
+              "U": "1",
+              "T": "0"
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse2",
+              "donor_a": 1,
+              "donor_b": 2,
+              "target": 0,
+              "intersect_symbol": "S",
+              "restrict_symbol": "T",
+              "removed": [
+                "1"
+              ]
+            }
+          ],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "T": [
+                "0",
+                "1",
+                "2"
+              ],
+              "C": "0"
+            },
+            {
+              "S": "0",
+              "T": "0"
+            },
+            {
+              "S": "1",
+              "T": [
+                "2",
+                "3"
+              ]
+            },
+            {
+              "U": "1",
+              "T": "0"
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse2",
+              "donor_a": 1,
+              "donor_b": 2,
+              "target": 0,
+              "intersect_symbol": "S",
+              "restrict_symbol": "T",
+              "removed": [
+                "1"
+              ]
+            }
+          ],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "directed_oneend_shrink_min.json",
+      "input_clauses": 5,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "T": [
+                "0",
+                "1",
+                "2"
+              ],
+              "C": "0"
+            },
+            {
+              "S": "0",
+              "T": "0"
+            },
+            {
+              "S": "1",
+              "T": [
+                "2",
+                "3"
+              ]
+            },
+            {
+              "U": "1",
+              "T": [
+                "0",
+                "2"
+              ]
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse2",
+              "donor_a": 1,
+              "donor_b": 2,
+              "target": 0,
+              "intersect_symbol": "S",
+              "restrict_symbol": "T",
+              "removed": [
+                "1"
+              ]
+            }
+          ],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "T": [
+                "0",
+                "1",
+                "2"
+              ],
+              "C": "0"
+            },
+            {
+              "S": "0",
+              "T": "0"
+            },
+            {
+              "S": "1",
+              "T": [
+                "2",
+                "3"
+              ]
+            },
+            {
+              "U": "1",
+              "T": [
+                "0",
+                "2"
+              ]
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse2",
+              "donor_a": 1,
+              "donor_b": 2,
+              "target": 0,
+              "intersect_symbol": "S",
+              "restrict_symbol": "T",
+              "removed": [
+                "1"
+              ]
+            }
+          ],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "T": [
+                "0",
+                "1",
+                "2"
+              ],
+              "C": "0"
+            },
+            {
+              "S": "0",
+              "T": "0"
+            },
+            {
+              "S": "1",
+              "T": [
+                "2",
+                "3"
+              ]
+            },
+            {
+              "U": "1",
+              "T": [
+                "0",
+                "2"
+              ]
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse2",
+              "donor_a": 1,
+              "donor_b": 2,
+              "target": 0,
+              "intersect_symbol": "S",
+              "restrict_symbol": "T",
+              "removed": [
+                "1"
+              ]
+            }
+          ],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "directed_oneend_symbol_removal.json",
+      "input_clauses": 5,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "S": "0",
+              "R": "0"
+            },
+            {
+              "T": "2",
+              "R": "0"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "S": "0",
+              "R": "0"
+            },
+            {
+              "T": "2",
+              "R": "0"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "S": "0",
+              "R": "0"
+            },
+            {
+              "T": "2",
+              "R": "0"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "directed_oneend_symbol_removal_asymmetric.json",
+      "input_clauses": 5,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "T": [
+                "1",
+                "2"
+              ],
+              "R": "0"
+            },
+            {
+              "S": "1",
+              "T": [
+                "2",
+                "3"
+              ]
+            },
+            {
+              "S": "0",
+              "R": "0"
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse2",
+              "donor_a": 1,
+              "donor_b": 2,
+              "target": 0,
+              "intersect_symbol": "S",
+              "restrict_symbol": "T",
+              "removed": [
+                "1"
+              ]
+            }
+          ],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "T": [
+                "1",
+                "2"
+              ],
+              "R": "0"
+            },
+            {
+              "S": "1",
+              "T": [
+                "2",
+                "3"
+              ]
+            },
+            {
+              "S": "0",
+              "R": "0"
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse2",
+              "donor_a": 1,
+              "donor_b": 2,
+              "target": 0,
+              "intersect_symbol": "S",
+              "restrict_symbol": "T",
+              "removed": [
+                "1"
+              ]
+            }
+          ],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "T": [
+                "1",
+                "2"
+              ],
+              "R": "0"
+            },
+            {
+              "S": "1",
+              "T": [
+                "2",
+                "3"
+              ]
+            },
+            {
+              "S": "0",
+              "R": "0"
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse2",
+              "donor_a": 1,
+              "donor_b": 2,
+              "target": 0,
+              "intersect_symbol": "S",
+              "restrict_symbol": "T",
+              "removed": [
+                "1"
+              ]
+            }
+          ],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "directed_oneend_symbol_removal_with_c.json",
+      "input_clauses": 5,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "T": "2",
+              "R": "0",
+              "C": "0"
+            },
+            {
+              "S": "0",
+              "R": "0"
+            },
+            {
+              "T": [
+                "2",
+                "3"
+              ],
+              "R": "0"
+            },
+            {
+              "U": "1",
+              "T": "2",
+              "R": "0"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "T": "2",
+              "R": "0",
+              "C": "0"
+            },
+            {
+              "S": "0",
+              "R": "0"
+            },
+            {
+              "T": [
+                "2",
+                "3"
+              ],
+              "R": "0"
+            },
+            {
+              "U": "1",
+              "T": "2",
+              "R": "0"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "T": "2",
+              "R": "0",
+              "C": "0"
+            },
+            {
+              "S": "0",
+              "R": "0"
+            },
+            {
+              "T": [
+                "2",
+                "3"
+              ],
+              "R": "0"
+            },
+            {
+              "U": "1",
+              "T": "2",
+              "R": "0"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "minimized_deferred_skip.json",
+      "input_clauses": 5,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "X0": "5"
+            },
+            {
+              "X1": "6"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "X0": "5"
+            },
+            {
+              "X1": "6"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "X0": "5"
+            },
+            {
+              "X1": "6"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "minimized_first_order_phase_sse1.json",
+      "input_clauses": 4,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "X1": "0",
+              "X0": "5"
+            },
+            {
+              "X0": "0",
+              "X1": [
+                "4",
+                "0"
+              ]
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse1",
+              "donor": 0,
+              "target": 1,
+              "symbol": "X0",
+              "removed": [
+                "0"
+              ]
+            }
+          ],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "X1": "0",
+              "X0": "5"
+            },
+            {
+              "X0": "0",
+              "X1": [
+                "4",
+                "0"
+              ]
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse1",
+              "donor": 0,
+              "target": 1,
+              "symbol": "X0",
+              "removed": [
+                "0"
+              ]
+            }
+          ],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "X1": "0",
+              "X0": "5"
+            },
+            {
+              "X0": "0",
+              "X1": [
+                "4",
+                "0"
+              ]
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse1",
+              "donor": 0,
+              "target": 1,
+              "symbol": "X0",
+              "removed": [
+                "0"
+              ]
+            }
+          ],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "minimized_oneend_symbol_removal.json",
+      "input_clauses": 5,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "T": [
+                "1",
+                "2"
+              ],
+              "R": "0"
+            },
+            {
+              "S": "1",
+              "T": [
+                "2",
+                "3"
+              ]
+            },
+            {
+              "U": "1",
+              "T": "2"
+            },
+            {
+              "S": "0",
+              "R": "0"
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse2",
+              "donor_a": 1,
+              "donor_b": 3,
+              "target": 0,
+              "intersect_symbol": "S",
+              "restrict_symbol": "T",
+              "removed": [
+                "1"
+              ]
+            }
+          ],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "T": [
+                "1",
+                "2"
+              ],
+              "R": "0"
+            },
+            {
+              "S": "1",
+              "T": [
+                "2",
+                "3"
+              ]
+            },
+            {
+              "U": "1",
+              "T": "2"
+            },
+            {
+              "S": "0",
+              "R": "0"
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse2",
+              "donor_a": 1,
+              "donor_b": 3,
+              "target": 0,
+              "intersect_symbol": "S",
+              "restrict_symbol": "T",
+              "removed": [
+                "1"
+              ]
+            }
+          ],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "T": [
+                "1",
+                "2"
+              ],
+              "R": "0"
+            },
+            {
+              "S": "1",
+              "T": [
+                "2",
+                "3"
+              ]
+            },
+            {
+              "U": "1",
+              "T": "2"
+            },
+            {
+              "S": "0",
+              "R": "0"
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse2",
+              "donor_a": 1,
+              "donor_b": 3,
+              "target": 0,
+              "intersect_symbol": "S",
+              "restrict_symbol": "T",
+              "removed": [
+                "1"
+              ]
+            }
+          ],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "minimized_sse1.json",
+      "input_clauses": 4,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "X0": "3",
+              "X2": "4"
+            },
+            {
+              "X1": "3",
+              "X0": "2"
+            },
+            {
+              "X0": "5",
+              "X2": [
+                "4",
+                "2"
+              ]
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse1",
+              "donor": 0,
+              "target": 2,
+              "symbol": "X0",
+              "removed": [
+                "5"
+              ]
+            }
+          ],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "X0": "3",
+              "X2": "4"
+            },
+            {
+              "X1": "3",
+              "X0": "2"
+            },
+            {
+              "X0": "5",
+              "X2": [
+                "4",
+                "2"
+              ]
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse1",
+              "donor": 0,
+              "target": 2,
+              "symbol": "X0",
+              "removed": [
+                "5"
+              ]
+            }
+          ],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "X0": "3",
+              "X2": "4"
+            },
+            {
+              "X1": "3",
+              "X0": "2"
+            },
+            {
+              "X0": "5",
+              "X2": [
+                "4",
+                "2"
+              ]
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse1",
+              "donor": 0,
+              "target": 2,
+              "symbol": "X0",
+              "removed": [
+                "5"
+              ]
+            }
+          ],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "minimized_sse2.json",
+      "input_clauses": 6,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "X0": [
+                "5",
+                "4",
+                "0"
+              ],
+              "X2": [
+                "2",
+                "4"
+              ]
+            },
+            {
+              "X2": [
+                "2",
+                "1"
+              ],
+              "X1": "6"
+            },
+            {
+              "X0": "1",
+              "X2": [
+                "0",
+                "1"
+              ]
+            },
+            {
+              "X2": "0",
+              "X0": [
+                "1",
+                "4"
+              ]
+            },
+            {
+              "X0": [
+                "4",
+                "0"
+              ],
+              "X1": [
+                "0",
+                "6"
+              ]
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse2",
+              "donor_a": 1,
+              "donor_b": 3,
+              "target": 4,
+              "intersect_symbol": "X2",
+              "restrict_symbol": "X0",
+              "removed": [
+                "0"
+              ]
+            }
+          ],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "X0": [
+                "5",
+                "4",
+                "0"
+              ],
+              "X2": [
+                "2",
+                "4"
+              ]
+            },
+            {
+              "X2": [
+                "2",
+                "1"
+              ],
+              "X1": "6"
+            },
+            {
+              "X0": "1",
+              "X2": [
+                "0",
+                "1"
+              ]
+            },
+            {
+              "X2": "0",
+              "X0": [
+                "1",
+                "4"
+              ]
+            },
+            {
+              "X0": [
+                "4",
+                "0"
+              ],
+              "X1": [
+                "0",
+                "6"
+              ]
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse2",
+              "donor_a": 1,
+              "donor_b": 3,
+              "target": 4,
+              "intersect_symbol": "X2",
+              "restrict_symbol": "X0",
+              "removed": [
+                "0"
+              ]
+            }
+          ],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "X0": [
+                "5",
+                "4",
+                "0"
+              ],
+              "X2": [
+                "2",
+                "4"
+              ]
+            },
+            {
+              "X2": [
+                "2",
+                "1"
+              ],
+              "X1": "6"
+            },
+            {
+              "X0": "1",
+              "X2": [
+                "0",
+                "1"
+              ]
+            },
+            {
+              "X2": "0",
+              "X0": [
+                "1",
+                "4"
+              ]
+            },
+            {
+              "X0": [
+                "4",
+                "0"
+              ],
+              "X1": [
+                "0",
+                "6"
+              ]
+            }
+          ],
+          "pending": [
+            {
+              "kind": "sse2",
+              "donor_a": 1,
+              "donor_b": 3,
+              "target": 4,
+              "intersect_symbol": "X2",
+              "restrict_symbol": "X0",
+              "removed": [
+                "0"
+              ]
+            }
+          ],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "minimized_subsumption.json",
+      "input_clauses": 3,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "X0": "2"
+            },
+            {
+              "X2": "2",
+              "X0": "2"
+            }
+          ],
+          "pending": [
+            {
+              "kind": "subsumption",
+              "donor": 0,
+              "target": 1
+            }
+          ],
+          "refutations": [
+            {
+              "target": 1,
+              "certificate": [
+                {
+                  "kind": "conflict",
+                  "donor": 0
+                }
+              ]
+            }
+          ]
+        },
+        "no_skip": {
+          "result": [
+            {
+              "X0": "2"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "X0": "2"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "outside_skip_example.json",
+      "input_clauses": 21,
+      "variants": {
+        "production": {
+          "result": false,
+          "pending": [],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": false,
+          "pending": [],
+          "refutations": []
+        },
+        "queued": {
+          "result": false,
+          "pending": [],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "outside_skip_satisfiable_cycle.json",
+      "input_clauses": 27,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "Q2": "3",
+              "Q0": "0"
+            },
+            {
+              "Q2": "0",
+              "Q1": "7"
+            },
+            {
+              "Q1": "0",
+              "Q0": "2"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "Q2": "3",
+              "Q0": "0"
+            },
+            {
+              "Q2": "0",
+              "Q1": "7"
+            },
+            {
+              "Q1": "0",
+              "Q0": "2"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "Q2": "3",
+              "Q0": "0"
+            },
+            {
+              "Q2": "0",
+              "Q1": "7"
+            },
+            {
+              "Q1": "0",
+              "Q0": "2"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "outside_skip_satisfiable_dense.json",
+      "input_clauses": 10,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "X0": "5"
+            },
+            {
+              "X1": "6"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "X0": "5"
+            },
+            {
+              "X1": "6"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "X0": "5"
+            },
+            {
+              "X1": "6"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "outside_skip_satisfiable_example.json",
+      "input_clauses": 10,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "X0": "5"
+            },
+            {
+              "X1": "6"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "X0": "5"
+            },
+            {
+              "X1": "6"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "X0": "5"
+            },
+            {
+              "X1": "6"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "fanout_3",
+      "input_clauses": 4,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "X0": "1"
+            },
+            {
+              "X2": "1"
+            },
+            {
+              "X1": "1"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "X0": "1"
+            },
+            {
+              "X2": "1"
+            },
+            {
+              "X1": "1"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "X0": "1"
+            },
+            {
+              "X2": "1"
+            },
+            {
+              "X1": "1"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "fanout_8",
+      "input_clauses": 14,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "X0": "1"
+            },
+            {
+              "X7": "1"
+            },
+            {
+              "X6": "1"
+            },
+            {
+              "X5": "1"
+            },
+            {
+              "X4": "1"
+            },
+            {
+              "X3": "1"
+            },
+            {
+              "X2": "1"
+            },
+            {
+              "X1": "1"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "X0": "1"
+            },
+            {
+              "X7": "1"
+            },
+            {
+              "X6": "1"
+            },
+            {
+              "X5": "1"
+            },
+            {
+              "X4": "1"
+            },
+            {
+              "X3": "1"
+            },
+            {
+              "X2": "1"
+            },
+            {
+              "X1": "1"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "X0": "1"
+            },
+            {
+              "X7": "1"
+            },
+            {
+              "X6": "1"
+            },
+            {
+              "X5": "1"
+            },
+            {
+              "X4": "1"
+            },
+            {
+              "X3": "1"
+            },
+            {
+              "X2": "1"
+            },
+            {
+              "X1": "1"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        }
+      }
+    },
+    {
+      "label": "fanout_24",
+      "input_clauses": 46,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "X0": "1"
+            },
+            {
+              "X23": "1"
+            },
+            {
+              "X22": "1"
+            },
+            {
+              "X21": "1"
+            },
+            {
+              "X20": "1"
+            },
+            {
+              "X19": "1"
+            },
+            {
+              "X18": "1"
+            },
+            {
+              "X17": "1"
+            },
+            {
+              "X16": "1"
+            },
+            {
+              "X15": "1"
+            },
+            {
+              "X14": "1"
+            },
+            {
+              "X13": "1"
+            },
+            {
+              "X12": "1"
+            },
+            {
+              "X11": "1"
+            },
+            {
+              "X10": "1"
+            },
+            {
+              "X9": "1"
+            },
+            {
+              "X8": "1"
+            },
+            {
+              "X7": "1"
+            },
+            {
+              "X6": "1"
+            },
+            {
+              "X5": "1"
+            },
+            {
+              "X4": "1"
+            },
+            {
+              "X3": "1"
+            },
+            {
+              "X2": "1"
+            },
+            {
+              "X1": "1"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "no_skip": {
+          "result": [
+            {
+              "X0": "1"
+            },
+            {
+              "X23": "1"
+            },
+            {
+              "X22": "1"
+            },
+            {
+              "X21": "1"
+            },
+            {
+              "X20": "1"
+            },
+            {
+              "X19": "1"
+            },
+            {
+              "X18": "1"
+            },
+            {
+              "X17": "1"
+            },
+            {
+              "X16": "1"
+            },
+            {
+              "X15": "1"
+            },
+            {
+              "X14": "1"
+            },
+            {
+              "X13": "1"
+            },
+            {
+              "X12": "1"
+            },
+            {
+              "X11": "1"
+            },
+            {
+              "X10": "1"
+            },
+            {
+              "X9": "1"
+            },
+            {
+              "X8": "1"
+            },
+            {
+              "X7": "1"
+            },
+            {
+              "X6": "1"
+            },
+            {
+              "X5": "1"
+            },
+            {
+              "X4": "1"
+            },
+            {
+              "X3": "1"
+            },
+            {
+              "X2": "1"
+            },
+            {
+              "X1": "1"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "X0": "1"
+            },
+            {
+              "X23": "1"
+            },
+            {
+              "X22": "1"
+            },
+            {
+              "X21": "1"
+            },
+            {
+              "X20": "1"
+            },
+            {
+              "X19": "1"
+            },
+            {
+              "X18": "1"
+            },
+            {
+              "X17": "1"
+            },
+            {
+              "X16": "1"
+            },
+            {
+              "X15": "1"
+            },
+            {
+              "X14": "1"
+            },
+            {
+              "X13": "1"
+            },
+            {
+              "X12": "1"
+            },
+            {
+              "X11": "1"
+            },
+            {
+              "X10": "1"
+            },
+            {
+              "X9": "1"
+            },
+            {
+              "X8": "1"
+            },
+            {
+              "X7": "1"
+            },
+            {
+              "X6": "1"
+            },
+            {
+              "X5": "1"
+            },
+            {
+              "X4": "1"
+            },
+            {
+              "X3": "1"
+            },
+            {
+              "X2": "1"
+            },
+            {
+              "X1": "1"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        }
+      }
+    }
+  ],
+  "differences": [
+    {
+      "label": "minimized_subsumption.json",
+      "domains": {
+        "X0": [
+          "1",
+          "2",
+          "4",
+          "5"
+        ],
+        "X1": [
+          "1"
+        ],
+        "X2": [
+          "2",
+          "3",
+          "5"
+        ]
+      },
+      "clauses": [
+        {
+          "X0": [
+            "2",
+            "4"
+          ],
+          "X2": [
+            "3"
+          ]
+        },
+        {
+          "X2": [
+            "5"
+          ],
+          "X0": [
+            "2",
+            "1"
+          ]
+        },
+        {
+          "X2": [
+            "2"
+          ],
+          "X0": [
+            "2",
+            "5"
+          ]
+        }
+      ],
+      "input_clauses": 3,
+      "variants": {
+        "production": {
+          "result": [
+            {
+              "X0": "2"
+            },
+            {
+              "X2": "2",
+              "X0": "2"
+            }
+          ],
+          "pending": [
+            {
+              "kind": "subsumption",
+              "donor": 0,
+              "target": 1
+            }
+          ],
+          "refutations": [
+            {
+              "target": 1,
+              "certificate": [
+                {
+                  "kind": "conflict",
+                  "donor": 0
+                }
+              ]
+            }
+          ]
+        },
+        "no_skip": {
+          "result": [
+            {
+              "X0": "2"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        },
+        "queued": {
+          "result": [
+            {
+              "X0": "2"
+            }
+          ],
+          "pending": [],
+          "refutations": []
+        }
+      },
+      "queue_differs_from_no_skip": false,
+      "queue_differs_from_production": true
+    }
+  ]
+}

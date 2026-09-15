@@ -1,0 +1,14 @@
+{
+  "binary": {
+    "queries": 76752,
+    "horn_steps": 76700,
+    "refutations": 32276
+  },
+  "omitted_units": {
+    "queries": 2600,
+    "horn_steps": 5104,
+    "omission_pairs": 1300,
+    "refutations": 576
+  },
+  "elapsed": 6.051860809326172
+}

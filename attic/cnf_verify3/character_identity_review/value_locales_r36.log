@@ -1,0 +1,11 @@
+{
+  "runtime": "3.6.3",
+  "formulas": 160,
+  "assignments": 10240,
+  "source_events": 166048,
+  "exact_normalized_traces_equal": true,
+  "truth_preserved": true,
+  "symbol_names": "ASCII",
+  "value_encodings": ["UTF-8", "Latin-1 where representable"],
+  "ctype_locales": ["C.UTF-8", "C"]
+}

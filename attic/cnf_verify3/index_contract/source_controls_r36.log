@@ -1,0 +1,8 @@
+REJECTED remove_nonunit_match_guard: Nonintegral or missing numeric subscript at source line 688: remaining_other_entries[[hla_clause_idx]]
+REJECTED corrupt_lazy_unit_count: Unit-HLA pivot-count bookkeeping failed
+REJECTED remove_future_matrix_guards: Two-dimensional access did not receive a matrix at source line 205: is_not_subset_of[[meta_idx]][, is_not_subset_of_col]
+REJECTED lookup_deleted_symbol_in_current_clause: Nonintegral or missing numeric subscript at source line 264: is_not_subset_of[[meta_idx]][, is_not_subset_of_col]
+REJECTED drop_count_matrix_dimensions: Two-dimensional access did not receive a matrix at source line 635: second_order_enabled_matrix[meta_disabled, ]
+REJECTED give_lazy_inverse_wrong_domain: Nonintegral or missing numeric subscript at source line 765: is_not_subset_of_unit[[updating_hla_clause_idx]]
+REJECTED allow_nonunit_hla_self_decrement: Nonintegral or missing numeric subscript at source line 711: not_subset_count_current[[roe_idx]]
+PASS: 7 canonical originals accepted; all 7 corrupted source copies rejected.

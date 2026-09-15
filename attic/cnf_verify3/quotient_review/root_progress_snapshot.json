@@ -1,0 +1,27 @@
+{
+  "inspected_utc": "2026-09-06T13:23:58.360822+00:00",
+  "completed": 173,
+  "completed_unique": 173,
+  "stats": {
+    "executions": 8414028,
+    "valuations": 471507840,
+    "sat_mdd_calibrations": 2076,
+    "constant_false": 0,
+    "unit_subsumption_outputs": 0
+  },
+  "errors": 0,
+  "parameters": {
+    "workers": 16,
+    "x_start": 0,
+    "x_stop": 193,
+    "y_limit": 193,
+    "out": "three_symbol_quotient_results.json"
+  },
+  "finished_utc": null,
+  "expected_full_valuations": 547476480,
+  "expected_full_executions": 9386748,
+  "profile_cardinality_sums": [
+    872,
+    20
+  ]
+}

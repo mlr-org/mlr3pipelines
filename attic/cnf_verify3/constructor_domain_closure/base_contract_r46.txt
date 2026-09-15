@@ -1,0 +1,136 @@
+R version 4.6.1 (2026-06-24)
+checkmate 2.3.4
+function (x, y)
+{
+    if (is.null(x))
+        return(NULL)
+    if (.set_ops_need_as_vector(x, y)) {
+        x <- as.vector(x)
+        y <- as.vector(y)
+    }
+    x <- unique(x)
+    names(x) <- NULL
+    y <- unique(y)
+    names(y) <- NULL
+    x[match(x, y, 0L) == 0L]
+}
+<bytecode: 0x56142b23c4f8>
+<environment: namespace:base>
+function (x, y)
+{
+    ((length(dim(x)) >= 2L) || (length(dim(y)) >= 2L) || (!isa(x,
+        class(y)) && !isa(y, class(x))) || !identical(class(tryCatch(x[0L],
+        error = identity)), class(x)) || !identical(class(tryCatch(y[0L],
+        error = identity)), class(y)))
+}
+<bytecode: 0x56142d2066b8>
+<environment: namespace:base>
+function (x, incomparables = FALSE, MARGIN = 1, fromLast = FALSE,
+    ...)
+{
+    if (!isFALSE(incomparables))
+        .NotYetUsed("incomparables != FALSE")
+    dx <- dim(x)
+    ndim <- length(dx)
+    if (length(MARGIN) != 1L || (MARGIN > ndim))
+        stop(gettextf("MARGIN = %s is invalid for dim = %s",
+            paste(MARGIN, collapse = ","), paste(dx, collapse = ",")),
+            domain = NA)
+    temp <- if ((ndim > 1L) && (prod(dx[-MARGIN]) > 1L))
+        asplit(x, MARGIN, TRUE)
+    else x
+    args <- rep(alist(a = ), ndim)
+    names(args) <- NULL
+    args[[MARGIN]] <- !duplicated.default(temp, fromLast = fromLast,
+        ...)
+    do.call(`[`, c(list(x), args, list(drop = FALSE)))
+}
+<bytecode: 0x56142e2c4750>
+<environment: namespace:base>
+function (x, incomparables = FALSE, MARGIN = 1, fromLast = FALSE,
+    ...)
+{
+    if (!isFALSE(incomparables))
+        .NotYetUsed("incomparables != FALSE")
+    dx <- dim(x)
+    ndim <- length(dx)
+    if (length(MARGIN) != 1L || (MARGIN > ndim))
+        stop(gettextf("MARGIN = %s is invalid for dim = %s",
+            paste(MARGIN, collapse = ","), paste(dx, collapse = ",")),
+            domain = NA)
+    temp <- if ((ndim > 1L) && (prod(dx[-MARGIN]) > 1L))
+        asplit(x, MARGIN, TRUE)
+    else x
+    args <- rep(alist(a = ), ndim)
+    names(args) <- NULL
+    args[[MARGIN]] <- !duplicated.default(temp, fromLast = fromLast,
+        ...)
+    do.call(`[`, c(list(x), args, list(drop = FALSE)))
+}
+<bytecode: 0x56142e22d030>
+<environment: namespace:base>
+
+Shape: plain
+class(input): character ; class(input[0]): character
+ chr [1:2] "b" "c"
+coercion guard: FALSE
+
+Shape: named
+class(input): character ; class(input[0]): character
+ chr [1:2] "b" "c"
+coercion guard: FALSE
+
+Shape: metadata
+class(input): character ; class(input[0]): character
+ chr [1:2] "b" "c"
+coercion guard: FALSE
+
+Shape: one_array
+class(input): array ; class(input[0]): character
+ chr [1:2] "b" "c"
+coercion guard: TRUE
+
+Shape: row_matrix
+class(input): matrix,array ; class(input[0]): character
+ chr [1:2] "b" "c"
+coercion guard: TRUE
+
+Shape: column_matrix
+class(input): matrix,array ; class(input[0]): character
+ chr [1:2] "b" "c"
+coercion guard: TRUE
+
+Shape: first_array
+class(input): array ; class(input[0]): character
+ chr [1:2] "b" "c"
+coercion guard: TRUE
+
+Shape: last_array
+class(input): array ; class(input[0]): character
+ chr [1:2] "b" "c"
+coercion guard: TRUE
+
+Shape: as_is
+class(input): AsIs ; class(input[0]): AsIs
+ chr [1:2] "b" "c"
+coercion guard: TRUE
+
+Shape: inert_class
+class(input): cnf_closure_no_methods ; class(input[0]): character
+ chr [1:2] "b" "c"
+coercion guard: TRUE
+
+Shape: named_matrix
+class(input): matrix,array ; class(input[0]): character
+ chr [1:2] "b" "c"
+coercion guard: TRUE
+
+Shape: two_matrix
+class(input): matrix,array ; class(input[0]): character
+ chr [1:2] "b" "c"
+coercion guard: TRUE
+
+Shape: two_array
+class(input): array ; class(input[0]): character
+ chr [1:2] "b" "c"
+coercion guard: TRUE

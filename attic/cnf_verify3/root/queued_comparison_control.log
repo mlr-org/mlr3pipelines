@@ -1,0 +1,8 @@
+The first site-21 witness preserves truth even with the changed copy; trying all saved witnesses.
+The changed copy differs on: random:1501
+There were 50 or more warnings (use warnings() to see the first 50)
+Warning message:
+In if (is.na(symbol_idx)) return(FALSE) :
+  the condition has length > 1 and only the first element will be used
+Reduced clauses: 11 ; symbols: 4 ; valuations: 360 ; candidate attempts: 3967
+Changed-copy result: subscript out of bounds

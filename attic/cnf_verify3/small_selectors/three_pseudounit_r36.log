@@ -1,0 +1,48 @@
+FIRST three_pseudounit_profiles noncanonical_correct at 25
+list(category = "noncanonical_correct", domains = list(X = c("v1",
+"v2", "v4"), Y = c("v0", "v3")), raw = list(list(X = "v1"), list(
+    X = "v2", Y = "v3"), list(X = "v4", Y = "v3")), selectors = list(
+    c(1L, 1L), 1:2, 1:2), selected = list(list(X = "v1", X = "v1"),
+    list(X = "v2", Y = "v3"), list(X = "v4", Y = "v3")), output = list(
+    list(X = "v1", X = "v1"), list(Y = "v3")), truth = structure(list(
+    X = c("v1", "v2", "v4", "v1", "v2", "v4"), Y = c("v0", "v0",
+    "v0", "v3", "v3", "v3"), expected = c(FALSE, FALSE, FALSE,
+    TRUE, FALSE, FALSE), positional = c(FALSE, FALSE, FALSE,
+    TRUE, FALSE, FALSE), named = c(FALSE, FALSE, FALSE, TRUE,
+    FALSE, FALSE)), class = "data.frame", row.names = c(NA, -6L
+)))
+FIRST three_pseudounit_profiles noncanonical_stale at 337
+list(category = "noncanonical_stale", domains = list(X = c("v1",
+"v3", "v4"), Y = c("v1", "v2")), raw = list(list(X = c("v1",
+"v3")), list(X = "v3", Y = "v1"), list(X = "v4", Y = "v2")),
+    selectors = list(c(1L, 1L), 1:2, 1:2), selected = list(list(
+        X = c("v1", "v3"), X = c("v1", "v3")), list(X = "v3",
+        Y = "v1"), list(X = "v4", Y = "v2")), output = list(list(
+        X = "v3", X = c("v1", "v3")), list(X = "v4", Y = "v2")),
+    truth = structure(list(X = c("v1", "v3", "v4", "v1", "v3",
+    "v4"), Y = c("v1", "v1", "v1", "v2", "v2", "v2"), expected = c(FALSE,
+    FALSE, FALSE, FALSE, TRUE, FALSE), positional = c(FALSE,
+    FALSE, FALSE, TRUE, TRUE, FALSE), named = c(FALSE, FALSE,
+    FALSE, FALSE, TRUE, FALSE)), class = "data.frame", row.names = c(NA,
+    -6L)))
+PROGRESS 20 of 193 seconds 3.636
+FIRST three_pseudounit_profiles error at 3027
+list(category = "error", error = "attempt to select less than one element in get1index",
+    domains = list(X = c("v0", "v3", "v6"), Y = c("v1", "v2")),
+    raw = list(list(X = c("v3", "v6"), Y = "v1"), list(X = "v6",
+        Y = "v2"), list(X = "v3")), selectors = list(1:2, 1:2,
+        c(1L, 1L)))
+PROGRESS 40 of 193 seconds 6.371
+PROGRESS 60 of 193 seconds 8.977
+PROGRESS 80 of 193 seconds 12.084
+PROGRESS 100 of 193 seconds 14.479
+PROGRESS 120 of 193 seconds 17.26
+PROGRESS 140 of 193 seconds 20.009
+PROGRESS 160 of 193 seconds 22.375
+PROGRESS 180 of 193 seconds 25.121
+       canonical_correct     noncanonical_correct       noncanonical_stale
+                     440                    14028                      800
+noncanonical_named_wrong  noncanonical_both_wrong          canonical_wrong
+                       0                        0                        0
+                   error
+                     944

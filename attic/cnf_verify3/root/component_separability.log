@@ -1,0 +1,31 @@
+{"stats": {"global_calls": 520, "isolated_calls": 1069, "contradictory_cases": 46, "cases": 200, "ordered_component_checks": 926, "nonconstant_fixed_points": 154, "independent_solver_checks": 2}, "productive": {"1": 132, "2": 17, "0": 5}}
+{"stats": {"global_calls": 1028, "isolated_calls": 2112, "contradictory_cases": 92, "cases": 400, "ordered_component_checks": 1826, "nonconstant_fixed_points": 308, "independent_solver_checks": 4}, "productive": {"1": 286, "2": 17, "0": 5}}
+{"stats": {"global_calls": 1538, "isolated_calls": 3171, "contradictory_cases": 136, "cases": 600, "ordered_component_checks": 2755, "nonconstant_fixed_points": 464, "independent_solver_checks": 6}, "productive": {"1": 440, "2": 17, "0": 7}}
+{"stats": {"global_calls": 2049, "isolated_calls": 4220, "contradictory_cases": 180, "cases": 800, "ordered_component_checks": 3665, "nonconstant_fixed_points": 620, "independent_solver_checks": 8}, "productive": {"1": 595, "2": 17, "0": 8}}
+{"stats": {"global_calls": 2554, "isolated_calls": 5266, "contradictory_cases": 226, "cases": 1000, "ordered_component_checks": 4573, "nonconstant_fixed_points": 774, "independent_solver_checks": 10}, "productive": {"1": 746, "2": 17, "0": 11}}
+{"stats": {"global_calls": 3065, "isolated_calls": 6346, "contradictory_cases": 268, "cases": 1200, "ordered_component_checks": 5511, "nonconstant_fixed_points": 932, "independent_solver_checks": 12}, "productive": {"1": 899, "2": 17, "0": 16}}
+{"stats": {"global_calls": 3575, "isolated_calls": 7418, "contradictory_cases": 312, "cases": 1400, "ordered_component_checks": 6443, "nonconstant_fixed_points": 1088, "independent_solver_checks": 14}, "productive": {"1": 1053, "2": 17, "0": 18}}
+{"stats": {"global_calls": 4082, "isolated_calls": 8450, "contradictory_cases": 357, "cases": 1600, "ordered_component_checks": 7339, "nonconstant_fixed_points": 1243, "independent_solver_checks": 16}, "productive": {"1": 1205, "2": 17, "0": 21}}
+{"stats": {"global_calls": 4607, "isolated_calls": 9539, "contradictory_cases": 394, "cases": 1800, "ordered_component_checks": 8311, "nonconstant_fixed_points": 1406, "independent_solver_checks": 20}, "productive": {"1": 1367, "2": 17, "0": 22}}
+{"stats": {"global_calls": 5111, "isolated_calls": 10585, "contradictory_cases": 441, "cases": 2000, "ordered_component_checks": 9209, "nonconstant_fixed_points": 1559, "independent_solver_checks": 22}, "productive": {"1": 1518, "2": 17, "0": 24}}
+{"stats": {"global_calls": 5621, "isolated_calls": 11637, "contradictory_cases": 485, "cases": 2200, "ordered_component_checks": 10121, "nonconstant_fixed_points": 1715, "independent_solver_checks": 24}, "productive": {"1": 1672, "2": 17, "0": 26}}
+{"stats": {"global_calls": 6125, "isolated_calls": 12706, "contradictory_cases": 531, "cases": 2400, "ordered_component_checks": 11045, "nonconstant_fixed_points": 1869, "independent_solver_checks": 26}, "productive": {"1": 1822, "2": 17, "0": 30}}
+{
+  "stats": {
+    "global_calls": 6125,
+    "isolated_calls": 12706,
+    "contradictory_cases": 531,
+    "cases": 2400,
+    "ordered_component_checks": 11045,
+    "nonconstant_fixed_points": 1869,
+    "independent_solver_checks": 26
+  },
+  "productive_pass_counts": {
+    "1": 1822,
+    "2": 17,
+    "0": 30
+  },
+  "source_scope": "ordinary disjoint symbol groups; exact projected clause/range order",
+  "fixture_count": 7,
+  "seed": 772031
+}

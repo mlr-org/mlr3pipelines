@@ -105,7 +105,14 @@ simplify_cnf = function(entries, universe) {
     }
     # The symbol registry is empty at the start; the following happens when new units are added later
     use_inso = FALSE
-    if (!is.null(is_not_subset_of)) {
+    # The matrices describe subset relations w/r/t the registering unit's *own* range unit[[1L]],
+    # but we propagate unit_domains[[nu]], which after a merge can be strictly smaller.
+    # A clause range that is a strict subset of unit[[1L]] can then still be *equal* to the merged
+    # intersection, in which case skipping would miss its subsumption elimination (the restriction
+    # itself is always a no-op for such clauses, since earlier propagation keeps them inside the
+    # previous unit range and hence inside the intersection). So only skip when the effective
+    # restringent is the unit's own range.
+    if (!is.null(is_not_subset_of) && length(unit_domains[[nu]]) == length(unit[[1L]])) {
       # if we have the is_not_subset_of matrix, we can use it to skip some checks
       unit_idx_meta = available_inverse[[unit_idx]]
       use_inso = unit_idx_meta <= meta_idx_outer  # .. but only if we have built the matrix up to the current index

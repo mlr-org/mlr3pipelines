@@ -1,0 +1,23 @@
+{
+  "seed": 20260906,
+  "requested_trials": 40,
+  "elapsed": 20.681137323379517,
+  "stats": {
+    "family_nonunit_hla_chain": 10,
+    "sat_equivalences": 40,
+    "known_consequences": 25,
+    "mdd_equivalences": 40,
+    "event_sse1": 741,
+    "event_hla": 5979,
+    "value_refinement_naturality": 13,
+    "max_variables": 83,
+    "max_clauses": 85,
+    "max_log10_assignments": 70.14313732118326,
+    "family_unit_hla_chain": 10,
+    "event_unit_hla": 244,
+    "family_second_order_bundle": 10,
+    "event_sse2": 2034,
+    "family_permutation_cycle": 10
+  },
+  "failures": []
+}

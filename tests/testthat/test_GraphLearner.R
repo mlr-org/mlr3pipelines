@@ -540,25 +540,25 @@ test_that("GraphLearner model", {
 
   lr = GraphLearner$new(graph)
 
-  expect_equal(lr$graph, graph)
-  expect_equal(lr$graph_model, graph)
+  expect_equal_r6(lr$graph, graph)
+  expect_equal_r6(lr$graph_model, graph)
 
   graph2$train(tsk("iris"))
 
   lr$train(tsk("iris"))
 
-  expect_equal(graph, graph_orig)
+  expect_equal_r6(graph, graph_orig)
   expect_null(graph$state$pca)
 
-  # behind-the-scenes param_set cache ruins expect_equal if we don't do this:
+  # behind-the-scenes param_set cache ruins equality if we don't do this:
   graph_orig$param_set
 
-  expect_equal(lr$graph, graph_orig)
+  expect_equal_r6(lr$graph, graph_orig)
 
   graph2$state$classif.rpart$train_time = 0
   lr$state$model$classif.rpart$train_time = 0
 
-  expect_equal(lr$graph_model, graph2)
+  expect_equal_r6(lr$graph_model, graph2)
 
   imp = graph2$pipeops$classif.rpart$learner_model$importance()
 
@@ -811,7 +811,7 @@ test_that("base_learner() works", {
   expect_error(as_learner(po("nop"))$base_learner(), "No base learner found in Graph.")
 
 
-  bagger = as_learner(ppl("bagging", iterations = 1, lrn("classif.rpart"),
+  bagger = as_learner(ppl("bag", iterations = 1, lrn("classif.rpart"),
     averager = po("classifavg", collect_multiplicity = TRUE)))
 
   expect_identical(bagger$base_learner(), bagger$graph_model$pipeops$classif.rpart$learner_model)
@@ -827,8 +827,8 @@ test_that("base_learner() works", {
 
   expect_error(bagger$base_learner(), "Multiplicity that does not contain exactly one Learner")
 
-  metabagger = as_learner(ppl("bagging", iterations = 1,
-      ppl("bagging", iterations = 1, lrn("classif.rpart"),
+  metabagger = as_learner(ppl("bag", iterations = 1,
+      ppl("bag", iterations = 1, lrn("classif.rpart"),
         averager = po("classifavg_1", collect_multiplicity = TRUE))$set_names(c("replicate", "subsample"), c("replicate_1", "subsample_1")),
     averager = po("classifavg_2", collect_multiplicity = TRUE)))
 
@@ -995,6 +995,60 @@ test_that("validation, internal_valid_scores", {
   glrn2 = as_learner(as_graph(lrn("classif.debug")))
 })
 
+test_that("validation, best_valid_scores", {
+  glrn1 = as_learner(as_graph(lrn("classif.rpart")))$train(tsk("iris"))
+  expect_null(glrn1$best_valid_scores)
+
+  glrn2 = as_learner(as_graph(lrn("classif.debug", early_stopping = TRUE, iter = 5)))
+  set_validate(glrn2, 0.2)
+  glrn2$train(tsk("iris"))
+
+  expect_list(glrn2$best_valid_scores, types = "numeric")
+  expect_equal(names(glrn2$best_valid_scores), "classif.debug.acc")
+  # the ids are prefixed the same way as for the internal valid scores
+  expect_equal(names(glrn2$best_valid_scores), names(glrn2$internal_valid_scores))
+  # the debug learner's best score is at least as good as its final one
+  expect_true(glrn2$best_valid_scores[[1L]] >= glrn2$internal_valid_scores[[1L]])
+  # without validation, no scores are reported at all
+  glrn3 = as_learner(as_graph(lrn("classif.debug")))
+  glrn3$train(tsk("iris"))
+  expect_null(glrn3$best_valid_scores)
+  expect_null(glrn3$internal_valid_scores)
+})
+
+test_that("internal validation and internal tuning are extracted independently", {
+  # Regression test: the guards of the two extractors used to be swapped, so a Graph that
+  # supported only one of the two properties reported nothing for the property it did support.
+  # All learners currently shipping in the mlr3 ecosystem have both properties, which is why
+  # this needs learners that were stripped of one of them.
+
+  lrn_valid = lrn("classif.debug")
+  lrn_valid$properties = setdiff(lrn_valid$properties, "internal_tuning")
+  glrn_valid = as_learner(as_graph(lrn_valid))
+  expect_true("validation" %in% glrn_valid$properties)
+  expect_false("internal_tuning" %in% glrn_valid$properties)
+
+  set_validate(glrn_valid, 0.2)
+  glrn_valid$train(tsk("iris"))
+  expect_list(glrn_valid$internal_valid_scores, types = "numeric")
+  expect_equal(names(glrn_valid$internal_valid_scores), "classif.debug.acc")
+  # same values as the PipeOp reports, only the names are prefixed
+  expect_equal(
+    unname(glrn_valid$internal_valid_scores),
+    unname(glrn_valid$graph_model$pipeops[["classif.debug"]]$internal_valid_scores["acc"])
+  )
+
+  lrn_tune = lrn("classif.debug")
+  lrn_tune$properties = setdiff(lrn_tune$properties, "validation")
+  glrn_tune = as_learner(as_graph(lrn_tune))
+  expect_true("internal_tuning" %in% glrn_tune$properties)
+  expect_false("validation" %in% glrn_tune$properties)
+
+  glrn_tune$train(tsk("iris"))
+  # not NULL: the Graph does support internal tuning, it just has nothing tuned to report
+  expect_equal(glrn_tune$internal_tuned_values, named_list())
+})
+
 test_that("internal_tuned_values", {
   skip_if_not_installed("rpart")
   # no internal tuning support -> NULL
@@ -1155,7 +1209,7 @@ test_that("GraphLearner Importance", {
 
   expect_equal(g_importance$importance(), c(Petal.Length = 1, Petal.Width = 1, Sepal.Length = 1, Sepal.Width = 1))
 
-  g_bagging = as_learner(ppl("bagging", DebugWithImportance$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
+  g_bagging = as_learner(ppl("bag", DebugWithImportance$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
 
   expect_true("importance" %in% g_bagging$properties)
   g_bagging$train(tsk("iris"))
@@ -1236,7 +1290,7 @@ test_that("GraphLearner Selected Features", {
   g_featsel$impute_selected_features = TRUE
   expect_equal(g_featsel$selected_features(), tsk("iris")$feature_names[[1]])
 
-  g_bagging = as_learner(ppl("bagging", DebugWithSelectedFeatures$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
+  g_bagging = as_learner(ppl("bag", DebugWithSelectedFeatures$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
 
   expect_true("selected_features" %in% g_bagging$properties)
   g_bagging$train(tsk("iris"))
@@ -1334,7 +1388,7 @@ test_that("GraphLearner other properties", {
   expect_equal(g_properties$loglik(), 1)
   expect_equal(g_properties$oob_error(), 2)
 
-  g_bagging = as_learner(ppl("bagging", DebugWithProperties$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
+  g_bagging = as_learner(ppl("bag", DebugWithProperties$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
 
   expect_true(all(c("loglik", "oob_error") %in% g_bagging$properties))
   g_bagging$train(tsk("iris"))

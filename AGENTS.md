@@ -145,4 +145,3 @@ For mutable fields, the binding returns the private value when called without ar
 * When working on PipeOps, read `R/PipeOp.R` beforehand.
 * When working on PipeOps inheriting from `PipeOpTaskPreproc` or `PipeOpTaskPreprocSimple`, read `R/PipeOpTaskPreproc.R` beforehand.
 * When commiting changes via git, make sure to read @extra-rules/commit-messages.md and follow its instructions.
-

@@ -1,0 +1,483 @@
+"id","kind","line","expression","evaluations"
+1,"[",30,"x[x %in% y]",32422
+2,"[",31,"x[!x %in% y]",5989
+3,"[",32,"y[!y %in% x]",441
+4,"if",36,"if (!length(entries)) TRUE else entries",3596
+5,"if",42,"if (is.logical(entries)) return(return_entries(entries))",3596
+6,"[",48,"entries[order(lengths(entries))]",3594
+7,"[[",88,"entries[[unit_idx]]",9954
+8,"[[",90,"unit_registry[[nu]]",9954
+9,"if",91,"if (is.null(ur)) {     unit_registry[[nu]] = unit_idx     unit_domains[[nu]] = unit[[1L]]     is_unit[[unit_idx]] <<- TRUE } else {     prev_unit = unit_domains[[nu]]     unit_isct = prev_unit[prev_unit %in% unit[[1L]]]     if (!length(unit_isct))          return(TRUE)     entries[[ur]][[1L]] <<- (unit_domains[[nu]] = unit_isct)     eliminated[[unit_idx]] <<- TRUE }",9954
+10,"[[",92,"unit_registry[[nu]]",6464
+11,"[[",93,"unit_domains[[nu]]",6464
+12,"[[",93,"unit[[1L]]",6464
+13,"[[",95,"is_unit[[unit_idx]]",6464
+14,"[[",100,"unit_domains[[nu]]",3490
+15,"[",101,"prev_unit[prev_unit %in% unit[[1L]]]",3490
+16,"[[",101,"unit[[1L]]",3490
+17,"if",102,"if (!length(unit_isct)) return(TRUE)",3490
+18,"[[",103,"entries[[ur]][[1L]]",2271
+19,"[[",103,"entries[[ur]]",2271
+20,"[[",103,"unit_domains[[nu]]",2271
+21,"[[",104,"eliminated[[unit_idx]]",2271
+22,"if",115,"if (!is.null(is_not_subset_of) && length(unit_domains[[nu]]) == length(unit[[1L]])) {     unit_idx_meta = available_inverse[[unit_idx]]     use_inso = unit_idx_meta <= meta_idx_outer     if (use_inso) {         inso_column = is_not_subset_of[[unit_idx_meta]][, nu]     } }",8735
+23,"&&",115,"!is.null(is_not_subset_of) && length(unit_domains[[nu]]) == length(unit[[1L]])",9131
+24,"[[",115,"unit_domains[[nu]]",396
+25,"[[",115,"unit[[1L]]",396
+26,"[[",117,"available_inverse[[unit_idx]]",388
+27,"if",119,"if (use_inso) {     inso_column = is_not_subset_of[[unit_idx_meta]][, nu] }",388
+28,"[",121,"is_not_subset_of[[unit_idx_meta]][, nu]",335
+29,"[[",121,"is_not_subset_of[[unit_idx_meta]]",335
+30,"[[",124,"symbol_registry[[nu]]",8735
+31,"if",128,"if (eliminated[[s_clause_idx]]) next",1318
+32,"[[",128,"eliminated[[s_clause_idx]]",1318
+33,"if",129,"if (use_inso) {     s_clause_idx_meta = available_inverse[[s_clause_idx]]     if (s_clause_idx_meta <= meta_idx_outer && inso_column[[s_clause_idx_meta]] && !is_not_subset_of[[s_clause_idx_meta]][unit_idx_meta, nu])          next }",1244
+34,"[[",132,"available_inverse[[s_clause_idx]]",872
+35,"if",133,"if (s_clause_idx_meta <= meta_idx_outer && inso_column[[s_clause_idx_meta]] && !is_not_subset_of[[s_clause_idx_meta]][unit_idx_meta, nu]) next",872
+36,"&&",133,"s_clause_idx_meta <= meta_idx_outer && inso_column[[s_clause_idx_meta]] && !is_not_subset_of[[s_clause_idx_meta]][unit_idx_meta, nu]",1209
+37,"&&",133,"s_clause_idx_meta <= meta_idx_outer && inso_column[[s_clause_idx_meta]]",1394
+38,"[[",133,"inso_column[[s_clause_idx_meta]]",522
+39,"[",133,"is_not_subset_of[[s_clause_idx_meta]][unit_idx_meta, nu]",337
+40,"[[",133,"is_not_subset_of[[s_clause_idx_meta]]",337
+41,"[[",135,"unit_domains[[nu]]",1034
+42,"if",136,"if (identical(adr, TRUE)) return(TRUE)",1037
+43,"[[",147,"entries[[clause_idx]]",21627
+44,"if",149,"if (is.na(symbol_idx)) return(FALSE)",21627
+45,"[[",151,"clause[[symbol_idx]]",18563
+46,"[[",152,"clause[[symbol_idx]]",18563
+47,"[[",152,"clause[[symbol_idx]]",18563
+48,"if",153,"if (length(clause[[symbol_idx]]) == length(restringent)) {     eliminate_clause_update_sr(clause_idx)     return(NULL) }",18563
+49,"[[",153,"clause[[symbol_idx]]",18563
+50,"if",160,"if (length(clause[[symbol_idx]]) == clause_symbol_length_before) return(FALSE)",13103
+51,"[[",160,"clause[[symbol_idx]]",13103
+52,"if",161,"if (!length(clause[[symbol_idx]])) {     return(eliminate_symbol_from_clause(clause_idx, symbol)) }",10470
+53,"[[",161,"clause[[symbol_idx]]",10470
+54,"[[",167,"entries[[clause_idx]]",3330
+55,"if",170,"if (is.null(is_not_subset_of)) return(FALSE)",3330
+56,"[[",172,"available_inverse[[clause_idx]]",1017
+57,"if",176,"if (meta_idx > meta_idx_outer) return(FALSE)",1017
+58,"if",178,"if (!is_unit_propagation) {     idx_to_check = which(!is.na(not_subset_count[, meta_idx]) & available %in% symbol_registry[[symbol]])     for (other_meta_idx in idx_to_check) {         if (!is_not_subset_of[[other_meta_idx]][meta_idx, symbol] && !all(entries[[available[[other_meta_idx]]]][[symbol]] %in% entries[[clause_idx]][[symbol]])) {             is_not_subset_of[[other_meta_idx]][meta_idx, symbol] <<- TRUE             not_subset_count[other_meta_idx, meta_idx] <<- not_subset_count[other_meta_idx, meta_idx] + 1L         }     } }",919
+59,"[",182,"not_subset_count[, meta_idx]",868
+60,"[[",182,"symbol_registry[[symbol]]",868
+61,"if",185,"if (!is_not_subset_of[[other_meta_idx]][meta_idx, symbol] && !all(entries[[available[[other_meta_idx]]]][[symbol]] %in% entries[[clause_idx]][[symbol]])) {     is_not_subset_of[[other_meta_idx]][meta_idx, symbol] <<- TRUE     not_subset_count[other_meta_idx, meta_idx] <<- not_subset_count[other_meta_idx, meta_idx] + 1L }",1958
+62,"&&",185,"!is_not_subset_of[[other_meta_idx]][meta_idx, symbol] && !all(entries[[available[[other_meta_idx]]]][[symbol]] %in% entries[[clause_idx]][[symbol]])",2377
+63,"[",185,"is_not_subset_of[[other_meta_idx]][meta_idx, symbol]",1958
+64,"[[",185,"is_not_subset_of[[other_meta_idx]]",1958
+65,"[[",185,"entries[[available[[other_meta_idx]]]][[symbol]]",419
+66,"[[",185,"entries[[available[[other_meta_idx]]]]",419
+67,"[[",185,"available[[other_meta_idx]]",419
+68,"[[",185,"entries[[clause_idx]][[symbol]]",419
+69,"[[",185,"entries[[clause_idx]]",419
+70,"[",186,"is_not_subset_of[[other_meta_idx]][meta_idx, symbol]",171
+71,"[[",186,"is_not_subset_of[[other_meta_idx]]",171
+72,"[",188,"not_subset_count[other_meta_idx, meta_idx]",171
+73,"[",188,"not_subset_count[other_meta_idx, meta_idx]",171
+74,"[[",194,"is_not_subset_of[[meta_idx]]",919
+75,"[",205,"not_subset_count[meta_idx, ]",919
+76,"[",205,"is_not_subset_of[[meta_idx]][, is_not_subset_of_col]",919
+77,"[[",205,"is_not_subset_of[[meta_idx]]",919
+78,"[[",205,"symbol_registry[[symbol]]",919
+79,"[[",207,"available[[other_meta_idx]]",1902
+80,"if",210,"if (eliminated[[clause_idx_other]] || is_unit[[clause_idx_other]]) next",1902
+81,"||",210,"eliminated[[clause_idx_other]] || is_unit[[clause_idx_other]]",3802
+82,"[[",210,"eliminated[[clause_idx_other]]",1902
+83,"[[",210,"is_unit[[clause_idx_other]]",1900
+84,"[[",215,"entries[[available[[other_meta_idx]]]][[symbol]]",1900
+85,"[[",215,"entries[[available[[other_meta_idx]]]]",1900
+86,"[[",215,"available[[other_meta_idx]]",1900
+87,"if",216,"if (!all(entries[[clause_idx]][[symbol]] %in% other_clause_range)) next",1900
+88,"[[",216,"entries[[clause_idx]][[symbol]]",1900
+89,"[[",216,"entries[[clause_idx]]",1900
+90,"if",220,"if (!is_not_subset_of[[meta_idx]][other_meta_idx, is_not_subset_of_col]) next",1163
+91,"[",220,"is_not_subset_of[[meta_idx]][other_meta_idx, is_not_subset_of_col]",1163
+92,"[[",220,"is_not_subset_of[[meta_idx]]",1163
+93,"[",221,"is_not_subset_of[[meta_idx]][other_meta_idx, is_not_subset_of_col]",1163
+94,"[[",221,"is_not_subset_of[[meta_idx]]",1163
+95,"[",222,"not_subset_count[meta_idx, other_meta_idx]",1163
+96,"[",222,"not_subset_count[meta_idx, other_meta_idx]",1163
+97,"if",223,"if (rowsum > 1L + second_order_enabled) next",1163
+98,"if",225,"if (identical(ousr, TRUE)) return(TRUE)",570
+99,"if",226,"if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) return(NULL)",570
+100,"||",226,"eliminated[[clause_idx]] || is_unit[[clause_idx]]",1137
+101,"[[",226,"eliminated[[clause_idx]]",570
+102,"[[",226,"is_unit[[clause_idx]]",567
+103,"if",231,"if (second_order_enabled) on_update_range(meta_idx, symbol) else FALSE",916
+104,"[[",237,"entries[[clause_idx]]",7140
+105,"[[",238,"clause[[symbol]]",7140
+106,"if",239,"if (!length(clause)) return(TRUE)",7140
+107,"[[",241,"symbol_registry[[symbol]]",7140
+108,"[[",242,"symbol_registry[[symbol]]",7140
+109,"[",242,"sr[sr != clause_idx]",7140
+110,"[[",244,"entries[[clause_idx]]",7140
+111,"if",245,"if (length(clause) == 1) {     sr = symbol_registry[[names(clause)]]     symbol_registry[[names(clause)]] = sr[sr != clause_idx]     if (register_unit(clause_idx))          return(TRUE)     return(NULL) }",7140
+112,"[[",249,"symbol_registry[[names(clause)]]",2348
+113,"[[",250,"symbol_registry[[names(clause)]]",2348
+114,"[",250,"sr[sr != clause_idx]",2348
+115,"if",251,"if (register_unit(clause_idx)) return(TRUE)",2348
+116,"if",255,"if (is.null(is_not_subset_of)) return(FALSE)",4792
+117,"[[",257,"available_inverse[[clause_idx]]",1398
+118,"if",261,"if (meta_idx > meta_idx_outer) return(FALSE)",1398
+119,"[[",263,"is_not_subset_of[[meta_idx]]",1325
+120,"[",264,"is_not_subset_of[[meta_idx]][, is_not_subset_of_col]",1325
+121,"[[",264,"is_not_subset_of[[meta_idx]]",1325
+122,"[",264,"not_subset_count[meta_idx, ]",1325
+123,"[",265,"is_not_subset_of[[meta_idx]][, is_not_subset_of_col]",1325
+124,"[[",265,"is_not_subset_of[[meta_idx]]",1325
+125,"[",266,"not_subset_count[meta_idx, rows_changed]",1325
+126,"[",266,"not_subset_count[meta_idx, rows_changed]",1325
+127,"[",267,"available_inverse[sr]",1325
+128,"[",269,"others_ref_this_symbol[!is.na(not_subset_count[others_ref_this_symbol, meta_idx])]",1325
+129,"[",269,"not_subset_count[others_ref_this_symbol, meta_idx]",1325
+130,"if",270,"if (!is_not_subset_of[[meta_idx_other]][meta_idx, symbol]) {     is_not_subset_of[[meta_idx_other]][meta_idx, symbol] <<- TRUE     not_subset_count[meta_idx_other, meta_idx] <<- not_subset_count[meta_idx_other, meta_idx] + 1L }",2404
+131,"[",270,"is_not_subset_of[[meta_idx_other]][meta_idx, symbol]",2404
+132,"[[",270,"is_not_subset_of[[meta_idx_other]]",2404
+133,"[",271,"is_not_subset_of[[meta_idx_other]][meta_idx, symbol]",207
+134,"[[",271,"is_not_subset_of[[meta_idx_other]]",207
+135,"[",272,"not_subset_count[meta_idx_other, meta_idx]",207
+136,"[",272,"not_subset_count[meta_idx_other, meta_idx]",207
+137,"[",276,"available[rows_changed]",1325
+138,"[",277,"rows_changed[!eliminated[rows_changed_ids] & !is_unit[rows_changed_ids] & rows_changed <= meta_idx_outer]",1325
+139,"[",277,"eliminated[rows_changed_ids]",1325
+140,"[",277,"is_unit[rows_changed_ids]",1325
+141,"[[",281,"available[[meta_idx_other]]",3275
+142,"if",283,"if (eliminated[[clause_idx_other]] || is_unit[[clause_idx_other]]) next",3275
+143,"||",283,"eliminated[[clause_idx_other]] || is_unit[[clause_idx_other]]",6547
+144,"[[",283,"eliminated[[clause_idx_other]]",3275
+145,"[[",283,"is_unit[[clause_idx_other]]",3272
+146,"if",284,"if (not_subset_count[meta_idx, meta_idx_other] > 1L + second_order_enabled) next",3270
+147,"[",284,"not_subset_count[meta_idx, meta_idx_other]",3270
+148,"if",286,"if (identical(ousr, TRUE)) return(TRUE)",984
+149,"if",288,"if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) return(NULL)",984
+150,"||",288,"eliminated[[clause_idx]] || is_unit[[clause_idx]]",1964
+151,"[[",288,"eliminated[[clause_idx]]",984
+152,"[[",288,"is_unit[[clause_idx]]",980
+153,"[",298,"not_subset_count[meta_idx, meta_idx_other]",16630
+154,"if",299,"if (rowsum > 1L + second_order_enabled) return(FALSE)",16630
+155,"if",300,"if (rowsum == 2L) {     hs2oo = handle_sse_2nd_order_twoend(meta_idx, meta_idx_other, NULL)     if (identical(hs2oo, TRUE))          return(TRUE)     clause_other = available[[meta_idx_other]]     if (eliminated[[clause_other]] || is_unit[[clause_other]])          return(NULL)     return(FALSE) }",16572
+156,"if",304,"if (identical(hs2oo, TRUE)) return(TRUE)",9678
+157,"[[",305,"available[[meta_idx_other]]",9678
+158,"if",306,"if (eliminated[[clause_other]] || is_unit[[clause_other]]) return(NULL)",9678
+159,"||",306,"eliminated[[clause_other]] || is_unit[[clause_other]]",19345
+160,"[[",306,"eliminated[[clause_other]]",9678
+161,"[[",306,"is_unit[[clause_other]]",9667
+162,"if",309,"if (rowsum == 0) {     eliminate_clause_update_sr(available[[meta_idx_other]])     return(NULL) }",6894
+163,"[[",310,"available[[meta_idx_other]]",786
+164,"[",314,"colnames(is_not_subset_of[[meta_idx]])[is_not_subset_of[[meta_idx]][meta_idx_other, ]]",6108
+165,"[[",314,"is_not_subset_of[[meta_idx]]",6108
+166,"[",314,"is_not_subset_of[[meta_idx]][meta_idx_other, ]",6108
+167,"[[",314,"is_not_subset_of[[meta_idx]]",6108
+168,"if",317,"if (!second_order_only) {     adr = apply_domain_restriction(available[[meta_idx_other]], symbol_to_restrict, entries[[available[[meta_idx]]]][[symbol_to_restrict]], FALSE)     if (is.null(adr))          return(NULL)     if (adr)          return(TRUE)     if (!second_order_enabled)          return(FALSE) }",6108
+169,"[[",322,"available[[meta_idx_other]]",5993
+170,"[[",322,"entries[[available[[meta_idx]]]][[symbol_to_restrict]]",2932
+171,"[[",322,"entries[[available[[meta_idx]]]]",2932
+172,"[[",322,"available[[meta_idx]]",2932
+173,"if",323,"if (is.null(adr)) return(NULL)",5993
+174,"if",324,"if (adr) return(TRUE)",5751
+175,"if",325,"if (!second_order_enabled) return(FALSE)",5749
+176,"if",327,"if (!second_order_enabled_matrix[meta_idx, meta_idx_other]) return(FALSE)",418
+177,"[",327,"second_order_enabled_matrix[meta_idx, meta_idx_other]",418
+178,"[[",328,"available[[meta_idx]]",278
+179,"if",329,"if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) return(FALSE)",278
+180,"||",329,"eliminated[[clause_idx]] || is_unit[[clause_idx]]",556
+181,"[[",329,"eliminated[[clause_idx]]",278
+182,"[[",329,"is_unit[[clause_idx]]",278
+183,"if",331,"if (identical(hs2oo, TRUE)) return(TRUE)",278
+184,"[[",332,"available[[meta_idx_other]]",278
+185,"if",333,"if (eliminated[[clause_other]] || is_unit[[clause_other]]) return(NULL)",278
+186,"||",333,"eliminated[[clause_other]] || is_unit[[clause_other]]",556
+187,"[[",333,"eliminated[[clause_other]]",278
+188,"[[",333,"is_unit[[clause_other]]",278
+189,"[[",348,"is_not_subset_of[[meta_idx]]",219
+190,"[",349,"is_not_subset_of[[meta_idx]][, inso_symbol_col]",219
+191,"[[",349,"is_not_subset_of[[meta_idx]]",219
+192,"[",349,"eliminated[available]",219
+193,"[",349,"is_unit[available]",219
+194,"[",349,"not_subset_count[meta_idx, ]",219
+195,"[",351,"potential_targets[not_subset_count[meta_idx, potential_targets] == 1L]",219
+196,"[",351,"not_subset_count[meta_idx, potential_targets]",219
+197,"if",354,"if (!second_order_enabled_matrix[meta_idx, meta_idx_target]) next",77
+198,"[",354,"second_order_enabled_matrix[meta_idx, meta_idx_target]",77
+199,"if",356,"if (is.null(hs2oo)) return(NULL)",75
+200,"if",357,"if (hs2oo) return(TRUE)",72
+201,"[",359,"potential_targets[not_subset_count[meta_idx, potential_targets] == 2L]",216
+202,"[",359,"not_subset_count[meta_idx, potential_targets]",216
+203,"if",361,"if (!second_order_enabled_matrix[meta_idx, meta_idx_target]) next",397
+204,"[",361,"second_order_enabled_matrix[meta_idx, meta_idx_target]",397
+205,"if",363,"if (is.null(hs2oo)) return(NULL)",190
+206,"if",364,"if (hs2oo) return(TRUE)",190
+207,"[[",374,"is_not_subset_of[[meta_idx]]",353
+208,"[[",375,"available[[meta_idx]]",353
+209,"[[",376,"symbol_registry[[symbol]]",353
+210,"[",377,"available_inverse[symbol_clauses]",353
+211,"[[",379,"available[[meta_idx_target]]",353
+212,"if",381,"if (eliminated[[clause_idx_target]] || is_unit[[clause_idx_target]]) return(FALSE)",353
+213,"||",381,"eliminated[[clause_idx_target]] || is_unit[[clause_idx_target]]",706
+214,"[[",381,"eliminated[[clause_idx_target]]",353
+215,"[[",381,"is_unit[[clause_idx_target]]",353
+216,"[",382,"symbol_clauses_meta[not_subset_count[symbol_clauses_meta, meta_idx_target] == 2L]",353
+217,"[",382,"not_subset_count[symbol_clauses_meta, meta_idx_target]",353
+218,"[",383,"twoends[!is.na(twoends)]",353
+219,"if",386,"if (not_subset_count[meta_idx, meta_idx_target] != 1L || !is_not_subset_of[[meta_idx]][meta_idx_target, inso_symbol_col]) break",590
+220,"||",386,"not_subset_count[meta_idx, meta_idx_target] != 1L || !is_not_subset_of[[meta_idx]][meta_idx_target, inso_symbol_col]",1180
+221,"[",386,"not_subset_count[meta_idx, meta_idx_target]",590
+222,"[",386,"is_not_subset_of[[meta_idx]][meta_idx_target, inso_symbol_col]",590
+223,"[[",386,"is_not_subset_of[[meta_idx]]",590
+224,"[[",387,"available[[meta_idx_twoend]]",590
+225,"if",390,"if (eliminated[[clause_idx_twoend]] || is_unit[[clause_idx_twoend]] || not_subset_count[meta_idx_twoend, meta_idx_target] != 2L) {     next }",590
+226,"||",390,"eliminated[[clause_idx_twoend]] || is_unit[[clause_idx_twoend]] || not_subset_count[meta_idx_twoend, meta_idx_target] != 2L",1180
+227,"||",390,"eliminated[[clause_idx_twoend]] || is_unit[[clause_idx_twoend]]",1180
+228,"[[",390,"eliminated[[clause_idx_twoend]]",590
+229,"[[",390,"is_unit[[clause_idx_twoend]]",590
+230,"[",391,"not_subset_count[meta_idx_twoend, meta_idx_target]",590
+231,"[",394,"colnames(is_not_subset_of[[meta_idx_twoend]])[is_not_subset_of[[meta_idx_twoend]][meta_idx_target, ]]",585
+232,"[[",394,"is_not_subset_of[[meta_idx_twoend]]",585
+233,"[",394,"is_not_subset_of[[meta_idx_twoend]][meta_idx_target, ]",585
+234,"[[",394,"is_not_subset_of[[meta_idx_twoend]]",585
+235,"[",395,"symbol_target[symbol_target != symbol]",585
+236,"if",396,"if (length(symbol_target) != 1L) next",585
+237,"if",397,"if (!symbol_target %in% names(entries[[clause_idx_target]])) next",576
+238,"[[",397,"entries[[clause_idx_target]]",576
+239,"if",400,"if (identical(ts2o, TRUE)) return(TRUE)",288
+240,"if",401,"if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) return(NULL)",288
+241,"||",401,"eliminated[[clause_idx]] || is_unit[[clause_idx]]",571
+242,"[[",401,"eliminated[[clause_idx]]",288
+243,"[[",401,"is_unit[[clause_idx]]",283
+244,"if",402,"if (is.null(ts2o)) return(FALSE)",283
+245,"[[",408,"available[[meta_idx]]",9868
+246,"[[",410,"available[[meta_idx_target]]",9868
+247,"if",412,"if (eliminated[[clause_idx_target]] || is_unit[[clause_idx_target]] || not_subset_count[meta_idx, meta_idx_target] != 2) return(FALSE)",9868
+248,"||",412,"eliminated[[clause_idx_target]] || is_unit[[clause_idx_target]] || not_subset_count[meta_idx, meta_idx_target] != 2",19736
+249,"||",412,"eliminated[[clause_idx_target]] || is_unit[[clause_idx_target]]",19736
+250,"[[",412,"eliminated[[clause_idx_target]]",9868
+251,"[[",412,"is_unit[[clause_idx_target]]",9868
+252,"[",412,"not_subset_count[meta_idx, meta_idx_target]",9868
+253,"[",413,"is_not_subset_of[[meta_idx]][meta_idx_target, ]",9868
+254,"[[",413,"is_not_subset_of[[meta_idx]]",9868
+255,"[",414,"colnames(is_not_subset_of[[meta_idx]])[inso_symbols_cols]",9868
+256,"[[",414,"is_not_subset_of[[meta_idx]]",9868
+257,"if",415,"if (!is.null(symbol) && !symbol %in% symbols_twoend) return(FALSE)",9868
+258,"&&",415,"!is.null(symbol) && !symbol %in% symbols_twoend",10058
+259,"[[",417,"symbols_twoend[[symbol_inner_idx]]",19716
+260,"[[",418,"symbols_twoend[[3 - symbol_inner_idx]]",19716
+261,"if",420,"if (!symbol_other %in% names(entries[[clause_idx_target]])) next",19716
+262,"[[",420,"entries[[clause_idx_target]]",19716
+263,"[",421,"available_inverse[symbol_registry[[symbol_inner]]]",9926
+264,"[[",421,"symbol_registry[[symbol_inner]]",9926
+265,"[",424,"symbol_inner_clauses_meta[not_subset_count[symbol_inner_clauses_meta, meta_idx_target] <= 2L]",9926
+266,"[",424,"not_subset_count[symbol_inner_clauses_meta, meta_idx_target]",9926
+267,"[",425,"oneends[!is.na(oneends)]",9926
+268,"if",427,"if (not_subset_count[meta_idx, meta_idx_target] != 2 || !all(is_not_subset_of[[meta_idx]][meta_idx_target, inso_symbols_cols])) break",24349
+269,"||",427,"not_subset_count[meta_idx, meta_idx_target] != 2 || !all(is_not_subset_of[[meta_idx]][meta_idx_target, inso_symbols_cols])",48698
+270,"[",427,"not_subset_count[meta_idx, meta_idx_target]",24349
+271,"[",427,"is_not_subset_of[[meta_idx]][meta_idx_target, inso_symbols_cols]",24349
+272,"[[",427,"is_not_subset_of[[meta_idx]]",24349
+273,"[[",430,"available[[meta_idx_oneend]]",24349
+274,"if",431,"if (eliminated[[clause_idx_oneend]] || is_unit[[clause_idx_oneend]]) next",24349
+275,"||",431,"eliminated[[clause_idx_oneend]] || is_unit[[clause_idx_oneend]]",48697
+276,"[[",431,"eliminated[[clause_idx_oneend]]",24349
+277,"[[",431,"is_unit[[clause_idx_oneend]]",24348
+278,"[[",436,"is_not_subset_of[[meta_idx_oneend]]",24348
+279,"if",437,"if (not_subset_count[meta_idx_oneend, meta_idx_target] != sum(is_not_subset_of[[meta_idx_oneend]][meta_idx_target, symbols_twoend_idx])) {     next }",24348
+280,"[",437,"not_subset_count[meta_idx_oneend, meta_idx_target]",24348
+281,"[",437,"is_not_subset_of[[meta_idx_oneend]][meta_idx_target, symbols_twoend_idx]",24348
+282,"[[",437,"is_not_subset_of[[meta_idx_oneend]]",24348
+283,"if",440,"if (!symbol_other %in% names(entries[[clause_idx_target]])) next",14203
+284,"[[",440,"entries[[clause_idx_target]]",14203
+285,"if",442,"if (identical(ts2o, TRUE)) return(TRUE)",14096
+286,"if",443,"if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) return(NULL)",14096
+287,"||",443,"eliminated[[clause_idx]] || is_unit[[clause_idx]]",28185
+288,"[[",443,"eliminated[[clause_idx]]",14096
+289,"[[",443,"is_unit[[clause_idx]]",14089
+290,"if",444,"if (is.null(ts2o)) return(FALSE)",14086
+291,"if",453,"if (!all(is_not_subset_of[[meta_idx_target]][c(meta_idx_oneend, meta_idx_twoends), symbol_target])) return(FALSE)",14384
+292,"[",453,"is_not_subset_of[[meta_idx_target]][c(meta_idx_oneend, meta_idx_twoends), symbol_target]",14384
+293,"[[",453,"is_not_subset_of[[meta_idx_target]]",14384
+294,"[[",454,"available[[meta_idx_oneend]]",9931
+295,"[[",455,"available[[meta_idx_twoends]]",9931
+296,"[[",456,"available[[meta_idx_target]]",9931
+297,"[[",458,"entries[[idx_oneend]]",9931
+298,"[[",459,"entries[[idx_twoends]]",9931
+299,"[[",462,"clause_oneend[[symbol_intersect]]",9931
+300,"if",463,"if (any(clause_oneend_symbol_intersect %in% clause_twoends[[symbol_intersect]] & !clause_oneend_symbol_intersect %in% entries[[idx_target]][[symbol_intersect]])) {     return(FALSE) }",9931
+301,"[[",463,"clause_twoends[[symbol_intersect]]",9931
+302,"[[",464,"entries[[idx_target]][[symbol_intersect]]",9931
+303,"[[",464,"entries[[idx_target]]",9931
+304,"[[",467,"clause_oneend[[symbol_target]]",441
+305,"[[",467,"clause_twoends[[symbol_target]]",441
+306,"if",473,"if (is_unit[[clause_idx]]) stop(""Bug in the code, this should never happen."")",6418
+307,"[[",473,"is_unit[[clause_idx]]",6418
+308,"[[",474,"eliminated[[clause_idx]]",6418
+309,"[[",475,"entries[[clause_idx]]",6418
+310,"[[",476,"symbol_registry[[s]]",20865
+311,"[[",477,"symbol_registry[[s]]",20865
+312,"[",477,"sr[sr != clause_idx]",20865
+313,"if",487,"if (register_unit(unit_idx)) return(return_entries(FALSE))",7606
+314,"if",491,"if (length(unit_queue) == length(entries)) return(return_entries(entries[!eliminated]))",2699
+315,"[",491,"entries[!eliminated]",118
+316,"[[",502,"entries[[clause_idx]]",13859
+317,"[[",506,"unit_domains[[symbol]]",14156
+318,"if",507,"if (is.null(adr)) break",14156
+319,"if",508,"if (adr) return(return_entries(FALSE))",7554
+320,"if",511,"if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) next",13537
+321,"||",511,"eliminated[[clause_idx]] || is_unit[[clause_idx]]",21360
+322,"[[",511,"eliminated[[clause_idx]]",13537
+323,"[[",511,"is_unit[[clause_idx]]",7823
+324,"[[",515,"entries[[clause_idx]]",6935
+325,"[[",516,"symbol_registry[[symbol]]",21301
+326,"if",517,"if (is.null(sr_entry)) {     symbol_registry[[symbol]] = clause_idx } else {     symbol_registry[[symbol]][[length(sr_entry) + 1L]] = clause_idx }",21301
+327,"[[",518,"symbol_registry[[symbol]]",6345
+328,"[[",520,"symbol_registry[[symbol]][[length(sr_entry) + 1L]]",14956
+329,"[[",520,"symbol_registry[[symbol]]",14956
+330,"[[",552,"available[[meta_idx_outer]]",6700
+331,"if",553,"if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) next",6700
+332,"||",553,"eliminated[[clause_idx]] || is_unit[[clause_idx]]",13287
+333,"[[",553,"eliminated[[clause_idx]]",6700
+334,"[[",553,"is_unit[[clause_idx]]",6587
+335,"[[",554,"entries[[clause_idx]]",6552
+336,"[[",561,"is_not_subset_of[[meta_idx_outer]]",6552
+337,"[",569,"is_not_subset_of[[meta_idx_outer]][meta_idx_outer, ]",6552
+338,"[[",569,"is_not_subset_of[[meta_idx_outer]]",6552
+339,"[[",573,"entries[[clause_idx]]",15579
+340,"[[",574,"available[[meta_idx_inner]]",15579
+341,"if",575,"if (eliminated[[clause_idx_inner]] || is_unit[[clause_idx_inner]]) next",15579
+342,"||",575,"eliminated[[clause_idx_inner]] || is_unit[[clause_idx_inner]]",29958
+343,"[[",575,"eliminated[[clause_idx_inner]]",15579
+344,"[[",575,"is_unit[[clause_idx_inner]]",14379
+345,"[[",576,"entries[[clause_idx_inner]]",14176
+346,"[[",588,"sci_sc_map[[symbol_idx_inner]]",28008
+347,"[[",589,"sci[[symbol_idx_inner]]",28008
+348,"[[",591,"clause_inner[[symbol_idx_inner]]",28008
+349,"[[",592,"clause[[symbol_idx_outer]]",28008
+350,"||",595,"(inner_subset_of_outer && length(range_outer) == length(range_inner)) || all(range_outer %in% range_inner)",50457
+351,"&&",595,"inner_subset_of_outer && length(range_outer) == length(range_inner)",37488
+352,"if",596,"if (inner_subset_of_outer) {     is_not_subset_of[[meta_idx_inner]][meta_idx_outer, symbol] = FALSE }",28008
+353,"[",600,"is_not_subset_of[[meta_idx_inner]][meta_idx_outer, symbol]",9480
+354,"[[",600,"is_not_subset_of[[meta_idx_inner]]",9480
+355,"if",602,"if (outer_subset_of_inner) {     is_not_subset_of[[meta_idx_outer]][meta_idx_inner, symbol] = FALSE }",28008
+356,"[",603,"is_not_subset_of[[meta_idx_outer]][meta_idx_inner, symbol]",9398
+357,"[[",603,"is_not_subset_of[[meta_idx_outer]]",9398
+358,"[",608,"not_subset_count[meta_idx_outer, meta_idx_inner]",14176
+359,"[",608,"is_not_subset_of[[meta_idx_outer]][meta_idx_inner, ]",14176
+360,"[[",608,"is_not_subset_of[[meta_idx_outer]]",14176
+361,"[",609,"is_not_subset_of[[meta_idx_inner]][meta_idx_outer, ]",14176
+362,"[[",609,"is_not_subset_of[[meta_idx_inner]]",14176
+363,"[",610,"not_subset_count[meta_idx_inner, meta_idx_outer]",14176
+364,"if",611,"if (rowsum <= 1) {     ousr = on_updated_subset_relations(meta_idx_inner, meta_idx_outer, FALSE)     if (is.null(ousr))          break     if (ousr)          return(return_entries(FALSE))     if (eliminated[[clause_idx_inner]] || is_unit[[clause_idx_inner]])          next }",14176
+365,"if",613,"if (is.null(ousr)) break",4343
+366,"if",614,"if (ousr) return(return_entries(FALSE))",3557
+367,"if",615,"if (eliminated[[clause_idx_inner]] || is_unit[[clause_idx_inner]]) next",3556
+368,"||",615,"eliminated[[clause_idx_inner]] || is_unit[[clause_idx_inner]]",7049
+369,"[[",615,"eliminated[[clause_idx_inner]]",3556
+370,"[[",615,"is_unit[[clause_idx_inner]]",3493
+371,"[",618,"not_subset_count[meta_idx_outer, meta_idx_inner]",13326
+372,"if",619,"if (rowsum <= 1) {     ousr = on_updated_subset_relations(meta_idx_outer, meta_idx_inner, FALSE)     if (identical(ousr, TRUE))          return(return_entries(FALSE))     if (eliminated[[clause_idx]] || is_unit[[clause_idx]])          break     if (is.null(ousr))          next }",13326
+373,"if",621,"if (identical(ousr, TRUE)) return(return_entries(FALSE))",1362
+374,"if",622,"if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) break",1361
+375,"||",622,"eliminated[[clause_idx]] || is_unit[[clause_idx]]",2716
+376,"[[",622,"eliminated[[clause_idx]]",1361
+377,"[[",622,"is_unit[[clause_idx]]",1355
+378,"if",623,"if (is.null(ousr)) next",1355
+379,"[",634,"eliminated[available]",2257
+380,"[",634,"is_unit[available]",2257
+381,"[",635,"second_order_enabled_matrix[meta_disabled, ]",2257
+382,"[",636,"second_order_enabled_matrix[, meta_disabled]",2257
+383,"[",642,"sse_to_trigger[sse_idx, 1L]",9867
+384,"[",643,"sse_to_trigger[sse_idx, 2L]",9867
+385,"if",644,"if (eliminated[[available[[meta_idx]]]] || is_unit[[available[[meta_idx]]]] || eliminated[[available[[meta_idx_other]]]] || is_unit[[available[[meta_idx_other]]]]) next",9867
+386,"||",644,"eliminated[[available[[meta_idx]]]] || is_unit[[available[[meta_idx]]]] || eliminated[[available[[meta_idx_other]]]] || is_unit[[available[[meta_idx_other]]]]",19283
+387,"||",644,"eliminated[[available[[meta_idx]]]] || is_unit[[available[[meta_idx]]]] || eliminated[[available[[meta_idx_other]]]]",19436
+388,"||",644,"eliminated[[available[[meta_idx]]]] || is_unit[[available[[meta_idx]]]]",19558
+389,"[[",644,"eliminated[[available[[meta_idx]]]]",9867
+390,"[[",644,"available[[meta_idx]]",9867
+391,"[[",644,"is_unit[[available[[meta_idx]]]]",9691
+392,"[[",644,"available[[meta_idx]]",9691
+393,"[[",644,"eliminated[[available[[meta_idx_other]]]]",9569
+394,"[[",644,"available[[meta_idx_other]]",9569
+395,"[[",644,"is_unit[[available[[meta_idx_other]]]]",9416
+396,"[[",644,"available[[meta_idx_other]]",9416
+397,"[",645,"second_order_enabled_matrix[meta_idx, meta_idx_other]",9371
+398,"if",646,"if (identical(on_updated_subset_relations(meta_idx, meta_idx_other, TRUE), TRUE)) return(return_entries(FALSE))",9371
+399,"[",657,"which(!eliminated)[order(lengths(entries[!eliminated]), decreasing = TRUE)]",2257
+400,"[",657,"entries[!eliminated]",2257
+401,"[",658,"remaining_entries[seq_len(length(remaining_entries) - length(unit_domains))]",2257
+402,"if",659,"if (length(unit_domains)) remaining_entries[seq.int(length(remaining_entries) - length(unit_domains) + 1L, length(remaining_entries))]",2257
+403,"[",659,"remaining_entries[seq.int(length(remaining_entries) - length(unit_domains) + 1L, length(remaining_entries))]",1785
+404,"[[",663,"entries[[clause_idx]]",5234
+405,"[[",666,"available_inverse[[clause_idx]]",5234
+406,"[",667,"remaining_nonunit_entries[remaining_nonunit_entries != clause_idx]",5234
+407,"[",673,"not_subset_count[available_inverse[remaining_other_entries], meta_idx]",5234
+408,"[",673,"available_inverse[remaining_other_entries]",5234
+409,"if",687,"if (is.na(hla_clause_idx)) break",9973
+410,"[[",688,"remaining_other_entries[[hla_clause_idx]]",4911
+411,"[[",689,"available_inverse[[clause_idx_other]]",4911
+412,"[",690,"colnames(is_not_subset_of[[meta_idx_other]])[is_not_subset_of[[meta_idx_other]][meta_idx, ]]",4911
+413,"[[",690,"is_not_subset_of[[meta_idx_other]]",4911
+414,"[",690,"is_not_subset_of[[meta_idx_other]][meta_idx, ]",4911
+415,"[[",690,"is_not_subset_of[[meta_idx_other]]",4911
+416,"[[",691,"clause[[symbol]]",4911
+417,"[[",693,"universe[[symbol]]",4911
+418,"[[",693,"entries[[clause_idx_other]][[symbol]]",4911
+419,"[[",693,"entries[[clause_idx_other]]",4911
+420,"if",694,"if (length(range_new) == length(universe[[symbol]])) {     eliminate_clause_update_sr(clause_idx)     remaining_nonunit_entries = remaining_other_entries     break }",4911
+421,"[[",694,"universe[[symbol]]",4911
+422,"[",705,"available_inverse[symbol_registry[[symbol]]]",4911
+423,"[[",705,"symbol_registry[[symbol]]",4911
+424,"if",707,"if (is_not_subset_of[[updating_clause_meta_idx]][meta_idx, symbol] && all(entries[[available[[updating_clause_meta_idx]]]][[symbol]] %in% range_new)) {     is_not_subset_of[[updating_clause_meta_idx]][meta_idx, symbol] = FALSE     roe_idx = match(available[[updating_clause_meta_idx]], remaining_other_entries)     not_subset_count_current[[roe_idx]] = not_subset_count_current[[roe_idx]] - 1L     if (not_subset_count_current[[roe_idx]] == 0L) {         eliminate_clause_update_sr(clause_idx)         remaining_nonunit_entries = remaining_other_entries         break     } }",19428
+425,"&&",707,"is_not_subset_of[[updating_clause_meta_idx]][meta_idx, symbol] && all(entries[[available[[updating_clause_meta_idx]]]][[symbol]] %in% range_new)",35763
+426,"[",707,"is_not_subset_of[[updating_clause_meta_idx]][meta_idx, symbol]",19428
+427,"[[",707,"is_not_subset_of[[updating_clause_meta_idx]]",19428
+428,"[[",708,"entries[[available[[updating_clause_meta_idx]]]][[symbol]]",16335
+429,"[[",708,"entries[[available[[updating_clause_meta_idx]]]]",16335
+430,"[[",708,"available[[updating_clause_meta_idx]]",16335
+431,"[",709,"is_not_subset_of[[updating_clause_meta_idx]][meta_idx, symbol]",3254
+432,"[[",709,"is_not_subset_of[[updating_clause_meta_idx]]",3254
+433,"[[",710,"available[[updating_clause_meta_idx]]",3254
+434,"[[",711,"not_subset_count_current[[roe_idx]]",3254
+435,"[[",711,"not_subset_count_current[[roe_idx]]",3254
+436,"if",712,"if (not_subset_count_current[[roe_idx]] == 0L) {     eliminate_clause_update_sr(clause_idx)     remaining_nonunit_entries = remaining_other_entries     break }",3254
+437,"[[",712,"not_subset_count_current[[roe_idx]]",3254
+438,"if",720,"if (eliminated[[clause_idx]]) break",4911
+439,"[[",720,"eliminated[[clause_idx]]",4911
+440,"[[",721,"was_used[[hla_clause_idx]]",4739
+441,"[[",722,"clause[[symbol]]",4739
+442,"[[",732,"entries[[clause_idx]]",3803
+443,"[",738,"entries[remaining_nonunit_entries]",3803
+444,"[[",738,"symbol_registry[[unitsymbol]]",3803
+445,"if",746,"if (is.na(hla_clause_idx)) break",4823
+446,"[[",747,"remaining_nonunit_entries[[hla_clause_idx]]",1078
+447,"[[",748,"entries[[clause_idx_other]]",1078
+448,"if",749,"if (is.null(is_not_subset_of_unit[[hla_clause_idx]])) {     is_not_subset_of_unit[[hla_clause_idx]] = structure(names(clause_other) != unitsymbol, names = names(clause_other)) }",1078
+449,"[[",749,"is_not_subset_of_unit[[hla_clause_idx]]",1078
+450,"[[",750,"is_not_subset_of_unit[[hla_clause_idx]]",756
+451,"[[",752,"is_not_subset_of_unit[[hla_clause_idx]]",1078
+452,"[",753,"names(is_not_subset_entry)[is_not_subset_entry]",1078
+453,"[[",754,"clause[[symbol]]",1078
+454,"[[",755,"universe[[symbol]]",1078
+455,"[[",755,"clause_other[[symbol]]",1078
+456,"if",756,"if (length(range_new) == length(universe[[symbol]])) {     eliminated[[clause_idx]] = TRUE     break }",1078
+457,"[[",756,"universe[[symbol]]",1078
+458,"[[",759,"eliminated[[clause_idx]]",0
+459,"[[",763,"symbol_registry[[symbol]]",1078
+460,"[[",764,"roe_inverse[[updating_clause_idx]]",2868
+461,"if",765,"if (is.null(is_not_subset_of_unit[[updating_hla_clause_idx]])) {     updating_clause = entries[[updating_clause_idx]]     is_not_subset_of_unit[[updating_hla_clause_idx]] = structure(names(updating_clause) != unitsymbol, names = names(updating_clause)) }",2868
+462,"[[",765,"is_not_subset_of_unit[[updating_hla_clause_idx]]",2868
+463,"[[",768,"entries[[updating_clause_idx]]",1190
+464,"[[",769,"is_not_subset_of_unit[[updating_hla_clause_idx]]",1190
+465,"if",771,"if (is_not_subset_of_unit[[updating_hla_clause_idx]][[symbol]] && all(entries[[updating_clause_idx]][[symbol]] %in% range_new)) {     is_not_subset_of_unit[[updating_hla_clause_idx]][[symbol]] = FALSE     not_subset_count[[updating_hla_clause_idx]] = not_subset_count[[updating_hla_clause_idx]] - 1L     if (not_subset_count[[updating_hla_clause_idx]] == 0) {         eliminated[[clause_idx]] = TRUE         break     } }",2868
+466,"&&",771,"is_not_subset_of_unit[[updating_hla_clause_idx]][[symbol]] && all(entries[[updating_clause_idx]][[symbol]] %in% range_new)",5666
+467,"[[",771,"is_not_subset_of_unit[[updating_hla_clause_idx]][[symbol]]",2868
+468,"[[",771,"is_not_subset_of_unit[[updating_hla_clause_idx]]",2868
+469,"[[",772,"entries[[updating_clause_idx]][[symbol]]",2798
+470,"[[",772,"entries[[updating_clause_idx]]",2798
+471,"[[",773,"is_not_subset_of_unit[[updating_hla_clause_idx]][[symbol]]",514
+472,"[[",773,"is_not_subset_of_unit[[updating_hla_clause_idx]]",514
+473,"[[",774,"not_subset_count[[updating_hla_clause_idx]]",514
+474,"[[",774,"not_subset_count[[updating_hla_clause_idx]]",514
+475,"if",775,"if (not_subset_count[[updating_hla_clause_idx]] == 0) {     eliminated[[clause_idx]] = TRUE     break }",514
+476,"[[",775,"not_subset_count[[updating_hla_clause_idx]]",514
+477,"[[",777,"eliminated[[clause_idx]]",58
+478,"if",782,"if (eliminated[[clause_idx]]) break",1078
+479,"[[",782,"eliminated[[clause_idx]]",1078
+480,"[[",783,"was_used[[hla_clause_idx]]",1020
+481,"[[",784,"clause[[symbol]]",1020
+482,"[",788,"entries[!eliminated]",2257

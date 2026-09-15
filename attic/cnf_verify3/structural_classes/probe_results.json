@@ -1,0 +1,14 @@
+{
+  "boolean_binary": {
+    "cases": 8192,
+    "unsatisfiable": 3398,
+    "recognized_unsatisfiable": 3398
+  },
+  "ternary_forests": {
+    "cases": 5184,
+    "unsatisfiable": 12,
+    "essential_clauses": 13272,
+    "essential_values": 29019
+  },
+  "seconds": 85.09598088264465
+}
