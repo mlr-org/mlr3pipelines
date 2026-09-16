@@ -1,7 +1,3 @@
-
-
-
-
 test_that("CnfFormula Regression Tests", {
   skip_on_cran()
   testfile = xzfile(test_path("testdata", "cnf.xz"))
@@ -404,7 +400,8 @@ test_that("unit implication chains simplify in either clause order", {
   initial_unit = as.CnfClause(CnfAtom(symbols[[1L]], "1"))
   expected = CnfFormula(lapply(symbols, function(symbol) as.CnfClause(CnfAtom(symbol, "1"))))
   for (input in list(clauses, rev(clauses))) {
-    expect_equal(CnfFormula(c(list(initial_unit), input)), expected)
+    # Clause order may differ; use the order-independent CNF comparison.
+    expect_true(all.equal(CnfFormula(c(list(initial_unit), input)), expected))
   }
 })
 
