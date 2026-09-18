@@ -99,26 +99,22 @@ test_that("mlr_pipeops multi-access works", {
   expect_equal(pos(), mlr_pipeops)
 
   expect_equal(
-    unname(pos("scale")),
+    pos("scale"),
     list(mlr_pipeops$get("scale"))
   )
 
   expect_equal(
-    unname(pos(c("scale", "nop"))),
+    pos(c("scale", "nop")),
     list(mlr_pipeops$get("scale"), mlr_pipeops$get("nop"))
   )
 
   expect_equal(
-    {
-      tmp = pos(c("scale", original = "nop"))
-      names(tmp)[1] = ""
-      tmp
-    },
-    list(mlr_pipeops$get("scale"), original = mlr_pipeops$get("nop", id = "original"))
+    pos(c("scale", original = "nop")),
+    list(mlr_pipeops$get("scale"), mlr_pipeops$get("nop", id = "original"))
   )
 
   expect_equal(
-    unname(pos("scale", center = FALSE)),
+    pos("scale", center = FALSE),
     list(mlr_pipeops$get("scale", param_vals = list(center = FALSE)))
   )
 
@@ -128,28 +124,28 @@ test_that("mlr_pipeops multi-access works", {
   )
 
   expect_equal(
-    unname(pos(c("scale", "pca"), center = FALSE)),
+    pos(c("scale", "pca"), center = FALSE),
     list(mlr_pipeops$get("scale", param_vals = list(center = FALSE)), mlr_pipeops$get("pca", param_vals = list(center = FALSE)))
   )
 
 
   expect_equal(
-    unname(pos("scale", id = "sx", center = FALSE)),
+    pos("scale", id = "sx", center = FALSE),
     list(PipeOpScale$new(id = "sx", param_vals = list(center = FALSE)))
   )
 
   expect_equal(
-    unname(pos("copy", 2)),
+    pos("copy", 2),
     list(mlr_pipeops$get("copy", 2))
   )
 
   expect_equal(
-    unname(pos("copy", outnum = 2)),
+    pos("copy", outnum = 2),
     list(mlr_pipeops$get("copy", outnum = 2))
   )
 
   expect_equal(
-    unname(pos("branch", options = 2)),
+    pos("branch", options = 2),
     list(mlr_pipeops$get("branch", options = 2))
   )
 
@@ -166,7 +162,7 @@ test_that("mlr_pipeops multi-access works", {
   )
 
   expect_equal(
-    unname(pos("learner", dblrn$new(), key = 99)),
+    pos("learner", dblrn$new(), key = 99),
     list(mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99)))
   )
 
@@ -177,31 +173,46 @@ test_that("mlr_pipeops multi-access works", {
   )
 
   expect_equal(
-    unname(pos(list(dblrn$new(), dblrn$new()))),
+    pos(list(dblrn$new(), dblrn$new())),
     list(mlr_pipeops$get("learner", dblrn$new()), mlr_pipeops$get("learner", dblrn$new()))
   )
 
   expect_equal(
-    unname(pos(list(dblrn$new(), dblrn$new()), key = 99)),
+    pos(list(dblrn$new(), dblrn$new()), key = 99),
     list(mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99)), mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99)))
   )
 
-  expect_equal(unname(pos(character(0))), list())
-  expect_equal(pos(c(x = "nop")), list(x = mlr_pipeops$get("nop", id = "x")))
-  expect_equal(unname(pos(list())), list())
+  expect_equal(pos(character(0)), list())
+  expect_equal(pos(c(x = "nop")), list(mlr_pipeops$get("nop", id = "x")))
+  expect_equal(pos(list()), list())
 
   polrn = mlr_pipeops$get("learner", dblrn$new())
   polrn$id = "y"
   expect_equal(
     pos(c(x = po("nop"), y = dblrn$new())),
-    list(x = po("nop", id = "x"), y = polrn)
+    list(po("nop", id = "x"), polrn)
   )
 
   expect_equal(
     pos(list(a = polrn, b = dblrn$new())),
-    list(a = po(dblrn$new(), id = "a"), b = po(dblrn$new(), id = "b"))
+    list(po(dblrn$new(), id = "a"), po(dblrn$new(), id = "b"))
   )
 
+})
+
+test_that("pos returns unnamed lists without duplicating graph IDs", {
+  for (objs in list(c("pca", "nop"), list("pca", po("nop")))) {
+    pipeops = pos(objs)
+    expect_null(names(pipeops))
+    expect_identical(as_graph(pipeops)$ids(), c("pca", "nop"))
+  }
+
+  for (objs in list(c("pca", original = "nop"), list("pca", original = po("nop")))) {
+    pipeops = pos(objs)
+    expect_null(names(pipeops))
+    expect_identical(map_chr(pipeops, "id"), c("pca", "original"))
+    expect_identical(as_graph(pipeops)$ids(), c("pca", "original"))
+  }
 })
 
 test_that("Incrementing ids works", {
@@ -215,7 +226,7 @@ test_that("Incrementing ids works", {
   expect_r6(x, "PipeOpLearner")
 
   xs = pos(c("pca_1", "pca_2"))
-  assert_true(all(names(xs) == c("pca_1", "pca_2")))
+  expect_identical(map_chr(xs, "id"), c("pca_1", "pca_2"))
 })
 
 test_that("po - dictionary suggest works", {

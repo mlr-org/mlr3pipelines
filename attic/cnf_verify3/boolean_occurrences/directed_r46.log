@@ -1,0 +1,85 @@
+checked 100 of 1514 elapsed 4.097
+checked 200 of 1514 elapsed 7.27
+checked 300 of 1514 elapsed 10.296
+checked 400 of 1514 elapsed 14.07
+checked 500 of 1514 elapsed 17.263
+checked 600 of 1514 elapsed 21.067
+checked 700 of 1514 elapsed 25.8
+checked 800 of 1514 elapsed 30.518
+checked 900 of 1514 elapsed 34.988
+checked 1000 of 1514 elapsed 36.783
+checked 1100 of 1514 elapsed 38.343
+checked 1200 of 1514 elapsed 39.773
+checked 1300 of 1514 elapsed 41.143
+checked 1400 of 1514 elapsed 42.404
+checked 1500 of 1514 elapsed 46.693
+$R
+[1] "R version 4.6.1 (2026-06-24)"
+
+$cases
+[1] 1514
+
+$totals
+$totals$enter_on_updated_subset_relations
+[1] 6719
+
+$totals$semantic_boundary_checks
+[1] 58388
+
+$totals$cache_pair_checks
+[1] 292998
+
+$totals$enter_apply_domain_restriction
+[1] 7106
+
+$totals$enter_eliminate_symbol_from_clause
+[1] 4004
+
+$totals$enter_register_unit
+[1] 1754
+
+$totals$enter_eliminate_clause_update_sr
+[1] 1640
+
+$totals$delete_first_with_copy_left
+[1] 1718
+
+$totals$correct_formulas
+[1] 1514
+
+$totals$assignment_rows
+[1] 24224
+
+$totals$enter_handle_sse_2nd_order_twoend
+[1] 3013
+
+$totals$enter_try_sse_2nd_order
+[1] 4899
+
+$totals$orphan_occurrence
+[1] 8914
+
+$totals$nonunit_hla_donor
+[1] 1347
+
+$totals$delete_orphan_clause
+[1] 239
+
+$totals$enter_handle_sse_2nd_order_oneend
+[1] 59
+
+$totals$same_name_twoend_try
+[1] 2426
+
+$totals$nonunit_hla_deletion
+[1] 94
+
+$totals$unit_cache_skip
+[1] 2
+
+$totals$same_name_extra_exception
+[1] 366
+
+
+$seconds
+[1] 46.976

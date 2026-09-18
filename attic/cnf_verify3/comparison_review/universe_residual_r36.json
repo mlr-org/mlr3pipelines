@@ -1,0 +1,272 @@
+{
+  "metadata": {
+    "runtime": "3.6.3",
+    "locale": "LC_CTYPE=C.UTF-8;LC_NUMERIC=C;LC_TIME=C.UTF-8;LC_COLLATE=C.UTF-8;LC_MONETARY=C.UTF-8;LC_MESSAGES=C.UTF-8;LC_PAPER=C.UTF-8;LC_NAME=C;LC_ADDRESS=C;LC_TELEPHONE=C;LC_MEASUREMENT=C.UTF-8;LC_IDENTIFICATION=C",
+    "package_versions": {
+      "checkmate": "2.3.4",
+      "mlr3misc": "0.22.0",
+      "digest": "0.6.39",
+      "jsonlite": "2.0.0"
+    },
+    "source_md5": {
+      "attic/cnf_verify3/root/comparison_normalization.R": "cf41f193f045b086c2ae48fbc128e665",
+      "R/CnfAtom.R": "58699a7eb88f45c6aa5cdb8b77cc7c41",
+      "R/CnfClause.R": "f6c9659b31a511e696dc9d8d7cfa9349",
+      "R/CnfFormula.R": "7609c11610bbe9de566d9d9b448a07f7"
+    }
+  },
+  "records": [
+    {
+      "locale": "C",
+      "class": "CnfAtom",
+      "same_payload": true,
+      "same_bindings": true,
+      "base_environment": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "left_sorted_bindings": ["38é", "38é"],
+      "right_sorted_bindings": ["38é", "38é"],
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "locale": "C",
+      "class": "CnfClause",
+      "same_payload": true,
+      "same_bindings": true,
+      "base_environment": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "left_sorted_bindings": ["38é", "38é"],
+      "right_sorted_bindings": ["38é", "38é"],
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "locale": "C",
+      "class": "CnfFormula",
+      "same_payload": true,
+      "same_bindings": true,
+      "base_environment": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "left_sorted_bindings": ["38é", "38é"],
+      "right_sorted_bindings": ["38é", "38é"],
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "locale": "C.UTF-8",
+      "class": "CnfAtom",
+      "same_payload": true,
+      "same_bindings": true,
+      "base_environment": {
+        "equal": false,
+        "message": "Names: 2 string mismatches",
+        "error": null
+      },
+      "left_sorted_bindings": ["38é", "38é"],
+      "right_sorted_bindings": ["38é", "38é"],
+      "original": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      }
+    },
+    {
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "same_payload": true,
+      "same_bindings": true,
+      "base_environment": {
+        "equal": false,
+        "message": "Names: 2 string mismatches",
+        "error": null
+      },
+      "left_sorted_bindings": ["38é", "38é"],
+      "right_sorted_bindings": ["38é", "38é"],
+      "original": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      }
+    },
+    {
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "same_payload": true,
+      "same_bindings": true,
+      "base_environment": {
+        "equal": false,
+        "message": "Names: 2 string mismatches",
+        "error": null
+      },
+      "left_sorted_bindings": ["38é", "38é"],
+      "right_sorted_bindings": ["38é", "38é"],
+      "original": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      }
+    },
+    {
+      "locale": "en_US.UTF-8",
+      "class": "CnfAtom",
+      "same_payload": true,
+      "same_bindings": true,
+      "base_environment": {
+        "equal": false,
+        "message": "Names: 2 string mismatches",
+        "error": null
+      },
+      "left_sorted_bindings": ["38é", "38é"],
+      "right_sorted_bindings": ["38é", "38é"],
+      "original": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      }
+    },
+    {
+      "locale": "en_US.UTF-8",
+      "class": "CnfClause",
+      "same_payload": true,
+      "same_bindings": true,
+      "base_environment": {
+        "equal": false,
+        "message": "Names: 2 string mismatches",
+        "error": null
+      },
+      "left_sorted_bindings": ["38é", "38é"],
+      "right_sorted_bindings": ["38é", "38é"],
+      "original": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      }
+    },
+    {
+      "locale": "en_US.UTF-8",
+      "class": "CnfFormula",
+      "same_payload": true,
+      "same_bindings": true,
+      "base_environment": {
+        "equal": false,
+        "message": "Names: 2 string mismatches",
+        "error": null
+      },
+      "left_sorted_bindings": ["38é", "38é"],
+      "right_sorted_bindings": ["38é", "38é"],
+      "original": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Names: 2 string mismatches >",
+        "error": null
+      }
+    }
+  ]
+}

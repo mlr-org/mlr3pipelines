@@ -91,6 +91,9 @@ Also see \code{\link{set_validate.GraphLearner}} for more information.
 The internally tuned values if the wrapped \code{Learner} supports internal tuning, \code{NULL} otherwise.
 \item \code{internal_valid_scores} :: named \code{list()} or \code{NULL}\cr
 The internal validation scores if the wrapped \code{Learner} supports internal validation, \code{NULL} otherwise.
+\item \code{best_valid_scores} :: named \code{list()} or \code{NULL}\cr
+The best internal validation scores observed during training if the wrapped \code{Learner} tracks them,
+\code{NULL} otherwise.
 }
 }
 

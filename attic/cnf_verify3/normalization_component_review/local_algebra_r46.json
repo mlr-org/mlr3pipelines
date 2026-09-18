@@ -1,0 +1,13 @@
+{
+  "R": "R version 4.6.1 (2026-06-24)",
+  "counts": {
+    "multiplicity_vectors": 14,
+    "selected_states": 526,
+    "shape_checks": 2104,
+    "repeated_results": 1268,
+    "named_results": 512,
+    "two_step_checks": 8984
+  },
+  "full_support_is_not_length_equality": true,
+  "missing_value_without_capacity_is_insufficient": true
+}

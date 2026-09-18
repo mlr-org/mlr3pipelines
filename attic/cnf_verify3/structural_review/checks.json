@@ -1,0 +1,257 @@
+{
+  "stats": {
+    "forest": {
+      "cases": 240,
+      "worlds": 25336,
+      "unsatisfiable": 38,
+      "clause_witnesses": 585,
+      "value_witnesses": 1127,
+      "matching_models": 0,
+      "broad_clause_inputs": 196
+    },
+    "pseudoforest": {
+      "cases": 240,
+      "worlds": 12817,
+      "unsatisfiable": 66,
+      "clause_witnesses": 0,
+      "value_witnesses": 0,
+      "matching_models": 174,
+      "broad_clause_inputs": 88
+    },
+    "renamable_horn": {
+      "cases": 400,
+      "worlds": 12792,
+      "unsatisfiable": 92,
+      "clause_witnesses": 0,
+      "value_witnesses": 0,
+      "matching_models": 0,
+      "broad_clause_inputs": 378
+    },
+    "equal_disjoint_binary": {
+      "cases": 300,
+      "worlds": 118811,
+      "unsatisfiable": 201,
+      "clause_witnesses": 0,
+      "value_witnesses": 0,
+      "matching_models": 0,
+      "broad_clause_inputs": 0
+    },
+    "single_cycle_control": {
+      "cases": 1,
+      "worlds": 16,
+      "unsatisfiable": 0,
+      "clause_witnesses": 0,
+      "value_witnesses": 0,
+      "matching_models": 1,
+      "broad_clause_inputs": 0
+    },
+    "opposed_cycles_control": {
+      "cases": 1,
+      "worlds": 128,
+      "unsatisfiable": 1,
+      "clause_witnesses": 0,
+      "value_witnesses": 0,
+      "matching_models": 0,
+      "broad_clause_inputs": 0
+    },
+    "overlapping_binary_control": {
+      "cases": 1,
+      "worlds": 16,
+      "unsatisfiable": 0,
+      "clause_witnesses": 0,
+      "value_witnesses": 0,
+      "matching_models": 0,
+      "broad_clause_inputs": 0
+    }
+  },
+  "counterexamples": {
+    "single_cycle": {
+      "domains": {
+        "x": ["0", "1"],
+        "a1": ["0", "1"],
+        "a2": ["0", "1"],
+        "a3": ["0", "1"]
+      },
+      "clauses": [
+        {
+          "x": "1",
+          "a1": "1"
+        },
+        {
+          "a1": "0",
+          "a2": "1"
+        },
+        {
+          "a2": "0",
+          "a3": "1"
+        },
+        {
+          "a3": "0",
+          "x": "1"
+        }
+      ],
+      "output": [
+        {
+          "x": "1",
+          "a1": "1"
+        },
+        {
+          "a1": "0",
+          "a2": "1"
+        },
+        {
+          "a2": "0",
+          "a3": "1"
+        },
+        {
+          "a3": "0",
+          "x": "1"
+        }
+      ],
+      "models": 4,
+      "forced_symbol": "x",
+      "forced_value": "1",
+      "incidence_ranks": 1,
+      "redundant_value": {
+        "clause": 1,
+        "symbol": "a1",
+        "value": "1"
+      },
+      "renamable_horn_positive_values": ["0", "1", "1", "1"]
+    },
+    "opposed_cycles": {
+      "domains": {
+        "x": ["0", "1"],
+        "a1": ["0", "1"],
+        "a2": ["0", "1"],
+        "a3": ["0", "1"],
+        "b1": ["0", "1"],
+        "b2": ["0", "1"],
+        "b3": ["0", "1"]
+      },
+      "clauses": [
+        {
+          "x": "1",
+          "a1": "1"
+        },
+        {
+          "a1": "0",
+          "a2": "1"
+        },
+        {
+          "a2": "0",
+          "a3": "1"
+        },
+        {
+          "a3": "0",
+          "x": "1"
+        },
+        {
+          "x": "0",
+          "b1": "1"
+        },
+        {
+          "b1": "0",
+          "b2": "1"
+        },
+        {
+          "b2": "0",
+          "b3": "1"
+        },
+        {
+          "b3": "0",
+          "x": "0"
+        }
+      ],
+      "output": [
+        {
+          "x": "1",
+          "a1": "1"
+        },
+        {
+          "a1": "0",
+          "a2": "1"
+        },
+        {
+          "a2": "0",
+          "a3": "1"
+        },
+        {
+          "a3": "0",
+          "x": "1"
+        },
+        {
+          "x": "0",
+          "b1": "1"
+        },
+        {
+          "b1": "0",
+          "b2": "1"
+        },
+        {
+          "b2": "0",
+          "b3": "1"
+        },
+        {
+          "b3": "0",
+          "x": "0"
+        }
+      ],
+      "models": 0,
+      "incidence_ranks": 2
+    },
+    "overlapping_binary": {
+      "domains": {
+        "X0": ["0", "1", "4", "5"],
+        "X1": ["0", "1", "4", "5"]
+      },
+      "clauses": [
+        {
+          "X1": ["0", "5"],
+          "X0": ["0", "5"]
+        },
+        {
+          "X0": "1",
+          "X1": ["0", "1", "4"]
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0", "5"]
+        },
+        {
+          "X1": "0",
+          "X0": ["4", "5"]
+        }
+      ],
+      "output": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0"]
+        }
+      ],
+      "second": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X1": ["4", "0"]
+        }
+      ],
+      "opportunity": {
+        "kind": "SSE1",
+        "target": 2,
+        "donor": 1,
+        "pivot": "X0"
+      },
+      "incidence_ranks": 3
+    }
+  },
+  "R": "R version 4.6.1 (2026-06-24)",
+  "package": "0.11.0.9000",
+  "initial_boundary_statement": 26
+}

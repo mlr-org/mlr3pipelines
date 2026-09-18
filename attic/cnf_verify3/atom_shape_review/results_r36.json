@@ -1,0 +1,153 @@
+{
+  "runtime": "R version 3.6.3 (2020-02-29)",
+  "locale": "LC_CTYPE=C.UTF-8;LC_NUMERIC=C;LC_TIME=C.UTF-8;LC_COLLATE=C.UTF-8;LC_MONETARY=C.UTF-8;LC_MESSAGES=C.UTF-8;LC_PAPER=C.UTF-8;LC_NAME=C;LC_ADDRESS=C;LC_TELEPHONE=C;LC_MEASUREMENT=C.UTF-8;LC_IDENTIFICATION=C",
+  "package_versions": ["2.3.4", "0.22.0", "2.0.0"],
+  "source_md5": ["58699a7eb88f45c6aa5cdb8b77cc7c41", "f6c9659b31a511e696dc9d8d7cfa9349", "7609c11610bbe9de566d9d9b448a07f7", "f182b0a8bffc0432b427659dbb1fa91f"],
+  "shape_pairs": 7,
+  "original_false_negatives": 4,
+  "prior_candidate_false_negatives": 4,
+  "flatten_only_false_negatives": 4,
+  "candidate_disagreements": 0,
+  "support_negative_directions": 42,
+  "symbol_negative_directions": 14,
+  "guard_checks": 8,
+  "records": {
+    "minimal_row": {
+      "input_dim": [1, 2],
+      "stored_dim": [1, 2],
+      "input": ["a", "a"],
+      "stored": ["a", "a"],
+      "support": "a",
+      "sorted_stored": ["a", "a"],
+      "original": "Component “values”: Lengths (2, 1) differ (string compare on first 1)",
+      "previous": "Component “values”: Lengths (2, 1) differ (string compare on first 1)",
+      "flatten_only": "Component “values”: Lengths (2, 1) differ (string compare on first 1)",
+      "candidate": true,
+      "truth": [true, false, false],
+      "negative_results": [
+        "Component “values”: Lengths (1, 2) differ (string compare on first 1)",
+        "Component “values”: 1 string mismatch",
+        "Component “values”: 1 string mismatch"
+      ]
+    },
+    "minimal_column": {
+      "input_dim": [2, 1],
+      "stored_dim": [1, 1],
+      "input": ["a", "a"],
+      "stored": "a",
+      "support": "a",
+      "sorted_stored": "a",
+      "original": true,
+      "previous": true,
+      "flatten_only": true,
+      "candidate": true,
+      "truth": [true, false, false],
+      "negative_results": [
+        "Component “values”: Lengths (1, 2) differ (string compare on first 1)",
+        "Component “values”: 1 string mismatch",
+        "Component “values”: 1 string mismatch"
+      ]
+    },
+    "matrix_2_by_3": {
+      "input_dim": [2, 3],
+      "stored_dim": [2, 3],
+      "input": ["a", "b", "a", "a", "b", "a"],
+      "stored": ["a", "b", "a", "a", "b", "a"],
+      "support": ["a", "b"],
+      "sorted_stored": ["a", "a", "a", "a", "b", "b"],
+      "original": ["Component “values”: Lengths (6, 2) differ (string compare on first 2)", "Component “values”: 1 string mismatch"],
+      "previous": ["Component “values”: Lengths (6, 2) differ (string compare on first 2)", "Component “values”: 1 string mismatch"],
+      "flatten_only": ["Component “values”: Lengths (6, 2) differ (string compare on first 2)", "Component “values”: 1 string mismatch"],
+      "candidate": true,
+      "truth": [true, true, false],
+      "negative_results": [
+        "Component “values”: Lengths (2, 1) differ (string compare on first 1)",
+        "Component “values”: 1 string mismatch",
+        ["Component “values”: Lengths (2, 1) differ (string compare on first 1)", "Component “values”: 1 string mismatch"]
+      ]
+    },
+    "array_2_by_2_by_2": {
+      "input_dim": [2, 2, 2],
+      "stored_dim": [2, 2, 2],
+      "input": ["a", "b", "a", "a", "b", "a", "a", "b"],
+      "stored": ["a", "b", "a", "a", "b", "a", "a", "b"],
+      "support": ["a", "b"],
+      "sorted_stored": ["a", "a", "a", "a", "a", "b", "b", "b"],
+      "original": ["Component “values”: Lengths (8, 2) differ (string compare on first 2)", "Component “values”: 1 string mismatch"],
+      "previous": ["Component “values”: Lengths (8, 2) differ (string compare on first 2)", "Component “values”: 1 string mismatch"],
+      "flatten_only": ["Component “values”: Lengths (8, 2) differ (string compare on first 2)", "Component “values”: 1 string mismatch"],
+      "candidate": true,
+      "truth": [true, true, false],
+      "negative_results": [
+        "Component “values”: Lengths (2, 1) differ (string compare on first 1)",
+        "Component “values”: 1 string mismatch",
+        ["Component “values”: Lengths (2, 1) differ (string compare on first 1)", "Component “values”: 1 string mismatch"]
+      ]
+    },
+    "array_duplicate_slabs": {
+      "input_dim": [3, 2, 2],
+      "stored_dim": [2, 2, 2],
+      "input": ["a", "a", "b", "a", "a", "b", "a", "a", "b", "a", "a", "b"],
+      "stored": ["a", "b", "a", "b", "a", "b", "a", "b"],
+      "support": ["a", "b"],
+      "sorted_stored": ["a", "a", "a", "a", "b", "b", "b", "b"],
+      "original": ["Component “values”: Lengths (8, 2) differ (string compare on first 2)", "Component “values”: 1 string mismatch"],
+      "previous": ["Component “values”: Lengths (8, 2) differ (string compare on first 2)", "Component “values”: 1 string mismatch"],
+      "flatten_only": ["Component “values”: Lengths (8, 2) differ (string compare on first 2)", "Component “values”: 1 string mismatch"],
+      "candidate": true,
+      "truth": [true, true, false],
+      "negative_results": [
+        "Component “values”: Lengths (2, 1) differ (string compare on first 1)",
+        "Component “values”: 1 string mismatch",
+        ["Component “values”: Lengths (2, 1) differ (string compare on first 1)", "Component “values”: 1 string mismatch"]
+      ]
+    },
+    "vector_duplicate_control": {
+      "input_dim": {},
+      "stored_dim": {},
+      "input": ["a", "b", "a", "a"],
+      "stored": ["a", "b"],
+      "support": ["a", "b"],
+      "sorted_stored": ["a", "b"],
+      "original": true,
+      "previous": true,
+      "flatten_only": true,
+      "candidate": true,
+      "truth": [true, true, false],
+      "negative_results": [
+        "Component “values”: Lengths (2, 1) differ (string compare on first 1)",
+        "Component “values”: 1 string mismatch",
+        ["Component “values”: Lengths (2, 1) differ (string compare on first 1)", "Component “values”: 1 string mismatch"]
+      ]
+    },
+    "row_distinct_control": {
+      "input_dim": [1, 2],
+      "stored_dim": [1, 2],
+      "input": ["a", "b"],
+      "stored": ["a", "b"],
+      "support": ["a", "b"],
+      "sorted_stored": ["a", "b"],
+      "original": true,
+      "previous": true,
+      "flatten_only": true,
+      "candidate": true,
+      "truth": [true, true, false],
+      "negative_results": [
+        "Component “values”: Lengths (2, 1) differ (string compare on first 1)",
+        "Component “values”: 1 string mismatch",
+        ["Component “values”: Lengths (2, 1) differ (string compare on first 1)", "Component “values”: 1 string mismatch"]
+      ]
+    }
+  },
+  "guard_results": [
+    true,
+    true,
+    "target and current are both logicals but not equal",
+    "target and current are not both logicals",
+    "target and current are not both logicals",
+    "current is not a CnfAtom",
+    "current is not a CnfAtom",
+    "current is not a CnfAtom"
+  ],
+  "c_locale_minimal": "Component “values”: Lengths (2, 1) differ (string compare on first 1)"
+}

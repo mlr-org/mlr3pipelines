@@ -1,0 +1,9 @@
+Completed 10 of 64 inputs; 25927 events
+Completed 20 of 64 inputs; 123662 events
+Completed 30 of 64 inputs; 834812 events
+Completed 40 of 64 inputs; 1635007 events
+Completed 50 of 64 inputs; 2383095 events
+Completed 60 of 64 inputs; 5203319 events
+Error in differestopifnot(length(calibration_sites) == 1L, any(vapply(domain_take_trace(),  :
+  could not find function "differestopifnot"
+Execution halted

@@ -1,0 +1,8 @@
+{
+  "versions": ["R version 3.6.3 (2020-02-29)", "R version 4.6.1 (2026-06-24)"],
+  "exact_case_output_and_digest_records": 264,
+  "exact_first_virtual_witness_records": 14,
+  "if_outcomes_equal": true,
+  "all_run_counts_equal": true,
+  "primitive_counts_equal": true
+}

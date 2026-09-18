@@ -1,0 +1,7 @@
+R version 4.6.1 (2026-06-24)
+checkmate 2.3.4
+First result:
+list(list(Y = "0", X = "5"), list(X = "0", Y = c("4", "0")))
+Second result:
+list(list(Y = "0", X = "5"), list(Y = c("4", "0")))
+All 16 valuations preserved; the second pass removes an applicable first-order literal.

@@ -1,0 +1,9 @@
+phase 1: collecting mutant-killing inputs...
+  M19: 25 killers found
+  M14: 25 killers found
+  M07: 25 killers found
+  M09: 25 killers found
+phase 2: exploring killer neighborhoods against real code + invariants...
+  100 killers total, 400 neighbors each
+boundary search: 40000 neighbor formulas tested, 1 failures
+  [error] INVARIANT VIOLATION [pre_hla]: I3: clause 3 sym V1 range not PROPER subset of unit

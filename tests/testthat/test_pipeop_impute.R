@@ -96,7 +96,7 @@ test_that("PipeOpImpute", {
     )
   )
 
-  task = mlr_tasks$get("pima")
+  task = mlr_tasks$get("diabetes")
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(param_vals = list(innum = c("a", "b", "c", "d", "e", "f", "g"))), task = task)
 
@@ -271,7 +271,7 @@ test_that("PipeOpImpute", {
   task_trained = po$train(list(task$clone(deep = TRUE)$filter(5:6)))[[1]]$data()
   task_predicted = po$predict(list(task$clone(deep = TRUE)$filter(1:3)))[[1]]$data()
 
-  expect_equal(task_predicted, task$clone(deep = TRUE)$filter(1:3)$data(), ignore.col.order = TRUE)
+  expect_equal_data_table(task_predicted, task$clone(deep = TRUE)$filter(1:3)$data(), ignore_col_order = TRUE)
 
   po = PipeOpTestImpute$new(param_vals = list(
     method_num = "hist", method_fct = "oor", add_dummy = "missing_train"))
@@ -449,7 +449,7 @@ test_that("More tests for Integers", {
 
 test_that("impute, test rows and affect_columns", {
   po_impute = po("imputeconstant", affect_columns = selector_name("insulin"), constant = 2)
-  task = tsk("pima")
+  task = tsk("diabetes")
   ids = 1:30
   task$internal_valid_task = task$clone(deep = TRUE)$filter(ids)
   task$row_roles$use = setdiff(task$row_roles$use, 1:30)
@@ -734,4 +734,3 @@ test_that("PipeOpImputeSample - impute missings for unseen factor levels", {
   expect_no_error(glrn$predict(task_NA))
 
 })
-

@@ -1,0 +1,85 @@
+
+first_copy_orphan
+Input signed occurrence words:
+list(c(-1L, 2L), c(1L, 1L, 2L, 3L))
+Output positional ranges:
+list(list(S1 = "0", S2 = "1"), list(S1 = "1", S2 = "1", S3 = "1"))
+  S1 S2 S3 input output
+1  0  0  0 FALSE  FALSE
+2  1  0  0 FALSE  FALSE
+3  0  1  0  TRUE   TRUE
+4  1  1  0  TRUE   TRUE
+5  0  0  1  TRUE   TRUE
+6  1  0  1 FALSE  FALSE
+7  0  1  1  TRUE   TRUE
+8  1  1  1  TRUE   TRUE
+Observed events: delete_first_with_copy_left, orphan_occurrence, nonunit_hla_donor
+
+unrelated_same_name_exception
+Input signed occurrence words:
+list(1:2, c(1L, 1L, 3L), c(-1L, -1L, 3L))
+Output positional ranges:
+list(list(S1 = "1", S2 = "1"), list(S1 = "1", S1 = "1", S3 = "1"),
+    list(S1 = "0", S1 = "0", S3 = "1"))
+  S1 S2 S3 input output
+1  0  0  0 FALSE  FALSE
+2  1  0  0 FALSE  FALSE
+3  0  1  0 FALSE  FALSE
+4  1  1  0 FALSE  FALSE
+5  0  0  1 FALSE  FALSE
+6  1  0  1  TRUE   TRUE
+7  0  1  1  TRUE   TRUE
+8  1  1  1  TRUE   TRUE
+Observed events: same_name_twoend_try, same_name_extra_exception, nonunit_hla_donor
+
+old_registry_snapshot_skip
+Input signed occurrence words:
+list(c(-2L, 3L), c(-1L, -3L), c(3L, 2L, 1L, 1L), c(2L, -1L))
+Output positional ranges:
+list(list(S2 = "0", S3 = "1"), list(S1 = "0"), list(S3 = "1",
+    S1 = "1"))
+  S1 S2 S3 input output
+1  0  0  0 FALSE  FALSE
+2  1  0  0 FALSE  FALSE
+3  0  1  0 FALSE  FALSE
+4  1  1  0 FALSE  FALSE
+5  0  0  1  TRUE   TRUE
+6  1  0  1 FALSE  FALSE
+7  0  1  1  TRUE   TRUE
+8  1  1  1 FALSE  FALSE
+Observed events: delete_first_with_copy_left, orphan_occurrence, unit_cache_skip, nonunit_hla_donor
+
+eventual_orphan_deletion
+Input signed occurrence words:
+list(c(-1L, 2L), c(1L, 1L, 2L, 3L), c(-1L, 2L), c(1L, -3L))
+Output positional ranges:
+list(list(S2 = "1"), list(S1 = "1", S3 = "0"))
+  S1 S2 S3 input output
+1  0  0  0 FALSE  FALSE
+2  1  0  0 FALSE  FALSE
+3  0  1  0  TRUE   TRUE
+4  1  1  0  TRUE   TRUE
+5  0  0  1 FALSE  FALSE
+6  1  0  1 FALSE  FALSE
+7  0  1  1 FALSE  FALSE
+8  1  1  1  TRUE   TRUE
+Observed events: delete_first_with_copy_left, orphan_occurrence, delete_orphan_clause
+
+hidden_deletion_with_orphan_present
+Input signed occurrence words:
+list(c(-1L, 2L), c(1L, 1L, 2L, 3L), c(1L, -2L), -2:-3)
+Output positional ranges:
+list(list(S1 = "0", S2 = "1"), list(S2 = "0", S3 = "0"), list(
+    S1 = "1", S3 = "1"))
+  S1 S2 S3 input output
+1  0  0  0 FALSE  FALSE
+2  1  0  0 FALSE  FALSE
+3  0  1  0 FALSE  FALSE
+4  1  1  0  TRUE   TRUE
+5  0  0  1  TRUE   TRUE
+6  1  0  1 FALSE  FALSE
+7  0  1  1 FALSE  FALSE
+8  1  1  1 FALSE  FALSE
+Observed events: delete_first_with_copy_left, orphan_occurrence, nonunit_hla_donor, nonunit_hla_deletion
+
+All public-constructor examples preserve their full positional truth tables.

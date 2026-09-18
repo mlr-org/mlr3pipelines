@@ -1,0 +1,29 @@
+R: R version 3.6.3 (2020-02-29)
+checkmate: 2.3.4
+
+NEW: reverse logical OR drops CnfClause class
+class(TRUE | cl): logical
+class(cl | TRUE): CnfClause
+CnfFormula(list(TRUE | cl)): Assertion on 'clauses' failed: May only contain the following types: {CnfClause,CnfFormula}, but element 1 has type 'logical'.
+CnfFormula(list(cl | TRUE)): succeeds
+class(TRUE | atom): CnfClause
+
+KNOWN (attic/cnf/review_5_2_pro.md): as.list loses symbol names
+names(as.list(cl)): NULL; names(cl): X, Y
+
+NEW: a missing logical subscript creates a malformed CnfClause
+cl[c(FALSE, NA)] is a CnfClause with one NA symbol name and a NULL range.
+CnfFormula accepts the malformed clause as a nonconstant formula.
+CnfClause(as.list(bad)) becomes TRUE through vacuous absent-domain coverage.
+The analogous missing numeric selector is rejected.
+
+NEW: repeated matrix indices create duplicate symbols and a simplifier error
+Repeated matrix selector creates two X occurrences; simplification errors: attempt to select less than one element in get1index
+The unduplicated formula simplifies to the single unit X in {a}.
+
+REPRESENTATION BOUNDARY: byte-marked values and Unicode formatting
+Accepted atom print error: translating strings with "bytes" encoding is not allowed
+The same atom converts to a formula and formula & !formula is FALSE.
+Accepted mixed Unicode/bytes symbol, valid-subset atom error: translating strings with "bytes" encoding is not allowed
+
+All reported outcomes reproduced.

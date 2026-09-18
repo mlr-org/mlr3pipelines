@@ -1,0 +1,25 @@
+{
+  "helper_names": ["char_intersect", "char_setdiff", "char_union", "return_entries", "register_unit", "apply_domain_restriction", "eliminate_symbol_from_clause", "on_updated_subset_relations", "on_update_range", "handle_sse_2nd_order_oneend", "handle_sse_2nd_order_twoend", "try_sse_2nd_order", "eliminate_clause_update_sr"],
+  "edges": {
+    "char_intersect": "char_union",
+    "char_setdiff": [],
+    "char_union": [],
+    "return_entries": [],
+    "register_unit": "apply_domain_restriction",
+    "apply_domain_restriction": ["char_intersect", "eliminate_clause_update_sr", "eliminate_symbol_from_clause", "on_updated_subset_relations", "on_update_range"],
+    "eliminate_symbol_from_clause": ["register_unit", "on_updated_subset_relations"],
+    "on_updated_subset_relations": ["handle_sse_2nd_order_twoend", "eliminate_clause_update_sr", "apply_domain_restriction", "handle_sse_2nd_order_oneend"],
+    "on_update_range": ["handle_sse_2nd_order_oneend", "handle_sse_2nd_order_twoend"],
+    "handle_sse_2nd_order_oneend": "try_sse_2nd_order",
+    "handle_sse_2nd_order_twoend": "try_sse_2nd_order",
+    "try_sse_2nd_order": ["apply_domain_restriction", "char_union"],
+    "eliminate_clause_update_sr": []
+  },
+  "deferred_argument_edge": ["char_intersect", "char_union"],
+  "excluded_for_acyclicity": "apply_domain_restriction",
+  "longest_acyclic_nodes": 5,
+  "longest_paths": [
+    ["eliminate_symbol_from_clause", "on_updated_subset_relations", "handle_sse_2nd_order_twoend", "try_sse_2nd_order", "char_union"],
+    ["eliminate_symbol_from_clause", "on_updated_subset_relations", "handle_sse_2nd_order_oneend", "try_sse_2nd_order", "char_union"]
+  ]
+}

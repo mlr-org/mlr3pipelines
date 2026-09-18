@@ -25,11 +25,11 @@ given to the \code{param_vals} argument of the constructor.}
 \item{.objs}{\code{character} | \code{list}\cr
 Either a \code{character} of \code{\link{PipeOp}}s to look up in \code{\link{mlr_pipeops}},
 or a list of other objects to be converted to a \code{\link{PipeOp}}.
-If this is a named \code{list}, then the names are used as \verb{$id} slot for the resulting
+If this is a named \code{character} or \code{list}, then the names are used as \verb{$id} slot for the resulting
 \code{\link{PipeOp}}s.}
 }
 \value{
-A \code{\link{PipeOp}} (for \code{po()}), or a \code{list} of \code{\link{PipeOp}}s (for \code{pos()}).
+A \code{\link{PipeOp}} (for \code{po()}), or an unnamed \code{list} of \code{\link{PipeOp}}s (for \code{pos()}).
 }
 \description{
 Create
@@ -45,7 +45,7 @@ The object is initialized with given parameters and \code{param_vals}.
 
 \code{po()} taks a single \code{obj} (\code{PipeOp} id, \code{\link[mlr3:Learner]{Learner}}, ...) and converts
 it to a \code{\link{PipeOp}}. \code{pos()} (with plural-s) takes either a \code{character}-vector, or a
-list of objects, and creates a \code{list} of \code{\link{PipeOp}}s.
+list of objects, and creates an unnamed \code{list} of \code{\link{PipeOp}}s.
 }
 \examples{
 \dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}

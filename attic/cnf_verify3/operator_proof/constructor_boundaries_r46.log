@@ -1,0 +1,16 @@
+R: R version 4.6.1 (2026-06-24)
+Clause constructor:
+          cases         success expected_errors
+            820             448             372
+Formula constructor:
+           cases          success      owner_error false_flattening
+             585              444               96               45
+formula_true_first: All clauses must be in the same universe.
+formula_false_after_formula: wrong arguments for subsetting an environment
+clause_false_first: All symbols must be in the same universe.
+clause_false_last: All symbols must be in the same universe.
+clause_true_last: All symbols must be in the same universe.
+TRUE | proper_clause: raw logical TRUE; using it in CnfFormula(list(...)) errors.
+Direct Formula binary methods:
+                cases               success expected_owner_errors
+                  288                   276                    12

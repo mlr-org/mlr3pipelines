@@ -1,0 +1,1832 @@
+{
+  "scope": "bounded support checks and exact local set implications; no scheduler model",
+  "support_counts": {
+    "satisfiable_support_triples": 78310,
+    "fixed_symbol_support_checks": 543821,
+    "common_triple_matching_exceptions": 105,
+    "sorted_relay_support_checks": 64
+  },
+  "local_set_width": 8,
+  "projection_counts": {
+    "common_triple_projection_checks": 373248,
+    "fixed_values_excluded_by_disjoint_residual_ranges": 36
+  },
+  "obligations": [
+    {
+      "name": "n3_private_intersection_sse1_0_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_0_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_0_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_single_absence_freezes_sse1_0_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_0_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_single_absence_freezes_sse1_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_0_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_0_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_0_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_0_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_0_2_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_0_2_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_1_0_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_1_0_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_1_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_1_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_outside_update_requires_pivot_dominance_sse1_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_1_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_1_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_1_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_1_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_1_2_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_1_2_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_2_0_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_2_0_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_2_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_2_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_2_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_outside_update_requires_pivot_dominance_sse1_2_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_2_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_2_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_2_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_2_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_single_absence_freezes_sse1_2_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_2_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse1_2_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_single_absence_freezes_sse1_2_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse1_2_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_1_2_0_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_1_2_0_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_1_2_0_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_outside_update_requires_pivot_dominance_sse2_1_2_0_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_1_2_0_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_1_2_0_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_1_2_0_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_1_2_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_outside_update_requires_pivot_dominance_sse2_1_2_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_1_2_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_1_2_0_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_1_2_0_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_1_2_0_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_1_2_0_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_0_2_1_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_single_absence_freezes_sse2_0_2_1_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_0_2_1_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_0_2_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_single_absence_freezes_sse2_0_2_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_0_2_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_0_2_1_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_0_2_1_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_0_2_1_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_single_absence_freezes_sse2_0_2_1_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_0_2_1_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_0_2_1_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_0_2_1_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_0_2_1_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_single_absence_freezes_sse2_0_2_1_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_0_2_1_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_0_1_2_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_0_1_2_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_0_1_2_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_0_1_2_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_0_1_2_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_0_1_2_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_0_1_2_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_0_1_2_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_0_1_2_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_0_1_2_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_private_intersection_sse2_0_1_2_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_pivot_dominance_persists_sse2_0_1_2_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n3_union_bound_preserves_target_pivot_containment",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_0_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_0_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_0_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_single_absence_freezes_sse1_0_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_0_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_single_absence_freezes_sse1_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_0_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_single_absence_freezes_sse1_0_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_0_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_0_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_0_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_0_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_0_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_0_2_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_0_2_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_0_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_0_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_1_0_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_1_0_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_1_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_1_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_outside_update_requires_pivot_dominance_sse1_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_1_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_outside_update_requires_pivot_dominance_sse1_1_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_1_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_1_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_1_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_1_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_1_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_1_2_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_1_2_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_1_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_1_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_2_0_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_2_0_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_2_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_2_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_2_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_outside_update_requires_pivot_dominance_sse1_2_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_2_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_2_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_outside_update_requires_pivot_dominance_sse1_2_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_2_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_2_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_2_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_2_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_single_absence_freezes_sse1_2_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_2_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_2_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_single_absence_freezes_sse1_2_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_2_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse1_2_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_single_absence_freezes_sse1_2_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse1_2_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_1_2_0_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_1_2_0_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_1_2_0_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_outside_update_requires_pivot_dominance_sse2_1_2_0_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_1_2_0_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_1_2_0_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_outside_update_requires_pivot_dominance_sse2_1_2_0_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_1_2_0_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_1_2_0_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_1_2_0_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_1_2_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_outside_update_requires_pivot_dominance_sse2_1_2_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_1_2_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_1_2_0_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_outside_update_requires_pivot_dominance_sse2_1_2_0_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_1_2_0_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_1_2_0_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_1_2_0_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_1_2_0_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_1_2_0_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_1_2_0_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_outside_update_requires_pivot_dominance_sse2_1_2_0_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_1_2_0_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_1_2_0_3_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_1_2_0_3_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_1_2_0_3_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_1_2_0_3_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_1_2_0_3_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_outside_update_requires_pivot_dominance_sse2_1_2_0_3_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_1_2_0_3_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_2_1_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_single_absence_freezes_sse2_0_2_1_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_2_1_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_2_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_single_absence_freezes_sse2_0_2_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_2_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_2_1_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_single_absence_freezes_sse2_0_2_1_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_2_1_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_2_1_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_2_1_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_2_1_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_single_absence_freezes_sse2_0_2_1_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_2_1_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_2_1_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_single_absence_freezes_sse2_0_2_1_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_2_1_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_2_1_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_2_1_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_2_1_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_single_absence_freezes_sse2_0_2_1_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_2_1_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_2_1_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_single_absence_freezes_sse2_0_2_1_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_2_1_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_2_1_3_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_2_1_3_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_2_1_3_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_single_absence_freezes_sse2_0_2_1_3_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_2_1_3_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_2_1_3_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_single_absence_freezes_sse2_0_2_1_3_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_2_1_3_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_1_2_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_1_2_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_1_2_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_1_2_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_1_2_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_1_2_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_1_2_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_1_2_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_1_2_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_1_2_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_1_2_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_1_2_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_1_2_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_1_2_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_1_2_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_1_2_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_1_2_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_1_2_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_1_2_3_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_1_2_3_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_1_2_3_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_1_2_3_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_private_intersection_sse2_0_1_2_3_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_pivot_dominance_persists_sse2_0_1_2_3_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n4_union_bound_preserves_target_pivot_containment",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_0_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_0_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_0_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse1_0_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_0_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse1_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_0_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse1_0_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_0_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_0_1_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse1_0_1_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_0_1_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_0_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_0_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_0_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_0_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_0_2_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_0_2_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_0_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_0_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_0_2_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_0_2_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_1_0_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_1_0_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_1_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_1_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse1_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_1_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse1_1_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_1_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_1_0_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse1_1_0_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_1_0_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_1_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_1_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_1_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_1_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_1_2_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_1_2_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_1_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_1_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_1_2_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_1_2_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_2_0_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_2_0_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_2_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_2_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_2_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse1_2_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_2_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_2_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse1_2_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_2_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_2_0_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse1_2_0_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_2_0_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_2_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_2_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_2_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse1_2_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_2_1_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_2_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse1_2_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_2_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_2_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse1_2_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_2_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse1_2_1_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse1_2_1_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse1_2_1_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse2_1_2_0_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse2_1_2_0_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_0_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse2_1_2_0_0_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_0_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse2_1_2_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse2_1_2_0_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_1_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse2_1_2_0_1_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_1_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse2_1_2_0_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_2_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse2_1_2_0_2_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_2_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_3_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_3_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_3_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_3_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_3_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse2_1_2_0_3_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_3_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_3_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse2_1_2_0_3_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_3_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_4_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_4_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_4_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_4_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_4_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse2_1_2_0_4_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_4_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_1_2_0_4_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_outside_update_requires_pivot_dominance_sse2_1_2_0_4_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_1_2_0_4_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse2_0_2_1_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse2_0_2_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse2_0_2_1_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_0_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse2_0_2_1_0_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_0_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse2_0_2_1_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse2_0_2_1_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_1_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse2_0_2_1_1_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_1_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse2_0_2_1_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse2_0_2_1_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_2_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse2_0_2_1_2_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_2_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_3_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_3_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_3_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse2_0_2_1_3_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_3_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_3_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse2_0_2_1_3_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_3_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_3_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse2_0_2_1_3_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_3_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_4_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_4_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_4_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse2_0_2_1_4_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_4_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_4_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse2_0_2_1_4_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_4_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_2_1_4_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_single_absence_freezes_sse2_0_2_1_4_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_2_1_4_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_0_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_0_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_0_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_0_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_0_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_1_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_1_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_1_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_1_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_1_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_2_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_2_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_2_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_2_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_2_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_3_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_3_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_3_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_3_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_3_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_3_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_3_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_3_4",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_4_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_4_0",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_4_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_4_1",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_4_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_4_2",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_private_intersection_sse2_0_1_2_4_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_pivot_dominance_persists_sse2_0_1_2_4_3",
+      "result": "unsat"
+    },
+    {
+      "name": "n5_union_bound_preserves_target_pivot_containment",
+      "result": "unsat"
+    }
+  ]
+}

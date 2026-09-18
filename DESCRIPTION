@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.11.0-9000
+Version: 0.12.0-9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -217,6 +217,7 @@ Collate:
     'gunion.R'
     'mlr_graphs.R'
     'operators.R'
+    'pipeline_bag.R'
     'pipeline_bagging.R'
     'pipeline_branch.R'
     'pipeline_convert_types.R'
@@ -231,5 +232,4 @@ Collate:
     'reexports.R'
     'typecheck.R'
     'zzz.R'
-Config/roxygen2/version: 8.0.0
-RoxygenNote: 7.3.2
+Config/roxygen2/version: 8.1.0

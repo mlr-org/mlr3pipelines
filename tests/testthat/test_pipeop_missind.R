@@ -1,7 +1,7 @@
 context("PipeOpMissInd")
 
 test_that("PipeOpMissInd", {
-  task = mlr_tasks$get("pima")
+  task = mlr_tasks$get("diabetes")
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task)
 

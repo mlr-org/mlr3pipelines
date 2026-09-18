@@ -1,0 +1,316 @@
+{
+  "summary": {
+    "runtime": "4.6.1",
+    "checkmate": "2.3.4",
+    "configurations": 7,
+    "largest_initial_width": 258,
+    "assignment_rows": 6944,
+    "positive_padding_traces_equal": true,
+    "every_second_pass_productive": true,
+    "common_padding_factored_truth_preserved": true,
+    "all_public_outputs_match_observer": true
+  },
+  "records": [
+    {
+      "padding": 0,
+      "initial_width": 2,
+      "first_widths": [2, 2],
+      "second_widths": [2, 1],
+      "first_core": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0"]
+        }
+      ],
+      "second_core": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X1": ["4", "0"]
+        }
+      ],
+      "first_leftover": [
+        {
+          "donor": 1,
+          "target": 2,
+          "symbol": "X0",
+          "removed": "0"
+        }
+      ],
+      "second_leftovers": 0,
+      "evaluated_assignments": 16,
+      "truth_mode": "full",
+      "core_models": 5,
+      "exact_model_count": "16 * 2^0 - 11",
+      "first_trace_events": 42,
+      "second_trace_events": 9,
+      "register_unit_entries": 2,
+      "all_truth_preserved": true,
+      "productive_second_pass": true
+    },
+    {
+      "padding": 1,
+      "initial_width": 3,
+      "first_widths": [3, 3],
+      "second_widths": [3, 2],
+      "first_core": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0"]
+        }
+      ],
+      "second_core": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X1": ["4", "0"]
+        }
+      ],
+      "first_leftover": [
+        {
+          "donor": 1,
+          "target": 2,
+          "symbol": "X0",
+          "removed": "0"
+        }
+      ],
+      "second_leftovers": 0,
+      "evaluated_assignments": 32,
+      "truth_mode": "full",
+      "core_models": 5,
+      "exact_model_count": "16 * 2^1 - 11",
+      "first_trace_events": 58,
+      "second_trace_events": 16,
+      "register_unit_entries": 0,
+      "all_truth_preserved": true,
+      "productive_second_pass": true
+    },
+    {
+      "padding": 2,
+      "initial_width": 4,
+      "first_widths": [4, 4],
+      "second_widths": [4, 3],
+      "first_core": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0"]
+        }
+      ],
+      "second_core": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X1": ["4", "0"]
+        }
+      ],
+      "first_leftover": [
+        {
+          "donor": 1,
+          "target": 2,
+          "symbol": "X0",
+          "removed": "0"
+        }
+      ],
+      "second_leftovers": 0,
+      "evaluated_assignments": 64,
+      "truth_mode": "full",
+      "core_models": 5,
+      "exact_model_count": "16 * 2^2 - 11",
+      "first_trace_events": 58,
+      "second_trace_events": 16,
+      "register_unit_entries": 0,
+      "all_truth_preserved": true,
+      "productive_second_pass": true
+    },
+    {
+      "padding": 3,
+      "initial_width": 5,
+      "first_widths": [5, 5],
+      "second_widths": [5, 4],
+      "first_core": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0"]
+        }
+      ],
+      "second_core": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X1": ["4", "0"]
+        }
+      ],
+      "first_leftover": [
+        {
+          "donor": 1,
+          "target": 2,
+          "symbol": "X0",
+          "removed": "0"
+        }
+      ],
+      "second_leftovers": 0,
+      "evaluated_assignments": 128,
+      "truth_mode": "full",
+      "core_models": 5,
+      "exact_model_count": "16 * 2^3 - 11",
+      "first_trace_events": 58,
+      "second_trace_events": 16,
+      "register_unit_entries": 0,
+      "all_truth_preserved": true,
+      "productive_second_pass": true
+    },
+    {
+      "padding": 7,
+      "initial_width": 9,
+      "first_widths": [9, 9],
+      "second_widths": [9, 8],
+      "first_core": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0"]
+        }
+      ],
+      "second_core": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X1": ["4", "0"]
+        }
+      ],
+      "first_leftover": [
+        {
+          "donor": 1,
+          "target": 2,
+          "symbol": "X0",
+          "removed": "0"
+        }
+      ],
+      "second_leftovers": 0,
+      "evaluated_assignments": 2048,
+      "truth_mode": "full",
+      "core_models": 5,
+      "exact_model_count": "16 * 2^7 - 11",
+      "first_trace_events": 58,
+      "second_trace_events": 16,
+      "register_unit_entries": 0,
+      "all_truth_preserved": true,
+      "productive_second_pass": true
+    },
+    {
+      "padding": 31,
+      "initial_width": 33,
+      "first_widths": [33, 33],
+      "second_widths": [33, 32],
+      "first_core": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0"]
+        }
+      ],
+      "second_core": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X1": ["4", "0"]
+        }
+      ],
+      "first_leftover": [
+        {
+          "donor": 1,
+          "target": 2,
+          "symbol": "X0",
+          "removed": "0"
+        }
+      ],
+      "second_leftovers": 0,
+      "evaluated_assignments": 528,
+      "truth_mode": "every_single_padding_plus_all_false_all_true",
+      "core_models": 5,
+      "exact_model_count": "16 * 2^31 - 11",
+      "first_trace_events": 58,
+      "second_trace_events": 16,
+      "register_unit_entries": 0,
+      "all_truth_preserved": true,
+      "productive_second_pass": true
+    },
+    {
+      "padding": 256,
+      "initial_width": 258,
+      "first_widths": [258, 258],
+      "second_widths": [258, 257],
+      "first_core": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0"]
+        }
+      ],
+      "second_core": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X1": ["4", "0"]
+        }
+      ],
+      "first_leftover": [
+        {
+          "donor": 1,
+          "target": 2,
+          "symbol": "X0",
+          "removed": "0"
+        }
+      ],
+      "second_leftovers": 0,
+      "evaluated_assignments": 4128,
+      "truth_mode": "every_single_padding_plus_all_false_all_true",
+      "core_models": 5,
+      "exact_model_count": "16 * 2^256 - 11",
+      "first_trace_events": 58,
+      "second_trace_events": 16,
+      "register_unit_entries": 0,
+      "all_truth_preserved": true,
+      "productive_second_pass": true
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "R": "R version 4.6.1 (2026-06-24)",
+  "checkmate": "2.3.4",
+  "source_md5": {
+    "R/CnfUniverse.R": "45fa56698900fc42440b5dda34fbe4ff",
+    "R/CnfSymbol.R": "d1aa6bcd59ced1aa4e5ea3317d640897",
+    "R/CnfAtom.R": "58699a7eb88f45c6aa5cdb8b77cc7c41",
+    "R/CnfClause.R": "f6c9659b31a511e696dc9d8d7cfa9349",
+    "R/CnfFormula.R": "7609c11610bbe9de566d9d9b448a07f7",
+    "R/CnfFormula_simplify.R": "376aac6eb81334e751e9351f9eddc02f"
+  },
+  "counts": {
+    "random_cases": 400,
+    "result_checks": 33918,
+    "valuation_rows": 520794,
+    "exact_normalized_comparisons": 400,
+    "proper_formula_negations": 578,
+    "contradiction_negations": 222,
+    "direct_mixed_calls": 5850,
+    "native_mixed_calls": 5850,
+    "old_dispatch_exclusions": 0,
+    "known_class_losses": 52,
+    "gate_calls": 0
+  },
+  "seed": 908216,
+  "gate_enabled": false
+}

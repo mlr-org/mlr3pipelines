@@ -1,0 +1,2333 @@
+{
+  "stats": {
+    "formulas": 12240,
+    "unit_skip": 7440,
+    "unit_skip_proper": 7392,
+    "unit_skip_equal": 48,
+    "residual_formula": 48,
+    "residual_subsumption": 48
+  },
+  "elapsed": 76.79346537590027,
+  "findings": [
+    {
+      "mask": 150,
+      "permutation": [
+        0,
+        1,
+        2
+      ],
+      "orientation": [
+        0,
+        1,
+        0
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "p100",
+            "p111"
+          ],
+          "Y": [
+            "a"
+          ]
+        },
+        {
+          "Y": [
+            "b"
+          ],
+          "X": [
+            "p010",
+            "p111"
+          ]
+        },
+        {
+          "X": [
+            "p001",
+            "p111"
+          ],
+          "Y": [
+            "c"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "X": "p111",
+          "Y": "c"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "a"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p010",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p010",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p010",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "c"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        0,
+        1,
+        2
+      ],
+      "orientation": [
+        0,
+        1,
+        1
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "p100",
+            "p111"
+          ],
+          "Y": [
+            "a"
+          ]
+        },
+        {
+          "Y": [
+            "b"
+          ],
+          "X": [
+            "p010",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "c"
+          ],
+          "X": [
+            "p001",
+            "p111"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "Y": "c",
+          "X": "p111"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "a"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p010",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p010",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p010",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "c",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        0,
+        1,
+        2
+      ],
+      "orientation": [
+        1,
+        1,
+        0
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "Y": [
+            "a"
+          ],
+          "X": [
+            "p100",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "b"
+          ],
+          "X": [
+            "p010",
+            "p111"
+          ]
+        },
+        {
+          "X": [
+            "p001",
+            "p111"
+          ],
+          "Y": [
+            "c"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "X": "p111",
+          "Y": "c"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "a",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p010",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p010",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p010",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "c"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        0,
+        1,
+        2
+      ],
+      "orientation": [
+        1,
+        1,
+        1
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "Y": [
+            "a"
+          ],
+          "X": [
+            "p100",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "b"
+          ],
+          "X": [
+            "p010",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "c"
+          ],
+          "X": [
+            "p001",
+            "p111"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "Y": "c",
+          "X": "p111"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "a",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p010",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p010",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p010",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "c",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        0,
+        2,
+        1
+      ],
+      "orientation": [
+        0,
+        0,
+        1
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "p100",
+            "p111"
+          ],
+          "Y": [
+            "a"
+          ]
+        },
+        {
+          "Y": [
+            "c"
+          ],
+          "X": [
+            "p001",
+            "p111"
+          ]
+        },
+        {
+          "X": [
+            "p010",
+            "p111"
+          ],
+          "Y": [
+            "b"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "X": "p111",
+          "Y": "b"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "a"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p001",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p001",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p001",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "b"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        0,
+        2,
+        1
+      ],
+      "orientation": [
+        0,
+        1,
+        1
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "p100",
+            "p111"
+          ],
+          "Y": [
+            "a"
+          ]
+        },
+        {
+          "Y": [
+            "c"
+          ],
+          "X": [
+            "p001",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "b"
+          ],
+          "X": [
+            "p010",
+            "p111"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "Y": "b",
+          "X": "p111"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "a"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p001",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p001",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p001",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "b",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        0,
+        2,
+        1
+      ],
+      "orientation": [
+        1,
+        0,
+        1
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "Y": [
+            "a"
+          ],
+          "X": [
+            "p100",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "c"
+          ],
+          "X": [
+            "p001",
+            "p111"
+          ]
+        },
+        {
+          "X": [
+            "p010",
+            "p111"
+          ],
+          "Y": [
+            "b"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "X": "p111",
+          "Y": "b"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "a",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p001",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p001",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p001",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "b"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        0,
+        2,
+        1
+      ],
+      "orientation": [
+        1,
+        1,
+        1
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "Y": [
+            "a"
+          ],
+          "X": [
+            "p100",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "c"
+          ],
+          "X": [
+            "p001",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "b"
+          ],
+          "X": [
+            "p010",
+            "p111"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "Y": "b",
+          "X": "p111"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "a",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p001",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p001",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p001",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "b",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        1,
+        0,
+        2
+      ],
+      "orientation": [
+        1,
+        0,
+        0
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "p010",
+            "p111"
+          ],
+          "Y": [
+            "b"
+          ]
+        },
+        {
+          "Y": [
+            "a"
+          ],
+          "X": [
+            "p100",
+            "p111"
+          ]
+        },
+        {
+          "X": [
+            "p001",
+            "p111"
+          ],
+          "Y": [
+            "c"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "X": "p111",
+          "Y": "c"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "b"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p100",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p100",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p100",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "c"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        1,
+        0,
+        2
+      ],
+      "orientation": [
+        1,
+        0,
+        1
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "p010",
+            "p111"
+          ],
+          "Y": [
+            "b"
+          ]
+        },
+        {
+          "Y": [
+            "a"
+          ],
+          "X": [
+            "p100",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "c"
+          ],
+          "X": [
+            "p001",
+            "p111"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "Y": "c",
+          "X": "p111"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "b"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p100",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p100",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p100",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "c",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        1,
+        0,
+        2
+      ],
+      "orientation": [
+        1,
+        1,
+        0
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "Y": [
+            "b"
+          ],
+          "X": [
+            "p010",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "a"
+          ],
+          "X": [
+            "p100",
+            "p111"
+          ]
+        },
+        {
+          "X": [
+            "p001",
+            "p111"
+          ],
+          "Y": [
+            "c"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "X": "p111",
+          "Y": "c"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "b",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p100",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p100",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p100",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "c"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        1,
+        0,
+        2
+      ],
+      "orientation": [
+        1,
+        1,
+        1
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "Y": [
+            "b"
+          ],
+          "X": [
+            "p010",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "a"
+          ],
+          "X": [
+            "p100",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "c"
+          ],
+          "X": [
+            "p001",
+            "p111"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "Y": "c",
+          "X": "p111"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "b",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p100",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p100",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p100",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "c",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        1,
+        2,
+        0
+      ],
+      "orientation": [
+        0,
+        0,
+        1
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "p010",
+            "p111"
+          ],
+          "Y": [
+            "b"
+          ]
+        },
+        {
+          "Y": [
+            "c"
+          ],
+          "X": [
+            "p001",
+            "p111"
+          ]
+        },
+        {
+          "X": [
+            "p100",
+            "p111"
+          ],
+          "Y": [
+            "a"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "X": "p111",
+          "Y": "a"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "b"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p001",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p001",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p001",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "a"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        1,
+        2,
+        0
+      ],
+      "orientation": [
+        0,
+        1,
+        1
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "Y": [
+            "b"
+          ],
+          "X": [
+            "p010",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "c"
+          ],
+          "X": [
+            "p001",
+            "p111"
+          ]
+        },
+        {
+          "X": [
+            "p100",
+            "p111"
+          ],
+          "Y": [
+            "a"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "X": "p111",
+          "Y": "a"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "b",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p001",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p001",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p001",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "a"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        1,
+        2,
+        0
+      ],
+      "orientation": [
+        1,
+        0,
+        1
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "p010",
+            "p111"
+          ],
+          "Y": [
+            "b"
+          ]
+        },
+        {
+          "Y": [
+            "c"
+          ],
+          "X": [
+            "p001",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "a"
+          ],
+          "X": [
+            "p100",
+            "p111"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "Y": "a",
+          "X": "p111"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "b"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p001",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p001",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p001",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "a",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        1,
+        2,
+        0
+      ],
+      "orientation": [
+        1,
+        1,
+        1
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "Y": [
+            "b"
+          ],
+          "X": [
+            "p010",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "c"
+          ],
+          "X": [
+            "p001",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "a"
+          ],
+          "X": [
+            "p100",
+            "p111"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "Y": "a",
+          "X": "p111"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "b",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p001",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p001",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p001",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "a",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        2,
+        0,
+        1
+      ],
+      "orientation": [
+        1,
+        0,
+        0
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "p001",
+            "p111"
+          ],
+          "Y": [
+            "c"
+          ]
+        },
+        {
+          "Y": [
+            "a"
+          ],
+          "X": [
+            "p100",
+            "p111"
+          ]
+        },
+        {
+          "X": [
+            "p010",
+            "p111"
+          ],
+          "Y": [
+            "b"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "X": "p111",
+          "Y": "b"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "c"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p100",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p100",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p100",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "b"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        2,
+        0,
+        1
+      ],
+      "orientation": [
+        1,
+        0,
+        1
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "Y": [
+            "c"
+          ],
+          "X": [
+            "p001",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "a"
+          ],
+          "X": [
+            "p100",
+            "p111"
+          ]
+        },
+        {
+          "X": [
+            "p010",
+            "p111"
+          ],
+          "Y": [
+            "b"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "X": "p111",
+          "Y": "b"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "c",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p100",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p100",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p100",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "b"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        2,
+        0,
+        1
+      ],
+      "orientation": [
+        1,
+        1,
+        0
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "p001",
+            "p111"
+          ],
+          "Y": [
+            "c"
+          ]
+        },
+        {
+          "Y": [
+            "a"
+          ],
+          "X": [
+            "p100",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "b"
+          ],
+          "X": [
+            "p010",
+            "p111"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "Y": "b",
+          "X": "p111"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "X": "p111",
+            "Y": "c"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p100",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p100",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p100",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "b",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    },
+    {
+      "mask": 150,
+      "permutation": [
+        2,
+        0,
+        1
+      ],
+      "orientation": [
+        1,
+        1,
+        1
+      ],
+      "domains": {
+        "X": [
+          "p001",
+          "p010",
+          "p100",
+          "p111"
+        ],
+        "Y": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "clauses": [
+        {
+          "Y": [
+            "c"
+          ],
+          "X": [
+            "p001",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "a"
+          ],
+          "X": [
+            "p100",
+            "p111"
+          ]
+        },
+        {
+          "Y": [
+            "b"
+          ],
+          "X": [
+            "p010",
+            "p111"
+          ]
+        }
+      ],
+      "result": [
+        {
+          "X": "p111"
+        },
+        {
+          "Y": "b",
+          "X": "p111"
+        }
+      ],
+      "opportunities": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "c",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": [
+            "p100",
+            "p111"
+          ],
+          "source": {
+            "X": [
+              "p100",
+              "p111"
+            ]
+          },
+          "source_id": 2,
+          "target_id": 1,
+          "units": {
+            "X": [
+              "p100",
+              "p111"
+            ]
+          }
+        },
+        {
+          "kind": "unit_skip",
+          "target": {
+            "Y": "b",
+            "X": "p111"
+          },
+          "symbol": "X",
+          "allowed": "p111",
+          "source": {
+            "X": "p111"
+          },
+          "source_id": 1,
+          "target_id": 3,
+          "units": {
+            "X": "p111"
+          }
+        }
+      ]
+    }
+  ]
+}
