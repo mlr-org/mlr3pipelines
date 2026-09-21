@@ -1,5 +1,6 @@
 # mlr3pipelines 0.12.0-9000
 
+* Fix: `GraphLearner$hash` and `$phash` now include the timeout, the deadline, the encapsulation method, and the `when` handler, matching `Learner$hash` in `mlr3`, so `GraphLearner`s differing only in these settings are no longer merged by `benchmark()`.
 * Tests in `inst/testthat` no longer override `expect_equal`.
 * Fix: `pos()` now returns an unnamed list, preventing duplicated PipeOp IDs such as `pca.pca` when passed to `as_graph()`.
 * New `ppl("bag")` / `pipeline_bag()` performs real bagging with `frac = 1` and `replace = TRUE` by default. `ppl("bagging")` / `pipeline_bagging()` is deprecated and will be removed in the future.
