@@ -481,12 +481,22 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       ivs
     },
     deep_clone = function(name, value) {
-      # FIXME this repairs the mlr3::Learner deep_clone() method which is broken.
+      # Learner's deep_clone only handles specific fields; also clone our R6
+      # fields (especially .graph) and R6-valued state$param_vals.
       if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
         return(value$clone(deep = TRUE))
       }
       if (name == "state") {
         value$log = copy(value$log)
+        if (!is.null(value$param_vals)) {
+          value$param_vals = map(value$param_vals, function(x) {
+            if (is.environment(x) && !is.null(x[[".__enclos_env__"]])) {
+              x$clone(deep = TRUE)
+            } else {
+              x
+            }
+          })
+        }
       }
       value
     },
