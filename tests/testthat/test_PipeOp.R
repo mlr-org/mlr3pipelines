@@ -215,3 +215,14 @@ test_that("PipeOp - auto-train untrained PipeOps during predict that have input 
   expect_no_error(op$predict(list(predict_out)))
 
 })
+
+test_that("PipeOp - predict_type is read-only, but assigning its current value is a no-op", {
+  po_1 = PipeOpDebugBasic$new()
+  expect_null(po_1$predict_type)
+
+  po_1$predict_type = NULL
+  expect_null(po_1$predict_type)
+
+  expect_error({po_1$predict_type = "response"}, "read-only")
+  expect_null(po_1$predict_type)
+})

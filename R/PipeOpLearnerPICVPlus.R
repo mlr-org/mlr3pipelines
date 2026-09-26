@@ -149,10 +149,12 @@ PipeOpLearnerPICVPlus = R6Class("PipeOpLearnerPICVPlus",
       }
     },
     predict_type = function(val) {
-      if (!missing(val)) {
+      predict_type = mlr_reflections$learner_predict_types$regr$quantiles  # c("response", "quantiles")
+      # read-only, but assigning the current value is a no-op
+      if (!missing(val) && !identical(val, predict_type)) {
         stop("$predict_type is read-only.")
       }
-      mlr_reflections$learner_predict_types$regr$quantiles  # Returns c("response", "quantiles")
+      predict_type
     }
   ),
   private = list(

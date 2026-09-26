@@ -14,6 +14,7 @@
 #' The `predict_type` of a [`GraphLearner`] can be obtained or set via it's `predict_type` active binding.
 #' Setting a new predict type will try to set the `predict_type` in all relevant
 #' [`PipeOp`] / [`Learner`][mlr3::Learner] encapsulated within the [`Graph`].
+#' [`PipeOp`]s whose `predict_type` already has the requested value are left untouched.
 #' Similarly, the predict_type of a Graph will always be the smallest denominator in the [`Graph`].
 #'
 #' A `GraphLearner` is always constructed in an untrained state. When the `graph` argument has a
@@ -394,7 +395,11 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       predict_type_pipeops = graph_base_learner(
         self$graph, resolve_branching = missing(rhs), lookup_field = "predict_type")
       if (!missing(rhs)) {
-        walk(predict_type_pipeops, function(po) po$predict_type = rhs)
+        walk(predict_type_pipeops, function(po) {
+          # skip PipeOps that already have the requested value: assigning to a
+          # read-only predict_type errors even when nothing would change
+          if (!identical(po$predict_type, rhs)) po$predict_type = rhs
+        })
         return(rhs)
       }
       pt = unique(unlist(map(predict_type_pipeops, "predict_type"), recursive = FALSE, use.names = FALSE))
