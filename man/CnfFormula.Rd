@@ -48,6 +48,10 @@ Not all contradictions between clauses are recognized, however.
 These values can be converted to, and from, \code{logical(1)} values using \code{as.logical()}
 and \code{as.CnfFormula()}.
 
+Nonconstant inputs must belong to the same universe. Constant inputs adopt that
+universe regardless of their own universe. If all inputs are constant, the first
+available universe is retained, or \code{NULL} if none has a universe.
+
 \code{CnfFormula} objects can be negated using the \code{!} operator. Beware that this
 may lead to an exponential blow-up in the number of clauses.
 
@@ -137,11 +141,11 @@ contradiction
 !contradiction
 }
 \seealso{
-Other CNF representation objects: 
-\code{\link{CnfAtom}()},
-\code{\link{CnfClause}()},
-\code{\link{CnfSymbol}()},
-\code{\link{CnfUniverse}()}
+Other CNF representation objects:
+\code{\link[=CnfAtom]{CnfAtom()}},
+\code{\link[=CnfClause]{CnfClause()}},
+\code{\link[=CnfSymbol]{CnfSymbol()}},
+\code{\link[=CnfUniverse]{CnfUniverse()}}
 }
 \concept{CNF representation objects}
 \keyword{internal}

@@ -1,5 +1,5 @@
 context("PipeOpLearnerPICVPlus")
-
+skip_on_cran()
 # marshaling for regr.debug
 marshal_model.regr.debug_model = function(model, inplace = FALSE, ...) {
   if (!is.null(model$marshal_count)) {

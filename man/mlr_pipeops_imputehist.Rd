@@ -3,12 +3,12 @@
 \name{mlr_pipeops_imputehist}
 \alias{mlr_pipeops_imputehist}
 \alias{PipeOpImputeHist}
-\title{Impute Numerical Features by Histogram}
+\title{Impute Numeric, Integer, POSIXct or Date Features by Histogram}
 \format{
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
 \description{
-Impute numerical features by histogram.
+Impute numeric, integer, POSIXct or Date features by histogram.
 
 During training, a histogram is fitted on each column using R's \code{\link[graphics:hist]{hist()}} function.
 The fitted histogram is then sampled from for imputation. Sampling happens in a two-step process:
@@ -34,7 +34,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 Input and output channels are inherited from \code{\link{PipeOpImpute}}.
 
-The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric features missing values imputed by (column-wise) histogram; see Description for details.
+The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric, integer, POSIXct or Date features missing values imputed by (column-wise) histogram; see Description for details.
 }
 
 \section{State}{
@@ -67,7 +67,7 @@ Only methods inherited from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 \examples{
 library("mlr3")
 
-task = tsk("pima")
+task = tsk("diabetes")
 task$missings()
 
 po = po("imputehist")
@@ -79,7 +79,7 @@ po$state$model
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
@@ -96,6 +96,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_classbalancing}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_classweights}},
+\code{\link{mlr_pipeops_classweightsex}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},
@@ -125,6 +126,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},
 \code{\link{mlr_pipeops_learner_quantiles}},
+\code{\link{mlr_pipeops_materialize}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
@@ -152,6 +154,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
+\code{\link{mlr_pipeops_splines}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
 \code{\link{mlr_pipeops_targetmutate}},
@@ -165,7 +168,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}}
 
-Other Imputation PipeOps: 
+Other Imputation PipeOps:
 \code{\link{PipeOpImpute}},
 \code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputelearner}},

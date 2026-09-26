@@ -1,0 +1,13 @@
+{"stats": {"formulas": 250, "unit_births": 462, "skip_certificates": 394, "requires_older_unit": 30, "outside_current_unit": 30}, "elapsed": 40.95953631401062}
+{"stats": {"formulas": 500, "unit_births": 906, "skip_certificates": 795, "requires_older_unit": 36, "outside_current_unit": 36}, "elapsed": 85.64539361000061}
+{"stats": {"formulas": 750, "unit_births": 1342, "skip_certificates": 1270, "requires_older_unit": 51, "outside_current_unit": 51}, "elapsed": 130.93433952331543}
+{"stats": {"formulas": 1000, "unit_births": 1780, "skip_certificates": 1575, "requires_older_unit": 54, "outside_current_unit": 54}, "elapsed": 176.07036638259888}
+{"stats": {"formulas": 1250, "unit_births": 2259, "skip_certificates": 2042, "requires_older_unit": 97, "outside_current_unit": 97}, "elapsed": 226.45660877227783}
+{"stats": {"formulas": 1500, "unit_births": 2674, "skip_certificates": 2416, "requires_older_unit": 110, "outside_current_unit": 110}, "elapsed": 274.0300328731537}
+{"stats": {"formulas": 1750, "unit_births": 3190, "skip_certificates": 2920, "requires_older_unit": 162, "outside_current_unit": 162}, "elapsed": 313.30249404907227}
+{"stats": {"formulas": 2000, "unit_births": 3531, "skip_certificates": 3195, "requires_older_unit": 171, "outside_current_unit": 171}, "elapsed": 361.9223611354828}
+{"stats": {"formulas": 2250, "unit_births": 4012, "skip_certificates": 3660, "requires_older_unit": 194, "outside_current_unit": 194}, "elapsed": 405.89262342453003}
+{"stats": {"formulas": 2500, "unit_births": 4386, "skip_certificates": 3962, "requires_older_unit": 200, "outside_current_unit": 200}, "elapsed": 456.86552357673645}
+{"stats": {"formulas": 2750, "unit_births": 4831, "skip_certificates": 4381, "requires_older_unit": 221, "outside_current_unit": 221}, "elapsed": 495.9780099391937}
+{"stats": {"formulas": 3000, "unit_births": 5244, "skip_certificates": 4798, "requires_older_unit": 246, "outside_current_unit": 246}, "elapsed": 536.0972766876221}
+{"stats": {"formulas": 3000, "unit_births": 5244, "skip_certificates": 4798, "requires_older_unit": 246, "outside_current_unit": 246}, "elapsed": 536.1291086673737}

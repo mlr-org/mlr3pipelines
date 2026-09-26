@@ -98,7 +98,7 @@ This method is abstract, it must be implemented by deriving classes.
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpImpute}},
@@ -114,6 +114,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_classbalancing}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_classweights}},
+\code{\link{mlr_pipeops_classweightsex}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},
@@ -144,6 +145,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},
 \code{\link{mlr_pipeops_learner_quantiles}},
+\code{\link{mlr_pipeops_materialize}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
@@ -171,6 +173,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
+\code{\link{mlr_pipeops_splines}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
 \code{\link{mlr_pipeops_targetmutate}},
@@ -184,8 +187,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}}
 
-Other Multiplicity PipeOps: 
-\code{\link{Multiplicity}()},
+Other Multiplicity PipeOps:
+\code{\link[=Multiplicity]{Multiplicity()}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_multiplicityexply}},
@@ -195,7 +198,7 @@ Other Multiplicity PipeOps:
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_replicate}}
 
-Other Ensembles: 
+Other Ensembles:
 \code{\link{mlr_learners_avg}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_ovrunite}},

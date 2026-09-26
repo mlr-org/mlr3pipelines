@@ -8,14 +8,10 @@
 #' The dictionary contains a collection of often-used graph structures, and it's aim
 #' is solely to make often-used functions more accessible.
 #' Each `Graph` has an associated help page, which can be accessed via `?mlr_graphs_<key>`, i.e.
-#' `?mlr_graphs_bagging`.
+#' `?mlr_graphs_bag`.
 #'
 #' @section Methods:
-#' Methods inherited from [`Dictionary`][mlr3misc::Dictionary], as well as:
-#' * `add(key, value)`\cr
-#'   (`character(1)`, `function`)\cr
-#'   Adds constructor `value` to the dictionary with key `key`, potentially
-#'   overwriting a previously stored item.
+#' Methods inherited from [`Dictionary`][mlr3misc::Dictionary].
 #'
 #' @section S3 methods:
 #' * `as.data.table(dict)`\cr
@@ -39,15 +35,7 @@
 #'
 #' # all Graphs currently in the dictionary:
 #' as.data.table(mlr_graphs)
-mlr_graphs = R6Class("DictionaryGraph", inherit = Dictionary,
-  cloneable = FALSE,
-  public = list(
-    add = function(key, value) {
-      assert_function(value)
-      ret = super$add(key, value)
-      invisible(self)
-    }
-))$new()
+mlr_graphs = R6Class("DictionaryGraph", inherit = Dictionary, cloneable = FALSE)$new()
 
 #' @export
 as.data.table.DictionaryGraph = function(x, ...) {

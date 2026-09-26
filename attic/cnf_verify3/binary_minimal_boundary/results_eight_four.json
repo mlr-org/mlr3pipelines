@@ -1,0 +1,196 @@
+{
+  "calibrations": [
+    {
+      "variables": 2,
+      "clauses": 4,
+      "complement_distances": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "one_clause_deletion_model_counts": [
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "variables": 3,
+      "clauses": 6,
+      "complement_distances": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "one_clause_deletion_model_counts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "variables": 4,
+      "clauses": 8,
+      "complement_distances": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "one_clause_deletion_model_counts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    }
+  ],
+  "scopes": [
+    {
+      "clauses": 8,
+      "variables": 4,
+      "counts": {
+        "multigraphs": 14,
+        "gauge_fixed_signings": 1472,
+        "signings_without_pure_literals": 1376,
+        "short_seed_free_signings": 264,
+        "unrecognized_contradictions": 24
+      },
+      "witnesses": [
+        [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            6
+          ]
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            4,
+            7
+          ]
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            5,
+            7
+          ]
+        ]
+      ]
+    }
+  ],
+  "elapsed_seconds": 0.04555054008960724,
+  "totals": {
+    "multigraphs": 14,
+    "gauge_fixed_signings": 1472,
+    "signings_without_pure_literals": 1376,
+    "short_seed_free_signings": 264,
+    "unrecognized_contradictions": 24
+  },
+  "requested_bounds": {
+    "min_clauses": 8,
+    "max_clauses": 8,
+    "min_variables": 4,
+    "max_variables": 4,
+    "output": "results_eight_four.json"
+  }
+}

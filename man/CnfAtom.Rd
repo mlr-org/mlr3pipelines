@@ -17,7 +17,11 @@ as.CnfAtom(x)
 The symbol to which the atom refers.}
 
 \item{values}{(\code{character}) \cr
-The values that the symbol can take.}
+The values that the symbol can take, as a character vector without dimensions
+or custom classes, missing values, byte-marked strings, or invalid encodings.
+Accepted text is converted to UTF-8 and repeated values are removed.
+Use \code{character(0)} for the empty selection; other unclassed zero-length vectors
+and \code{NULL} are also accepted.}
 
 \item{e1}{(\code{CnfSymbol}) \cr
 Left-hand side of the \verb{\%among\%} operator.
@@ -84,11 +88,11 @@ X \%among\% "a" | X \%among\% "b"  # creates a CnfClause
 X \%among\% "a" & X \%among\% c("a", "b")  # creates a CnfFormula
 }
 \seealso{
-Other CNF representation objects: 
-\code{\link{CnfClause}()},
-\code{\link{CnfFormula}()},
-\code{\link{CnfSymbol}()},
-\code{\link{CnfUniverse}()}
+Other CNF representation objects:
+\code{\link[=CnfClause]{CnfClause()}},
+\code{\link[=CnfFormula]{CnfFormula()}},
+\code{\link[=CnfSymbol]{CnfSymbol()}},
+\code{\link[=CnfUniverse]{CnfUniverse()}}
 }
 \concept{CNF representation objects}
 \keyword{internal}

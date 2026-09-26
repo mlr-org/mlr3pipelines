@@ -71,10 +71,10 @@ LeDell, Erin (2015).
 Ph.D. thesis, UC Berkeley.
 }
 \seealso{
-Other Learners: 
+Other Learners:
 \code{\link{mlr_learners_graph}}
 
-Other Ensembles: 
+Other Ensembles:
 \code{\link{PipeOpEnsemble}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_ovrunite}},

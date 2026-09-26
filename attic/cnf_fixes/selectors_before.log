@@ -1,0 +1,81 @@
+Console output with transient progress-spinner lines removed.
+ℹ Testing mlr3pipelines
+✔ | F W  S  OK | Context
+
+✖ | 12       18 | CnfSelectors
+────────────────────────────────────────────────────────────────────────────────
+Failure ('test_CnfSelectors.R:7:5'): CnfClause rejects dimensional selectors
+Expected `clause[matrix(indices, nrow = 1L)]` to throw a error.
+
+Failure ('test_CnfSelectors.R:8:5'): CnfClause rejects dimensional selectors
+Expected `clause[array(indices, c(1L, 2L, 1L))]` to throw a error.
+
+Failure ('test_CnfSelectors.R:7:5'): CnfClause rejects dimensional selectors
+Expected `clause[matrix(indices, nrow = 1L)]` to throw a error.
+
+Failure ('test_CnfSelectors.R:8:5'): CnfClause rejects dimensional selectors
+Expected `clause[array(indices, c(1L, 2L, 1L))]` to throw a error.
+
+Error ('test_CnfSelectors.R:7:5'): CnfClause rejects dimensional selectors
+Error: Assertion on 'i' failed: One of the following must apply:
+ * check_numeric(i): Must be of type 'numeric', not 'matrix'
+ * check_subset(i): Must be a subset of {'X'}, but has different type
+ * check_logical(i): Must have length 1, but has length 2.
+Backtrace:
+     ▆
+  1. ├─testthat::expect_error(clause[matrix(indices, nrow = 1L)], "atomic vector") at test_CnfSelectors.R:7:5
+  2. │ └─testthat:::expect_condition_matching_(...)
+  3. │   └─testthat:::quasi_capture(...)
+  4. │     ├─testthat (local) .capture(...)
+  5. │     │ └─base::withCallingHandlers(...)
+  6. │     └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+  7. ├─clause[matrix(indices, nrow = 1L)]
+  8. └─mlr3pipelines:::`[.CnfClause`(clause, matrix(indices, nrow = 1L))
+  9.   └─checkmate::assert(...) at work/R/CnfClause.R:234:3
+ 10.     └─checkmate:::mstopOrPush(res = msgs, v_name = .var.name, collection = add)
+ 11.       └─checkmate:::mstop("Assertion on '%s' failed: %s.", v_name, res)
+
+Failure ('test_CnfSelectors.R:23:5'): CnfClause rejects missing selectors of every accepted type
+Expected `unit[index]` to throw a error.
+
+Failure ('test_CnfSelectors.R:23:5'): CnfClause rejects missing selectors of every accepted type
+Expected `unit[index]` to throw a error.
+
+Failure ('test_CnfSelectors.R:23:5'): CnfClause rejects missing selectors of every accepted type
+Expected `unit[index]` to throw a error.
+
+Failure ('test_CnfSelectors.R:23:5'): CnfClause rejects missing selectors of every accepted type
+Expected `unit[index]` to throw a error.
+
+Failure ('test_CnfSelectors.R:26:5'): CnfClause rejects missing selectors of every accepted type
+Expected `clause[indices]` to throw a error.
+
+Failure ('test_CnfSelectors.R:26:5'): CnfClause rejects missing selectors of every accepted type
+Expected `clause[indices]` to throw a error.
+
+Error ('test_CnfSelectors.R:26:5'): CnfClause rejects missing selectors of every accepted type
+Error: Assertion on 'i' failed: One of the following must apply:
+ * check_numeric(i): Must be of type 'numeric', not 'character'
+ * check_subset(i): Must be a subset of {'X','Y'}, but has additional
+ * elements {'NA'}
+ * check_logical(i): Must be of type 'logical', not 'character'.
+Backtrace:
+     ▆
+  1. ├─testthat::expect_error(clause[indices], "missing") at test_CnfSelectors.R:26:5
+  2. │ └─testthat:::expect_condition_matching_(...)
+  3. │   └─testthat:::quasi_capture(...)
+  4. │     ├─testthat (local) .capture(...)
+  5. │     │ └─base::withCallingHandlers(...)
+  6. │     └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+  7. ├─clause[indices]
+  8. └─mlr3pipelines:::`[.CnfClause`(clause, indices)
+  9.   └─checkmate::assert(...) at work/R/CnfClause.R:234:3
+ 10.     └─checkmate:::mstopOrPush(res = msgs, v_name = .var.name, collection = add)
+ 11.       └─checkmate:::mstop("Assertion on '%s' failed: %s.", v_name, res)
+────────────────────────────────────────────────────────────────────────────────
+
+Maximum number of failures exceeded; quitting.
+ℹ Increase this number with (e.g.) `testthat::set_max_fails(Inf)`
+Error:
+! Test failures.
+Execution halted

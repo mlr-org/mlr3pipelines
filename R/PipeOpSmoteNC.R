@@ -103,7 +103,7 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
         return(task)
       }
       # SmoteNC cannot generate synthetic data for non-feature columns
-      unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
+      unsupported_cols = setdiff(unlist(task$col_roles), c(cols, task$target_names, task$col_roles$name))
       if (length(unsupported_cols)) {
         stopf("SMOTENC cannot generate synthetic data for the following columns since they are neither features nor targets: %s.",
               str_collapse(unsupported_cols, quote = '"'))
@@ -132,6 +132,8 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
       # Convert originally integer columns back to integer as SMOTENC treats them as numeric
       int_cols = task$feature_names[task$feature_types$type == "integer"]
       snc[, (int_cols) := lapply(.SD, function(x) as.integer(round(x))), .SDcols = int_cols]
+      # Assign generated rows a synthetic "name" value based on the PipeOp id.
+      snc = add_synthetic_name_col(task, snc, self$id)
 
       # Re-add empty target levels
       task$set_levels(levels)

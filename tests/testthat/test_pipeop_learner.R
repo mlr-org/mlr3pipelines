@@ -210,5 +210,13 @@ test_that("internal_tuned_values, internal_valid_scores", {
   expect_int(obj$internal_tuned_values$iter)
   expect_list(obj$internal_tuned_values, types = "numeric")
   expect_equal(names(obj$internal_valid_scores), "acc")
+  expect_equal(names(obj$best_valid_scores), "acc")
+  expect_true(obj$best_valid_scores$acc >= obj$internal_valid_scores$acc)
+
+  # PipeOps wrapping a Learner without validation report neither
+  obj_novalid = as_pipeop(lrn("classif.rpart"))
+  obj_novalid$train(list(task))
+  expect_null(obj_novalid$internal_valid_scores)
+  expect_null(obj_novalid$best_valid_scores)
 })
 

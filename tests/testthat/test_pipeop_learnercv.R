@@ -1,6 +1,7 @@
 context("PipeOpLearnerCV")
-
 test_that("PipeOpLearnerCV - basic properties", {
+  skip_on_cran()
+
   lrn = mlr_learners$get("classif.featureless")
   po = PipeOpLearnerCV$new(lrn)
   expect_pipeop(po$clone(), check_ps_default_values = FALSE)
@@ -39,6 +40,7 @@ test_that("PipeOpLearnerCV - basic properties", {
 })
 
 test_that("PipeOpLearnerCV - param values", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   lrn = mlr_learners$get("classif.rpart")
   polrn = PipeOpLearnerCV$new(lrn)
@@ -68,6 +70,7 @@ test_that("PipeOpLearnerCV - param values", {
 })
 
 test_that("PipeOpLearnerCV se aggregation default matches learner predict_type", {
+  skip_on_cran()
   learner_resp = LearnerRegrDebug$new()
   learner_resp$predict_type = "response"
   po_resp = PipeOpLearnerCV$new(learner_resp)
@@ -86,6 +89,7 @@ test_that("PipeOpLearnerCV se aggregation default matches learner predict_type",
 })
 
 test_that("PipeOpLearnerCV - cv ensemble averages fold learners", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   task = tsk("iris")
   learner = lrn("classif.rpart", predict_type = "prob")
@@ -96,38 +100,45 @@ test_that("PipeOpLearnerCV - cv ensemble averages fold learners", {
       resampling.predict_method = "cv_ensemble"
     )
   )
+  prob_feature_names = paste0(po$id, ".prob.", task$class_names)
+  response_feature_name = paste0(po$id, ".response")
 
-  trained_task = po$train(list(task))[[1]]
-  expect_setequal(trained_task$feature_names, c(
-    sprintf("%s.response", po$id),
-    paste0(po$id, ".prob.", task$class_names)
-  ))
+  trained_task = po$train(list(task))[[1L]]
+  expect_setequal(trained_task$feature_names, c(response_feature_name, prob_feature_names))
   expect_equal(po$state$predict_method, "cv_ensemble")
   expect_length(po$state$cv_model_states, 2)
 
-  result_task = po$predict(list(task))[[1]]
-  prob_feature_names = paste0(po$id, ".prob.", task$class_names)
+  result_task = po$predict(list(task))[[1L]]
+  pred_probs = as.matrix(result_task$data(cols = prob_feature_names))
+  # Ignore ties to avoid randomness in test
+  non_tie_indices = which(apply(pred_probs, 1, function(x) !any(duplicated(x))))
+  pred_probs = pred_probs[non_tie_indices, ]
 
-  pred_probs = as.matrix(result_task$data(rows = task$row_ids, cols = prob_feature_names))
   manual_probs = mlr3misc::map(po$state$cv_model_states, function(state) {
     clone = learner$clone(deep = TRUE)
     clone$state = state
     dt = as.data.table(clone$predict(task))
-    data.table::setorder(dt, row_ids)
+    setorder(dt, row_ids)
     as.matrix(dt[, paste0("prob.", task$class_names), with = FALSE])
   })
   manual_prob = Reduce(`+`, manual_probs) / length(manual_probs)
   colnames(manual_prob) = prob_feature_names
+  # We ignore cases with ties to avoid randomness
+  non_tie_indices_manual = which(apply(manual_prob, 1, function(x) !any(duplicated(x))))
+  manual_prob = manual_prob[non_tie_indices_manual, ]
+
   expect_equal(pred_probs, manual_prob)
 
-  result_response = result_task$data(rows = task$row_ids, cols = sprintf("%s.response", po$id))[[1]]
+  result_response = result_task$data(cols = response_feature_name)[non_tie_indices, ][[1L]]
+  manual_response = task$class_names[max.col(manual_prob)]
   expect_equal(
     as.character(result_response),
-    task$class_names[max.col(manual_prob)]
+    manual_response
   )
 })
 
 test_that("PipeOpLearnerCV - cv ensemble drops response when requested", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   task = tsk("iris")
   learner = lrn("classif.rpart", predict_type = "prob")
@@ -143,6 +154,7 @@ test_that("PipeOpLearnerCV - cv ensemble drops response when requested", {
 })
 
 test_that("PipeOpLearnerCV - cv ensemble averages classif responses", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   task = tsk("iris")
   learner = lrn("classif.rpart", predict_type = "response")
@@ -188,6 +200,7 @@ test_that("PipeOpLearnerCV - cv ensemble averages classif responses", {
 })
 
 test_that("PipeOpLearnerCV - cv ensemble log prob aggregation", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   task = tsk("iris")
   learner = lrn("classif.rpart", predict_type = "prob")
@@ -233,6 +246,7 @@ test_that("PipeOpLearnerCV - cv ensemble log prob aggregation", {
 })
 
 test_that("PipeOpLearnerCV - log aggregation with zeros uses epsilon", {
+  skip_on_cran()
   backend = data.table::data.table(
     x = 1:2,
     y = factor(c("a", "b"), levels = c("a", "b"))
@@ -261,6 +275,7 @@ test_that("PipeOpLearnerCV - log aggregation with zeros uses epsilon", {
 })
 
 test_that("PipeOpLearnerCV - log aggregation epsilon controls shrinkage", {
+  skip_on_cran()
   backend = data.table::data.table(
     x = 1:3,
     y = factor(c("a", "b", "b"), levels = c("a", "b"))
@@ -314,8 +329,9 @@ test_that("PipeOpLearnerCV - log aggregation epsilon controls shrinkage", {
 })
 
 test_that("PipeOpLearnerCV - cv ensemble averages regression predictions", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
-  task = TaskRegr$new("mtcars", backend = data.table::as.data.table(mtcars), target = "mpg")
+  task = tsk("mtcars")
   learner = lrn("regr.rpart")
   po = PipeOpLearnerCV$new(learner,
     param_vals = list(resampling.folds = 2, resampling.predict_method = "cv_ensemble")
@@ -340,6 +356,7 @@ test_that("PipeOpLearnerCV - cv ensemble averages regression predictions", {
 })
 
 test_that("PipeOpLearnerCV - cv ensemble handles multiplicity", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   tasks = Multiplicity(tsk("iris"), tsk("sonar"))
   learner = lrn("classif.rpart", predict_type = "prob")
@@ -369,6 +386,7 @@ test_that("PipeOpLearnerCV - cv ensemble handles multiplicity", {
 })
 
 test_that("PipeOpLearnerCV - cv ensemble requires resampling method cv", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   po = PipeOpLearnerCV$new(
     lrn("classif.rpart"),
@@ -378,6 +396,7 @@ test_that("PipeOpLearnerCV - cv ensemble requires resampling method cv", {
 })
 
 test_that("PipeOpLearnerCV - learner_model returns averaged ensemble", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   task = tsk("iris")
   learner = lrn("classif.rpart", predict_type = "prob")
@@ -410,6 +429,7 @@ test_that("PipeOpLearnerCV - learner_model returns averaged ensemble", {
 })
 
 test_that("PipeOpLearnerCV - cv ensemble with predict_type = 'se'", {
+  skip_on_cran()
   skip_if_not_installed("mlr3learners")
   task = tsk("mtcars")
   learner = lrn("regr.lm", predict_type = "se")
@@ -449,6 +469,7 @@ test_that("PipeOpLearnerCV - cv ensemble with predict_type = 'se'", {
 })
 
 test_that("PipeOpLearnerCV - within resampling", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   lrn = mlr_learners$get("classif.rpart")
   gr = GraphLearner$new(PipeOpLearnerCV$new(lrn) %>>% po(id = "l2", lrn))
@@ -457,6 +478,7 @@ test_that("PipeOpLearnerCV - within resampling", {
 })
 
 test_that("PipeOpLearnerCV - insample resampling", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   lrn = mlr_learners$get("classif.featureless")
   iris_with_unambiguous_mode = mlr_tasks$get("iris")$filter(c(1:30, 70:150))  # want featureless learner without randomness
@@ -473,6 +495,7 @@ test_that("PipeOpLearnerCV - insample resampling", {
 })
 
 test_that("PipeOpLearnerCV - graph but no id", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   g = PipeOpNOP$new() %>>% PipeOpLearner$new(LearnerClassifRpart$new())
   po = PipeOpLearnerCV$new(g)
@@ -480,6 +503,7 @@ test_that("PipeOpLearnerCV - graph but no id", {
 })
 
 test_that("PipeOpLearnerCV - model active binding to state", {
+  skip_on_cran()
   lrn = mlr_learners$get("classif.featureless")
   po = PipeOpLearnerCV$new(lrn)
   task = mlr_tasks$get("iris")
@@ -503,6 +527,7 @@ test_that("PipeOpLearnerCV - model active binding to state", {
 })
 
 test_that("predict_type", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   expect_equal(po("learner_cv", lrn("classif.rpart", predict_type = "response"))$predict_type, "response")
   expect_equal(po("learner_cv", lrn("classif.rpart", predict_type = "prob"))$predict_type, "prob")
@@ -526,6 +551,7 @@ test_that("predict_type", {
 })
 
 test_that("marshal", {
+  skip_on_cran()
   task = tsk("iris")
   po_lrn = as_pipeop(po("learner_cv", learner = lrn("classif.debug")))
   po_lrn$train(list(task))
@@ -605,6 +631,7 @@ test_that("marshal multiplicity", {
 })
 
 test_that("marshal with cv ensemble", {
+  skip_on_cran()
   skip_if_not_installed("rpart")
   task = tsk("iris")
   po = po("learner_cv", learner = lrn("classif.rpart", predict_type = "prob"),
@@ -624,6 +651,7 @@ test_that("marshal with cv ensemble", {
 })
 
 test_that("state class and multiplicity", {
+  skip_on_cran()
   po = po("learner_cv", learner = lrn("classif.debug"))
   po$train(list(Multiplicity(tsk("iris"))))
   expect_class(po$state, "Multiplicity")
@@ -638,6 +666,7 @@ test_that("state class and multiplicity", {
 })
 
 test_that("PipeOpLearnerCV cv ensemble aggregates SE like PipeOpRegrAvg", {
+  skip_on_cran()
   task_backend = data.table::data.table(
     x1 = c(1, 2, 3, 4),
     x2 = c(4, 3, 2, 1),
@@ -719,4 +748,100 @@ test_that("PipeOpLearnerCV cv ensemble aggregates SE like PipeOpRegrAvg", {
       expect_equal(graph_pred$se, expected_se)
     }
   }
+})
+
+test_that("PipeOpLearnerCV cv ensemble handles unsorted, subsetted row_ids (classif)",{
+  skip_on_cran()
+  skip_if_not_installed("rpart")
+
+  set.seed(1)
+  task = tsk("iris")$filter(c(1, 15, 3, 42, 28, 52, 88, 65, 98, 73, 120, 102, 135, 141, 108))  # unsorted, subsetted row_ids
+
+  learner = lrn("classif.rpart", predict_type = "prob")
+  op = po("learner_cv", learner, 
+    resampling.predict_method = "cv_ensemble", 
+    resampling.prob_aggr = "mean",
+    resampling.keep_response = TRUE)
+  
+  op$train(list(task))
+  result_task = op$predict(list(task))[[1]]
+  
+  prob_feature_names = paste0(op$id, ".prob.", task$class_names)
+  pred_probs = as.matrix(result_task$data(cols = prob_feature_names))
+  # We ignore cases with ties to avoid randomness
+  non_tie_indices_pred = which(apply(pred_probs, 1, function(x) !any(duplicated(x))))
+  pred_probs = pred_probs[non_tie_indices_pred, ]
+
+  manual_probs = map(op$state$cv_model_states, function(state) {
+    clone = learner$clone(deep = TRUE)
+    clone$state = state
+    dt = as.data.table(clone$predict(task))
+    # setorder(dt, row_ids)
+    as.matrix(dt[, paste0("prob.", task$class_names), with = FALSE])
+  })
+  manual_prob = Reduce(`+`, manual_probs) / length(manual_probs)
+  colnames(manual_prob) = prob_feature_names
+  # We ignore cases with ties to avoid randomness
+  non_tie_indices_manual = which(apply(manual_prob, 1, function(x) !any(duplicated(x))))
+  manual_prob = manual_prob[non_tie_indices_manual, ]
+
+  expect_equal(pred_probs, manual_prob)
+
+  pred_response = result_task$data(cols = "classif.rpart.response")[non_tie_indices_pred, ][[1L]]
+  manual_response = task$class_names[max.col(manual_prob)]
+  expect_equal(
+    as.character(pred_response),
+    manual_response
+  )
+})
+
+test_that("PipeOpLearnerCV cv ensemble handles unsorted, subsetted row_ids (regr)", {
+  skip_on_cran()
+  skip_if_not_installed("rpart")
+
+  task = tsk("mtcars")$filter(c(10, 5, 20, 3, 15))  # unsorted, subsetted row_ids
+
+  learner = lrn("regr.rpart")
+  op = po("learner_cv", learner, 
+    resampling.folds = 2,
+    resampling.predict_method = "cv_ensemble")
+  
+  op$train(list(task))
+  result_task = op$predict(list(task))[[1]]
+  
+  response_feature_name = sprintf("%s.response", op$id)
+  pred_response = result_task$data(cols = response_feature_name)[[1L]]
+
+  manual_responses = map(op$state$cv_model_states, function(state) {
+    clone = learner$clone(deep = TRUE)
+    clone$state = state
+    pred = clone$predict(task)
+    pred$response
+  })
+  manual_average = Reduce(`+`, manual_responses) / length(manual_responses)
+
+  expect_equal(pred_response, manual_average)
+})
+
+test_that("PipeOpLearnerCV cv_ensemble resolves ties randomly", {
+  skip_on_cran()
+  skip_if_not_installed("rpart")
+
+  set.seed(121325)
+  task = tsk("iris")$filter(c(1, 51)) 
+  learner = lrn("classif.featureless", predict_type = "prob")
+  op = po("learner_cv", learner, 
+    resampling.folds = 2,
+    resampling.predict_method = "cv_ensemble", 
+    resampling.prob_aggr = "mean",
+    resampling.keep_response = TRUE)
+  
+  responses <- map(seq_len(15), function(i) {
+    op$train(list(task))
+    op$predict(list(task))[[1L]]$data(cols = "classif.featureless.response")[[1L]]
+  })
+  expect_equal(
+    as.character(unique(unlist(responses))),
+    c("setosa", "versicolor")
+  )
 })

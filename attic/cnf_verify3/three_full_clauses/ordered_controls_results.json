@@ -1,0 +1,304 @@
+{
+  "source_sha256": "7d34ad60035509a463168752bb5f6f82d87fd7182a94a0e48461be7cdbe35fdc",
+  "seed": 309062026,
+  "scope": "directed and seeded full-three-clause symbol-order controls",
+  "directed": [
+    {
+      "name": "unit_birth_no_range_propagation",
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "1"
+          ],
+          "Z": [
+            "1"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "2"
+          ],
+          "Z": [
+            "2"
+          ]
+        }
+      ],
+      "arrangements": 216,
+      "distinct_outputs": 1,
+      "representatives": [
+        {
+          "order": [
+            [
+              "X",
+              "Y",
+              "Z"
+            ],
+            [
+              "X",
+              "Y",
+              "Z"
+            ],
+            [
+              "X",
+              "Y",
+              "Z"
+            ]
+          ],
+          "first": [
+            {
+              "X": [
+                "0",
+                "1",
+                "2"
+              ]
+            },
+            {
+              "X": [
+                "0",
+                "1"
+              ],
+              "Y": "1",
+              "Z": "1"
+            },
+            {
+              "X": "2",
+              "Y": "2",
+              "Z": "2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "two_symbol_equality_gap_with_common_third_literal",
+      "domains": {
+        "X": [
+          "1",
+          "2",
+          "4",
+          "5"
+        ],
+        "Y": [
+          "2",
+          "3",
+          "5"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "2",
+            "4"
+          ],
+          "Y": [
+            "3"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "2"
+          ],
+          "Y": [
+            "5"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "2",
+            "5"
+          ],
+          "Y": [
+            "2"
+          ],
+          "Z": [
+            "0"
+          ]
+        }
+      ],
+      "arrangements": 216,
+      "distinct_outputs": 1,
+      "representatives": [
+        {
+          "order": [
+            [
+              "X",
+              "Y",
+              "Z"
+            ],
+            [
+              "X",
+              "Y",
+              "Z"
+            ],
+            [
+              "X",
+              "Y",
+              "Z"
+            ]
+          ],
+          "first": [
+            {
+              "X": "2",
+              "Z": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "proposed_first_order_relay_deleted_donor_control",
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "2"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ]
+        }
+      ],
+      "arrangements": 216,
+      "distinct_outputs": 1,
+      "representatives": [
+        {
+          "order": [
+            [
+              "X",
+              "Y",
+              "Z"
+            ],
+            [
+              "X",
+              "Y",
+              "Z"
+            ],
+            [
+              "X",
+              "Y",
+              "Z"
+            ]
+          ],
+          "first": [
+            {
+              "Y": [
+                "0",
+                "1"
+              ],
+              "Z": "0"
+            },
+            {
+              "X": "1",
+              "Y": "0",
+              "Z": "0"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "random_cases": 1000,
+  "summary": {
+    "executions": 73296,
+    "arrangements": 36648,
+    "full_model_comparisons": 4176
+  },
+  "ordering_examples": [],
+  "failures": [],
+  "elapsed_seconds": 285.83626985549927
+}

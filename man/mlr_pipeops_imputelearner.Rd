@@ -13,7 +13,7 @@ Uses the features indicated by the \code{context_columns} parameter as features 
 Note this parameter is part of the \code{\link{PipeOpImpute}} base class and explained there.
 
 Additionally, only features supported by the learner can be imputed; i.e. learners of type
-\code{regr} can only impute features of type \code{integer} and \code{numeric}, while \code{classif} can impute
+\code{regr} can only impute features of type \code{integer}, \code{numeric}, \code{POSIXct} and \code{Date}, while \code{classif} can impute
 features of type \code{factor}, \code{ordered} and \code{logical}.
 
 The \code{\link[mlr3:Learner]{Learner}} used for imputation is trained on all \code{context_columns}; if these contain missing values,
@@ -93,7 +93,7 @@ Only methods inherited from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 \dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library("mlr3")
 
-task = tsk("pima")
+task = tsk("diabetes")
 task$missings()
 
 po = po("imputelearner", lrn("regr.rpart"))
@@ -118,7 +118,7 @@ new_task$missings()
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
@@ -135,6 +135,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_classbalancing}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_classweights}},
+\code{\link{mlr_pipeops_classweightsex}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},
@@ -164,6 +165,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},
 \code{\link{mlr_pipeops_learner_quantiles}},
+\code{\link{mlr_pipeops_materialize}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
@@ -191,6 +193,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
+\code{\link{mlr_pipeops_splines}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
 \code{\link{mlr_pipeops_targetmutate}},
@@ -204,7 +207,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}}
 
-Other Imputation PipeOps: 
+Other Imputation PipeOps:
 \code{\link{PipeOpImpute}},
 \code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},

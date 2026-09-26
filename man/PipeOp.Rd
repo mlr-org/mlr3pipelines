@@ -73,7 +73,7 @@ channels in \verb{$output}. The \code{private$.train()} and \code{private$.predi
 instead, a \verb{$train()} and \verb{$predict()} should be used. The most convenient usage is to add the \code{PipeOp}
 to a \code{\link{Graph}} (possibly as singleton in that \code{\link{Graph}}), and using the \code{\link{Graph}}'s \verb{$train()} / \verb{$predict()} methods.
 
-\code{private$.train()} and \code{private$.predict()} should treat their inputs as read-only. If they are \code{\link[R6:R6Class]{R6}} objects,
+\code{private$.train()} and \code{private$.predict()} should treat their inputs as read-only. If they are \code{\link[R6:R6]{R6}} objects,
 they should be cloned before being manipulated in-place. Objects, or parts of objects, that are not changed, do
 not need to be cloned, and it is legal to return the same identical-by-reference objects to multiple outputs.
 }
@@ -130,11 +130,11 @@ Can be used to filter \code{\link[=mlr_pipeops]{as.data.table(mlr_pipeops)}}.
 \item \code{hash} :: \code{character(1)} \cr
 Checksum calculated on the \code{PipeOp}, depending on the \code{PipeOp}'s \code{class} and the slots \verb{$id} and \verb{$param_set$values}. If a
 \code{PipeOp}'s functionality may change depending on more than these values, it should inherit the \verb{$hash} active
-binding and calculate the hash as \verb{digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")}.
+binding and calculate the hash as \verb{mlr3misc::calculate_hash(super$hash, <OTHER THINGS>)}.
 \item \code{phash} :: \code{character(1)} \cr
 Checksum calculated on the \code{PipeOp}, depending on the \code{PipeOp}'s \code{class} and the slots \verb{$id} but ignoring \verb{$param_set$values}. If a
 \code{PipeOp}'s functionality may change depending on more than these values, it should inherit the \verb{$hash} active
-binding and calculate the hash as \verb{digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")}.
+binding and calculate the hash as \verb{mlr3misc::calculate_hash(super$hash, <OTHER THINGS>)}.
 \item \code{.result} :: \code{list} \cr
 If the \code{\link{Graph}}'s \verb{$keep_results} flag is set to \code{TRUE}, then the intermediate Results of \verb{$train()} and \verb{$predict()}
 are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
@@ -150,7 +150,8 @@ Currently supported values are:
 \item \code{"validation"}: the \code{PipeOp} can make use of the \verb{$internal_valid_task} of an \code{\link[mlr3:Task]{mlr3::Task}}.
 This is for example used for \code{\link{PipeOpLearner}}s that wrap a \code{\link[mlr3:Learner]{Learner}} with this property, see \code{\link[mlr3:Learner]{mlr3::Learner}}.
 \code{PipeOp}s that have this property, also have a \verb{$validate} field, which controls whether to use the validation task,
-as well as a \verb{$internal_valid_scores} field, which allows to access the internal validation scores after training.
+as well as a \verb{$internal_valid_scores} field, which allows to access the internal validation scores after training,
+and a \verb{$best_valid_scores} field for the best internal validation scores observed during training.
 \item \code{"internal_tuning"}: the \code{PipeOp} is able to internally optimize hyperparameters.
 This works analogously to the internal tuning implementation for \code{\link[mlr3:Learner]{mlr3::Learner}}.
 \code{PipeOp}s with that property also implement the standardized accessor \verb{$internal_tuned_values} and have at least one
@@ -268,16 +269,17 @@ posum$predict(list(NULL, NULL))
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other mlr3pipelines backend related: 
+Other mlr3pipelines backend related:
 \code{\link{Graph}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_graphs}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_materialize}},
 \code{\link{mlr_pipeops_updatetarget}}
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
@@ -293,6 +295,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_classbalancing}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_classweights}},
+\code{\link{mlr_pipeops_classweightsex}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},
@@ -323,6 +326,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},
 \code{\link{mlr_pipeops_learner_quantiles}},
+\code{\link{mlr_pipeops_materialize}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
@@ -350,6 +354,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
+\code{\link{mlr_pipeops_splines}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
 \code{\link{mlr_pipeops_targetmutate}},

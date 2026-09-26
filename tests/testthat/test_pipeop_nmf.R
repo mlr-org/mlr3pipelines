@@ -13,10 +13,46 @@ test_that("PipeOpNMF - feature selector", {
   dat$Sepal.Length[1L] <- -999
   dat$test <- rep.int(c(TRUE, FALSE), times = 75L)
   task = TaskClassif$new("test", backend = dat, target = "Species")
-  train_out = op$train(list(task))[[1L]]
+  expect_warning(
+    {
+      train_out = op$train(list(task))[[1L]]
+    },
+    "negative values.*Sepal.Length.*error in a future.*selector_non_negative"
+  )
   expect_setequal(c("Sepal.Length", "test", paste0("NMF", 1:2)), train_out$feature_names)
 })
 
+test_that("PipeOpNMF - feature selector respects affect_columns", {
+  skip_if_not_installed("NMF")
+  task = tsk("iris")
+  new_row = task$data(rows = 1L)[, Sepal.Length := -999]
+  task$rbind(new_row)
+
+  selectors = list(
+    selector_non_negative(),
+    selector_name(setdiff(task$feature_names, "Sepal.Length"))
+  )
+  for (selector in selectors) {
+    op = po("nmf", affect_columns = selector)
+    expect_warning(op$train(list(task)), NA)
+    expect_false("Sepal.Length" %in% op$state$dt_columns)
+  }
+})
+
+test_that("PipeOpNMF - feature selector rejects non-finite values, fix for #983", {
+  skip_if_not_installed("NMF")
+
+  for (value in list(NA_real_, Inf)) {
+    task = tsk("iris")
+    new_row = task$data(rows = 1L)[, Petal.Length := value]
+    task = task$rbind(new_row)
+
+    expect_error(
+      po("nmf")$train(list(task)),
+      "NMF does not support features with missing or infinite values.*Petal.Length"
+    )
+  }
+})
 
 test_that("PipeOpNMF - parameters", {
   skip_if_not_installed("NMF")

@@ -1,0 +1,77 @@
+Library paths:
+[1] "/work/attic/cnf_verify3/review_semantics/r46-library"
+[2] "/work/attic/cnf_verify3/representation/r46-library"
+[3] "/usr/local/lib/R/site-library"
+[4] "/usr/lib/R/site-library"
+[5] "/usr/lib/R/library"
+Missing imports and focused-test support:
+[1] "data.table" "lgr"        "mlr3"       "mlr3misc"   "paradox"
+[6] "mlbench"
+Installing packages into ‘/work/attic/cnf_verify3/review_semantics/r46-library’
+(as ‘lib’ is unspecified)
+also installing the dependencies ‘globals’, ‘listenv’, ‘nanonext’, ‘PRROC’, ‘future’, ‘future.apply’, ‘mirai’, ‘mlr3measures’, ‘parallelly’, ‘palmerpenguins’, ‘uuid’
+
+trying URL 'https://cloud.r-project.org/src/contrib/globals_0.19.1.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/listenv_1.0.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/nanonext_1.10.2.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/PRROC_1.4.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/future_1.75.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/future.apply_1.20.2.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/mirai_2.7.2.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/mlr3measures_1.3.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/parallelly_1.48.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/palmerpenguins_0.1.1.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/uuid_1.2-2.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/data.table_1.18.6.1.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/lgr_0.5.2.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/mlr3_1.8.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/mlr3misc_0.23.0.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/paradox_1.0.1.tar.gz'
+trying URL 'https://cloud.r-project.org/src/contrib/mlbench_2.1-11.tar.gz'
+begin installing package ‘globals’
+begin installing package ‘listenv’
+begin installing package ‘nanonext’
+begin installing package ‘PRROC’
+make: *** [Makefile:21: PRROC.ts] Error 1
+begin installing package ‘parallelly’
+make: *** [Makefile:6: globals.ts] Error 1
+make: *** [Makefile:16: nanonext.ts] Error 1
+begin installing package ‘palmerpenguins’
+begin installing package ‘uuid’
+make: *** [Makefile:11: listenv.ts] Error 1
+begin installing package ‘data.table’
+make: *** [Makefile:26: parallelly.ts] Error 1
+begin installing package ‘lgr’
+make: *** [Makefile:31: palmerpenguins.ts] Error 1
+begin installing package ‘mlbench’
+make: *** [Makefile:36: uuid.ts] Error 1
+make: *** [Makefile:41: data.table.ts] Error 1
+make: *** [Makefile:46: lgr.ts] Error 1
+make: *** [Makefile:51: mlbench.ts] Error 1
+make: Target 'all' not remade because of errors.
+Warning: invalid package ‘attic/cnf_verify3/review_semantics/r46-downloads/globals_0.19.1.tar.gz’
+Error: ERROR: no packages specified
+Warning: invalid package ‘attic/cnf_verify3/review_semantics/r46-downloads/listenv_1.0.0.tar.gz’
+Error: ERROR: no packages specified
+Warning: invalid package ‘attic/cnf_verify3/review_semantics/r46-downloads/nanonext_1.10.2.tar.gz’
+Error: ERROR: no packages specified
+Warning: invalid package ‘attic/cnf_verify3/review_semantics/r46-downloads/PRROC_1.4.tar.gz’
+Error: ERROR: no packages specified
+Warning: invalid package ‘attic/cnf_verify3/review_semantics/r46-downloads/parallelly_1.48.0.tar.gz’
+Error: ERROR: no packages specified
+Warning: invalid package ‘attic/cnf_verify3/review_semantics/r46-downloads/palmerpenguins_0.1.1.tar.gz’
+Error: ERROR: no packages specified
+Warning: invalid package ‘attic/cnf_verify3/review_semantics/r46-downloads/uuid_1.2-2.tar.gz’
+Error: ERROR: no packages specified
+Warning: invalid package ‘attic/cnf_verify3/review_semantics/r46-downloads/data.table_1.18.6.1.tar.gz’
+Error: ERROR: no packages specified
+Warning: invalid package ‘attic/cnf_verify3/review_semantics/r46-downloads/lgr_0.5.2.tar.gz’
+Error: ERROR: no packages specified
+Warning: invalid package ‘attic/cnf_verify3/review_semantics/r46-downloads/mlbench_2.1-11.tar.gz’
+Error: ERROR: no packages specified
+Warning message:
+In install.packages(missing, dependencies = NA, Ncpus = 4L, destdir = file.path(review_dir,  :
+  installation of 17 packages failed:
+  ‘globals’, ‘listenv’, ‘nanonext’, ‘PRROC’, ‘parallelly’, ‘palmerpenguins’, ‘uuid’, ‘data.table’, ‘lgr’, ‘mlbench’, ‘future’, ‘mirai’, ‘mlr3misc’, ‘future.apply’, ‘mlr3measures’, ‘paradox’, ‘mlr3’
+Error: Missing dependencies: data.table, lgr, mlr3, mlr3misc, paradox, mlbench
+Execution halted

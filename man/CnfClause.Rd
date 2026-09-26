@@ -34,6 +34,7 @@ or implicitly, by using the \code{|} operator on \code{\link{CnfAtom}}s or other
 \code{CnfClause} objects which are not tautologies or contradictions are named lists;
 the value ranges of each symbol can be accessed using \code{[[}, and these clauses
 can be subset using \code{[} to get clauses containing only the indicated symbols.
+Indices must be atomic vectors without missing values; matrices and arrays are not supported.
 However, to get a list of \code{\link{CnfAtom}} objects, use \code{as.list()}.
 Note that the simplified form of a clause containing a contradiction is the empty list.
 
@@ -48,6 +49,10 @@ If a \code{CnfClause} contains no atoms, or only \code{FALSE} atoms, it evaluate
 If it contains at least one atom that is always true, the clause evaluates to \code{TRUE}.
 These values can be converted to, and from, \code{logical(1)} values using \code{as.logical()}
 and \code{as.CnfClause()}.
+
+Nonconstant inputs must belong to the same universe. Constant inputs adopt that
+universe regardless of their own universe. If all inputs are constant, the first
+available universe is retained, or \code{NULL} if none has a universe.
 
 \code{CnfClause} objects can be negated using the \code{!} operator, and combined using the
 \code{&} operator. Both of these operations return a \code{\link{CnfFormula}}, even if the result
@@ -94,11 +99,11 @@ X \%among\% "a" | Y \%among\% character(0)
   (X \%among\% c("a", "b") | Y \%among\% "d")
 }
 \seealso{
-Other CNF representation objects: 
-\code{\link{CnfAtom}()},
-\code{\link{CnfFormula}()},
-\code{\link{CnfSymbol}()},
-\code{\link{CnfUniverse}()}
+Other CNF representation objects:
+\code{\link[=CnfAtom]{CnfAtom()}},
+\code{\link[=CnfFormula]{CnfFormula()}},
+\code{\link[=CnfSymbol]{CnfSymbol()}},
+\code{\link[=CnfUniverse]{CnfUniverse()}}
 }
 \concept{CNF representation objects}
 \keyword{internal}

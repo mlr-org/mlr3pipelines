@@ -1,0 +1,276 @@
+[
+  [
+    {
+      "event_index": 1,
+      "kind": "state",
+      "owner": "on_updated_subset_relations",
+      "entries": [
+        {
+          "X1": ["0", "5"],
+          "X0": ["0", "5"]
+        },
+        {
+          "X0": "1",
+          "X1": ["0", "1", "4"]
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0", "5"]
+        },
+        {
+          "X1": "0",
+          "X0": ["4", "5"]
+        }
+      ],
+      "eliminated": [false, false, false, false]
+    },
+    {
+      "event_index": 11,
+      "kind": "state",
+      "owner": "on_updated_subset_relations",
+      "entries": [
+        {
+          "X1": ["0", "5"],
+          "X0": "5"
+        },
+        {
+          "X0": "1",
+          "X1": ["0", "1", "4"]
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0", "5"]
+        },
+        {
+          "X1": "0",
+          "X0": ["4", "5"]
+        }
+      ],
+      "eliminated": [false, false, false, false]
+    },
+    {
+      "event_index": 20,
+      "kind": "state",
+      "owner": "on_updated_subset_relations",
+      "entries": [
+        {
+          "X1": ["0", "5"],
+          "X0": "5"
+        },
+        {
+          "X1": ["0", "1", "4"]
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0", "5"]
+        },
+        {
+          "X1": "0",
+          "X0": ["4", "5"]
+        }
+      ],
+      "eliminated": [false, false, false, false]
+    },
+    {
+      "event_index": 22,
+      "kind": "state",
+      "owner": "on_updated_subset_relations",
+      "entries": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X1": ["0", "1", "4"]
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0", "5"]
+        },
+        {
+          "X1": "0",
+          "X0": ["4", "5"]
+        }
+      ],
+      "eliminated": [false, false, false, false]
+    },
+    {
+      "event_index": 28,
+      "kind": "state",
+      "owner": "eliminate_clause_update_sr",
+      "entries": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X1": ["0", "1", "4"]
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0", "5"]
+        },
+        {
+          "X1": "0",
+          "X0": ["4", "5"]
+        }
+      ],
+      "eliminated": [false, false, false, true]
+    },
+    {
+      "event_index": 34,
+      "kind": "state",
+      "owner": "on_updated_subset_relations",
+      "entries": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X1": ["0", "1", "4"]
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0"]
+        },
+        {
+          "X1": "0",
+          "X0": ["4", "5"]
+        }
+      ],
+      "eliminated": [false, false, false, true]
+    },
+    {
+      "event_index": 53,
+      "kind": "hla",
+      "owner": "simplify_cnf",
+      "target": 1,
+      "donor": 2,
+      "symbol": "X1",
+      "virtual_core": {
+        "X1": "0",
+        "X0": "5"
+      },
+      "new_range": ["0", "5"]
+    },
+    {
+      "event_index": 54,
+      "kind": "hla",
+      "owner": "simplify_cnf",
+      "target": 3,
+      "donor": 1,
+      "symbol": "X0",
+      "virtual_core": {
+        "X0": "0",
+        "X1": ["4", "0"]
+      },
+      "new_range": ["0", "1", "4"]
+    },
+    {
+      "event_index": 55,
+      "kind": "hla",
+      "owner": "simplify_cnf",
+      "target": 3,
+      "donor": 2,
+      "symbol": "X1",
+      "virtual_core": {
+        "X0": ["0", "1", "4"],
+        "X1": ["4", "0"]
+      },
+      "new_range": ["4", "0", "5"]
+    },
+    {
+      "event_index": 56,
+      "kind": "hla",
+      "owner": "simplify_cnf",
+      "target": 2,
+      "donor": 1,
+      "symbol": "X0",
+      "virtual_core": {
+        "X1": ["0", "1", "4"]
+      },
+      "new_range": ["0", "1", "4"]
+    },
+    {
+      "event_index": 58,
+      "kind": "state",
+      "owner": "eliminate_clause_update_sr",
+      "entries": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X1": ["0", "1", "4"]
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0"]
+        },
+        {
+          "X1": "0",
+          "X0": ["4", "5"]
+        }
+      ],
+      "eliminated": [false, true, false, true]
+    }
+  ],
+  [
+    {
+      "event_index": 1,
+      "kind": "state",
+      "owner": "on_updated_subset_relations",
+      "entries": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X0": "0",
+          "X1": ["4", "0"]
+        }
+      ],
+      "eliminated": [false, false]
+    },
+    {
+      "event_index": 4,
+      "kind": "state",
+      "owner": "on_updated_subset_relations",
+      "entries": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X1": ["4", "0"]
+        }
+      ],
+      "eliminated": [false, false]
+    },
+    {
+      "event_index": 15,
+      "kind": "hla",
+      "owner": "simplify_cnf",
+      "target": 1,
+      "donor": 2,
+      "symbol": "X1",
+      "virtual_core": {
+        "X1": "0",
+        "X0": "5"
+      },
+      "new_range": ["0", "1", "5"]
+    },
+    {
+      "event_index": 16,
+      "kind": "hla",
+      "owner": "simplify_cnf",
+      "target": 2,
+      "donor": 1,
+      "symbol": "X0",
+      "virtual_core": {
+        "X1": ["4", "0"]
+      },
+      "new_range": ["0", "1", "4"]
+    }
+  ]
+]

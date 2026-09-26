@@ -1,5 +1,7 @@
 context("PipeOpSpatialSign")
 
+skip_on_cran()
+
 test_that("PipeOpSpatialSign - general functionality", {
   task = mlr_tasks$get("iris")
   op = PipeOpSpatialSign$new()

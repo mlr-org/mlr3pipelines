@@ -16,19 +16,33 @@ register_mlr3 = function() {
     c("abstract", "meta", "missings", "feature selection", "imbalanced data",
     "data transform", "target transform", "ensemble", "robustify", "learner", "encode",
      "multiplicity", "debug")))
-  x$pipeops$properties = c("validation", "internal_tuning")
+  x$pipeops$properties = unique(c(x$pipeops$properties, c("validation", "internal_tuning")))
 }
 
 register_mlr3filters = function() {
   if ("mlr3filters" %in% loadedNamespaces()) {
     x = utils::getFromNamespace("mlr_filters", ns = "mlr3filters")
-    x$add("ensemble", FilterEnsemble)
+    x$add("ensemble", FilterEnsemble, .prototype_args = list(filters = list(R6Class("Filter", public = list(id = "filter", task_types = mlr_reflections$task_types$type, task_properties = character(), param_set = ps(), feature_types = mlr_reflections$task_feature_types, packages = "mlr3pipelines", label = NA_character_, man = NA_character_))$new()))) # nolint
   }
 }
 
 
-
 paradox_info <- list2env(list(is_old = FALSE), parent = emptyenv())
+
+supply_diabetes = function() {
+  if (tsk()$has("diabetes")) return(invisible(NULL))
+  tsk()$add("diabetes", function(id = "diabetes") {
+    warning(
+      paste(
+        "The installed version of mlr3 does not provide the 'diabetes' task; using the legacy 'pima' task instead.",
+        "Update mlr3 to version 1.8.0 or later to use the synthetic diabetes task.",
+        "This compatibility alias will be removed in the future."
+      ),
+      call. = FALSE
+    )
+    tsk("pima", id = id)
+  })
+}
 
 .onLoad = function(libname, pkgname) {  # nocov start
   register_mlr3()
@@ -47,6 +61,7 @@ paradox_info <- list2env(list(is_old = FALSE), parent = emptyenv())
     lg$set_threshold("warn")
   }
   supply_boston_housing()
+  supply_diabetes()
 }  # nocov end
 
 .onUnload = function(libpath) { # nocov start

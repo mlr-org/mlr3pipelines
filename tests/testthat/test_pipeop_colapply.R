@@ -9,7 +9,7 @@ test_that("apply general tests", {
   expect_datapreproc_pipeop_class(PipeOpColApply, task = task,
     constargs = list(param_vals = list(applicator = as.character)))
 
-  expect_datapreproc_pipeop_class(PipeOpColApply, task = mlr_tasks$get("pima"),
+  expect_datapreproc_pipeop_class(PipeOpColApply, task = mlr_tasks$get("diabetes"),
     constargs = list(param_vals = list(applicator = as.numeric)))
 
 })

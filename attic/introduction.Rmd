@@ -63,7 +63,7 @@ In `mlr3pipelines` we consider 3 basic types of PipeOps;
 - **broadcast** `PipeOp`s do some operation on a single input, and return multiple outputs.
   We could for example chunk the data into several chunks using `PipeOpChunk` and send
   each chunk to a different subsequent node.
-- **aggregate** `PipeOp`s recieve multiple inputs and transform them into a single output.
+- **aggregate** `PipeOp`s receive multiple inputs and transform them into a single output.
   This can for example be concatenating features from different inputs to a single task
   using `PipeOpFeatureUnion`.
 

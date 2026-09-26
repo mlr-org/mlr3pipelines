@@ -132,11 +132,11 @@ PipeOpFilter = R6Class("PipeOpFilter",
 
     .get_state = function(task) {
       # reset filter on exit, the user should not even feel the temptation to not use the `$state`
-      on.exit({self$filter$scores = structure(numeric(0), .Names = character(0))})
+      on.exit({self$filter$scores = structure(numeric(0), names = character(0))})
       filtercrit = c("nfeat", "frac", "cutoff", "permuted")
       filtercrit = Filter(function(name) !is.null(private$.outer_param_set$values[[name]]), filtercrit)
       if (length(filtercrit) != 1) {
-        stopf("Exactly one of 'nfeat', 'frac', 'cutoff', or 'permuted' must be given. Instead given: %s",
+        stopf("Exactly one hyperparameter of 'filter.nfeat', 'filter.frac', 'filter.cutoff', or 'filter.permuted' must be given. Instead given: %s",
           if (length(filtercrit) == 0) "none" else str_collapse(filtercrit))
       }
       critvalue = private$.outer_param_set$values[[filtercrit]]

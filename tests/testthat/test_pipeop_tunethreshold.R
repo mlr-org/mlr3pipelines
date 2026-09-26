@@ -33,7 +33,9 @@ test_that("threshold works for multiclass", {
 
 test_that("threshold works for binary", {
   skip_if_not_installed("rpart")
-  t = tsk("pima")
+  # seed for deterministic threshold tuning on the small synthetic diabetes task
+  set.seed(1)
+  t = tsk("diabetes")
   po_cv =  po("learner_cv", learner = lrn("classif.rpart", predict_type = "prob"))
   res = po_cv$train(list(t))
   po_thr = po("tunethreshold")
@@ -70,19 +72,19 @@ test_that("tunethreshold graph works", {
 
   graph = po("learner_cv", lrn("classif.rpart", predict_type = "prob")) %>>% po("tunethreshold")
 
-  out = graph$train(tsk("pima"))
+  out = graph$train(tsk("diabetes"))
 
   expect_null(out$tunethreshold.output)
 
-  out = graph$predict(tsk("pima"))
+  out = graph$predict(tsk("diabetes"))
 
   expect_prediction(out$tunethreshold.output)
 
   glrn = as_learner(graph)
 
-  glrn$train(tsk("pima"))
+  glrn$train(tsk("diabetes"))
 
-  expect_prediction(glrn$predict(tsk("pima")))
+  expect_prediction(glrn$predict(tsk("diabetes")))
 
 
 })

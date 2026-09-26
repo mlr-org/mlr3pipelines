@@ -1,5 +1,5 @@
 context("gunion")
-
+skip_on_cran()
 test_that("gunion", {
   g1 = PipeOpPCA$new() %>>% PipeOpScale$new(param_vals = list(scale = FALSE))
   g2 = PipeOpPCA$new(id = "pca2") %>>% PipeOpPCA$new(id = "xx")

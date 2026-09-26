@@ -148,8 +148,13 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
 
     .train = function(inputs) {
       intask = inputs[[1L]]$clone(deep = TRUE)
+      internal_valid_task = intask$internal_valid_task
+      intask$internal_valid_task = NULL
       self$state = private$.get_state(intask)
       intask = private$.transform(intask, "train")
+      if (!is.null(internal_valid_task)) {
+        intask$internal_valid_task = private$.transform(internal_valid_task, "predict")
+      }
       list(NULL, intask)
     },
 
@@ -273,7 +278,13 @@ PipeOpTargetInvert = R6Class("PipeOpTargetInvert",
     },
 
     .predict = function(inputs) {
-      inputs[[1]](inputs[-1])
+      output = inputs[[1L]](inputs[-1L])
+      # Keep "extra" slot if inverter does not handle it already
+      extra = inputs[[2L]]$data$extra
+      if (!is.null(extra) && is.null(output[[1L]]$data$extra)) {
+        output[[1L]]$data$extra = extra
+      }
+      output
     }
   )
 )
@@ -619,10 +630,16 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
   private = list(
     .train = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
+      internal_valid_task = intask$internal_valid_task
+      intask$internal_valid_task = NULL
       pv = self$param_set$values
       if (identical(pv$trafo, identity) && (pv$new_target_name %in% unlist(intask$col_roles, use.names = FALSE))) {
         self$state = list()
-        return(list(private$.update_target(intask, drop_levels = TRUE)))  # early exit
+        intask = private$.update_target(intask, drop_levels = TRUE)
+        if (!is.null(internal_valid_task)) {
+          intask$internal_valid_task = private$.predict(list(internal_valid_task))[[1L]]
+        }
+        return(list(intask))  # early exit
       }
       if (!identical(pv$trafo, identity) || !is.null(pv$new_target_name)) {
         # Apply fun to target, rename, cbind and convert task if required
@@ -635,7 +652,11 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
       } else {
         self$state = list()
       }
-      list(private$.update_target(intask, drop_levels = TRUE))
+      intask = private$.update_target(intask, drop_levels = TRUE)
+      if (!is.null(internal_valid_task)) {
+        intask$internal_valid_task = private$.predict(list(internal_valid_task))[[1L]]
+      }
+      list(intask)
     },
 
     .predict = function(inputs) {

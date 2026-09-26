@@ -73,6 +73,11 @@ The internal tuned parameter values collected from all \code{\link{PipeOp}}s.
 The internal validation scores as retrieved from the \code{\link{PipeOp}}s.
 The names are prefixed with the respective IDs of the \code{\link{PipeOp}}s.
 \code{NULL} is returned if the learner is not trained or none of the wrapped learners supports internal validation.
+\item \code{best_valid_scores} :: named \code{list()} or \code{NULL}\cr
+The best internal validation scores as retrieved from the \code{\link{PipeOp}}s, i.e. the best scores that were observed
+during training instead of those of the final model.
+The names are prefixed with the respective IDs of the \code{\link{PipeOp}}s.
+\code{NULL} is returned if the learner is not trained or none of the wrapped learners tracks them.
 \item \code{validate} :: \code{numeric(1)}, \code{"predefined"}, \code{"test"} or \code{NULL}\cr
 How to construct the validation data. This also has to be configured for the individual \code{\link{PipeOp}}s such as
 \code{PipeOpLearner}, see \code{\link{set_validate.GraphLearner}}.
@@ -105,8 +110,8 @@ Get IDs of all \code{\link{PipeOp}}s. This is in order that \code{\link{PipeOp}}
 \item \code{plot(html = FALSE, horizontal = FALSE)} \cr
 (\code{logical(1)}, \code{logical(1)}) -> \code{NULL} \cr
 Plot the \code{\link{Graph}}, using either the \CRANpkg{igraph} package (for \code{html = FALSE}, default) or
-the \code{visNetwork} package for \code{html = TRUE} producing a \code{\link[htmlwidgets:htmlwidgets-package]{htmlWidget}}.
-The \code{\link[htmlwidgets:htmlwidgets-package]{htmlWidget}} can be rescaled using \code{\link[visNetwork:visOptions]{visOptions}}.
+the \code{visNetwork} package for \code{html = TRUE} producing a \code{\link[htmlwidgets:htmlwidgets]{htmlWidget}}.
+The \code{\link[htmlwidgets:htmlwidgets]{htmlWidget}} can be rescaled using \code{\link[visNetwork:visOptions]{visOptions}}.
 For \code{html = FALSE}, the orientation of the plotted graph can be controlled through \code{horizontal}.
 \item \code{marshal}\cr
 (any) -> \code{self}\cr
@@ -131,6 +136,17 @@ If \code{resolve_branching} is \code{TRUE}, and when a \code{\link{PipeOpUnbranc
 corresponding \code{\link{PipeOpBranch}} is searched, and its hyperparameter configuration is used to select the base learner.
 There may be multiple corresponding \code{\link{PipeOpBranch}}s, which are all considered.
 If \code{resolve_branching} is \code{FALSE}, \code{\link{PipeOpUnbranch}} is treated as any other \code{PipeOp} with multiple inputs; all possible branch paths are considered equally.
+\item \code{predict_newdata_fast(newdata, task = NULL)}\cr
+(\code{data.frame}, \code{\link[mlr3:Task]{Task}} | \code{NULL}) -> \code{\link[mlr3:Prediction]{Prediction}}\cr
+Predicts outcomes for new data in \code{newdata} using the model fitted during \verb{$train()}.\cr
+For the moment, this is merely a thin wrapper around \code{\link[mlr3:Learner]{Learner$predict_newdata()}} to ensure compatibility, meaning that \emph{no speedup} is currently achieved.
+In the future, this method may be optimized to be faster than \verb{$predict_newdata()}.\cr
+Unlike \verb{$predict_newdata()}, this method does not return a \link[mlr3:Prediction]{Prediction} object.
+Instead, it returns a list with elements depending on \verb{$task_type} and \verb{$predict_type}:
+\itemize{
+\item for \code{task_type = "classif"}: \code{response} and \code{prob}, or \code{quantiles} (if \code{predict_type = "quantiles"})
+\item for \code{task_type = "regr"}: \code{response} and \code{se}
+}
 }
 
 The following standard extractors as defined by the \code{\link[mlr3:Learner]{Learner}} class are available.
@@ -197,7 +213,7 @@ lr$graph_model$pipeops$classif.rpart$learner_model$importance()
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other Learners: 
+Other Learners:
 \code{\link{mlr_learners_avg}}
 }
 \concept{Learners}

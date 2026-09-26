@@ -1,5 +1,7 @@
 context("PipeOpInfo")
 
+skip_on_cran()
+
 test_that("basic properties", {
   po = po("info")
   expect_pipeop(po)

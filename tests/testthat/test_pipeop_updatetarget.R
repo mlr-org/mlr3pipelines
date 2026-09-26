@@ -34,7 +34,7 @@ test_that("update target regr to classif", {
 
 test_that("update target classif to regr", {
   # this is e.g. used in mlr3ordinal for casting
-  # orginal to regr
+  # original to regr
   trafo_fun = function(x) {map_dtc(x, as.numeric)}
   pom = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "quality", new_task_type = "regr"))
   expect_pipeop(pom)
@@ -53,7 +53,7 @@ test_that("update target classif to regr", {
 
 test_that("update target same target", {
   # this is e.g. used in mlr3ordinal for casting
-  # orginal to classif
+  # original to classif
   pom = PipeOpUpdateTarget$new(param_vals = list(new_target_name = "type", new_task_type = "classif"))
   expect_pipeop(pom)
   newtsk = pom$train(list(tsk("wine")))[[1]]
@@ -108,4 +108,25 @@ test_that("make an existing feature a target", {
 
   newtsk2 = pom$predict(list(tsk("wine")))[[1]]
   expect_equivalent(newtsk$hash, newtsk2$hash)
+})
+
+test_that("PipeOpUpdateTarget - transforms internal validation task", {
+  task = tsk("boston_housing_classic")
+  task$internal_valid_task = 1:10
+
+  validation_task = task$internal_valid_task
+  trafo_fun = function(x) {factor(ifelse(x < 25, "<25", ">=25"))}
+  op = PipeOpUpdateTarget$new(param_vals = list(
+    trafo = trafo_fun, new_target_name = "threshold_25", new_task_type = "classif"
+  ))
+
+  train_out = op$train(list(task))[["output"]]
+  predict_out = op$predict(list(validation_task))[["output"]]
+
+  cols = unname(unlist(train_out$col_roles[c("feature", "target")]))
+  expect_equal_data_table(
+    train_out$internal_valid_task$data(cols = cols),
+    predict_out$data(cols = cols),
+    ignore_col_order = TRUE
+  )
 })

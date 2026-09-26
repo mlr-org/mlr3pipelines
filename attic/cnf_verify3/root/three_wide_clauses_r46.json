@@ -1,0 +1,16 @@
+{
+  "stats": {
+    "inputs": 20000,
+    "different_supports": 11996,
+    "source_calls": 40000,
+    "first_productive": 8979,
+    "second_productive": 0,
+    "retained_units": 1,
+    "mdd_comparisons": 40000,
+    "sat_calibrations": 78
+  },
+  "examples": {},
+  "seed": 2609061709,
+  "seconds": 224.61358892917633,
+  "runtime": "R4.6.1"
+}

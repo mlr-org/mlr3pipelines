@@ -91,6 +91,9 @@ Also see \code{\link{set_validate.GraphLearner}} for more information.
 The internally tuned values if the wrapped \code{Learner} supports internal tuning, \code{NULL} otherwise.
 \item \code{internal_valid_scores} :: named \code{list()} or \code{NULL}\cr
 The internal validation scores if the wrapped \code{Learner} supports internal validation, \code{NULL} otherwise.
+\item \code{best_valid_scores} :: named \code{list()} or \code{NULL}\cr
+The best internal validation scores observed during training if the wrapped \code{Learner} tracks them,
+\code{NULL} otherwise.
 }
 }
 
@@ -114,7 +117,7 @@ lrn_po$predict(list(task))
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
@@ -131,6 +134,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_classbalancing}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_classweights}},
+\code{\link{mlr_pipeops_classweightsex}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},
@@ -160,6 +164,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},
 \code{\link{mlr_pipeops_learner_quantiles}},
+\code{\link{mlr_pipeops_materialize}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
@@ -187,6 +192,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
+\code{\link{mlr_pipeops_splines}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
 \code{\link{mlr_pipeops_targetmutate}},
@@ -200,7 +206,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}}
 
-Other Meta PipeOps: 
+Other Meta PipeOps:
 \code{\link{mlr_pipeops_learner_cv}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},
 \code{\link{mlr_pipeops_learner_quantiles}}

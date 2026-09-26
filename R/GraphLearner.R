@@ -65,6 +65,11 @@
 #'   The internal validation scores as retrieved from the [`PipeOp`]s.
 #'   The names are prefixed with the respective IDs of the [`PipeOp`]s.
 #'   `NULL` is returned if the learner is not trained or none of the wrapped learners supports internal validation.
+#' * `best_valid_scores` :: named `list()` or `NULL`\cr
+#'   The best internal validation scores as retrieved from the [`PipeOp`]s, i.e. the best scores that were observed
+#'   during training instead of those of the final model.
+#'   The names are prefixed with the respective IDs of the [`PipeOp`]s.
+#'   `NULL` is returned if the learner is not trained or none of the wrapped learners tracks them.
 #' * `validate` :: `numeric(1)`, `"predefined"`, `"test"` or `NULL`\cr
 #'   How to construct the validation data. This also has to be configured for the individual [`PipeOp`]s such as
 #'   `PipeOpLearner`, see [`set_validate.GraphLearner`].
@@ -119,7 +124,16 @@
 #'   corresponding [`PipeOpBranch`] is searched, and its hyperparameter configuration is used to select the base learner.
 #'   There may be multiple corresponding [`PipeOpBranch`]s, which are all considered.
 #'   If `resolve_branching` is `FALSE`, [`PipeOpUnbranch`] is treated as any other `PipeOp` with multiple inputs; all possible branch paths are considered equally.
-#'
+#' * `predict_newdata_fast(newdata, task = NULL)`\cr
+#'   (`data.frame`, [`Task`][mlr3::Task] | `NULL`) -> [`Prediction`][mlr3::Prediction]\cr
+#'   Predicts outcomes for new data in `newdata` using the model fitted during `$train()`.\cr
+#'   For the moment, this is merely a thin wrapper around [`Learner$predict_newdata()`][mlr3::Learner] to ensure compatibility, meaning that *no speedup* is currently achieved.
+#'   In the future, this method may be optimized to be faster than `$predict_newdata()`.\cr
+#'   Unlike `$predict_newdata()`, this method does not return a [Prediction] object.
+#'   Instead, it returns a list with elements depending on `$task_type` and `$predict_type`:
+#'   * for `task_type = "classif"`: `response` and `prob`, or `quantiles` (if `predict_type = "quantiles"`)
+#'   * for `task_type = "regr"`: `response` and `se`
+#' 
 #' The following standard extractors as defined by the [`Learner`][mlr3::Learner] class are available.
 #' Note that these typically only extract information from the `$base_learner()`.
 #' This works well for simple [`Graph`]s that do not modify features too much, but may give unexpected results for `Graph`s that
@@ -325,12 +339,30 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         pp = "non-sequential"
       }
       cat_cli(cli_h3("Pipeline: {.strong {pp}}"))
+    },
+    # TODO: Optimize this method to be actually faster than predict_newdata(), #968
+    predict_newdata_fast = function(newdata, task = NULL) {
+      pred = self$predict_newdata(newdata, task)
+      if (self$task_type == "regr") {
+        if (!is.null(pred$quantiles)) {
+          return(list(quantiles = pred$quantiles))
+        }
+        list(response = pred$response, se = if (!all(is.na(pred$se))) pred$se else NULL)
+      } else if (self$task_type == "classif") {
+        list(response = pred$response, prob = pred$prob)
+      } else {
+        stopf("GraphLearner's predict_newdata_fast does not support task type '%s'.", self$task_type)
+      }
     }
   ),
   active = list(
     internal_valid_scores = function(rhs) {
       assert_ro_binding(rhs)
       self$state$internal_valid_scores
+    },
+    best_valid_scores = function(rhs) {
+      assert_ro_binding(rhs)
+      self$state$best_valid_scores
     },
     internal_tuned_values = function(rhs) {
       assert_ro_binding(rhs)
@@ -348,14 +380,10 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     marshaled = function() {
       learner_marshaled(self)
     },
-    hash = function() {
-      digest(list(class(self), self$id, self$graph$hash, private$.predict_type, private$.validate,
-        self$fallback$hash, self$parallel_predict), algo = "xxhash64")
-    },
-    phash = function() {
-      digest(list(class(self), self$id, self$graph$phash, private$.predict_type, private$.validate,
-        self$fallback$hash, self$parallel_predict), algo = "xxhash64")
-    },
+    hash = function() calculate_hash(class(self), self$id, self$graph$hash, private$.predict_type, private$.validate, 
+      self$fallback$hash, self$parallel_predict),
+    phash = function() calculate_hash(class(self), self$id, self$graph$phash, private$.predict_type, private$.validate,
+      self$fallback$hash, self$parallel_predict),
     predict_type = function(rhs) {
       if (!missing(rhs)) {
         assert_subset(rhs, unlist(mlr_reflections$learner_predict_types[[self$task_type]], use.names = FALSE))
@@ -440,24 +468,40 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     .can_validate = NULL,
     .can_internal_tuning = NULL,
     .extract_internal_tuned_values = function() {
-      if (!private$.can_validate) return(NULL)
+      if (!private$.can_internal_tuning) return(NULL)
       itvs = unlist(map(pos_with_property(self$graph_model, "internal_tuning"), "internal_tuned_values"), recursive = FALSE)
       if (!length(itvs)) return(named_list())
       itvs
     },
     .extract_internal_valid_scores = function() {
-      if (!private$.can_internal_tuning) return(NULL)
-      ivs = unlist(map(pos_with_property(self$graph_model, "validation"), "internal_valid_scores"), recursive = FALSE)
+      private$.collect_valid_scores("internal_valid_scores")
+    },
+    .extract_best_valid_scores = function() {
+      private$.collect_valid_scores("best_valid_scores")
+    },
+    .collect_valid_scores = function(field) {
+      if (!private$.can_validate) return(NULL)
+      ivs = unlist(map(pos_with_property(self$graph_model, "validation"), field), recursive = FALSE)
       if (!length(ivs)) return(named_list())
       ivs
     },
     deep_clone = function(name, value) {
-      # FIXME this repairs the mlr3::Learner deep_clone() method which is broken.
+      # Learner's deep_clone only handles specific fields; also clone our R6
+      # fields (especially .graph) and R6-valued state$param_vals.
       if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
         return(value$clone(deep = TRUE))
       }
       if (name == "state") {
         value$log = copy(value$log)
+        if (!is.null(value$param_vals)) {
+          value$param_vals = map(value$param_vals, function(x) {
+            if (is.environment(x) && !is.null(x[[".__enclos_env__"]])) {
+              x$clone(deep = TRUE)
+            } else {
+              x
+            }
+          })
+        }
       }
       value
     },
@@ -612,13 +656,24 @@ unmarshal_model.graph_learner_model_marshaled = function(model, inplace = FALSE,
 }
 
 #' @export
-as_learner.Graph = function(x, clone = FALSE, ...) {
-  GraphLearner$new(x, clone_graph = clone)
+as_learner.Graph = function(x, clone = TRUE, discard_state = FALSE, ..., id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL) {
+  learner = GraphLearner$new(
+    x,
+    id = id,
+    param_vals = param_vals,
+    task_type = task_type,
+    predict_type = predict_type,
+    clone_graph = clone
+  )
+  if (clone && discard_state) {
+    learner$state = NULL
+  }
+  learner
 }
 
 #' @export
 as_learner.PipeOp = function(x, clone = FALSE, ...) {
-  as_learner(as_graph(x, clone = FALSE, ...), clone = clone)
+  as_learner(as_graph(x, clone = FALSE), clone = clone, ...)
 }
 
 

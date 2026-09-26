@@ -10,7 +10,7 @@
 \description{
 Impute factorial features by adding a new level \code{".MISSING"}.
 
-Impute numerical features by constant values shifted below the minimum or above the maximum by
+Impute numeric, integer, POSIXct or Date features by constant values shifted below the minimum or above the maximum by
 using \eqn{min(x) - offset - multiplier * diff(range(x))} or
 \eqn{max(x) + offset + multiplier * diff(range(x))}.
 
@@ -60,7 +60,7 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 
 The \verb{$state$model} contains either \code{".MISSING"} used for \code{character} and \code{factor} (also
 \code{ordered}) features or \code{numeric(1)} indicating the constant value used for imputation of
-\code{integer} and \code{numeric} features.
+\code{integer}, \code{numeric}, \code{POSIXct} or \code{Date} features.
 }
 
 \section{Parameters}{
@@ -71,10 +71,10 @@ The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, as 
 Should \code{integer} and \code{numeric} features be shifted below the minimum? Initialized to \code{TRUE}. If \code{FALSE}
 they are shifted above the maximum. See also the description above.
 \item \code{offset} :: \code{numeric(1)} \cr
-Numerical non-negative offset as used in the description above for \code{integer} and \code{numeric}
+Numerical non-negative offset as used in the description above for \code{integer}, \code{numeric}, \code{POSIXCT} and \code{Date}.
 features. Initialized to \code{1}.
 \item \code{multiplier} :: \code{numeric(1)} \cr
-Numerical non-negative multiplier as used in the description above for \code{integer} and \code{numeric}
+Numerical non-negative multiplier as used in the description above for \code{integer}, \code{numeric}, \code{POSIXct} and \code{Date}.
 features. Initialized to \code{1}.
 }
 }
@@ -84,7 +84,7 @@ features. Initialized to \code{1}.
 Adds an explicit new \code{level()} to \code{factor} and \code{ordered} features, but not to \code{character} features.
 For \code{integer} and \code{numeric} features uses the \code{min}, \code{max}, \code{diff} and \code{range} functions.
 \code{integer} and \code{numeric} features that are entirely \code{NA} are imputed as \code{0}. \code{factor} and \code{ordered} features that are
-entirely \code{NA} are imputed as \code{".MISSING"}.
+entirely \code{NA} are imputed as \code{".MISSING"}. For \code{POSIXct} and \code{Date} features the value \code{0} is transformed into the respective data type.
 }
 
 \section{Fields}{
@@ -100,9 +100,9 @@ Only methods inherited from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 \examples{
 library("mlr3")
 set.seed(2409)
-data = tsk("pima")$data()
-data$y = factor(c(NA, sample(letters, size = 766, replace = TRUE), NA))
-data$z = ordered(c(NA, sample(1:10, size = 767, replace = TRUE)))
+data = tsk("diabetes")$data()
+data$y = factor(c(NA, sample(letters, size = nrow(data) - 2, replace = TRUE), NA))
+data$z = ordered(c(NA, sample(1:10, size = nrow(data) - 1, replace = TRUE)))
 task = TaskClassif$new("task", backend = data, target = "diabetes")
 task$missings()
 po = po("imputeoor")
@@ -130,7 +130,7 @@ Ding Y, Simonoff JS (2010).
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOp}},
 \code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
@@ -147,6 +147,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_classbalancing}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_classweights}},
+\code{\link{mlr_pipeops_classweightsex}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},
@@ -176,6 +177,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_learner_pi_cvplus}},
 \code{\link{mlr_pipeops_learner_quantiles}},
+\code{\link{mlr_pipeops_materialize}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
@@ -203,6 +205,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
+\code{\link{mlr_pipeops_splines}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
 \code{\link{mlr_pipeops_targetmutate}},
@@ -216,7 +219,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}}
 
-Other Imputation PipeOps: 
+Other Imputation PipeOps:
 \code{\link{PipeOpImpute}},
 \code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},

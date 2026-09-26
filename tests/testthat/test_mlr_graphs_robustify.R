@@ -13,7 +13,7 @@ test_that("Robustify Pipeline", {
   expect_true("fixfactors" %nin% names(p$pipeops))
   expect_true(length(p$pipeops) == 3)
 
-  tsk = tsk("pima")
+  tsk = tsk("diabetes")
   # missings with scaling (rpart can do missings)
   p = ppl("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
@@ -103,7 +103,7 @@ test_that("Robustify Pipeline", {
 
 test_that("Robustify Pipeline Impute Missings", {
   skip_if_not_installed("rpart")
-  tmissings = tsk("pima")
+  tmissings = tsk("diabetes")
   tnomissings = tsk("iris")
 
   lmissings = lrn("classif.rpart")
@@ -165,13 +165,18 @@ test_that("Robustify Pipeline factor to numeric", {
   cleanedatft = copy(atft)[type == "character", type := "factor"][type == "POSIXct", type := "numeric"]
   vectoradft = copy(po("textvectorizer")$train(list(alltask))[[1]]$feature_types)[type == "POSIXct", type := "numeric"]
 
-  expect_equal(ppl("robustify", learner = lfactor, makeTypeTask("numeric"))$train(alltask)[[1]]$feature_types, atft, check.attributes = FALSE)
-  expect_equal(ppl("robustify", learner = lnofactor, makeTypeTask("numeric"))$train(alltask)[[1]]$feature_types, atft, check.attributes = FALSE)
-  expect_equal(ppl("robustify", learner = lfactor, alltask)$train(alltask)[[1]]$feature_types, cleanedatft, ignore.row.order = TRUE, check.attributes = FALSE)
+  expect_equal(ppl("robustify", learner = lfactor, makeTypeTask("numeric"))$train(alltask)[[1]]$feature_types, atft, ignore_attr = TRUE)
+  expect_equal(ppl("robustify", learner = lnofactor, makeTypeTask("numeric"))$train(alltask)[[1]]$feature_types, atft, ignore_attr = TRUE)
+  expect_equal_data_table(
+    ppl("robustify", learner = lfactor, alltask)$train(alltask)[[1]]$feature_types,
+    cleanedatft,
+    ignore_row_order = TRUE,
+    check_attributes = FALSE
+  )
 
 
-  expect_equal(ppl("robustify", learner = lnofactor, alltask)$train(alltask)[[1]]$feature_types[, id := gsub("\\.[^.]*$", "", id)], vectoradft, check.attributes = FALSE)
-  expect_equal(ppl("robustify", learner = lnofactor, alltask, character_action = "matrix")$train(alltask)[[1]]$feature_types, vectoradft, check.attributes = FALSE)
+  expect_equal(ppl("robustify", learner = lnofactor, alltask)$train(alltask)[[1]]$feature_types[, id := gsub("\\.[^.]*$", "", id)], vectoradft, ignore_attr = TRUE)
+  expect_equal(ppl("robustify", learner = lnofactor, alltask, character_action = "matrix")$train(alltask)[[1]]$feature_types, vectoradft, ignore_attr = TRUE)
 
 
 })

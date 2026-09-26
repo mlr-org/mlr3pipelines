@@ -80,7 +80,7 @@
 #'
 #' o1 %>>!% o2
 #'
-#' o1  # not changed, becuase not a Graph.
+#' o1  # not changed, because not a Graph.
 `%>>%` = function(g1, g2) {
   concat_graphs(g1, g2, in_place = FALSE)
 }

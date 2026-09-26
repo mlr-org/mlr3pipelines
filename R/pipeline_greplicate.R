@@ -19,7 +19,7 @@
 #' library("mlr3")
 #'
 #' po_pca = po("pca")
-#' pipeline_greplicate(po_pca, n = 2)
+#' ppl("greplicate", po_pca, n = 2)
 pipeline_greplicate = function(graph, n) {
   graph = as_graph(graph)
   n = assert_count(n, positive = TRUE, coerce = TRUE)

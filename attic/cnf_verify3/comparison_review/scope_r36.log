@@ -1,0 +1,811 @@
+{
+  "metadata": {
+    "runtime": "3.6.3",
+    "locale": "LC_CTYPE=C.UTF-8;LC_NUMERIC=C;LC_TIME=C.UTF-8;LC_COLLATE=C.UTF-8;LC_MONETARY=C.UTF-8;LC_MESSAGES=C.UTF-8;LC_PAPER=C.UTF-8;LC_NAME=C;LC_ADDRESS=C;LC_TELEPHONE=C;LC_MEASUREMENT=C.UTF-8;LC_IDENTIFICATION=C",
+    "package_versions": {
+      "checkmate": "2.3.4",
+      "mlr3misc": "0.22.0",
+      "digest": "0.6.39",
+      "jsonlite": "2.0.0"
+    },
+    "source_md5": {
+      "attic/cnf_verify3/root/comparison_normalization.R": "cf41f193f045b086c2ae48fbc128e665",
+      "R/CnfAtom.R": "58699a7eb88f45c6aa5cdb8b77cc7c41",
+      "R/CnfClause.R": "f6c9659b31a511e696dc9d8d7cfa9349",
+      "R/CnfFormula.R": "7609c11610bbe9de566d9d9b448a07f7"
+    }
+  },
+  "records": [
+    {
+      "label": "equal_bare_TRUE",
+      "locale": "C.UTF-8",
+      "class": "CnfAtom",
+      "identical": true,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": null,
+        "error": "$ operator is invalid for atomic vectors"
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "TRUE_versus_FALSE",
+      "locale": "C.UTF-8",
+      "class": "CnfAtom",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": null,
+        "error": "$ operator is invalid for atomic vectors"
+      },
+      "guarded": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      }
+    },
+    {
+      "label": "named_versus_unnamed_TRUE",
+      "locale": "C.UTF-8",
+      "class": "CnfAtom",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": null,
+        "error": "$ operator is invalid for atomic vectors"
+      },
+      "guarded": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      }
+    },
+    {
+      "label": "differently_named_TRUE",
+      "locale": "C.UTF-8",
+      "class": "CnfAtom",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": null,
+        "error": "$ operator is invalid for atomic vectors"
+      },
+      "guarded": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      }
+    },
+    {
+      "label": "named_versus_unnamed_FALSE",
+      "locale": "C.UTF-8",
+      "class": "CnfAtom",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": null,
+        "error": "$ operator is invalid for atomic vectors"
+      },
+      "guarded": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      }
+    },
+    {
+      "label": "TRUE_with_versus_without_universe",
+      "locale": "C.UTF-8",
+      "class": "CnfAtom",
+      "identical": false,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": null,
+        "error": "$ operator is invalid for atomic vectors"
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "proper_versus_TRUE",
+      "locale": "C.UTF-8",
+      "class": "CnfAtom",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "target and current are not both logicals",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": null,
+        "error": "$ operator is invalid for atomic vectors"
+      },
+      "guarded": {
+        "equal": false,
+        "message": "target and current are not both logicals",
+        "error": null
+      }
+    },
+    {
+      "label": "proper_versus_wrong_class",
+      "locale": "C.UTF-8",
+      "class": "CnfAtom",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "current is not a CnfAtom",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": null,
+        "error": "$ operator is invalid for atomic vectors"
+      },
+      "guarded": {
+        "equal": false,
+        "message": "current is not a CnfAtom",
+        "error": null
+      }
+    },
+    {
+      "label": "equal_bare_TRUE",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "identical": true,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "TRUE_versus_FALSE",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Component 1: 1 element mismatch",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      }
+    },
+    {
+      "label": "named_versus_unnamed_TRUE",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "names for target but not for current",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      }
+    },
+    {
+      "label": "differently_named_TRUE",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Names: 1 string mismatch",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      }
+    },
+    {
+      "label": "named_versus_unnamed_FALSE",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "names for target but not for current",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      }
+    },
+    {
+      "label": "TRUE_with_versus_without_universe",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "identical": false,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": ["Attributes: < Length mismatch: comparison on first 1 components >", "target is not list-like"],
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "proper_versus_TRUE",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "target and current are not both logicals",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": ["Modes: list, logical", "names for target but not for current", "Attributes: < Length mismatch: comparison on first 1 components >", "Component 1: Modes: character, logical", "Component 1: target is character, current is logical"],
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "target and current are not both logicals",
+        "error": null
+      }
+    },
+    {
+      "label": "proper_versus_wrong_class",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "current is not a CnfClause",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": null,
+        "error": "argument is not a character vector"
+      },
+      "guarded": {
+        "equal": false,
+        "message": "current is not a CnfClause",
+        "error": null
+      }
+    },
+    {
+      "label": "equal_bare_TRUE",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "identical": true,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "TRUE_versus_FALSE",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Component 1: 1 element mismatch",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      }
+    },
+    {
+      "label": "named_versus_unnamed_TRUE",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "names for target but not for current",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      }
+    },
+    {
+      "label": "differently_named_TRUE",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Names: 1 string mismatch",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      }
+    },
+    {
+      "label": "named_versus_unnamed_FALSE",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "names for target but not for current",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "target and current are both logicals but not equal",
+        "error": null
+      }
+    },
+    {
+      "label": "TRUE_with_versus_without_universe",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "identical": false,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "proper_versus_TRUE",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "target and current are not both logicals",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": ["Attributes: < Modes: list, NULL >", "Attributes: < Lengths: 2, 0 >", "Attributes: < names for target but not for current >", "Attributes: < current is not list-like >", "Component 1: Modes: list, logical", "Component 1: names for target but not for current", "Component 1: Component 1: Modes: character, logical", "Component 1: Component 1: target is character, current is logical"],
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "target and current are not both logicals",
+        "error": null
+      }
+    },
+    {
+      "label": "proper_versus_wrong_class",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "current is not a CnfFormula",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": null,
+        "error": "argument is not a character vector"
+      },
+      "guarded": {
+        "equal": false,
+        "message": "current is not a CnfFormula",
+        "error": null
+      }
+    },
+    {
+      "label": "universe_domain_order_contract",
+      "locale": "C.UTF-8",
+      "class": "CnfAtom",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Component “X”: 2 string mismatches >",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Component “X”: 2 string mismatches >",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Component “X”: 2 string mismatches >",
+        "error": null
+      }
+    },
+    {
+      "label": "universe_domain_order_contract",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Component “X”: 2 string mismatches >",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Component “X”: 2 string mismatches >",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Component “X”: 2 string mismatches >",
+        "error": null
+      }
+    },
+    {
+      "label": "universe_domain_order_contract",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Component “X”: 2 string mismatches >",
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Component “X”: 2 string mismatches >",
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": "Attributes: < Component “universe”: Component “X”: 2 string mismatches >",
+        "error": null
+      }
+    },
+    {
+      "label": "universe_binding_collation",
+      "locale": "C",
+      "class": "CnfAtom",
+      "identical": false,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "universe_binding_collation",
+      "locale": "C",
+      "class": "CnfClause",
+      "identical": false,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "universe_binding_collation",
+      "locale": "C",
+      "class": "CnfFormula",
+      "identical": false,
+      "original": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "candidate": {
+        "equal": true,
+        "message": null,
+        "error": null
+      },
+      "guarded": {
+        "equal": true,
+        "message": null,
+        "error": null
+      }
+    },
+    {
+      "label": "universe_binding_collation",
+      "locale": "C.UTF-8",
+      "class": "CnfAtom",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      }
+    },
+    {
+      "label": "universe_binding_collation",
+      "locale": "C.UTF-8",
+      "class": "CnfClause",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      }
+    },
+    {
+      "label": "universe_binding_collation",
+      "locale": "C.UTF-8",
+      "class": "CnfFormula",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      }
+    },
+    {
+      "label": "universe_binding_collation",
+      "locale": "en_US.UTF-8",
+      "class": "CnfAtom",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      }
+    },
+    {
+      "label": "universe_binding_collation",
+      "locale": "en_US.UTF-8",
+      "class": "CnfClause",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      }
+    },
+    {
+      "label": "universe_binding_collation",
+      "locale": "en_US.UTF-8",
+      "class": "CnfFormula",
+      "identical": false,
+      "original": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      },
+      "candidate": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      },
+      "guarded": {
+        "equal": false,
+        "message": ["Attributes: < Component “universe”: Names: 2 string mismatches >", "Attributes: < Component “universe”: Component 1: 1 string mismatch >", "Attributes: < Component “universe”: Component 2: 1 string mismatch >"],
+        "error": null
+      }
+    }
+  ],
+  "environment_search_pairs": 39,
+  "environment_example": {
+    "symbol_names": ["38é", "38é"],
+    "codepoints": [
+      [51, 56, 233],
+      [51, 56, 101, 769]
+    ],
+    "unsorted_left_names": ["38é", "38é"],
+    "unsorted_right_names": ["38é", "38é"],
+    "sorted_left_names": ["38é", "38é"],
+    "sorted_right_names": ["38é", "38é"],
+    "payloads_match_by_name": true,
+    "base_universe_comparison": {
+      "equal": false,
+      "message": ["Names: 2 string mismatches", "Component 1: 1 string mismatch", "Component 2: 1 string mismatch"],
+      "error": null
+    }
+  },
+  "forwarded_attribute_controls": {
+    "CnfAtom": {
+      "equal": true,
+      "message": null,
+      "error": null
+    },
+    "CnfClause": {
+      "equal": true,
+      "message": null,
+      "error": null
+    },
+    "CnfFormula": {
+      "equal": true,
+      "message": null,
+      "error": null
+    }
+  }
+}

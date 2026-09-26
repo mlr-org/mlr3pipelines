@@ -97,17 +97,16 @@ pipe1  # contains o1, o2, and o3 now.
 
 o1 \%>>!\% o2
 
-o1  # not changed, becuase not a Graph.
+o1  # not changed, because not a Graph.
 }
 \seealso{
-Other Graph operators: 
-\code{\link{as_graph}()},
-\code{\link{as_pipeop}()},
-\code{\link{assert_graph}()},
-\code{\link{assert_pipeop}()},
-\code{\link{chain_graphs}()},
-\code{\link{greplicate}()},
-\code{\link{gunion}()},
+Other Graph operators:
+\code{\link[=as_graph]{as_graph()}},
+\code{\link[=as_pipeop]{as_pipeop()}},
+\code{\link[=assert_graph]{assert_graph()}},
+\code{\link[=assert_pipeop]{assert_pipeop()}},
+\code{\link[=chain_graphs]{chain_graphs()}},
+\code{\link[=gunion]{gunion()}},
 \code{\link{mlr_graphs_greplicate}}
 }
 \concept{Graph operators}

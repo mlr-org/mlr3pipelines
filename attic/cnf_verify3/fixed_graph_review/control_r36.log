@@ -1,0 +1,48 @@
+Graph controls complete: 1755 cases
+Ternary fixed-point controls complete: 18473 inputs
+$R_version
+[1] "R version 3.6.3 (2020-02-29)"
+
+$source_md5
+[1] "376aac6eb81334e751e9351f9eddc02f"
+
+$stats
+$stats$graph_cases
+[1] 1755
+
+$stats$duplicate_graph_cases
+[1] 1201
+
+$stats$static_sse1_pairs
+[1] 48
+
+$stats$static_sse2_guard_candidates
+[1] 120
+
+$stats$fixed_inputs
+[1] 21429
+
+$stats$productive_passes
+[1] 20601
+
+$stats$nonproductive_passes
+[1] 21429
+
+$stats$exact_checks
+[1] 21429
+
+$stats$rule_audits
+[1] 20267
+
+$stats$constant_audits
+[1] 1162
+
+$stats$sort_only_passes
+[1] 2369
+
+$stats$max_productive_passes
+[1] 1
+
+
+$noncanonical_full_domain_control
+[1] TRUE

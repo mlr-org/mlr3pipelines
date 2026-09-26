@@ -1,0 +1,129 @@
+{"calls": 55, "clauses": 4, "symbols": 8, "values": 15, "domains": [4, 4]}
+{"calls": 90, "clauses": 4, "symbols": 8, "values": 15, "domains": [4, 4]}
+{
+  "kind": "sse1",
+  "variant": "first_order_phase",
+  "domains": {
+    "X0": [
+      "0",
+      "1",
+      "4",
+      "5"
+    ],
+    "X1": [
+      "0",
+      "1",
+      "4",
+      "5"
+    ]
+  },
+  "clauses": [
+    {
+      "X1": [
+        "0",
+        "5"
+      ],
+      "X0": [
+        "0",
+        "5"
+      ]
+    },
+    {
+      "X0": [
+        "1"
+      ],
+      "X1": [
+        "0",
+        "1",
+        "4"
+      ]
+    },
+    {
+      "X0": [
+        "0"
+      ],
+      "X1": [
+        "4",
+        "0",
+        "5"
+      ]
+    },
+    {
+      "X1": [
+        "0"
+      ],
+      "X0": [
+        "4",
+        "5"
+      ]
+    }
+  ],
+  "result": [
+    {
+      "X1": "0",
+      "X0": "5"
+    },
+    {
+      "X1": [
+        "0",
+        "1",
+        "4"
+      ]
+    },
+    {
+      "X0": "0",
+      "X1": [
+        "4",
+        "0"
+      ]
+    }
+  ],
+  "opportunities": [
+    {
+      "kind": "sse2",
+      "donor_a": 0,
+      "donor_b": 2,
+      "target": 1,
+      "intersect_symbol": "X0",
+      "restrict_symbol": "X1",
+      "removed": [
+        "1"
+      ]
+    },
+    {
+      "kind": "sse1",
+      "donor": 0,
+      "target": 2,
+      "symbol": "X0",
+      "removed": [
+        "0"
+      ]
+    },
+    {
+      "kind": "sse2",
+      "donor_a": 0,
+      "donor_b": 1,
+      "target": 2,
+      "intersect_symbol": "X1",
+      "restrict_symbol": "X0",
+      "removed": [
+        "0"
+      ]
+    }
+  ],
+  "second_pass": [
+    {
+      "X1": [
+        "0",
+        "4"
+      ]
+    },
+    {
+      "X1": "0",
+      "X0": "5"
+    }
+  ],
+  "idempotent": false,
+  "calls": 90,
+  "elapsed": 2.5782904624938965
+}

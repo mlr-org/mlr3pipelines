@@ -1,0 +1,8 @@
+{
+  "mode": "installed",
+  "runtime": "R version 4.6.1 (2026-06-24)",
+  "checked_definitions": 56,
+  "kernel_environment": "mlr3pipelines",
+  "calls": 36,
+  "wrong_truth_calls": 12
+}

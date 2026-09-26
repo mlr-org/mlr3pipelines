@@ -107,8 +107,8 @@ connecting them using \code{\link{\%>>\%}}.
 \item \code{plot(html = FALSE, horizontal = FALSE)} \cr
 (\code{logical(1)}, \code{logical(1)}) -> \code{NULL} \cr
 Plot the \code{Graph}, using either the \CRANpkg{igraph} package (for \code{html = FALSE}, default) or
-the \code{visNetwork} package for \code{html = TRUE} producing a \code{\link[htmlwidgets:htmlwidgets-package]{htmlWidget}}.
-The \code{\link[htmlwidgets:htmlwidgets-package]{htmlWidget}} can be rescaled using \code{\link[visNetwork:visOptions]{visOptions}}.
+the \code{visNetwork} package for \code{html = TRUE} producing a \code{\link[htmlwidgets:htmlwidgets]{htmlWidget}}.
+The \code{\link[htmlwidgets:htmlwidgets]{htmlWidget}} can be rescaled using \code{\link[visNetwork:visOptions]{visOptions}}.
 For \code{html = FALSE}, the orientation of the plotted graph can be controlled through \code{horizontal}.
 \item \code{print(dot = FALSE, dotname = "dot", fontsize = 24L)} \cr
 (\code{logical(1)}, \code{character(1)}, \code{integer(1)}) -> \code{NULL} \cr
@@ -168,13 +168,14 @@ predicted = g$predict(task)
 predicted[[1]]$data()
 }
 \seealso{
-Other mlr3pipelines backend related: 
+Other mlr3pipelines backend related:
 \code{\link{PipeOp}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_graphs}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_materialize}},
 \code{\link{mlr_pipeops_updatetarget}}
 }
 \concept{mlr3pipelines backend related}

@@ -123,11 +123,11 @@
 #' * `hash` :: `character(1)` \cr
 #'   Checksum calculated on the `PipeOp`, depending on the `PipeOp`'s `class` and the slots `$id` and `$param_set$values`. If a
 #'   `PipeOp`'s functionality may change depending on more than these values, it should inherit the `$hash` active
-#'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
+#'   binding and calculate the hash as `mlr3misc::calculate_hash(super$hash, <OTHER THINGS>)`.
 #' * `phash` :: `character(1)` \cr
 #'   Checksum calculated on the `PipeOp`, depending on the `PipeOp`'s `class` and the slots `$id` but ignoring `$param_set$values`. If a
 #'   `PipeOp`'s functionality may change depending on more than these values, it should inherit the `$hash` active
-#'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
+#'   binding and calculate the hash as `mlr3misc::calculate_hash(super$hash, <OTHER THINGS>)`.
 #' * `.result` :: `list` \cr
 #'   If the [`Graph`]'s `$keep_results` flag is set to `TRUE`, then the intermediate Results of `$train()` and `$predict()`
 #'   are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
@@ -142,7 +142,8 @@
 #'     * `"validation"`: the `PipeOp` can make use of the `$internal_valid_task` of an [`mlr3::Task`].
 #'        This is for example used for [`PipeOpLearner`]s that wrap a [`Learner`][mlr3::Learner] with this property, see [`mlr3::Learner`].
 #'        `PipeOp`s that have this property, also have a `$validate` field, which controls whether to use the validation task,
-#'        as well as a `$internal_valid_scores` field, which allows to access the internal validation scores after training.
+#'        as well as a `$internal_valid_scores` field, which allows to access the internal validation scores after training,
+#'        and a `$best_valid_scores` field for the best internal validation scores observed during training.
 #'     * `"internal_tuning"`: the `PipeOp` is able to internally optimize hyperparameters.
 #'        This works analogously to the internal tuning implementation for [`mlr3::Learner`].
 #'        `PipeOp`s with that property also implement the standardized accessor `$internal_tuned_values` and have at least one
@@ -412,8 +413,8 @@ PipeOp = R6Class("PipeOp",
     innum = function() nrow(self$input),
     outnum = function() nrow(self$output),
     is_trained = function() !is.null(self$state),
-    hash = function() {
-      digest(list(class(self), self$id, lapply(self$param_set$values, function(val) {
+    hash = function() calculate_hash(
+      class(self), self$id, lapply(self$param_set$values, function(val) {
         # ideally we would just want to hash `param_set$values`, but one of the values
         # could be an R6 object with a `$hash` slot as well, in which case we take that
         # slot's value. This is to avoid different hashes from essentially the same
@@ -425,11 +426,8 @@ PipeOp = R6Class("PipeOp",
         } else {
           val
         }
-      }), private$.additional_phash_input()), algo = "xxhash64")
-    },
-    phash = function() {
-      digest(list(class(self), self$id, private$.additional_phash_input()), algo = "xxhash64")
-    },
+      }), private$.additional_phash_input()),
+    phash = function() calculate_hash(class(self), self$id, private$.additional_phash_input()),
     man = function(x) {
       if (!missing(x)) stop("man is read-only")
       paste0(topenv(self$.__enclos_env__)$.__NAMESPACE__.$spec[["name"]], "::", class(self)[[1]])
@@ -549,7 +547,18 @@ check_types = function(self, data, direction, operation) {
         ""
       }, error = function(e) sprintf("\nConversion from given data to %s produced message:\n%s.", typereq, e$message))
     }
-    assert_class(data_element, typereq, .var.name = paste0(varname, msg))
+
+    if (inherits(data_element, typereq)) {
+      return(data_element)
+    } else {
+      stop(sprintf(
+        "Type mismatch for %s: Must inherit from class '%s', but has class(es) %s. %s",
+        varname,
+        typereq,
+        str_collapse(class(data_element), quote = "'"),
+        msg
+      ), call. = FALSE)
+    }
   }
 
   for (idx in seq_along(data)) {

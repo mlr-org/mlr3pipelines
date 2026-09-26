@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.10.0-9000
+Version: 0.12.0-9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -106,6 +106,7 @@ Suggests:
     htmlwidgets,
     ranger,
     themis,
+    splines,
     dimRed,
     RSpectra,
     RANN
@@ -115,7 +116,6 @@ Config/testthat/edition: 3
 Config/testthat/parallel: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.3.3
 VignetteBuilder: knitr, rmarkdown
 Collate:
     'CnfAtom.R'
@@ -142,6 +142,7 @@ Collate:
     'PipeOpChunk.R'
     'PipeOpClassBalancing.R'
     'PipeOpClassWeights.R'
+    'PipeOpClassWeightsEx.R'
     'PipeOpClassifAvg.R'
     'PipeOpColApply.R'
     'PipeOpColRoles.R'
@@ -174,6 +175,7 @@ Collate:
     'PipeOpLearnerCV.R'
     'PipeOpLearnerPICVPlus.R'
     'PipeOpLearnerQuantiles.R'
+    'PipeOpMaterialize.R'
     'PipeOpMissingIndicators.R'
     'PipeOpModelMatrix.R'
     'PipeOpMultiplicity.R'
@@ -198,6 +200,7 @@ Collate:
     'PipeOpSmote.R'
     'PipeOpSmoteNC.R'
     'PipeOpSpatialSign.R'
+    'PipeOpSplines.R'
     'PipeOpSubsample.R'
     'PipeOpTextVectorizer.R'
     'PipeOpThreshold.R'
@@ -211,10 +214,10 @@ Collate:
     'TaskRegr_boston_housing.R'
     'assert_graph.R'
     'bibentries.R'
-    'greplicate.R'
     'gunion.R'
     'mlr_graphs.R'
     'operators.R'
+    'pipeline_bag.R'
     'pipeline_bagging.R'
     'pipeline_branch.R'
     'pipeline_convert_types.R'
@@ -229,3 +232,4 @@ Collate:
     'reexports.R'
     'typecheck.R'
     'zzz.R'
+Config/roxygen2/version: 8.1.0

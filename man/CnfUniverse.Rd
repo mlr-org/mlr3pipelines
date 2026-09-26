@@ -14,6 +14,8 @@ A symbol table for CNF formulas. The \code{CnfUniverse} is a by-reference object
 that stores the domain of each symbol. Symbols are created with \code{\link[=CnfSymbol]{CnfSymbol()}}
 and can be retrieved with \code{$}.
 Using \code{[[} retrieves a given symbol's domain.
+Symbol lookup with \code{$} uses the same name checks and UTF-8 normalization as
+\code{\link[=CnfSymbol]{CnfSymbol()}}. Keep the character locale (\code{LC_CTYPE}) unchanged while a universe is in use.
 
 It is only possible to combine symbols from the same (identical) universe.
 
@@ -36,11 +38,11 @@ Y \%among\% character(0)
 u$X \%among\% "a" | u$Y \%among\% "d"
 }
 \seealso{
-Other CNF representation objects: 
-\code{\link{CnfAtom}()},
-\code{\link{CnfClause}()},
-\code{\link{CnfFormula}()},
-\code{\link{CnfSymbol}()}
+Other CNF representation objects:
+\code{\link[=CnfAtom]{CnfAtom()}},
+\code{\link[=CnfClause]{CnfClause()}},
+\code{\link[=CnfFormula]{CnfFormula()}},
+\code{\link[=CnfSymbol]{CnfSymbol()}}
 }
 \concept{CNF representation objects}
 \keyword{internal}

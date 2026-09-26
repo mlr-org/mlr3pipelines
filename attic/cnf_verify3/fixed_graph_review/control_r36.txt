@@ -1,0 +1,7 @@
+list(R_version = "R version 3.6.3 (2020-02-29)", source_md5 = "376aac6eb81334e751e9351f9eddc02f",
+    stats = list(graph_cases = 1755L, duplicate_graph_cases = 1201L,
+        static_sse1_pairs = 48L, static_sse2_guard_candidates = 120L,
+        fixed_inputs = 21429L, productive_passes = 20601L, nonproductive_passes = 21429L,
+        exact_checks = 21429L, rule_audits = 20267L, constant_audits = 1162L,
+        sort_only_passes = 2369L, max_productive_passes = 1L),
+    noncanonical_full_domain_control = TRUE)
