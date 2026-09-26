@@ -368,7 +368,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         self$graph, resolve_branching = missing(rhs), lookup_field = "predict_type")
       if (!missing(rhs)) {
         walk(predict_type_pipeops, function(po) {
-          # only assign when something changes: a PipeOp's predict_type may be read-only
+          # skip PipeOps that already have the requested value: assigning to a
+          # read-only predict_type errors even when nothing would change
           if (!identical(po$predict_type, rhs)) po$predict_type = rhs
         })
         return(rhs)
