@@ -2,6 +2,8 @@
 
 ## mlr3pipelines 0.12.0-9000
 
+- Fix: Deep-cloning a `GraphLearner` now also clones `R6` objects in its
+  saved hyperparameter values (`$state$param_vals`).
 - Tests in `inst/testthat` no longer override `expect_equal`.
 - Fix: [`pos()`](https://mlr3pipelines.mlr-org.com/dev/reference/po.md)
   now returns an unnamed list, preventing duplicated PipeOp IDs such as
