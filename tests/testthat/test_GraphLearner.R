@@ -502,6 +502,95 @@ test_that("graphlearner predict type inference", {
   expect_error({lrrp = po(lrn("classif.featureless", predict_type = "se"))})
 })
 
+test_that("graphlearner predict_type setter only assigns where the value changes", {
+  # PipeOpLearner that counts assignments to $predict_type
+  PipeOpLearnerCounting = R6Class("PipeOpLearnerCounting", inherit = PipeOpLearner,
+    public = list(n_assigned = 0L),
+    active = list(
+      predict_type = function(val) {
+        if (!missing(val)) {
+          self$n_assigned = self$n_assigned + 1L
+          private$.learner$predict_type = val
+        }
+        private$.learner$predict_type
+      }
+    )
+  )
+  # PipeOpLearner with a strictly read-only $predict_type that errors on *any* assignment,
+  # as a third-party PipeOp might have
+  PipeOpLearnerFixed = R6Class("PipeOpLearnerFixed", inherit = PipeOpLearner,
+    active = list(
+      predict_type = function(val) {
+        if (!missing(val)) stop("$predict_type is read-only.")
+        "response"
+      }
+    )
+  )
+
+  # linear: assignment happens only when the value changes
+  lrn = GraphLearner$new(PipeOpLearnerCounting$new(lrn("classif.featureless")))
+  po_counting = lrn$graph$pipeops$classif.featureless
+  expect_equal(po_counting$n_assigned, 0L)
+  expect_equal(lrn$predict_type, "response")
+
+  lrn$predict_type = "response"
+  expect_equal(po_counting$n_assigned, 0L)
+  expect_equal(lrn$predict_type, "response")
+
+  lrn$predict_type = "prob"
+  expect_equal(po_counting$n_assigned, 1L)
+  expect_equal(lrn$predict_type, "prob")
+  expect_equal(po_counting$learner$predict_type, "prob")
+
+  lrn$predict_type = "prob"
+  expect_equal(po_counting$n_assigned, 1L)
+  expect_equal(lrn$predict_type, "prob")
+
+  # read-only PipeOp: assigning the value it already has must not error
+  lrn = GraphLearner$new(PipeOpLearnerFixed$new(lrn("classif.featureless")))
+  expect_equal(lrn$predict_type, "response")
+  lrn$predict_type = "response"
+  expect_equal(lrn$predict_type, "response")
+  expect_error({lrn$predict_type = "prob"}, "read-only")
+
+  # same on construction
+  lrn = GraphLearner$new(PipeOpLearnerFixed$new(lrn("classif.featureless")), predict_type = "response")
+  expect_equal(lrn$predict_type, "response")
+  expect_error(GraphLearner$new(PipeOpLearnerFixed$new(lrn("classif.featureless")), predict_type = "prob"), "read-only")
+
+  # branching: all branches are visited, each PipeOp is compared individually
+  po_a = PipeOpLearnerCounting$new(lrn("classif.featureless", id = "a"))
+  po_b = PipeOpLearnerCounting$new(lrn("classif.featureless", id = "b", predict_type = "prob"))
+  lrn = GraphLearner$new(po("branch", 2) %>>% gunion(list(po_a, po_b)) %>>% po("unbranch"))
+  po_a = lrn$graph$pipeops$a
+  po_b = lrn$graph$pipeops$b
+
+  lrn$predict_type = "prob"
+  expect_equal(po_a$n_assigned, 1L)
+  expect_equal(po_b$n_assigned, 0L)
+  expect_equal(po_a$predict_type, "prob")
+  expect_equal(po_b$predict_type, "prob")
+
+  lrn$predict_type = "response"
+  expect_equal(po_a$n_assigned, 2L)
+  expect_equal(po_b$n_assigned, 1L)
+  expect_equal(po_a$predict_type, "response")
+  expect_equal(po_b$predict_type, "response")
+
+  # read-only PipeOp in an inactive branch does not get in the way as long as its value is not changed
+  po_fixed = PipeOpLearnerFixed$new(lrn("classif.featureless", id = "fixed"))
+  po_c = PipeOpLearnerCounting$new(lrn("classif.featureless", id = "c", predict_type = "prob"))
+  lrn = GraphLearner$new(po("branch", 2) %>>% gunion(list(po_fixed, po_c)) %>>% po("unbranch"))
+  lrn$param_set$values$branch.selection = 2
+  expect_equal(lrn$predict_type, "prob")
+
+  lrn$predict_type = "response"
+  expect_equal(lrn$graph$pipeops$c$n_assigned, 1L)
+  expect_equal(lrn$graph$pipeops$c$predict_type, "response")
+  expect_equal(lrn$predict_type, "response")
+  expect_error({lrn$predict_type = "prob"}, "read-only")
+})
+
 
 test_that("GraphLearner model", {
   skip_if_not_installed("rpart")

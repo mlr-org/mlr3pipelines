@@ -403,7 +403,8 @@ PipeOp = R6Class("PipeOp",
       private$.param_set
     },
     predict_type = function(val) {
-      if (!missing(val)) {
+      # read-only, but assigning the current value (NULL) is a no-op
+      if (!missing(val) && !is.null(val)) {
         stop("$predict_type is read-only.")
       }
       return(NULL)
