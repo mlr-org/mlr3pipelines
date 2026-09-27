@@ -14,6 +14,7 @@ A \code{\link[mlr3:Learner]{Learner}} that encapsulates a \code{\link{Graph}} to
 The Graph must return a single \code{\link[mlr3:Prediction]{Prediction}} on its \verb{$predict()}
 call. The result of the \verb{$train()} call is discarded, only the
 internal state changes during training are used.
+See Section \emph{Internals} of \code{\link{Graph}} for how the \verb{$state} of a \code{\link{Graph}} relates to the \verb{$model} of a \code{GraphLearner}.
 
 The \code{predict_type} of a \code{\link{GraphLearner}} can be obtained or set via it's \code{predict_type} active binding.
 Setting a new predict type will try to set the \code{predict_type} in all relevant
@@ -54,7 +55,7 @@ Fields inherited from \code{\link[mlr3:Learner]{Learner}}, as well as:
 \item \code{graph} :: \code{\link{Graph}}\cr
 \code{\link{Graph}} that is being wrapped. This field contains the prototype of the \code{\link{Graph}} that is being trained, but does \emph{not}
 contain the model. Use \code{graph_model} to access the trained \code{\link{Graph}} after \verb{$train()}. Read-only.
-\item \code{graph_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
+\item \code{graph_model} :: \code{\link{Graph}}\cr
 \code{\link{Graph}} that is being wrapped. This \code{\link{Graph}} contains a trained state after \verb{$train()}. Read-only.
 \item \code{pipeops} :: named \code{list} of \code{\link{PipeOp}} \cr
 Contains all \code{\link{PipeOp}}s in the underlying \code{\link{Graph}}, named by the \code{\link{PipeOp}}'s \verb{$id}s. Shortcut for \verb{$graph_model$pipeops}. See \code{\link{Graph}} for details.

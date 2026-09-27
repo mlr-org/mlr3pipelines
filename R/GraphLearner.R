@@ -10,6 +10,7 @@
 #' The Graph must return a single [`Prediction`][mlr3::Prediction] on its `$predict()`
 #' call. The result of the `$train()` call is discarded, only the
 #' internal state changes during training are used.
+#' See Section *Internals* of [`Graph`] for how the `$state` of a [`Graph`] relates to the `$model` of a `GraphLearner`.
 #'
 #' The `predict_type` of a [`GraphLearner`] can be obtained or set via it's `predict_type` active binding.
 #' Setting a new predict type will try to set the `predict_type` in all relevant
@@ -45,7 +46,7 @@
 #' * `graph` :: [`Graph`]\cr
 #'   [`Graph`] that is being wrapped. This field contains the prototype of the [`Graph`] that is being trained, but does *not*
 #'   contain the model. Use `graph_model` to access the trained [`Graph`] after `$train()`. Read-only.
-#' * `graph_model` :: [`Learner`][mlr3::Learner]\cr
+#' * `graph_model` :: [`Graph`]\cr
 #'   [`Graph`] that is being wrapped. This [`Graph`] contains a trained state after `$train()`. Read-only.
 #' * `pipeops` :: named `list` of [`PipeOp`] \cr
 #'   Contains all [`PipeOp`]s in the underlying [`Graph`], named by the [`PipeOp`]'s `$id`s. Shortcut for `$graph_model$pipeops`. See [`Graph`] for details.
