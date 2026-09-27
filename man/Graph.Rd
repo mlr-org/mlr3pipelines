@@ -168,8 +168,8 @@ names (\verb{$input$name}) and inputs will be sent to the channels by name; othe
 in order in which they are listed in \verb{$input}.
 \item \code{predict(input, single_input = TRUE)} \cr
 (\code{any}, \code{logical(1)}) -> \code{list} of \code{any} \cr
-Predict with the \code{Graph} by calling all the \code{\link{PipeOp}}'s \verb{$train} methods. Input and output, as well as the function
-of the \code{single_input} argument, are analogous to \verb{$train()}.
+Predict with the \code{Graph} by calling all the \code{\link{PipeOp}}'s \verb{$predict} methods.
+Input and output, as well as the function of the \code{single_input} argument, are analogous to \verb{$train()}.
 \item \code{help(help_type)} \cr
 (\code{character(1)}) -> help file\cr
 Displays the help file of the concrete \code{PipeOp} instance. \code{help_type} is one of \code{"text"}, \code{"html"}, \code{"pdf"} and behaves

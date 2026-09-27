@@ -47,19 +47,30 @@ trained on the training input data.
 
 \section{State}{
 
-The \verb{$state} is set to the \verb{$state} slot of the \code{\link[mlr3:Learner]{Learner}} object. It is a named \code{list} with members:
+The \verb{$state} is set to the \verb{$state} slot of the \code{\link[mlr3:Learner]{Learner}} object after training.
+This is the named \code{list} of class \code{"learner_state"} that \CRANpkg{mlr3} creates during \verb{$train()},
+which is considered an internal data structure that may change
+(see the \verb{$state} field of \code{\link[mlr3:Learner]{Learner}}).
+Its most important members are:
 \itemize{
 \item \code{model} :: \code{any}\cr
 Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function.
-\item \code{train_log} :: \code{\link[data.table:data.table]{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
-Errors logged during training.
+\item \code{log} :: \code{\link[data.table:data.table]{data.table}} with columns \code{stage} (\code{factor}), \code{class} (\code{factor}),
+\code{condition} (\code{list})\cr
+Output, warnings and errors logged during training.
 \item \code{train_time} :: \code{numeric(1)}\cr
 Training time, in seconds.
-\item \code{predict_log} :: \code{NULL} | \code{\link[data.table:data.table]{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
-Errors logged during prediction.
-\item \code{predict_time} :: \code{NULL} | \code{numeric(1)}
-Prediction time, in seconds.
+\item \code{param_vals} :: named \code{list}\cr
+Hyperparameter values used for training.
+\item \code{task_hash} :: \code{character(1)}\cr
+Hash of the training \code{\link[mlr3:Task]{Task}}.
+\item \code{feature_names} :: \code{character}\cr
+Feature names of the training \code{\link[mlr3:Task]{Task}}.
 }
+
+\CRANpkg{mlr3} adds further members, e.g. \code{train_task}, \code{data_prototype}, \code{validate} and \code{mlr3_version},
+as well as \code{internal_valid_scores}, \code{best_valid_scores} and \code{internal_tuned_values} for \code{\link[mlr3:Learner]{Learner}}s
+with the \code{"validation"} or \code{"internal_tuning"} property (see the respective fields of \code{PipeOpLearner}).
 }
 
 \section{Parameters}{
@@ -69,7 +80,8 @@ The parameters are exactly the parameters of the \code{\link[mlr3:Learner]{Learn
 
 \section{Internals}{
 
-The \verb{$state} is currently not updated by prediction, so the \verb{$state$predict_log} and \verb{$state$predict_time} will always be \code{NULL}.
+The \verb{$state} is currently not updated by prediction, so \verb{$state$log} never contains entries with \code{stage} \code{"predict"}
+and \verb{$state$predict_time} is always \code{NULL}.
 }
 
 \section{Fields}{

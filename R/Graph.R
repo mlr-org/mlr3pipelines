@@ -155,8 +155,8 @@
 #'   in order in which they are listed in `$input`.
 #' * `predict(input, single_input = TRUE)` \cr
 #'   (`any`, `logical(1)`) -> `list` of `any` \cr
-#'   Predict with the `Graph` by calling all the [`PipeOp`]'s `$train` methods. Input and output, as well as the function
-#'   of the `single_input` argument, are analogous to `$train()`.
+#'   Predict with the `Graph` by calling all the [`PipeOp`]'s `$predict` methods.
+#'   Input and output, as well as the function of the `single_input` argument, are analogous to `$train()`.
 #' * `help(help_type)` \cr
 #'   (`character(1)`) -> help file\cr
 #'   Displays the help file of the concrete `PipeOp` instance. `help_type` is one of `"text"`, `"html"`, `"pdf"` and behaves

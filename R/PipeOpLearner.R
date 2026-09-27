@@ -38,23 +38,35 @@
 #' trained on the training input data.
 #'
 #' @section State:
-#' The `$state` is set to the `$state` slot of the [`Learner`][mlr3::Learner] object. It is a named `list` with members:
+#' The `$state` is set to the `$state` slot of the [`Learner`][mlr3::Learner] object after training.
+#' This is the named `list` of class `"learner_state"` that \CRANpkg{mlr3} creates during `$train()`,
+#' which is considered an internal data structure that may change
+#' (see the `$state` field of [`Learner`][mlr3::Learner]).
+#' Its most important members are:
 #' * `model` :: `any`\cr
 #'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function.
-#' * `train_log` :: [`data.table`][data.table::data.table] with columns `class` (`character`), `msg` (`character`)\cr
-#'   Errors logged during training.
+#' * `log` :: [`data.table`][data.table::data.table] with columns `stage` (`factor`), `class` (`factor`),
+#'   `condition` (`list`)\cr
+#'   Output, warnings and errors logged during training.
 #' * `train_time` :: `numeric(1)`\cr
 #'   Training time, in seconds.
-#' * `predict_log` :: `NULL` | [`data.table`][data.table::data.table] with columns `class` (`character`), `msg` (`character`)\cr
-#'   Errors logged during prediction.
-#' * `predict_time` :: `NULL` | `numeric(1)`
-#'   Prediction time, in seconds.
+#' * `param_vals` :: named `list`\cr
+#'   Hyperparameter values used for training.
+#' * `task_hash` :: `character(1)`\cr
+#'   Hash of the training [`Task`][mlr3::Task].
+#' * `feature_names` :: `character`\cr
+#'   Feature names of the training [`Task`][mlr3::Task].
+#'
+#' \CRANpkg{mlr3} adds further members, e.g. `train_task`, `data_prototype`, `validate` and `mlr3_version`,
+#' as well as `internal_valid_scores`, `best_valid_scores` and `internal_tuned_values` for [`Learner`][mlr3::Learner]s
+#' with the `"validation"` or `"internal_tuning"` property (see the respective fields of `PipeOpLearner`).
 #'
 #' @section Parameters:
 #' The parameters are exactly the parameters of the [`Learner`][mlr3::Learner] wrapped by this object.
 #'
 #' @section Internals:
-#' The `$state` is currently not updated by prediction, so the `$state$predict_log` and `$state$predict_time` will always be `NULL`.
+#' The `$state` is currently not updated by prediction, so `$state$log` never contains entries with `stage` `"predict"`
+#' and `$state$predict_time` is always `NULL`.
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`], as well as:
