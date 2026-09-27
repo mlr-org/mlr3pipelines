@@ -1,5 +1,6 @@
 # mlr3pipelines 0.12.0-9000
 
+* New `PipeOpUMAP` / `po("umap")` uses `uwot` for dimensionality reduction, including transformation of new observations.
 * Fix: Deep-cloning a `GraphLearner` now also clones `R6` objects in its saved hyperparameter values (`$state$param_vals`).
 * Tests in `inst/testthat` no longer override `expect_equal`.
 * Fix: `pos()` now returns an unnamed list, preventing duplicated PipeOp IDs such as `pca.pca` when passed to `as_graph()`.
