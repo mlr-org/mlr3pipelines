@@ -1,0 +1,57 @@
+{
+  "source_sha256": "7d34ad60035509a463168752bb5f6f82d87fd7182a94a0e48461be7cdbe35fdc",
+  "version": "R version 4.6.1 (2026-06-24)",
+  "checkmate_version": "2.3.4",
+  "seed": 860601,
+  "saved_cases": 57,
+  "basic_cases": 7,
+  "generated_cases": 200,
+  "variants": ["plain", "reordered", "repeated", "named", "repeated_named", "matrix", "array", "repeated_matrix", "repeated_array", "attributed", "inert_class"],
+  "counts": {
+    "cases": 264,
+    "runs": 2904,
+    "paired_trace_checks": 2640,
+    "events": 10128063,
+    "actual_write_events": 30635,
+    "pair_rows": 56958,
+    "unit_containments": 3861,
+    "nonunit_hla": 15059,
+    "unit_hla": 2640,
+    "repeated_virtual_ranges": 9124,
+    "named_virtual_ranges": 8045,
+    "truth_assignments": 172320,
+    "virtual_support_comparisons": 16090
+  },
+  "sites": {
+    "&&_left": 8,
+    "&&_right": 8,
+    "||_left": 26,
+    "||_right": 26,
+    "actual_write": 4,
+    "decision_!=": 15,
+    "decision_<=": 6,
+    "decision_==": 18,
+    "decision_>": 5,
+    "decision_all": 8,
+    "decision_any": 1,
+    "for_iteration": 23,
+    "for_sequence": 23,
+    "helper_entry": 13,
+    "hla_hook": 2,
+    "if": 108,
+    "repeat_iteration": 2
+  },
+  "feasible_if_outcomes": 212,
+  "controls": {
+    "schedule_only_detected": true,
+    "difference_mutation_detected": "!any(missing %in% new) is not TRUE",
+    "standalone_full_support_length_equivalence_refuted": {
+      "domain": ["a", "a", "b"],
+      "old": "a",
+      "donor": [],
+      "new": ["a", "b"],
+      "covers": true,
+      "length_equal": false
+    }
+  }
+}

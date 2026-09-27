@@ -1,0 +1,17 @@
+R 3.6.3 LC_CTYPE C.UTF-8 input models 0 output models 0
+CnfFormula: FALSE
+[1] X Y
+<0 rows> (or 0-length row.names)
+name encoding UTF-8 name bytes 195 169
+[1] "é"
+same name found by membership: TRUE
+R 3.6.3 LC_CTYPE C input models 0 output models 2
+CnfFormula:
+     (<U+00E9> <U+2208> {b} | Y <U+2208> {a})
+   & (<U+00E9> <U+2208> {c} | Y <U+2208> {b})
+  X Y
+3 c a
+5 b b
+name encoding UTF-8 name bytes 195 169
+[1] "<U+00E9>"
+same name found by membership: FALSE

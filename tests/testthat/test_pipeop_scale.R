@@ -3,15 +3,7 @@ context("PipeOpScale")
 test_that("PipeOpScale - basic properties", {
   op = PipeOpScale$new()
   task = mlr_tasks$get("iris")
-  expect_pipeop(op)
-
   expect_datapreproc_pipeop_class(PipeOpScale, task = task)
-
-  result = train_pipeop(op, inputs = list(task))
-  expect_task(result[[1]])
-
-  result = predict_pipeop(op, inputs = list(task))
-  expect_task(result[[1]])
 })
 
 test_that("basic properties", {
@@ -19,7 +11,7 @@ test_that("basic properties", {
 
   expect_datapreproc_pipeop_class(PipeOpScale, task = mlr_tasks$get("boston_housing_classic"))
 
-  expect_datapreproc_pipeop_class(PipeOpScale, task = mlr_tasks$get("pima"))
+  expect_datapreproc_pipeop_class(PipeOpScale, task = mlr_tasks$get("diabetes"))
 
   expect_datapreproc_pipeop_class(PipeOpScale, list(param_vals = list(robust = TRUE)), task = mlr_tasks$get("iris"))
 
@@ -43,8 +35,8 @@ test_that("basic properties", {
 
   po$param_set$values[c("center", "scale")] = c(FALSE, FALSE)
 
-  expect_equal(data, po$train(list(task))[[1]]$data(), ignore.col.order = TRUE)
-  expect_equal(data, po$predict(list(task))[[1]]$data(), ignore.col.order = TRUE)
+  expect_equal_data_table(data, po$train(list(task))[[1]]$data(), ignore_col_order = TRUE)
+  expect_equal_data_table(data, po$predict(list(task))[[1]]$data(), ignore_col_order = TRUE)
 
   po$param_set$values[c("center", "scale")] = c(TRUE, FALSE)
 
@@ -60,8 +52,8 @@ test_that("basic properties", {
     i = rep(TRUE, 5),
     class = data$class)
 
-  expect_equal(data.center, po$train(list(task))[[1]]$data(), ignore.col.order = TRUE)
-  expect_equal(data.center, po$predict(list(task))[[1]]$data(), ignore.col.order = TRUE)
+  expect_equal_data_table(data.center, po$train(list(task))[[1]]$data(), ignore_col_order = TRUE)
+  expect_equal_data_table(data.center, po$predict(list(task))[[1]]$data(), ignore_col_order = TRUE)
 
   po$param_set$values[c("center", "scale")] = c(FALSE, TRUE)
 
@@ -78,8 +70,8 @@ test_that("basic properties", {
     i = rep(TRUE, 5),
     class = data$class)
 
-  expect_equal(data.center, po$train(list(task))[[1]]$data(), ignore.col.order = TRUE)
-  expect_equal(data.center, po$predict(list(task))[[1]]$data(), ignore.col.order = TRUE)
+  expect_equal_data_table(data.center, po$train(list(task))[[1]]$data(), ignore_col_order = TRUE)
+  expect_equal_data_table(data.center, po$predict(list(task))[[1]]$data(), ignore_col_order = TRUE)
 
   po$param_set$values[c("center", "scale")] = c(TRUE, TRUE)
 
@@ -96,8 +88,8 @@ test_that("basic properties", {
     i = rep(TRUE, 5),
     class = data$class)
 
-  expect_equal(data.center, po$train(list(task))[[1]]$data(), ignore.col.order = TRUE)
-  expect_equal(data.center, po$predict(list(task))[[1]]$data(), ignore.col.order = TRUE)
+  expect_equal_data_table(data.center, po$train(list(task))[[1]]$data(), ignore_col_order = TRUE)
+  expect_equal_data_table(data.center, po$predict(list(task))[[1]]$data(), ignore_col_order = TRUE)
 })
 
 

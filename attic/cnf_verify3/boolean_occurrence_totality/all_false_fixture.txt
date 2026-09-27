@@ -1,0 +1,6 @@
+list(words = list(c(-1L, 2L), c(3L, -2L), c(1L, 1L, 1L), c(-3L,
+-1L)), unit = "X1", target = 1L, donor = 4L, entries = list(list(
+    X1 = "0"), list(X3 = "1", X2 = "0"), list(X3 = "0", X1 = "0"),
+    list(X1 = "1", X1 = "1")), eliminated = c(FALSE, FALSE, TRUE,
+FALSE), registry = list(X1 = integer(0), X2 = 2L, X3 = 2L), counts = c(2L,
+2L), remaining = c(2L, 4L), lazy = c(X1 = FALSE, X1 = FALSE))

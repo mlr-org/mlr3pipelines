@@ -1,0 +1,14 @@
+{
+  "seed": 816225,
+  "counts": {
+    "profile3": 193,
+    "profile2": 7,
+    "singleton_points": 9769,
+    "independent_formula_checks": 1020,
+    "grid_cases": 102,
+    "syntactic_order_checks": 432,
+    "production_refinement_pairs": 300
+  },
+  "distinct_cells_for_asymmetric_order_case": 144,
+  "local_reduction_examples": []
+}

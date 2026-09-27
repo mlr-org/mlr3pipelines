@@ -1,0 +1,58 @@
+{
+  "checks": {
+    "freeze_prebirth_false_certificate": 10,
+    "acyclic_birth_discharge": 1088,
+    "pending_parent_cannot_undo_child": 8,
+    "merge_before_candidate_elimination": 4,
+    "merge_after_candidate_elimination": 4,
+    "hla_under_retained_donor": 12,
+    "circular_context_countermodel_is_real": 1,
+    "unit_restriction_keeps_current_formula": 1,
+    "removing_unit_after_sound_strengthening_is_valid": 1,
+    "mutable_representative_countermodel_is_real": 1,
+    "cyclic_certificate_countermodel_is_real": 1,
+    "unallocated_row_absent_changed_symbol": 9,
+    "allocated_row_monotone_update": 27
+  },
+  "total": 1167,
+  "contextual_unit_hla_countermodel": {
+    "original_models": [
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "after_unsafe_unit_removal": [
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "after_restriction_then_unit_removal": [
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ]
+  }
+}

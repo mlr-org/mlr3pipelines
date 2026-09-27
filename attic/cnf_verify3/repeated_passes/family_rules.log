@@ -1,0 +1,11 @@
+n=1: all 2 prefix states have exactly the claimed local opportunity
+n=2: all 3 prefix states have exactly the claimed local opportunity
+n=3: all 4 prefix states have exactly the claimed local opportunity
+n=4: all 5 prefix states have exactly the claimed local opportunity
+n=5: all 6 prefix states have exactly the claimed local opportunity
+n=6: all 7 prefix states have exactly the claimed local opportunity
+n=7: all 8 prefix states have exactly the claimed local opportunity
+n=8: all 9 prefix states have exactly the claimed local opportunity
+n=9: all 10 prefix states have exactly the claimed local opportunity
+n=10: all 11 prefix states have exactly the claimed local opportunity
+{'frontier_states': 65, 'irredundancy_witnesses': 945, 'public_first_passes': 10}

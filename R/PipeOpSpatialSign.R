@@ -22,7 +22,6 @@
 #'
 #' The output is the input [`Task`][mlr3::Task] with all affected numeric features replaced by their normalized versions.
 #'
-#'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`].
 #'
@@ -33,6 +32,9 @@
 #' * `norm` :: `numeric(1)` \cr
 #'  Norm to use. Rows are scaled to `sum(x^norm)^(1/norm) == length` for finite `norm`, or to `max(abs(x)) == length`
 #'  if `norm` is `Inf`. Default is 2.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].

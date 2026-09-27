@@ -1,0 +1,141 @@
+R version 3.6.3 (2020-02-29); checkmate 2.3.4
+empty Clause: expected payload
+empty Formula: expected payload
+free TRUE masks later Clause owner: expected payload
+later free TRUE still owner-checked in Clause: expected error: All symbols must be in the same universe.
+free FALSE first Clause: expected error: All symbols must be in the same universe.
+free FALSE last Clause: expected error: All symbols must be in the same universe.
+full union masks later Clause owner: expected payload
+upfront Clause types checked after apparent TRUE: expected error: Assertion on 'atoms' failed: May only contain the following types: {CnfAtom,CnfClause}, but element 2 has type 'numeric'.
+same-owner FALSE in Clause: expected payload
+dimensional outer atom list: expected payload
+free TRUE first Formula: expected error: All clauses must be in the same universe.
+free TRUE last Formula: expected payload
+only Clauses before FALSE: expected payload
+FALSE before nested Formula: expected payload
+nested Formula before same-owner FALSE: expected error: wrong arguments for subsetting an environment
+nested Formula before free FALSE: expected error: wrong arguments for subsetting an environment
+upfront Formula types checked after apparent FALSE: expected error: Assertion on 'clauses' failed: May only contain the following types: {CnfClause,CnfFormula}, but element 2 has type 'logical'.
+same-owner TRUE first Formula: expected payload
+dimensional outer clause list: expected payload
+foreign TRUE skipped before owner check: expected payload
+proper foreign Formula member: expected error: All clauses must be in the same universe.
+known as.list TRUE Clause: expected error: Cannot convert object to CnfAtom.
+FALSE Clause round trip: expected payload
+TRUE Formula round trip: expected payload
+FALSE Formula round trip: expected payload
+proper Clause round trip: expected payload
+raw TRUE | proper Clause: correct truth, missing promised Clause class
+raw TRUE class-loss consequence: expected error: Assertion on 'clauses' failed: May only contain the following types: {CnfClause,CnfFormula}, but element 1 has type 'logical'.
+empty binding name: expected error: invalid first argument
+missing binding value: expected error: Assertion on 'name' failed: May not be NA.
+missing domain value: expected error: Assertion on 'domain' failed: Contains missing values (element 2).
+missing names are attributes: expected payload
+nonempty rejected logical logical: expected error: Assertion on 'values' failed: Must be a subset of {'a','b','b','c'}, but has different type.
+nonempty rejected integer integer: expected error: Assertion on 'values' failed: Must be a subset of {'a','b','b','c'}, but has different type.
+nonempty rejected double numeric: expected error: Assertion on 'values' failed: Must be a subset of {'a','b','b','c'}, but has different type.
+nonempty rejected complex complex: expected error: Assertion on 'values' failed: Must be a subset of {'a','b','b','c'}, but has different type.
+nonempty rejected raw raw: expected error: Assertion on 'values' failed: Must be a subset of {'a','b','b','c'}, but has different type.
+nonempty rejected list list: expected error: Assertion on 'values' failed: Must be a subset of {'a','b','b','c'}, but has different type.
+nonempty rejected integer factor: expected error: Assertion on 'values' failed: Must be a subset of {'a','b','b','c'}, but has different type.
+nonempty rejected character character: expected error: Assertion on 'values' failed: Must be a subset of {'a','b','b','c'}, but has additional elements {'NA'}.
+native mixed old-R Ops: documented incompatible-method exclusion
+portable direct Formula method: expected payload
+
+Inspected base bodies (no bytecode addresses):
+
+setdiff
+function (x, y)
+{
+    x <- as.vector(x)
+    y <- as.vector(y)
+    unique(if (length(x) || length(y))
+        x[match(x, y, 0L) == 0L]
+    else x)
+}
+
+unique.matrix
+function (x, incomparables = FALSE, MARGIN = 1, fromLast = FALSE,
+    ...)
+{
+    if (!isFALSE(incomparables))
+        .NotYetUsed("incomparables != FALSE")
+    dx <- dim(x)
+    ndim <- length(dx)
+    if (length(MARGIN) != 1L || (MARGIN > ndim))
+        stop(gettextf("MARGIN = %s is invalid for dim = %s",
+            paste(MARGIN, collapse = ","), paste(dx, collapse = ",")),
+            domain = NA)
+    temp <- if ((ndim > 1L) && (prod(dx[-MARGIN]) > 1L))
+        asplit(x, MARGIN)
+    else x
+    args <- rep(alist(a = ), ndim)
+    names(args) <- NULL
+    args[[MARGIN]] <- !duplicated.default(temp, fromLast = fromLast,
+        ...)
+    do.call("[", c(list(x), args, list(drop = FALSE)))
+}
+
+unique.array
+function (x, incomparables = FALSE, MARGIN = 1, fromLast = FALSE,
+    ...)
+{
+    if (!isFALSE(incomparables))
+        .NotYetUsed("incomparables != FALSE")
+    dx <- dim(x)
+    ndim <- length(dx)
+    if (length(MARGIN) != 1L || (MARGIN > ndim))
+        stop(gettextf("MARGIN = %s is invalid for dim = %s",
+            paste(MARGIN, collapse = ","), paste(dx, collapse = ",")),
+            domain = NA)
+    temp <- if ((ndim > 1L) && (prod(dx[-MARGIN]) > 1L))
+        asplit(x, MARGIN)
+    else x
+    args <- rep(alist(a = ), ndim)
+    names(args) <- NULL
+    args[[MARGIN]] <- !duplicated.default(temp, fromLast = fromLast,
+        ...)
+    do.call("[", c(list(x), args, list(drop = FALSE)))
+}
+
+unique.default
+function (x, incomparables = FALSE, fromLast = FALSE, nmax = NA,
+    ...)
+{
+    if (is.factor(x)) {
+        z <- .Internal(unique(x, incomparables, fromLast, min(length(x),
+            nlevels(x) + 1L)))
+        return(factor(z, levels = seq_len(nlevels(x)), labels = levels(x),
+            ordered = is.ordered(x)))
+    }
+    z <- .Internal(unique(x, incomparables, fromLast, nmax))
+    if (inherits(x, "POSIXct"))
+        structure(z, class = class(x), tzone = attr(x, "tzone"))
+    else if (inherits(x, "Date"))
+        structure(z, class = class(x))
+    else z
+}
+
+I
+function (x)
+{
+    structure(x, class = unique(c("AsIs", oldClass(x))))
+}
+
+[.AsIs
+function (x, i, ...)
+I(NextMethod("["))
+
+Directed duplicate-row case:
+structure(c("b", "b", "a", "a", "a", "b"), .Dim = 3:2)
+structure(c("b", "a", "a", "b"), .Dim = c(2L, 2L))
+ordinary atom values:
+structure(c("b", "a", "a", "b"), .Dim = c(2L, 2L))
+AsIs atom values:
+c("b", "a")
+complement atom values:
+"c"
+directly negated Formula payload:
+list(list(X = "c"))
+
+Grammar and exclusion controls: 58

@@ -1,0 +1,11 @@
+cases=1017 conditions=108 evaluations=481898 unseen_true=29 unseen_false=0 complete=FALSE
+cases=2017 conditions=108 evaluations=993669 unseen_true=22 unseen_false=0 complete=FALSE
+cases=3017 conditions=108 evaluations=1473619 unseen_true=20 unseen_false=0 complete=FALSE
+cases=4017 conditions=108 evaluations=1938877 unseen_true=20 unseen_false=0 complete=FALSE
+cases=5017 conditions=108 evaluations=2408525 unseen_true=20 unseen_false=0 complete=FALSE
+cases=6017 conditions=108 evaluations=2909172 unseen_true=20 unseen_false=0 complete=FALSE
+cases=7017 conditions=108 evaluations=3429536 unseen_true=20 unseen_false=0 complete=FALSE
+cases=8017 conditions=108 evaluations=3908997 unseen_true=19 unseen_false=0 complete=FALSE
+cases=9017 conditions=108 evaluations=4368615 unseen_true=18 unseen_false=0 complete=FALSE
+cases=10017 conditions=108 evaluations=4835057 unseen_true=15 unseen_false=0 complete=FALSE
+cases=10017 conditions=108 evaluations=4835057 unseen_true=15 unseen_false=0 complete=TRUE

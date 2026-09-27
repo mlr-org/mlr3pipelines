@@ -1,0 +1,5 @@
+{"donors": 0, "stats": {"queries": 26, "horn_steps": 0}, "elapsed": 0.0009469985961914062}
+{"donors": 1, "stats": {"queries": 702, "horn_steps": 242, "refutations": 98}, "elapsed": 0.03831219673156738}
+{"donors": 2, "stats": {"queries": 9152, "horn_steps": 6260, "refutations": 2584}, "elapsed": 0.676292896270752}
+{"donors": 3, "stats": {"queries": 76752, "horn_steps": 76700, "refutations": 32276}, "elapsed": 5.8527209758758545}
+{"binary": {"queries": 76752, "horn_steps": 76700, "refutations": 32276}, "omitted_units": {"queries": 2600, "horn_steps": 5104, "omission_pairs": 1300, "refutations": 576}, "elapsed": 6.051860809326172}

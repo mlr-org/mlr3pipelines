@@ -1,0 +1,9 @@
+ℹ Testing mlr3pipelines
+✔ | F W  S  OK | Context
+
+✔ |        136 | CnfOperators [1.9s]
+
+══ Results ═════════════════════════════════════════════════════════════════════
+Duration: 1.9 s
+
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 136 ]

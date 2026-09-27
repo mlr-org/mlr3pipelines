@@ -1,0 +1,8 @@
+R version 3.6.3 (2020-02-29)
+minimized_subsumption.json : 12 valuations, 3 models; value occurrences 9 -> 3 -> 1
+minimized_sse1.json : 18 valuations, 5 models; value occurrences 11 -> 7 -> 6
+minimized_first_order_phase_sse1.json : 16 valuations, 5 models; value occurrences 15 -> 5 -> 4
+minimized_sse2.json : 48 valuations, 9 models; value occurrences 23 -> 18 -> 17
+directed_oneend_shrink_min.json : 32 valuations, 9 models; value occurrences 17 -> 12 -> 11
+minimized_oneend_symbol_removal.json : 24 valuations, 9 models; value occurrences 14 -> 10 -> 9
+minimized_deferred_skip.json : 16 valuations, 1 models; value occurrences 15 -> 2 -> 2

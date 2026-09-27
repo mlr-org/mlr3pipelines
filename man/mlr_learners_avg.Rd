@@ -49,7 +49,7 @@ Nloptr hyperparameters are initialized to \code{xtol_rel = 1e-8}, \code{algorith
 and equal initial weights for each learner.
 For more fine-grained control, it is recommended to supply a instantiated \code{\link[bbotk:Optimizer]{Optimizer}}.
 \item \code{log_level} :: \code{character(1)} | \code{integer(1)}\cr
-Set a temporary log-level for \code{lgr::get_logger("bbotk")}. Initialized to: "warn".
+Set a temporary log-level for \code{lgr::get_logger("mlr3/bbotk")}. Initialized to: "warn".
 }
 }
 
@@ -71,10 +71,10 @@ LeDell, Erin (2015).
 Ph.D. thesis, UC Berkeley.
 }
 \seealso{
-Other Learners: 
+Other Learners:
 \code{\link{mlr_learners_graph}}
 
-Other Ensembles: 
+Other Ensembles:
 \code{\link{PipeOpEnsemble}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_ovrunite}},

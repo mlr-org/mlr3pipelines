@@ -1,0 +1,43 @@
+R version 3.6.3 (2020-02-29)
+atom value permutation: content=TRUE, comparison=TRUE
+atom changed value: content=FALSE, comparison=FALSE
+atom changed symbol: content=FALSE, comparison=FALSE
+atom repeated scalar storage: content=TRUE, comparison=FALSE
+clause symbol permutation: content=TRUE, comparison=TRUE
+clause changed association: content=FALSE, comparison=FALSE
+clause changed symbol only: content=FALSE, comparison=FALSE
+formula clause and symbol permutation: content=TRUE, comparison=TRUE
+formula changed associations: content=FALSE, comparison=FALSE
+formula duplicate count: content=FALSE, comparison=FALSE
+formula distinct clause multiplicities: content=FALSE, comparison=FALSE
+formula equal repeated multiset: content=TRUE, comparison=TRUE
+equal constants across classes: content=TRUE, comparison=TRUE
+constant versus bare logical: content=TRUE, comparison=TRUE
+different constants: content=FALSE, comparison=FALSE
+constant universe ignored: content=TRUE, comparison=TRUE
+constant names retained by c: content=TRUE, comparison=FALSE
+proper versus constant: content=FALSE, comparison=FALSE
+proper class guard: content=FALSE, comparison=FALSE
+collation tie equal set: content=TRUE, comparison=FALSE
+collation tie unequal singletons: content=FALSE, comparison=FALSE
+equivalent encodings: content=TRUE, comparison=TRUE
+Intentional caller-option controls:
+$default
+[1] FALSE
+
+$check_attributes_false
+[1] TRUE
+
+$check_names_false
+[1] TRUE
+
+$use_names_false
+[1] FALSE
+
+$formula_check_attributes_false
+[1] TRUE
+
+$atom_check_attributes_false
+[1] FALSE
+
+Default CNF controls: 22 ; all TRUE results preserve content.

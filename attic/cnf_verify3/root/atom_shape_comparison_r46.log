@@ -1,0 +1,64 @@
+$runtime
+[1] "R version 4.6.1 (2026-06-24)"
+
+$comparisons
+[1] 248
+
+$false_negatives
+[1] 116
+
+$unequal_controls
+[1] 248
+
+$positional_rows
+[1] 744
+
+$examples
+$examples$row
+$examples$row$input
+     [,1] [,2]
+[1,] "a"  "a"
+
+$examples$row$stored
+     [,1] [,2]
+[1,] "a"  "a"
+
+$examples$row$reference
+[1] "a"
+
+$examples$row$comparison
+[1] "Component “values”: Lengths (2, 1) differ (string compare on first 1)"
+
+$examples$row$truth
+[1]  TRUE FALSE FALSE
+
+$examples$row$clause_comparison
+[1] TRUE
+
+
+$examples$array
+$examples$array$input
+, , 1
+
+     [,1] [,2]
+[1,] "a"  "a"
+
+
+$examples$array$stored
+, , 1
+
+     [,1] [,2]
+[1,] "a"  "a"
+
+
+$examples$array$reference
+[1] "a"
+
+$examples$array$comparison
+[1] "Component “values”: Lengths (2, 1) differ (string compare on first 1)"
+
+$examples$array$truth
+[1]  TRUE FALSE FALSE
+
+$examples$array$clause_comparison
+[1] TRUE

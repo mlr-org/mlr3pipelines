@@ -1,0 +1,190 @@
+FIRST three_random_100000 noncanonical_correct at 1
+list(category = "noncanonical_correct", domains = list(A = c("a",
+"b", "c", "d"), B = c("a", "b", "c", "d", "e"), C = c("a", "b"
+), D = c("a", "b", "c", "d", "e")), raw = list(list(A = c("c",
+"d"), C = "b", D = c("b", "c", "e")), list(A = "b", B = c("b",
+"e")), list(A = c("b", "d"), B = c("d", "e"), C = "b")), selectors = list(
+    c(3L, 1L, 1L, 2L, 1L), c(2L, 1L, 1L, 2L, 1L), c(3L, 1L, 2L
+    )), selected = list(list(D = c("b", "c", "e"), A = c("c",
+"d"), A = c("c", "d"), C = "b", A = c("c", "d")), list(B = c("b",
+"e"), A = "b", A = "b", B = c("b", "e"), A = "b"), list(C = "b",
+    A = c("b", "d"), B = c("d", "e"))), output = list(list(C = "b",
+    A = c("b", "d"), B = c("d", "e")), list(D = c("b", "c", "e"
+), A = c("c", "d"), A = c("c", "d"), C = "b", A = c("c", "d")),
+    list(B = c("b", "e"), A = "b", A = "b", B = c("b", "e"),
+        A = "b")), truth = structure(list(A = c("a", "b", "c",
+"d", "a", "b", "c", "d", "a", "b", "c", "d", "a", "b", "c", "d",
+"a", "b", "c", "d", "a", "b", "c", "d", "a", "b", "c", "d", "a",
+"b", "c", "d", "a", "b", "c", "d", "a", "b", "c", "d", "a", "b",
+"c", "d", "a", "b", "c", "d", "a", "b", "c", "d", "a", "b", "c",
+"d", "a", "b", "c", "d", "a", "b", "c", "d", "a", "b", "c", "d",
+"a", "b", "c", "d", "a", "b", "c", "d", "a", "b", "c", "d", "a",
+"b", "c", "d", "a", "b", "c", "d", "a", "b", "c", "d", "a", "b",
+"c", "d", "a", "b", "c", "d", "a", "b", "c", "d", "a", "b", "c",
+"d", "a", "b", "c", "d", "a", "b", "c", "d", "a", "b", "c", "d",
+"a", "b", "c", "d", "a", "b", "c", "d", "a", "b", "c", "d", "a",
+"b", "c", "d", "a", "b", "c", "d", "a", "b", "c", "d", "a", "b",
+"c", "d", "a", "b", "c", "d", "a", "b", "c", "d", "a", "b", "c",
+"d", "a", "b", "c", "d", "a", "b", "c", "d", "a", "b", "c", "d",
+"a", "b", "c", "d", "a", "b", "c", "d", "a", "b", "c", "d", "a",
+"b", "c", "d", "a", "b", "c", "d", "a", "b", "c", "d", "a", "b",
+"c", "d"), B = c("a", "a", "a", "a", "b", "b", "b", "b", "c",
+"c", "c", "c", "d", "d", "d", "d", "e", "e", "e", "e", "a", "a",
+"a", "a", "b", "b", "b", "b", "c", "c", "c", "c", "d", "d", "d",
+"d", "e", "e", "e", "e", "a", "a", "a", "a", "b", "b", "b", "b",
+"c", "c", "c", "c", "d", "d", "d", "d", "e", "e", "e", "e", "a",
+"a", "a", "a", "b", "b", "b", "b", "c", "c", "c", "c", "d", "d",
+"d", "d", "e", "e", "e", "e", "a", "a", "a", "a", "b", "b", "b",
+"b", "c", "c", "c", "c", "d", "d", "d", "d", "e", "e", "e", "e",
+"a", "a", "a", "a", "b", "b", "b", "b", "c", "c", "c", "c", "d",
+"d", "d", "d", "e", "e", "e", "e", "a", "a", "a", "a", "b", "b",
+"b", "b", "c", "c", "c", "c", "d", "d", "d", "d", "e", "e", "e",
+"e", "a", "a", "a", "a", "b", "b", "b", "b", "c", "c", "c", "c",
+"d", "d", "d", "d", "e", "e", "e", "e", "a", "a", "a", "a", "b",
+"b", "b", "b", "c", "c", "c", "c", "d", "d", "d", "d", "e", "e",
+"e", "e", "a", "a", "a", "a", "b", "b", "b", "b", "c", "c", "c",
+"c", "d", "d", "d", "d", "e", "e", "e", "e"), C = c("a", "a",
+"a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a",
+"a", "a", "a", "a", "a", "b", "b", "b", "b", "b", "b", "b", "b",
+"b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "a",
+"a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a",
+"a", "a", "a", "a", "a", "a", "b", "b", "b", "b", "b", "b", "b",
+"b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b",
+"a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a",
+"a", "a", "a", "a", "a", "a", "a", "b", "b", "b", "b", "b", "b",
+"b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b",
+"b", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a",
+"a", "a", "a", "a", "a", "a", "a", "a", "b", "b", "b", "b", "b",
+"b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b",
+"b", "b", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a",
+"a", "a", "a", "a", "a", "a", "a", "a", "a", "b", "b", "b", "b",
+"b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b",
+"b", "b", "b"), D = c("a", "a", "a", "a", "a", "a", "a", "a",
+"a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a",
+"a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a",
+"a", "a", "a", "a", "a", "a", "b", "b", "b", "b", "b", "b", "b",
+"b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b",
+"b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b",
+"b", "b", "b", "b", "b", "b", "b", "c", "c", "c", "c", "c", "c",
+"c", "c", "c", "c", "c", "c", "c", "c", "c", "c", "c", "c", "c",
+"c", "c", "c", "c", "c", "c", "c", "c", "c", "c", "c", "c", "c",
+"c", "c", "c", "c", "c", "c", "c", "c", "d", "d", "d", "d", "d",
+"d", "d", "d", "d", "d", "d", "d", "d", "d", "d", "d", "d", "d",
+"d", "d", "d", "d", "d", "d", "d", "d", "d", "d", "d", "d", "d",
+"d", "d", "d", "d", "d", "d", "d", "d", "d", "e", "e", "e", "e",
+"e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "e",
+"e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "e",
+"e", "e", "e", "e", "e", "e", "e", "e", "e", "e"), expected = c(FALSE,
+FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE,
+FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE,
+TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE,
+TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
+TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE,
+TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
+TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE,
+TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
+TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE,
+TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
+TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE,
+TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
+TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE,
+FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+FALSE, TRUE, TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
+TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE,
+TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE,
+TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE,
+TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
+TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE,
+TRUE, TRUE, TRUE), positional = c(FALSE, FALSE, FALSE, FALSE,
+FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE,
+FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, FALSE,
+FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE,
+TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, FALSE,
+FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE,
+TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, FALSE,
+FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE,
+TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, FALSE,
+FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE,
+TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, FALSE,
+FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE,
+TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE,
+FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE,
+FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE,
+TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, FALSE,
+FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE,
+TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE,
+FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE,
+TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, FALSE,
+FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE), named = c(FALSE,
+FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE,
+FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE,
+TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE,
+TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
+TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE,
+TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
+TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE,
+TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
+TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE,
+TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
+TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE,
+TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
+TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE,
+FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+FALSE, TRUE, TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
+TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE,
+TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE,
+TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE,
+TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
+TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE,
+TRUE, TRUE, TRUE)), class = "data.frame", row.names = c(NA, -200L
+)))
+FIRST three_random_100000 error at 175
+list(category = "error", error = "attempt to select less than one element in get1index",
+    domains = list(A = c("a", "b", "c"), B = c("a", "b", "c",
+    "d")), raw = list(list(B = c("b", "c", "d")), list(B = c("b",
+    "d")), list(B = c("a", "d"))), selectors = list(c(1L, 1L,
+    1L), c(1L, 1L), 1L))
+FIRST three_random_100000 noncanonical_stale at 393
+list(category = "noncanonical_stale", domains = list(A = c("a",
+"b", "c"), B = c("a", "b", "c", "d", "e")), raw = list(list(A = "b",
+    B = "d"), list(A = c("b", "c"), B = c("a", "e")), list(A = c("a",
+"b"))), selectors = list(2:1, c(2L, 2L, 1L), c(1L, 1L)), selected = list(
+    list(B = "d", A = "b"), list(B = c("a", "e"), B = c("a",
+    "e"), A = c("b", "c")), list(A = c("a", "b"), A = c("a",
+    "b"))), output = list(list(A = "b", A = c("a", "b"))), truth = structure(list(
+    A = c("a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b",
+    "c", "a", "b", "c"), B = c("a", "a", "a", "b", "b", "b",
+    "c", "c", "c", "d", "d", "d", "e", "e", "e"), expected = c(FALSE,
+    TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE,
+    TRUE, FALSE, FALSE, TRUE, FALSE), positional = c(TRUE, TRUE,
+    FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE,
+    FALSE, TRUE, TRUE, FALSE), named = c(FALSE, TRUE, FALSE,
+    FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE,
+    FALSE, TRUE, FALSE)), class = "data.frame", row.names = c(NA,
+-15L)))
+PROGRESS 5000 seconds 18.65
+PROGRESS 10000 seconds 35.997
+PROGRESS 15000 seconds 53.449
+PROGRESS 20000 seconds 70.878
+PROGRESS 25000 seconds 88.256
+PROGRESS 30000 seconds 105.644
+PROGRESS 35000 seconds 122.967
+PROGRESS 40000 seconds 140.382
+PROGRESS 45000 seconds 157.776
+PROGRESS 50000 seconds 175.261
+PROGRESS 55000 seconds 192.589
+PROGRESS 60000 seconds 210.017
+PROGRESS 65000 seconds 227.33
+PROGRESS 70000 seconds 244.697
+PROGRESS 75000 seconds 262.054
+PROGRESS 80000 seconds 279.488
+PROGRESS 85000 seconds 296.84
+PROGRESS 90000 seconds 314.572
+PROGRESS 95000 seconds 333.102
+PROGRESS 100000 seconds 350.785
+       canonical_correct     noncanonical_correct       noncanonical_stale
+                    8673                    89730                       89
+noncanonical_named_wrong  noncanonical_both_wrong          canonical_wrong
+                       0                        0                        0
+                   error
+                    1508

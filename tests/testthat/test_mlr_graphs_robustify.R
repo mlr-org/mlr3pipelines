@@ -13,7 +13,7 @@ test_that("Robustify Pipeline", {
   expect_true("fixfactors" %nin% names(p$pipeops))
   expect_true(length(p$pipeops) == 3)
 
-  tsk = tsk("pima")
+  tsk = tsk("diabetes")
   # missings with scaling (rpart can do missings)
   p = ppl("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
@@ -73,7 +73,6 @@ test_that("Robustify Pipeline", {
   dt = tsk$data()
   dt[2, 3] = NA
   tsk2 = TaskRegr$new(id = "bh", dt, target = "medv")
-  lrn$properties = c("multiclass", "twoclass")
   p = ppl("robustify", impute_missings = TRUE) %>>% po(lrn)
   g = GraphLearner$new(p)
   g$train(tsk)
@@ -102,10 +101,9 @@ test_that("Robustify Pipeline", {
 })
 
 
-
 test_that("Robustify Pipeline Impute Missings", {
   skip_if_not_installed("rpart")
-  tmissings = tsk("pima")
+  tmissings = tsk("diabetes")
   tnomissings = tsk("iris")
 
   lmissings = lrn("classif.rpart")
@@ -158,7 +156,6 @@ test_that("Robustify Pipeline factor to numeric", {
   alltask = makeTypeTask(c("integer", "numeric", "logical", "character", "POSIXct"))
 
   skip_if_not_installed("quanteda")
-  suppressWarnings(loadNamespace("quanteda"))  # TODO: see https://github.com/quanteda/quanteda/issues/2116 , may not be an issue in the future
 
   lfactor = lrn("regr.rpart")
   lnofactor = lrn("regr.rpart")
@@ -168,13 +165,46 @@ test_that("Robustify Pipeline factor to numeric", {
   cleanedatft = copy(atft)[type == "character", type := "factor"][type == "POSIXct", type := "numeric"]
   vectoradft = copy(po("textvectorizer")$train(list(alltask))[[1]]$feature_types)[type == "POSIXct", type := "numeric"]
 
-  expect_equal(ppl("robustify", learner = lfactor, makeTypeTask("numeric"))$train(alltask)[[1]]$feature_types, atft, check.attributes = FALSE)
-  expect_equal(ppl("robustify", learner = lnofactor, makeTypeTask("numeric"))$train(alltask)[[1]]$feature_types, atft, check.attributes = FALSE)
-  expect_equal(ppl("robustify", learner = lfactor, alltask)$train(alltask)[[1]]$feature_types, cleanedatft, ignore.row.order = TRUE, check.attributes = FALSE)
+  expect_equal(ppl("robustify", learner = lfactor, makeTypeTask("numeric"))$train(alltask)[[1]]$feature_types, atft, ignore_attr = TRUE)
+  expect_equal(ppl("robustify", learner = lnofactor, makeTypeTask("numeric"))$train(alltask)[[1]]$feature_types, atft, ignore_attr = TRUE)
+  expect_equal_data_table(
+    ppl("robustify", learner = lfactor, alltask)$train(alltask)[[1]]$feature_types,
+    cleanedatft,
+    ignore_row_order = TRUE,
+    check_attributes = FALSE
+  )
 
 
-  expect_equal(ppl("robustify", learner = lnofactor, alltask)$train(alltask)[[1]]$feature_types[, id := gsub("\\.[^.]*$", "", id)], vectoradft, check.attributes = FALSE)
-  expect_equal(ppl("robustify", learner = lnofactor, alltask, character_action = "matrix")$train(alltask)[[1]]$feature_types, vectoradft, check.attributes = FALSE)
+  expect_equal(ppl("robustify", learner = lnofactor, alltask)$train(alltask)[[1]]$feature_types[, id := gsub("\\.[^.]*$", "", id)], vectoradft, ignore_attr = TRUE)
+  expect_equal(ppl("robustify", learner = lnofactor, alltask, character_action = "matrix")$train(alltask)[[1]]$feature_types, vectoradft, ignore_attr = TRUE)
 
+
+})
+
+test_that("Robustify pipeline - imputes missings for unseen factor levels", {
+  skip_if_not_installed("rpart")
+  # Construct Learner incapable of handling missings
+  learner = lrn("classif.rpart")
+  learner$properties = setdiff(learner$properties, "missings")
+  # Construct Tasks with unseen factor levels
+  task_NA = as_task_classif(data.table(
+    target = factor(rep(c("A", "B"), 3)),
+    fct = factor(rep(c("a", "b", NA), 2)),
+    fct2 = factor(rep(c("a", "b"), 3))
+  ), target = "target")
+  task_noNA = as_task_classif(data.table(
+    target = factor(rep(c("A", "B"), 3)),
+    fct = factor(rep(c("a", "b", "c"), 2)),
+    fct2 = factor(rep(c("a", "b", "c"), 2))
+  ), target = "target")
+
+  g = ppl("robustify", learner = learner, task = task_NA)
+
+  expect_equal(sum(g$train(task_NA)[[1]]$missings()), 0)
+  expect_equal(sum(g$predict(task_noNA)[[1]]$missings()), 0)
+
+  glrn = g %>>% learner
+  expect_no_error(glrn$train(task_NA))
+  expect_no_error(glrn$predict(task_NA))
 
 })

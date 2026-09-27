@@ -1,0 +1,7 @@
+{
+  "identical_saved_records": true,
+  "normalization_case_trace_records": 135,
+  "component_repeated_trace_records": 2433,
+  "binary_serialization_digests_not_compared": true,
+  "exact_counter_and_control_comparisons": true
+}

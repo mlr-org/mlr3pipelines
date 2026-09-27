@@ -1,0 +1,5 @@
+Ternary three-clause formula: FALSE, despite no complement-range path seed.
+Multivalued broad unit x in {0,1}: created, present before HLA, then removed; semantics unchanged.
+Boolean four-edge forcing cycle: satisfiable, entails x = 1, produces no unit.
+Opposed Boolean four-edge cycles: unsatisfiable, every clause indispensable, production unchanged.
+R: R version 4.6.1 (2026-06-24)

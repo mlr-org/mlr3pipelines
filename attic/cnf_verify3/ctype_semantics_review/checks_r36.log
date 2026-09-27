@@ -1,0 +1,97 @@
+R version 3.6.3 (2020-02-29)
+Small directed cases: 140
+Changed original cases: 8
+Every candidate result has the independently expected truth.
+write main entries = entries[order(lengths(entries))] models 0 -> 0
+write main eliminated = logical(length(entries)) models 0 -> 0
+
+line502
+$clause
+[1] 2
+
+$selected
+character(0)
+
+$enumerated
+[1] "<U+00E9>"
+
+$direct_lookup
+[1]  TRUE FALSE
+
+
+line502
+$clause
+[1] 3
+
+$selected
+character(0)
+
+$enumerated
+[1] "<U+00E9>"
+
+$direct_lookup
+[1]  TRUE FALSE
+
+
+line738
+$cached
+[1] 1 1
+
+$physical
+[1] 2 2
+
+
+line777_before
+$cached
+[1] 1 0
+
+$virtual
+$virtual$s1
+[1] "a"
+
+$virtual$s2
+[1] "b"
+
+
+$physical
+[1] 2 1
+
+write unit_hse_line777 eliminated[[clause_idx]] = TRUE models 0 -> 2
+
+Excluded alias construction remains malformed under candidate:
+$universe_bindings
+[1] 2
+
+$incoming_clause_width
+[1] 2
+
+$duplicate_input_names
+[1] TRUE
+
+$duplicate_candidate_names
+[1] TRUE
+
+{
+  "R": "R version 3.6.3 (2020-02-29)",
+  "checkmate": "2.3.4",
+  "cases": 140,
+  "candidate_replacements": 1,
+  "changed_original": 8,
+  "original_two_or_fewer_preserved": true,
+  "actual_truth_changing_writes": 1,
+  "first_truth_changing_context": "unit_hse_line777",
+  "alias_control": {
+    "universe_bindings": 2,
+    "incoming_clause_width": 2,
+    "duplicate_input_names": true,
+    "duplicate_candidate_names": true
+  },
+  "source_md5": {
+    "R/CnfUniverse.R": "45fa56698900fc42440b5dda34fbe4ff",
+    "R/CnfSymbol.R": "d1aa6bcd59ced1aa4e5ea3317d640897",
+    "R/CnfAtom.R": "58699a7eb88f45c6aa5cdb8b77cc7c41",
+    "R/CnfClause.R": "f6c9659b31a511e696dc9d8d7cfa9349",
+    "R/CnfFormula.R": "7609c11610bbe9de566d9d9b448a07f7",
+    "R/CnfFormula_simplify.R": "376aac6eb81334e751e9351f9eddc02f"
+  }
+}

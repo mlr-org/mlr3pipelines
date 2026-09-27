@@ -1,0 +1,2 @@
+{"symbols": 7, "clause_bound": 6, "verdict": "unsat", "seconds": 25.6237620562315}
+{"symbols": 7, "clause_bound": 7, "verdict": "unknown", "seconds": 120.00062945485115, "reason": "canceled"}

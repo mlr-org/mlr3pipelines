@@ -1,0 +1,8 @@
+Get:1 http://deb.debian.org/debian sid InRelease [193 kB]
+Get:2 http://deb.debian.org/debian testing InRelease [151 kB]
+Get:3 http://deb.debian.org/debian testing-updates InRelease [45.1 kB]
+Get:4 http://deb.debian.org/debian-security testing-security InRelease [48.0 kB]
+Get:5 http://deb.debian.org/debian sid/main amd64 Packages [10.8 MB]
+Get:6 http://deb.debian.org/debian testing/main amd64 Packages [9,929 kB]
+Fetched 21.1 MB in 3s (6,431 kB/s)
+Reading package lists...

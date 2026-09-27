@@ -82,15 +82,21 @@
 #'
 #' @section Internals:
 #' Uses the [`nmf()`][NMF::nmf] function as well as [`basis()`][NMF::basis], [`coef()`][NMF::coef] and
-#' [`ginv()`][MASS::ginv].
+#' [`ginv()`][MASS::ginv]. Does not support features with missing or infinite values. Features containing
+#' negative values are currently excluded with a warning, but this will become an error in a future release.
+#' Use `affect_columns = selector_non_negative()` to explicitly select non-negative features.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("NMF")) \{ }
-#' \dontshow{ if (requireNamespace("MASS")) \{ }
-#' if (requireNamespace("NMF")) {
+#' @examplesIf mlr3misc::require_namespaces(c("NMF", "MASS"), quietly = TRUE)
+#' \dontshow{
+#' # NMF attaches these packages to search path on load, #929
+#' lapply(c("package:Biobase", "package:BiocGenerics", "package:generics"), detach, character.only = TRUE)
+#' }
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -100,9 +106,11 @@
 #' pop$train(list(task))[[1]]$data()
 #'
 #' pop$state
+#' \dontshow{
+#' # BiocGenerics overwrites printer for our tables mlr-org/mlr3#1112
+#' # Necessary as detaching packages does not remove registered S3 methods
+#' suppressWarnings(try(rm("format.list", envir = .BaseNamespaceEnv$.__S3MethodsTable__.), silent = TRUE))
 #' }
-#' \dontshow{ \} }
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
@@ -132,12 +140,27 @@ PipeOpNMF = R6Class("PipeOpNMF",
         callback = p_uty(tags = c("train", "nmf"), depends = quote(keep.all == TRUE))  # .callback
       )
       ps$values = list(rank = 2L, method = "brunet", parallel = FALSE, parallel.required = FALSE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), packages = c("MASS", "NMF"))
+      # "NMF" is not in packages so that it does not get loaded by PipeOp's train or predict. See note in private$.train_dt().
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"),
+        packages = "MASS")
     }
   ),
   private = list(
 
     .train_dt = function(dt, levels, target) {
+      # Note: NMF indirectly attaches Biobase which attaches BiocGenerics which attaches generics to the search path on
+      # load. If NMF was not loaded prior to this, we detach packages on exit that were not originally attached. If it
+      # was, we leave the search path as it was. Necessary because of #751, #929, and renozao/NMF#191.
+      if ("NMF" %nin% loadedNamespaces()) {
+        pkgs = c("package:Biobase", "package:BiocGenerics", "package:generics")  # order is important due to depends
+        to_be_detached = pkgs[pkgs %nin% search()]
+        if (length(to_be_detached)) {
+          # Load namespace here as "NMF" is not in self$packages and thus does not get loaded by PipeOp's $train() or $predict()
+          require_namespaces("NMF")
+          on.exit(map(to_be_detached, detach, character.only = TRUE))
+        }
+      }
+
       x = t(as.matrix(dt))  # nmf expects a matrix with the rows holding the features
 
       # handling of parameters
@@ -145,7 +168,7 @@ PipeOpNMF = R6Class("PipeOpNMF",
       names(.args)[match("pbackend", names(.args), nomatch = 0L)] = ".pbackend"
       names(.args)[match("callback", names(.args), nomatch = 0L)] = ".callback"
 
-      nmf = mlr3misc::invoke(NMF::nmf,
+      nmf = invoke(NMF::nmf,
         x = x,
         rng = NULL,
         model = NULL,
@@ -153,33 +176,78 @@ PipeOpNMF = R6Class("PipeOpNMF",
         .options = self$param_set$get_values(tags = "nmf.options")
       )
 
-      self$state = nmf
+      # Adding separate state class to avoid NMF loading in S4 method lookup when operating on the state
+      self$state = structure(list(nmf = nmf), class = "PipeOpNMFstate")
+
       # here we have two options? return directly h or do what we do during prediction
-      #h = t(mlr3misc::invoke(NMF::coef, object = nmf))
-      w = mlr3misc::invoke(NMF::basis, object = nmf)
-      h_ = t(mlr3misc::invoke(MASS::ginv, X = w) %*% x)
+      #h = t(invoke(NMF::coef, object = nmf))
+      w = invoke(NMF::basis, object = nmf)
+      h_ = t(invoke(MASS::ginv, X = w) %*% x)
       colnames(h_) = paste0("NMF", seq_len(self$param_set$values$rank))
       h_
     },
 
     .predict_dt = function(dt, levels) {
+      # See note in private$.train_dt().
+      if ("NMF" %nin% loadedNamespaces()) {
+        pkgs = c("package:Biobase", "package:BiocGenerics", "package:generics")
+        to_be_detached = pkgs[pkgs %nin% search()]
+        if (length(to_be_detached)) {
+          require_namespaces("NMF")
+          on.exit(map(to_be_detached, detach, character.only = TRUE))
+        }
+      }
+
       x = t(as.matrix(dt))
-      w = mlr3misc::invoke(NMF::basis, object = self$state)
-      h_ = t(mlr3misc::invoke(MASS::ginv, X = w) %*% x)
+      w = invoke(NMF::basis, object = self$state$nmf)
+      h_ = t(invoke(MASS::ginv, X = w) %*% x)
       colnames(h_) = paste0("NMF", seq_len(self$param_set$values$rank))
       h_
     },
 
+    # This is called after affect_columns subsetting.
     .select_cols = function(task) {
-      # only use non-negative numerical features
+      # only use fully observed, non-negative numerical features
       features = task$feature_types[get("type") %in% self$feature_types, get("id")]
-      non_negative = map(task$data(cols = features), function(x) all(x >= 0))  # could also be more precise
-      names(non_negative[unlist(non_negative)])
+      data = task$data(cols = features)
+      # Indicator for whether all observations for a feature are finite and non-missing
+      finite = map_lgl(data, function(x) all(is.finite(x)))  # is.finite also returns FALSE for NAs
+      if (!all(finite)) {
+        stopf(
+          "NMF does not support features with missing or infinite values. Affected features: %s.",
+          str_collapse(names(finite)[!finite], quote = "'")
+        )
+      }
+      non_negative_features = selector_non_negative(na_ignore = FALSE)(task)
+      negative_features = setdiff(features, non_negative_features)
+      if (length(negative_features)) {
+        warningf(
+          paste(
+            "PipeOpNMF currently drops features containing negative values: %s.",
+            "This will be an error in a future release.",
+            "Use `affect_columns = selector_non_negative(na_ignore = FALSE)` to explicitly select non-negative features."
+          ),
+          str_collapse(negative_features, quote = "'")
+        )
+      }
+      non_negative_features
     }
   )
 )
 
 mlr_pipeops$add("nmf", PipeOpNMF)
+
+#' @export
+# Prevent printing of PipeOpNMF's state if NMF is not loaded to avoid attaching of Biobase, BiocGenerics, and generics
+# during S4 method lookup. We can not avoid that printing $state$nmf will lead to NMF getting loaded.
+print.PipeOpNMFstate = function(x, ...) {
+  if ("NMF" %nin% loadedNamespaces()) {
+    cat("[PipeOpNMFstate]\n")
+    invisible(x)
+  } else {
+    NextMethod()
+  }
+}
 
 # this is just a really bad idea
 ## CondLarger = R6Class("CondLarger", inherit = Condition,

@@ -15,7 +15,6 @@ test_that("PipeOpEncodeLmer regr", {
   expect_datapreproc_pipeop_class(PipeOpEncodeLmer, task = task)
   expect_datapreproc_pipeop_class(PipeOpEncodeLmer, task = mlr_tasks$get("iris"))
   op = PipeOpEncodeLmer$new()
-  expect_pipeop(op)
   nt = train_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names
   expect_true("factor" %nin% nt$feature_types$type)

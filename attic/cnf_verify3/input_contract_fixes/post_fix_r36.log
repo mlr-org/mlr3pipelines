@@ -1,0 +1,10 @@
+Observed native-R constructor control run after strict native validation:
+R version 3.6.3 (2020-02-29) passed 62 constructor controls
+
+The controls covered C/C.UTF-8 name acceptance, UTF-8/Latin-1 aliases,
+normalization/deduplication, all preserved empty selections, shape/class
+rejection, marked and native invalid text, and the compatible-locale
+three-clause contradiction. No all.equal.Cnf* oracle was used.
+
+Additional getter controls on final source:
+R version 3.6.3 (2020-02-29) passed 9 getter controls

@@ -1,0 +1,161 @@
+{
+  "R": "R version 4.6.1 (2026-06-24)",
+  "checkmate": "2.3.4",
+  "digest": "0.6.39",
+  "default_controls": [
+    {
+      "label": "atom value permutation",
+      "same_content": true,
+      "result_true": true,
+      "diagnostic": ""
+    },
+    {
+      "label": "atom changed value",
+      "same_content": false,
+      "result_true": false,
+      "diagnostic": "Component “values”: 1 string mismatch"
+    },
+    {
+      "label": "atom changed symbol",
+      "same_content": false,
+      "result_true": false,
+      "diagnostic": "Component “symbol”: 1 string mismatch"
+    },
+    {
+      "label": "atom repeated scalar storage",
+      "same_content": true,
+      "result_true": false,
+      "diagnostic": "Component “values”: Lengths (1, 2) differ (string compare on first 1)"
+    },
+    {
+      "label": "clause symbol permutation",
+      "same_content": true,
+      "result_true": true,
+      "diagnostic": ""
+    },
+    {
+      "label": "clause changed association",
+      "same_content": false,
+      "result_true": false,
+      "diagnostic": ["Component “X”: 1 string mismatch", "Component “Y”: 1 string mismatch"]
+    },
+    {
+      "label": "clause changed symbol only",
+      "same_content": false,
+      "result_true": false,
+      "diagnostic": "Names: 1 string mismatch"
+    },
+    {
+      "label": "formula clause and symbol permutation",
+      "same_content": true,
+      "result_true": true,
+      "diagnostic": ""
+    },
+    {
+      "label": "formula changed associations",
+      "same_content": false,
+      "result_true": false,
+      "diagnostic": ["Component 1: Component 2: 1 string mismatch", "Component 2: Component 2: 1 string mismatch"]
+    },
+    {
+      "label": "formula duplicate count",
+      "same_content": false,
+      "result_true": false,
+      "diagnostic": "Length mismatch: comparison on first 1 components"
+    },
+    {
+      "label": "formula distinct clause multiplicities",
+      "same_content": false,
+      "result_true": false,
+      "diagnostic": ["Component 2: Names: 1 string mismatch", "Component 2: Component 1: 1 string mismatch"]
+    },
+    {
+      "label": "formula equal repeated multiset",
+      "same_content": true,
+      "result_true": true,
+      "diagnostic": ""
+    },
+    {
+      "label": "equal constants across classes",
+      "same_content": true,
+      "result_true": true,
+      "diagnostic": ""
+    },
+    {
+      "label": "constant versus bare logical",
+      "same_content": true,
+      "result_true": true,
+      "diagnostic": ""
+    },
+    {
+      "label": "different constants",
+      "same_content": false,
+      "result_true": false,
+      "diagnostic": "target and current are both logicals but not equal"
+    },
+    {
+      "label": "constant universe ignored",
+      "same_content": true,
+      "result_true": true,
+      "diagnostic": ""
+    },
+    {
+      "label": "constant names retained by c",
+      "same_content": true,
+      "result_true": false,
+      "diagnostic": "target and current are both logicals but not equal"
+    },
+    {
+      "label": "proper versus constant",
+      "same_content": false,
+      "result_true": false,
+      "diagnostic": "target and current are not both logicals"
+    },
+    {
+      "label": "proper class guard",
+      "same_content": false,
+      "result_true": false,
+      "diagnostic": "current is not a CnfAtom"
+    },
+    {
+      "label": "collation tie equal set",
+      "same_content": true,
+      "result_true": false,
+      "diagnostic": "Component “values”: 2 string mismatches"
+    },
+    {
+      "label": "collation tie unequal singletons",
+      "same_content": false,
+      "result_true": false,
+      "diagnostic": "Component “values”: 1 string mismatch"
+    },
+    {
+      "label": "equivalent encodings",
+      "same_content": true,
+      "result_true": true,
+      "diagnostic": ""
+    }
+  ],
+  "option_controls": {
+    "default": false,
+    "check_attributes_false": true,
+    "check_names_false": true,
+    "use_names_false": false,
+    "formula_check_attributes_false": true,
+    "atom_check_attributes_false": false
+  },
+  "base_controls": {
+    "list_names_detected": true,
+    "list_lengths_detected": true,
+    "character_lengths_detected": true,
+    "character_values_detected": true
+  },
+  "source_md5": {
+    "R/CnfUniverse.R": "45fa56698900fc42440b5dda34fbe4ff",
+    "R/CnfSymbol.R": "d1aa6bcd59ced1aa4e5ea3317d640897",
+    "R/CnfAtom.R": "58699a7eb88f45c6aa5cdb8b77cc7c41",
+    "R/CnfClause.R": "f6c9659b31a511e696dc9d8d7cfa9349",
+    "R/CnfFormula.R": "7609c11610bbe9de566d9d9b448a07f7",
+    "R/CnfFormula_simplify.R": "376aac6eb81334e751e9351f9eddc02f"
+  }
+}

@@ -4,15 +4,7 @@ test_that("PipeOpBoxCox - general functionality", {
   skip_if_not_installed("bestNormalize")
   task = mlr_tasks$get("iris")
   op = PipeOpBoxCox$new()
-  expect_pipeop(op)
-
   expect_datapreproc_pipeop_class(PipeOpBoxCox, task = task)
-
-  result = train_pipeop(op, inputs = list(task))
-  expect_task(result[[1]])
-
-  result = predict_pipeop(op, inputs = list(task))
-  expect_task(result[[1]])
 })
 
 test_that("PipeOpBoxCox - receive expected result", {

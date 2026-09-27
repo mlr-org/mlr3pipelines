@@ -13,6 +13,7 @@
 #' ```
 #' PipeOpThreshold$new(id = "threshold", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, default `"threshold"`.
 #' * `param_vals` :: named `list`\cr
@@ -36,20 +37,22 @@
 #'   at level `0.5`.
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOp`].
+#' Fields inherited from [`PipeOp`], as well as:
+#' * `predict_type` :: `character(1)`\cr
+#'   Type of prediction to return. Either `"prob"` (default) or `"response"`.
+#'   Setting to `"response"` should rarely be used; it may potentially save some memory but has
+#'   no other benefits.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
 #' t = tsk("german_credit")
 #' gr = po(lrn("classif.rpart", predict_type = "prob")) %>>%
 #'   po("threshold", param_vals = list(thresholds = 0.9))
 #' gr$train(t)
 #' gr$predict(t)
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOp.R
@@ -67,7 +70,17 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
         tags = "target transform")
     }
   ),
+  active = list(
+    predict_type = function(rhs) {
+      if (!missing(rhs)) {
+        assert_choice(rhs, c("prob", "response"))
+        private$.predict_type = rhs
+      }
+      private$.predict_type
+    }
+  ),
   private = list(
+    .predict_type = "prob",
     .train = function(inputs) {
       self$state = list()
       list(NULL)
@@ -77,7 +90,7 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
       thr = self$param_set$values$thresholds
       assert_subset("prob", prd$predict_types)
       if (length(thr) > 1) {
-        if (length(thr) != length(levels(prd$truth))) {
+        if (length(thr) != nlevels(prd$truth)) {
           stop("'thresholds' parameter must have length one or length equal to number of outcome levels")
         }
         if (is.null(names(thr))) {
@@ -86,17 +99,12 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
         }
       }
 
-      list(prd$set_threshold(thr))
-    }
-  ),
-  active = list(
-    predict_type = function(val) {
-      if (!missing(val)) {
-        if (!identical(val, private$.learner)) {
-          stop("$predict_type for PipeOpThreshold is read-only.")
-        }
+      prd$set_threshold(thr)
+      if (self$predict_type == "response") {
+        prd$predict_types = "response"
+        prd$data$prob = NULL
       }
-      return("response")
+      list(prd)
     }
   )
 )

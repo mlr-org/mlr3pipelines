@@ -1,0 +1,222 @@
+{
+  "version": {
+    "ok": true,
+    "version": "R version 4.6.1 (2026-06-24)",
+    "source_md5": "376aac6eb81334e751e9351f9eddc02f"
+  },
+  "whole_relation_meet_closed_does_not_suffice": {
+    "domains": {
+      "X": [
+        "0",
+        "1"
+      ],
+      "Y": [
+        "0",
+        "1"
+      ]
+    },
+    "clauses": [
+      {
+        "X": [
+          "0"
+        ],
+        "Y": [
+          "1"
+        ]
+      },
+      {
+        "X": [
+          "1"
+        ],
+        "Y": [
+          "0"
+        ]
+      },
+      {
+        "X": [
+          "1"
+        ],
+        "Y": [
+          "1"
+        ]
+      }
+    ],
+    "models": [
+      [
+        "1",
+        "1"
+      ]
+    ],
+    "initial_coordinate_minima": [
+      "0",
+      "0"
+    ],
+    "answer": {
+      "ok": true,
+      "prefix": [
+        {
+          "X": "0",
+          "Y": "1"
+        },
+        {
+          "X": "1",
+          "Y": "0"
+        },
+        {
+          "X": "1",
+          "Y": "1"
+        }
+      ],
+      "full": [
+        {
+          "X": "1"
+        },
+        {
+          "Y": "1"
+        }
+      ],
+      "final": {
+        "entries": [
+          {
+            "X": "0",
+            "Y": "1"
+          },
+          {
+            "X": "1",
+            "Y": "0"
+          },
+          {
+            "X": "1",
+            "Y": "1"
+          }
+        ],
+        "eliminated": [
+          false,
+          false,
+          false
+        ],
+        "is_unit": [
+          false,
+          false,
+          false
+        ],
+        "clause_idx": 3,
+        "clause_symbol_isct": [],
+        "unit_domains": [],
+        "unit_registry": [],
+        "symbol_registry": {
+          "X": [
+            1,
+            2,
+            3
+          ],
+          "Y": [
+            1,
+            2,
+            3
+          ]
+        }
+      },
+      "events": []
+    }
+  },
+  "full_literal_hides_nonclosed_range": {
+    "meet": [
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        1,
+        2,
+        3
+      ]
+    ],
+    "ranges": [
+      [
+        0,
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "relation_closed": true,
+    "every_range_closed": false
+  },
+  "range_closure_is_needed_for_model_extraction": {
+    "domains": {
+      "X": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    "clauses": [
+      {
+        "X": [
+          "1",
+          "2"
+        ]
+      }
+    ],
+    "meet_of_surviving_domain": "0",
+    "answer": {
+      "ok": true,
+      "prefix": [
+        {
+          "X": [
+            "1",
+            "2"
+          ]
+        }
+      ],
+      "full": null,
+      "final": {
+        "entries": [
+          {
+            "X": [
+              "1",
+              "2"
+            ]
+          }
+        ],
+        "eliminated": false,
+        "is_unit": true,
+        "clause_idx": null,
+        "clause_symbol_isct": null,
+        "unit_domains": {
+          "X": [
+            "1",
+            "2"
+          ]
+        },
+        "unit_registry": {
+          "X": 1
+        },
+        "symbol_registry": []
+      },
+      "events": []
+    }
+  },
+  "status": "all negative controls reproduced"
+}

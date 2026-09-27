@@ -24,12 +24,21 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Martin Binder \email{mlr.developer@mb706.com}
   \item Florian Pfisterer \email{pfistererf@googlemail.com} (\href{https://orcid.org/0000-0001-8867-762X}{ORCID})
   \item Lennart Schneider \email{lennart.sch@web.de} (\href{https://orcid.org/0000-0003-4152-5308}{ORCID})
   \item Bernd Bischl \email{bernd_bischl@gmx.net} (\href{https://orcid.org/0000-0001-6002-6980}{ORCID})
   \item Michel Lang \email{michellang@gmail.com} (\href{https://orcid.org/0000-0001-9754-0393}{ORCID})
   \item Sebastian Fischer \email{sebf.fischer@gmail.com} (\href{https://orcid.org/0000-0002-9609-3197}{ORCID})
   \item Susanne Dandl \email{dandl.susanne@googlemail.com}
+}
+
+Other contributors:
+\itemize{
+  \item Keno Mersmann \email{keno.mersmann@gmail.com} [contributor]
+  \item Maximilian Mücke \email{muecke.maximilian@gmail.com} (\href{https://orcid.org/0009-0000-9432-9795}{ORCID}) [contributor]
+  \item Lona Koers \email{lona.koers@gmail.com} [contributor]
+  \item Alexander Winterstetter \email{alexander.winterstetter@gmail.com} [contributor]
 }
 
 }

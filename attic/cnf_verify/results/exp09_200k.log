@@ -1,0 +1,23 @@
+all probes patched
+
+fuzz workload (200000 trials, 0 oracle failures):
+  P1_nonunit_hte     0
+  P2_unit_hte        0
+  P3_twoend_reval    2
+  P4_twoend_rowsum2  65502
+  P5_symbol_target   17
+  P6_adr_escape      9
+  P7_esc_escape      5
+  P8_hse_nonunit     2819
+  P9_hse_unit        1794
+
+exhaustive 3v binary k<=5 (83,681 formulas, 0 oracle failures):
+  P1_nonunit_hte     0
+  P2_unit_hte        0
+  P3_twoend_reval    0
+  P4_twoend_rowsum2  36906
+  P5_symbol_target   0
+  P6_adr_escape      0
+  P7_esc_escape      0
+  P8_hse_nonunit     3208
+  P9_hse_unit        0

@@ -1,0 +1,275 @@
+DISTINCT C.UTF-8 C {"ctype":"C.UTF-8","collate":"C","env_size":true,"env_values":true,"list_values":true}
+DISTINCT C.UTF-8 C.UTF-8 {"ctype":"C.UTF-8","collate":"C.UTF-8","env_size":true,"env_values":true,"list_values":true}
+DISTINCT C.UTF-8 en_US.UTF-8 {"ctype":"C.UTF-8","collate":"en_US.UTF-8","env_size":true,"env_values":true,"list_values":true}
+DISTINCT en_US.UTF-8 C {"ctype":"en_US.UTF-8","collate":"C","env_size":true,"env_values":true,"list_values":true}
+DISTINCT en_US.UTF-8 C.UTF-8 {"ctype":"en_US.UTF-8","collate":"C.UTF-8","env_size":true,"env_values":true,"list_values":true}
+DISTINCT en_US.UTF-8 en_US.UTF-8 {"ctype":"en_US.UTF-8","collate":"en_US.UTF-8","env_size":true,"env_values":true,"list_values":true}
+DISTINCT C C {"ctype":"C","collate":"C","env_size":false,"env_values":false,"list_values":false}
+$`e<U+0301>`
+[1] 2
+
+$`<U+00E9>`
+[1] 3
+
+$` `
+[1] 6
+
+$`<U+00F6>`
+[1] 5
+
+$`<e9>`
+[1] 4
+
+DISTINCT C C.UTF-8 {"ctype":"C","collate":"C.UTF-8","env_size":false,"env_values":false,"list_values":false}
+$`e<U+0301>`
+[1] 2
+
+$`<U+00E9>`
+[1] 3
+
+$` `
+[1] 6
+
+$`<U+00F6>`
+[1] 5
+
+$`<e9>`
+[1] 4
+
+DISTINCT C en_US.UTF-8 {"ctype":"C","collate":"en_US.UTF-8","env_size":false,"env_values":false,"list_values":false}
+$`e<U+0301>`
+[1] 2
+
+$`<U+00E9>`
+[1] 3
+
+$` `
+[1] 6
+
+$`<U+00F6>`
+[1] 5
+
+$`<e9>`
+[1] 4
+
+COMPARISONS 66 FAILED 12
+[[1]]
+[[1]]$ctype
+[1] "C"
+
+[[1]]$collate
+[1] "C"
+
+[[1]]$left
+[1] "utf8"
+
+[[1]]$right
+[1] "utf8"
+
+[[1]]$failed
+[1] "environment_names_member"
+
+
+[[2]]
+[[2]]$ctype
+[1] "C"
+
+[[2]]$collate
+[1] "C"
+
+[[2]]$left
+[1] "utf8"
+
+[[2]]$right
+[1] "latin1"
+
+[[2]]$failed
+[1] "environment_exists"       "environment_get"
+[3] "environment_index"        "list_index"
+[5] "list_assignment"          "environment_assignment"
+[7] "environment_names_member"
+
+
+[[3]]
+[[3]]$ctype
+[1] "C"
+
+[[3]]$collate
+[1] "C"
+
+[[3]]$left
+[1] "latin1"
+
+[[3]]$right
+[1] "utf8"
+
+[[3]]$failed
+[1] "environment_exists"       "environment_get"
+[3] "environment_index"        "list_index"
+[5] "list_assignment"          "environment_assignment"
+[7] "environment_names_member"
+
+
+[[4]]
+[[4]]$ctype
+[1] "C"
+
+[[4]]$collate
+[1] "C"
+
+[[4]]$left
+[1] "latin1"
+
+[[4]]$right
+[1] "latin1"
+
+[[4]]$failed
+[1] "environment_names_member"
+
+
+[[5]]
+[[5]]$ctype
+[1] "C"
+
+[[5]]$collate
+[1] "C.UTF-8"
+
+[[5]]$left
+[1] "utf8"
+
+[[5]]$right
+[1] "utf8"
+
+[[5]]$failed
+[1] "environment_names_member"
+
+
+[[6]]
+[[6]]$ctype
+[1] "C"
+
+[[6]]$collate
+[1] "C.UTF-8"
+
+[[6]]$left
+[1] "utf8"
+
+[[6]]$right
+[1] "latin1"
+
+[[6]]$failed
+[1] "environment_exists"       "environment_get"
+[3] "environment_index"        "list_index"
+[5] "list_assignment"          "environment_assignment"
+[7] "environment_names_member"
+
+
+[[7]]
+[[7]]$ctype
+[1] "C"
+
+[[7]]$collate
+[1] "C.UTF-8"
+
+[[7]]$left
+[1] "latin1"
+
+[[7]]$right
+[1] "utf8"
+
+[[7]]$failed
+[1] "environment_exists"       "environment_get"
+[3] "environment_index"        "list_index"
+[5] "list_assignment"          "environment_assignment"
+[7] "environment_names_member"
+
+
+[[8]]
+[[8]]$ctype
+[1] "C"
+
+[[8]]$collate
+[1] "C.UTF-8"
+
+[[8]]$left
+[1] "latin1"
+
+[[8]]$right
+[1] "latin1"
+
+[[8]]$failed
+[1] "environment_names_member"
+
+
+[[9]]
+[[9]]$ctype
+[1] "C"
+
+[[9]]$collate
+[1] "en_US.UTF-8"
+
+[[9]]$left
+[1] "utf8"
+
+[[9]]$right
+[1] "utf8"
+
+[[9]]$failed
+[1] "environment_names_member"
+
+
+[[10]]
+[[10]]$ctype
+[1] "C"
+
+[[10]]$collate
+[1] "en_US.UTF-8"
+
+[[10]]$left
+[1] "utf8"
+
+[[10]]$right
+[1] "latin1"
+
+[[10]]$failed
+[1] "environment_exists"       "environment_get"
+[3] "environment_index"        "list_index"
+[5] "list_assignment"          "environment_assignment"
+[7] "environment_names_member"
+
+
+[[11]]
+[[11]]$ctype
+[1] "C"
+
+[[11]]$collate
+[1] "en_US.UTF-8"
+
+[[11]]$left
+[1] "latin1"
+
+[[11]]$right
+[1] "utf8"
+
+[[11]]$failed
+[1] "environment_exists"       "environment_get"
+[3] "environment_index"        "list_index"
+[5] "list_assignment"          "environment_assignment"
+[7] "environment_names_member"
+
+
+[[12]]
+[[12]]$ctype
+[1] "C"
+
+[[12]]$collate
+[1] "en_US.UTF-8"
+
+[[12]]$left
+[1] "latin1"
+
+[[12]]$right
+[1] "latin1"
+
+[[12]]$failed
+[1] "environment_names_member"

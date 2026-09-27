@@ -44,10 +44,10 @@
 #'   [`PipeOpRemoveConstants`] can be used with `affect_columns = selector_grep("^missing_")` and `ratio = x`.
 #'
 #' @section Fields:
-#' Fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
-#' Methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Methods inherited from [`PipeOpTaskPreprocSimple`]([`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
 #' @template seealso_pipeopslist
@@ -57,7 +57,7 @@
 #' library("mlr3")
 #' \dontshow{data.table::setDTthreads(1)}
 #'
-#' task = tsk("pima")$select(c("insulin", "triceps"))
+#' task = tsk("diabetes")$select(c("insulin", "triceps"))
 #' sum(complete.cases(task$data()))
 #' task$missings()
 #' tail(task$data())

@@ -1,0 +1,29 @@
+Console output with transient progress-spinner lines removed.
+ℹ Testing mlr3pipelines
+✔ | F W  S  OK | Context
+
+✖ | 1      205 | CnfConstructors [2.3s]
+────────────────────────────────────────────────────────────────────────────────
+Failure ('test_CnfConstructors.R:161:11'): logical disjunctions with clauses preserve their result class
+Expected `result` to be identical to `clause`.
+Differences:
+`attr(actual, 'universe')` is absent
+`attr(expected, 'universe')` is an S3 object of class <CnfUniverse>, an environment
+
+────────────────────────────────────────────────────────────────────────────────
+
+══ Results ═════════════════════════════════════════════════════════════════════
+Duration: 2.3 s
+
+── Failed tests ────────────────────────────────────────────────────────────────
+Failure ('test_CnfConstructors.R:161:11'): logical disjunctions with clauses preserve their result class
+Expected `result` to be identical to `clause`.
+Differences:
+`attr(actual, 'universe')` is absent
+`attr(expected, 'universe')` is an S3 object of class <CnfUniverse>, an environment
+
+
+[ FAIL 1 | WARN 0 | SKIP 0 | PASS 205 ]
+Error:
+! Test failures.
+Execution halted

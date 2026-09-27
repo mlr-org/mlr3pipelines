@@ -18,15 +18,15 @@ test_that("mlr_graphs access works", {
   )
 
   expect_equal(
-    ppl("bagging", graph = po("nop")),
-    mlr_graphs$get("bagging", graph = po("nop"))
+    ppl("bag", graph = po("nop")),
+    mlr_graphs$get("bag", graph = po("nop"))
   )
 
   expect_equal(ppl(), mlr_graphs)
 })
 
 
-test_that("mlr_pipeops multi-access works", {
+test_that("mlr_graphs multi-access works", {
 
   expect_equal(
     ppls("robustify"),
@@ -44,8 +44,8 @@ test_that("mlr_pipeops multi-access works", {
   )
 
   expect_equal(
-    ppls("bagging", graph = po("nop")),
-    list(mlr_graphs$get("bagging", graph = po("nop")))
+    ppls("bag", graph = po("nop")),
+    list(mlr_graphs$get("bag", graph = po("nop")))
   )
 
   expect_equal(
@@ -60,6 +60,7 @@ test_that("mlr_pipeops multi-access works", {
 
 test_that("mlr3book authors don't sleepwalk through life", {
   skip_if_not_installed("rpart")
+  skip_on_cran()
 
   tasks = tsks(c("breast_cancer", "sonar"))
 
@@ -71,5 +72,13 @@ test_that("mlr3book authors don't sleepwalk through life", {
 
   learners = c(glrn_stack)
   bmr = benchmark(benchmark_grid(tasks, learners, rsmp("cv", folds = 2)))
+
+})
+
+test_that("ppl - dictionary suggest works", {
+
+  # test that correct dictionary is checked against
+  expect_error(ppl("adas"), "po\\(\\): 'adas'")
+  expect_error(ppls("adas"), "pos\\(\\): 'adas'")
 
 })

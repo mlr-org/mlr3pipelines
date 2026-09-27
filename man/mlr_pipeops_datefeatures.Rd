@@ -8,12 +8,14 @@
 \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Based on \code{POSIXct} columns of the data, a set of date related features is computed and added to
-the feature set of the output task. If no \code{POSIXct} column is found, the original task is
-returned unaltered. This functionality is based on the \code{add_datepart()} and
-\code{add_cyclic_datepart()} functions from the \code{fastai} library. If operation on only particular
-\code{POSIXct} columns is requested, use the \code{affect_columns} parameter inherited from
-\code{\link{PipeOpTaskPreprocSimple}}.
+Based on \code{POSIXct}/\code{Date} columns of the data, a set of date related features is computed and
+added to the feature set of the output task. If no \code{POSIXct} or \code{Date} column is found, the
+original task is returned unaltered. This functionality is based on the \code{add_datepart()} and
+\code{add_cyclic_datepart()} functions from the \CRANpkg{fastai} package. If operation on only
+particular \code{POSIXct}/\code{Date} columns is requested, use the \code{affect_columns} parameter inherited
+from \code{\link{PipeOpTaskPreprocSimple}}.
+
+For \code{Date} columns, the features \code{"hour"}, \code{"minute"}, \code{"second"}, and \code{"is_day"} are skipped.
 
 If \code{cyclic = TRUE}, cyclic features are computed for the features \code{"month"}, \code{"week_of_year"},
 \code{"day_of_year"}, \code{"day_of_month"}, \code{"day_of_week"}, \code{"hour"}, \code{"minute"} and \code{"second"}. This
@@ -40,7 +42,7 @@ be set during construction. Default \code{list()}.
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpTaskPreprocSimple}}.
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with date-related features computed and added to the
 feature set of the output task and the \code{POSIXct} columns of the data removed from the
@@ -50,38 +52,60 @@ feature set (depending on the value of \code{keep_date_var}).
 \section{State}{
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from
-\code{\link{PipeOpTaskPreprocSimple}}.
+\code{\link{PipeOpTaskPreproc}}.
 }
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpTaskPreprocSimple}}, as well as:
+The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{keep_date_var} :: \code{logical(1)}\cr
-Should the \code{POSIXct} columns be kept as features? Default FALSE.
+Whether \code{POSIXct} columns should be kept as features. Initialized to \code{FALSE}.
 \item \code{cyclic} :: \code{logical(1)}\cr
-Should cyclic features be computed? See Internals. Default FALSE.
+Whether cyclic features should be computed. See Internals. Initialized to \code{FALSE}.
 \item \code{year} :: \code{logical(1)}\cr
-Should the year be extracted as a feature? Default TRUE.
+Whether the year should be extracted as a feature. Initialized to \code{TRUE}.
+\item \code{quarter} :: \code{logical(1)}\cr
+Whether the quarter should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{month} :: \code{logical(1)}\cr
-Should the month be extracted as a feature? Default TRUE.
+Whether the month should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{week_of_year} :: \code{logical(1)}\cr
-Should the week of the year be extracted as a feature? Default TRUE.
+Whether the week of the year should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{day_of_year} :: \code{logical(1)}\cr
-Should the day of the year be extracted as a feature? Default TRUE.
+Whether the day of the year should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{day_of_month} :: \code{logical(1)}\cr
-Should the day of the month be extracted as a feature? Default TRUE.
+Whether the day of the month should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{day_of_week} :: \code{logical(1)}\cr
-Should the day of the week be extracted as a feature? Default TRUE.
+Whether the day of the week (ISO 8601) should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{hour} :: \code{logical(1)}\cr
-Should the hour be extracted as a feature? Default TRUE.
+Whether the hour should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{minute} :: \code{logical(1)}\cr
-Should the minute be extracted as a feature? Default TRUE.
+Whether the minute should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{second} :: \code{logical(1)}\cr
-Should the second be extracted as a feature? Default TRUE.
+Whether the second should be extracted as a feature. Initialized to \code{TRUE}.
 \item \code{is_day} :: \code{logical(1)}\cr
-Should a feature be extracted indicating whether it is day time (06:00am - 08:00pm)?
-Default TRUE.
+Whether a feature indicating day time (06:00am - 08:00pm) should be extracted. Initialized to
+\code{TRUE}.
+\item \code{is_month_start} :: \code{logical(1)}\cr
+Whether a feature indicating the first day of the month should be extracted. Initialized to
+\code{FALSE}.
+\item \code{is_month_end} :: \code{logical(1)}\cr
+Whether a feature indicating the last day of the month should be extracted. Initialized to
+\code{FALSE}.
+\item \code{is_quarter_start} :: \code{logical(1)}\cr
+Whether a feature indicating the first day of the quarter should be extracted. Initialized to
+\code{FALSE}.
+\item \code{is_quarter_end} :: \code{logical(1)}\cr
+Whether a feature indicating the last day of the quarter should be extracted. Initialized to
+\code{FALSE}.
+\item \code{is_year_start} :: \code{logical(1)}\cr
+Whether a feature indicating the first day of the year should be extracted. Initialized to
+\code{FALSE}.
+\item \code{is_year_end} :: \code{logical(1)}\cr
+Whether a feature indicating the last day of the year should be extracted. Initialized to
+\code{FALSE}.
+\item \code{is_leap_year} :: \code{logical(1)}\cr
+Whether a feature indicating a leap year should be extracted. Initialized to \code{FALSE}.
 }
 }
 
@@ -91,22 +115,23 @@ The cyclic feature transformation always assumes that values range from 0, so so
 (e.g. day of the month) are shifted before sine/cosine transform.
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
-}
-
-\section{Fields}{
-
-Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{
 library("mlr3")
 dat = iris
 set.seed(1)
-dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"),
- size = 150L)
+dat$date = sample(
+  seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"), size = 150L
+)
 task = TaskClassif$new("iris_date", backend = dat, target = "Species")
 pop = po("datefeatures", param_vals = list(cyclic = FALSE, minute = FALSE, second = FALSE))
 pop$train(list(task))
@@ -115,27 +140,34 @@ pop$state
 \seealso{
 https://mlr-org.com/pipeops.html
 
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOp}},
+\code{\link{PipeOpEncodePL}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_adas}},
+\code{\link{mlr_pipeops_blsmote}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
 \code{\link{mlr_pipeops_classbalancing}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_classweights}},
+\code{\link{mlr_pipeops_classweightsex}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_decode}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encodeplquantiles}},
+\code{\link{mlr_pipeops_encodepltree}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
@@ -149,13 +181,19 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
+\code{\link{mlr_pipeops_info}},
+\code{\link{mlr_pipeops_isomap}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_learner_pi_cvplus}},
+\code{\link{mlr_pipeops_learner_quantiles}},
+\code{\link{mlr_pipeops_materialize}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nearmiss}},
 \code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
@@ -175,13 +213,16 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
+\code{\link{mlr_pipeops_smotenc}},
 \code{\link{mlr_pipeops_spatialsign}},
+\code{\link{mlr_pipeops_splines}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinvert}},
 \code{\link{mlr_pipeops_targetmutate}},
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_umap}},
 \code{\link{mlr_pipeops_unbranch}},

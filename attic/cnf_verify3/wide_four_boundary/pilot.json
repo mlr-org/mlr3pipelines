@@ -1,0 +1,302 @@
+[
+  {
+    "file": "minimized_first_order_phase_sse1.json",
+    "padding": 0,
+    "first": [
+      {
+        "X1": "0",
+        "X0": "5"
+      },
+      {
+        "X0": "0",
+        "X1": ["4", "0"]
+      }
+    ],
+    "second": [
+      {
+        "X1": "0",
+        "X0": "5"
+      },
+      {
+        "X1": ["4", "0"]
+      }
+    ],
+    "widths_first": [2, 2],
+    "widths_second": [2, 1],
+    "changed": true
+  },
+  {
+    "file": "minimized_first_order_phase_sse1.json",
+    "padding": 1,
+    "first": [
+      {
+        "X1": "0",
+        "X0": "5"
+      },
+      {
+        "X0": "0",
+        "X1": ["4", "0"]
+      }
+    ],
+    "second": [
+      {
+        "X1": "0",
+        "X0": "5"
+      },
+      {
+        "X1": ["4", "0"]
+      }
+    ],
+    "widths_first": [3, 3],
+    "widths_second": [3, 2],
+    "changed": true
+  },
+  {
+    "file": "minimized_first_order_phase_sse1.json",
+    "padding": 2,
+    "first": [
+      {
+        "X1": "0",
+        "X0": "5"
+      },
+      {
+        "X0": "0",
+        "X1": ["4", "0"]
+      }
+    ],
+    "second": [
+      {
+        "X1": "0",
+        "X0": "5"
+      },
+      {
+        "X1": ["4", "0"]
+      }
+    ],
+    "widths_first": [4, 4],
+    "widths_second": [4, 3],
+    "changed": true
+  },
+  {
+    "file": "minimized_first_order_phase_sse1.json",
+    "padding": 5,
+    "first": [
+      {
+        "X1": "0",
+        "X0": "5"
+      },
+      {
+        "X0": "0",
+        "X1": ["4", "0"]
+      }
+    ],
+    "second": [
+      {
+        "X1": "0",
+        "X0": "5"
+      },
+      {
+        "X1": ["4", "0"]
+      }
+    ],
+    "widths_first": [7, 7],
+    "widths_second": [7, 6],
+    "changed": true
+  },
+  {
+    "file": "minimized_first_order_phase_sse1.json",
+    "padding": 64,
+    "first": [
+      {
+        "X1": "0",
+        "X0": "5"
+      },
+      {
+        "X0": "0",
+        "X1": ["4", "0"]
+      }
+    ],
+    "second": [
+      {
+        "X1": "0",
+        "X0": "5"
+      },
+      {
+        "X1": ["4", "0"]
+      }
+    ],
+    "widths_first": [66, 66],
+    "widths_second": [66, 65],
+    "changed": true
+  },
+  {
+    "file": "minimized_sse1.json",
+    "padding": 0,
+    "first": [
+      {
+        "X0": "3",
+        "X2": "4"
+      },
+      {
+        "X1": "3",
+        "X0": "2"
+      },
+      {
+        "X0": "5",
+        "X2": ["4", "2"]
+      }
+    ],
+    "second": [
+      {
+        "X0": "3",
+        "X2": "4"
+      },
+      {
+        "X1": "3",
+        "X0": "2"
+      },
+      {
+        "X2": ["4", "2"]
+      }
+    ],
+    "widths_first": [2, 2, 2],
+    "widths_second": [2, 2, 1],
+    "changed": true
+  },
+  {
+    "file": "minimized_sse1.json",
+    "padding": 1,
+    "first": [
+      {
+        "X0": "3",
+        "X2": "4"
+      },
+      {
+        "X1": "3",
+        "X0": "2"
+      },
+      {
+        "X0": "5",
+        "X2": ["4", "2"]
+      }
+    ],
+    "second": [
+      {
+        "X0": "3",
+        "X2": "4"
+      },
+      {
+        "X1": "3",
+        "X0": "2"
+      },
+      {
+        "X2": ["4", "2"]
+      }
+    ],
+    "widths_first": [3, 3, 3],
+    "widths_second": [3, 3, 2],
+    "changed": true
+  },
+  {
+    "file": "minimized_sse1.json",
+    "padding": 2,
+    "first": [
+      {
+        "X0": "3",
+        "X2": "4"
+      },
+      {
+        "X1": "3",
+        "X0": "2"
+      },
+      {
+        "X0": "5",
+        "X2": ["4", "2"]
+      }
+    ],
+    "second": [
+      {
+        "X0": "3",
+        "X2": "4"
+      },
+      {
+        "X1": "3",
+        "X0": "2"
+      },
+      {
+        "X2": ["4", "2"]
+      }
+    ],
+    "widths_first": [4, 4, 4],
+    "widths_second": [4, 4, 3],
+    "changed": true
+  },
+  {
+    "file": "minimized_sse1.json",
+    "padding": 5,
+    "first": [
+      {
+        "X0": "3",
+        "X2": "4"
+      },
+      {
+        "X1": "3",
+        "X0": "2"
+      },
+      {
+        "X0": "5",
+        "X2": ["4", "2"]
+      }
+    ],
+    "second": [
+      {
+        "X0": "3",
+        "X2": "4"
+      },
+      {
+        "X1": "3",
+        "X0": "2"
+      },
+      {
+        "X2": ["4", "2"]
+      }
+    ],
+    "widths_first": [7, 7, 7],
+    "widths_second": [7, 7, 6],
+    "changed": true
+  },
+  {
+    "file": "minimized_sse1.json",
+    "padding": 64,
+    "first": [
+      {
+        "X0": "3",
+        "X2": "4"
+      },
+      {
+        "X1": "3",
+        "X0": "2"
+      },
+      {
+        "X0": "5",
+        "X2": ["4", "2"]
+      }
+    ],
+    "second": [
+      {
+        "X0": "3",
+        "X2": "4"
+      },
+      {
+        "X1": "3",
+        "X0": "2"
+      },
+      {
+        "X2": ["4", "2"]
+      }
+    ],
+    "widths_first": [66, 66, 66],
+    "widths_second": [66, 66, 65],
+    "changed": true
+  }
+]

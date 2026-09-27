@@ -4,12 +4,7 @@ test_that("PipeOpYeoJohnson - general functionality", {
   skip_if_not_installed("bestNormalize")
   task = mlr_tasks$get("iris")
   op = PipeOpYeoJohnson$new()
-  expect_pipeop(op)
   expect_datapreproc_pipeop_class(PipeOpYeoJohnson, task = task)
-  result = train_pipeop(op, inputs = list(task))
-  expect_task(result[[1]])
-  result = predict_pipeop(op, inputs = list(task))
-  expect_task(result[[1]])
 })
 
 test_that("PipeOpYeoJohnson - receive expected result", {

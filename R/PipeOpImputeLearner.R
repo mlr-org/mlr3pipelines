@@ -10,7 +10,7 @@
 #' Note this parameter is part of the [`PipeOpImpute`] base class and explained there.
 #'
 #' Additionally, only features supported by the learner can be imputed; i.e. learners of type
-#' `regr` can only impute features of type `integer` and `numeric`, while `classif` can impute
+#' `regr` can only impute features of type `integer`, `numeric`, `POSIXct` and `Date`, while `classif` can impute
 #' features of type `factor`, `ordered` and `logical`.
 #'
 #' The [`Learner`][mlr3::Learner] used for imputation is trained on all `context_columns`; if these contain missing values,
@@ -69,11 +69,10 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
 #'
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
 #'
-#' task = tsk("pima")
+#' task = tsk("diabetes")
 #' task$missings()
 #'
 #' po = po("imputelearner", lrn("regr.rpart"))
@@ -84,17 +83,16 @@
 #' po$state$model$mass
 #'
 #' library("mlr3learners")
-#' # to use the "regr.kknn" Learner, prefix it with its own imputation method!
-#' # The "imputehist" PipeOp is used to train "regr.kknn"; predictions of this
+#' # To use the "regr.lm" Learner, prefix it with its own imputation method!
+#' # The "imputehist" PipeOp is used to train "regr.lm"; predictions of this
 #' # trained Learner are then used to impute the missing values in the Task.
 #' po = po("imputelearner",
-#'   po("imputehist") %>>% lrn("regr.kknn")
+#'   po("imputehist") %>>% lrn("regr.lm")
 #' )
 #'
 #' new_task = po$train(list(task = task))[[1]]
 #' new_task$missings()
 #'
-#' \dontshow{ \} }
 #' @family PipeOps
 #' @family Imputation PipeOps
 #' @template seealso_pipeopslist
@@ -105,12 +103,9 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
   public = list(
     initialize = function(learner, id = "imputelearner", param_vals = list()) {
       private$.learner = as_learner(learner, clone = TRUE)
-      if (paradox_info$is_old) {
-        private$.learner$param_set$set_id = ""
-      }
       id = id %??% private$.learner$id
       feature_types = switch(private$.learner$task_type,
-        regr = c("integer", "numeric"),
+        regr = c("integer", "numeric", "POSIXct", "Date"),
         classif = c("logical", "factor", "ordered"),
         stop("Only `classif` or `regr` Learners are currently supported by PipeOpImputeLearner.")
         # FIXME: at least ordinal should also be possible. When Moore's law catches up with us we could even do `character`
@@ -153,6 +148,8 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
     },
 
     .impute = function(feature, type, model, context) {
+      nas = which(is.na(feature))
+      if (!length(nas)) return(feature)
       if (is.atomic(model)) {  # handle nullmodel, making use of the fact that `Learner$state` is always a list
         return(super$.impute(feature, type, model, context))
       }
@@ -162,17 +159,17 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
 
       # Use the trained learner to perform the imputation
       task = private$.create_imputation_task(feature, context)
-      pred = private$.learner$predict(task, which(is.na(feature)))
+      pred = private$.learner$predict(task, nas)
 
       # Replace the missing values with imputed values of the correct format
       imp_vals = private$.convert_to_type(pred$response, type)
 
       if (type %in% c("factor", "ordered")) {
         # in some edge cases there may be levels during training that are missing during predict.
-        levels(feature) = c(levels(feature), as.character(type))
+        levels(feature) = c(levels(feature), levels(imp_vals))
       }
 
-      feature[is.na(feature)] = imp_vals
+      feature[nas] = imp_vals
       feature
     },
 
@@ -186,8 +183,14 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
       # Convert non-factor imputation targets to a factor
       if (is.numeric(feature)) {
         feature
+      } else if (any(class(feature) %in% c("POSIXct", "Date"))) {
+        as.numeric(feature)
       } else {
-        factor(feature, ordered = FALSE)
+        if (!is.null(levels(feature))) {
+          factor(feature, levels = levels(feature), ordered = FALSE)
+        } else {
+          factor(feature, ordered = FALSE)
+        }
       }
     },
 
@@ -197,6 +200,8 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
         feature = round(feature)
       }
       if (type == "logical") feature = as.logical(feature) # FIXME mlr-org/mlr3#475
+      if (type == "POSIXct") feature = as.POSIXct(feature)
+      if (type == "Date") feature = as.Date(feature)
       auto_convert(feature, "feature to be imputed", type, levels = levels(feature))
     },
     .additional_phash_input = function() private$.learner$phash

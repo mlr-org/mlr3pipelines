@@ -1,0 +1,226 @@
+
+
+
+# MV SAT simplifier thoughts
+
+- check how fast symbol-access is by name vs. blowing up vector to access by number, vs. indirect access  x[[s[[i]]]]
+  - vs. hash table environment
+  - indirect access would enable us to have matrices with cols for 's', we could do colsums?
+- is subset-check through all(x %in% y) twice faster than length(union(x, y)), length(x), length(y)?
+
+- for every clause i, and for every symbol in that clause s, we keep a vector v[i][s] with v[i][s][j] == '0' if j[s] >= i[s]; 1 if j[s] < i[s]
+  - if s is not in i, then 0 is implied for all other clauses, so don't need to keep this
+  - likely don't need a matrix here since we will eliminate rows / cols etc. frequently and probably only need col-wise matrix-ops anyways?
+    - maybe something like colsums?
+- we start with i going down from largest to smallest (since largest we can probably eliminate quickly)
+  - we start with j going up, since we likely can eliminate fastest with small j
+    - go through all s in i and populate v[i][s][j], as well as v[j][s][i] -- but the latter only for equality!
+      - it could happen that we can eliminate j?
+        - no, because we only check subset-ness in one direction
+      - keep running tally of 1s and save to sum[i][j]
+      - check right away if we can eliminate [i]
+      - check right away if we can do HLA
+        - if so, set all 0s in v[i][s][k < j] we have already set to NA
+
+
+- maybe the other way around?
+  - i from small to large, keep vector v[i][s][j] with v[i][s][j] = 1 whenever i[s] > v[s]
+    - i from small to large, j from small to large also  (does not matter?)
+    - fill v[i][s][j]
+      - it starts with NA? and we fill v[j][s][i] with 0 if we find equality (starts with NA)?
+        - no we can not do that since in general we are comparing against j+, not j.
+      - we could potentially eliminate j
+      - we could potentially HLA to j
+    - no need to check if v[j][s][i] is 1? so can pre-fill with !v[j][s][i]?
+    - remember that we track >-relationship for small version vs. large version
+
+
+
+
+
+
+- checker for logical equivalence in tests
+
+
+
+# Ok, actual asymmetric hidden tautology elimination:
+# for a given clause C, look for other clause D that are subsets w/r/t all vars except one var 's'.
+# we can then add complement(var(D, s)) to C.
+# We might then be able to repeat this, even with clauses for which this didnt work before.
+# - why must D be a subset wrt all except one var? Because we can only add not(s). If there are more vars, then not(s, s') are two clauses.
+#   - does this mean we could replace C with two more clauses? Maybe, but these would have to be eliminated individually. May not be possible, is probablyd ifficult and out of scope.
+# - What if D is a subset wrt all vars? Then we can already subsumption eliminate C.
+# - D is a subset wrt all vars except 's', and 's' is partial overlap? We can still add the complement of var(D, s)!
+# - Why might this be better than what we already have?
+#   - potentially still quadratic in number of terms, but builds the biggest possible C before checking for elimination.
+#   - Is this truly more powerful than the current approach?
+# - We need to build up C+ and let it refer to C; if we eliminate C+, C is also eliminated.
+# - Can we greedily eliminate C / C+? Or are there cases where we need to keep either?
+# - Is it worth keeping the larger of C / C+?
+#   - What is the implication of having a D vs. D+ somewhere for this procedure?
+#     - To the degree that D has something that is outside of C, we want this to be as small as possible, because we want to grow C as much as possible, so D is preferable to D+
+#     - Suppose D has nothing outside of C, in this case we can already subsumption eliminate C, so we are indifferent to D+
+#     - Suppose subsumption elimination was not an option. At some point we were able to grow D and add something to it that is neither in C nor in D. Since D is a subset of C wrt to all except s, we can add the same thing to C. With D+ together, we could also add the complement of s and get a tautology.
+#     - But subsumption *is* an option, see line above.
+#   - So we never need to look at any C+ for the fattening procedure here.
+# - Should we keep D, even if D+ can be eliminated?
+#   - Suppose we grew D by using some E that does not have the 's' that D and C disagree on.
+#     - then E can also be used by C, since D-s is a subset of C.
+#   - Suppose we grew D by using some E that contains values in 's' that are not in C.
+#     - this may be the wrong question to ask. The question should be: Are we going to miss the complement(D, s) in C? This is the part we can't add to C once we have eliminated D.
+#   - it would be *really* nice if we could do this greedily!
+# - We can always do unit elimination
+#   - but maybe we should be smarter about it?
+# - Can we have a rule about what can be kept, what can be eliminated?
+# - Shoutout to 'Clause Elimination Procedures for CNF Formulas' by Marijn Heule, Matti Järvisalo, Armin Biere
+# - How do we efficiently calculate subsets wrt all vars except one?
+#   - How about having a subset relatoinship binary matrix for each variable?
+#     - e.g. X[v]_i,j == 1 whenever var(i, v) <= var(j, v)
+#     - doing AND for all X except v on i, j except v=s would give var(i, v) <= var(j, v) for all vsymbols except s, implying that i <= j (subset).
+#     - we could also sum the matrices up, and wherever sum{v!=s} of X[v] is n-1, we are satisfied.
+#       - this can be simplified by just calculating the sum over all matrices and subtracting X[s] one by one.
+#     - can we do transitivity in these matrices? [i] <= [j], [j]<=[k] for any [j] -> [i]<=[k] -- this is a vector dot product...
+#       - If the domains of vars are small and there are many j, calculating this directly may be faster?
+#       - Instead, suppose we already have the matrix for columns 1 ... i. We now check i+1. For agiven j
+#         - no need to check if j < i+1 and [i+1] => [j]. At most we check for equality (length equal).
+#         -  if we find [i+1] <= [j], we can immediately copy over the column of j to i+1.
+#       - other suggestion: we calculate submatrix 1..(i)x1..(i). Then add new column i+1. We can copy over all 1s immediately whenever we find a col that is a subset of i+1; However, we can at most copy i ones.
+#     - maybe there is no easy solution; possibly except ordering by size first and only comparing in one direction.
+# - does this make self subsumption elimination more efficient?
+
+
+
+## to test:
+# subsumption
+# unit elimination
+# unit elimination makes large clause smaller, leading to additional u.e.
+# unit elimination makes large clause smaller, leading to subsumption
+
+# branch with totune is swallowed by single unbranch
+# branch with totune is swallowed by multiple unbranch
+# branches with totune can possibly lead to conflicts, but not always (multiple active inputs to unbranch, or mixed inputs to normal pipeops)
+# branches with totune always lead to conflicts (multiple active inputs to unbranch, or mixed inputs to normal pipeops, or choice between both)
+# can we recognize that a certain choice would lead to a conflict, making only other choices possible?
+
+# why does this blow up?
+#
+
+# profvis::profvis(replicate(3000, { !!(((u$A %among% "T" | u$B %among% "F") & (u$A %among% "F" | u$C %among% "T") & (u$B %among% "T" | u$C %among% "F"))) ; NULL }) -> ., simplify = FALSE)
+
+# This is because we don't eliminate (C | A) & (!C | B) & (B | A) by removing (B | A)
+# so, if  clause X and clause Y have a symbol in common where the values are disjoint, the disjunction of the rest is implied?
+
+
+## Some thoughts:
+# could still do resolution self subsumption:
+# given Clause X
+# clause A that is mostly subset of X except for one symbol s
+# clause B that is complement to A wrt s *outside of X[s]*, otherwise subset of X except for one symbol t, which is also in X
+# - implied resolution of A and B is (A + B - s), can do self subsumption w/r/t t -> restrict X[t] to B[t]
+# what else do we know?
+# - A has rowsum 1; X[s] is therefore already self subsumption restricted to intersection with A[s]
+# - B has rowsum 2 -- if it were 1, then we could already do the self subsumption w/r/t t
+# - ideally we don't want to check that intersect(A[s], B[s]) is in X[s] too often
+# how to do this efficiently?
+#  - keep matrix of complement relationships? -- would miss out on cases where intersection of A[s] and B[s] is in X[s]
+#  - if we do this reactively, we have to react every time a new rowsum == 1 OR rowsum == 2 appears?
+#  - for each entry and each symbol, keep a rowsum == 1 and rowsum == 2 queue?
+#    - would have to keep a reverse registry as well so we know where to eliminate entries from? or just live with the fact that we have to check for eliminated every time?
+#    - or just use the symbol registry
+# suggestion:
+#  - when rowsum == 2: check symbol registry, intersect where not_subset w/r/t the symbol is TRUE, check rowsum == 1 on the other side, then check intersection relationship?
+#    - Maybe cache rowsum somewhere.
+#  - when rowsum == 1, check symbol registry, intersect where not_subset w/r/t the symbol is TRUE, check rowsum == 2 on the other side, then check intersection relationship?
+# What about longer graphs? For hidden lateral addition, we can just build up one clause at a time and see if it gets eliminated.
+#  - what happens is that rowsum == 1 elements are "plugs" that can reduce rowsums of other elements.
+#    - reducing rowsums of other rowsum == 1 elements is boring, since HLA will have the same result
+#  - the weird thing here is that, when doing the intersection part, we want to consider the intersection outside of X wiht maximal symbols, not minimal symbols;
+#    this is different than in all the other cases, for which we can just greedily reduce symbols.
+#  - do we, in principle, want to do this with all the hidden tautology eliminated clauses present?
+#  - maybe what we do is we continue with self subsumption eliminatoin during HLA?
+#    - YES
+#    - this changes the HLA loop, however, since now we need to revisit clauses that we have looped over already
+#      - keep track of the clause+, as well as rowsums, and update them in the on_subset_relations handler
+#    - question remains: do we want to keep the HLA-eliminated clauses?
+#      - suppose a clause A is subset of X w/r/t all symbols except s.
+#        - if it is eliminated by HLA, then this is only interesting if it is eliminated with at least one clause that is subset of A[s] but not X[s]; otherwise,
+#          X could have been eliminated already.
+#        - if we are only on about hidden tautology elimination, then X[s] would be filled up to superset A[s] eventually, and whatever eliminated A[s] can still work on X.
+#        - however, we are looking at a B that is not a subset of X w/r/t s and another symbol t.
+#        - test case:
+#           1   A %among% c("a1", "a2") | B %among% "b1" | C %among% c("c1", "c2")
+#           2   B %among% c("b1", "b2") | C %among% c("c1", "c3")
+#           3   A %among% c("a1", "a2") | B %among% c("b1", "b3")
+#           4   A %among% "a2" | B %among% "b3" | D %among% "d1"
+#           5   A %among% "a1" | B %among% "b3" | D %among% c("d2", "d3")
+#          - clause 3 adds 'b2' to clause 1; clause 2 can then restrict clause 1 to 'c1'
+#          - however, clauses 4 and 5 eliminate clause 3 through hidden subsumption elimination
+#          - how can clause 1 be restricted to 'c1' now?
+#            - I guess here we have a special case not treated above: two clauses that have both rowsum 2, that can be combined to rowsum 1 (w/r/t clause 1 here)
+#        - test case 2:
+#           1   A %among% c("a1", "a2") | B %among% "b1" | C %among% c("c1", "c2") | D %among% "d3"
+#           2   B %among% c("b1", "b2") | C %among% c("c1", "c3")
+#           3   A %among% c("a1", "a2") | B %among% c("b1", "b3") | D %among% "d3"
+#           4   A %among% "a2" | B %among% "b3" | D %among% c("d1", "d3")
+#           5   A %among% "a1" | B %among% "b3" | D %among% c("d2", "d3")
+#           - here, 4 and 5 can also be combined to remove B from clause 1. At the same time, clause 1+ retains B and gains b2 as well.
+#           - this was not visible from subset relations alone: 4 and 5 could differ in many symbols, only their intersection must be complement w/r/t 1.
+#             - they don't get built up by clause 1 and they don't build it up.
+#             - do we have to look at all combinations of all clauses?
+#               - take two clauses: intersection w/r/t one symbol, union w/r/t all others -- this can do something interesting to a third clause if the#
+#                 intersection is a subset w/r/t the third clause, but they were not subsets before. Also each clause must have have rowsums >= 2, since rowsum 1
+#                 clauses are already considered.
+#                 - this builds up a clause that these clauses could have eliminated
+#               - to test all these relationships, maybe we are in exponential time already?
+#               - how *could* this work? for all pairs of clauses, intersect w/r/t one symbol, union the others?
+#                 - is this still valid if one of the original clauses gets eliminated? Probably yes, if all we use this for is self subsumption elimination.
+#           - how about this: we keep a separate queue of clauses that could be used for self subsumption elimination of clauses that were potentially already eliminated.
+#             we do this opportunistically, since it could contain information from higher order combinations of other clauses, which we won't bother to check exhaustively.
+#             Whenever rowsum of something is 2 after maximally expanding clause+, we check if there is something else that also has rowsum 2 w/r/t the same variables
+#             (for this it must be in the same variable queues) and if so, try to use it for self subsumption elimination. We need to somehow mark that this happened,
+#             since we don't need to do it again.
+#           - subsumption-eliminating something from clause X means that clause X could now be subset for something else, so we need to react...
+#           - maybe we should be reactive about clause+ right away: upon constructing the matrix, we also get a subset_count matrix; we build the clause+ right away.
+#             This way the logic for subsumption elimination after clause+-ing is easier; otherwise the code just needs to get written twice...
+#             - self-subsumption elimination after clause+ needs to do all the other things as well anyways...
+#             - check what we are currently doing based on is_not_subset_of -- we would turn it into is_not_subset_of_clause+, effectively.
+#             - do we need another symbol registry? For clause+, or for eliminated-but-can-still-trigger-self-subsumption?
+#             - now we need to treat units more like other clauses, as they can get normal clause+ and need normal subset-relationships.
+# testcase:
+#     (X ∈ {s} | Z ∈ {y})
+#   & (Y ∈ {x} | X ∈ {t})
+#   & (Y ∈ {x} | Z ∈ {z})
+# (in R-code, that is: `CnfFormula(list(X %among% "s" | Z %among% "y", Y %among% "x" | X %among% "t", Y %among% "x" | Z %among% "z"))` )
+# Here, the first two clauses can restrict the 3rd clause to `Y %among% "x"`, which then subsumption-eliminates clauses 2 and 3.
+#
+# Problems with this:
+#  - 1 (A %among% "a1" | B %among% c("b1", "b2")) &
+#    2 (A %among% "a1" | B %among% "b2" | C %among% "c1") &
+#    3 (A %among% "a2" | C %among% "c2")
+#      2 will add C %among% c2 to 1+, which will let 3 remove A %among% "a1" from 1 by self-subsumption.
+#      The problem here is that, without A %among% "a1", the necessary C %among% c2 could not have been added.
+#  - 1 (A %among% "a1" | B %among% "b1" | D %among% "d1") &
+#    2 (A %among% "a1" | C %among% "c1" | D %among% "d1") &
+#    3 (A %among% "a1" | B %among% "b1" | C %among% "c2") &
+#    4 (B %among% "b2" | C %among% "c1" | D %among% "d1")
+#      Clause 2 adds C %among% "c2" to clause 1, which then gets eliminated by 3.
+#      Clause 1 adds B %among% "b1" to clause 2, which then also gets eliminated by 4.
+#      However, the assignment A = "a2", B = "b2", C = "c2", D = "d2" is TRUE after removing clauses 1 and 2.
+#      The problem is that 2 and 3 imply 1, and 4 and 1 imply 2, but one cannot remove both.
+#      Int he old implementation, this is solved by the fact that we do HLA for one clause at a time, either
+#      eliminating it or not.
+
+# Now that 2nd order sse is implemented, one more possible obvious optimizatoin would be to keep original larger versions of clauses around
+# and use these for self-subsumption elimination.
+# - problem: this would make unit handling weird, since we get new units that can now still be self-subsumed.
+# - wehn we have that, we can also make sure 2nd order things only run after the initial 1st order things have all run, since we can then expect
+#   fewer range changes and hende fewer updates; that probably gives a lot of performance benefit.
+# - NO this does not work. Example case:
+#   1. CnfFormula(list((A %among% "a1" | B %among% "b1" | C %among% "c1"),
+#   2.                 (A %among% "a1" | B %among% "b2"),
+#   3.                 (A %among% "a2" | B %among% "b1")))
+#   Clause 2 can remove "B" from clause 1 through SSE.
+#   If we keep the memory of the larger clasue 1, then 3 can also remove "A" from 1.
+#   The result contains the unit C = "c1"; however, A = "a1", B = "b1", C = "c2" would have satisfied the original formula.
+#
+#

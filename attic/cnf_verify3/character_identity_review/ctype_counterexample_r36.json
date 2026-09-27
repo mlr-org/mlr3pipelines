@@ -1,0 +1,115 @@
+{
+  "runtime": "3.6.3",
+  "records": [
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "utf8",
+      "source_models": 0,
+      "output_models": 0,
+      "changed_truth": false,
+      "same_name_is_enumerated": true,
+      "name_encoding": "UTF-8",
+      "name_bytes": [195, 169],
+      "unit_domain_names": "é",
+      "unit_domain_names_encoding": "UTF-8",
+      "unit_domain_name_bytes": [
+        [195, 169]
+      ],
+      "propagation_sequences": [
+        "é",
+        ["é", "Y"]
+      ],
+      "hidden_elimination_branches": [],
+      "warnings": [],
+      "witnesses": []
+    },
+    {
+      "ctype": "C.UTF-8",
+      "encoding": "latin1",
+      "source_models": 0,
+      "output_models": 0,
+      "changed_truth": false,
+      "same_name_is_enumerated": true,
+      "name_encoding": "latin1",
+      "name_bytes": 233,
+      "unit_domain_names": "é",
+      "unit_domain_names_encoding": "UTF-8",
+      "unit_domain_name_bytes": [
+        [195, 169]
+      ],
+      "propagation_sequences": [
+        "é",
+        ["é", "Y"]
+      ],
+      "hidden_elimination_branches": [],
+      "warnings": [],
+      "witnesses": []
+    },
+    {
+      "ctype": "C",
+      "encoding": "utf8",
+      "source_models": 0,
+      "output_models": 2,
+      "changed_truth": true,
+      "same_name_is_enumerated": false,
+      "name_encoding": "UTF-8",
+      "name_bytes": [195, 169],
+      "unit_domain_names": "<U+00E9>",
+      "unit_domain_names_encoding": "unknown",
+      "unit_domain_name_bytes": [
+        [60, 85, 43, 48, 48, 69, 57, 62]
+      ],
+      "propagation_sequences": [
+        [],
+        []
+      ],
+      "hidden_elimination_branches": [
+        true
+      ],
+      "warnings": [],
+      "witnesses": [
+        {
+          "X": "c",
+          "Y": "a"
+        },
+        {
+          "X": "b",
+          "Y": "b"
+        }
+      ]
+    },
+    {
+      "ctype": "C",
+      "encoding": "latin1",
+      "source_models": 0,
+      "output_models": 2,
+      "changed_truth": true,
+      "same_name_is_enumerated": false,
+      "name_encoding": "latin1",
+      "name_bytes": 233,
+      "unit_domain_names": "<e9>",
+      "unit_domain_names_encoding": "unknown",
+      "unit_domain_name_bytes": [
+        [60, 101, 57, 62]
+      ],
+      "propagation_sequences": [
+        [],
+        []
+      ],
+      "hidden_elimination_branches": [
+        true
+      ],
+      "warnings": [],
+      "witnesses": [
+        {
+          "X": "c",
+          "Y": "a"
+        },
+        {
+          "X": "b",
+          "Y": "b"
+        }
+      ]
+    }
+  ]
+}

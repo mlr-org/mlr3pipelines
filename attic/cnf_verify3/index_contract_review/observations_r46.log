@@ -1,0 +1,82 @@
+Completed Boolean3 ordered width 1
+Completed Boolean3 ordered width 2
+Completed Boolean3 ordered width 3
+          stale_other_symbol_unit                        hook_range
+                                7                               313
+             hook_reverse_pending      hook_deleted_reverse_pending
+                              314                               405
+              future_registration                       hook_oneend
+                              412                               527
+                  hook_na_twoends              unit_pending_repairs
+                              527                               544
+               hook_unit_repaired                 hook_unit_pending
+                              544                               544
+              hook_consume_twoend              hook_forward_pending
+                             1169                              1801
+        lazy_inverse_consumptions               hook_inverse_before
+                             2368                              2368
+               hook_inverse_after                        self_guard
+                             2368                              2439
+    optional_future_short_circuit         optional_allocated_matrix
+                             2542                              4251
+              hla_nonunit_count_1               hook_delete_pending
+                             4429                              6671
+             hook_optional_matrix               hla_nonunit_count_0
+                             6793                              7194
+            hook_nonunit_repaired              hook_nonunit_pending
+                             7372                              7372
+          nonunit_pending_repairs               allocated_lazy_rows
+                             7372                              7811
+                    hook_snapshot                     hook_repaired
+                             8725                              9191
+            unallocated_lazy_rows intermediate_na_candidate_vectors
+                            11385                             15023
+                   hook_hla_split                  hook_unit_select
+                            18674                             19341
+                            cases         unit_selection_boundaries
+                            19787                             19885
+                   hook_eliminate                       hook_twoend
+                            21072                             21302
+               hook_delete_symbol                     hook_register
+                            21417                             22993
+                  hook_na_oneends                        hook_trial
+                            25821                             35761
+              hook_nonunit_select                    hook_self_loop
+                            38600                             44275
+     nonunit_selection_boundaries               hook_consume_oneend
+                            45972                             53348
+  filtered_candidate_consumptions                         hook_pair
+                            54517                             56782
+                    hook_restrict                   pair_boundaries
+                            61658                            195750
+              registry_boundaries                      condition_&&
+                           241825                            268600
+                     condition_||                      condition_if
+                          1024276                           2017938
+            initialized_pair_rows
+                          7176512
+$`stale missing-symbol guard`
+[1] "attempt to select more than one element in integerOneIndex"
+
+$`optional future-matrix guard`
+[1] "invalid argument type"
+
+$`reverse count repair`
+[1] "INDEPENDENT REVIEW: paired row/count synchronization"
+
+$`forward count repair`
+[1] "INDEPENDENT REVIEW: paired row/count synchronization"
+
+$`deleted-column count repair`
+[1] "INDEPENDENT REVIEW: paired row/count synchronization"
+
+$`self-row exclusion`
+[1] "INDEPENDENT REVIEW: self-row exclusion"
+
+$`lazy row count repair`
+[1] "INDEPENDENT REVIEW: lazy row/count synchronization"
+
+$`delayed inverse domain`
+[1] "INDEPENDENT REVIEW: forced inverse value"
+
+PASS 19787 original inputs; 8 corrupted-source controls rejected

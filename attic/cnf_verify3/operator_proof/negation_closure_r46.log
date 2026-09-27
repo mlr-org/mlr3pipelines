@@ -1,0 +1,9 @@
+R: R version 4.6.1 (2026-06-24)
+                      cases                  valuations
+                        603                       45264
+             contradictions unrecognized_contradictions
+                         58                          28
+      nonconstant_negations        falsifying_witnesses
+                        544                        1088
+Identity kernel calls: 2499 ; maximum clauses entering one identity call: 110
+All negations preserve semantics and recognize every tested contradiction, including with no kernel reductions.

@@ -1,0 +1,60 @@
+$R
+[1] "R version 3.6.3 (2020-02-29)"
+
+$counts
+$counts$semantic_boundaries
+[1] 65780
+
+$counts$cached_pairs
+[1] 839680
+
+$counts$first_copy_removed
+[1] 1770
+
+$counts$orphan
+[1] 7006
+
+$counts$unit_snapshot_skip
+[1] 63
+
+$counts$hla_virtual_semantics
+[1] 8643
+
+$counts$hla_cached_pairs
+[1] 31598
+
+$counts$hla_starting_donor
+[1] 1094
+
+$counts$unit_hla_initializations
+[1] 598
+
+$counts$formulas
+[1] 2067
+
+$counts$assignment_rows
+[1] 52962
+
+$counts$same_name_sse2
+[1] 3464
+
+$counts$orphan_clause_deleted
+[1] 626
+
+$counts$hla_clause_deleted
+[1] 13
+
+$counts$same_name_unrelated_exception
+[1] 132
+
+
+$seconds
+[1] 167.119
+
+$source_md5
+                   R/CnfUniverse.R                      R/CnfSymbol.R
+"45fa56698900fc42440b5dda34fbe4ff" "d1aa6bcd59ced1aa4e5ea3317d640897"
+                       R/CnfAtom.R                      R/CnfClause.R
+"58699a7eb88f45c6aa5cdb8b77cc7c41" "f6c9659b31a511e696dc9d8d7cfa9349"
+                    R/CnfFormula.R            R/CnfFormula_simplify.R
+"7609c11610bbe9de566d9d9b448a07f7" "376aac6eb81334e751e9351f9eddc02f"

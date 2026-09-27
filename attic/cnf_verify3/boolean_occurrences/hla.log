@@ -1,0 +1,85 @@
+checked 100 of 1872 elapsed 4.903
+checked 200 of 1872 elapsed 8.015
+checked 300 of 1872 elapsed 12.531
+checked 400 of 1872 elapsed 20.599
+checked 500 of 1872 elapsed 25.138
+checked 600 of 1872 elapsed 33.084
+checked 700 of 1872 elapsed 46.934
+checked 800 of 1872 elapsed 60.962
+checked 900 of 1872 elapsed 68.304
+checked 1000 of 1872 elapsed 84.965
+checked 1100 of 1872 elapsed 110.28
+checked 1200 of 1872 elapsed 135.62
+checked 1300 of 1872 elapsed 149.571
+checked 1400 of 1872 elapsed 163.223
+checked 1500 of 1872 elapsed 172.702
+checked 1600 of 1872 elapsed 182.12
+checked 1700 of 1872 elapsed 191.619
+checked 1800 of 1872 elapsed 201.11
+$R
+[1] "R version 3.6.3 (2020-02-29)"
+
+$cases
+[1] 1872
+
+$totals
+$totals$enter_on_updated_subset_relations
+[1] 26877
+
+$totals$semantic_boundary_checks
+[1] 149746
+
+$totals$cache_pair_checks
+[1] 3194170
+
+$totals$enter_eliminate_clause_update_sr
+[1] 1053
+
+$totals$enter_handle_sse_2nd_order_twoend
+[1] 23250
+
+$totals$enter_try_sse_2nd_order
+[1] 12778
+
+$totals$correct_formulas
+[1] 1872
+
+$totals$assignment_rows
+[1] 119808
+
+$totals$enter_apply_domain_restriction
+[1] 5786
+
+$totals$enter_eliminate_symbol_from_clause
+[1] 3237
+
+$totals$nonunit_hla_donor
+[1] 2716
+
+$totals$nonunit_hla_deletion
+[1] 32
+
+$totals$delete_first_with_copy_left
+[1] 618
+
+$totals$orphan_occurrence
+[1] 14748
+
+$totals$delete_orphan_clause
+[1] 56
+
+$totals$enter_register_unit
+[1] 1873
+
+$totals$unit_cache_skip
+[1] 77
+
+$totals$same_name_twoend_try
+[1] 644
+
+$totals$enter_handle_sse_2nd_order_oneend
+[1] 19
+
+
+$seconds
+[1] 207.872

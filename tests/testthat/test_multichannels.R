@@ -21,7 +21,7 @@ test_that("doublearrow with one output to many input works as expected", {
   g2 = Graph$new()$add_pipeop(po("scale"))$add_pipeop(po("pca"))$add_pipeop(po("subsample"))$
     add_edge("scale", "pca")$add_edge("scale", "subsample")
 
-  expect_equal(g1, g2)
+  expect_equal_r6(g1, g2)
 
   expect_error(gunion(list(po("scale"), po("pca"))) %>>% gunion(list(po("nop"), po("subsample"), po("select"))),
     "mismatching number of inputs / outputs")
@@ -129,13 +129,13 @@ test_that("doublearrow with many output to vararg input works as expected", {
   g2 = Graph$new()$add_pipeop(po("scale"))$add_pipeop(po("pca"))$add_pipeop(VarargPipeop$new())$
     add_edge("scale", "vararg")$add_edge("pca", "vararg")
 
-  expect_equal(g1, g2)
+  expect_equal_r6(g1, g2)
 
   g1 = gunion(list(po("scale"), po("pca"))) %>>% VarargPipeop$new(innum = 1)
   g2 = Graph$new()$add_pipeop(po("scale"))$add_pipeop(po("pca"))$add_pipeop(VarargPipeop$new(innum = 1))$
     add_edge("scale", "vararg", dst_channel = "...")$add_edge("pca", "vararg", dst_channel = "input1")
 
-  expect_equal(g1, g2)
+  expect_equal_r6(g1, g2)
 
   expect_error(gunion(list(po("scale"), po("pca"), po("select"), po("subsample"))) %>>% VarargPipeop$new(innum = 2),
     "mismatching number of inputs / outputs")

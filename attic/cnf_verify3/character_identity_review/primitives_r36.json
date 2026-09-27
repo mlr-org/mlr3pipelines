@@ -1,0 +1,2469 @@
+{
+  "runtime": "3.6.3",
+  "checkmate": "2.3.4",
+  "original_locale": "LC_CTYPE=C.UTF-8;LC_NUMERIC=C;LC_TIME=C.UTF-8;LC_COLLATE=C.UTF-8;LC_MONETARY=C.UTF-8;LC_MESSAGES=C.UTF-8;LC_PAPER=C.UTF-8;LC_NAME=C;LC_ADDRESS=C;LC_TELEPHONE=C;LC_MEASUREMENT=C.UTF-8;LC_IDENTIFICATION=C",
+  "comparisons": 66,
+  "failed": [
+    {
+      "ctype": "C",
+      "collate": "C",
+      "left": "utf8",
+      "right": "utf8",
+      "failed": "environment_names_member"
+    },
+    {
+      "ctype": "C",
+      "collate": "C",
+      "left": "utf8",
+      "right": "latin1",
+      "failed": ["environment_exists", "environment_get", "environment_index", "list_index", "list_assignment", "environment_assignment", "environment_names_member"]
+    },
+    {
+      "ctype": "C",
+      "collate": "C",
+      "left": "latin1",
+      "right": "utf8",
+      "failed": ["environment_exists", "environment_get", "environment_index", "list_index", "list_assignment", "environment_assignment", "environment_names_member"]
+    },
+    {
+      "ctype": "C",
+      "collate": "C",
+      "left": "latin1",
+      "right": "latin1",
+      "failed": "environment_names_member"
+    },
+    {
+      "ctype": "C",
+      "collate": "C.UTF-8",
+      "left": "utf8",
+      "right": "utf8",
+      "failed": "environment_names_member"
+    },
+    {
+      "ctype": "C",
+      "collate": "C.UTF-8",
+      "left": "utf8",
+      "right": "latin1",
+      "failed": ["environment_exists", "environment_get", "environment_index", "list_index", "list_assignment", "environment_assignment", "environment_names_member"]
+    },
+    {
+      "ctype": "C",
+      "collate": "C.UTF-8",
+      "left": "latin1",
+      "right": "utf8",
+      "failed": ["environment_exists", "environment_get", "environment_index", "list_index", "list_assignment", "environment_assignment", "environment_names_member"]
+    },
+    {
+      "ctype": "C",
+      "collate": "C.UTF-8",
+      "left": "latin1",
+      "right": "latin1",
+      "failed": "environment_names_member"
+    },
+    {
+      "ctype": "C",
+      "collate": "en_US.UTF-8",
+      "left": "utf8",
+      "right": "utf8",
+      "failed": "environment_names_member"
+    },
+    {
+      "ctype": "C",
+      "collate": "en_US.UTF-8",
+      "left": "utf8",
+      "right": "latin1",
+      "failed": ["environment_exists", "environment_get", "environment_index", "list_index", "list_assignment", "environment_assignment", "environment_names_member"]
+    },
+    {
+      "ctype": "C",
+      "collate": "en_US.UTF-8",
+      "left": "latin1",
+      "right": "utf8",
+      "failed": ["environment_exists", "environment_get", "environment_index", "list_index", "list_assignment", "environment_assignment", "environment_names_member"]
+    },
+    {
+      "ctype": "C",
+      "collate": "en_US.UTF-8",
+      "left": "latin1",
+      "right": "latin1",
+      "failed": "environment_names_member"
+    }
+  ],
+  "distinct_records": [
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C",
+      "env_size": true,
+      "env_values": true,
+      "list_values": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C.UTF-8",
+      "env_size": true,
+      "env_values": true,
+      "list_values": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "en_US.UTF-8",
+      "env_size": true,
+      "env_values": true,
+      "list_values": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C",
+      "env_size": true,
+      "env_values": true,
+      "list_values": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C.UTF-8",
+      "env_size": true,
+      "env_values": true,
+      "list_values": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "en_US.UTF-8",
+      "env_size": true,
+      "env_values": true,
+      "list_values": true
+    },
+    {
+      "ctype": "C",
+      "collate": "C",
+      "env_size": false,
+      "env_values": false,
+      "list_values": false
+    },
+    {
+      "ctype": "C",
+      "collate": "C.UTF-8",
+      "env_size": false,
+      "env_values": false,
+      "list_values": false
+    },
+    {
+      "ctype": "C",
+      "collate": "en_US.UTF-8",
+      "env_size": false,
+      "env_values": false,
+      "list_values": false
+    }
+  ],
+  "records": [
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C",
+      "left": "utf8",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C",
+      "left": "utf8",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C",
+      "left": "utf8",
+      "right": "native",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C",
+      "left": "latin1",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C",
+      "left": "latin1",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C",
+      "left": "latin1",
+      "right": "native",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C",
+      "left": "native",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C",
+      "left": "native",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C",
+      "left": "native",
+      "right": "native",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "utf8",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "utf8",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "utf8",
+      "right": "native",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "latin1",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "latin1",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "latin1",
+      "right": "native",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "native",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "native",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "native",
+      "right": "native",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "utf8",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "utf8",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "utf8",
+      "right": "native",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "latin1",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "latin1",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "latin1",
+      "right": "native",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "native",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "native",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "native",
+      "right": "native",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C",
+      "left": "utf8",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C",
+      "left": "utf8",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C",
+      "left": "utf8",
+      "right": "native",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C",
+      "left": "latin1",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C",
+      "left": "latin1",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C",
+      "left": "latin1",
+      "right": "native",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C",
+      "left": "native",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C",
+      "left": "native",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C",
+      "left": "native",
+      "right": "native",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "utf8",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "utf8",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "utf8",
+      "right": "native",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "latin1",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "latin1",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "latin1",
+      "right": "native",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "native",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "native",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "C.UTF-8",
+      "left": "native",
+      "right": "native",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "utf8",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "utf8",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "utf8",
+      "right": "native",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "latin1",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "latin1",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "latin1",
+      "right": "native",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "native",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "native",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "en_US.UTF-8",
+      "collate": "en_US.UTF-8",
+      "left": "native",
+      "right": "native",
+      "left_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "unknown",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": true
+    },
+    {
+      "ctype": "C",
+      "collate": "C",
+      "left": "utf8",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": false
+    },
+    {
+      "ctype": "C",
+      "collate": "C",
+      "left": "utf8",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": false,
+      "environment_get": false,
+      "environment_index": false,
+      "list_index": false,
+      "matrix_index": true,
+      "list_assignment": false,
+      "environment_assignment": false,
+      "environment_names_member": false
+    },
+    {
+      "ctype": "C",
+      "collate": "C",
+      "left": "latin1",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": false,
+      "environment_get": false,
+      "environment_index": false,
+      "list_index": false,
+      "matrix_index": true,
+      "list_assignment": false,
+      "environment_assignment": false,
+      "environment_names_member": false
+    },
+    {
+      "ctype": "C",
+      "collate": "C",
+      "left": "latin1",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": false
+    },
+    {
+      "ctype": "C",
+      "collate": "C.UTF-8",
+      "left": "utf8",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": false
+    },
+    {
+      "ctype": "C",
+      "collate": "C.UTF-8",
+      "left": "utf8",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": false,
+      "environment_get": false,
+      "environment_index": false,
+      "list_index": false,
+      "matrix_index": true,
+      "list_assignment": false,
+      "environment_assignment": false,
+      "environment_names_member": false
+    },
+    {
+      "ctype": "C",
+      "collate": "C.UTF-8",
+      "left": "latin1",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": false,
+      "environment_get": false,
+      "environment_index": false,
+      "list_index": false,
+      "matrix_index": true,
+      "list_assignment": false,
+      "environment_assignment": false,
+      "environment_names_member": false
+    },
+    {
+      "ctype": "C",
+      "collate": "C.UTF-8",
+      "left": "latin1",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": false
+    },
+    {
+      "ctype": "C",
+      "collate": "en_US.UTF-8",
+      "left": "utf8",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": false
+    },
+    {
+      "ctype": "C",
+      "collate": "en_US.UTF-8",
+      "left": "utf8",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": false,
+      "environment_get": false,
+      "environment_index": false,
+      "list_index": false,
+      "matrix_index": true,
+      "list_assignment": false,
+      "environment_assignment": false,
+      "environment_names_member": false
+    },
+    {
+      "ctype": "C",
+      "collate": "en_US.UTF-8",
+      "left": "latin1",
+      "right": "utf8",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "UTF-8",
+        "bytes": [
+          "w6k="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": false,
+      "environment_get": false,
+      "environment_index": false,
+      "list_index": false,
+      "matrix_index": true,
+      "list_assignment": false,
+      "environment_assignment": false,
+      "environment_names_member": false
+    },
+    {
+      "ctype": "C",
+      "collate": "en_US.UTF-8",
+      "left": "latin1",
+      "right": "latin1",
+      "left_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "right_string": {
+        "encoding": "latin1",
+        "bytes": [
+          "6Q=="
+        ],
+        "id": "233"
+      },
+      "identical": true,
+      "equal": true,
+      "unique": true,
+      "match": true,
+      "member": true,
+      "checkmate_subset": true,
+      "checkmate_string": true,
+      "environment_exists": true,
+      "environment_get": true,
+      "environment_index": true,
+      "list_index": true,
+      "matrix_index": true,
+      "list_assignment": true,
+      "environment_assignment": true,
+      "environment_names_member": false
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+R version 3.6.3 (2020-02-29) plain 84 anchors 28
+FIRST three_ternary_one_duplicate error at 766
+list(category = "error", error = "attempt to select less than one element in get1index",
+    domains = list(X = c("a", "b", "c"), Y = c("a", "b", "c")),
+    raw = list(list(X = "a"), list(X = c("a", "b")), list(X = c("a",
+    "b"))), selectors = list(c(1L, 1L), 1L, 1L))
+FIRST three_ternary_one_duplicate noncanonical_correct at 1531
+list(category = "noncanonical_correct", domains = list(X = c("a",
+"b", "c"), Y = c("a", "b", "c")), raw = list(list(X = "a"), list(
+    Y = "a"), list(Y = "a")), selectors = list(c(1L, 1L), 1L,
+    1L), selected = list(list(X = "a", X = "a"), list(Y = "a"),
+    list(Y = "a")), output = list(list(Y = "a"), list(X = "a",
+    X = "a")), truth = structure(list(X = c("a", "b", "c", "a",
+"b", "c", "a", "b", "c"), Y = c("a", "a", "a", "b", "b", "b",
+"c", "c", "c"), expected = c(TRUE, FALSE, FALSE, FALSE, FALSE,
+FALSE, FALSE, FALSE, FALSE), positional = c(TRUE, FALSE, FALSE,
+FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), named = c(TRUE, FALSE,
+FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE)), class = "data.frame", row.names = c(NA,
+-9L)))
+PROGRESS 1 of 28 seconds 14.683
+PROGRESS 2 of 28 seconds 20.432
+FIRST three_ternary_one_duplicate noncanonical_stale at 30061
+list(category = "noncanonical_stale", domains = list(X = c("a",
+"b", "c"), Y = c("a", "b", "c")), raw = list(list(X = c("a",
+"b")), list(X = "a", Y = "a"), list(X = "c", Y = "b")), selectors = list(
+    c(1L, 1L), 2:1, 2:1), selected = list(list(X = c("a", "b"
+), X = c("a", "b")), list(Y = "a", X = "a"), list(Y = "b", X = "c")),
+    output = list(list(X = "a", X = c("a", "b")), list(Y = "b",
+        X = "c")), truth = structure(list(X = c("a", "b", "c",
+    "a", "b", "c", "a", "b", "c"), Y = c("a", "a", "a", "b",
+    "b", "b", "c", "c", "c"), expected = c(FALSE, FALSE, FALSE,
+    TRUE, FALSE, FALSE, FALSE, FALSE, FALSE), positional = c(FALSE,
+    FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE), named = c(FALSE,
+    FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE)), class = "data.frame", row.names = c(NA,
+    -9L)))
+PROGRESS 3 of 28 seconds 37.252
+PROGRESS 4 of 28 seconds 42.864
+PROGRESS 5 of 28 seconds 47.848
+PROGRESS 6 of 28 seconds 52.848
+PROGRESS 7 of 28 seconds 57.89
+PROGRESS 8 of 28 seconds 62.831
+PROGRESS 9 of 28 seconds 67.806
+PROGRESS 10 of 28 seconds 72.75
+PROGRESS 11 of 28 seconds 78.209
+PROGRESS 12 of 28 seconds 83.667
+PROGRESS 13 of 28 seconds 88.901
+PROGRESS 14 of 28 seconds 94.388
+PROGRESS 15 of 28 seconds 99.572
+PROGRESS 16 of 28 seconds 104.78
+PROGRESS 17 of 28 seconds 109.993
+PROGRESS 18 of 28 seconds 115.241
+PROGRESS 19 of 28 seconds 120.7
+PROGRESS 20 of 28 seconds 125.913
+PROGRESS 21 of 28 seconds 131.334
+PROGRESS 22 of 28 seconds 136.752
+PROGRESS 23 of 28 seconds 141.886
+PROGRESS 24 of 28 seconds 147.104
+PROGRESS 25 of 28 seconds 152.291
+PROGRESS 26 of 28 seconds 157.464
+PROGRESS 27 of 28 seconds 162.623
+PROGRESS 28 of 28 seconds 167.779
+       canonical_correct     noncanonical_correct       noncanonical_stale
+                   91592                   116028                     6432
+noncanonical_named_wrong  noncanonical_both_wrong          canonical_wrong
+                       0                        0                        0
+                   error
+                   11740

@@ -42,6 +42,8 @@ Default \code{FALSE}.}
 \code{\link{Graph}}
 }
 \description{
+Deprecated in favor of \code{\link[=pipeline_bag]{pipeline_bag()}} (\code{ppl("bag")}), which has different defaults.
+
 Creates a \code{\link{Graph}} that performs bagging for a supplied graph.
 This is done as follows:
 \itemize{
@@ -54,7 +56,7 @@ This is done as follows:
 All input arguments are cloned and have no references in common with the returned \code{\link{Graph}}.
 }
 \examples{
-\dontshow{ if (requireNamespace("rpart")) \{ }
+\dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 \donttest{
 library(mlr3)
 lrn_po = po("learner", lrn("regr.rpart"))
@@ -67,5 +69,5 @@ gr = ppl("bagging", lrn_po, frac = 1, replace = TRUE,
   averager = po("regravg", collect_multiplicity = TRUE))
 resample(task, GraphLearner$new(gr), rsmp("holdout"))$aggregate()
 }
-\dontshow{ \} }
+\dontshow{\}) # examplesIf}
 }

@@ -1,0 +1,8 @@
+{
+  "configurations": 65025,
+  "useful_rules": 16256,
+  "direct_subsumption": 3536,
+  "stronger_sse1": 8624,
+  "hla_deletion": 512,
+  "twoend_enumerated": 3584
+}

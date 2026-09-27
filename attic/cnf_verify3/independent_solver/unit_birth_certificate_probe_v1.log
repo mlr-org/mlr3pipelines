@@ -1,0 +1,3 @@
+{"stats": {"formulas": 250, "unit_births": 462, "skip_certificates": 394, "requires_older_unit": 30, "outside_current_unit": 30}, "elapsed": 41.597771644592285}
+{"stats": {"formulas": 500, "unit_births": 906, "skip_certificates": 795, "requires_older_unit": 36, "outside_current_unit": 36}, "elapsed": 86.39379167556763}
+{"stats": {"formulas": 750, "unit_births": 1342, "skip_certificates": 1270, "requires_older_unit": 51, "outside_current_unit": 51}, "elapsed": 131.87532114982605}

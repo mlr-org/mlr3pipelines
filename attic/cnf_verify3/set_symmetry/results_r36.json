@@ -1,0 +1,159 @@
+{
+  "version": "R version 3.6.3 (2020-02-29)",
+  "seed": 260906164,
+  "random_cases": 600,
+  "source_sha256": "7d34ad60035509a463168752bb5f6f82d87fd7182a94a0e48461be7cdbe35fdc",
+  "cases": 615,
+  "production_sites": 290,
+  "transformations": {
+    "rename": 615,
+    "refine": 615,
+    "reorder": 615,
+    "refine_reorder": 615,
+    "quotient": 615
+  },
+  "baseline_events": 650287,
+  "paired_events": 3251435,
+  "quotient_cells_merged": 2485,
+  "constant_controls": 3,
+  "observer_controls": {
+    "cardinality": {
+      "first_difference": 1,
+      "site": {
+        "id": 1,
+        "kind": "==",
+        "owner": "simplify_cnf",
+        "expression": "length(entries[[1L]][[1L]]) == length(entries[[2L]][[1L]])"
+      },
+      "original": true,
+      "transformed": false
+    },
+    "short_circuit_label": {
+      "first_difference": 1,
+      "site": {
+        "id": 1,
+        "kind": "||_left",
+        "owner": "simplify_cnf",
+        "expression": "(\"a\" %in% entries[[1L]][[1L]])"
+      },
+      "original": true,
+      "transformed": false
+    },
+    "first_value_order": {
+      "first_difference": 1,
+      "site": {
+        "id": 1,
+        "kind": "==",
+        "owner": "simplify_cnf",
+        "expression": "entries[[1L]][[1L]][[1L]] == \"a\""
+      },
+      "original": true,
+      "transformed": false
+    }
+  },
+  "partial_fiber_control": true,
+  "value_predicates": [
+    {
+      "id": 8,
+      "kind": "if",
+      "owner": "register_unit",
+      "expression": "!length(unit_isct)",
+      "observed": ["FALSE", "TRUE"]
+    },
+    {
+      "id": 10,
+      "kind": "==",
+      "owner": "register_unit",
+      "expression": "length(unit_domains[[nu]]) == length(unit[[1L]])",
+      "observed": ["TRUE", "FALSE"]
+    },
+    {
+      "id": 29,
+      "kind": "==",
+      "owner": "apply_domain_restriction",
+      "expression": "length(clause[[symbol_idx]]) == length(restringent)",
+      "observed": ["TRUE", "FALSE"]
+    },
+    {
+      "id": 30,
+      "kind": "if",
+      "owner": "apply_domain_restriction",
+      "expression": "length(clause[[symbol_idx]]) == length(restringent)",
+      "observed": ["TRUE", "FALSE"]
+    },
+    {
+      "id": 31,
+      "kind": "==",
+      "owner": "apply_domain_restriction",
+      "expression": "length(clause[[symbol_idx]]) == clause_symbol_length_before",
+      "observed": ["TRUE", "FALSE"]
+    },
+    {
+      "id": 32,
+      "kind": "if",
+      "owner": "apply_domain_restriction",
+      "expression": "length(clause[[symbol_idx]]) == clause_symbol_length_before",
+      "observed": ["TRUE", "FALSE"]
+    },
+    {
+      "id": 33,
+      "kind": "if",
+      "owner": "apply_domain_restriction",
+      "expression": "!length(clause[[symbol_idx]])",
+      "observed": ["FALSE", "TRUE"]
+    },
+    {
+      "id": 217,
+      "kind": "==",
+      "owner": "simplify_cnf",
+      "expression": "length(range_outer) == length(range_inner)",
+      "observed": ["TRUE", "FALSE"]
+    },
+    {
+      "id": 258,
+      "kind": "==",
+      "owner": "simplify_cnf",
+      "expression": "length(range_new) == length(universe[[symbol]])",
+      "observed": "FALSE"
+    },
+    {
+      "id": 259,
+      "kind": "if",
+      "owner": "simplify_cnf",
+      "expression": "length(range_new) == length(universe[[symbol]])",
+      "observed": "FALSE"
+    },
+    {
+      "id": 276,
+      "kind": "==",
+      "owner": "simplify_cnf",
+      "expression": "length(range_new) == length(universe[[symbol]])",
+      "observed": "FALSE"
+    },
+    {
+      "id": 277,
+      "kind": "if",
+      "owner": "simplify_cnf",
+      "expression": "length(range_new) == length(universe[[symbol]])",
+      "observed": "FALSE"
+    }
+  ],
+  "site_kind_counts": {
+    "!=": 15,
+    "&&_left": 8,
+    "&&_right": 8,
+    "<=": 6,
+    "==": 18,
+    ">": 5,
+    "||_left": 26,
+    "||_right": 26,
+    "all": 8,
+    "any": 1,
+    "enter": 13,
+    "for_iteration": 23,
+    "for_sequence": 23,
+    "if": 108,
+    "repeat_iteration": 2
+  },
+  "success": true
+}

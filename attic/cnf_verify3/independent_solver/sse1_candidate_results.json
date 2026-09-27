@@ -1,0 +1,182 @@
+{
+  "stats": {
+    "formulas": 5000,
+    "baseline_seconds": 77.7020000000017,
+    "candidate_seconds": 67.97599999999906,
+    "residual_sse2": 3
+  },
+  "fixtures": [
+    {
+      "file": "minimized_sse1.json",
+      "result": [
+        {
+          "X0": "3",
+          "X2": "4"
+        },
+        {
+          "X1": "3",
+          "X0": "2"
+        },
+        {
+          "X2": [
+            "4",
+            "2"
+          ]
+        }
+      ],
+      "residual": []
+    },
+    {
+      "file": "minimized_first_order_phase_sse1.json",
+      "result": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X1": [
+            "4",
+            "0"
+          ]
+        }
+      ],
+      "residual": []
+    },
+    {
+      "file": "minimized_sse2.json",
+      "result": [
+        {
+          "X0": [
+            "5",
+            "4",
+            "0"
+          ],
+          "X2": [
+            "2",
+            "4"
+          ]
+        },
+        {
+          "X2": [
+            "2",
+            "1"
+          ],
+          "X1": "6"
+        },
+        {
+          "X0": "1",
+          "X2": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "X2": "0",
+          "X0": [
+            "1",
+            "4"
+          ]
+        },
+        {
+          "X0": [
+            "4",
+            "0"
+          ],
+          "X1": [
+            "0",
+            "6"
+          ]
+        }
+      ],
+      "residual": [
+        {
+          "kind": "sse2",
+          "donor_a": 1,
+          "donor_b": 3,
+          "target": 4,
+          "intersect_symbol": "X2",
+          "restrict_symbol": "X0",
+          "removed": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "directed_oneend_shrink_min.json",
+      "result": [
+        {
+          "T": [
+            "0",
+            "1",
+            "2"
+          ],
+          "C": "0"
+        },
+        {
+          "S": "0",
+          "T": "0"
+        },
+        {
+          "S": "1",
+          "T": [
+            "2",
+            "3"
+          ]
+        },
+        {
+          "U": "1",
+          "T": [
+            "0",
+            "2"
+          ]
+        }
+      ],
+      "residual": [
+        {
+          "kind": "sse2",
+          "donor_a": 1,
+          "donor_b": 2,
+          "target": 0,
+          "intersect_symbol": "S",
+          "restrict_symbol": "T",
+          "removed": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "minimized_subsumption.json",
+      "result": [
+        {
+          "X0": "2"
+        },
+        {
+          "X2": "2",
+          "X0": "2"
+        }
+      ],
+      "residual": [
+        {
+          "kind": "subsumption",
+          "donor": 0,
+          "target": 1
+        }
+      ]
+    },
+    {
+      "file": "minimized_deferred_skip.json",
+      "result": [
+        {
+          "X0": "5"
+        },
+        {
+          "X1": "6"
+        }
+      ],
+      "residual": []
+    }
+  ],
+  "elapsed": 343.8404016494751
+}

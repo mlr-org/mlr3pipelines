@@ -9,7 +9,7 @@ test_that("apply general tests", {
   expect_datapreproc_pipeop_class(PipeOpColApply, task = task,
     constargs = list(param_vals = list(applicator = as.character)))
 
-  expect_datapreproc_pipeop_class(PipeOpColApply, task = mlr_tasks$get("pima"),
+  expect_datapreproc_pipeop_class(PipeOpColApply, task = mlr_tasks$get("diabetes"),
     constargs = list(param_vals = list(applicator = as.numeric)))
 
 })
@@ -120,7 +120,7 @@ test_that("apply results look as they should", {
 
 test_that("empty task", {
 
-  task = tsk("iris")$filter(0L)
+  task = tsk("iris")$filter(integer(0))
   po = PipeOpColApply$new()
   po$param_set$values$applicator = function(x) as.integer(x)
 

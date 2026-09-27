@@ -1,7 +1,90 @@
+# Compare data.tables using data.table's equality semantics.
+expect_equal_data_table = function(object, expected,
+  ignore_col_order = FALSE, ignore_row_order = FALSE, trim_levels = TRUE,
+  check_attributes = TRUE, tolerance = sqrt(.Machine$double.eps)) {
+  act = testthat::quasi_label(rlang::enquo(object), arg = "object")
+  exp = testthat::quasi_label(rlang::enquo(expected), arg = "expected")
+
+  # Test instead of asserts since an input of wrong type should be a failure.
+  if (!data.table::is.data.table(act$val)) {
+    testthat::fail(sprintf("Expected %s to be a data.table.", act$lab))
+  }
+  if (!data.table::is.data.table(exp$val)) {
+    testthat::fail(sprintf("Expected %s to be a data.table.", exp$lab))
+  }
+
+  checkmate::assert_flag(ignore_col_order)
+  checkmate::assert_flag(ignore_row_order)
+  checkmate::assert_flag(trim_levels)
+  checkmate::assert_flag(check_attributes)
+  checkmate::assert_number(tolerance, lower = 0, finite = TRUE)
+
+  # delegates to all.equal.data.table
+  comparison = base::all.equal(
+    act$val,
+    exp$val,
+    trim.levels = trim_levels,
+    check.attributes = check_attributes,
+    ignore.col.order = ignore_col_order,
+    ignore.row.order = ignore_row_order,
+    tolerance = tolerance
+  )
+
+  if (isTRUE(comparison)) {
+    testthat::pass()
+  } else {
+    testthat::fail(c(
+      sprintf("Expected %s to equal %s as data.tables.", act$lab, exp$lab),
+      "Differences:",
+      paste0("- ", comparison)
+    ))
+  }
+
+  invisible(act$val)
+}
+
+# Waldo enumerates R6 environments by value, which evaluates active bindings.
+# Use the registered all.equal.R6 method, which deliberately excludes them.
+expect_equal_r6 = function(object, expected, ...) {
+  act = testthat::quasi_label(rlang::enquo(object), arg = "object")
+  exp = testthat::quasi_label(rlang::enquo(expected), arg = "expected")
+
+  # Test instead of asserts since an input of wrong type should be a failure.
+  if (!R6::is.R6(act$val)) {
+    testthat::fail(sprintf("Expected %s to be an R6 object.", act$lab))
+  }
+  if (!R6::is.R6(exp$val)) {
+    testthat::fail(sprintf("Expected %s to be an R6 object.", exp$lab))
+  }
+
+  comparison = base::all.equal(
+    act$val,
+    exp$val,
+    ...,
+    check.environment = FALSE
+  )
+
+  if (isTRUE(comparison)) {
+    testthat::pass()
+  } else {
+    testthat::fail(c(
+      sprintf("Expected %s to equal %s as R6 objects.", act$lab, exp$lab),
+      "Differences:",
+      paste0("- ", comparison)
+    ))
+  }
+
+  invisible(act$val)
+}
+
 # expect that 'one' is a deep clone of 'two'
 expect_deep_clone = function(one, two) {
   # is equal
-  expect_equal(one, two)
+  if (R6::is.R6(one)) {
+    expect_equal_r6(one, two)
+  } else {
+    expect_equal(one, two)
+  }
   visited = new.env()
   visited_b = new.env()
   expect_references_differ = function(a, b, path) {
@@ -79,7 +162,11 @@ expect_deep_clone = function(one, two) {
 }
 
 expect_shallow_clone = function(one, two) {
-  expect_equal(one, two)
+  if (R6::is.R6(one)) {
+    expect_equal_r6(one, two)
+  } else {
+    expect_equal(one, two)
+  }
   if (base::is.environment(one)) {
     addr_a = data.table::address(one)
     addr_b = data.table::address(two)
@@ -97,7 +184,7 @@ expect_pipeop = function(po, check_ps_default_values = TRUE) {
   expect_class(po$param_set, "ParamSet", label = label)
   expect_list(po$param_set$values, names = "unique", label = label)
   expect_flag(po$is_trained, label = label)
-  expect_output(print(po), "PipeOp:", label = label)
+  expect_output(print(po), "PipeOp", label = label)
   expect_character(po$packages, any.missing = FALSE, unique = TRUE, label = label)
   expect_function(po$train, nargs = 1)
   expect_function(po$predict, nargs = 1)
@@ -126,29 +213,16 @@ expect_valid_pipeop_param_set = function(po, check_ps_default_values = TRUE) {
   ps = po$param_set
   expect_true(every(ps$tags, function(x) length(intersect(c("train", "predict"), x)) > 0L))
 
-  if (mlr3pipelines:::paradox_info$is_old) {
-    uties = ps$params[ps$ids("ParamUty")]
-    if (length(uties)) {
-      test_value = NO_DEF  # custom_checks should fail for NO_DEF
-      results = map(uties, function(uty) {
-        uty$custom_check(test_value)
-      })
-      expect_true(all(map_lgl(results, function(result) {
-        length(result) == 1L && (is.character(result) || result == TRUE)  # result == TRUE is necessary because default is function(x) TRUE
-      })), label = "custom_check returns string on failure")
-    }
-  } else {
-    uties = ps$ids("ParamUty")
-    if (length(uties)) {
-      test_value = NO_DEF  # custom_checks should fail for NO_DEF
-      results = map(uties, function(uty) {
-        psn = ps$subset(uty, allow_dangling_dependencies = TRUE)
-        psn$check(structure(list(test_value), names = uty))
-      })
-      expect_true(all(map_lgl(results, function(result) {
-        length(result) == 1L && (is.character(result) || result == TRUE)  # result == TRUE is necessary because default is function(x) TRUE
-      })), label = "custom_check returns string on failure")
-    }
+  uties = ps$ids("ParamUty")
+  if (length(uties)) {
+    test_value = NO_DEF  # custom_checks should fail for NO_DEF
+    results = map(uties, function(uty) {
+      psn = ps$subset(uty, allow_dangling_dependencies = TRUE)
+      psn$check(structure(list(test_value), names = uty))
+    })
+    expect_true(all(map_lgl(results, function(result) {
+      length(result) == 1L && (is.character(result) || result == TRUE)  # result == TRUE is necessary because default is function(x) TRUE
+    })), label = "custom_check returns string on failure")
   }
 
   if (check_ps_default_values) {
@@ -210,6 +284,7 @@ expect_pipeop_class = function(poclass, constargs = list(), check_ps_default_val
 #  - predicting on task that has different column layout than training gives an error
 #  - training on task with no columns returns task with no columns
 #  - training on task when affect_columns is FALSE does not change task
+#  - training on classification tasks with empty target level
 #  - predicting on task with no columns returns task with no columns (if training happened on the same)
 #  - predicting on task with no rows returns task with no rows (if predict_rows_independent)
 #  - predicting without target column works
@@ -217,6 +292,8 @@ expect_pipeop_class = function(poclass, constargs = list(), check_ps_default_val
 #  - training / prediction does not change input task
 #  - is_trained is true
 #  - deep cloning clones the state
+#  - preproc() gives no error with Task indata
+#  - preproc() gives no error with data.table indata if PipeOp works without target column
 #
 # `task` must have at least two feature columns and at least two rows.
 expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
@@ -228,7 +305,6 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   # NOTE
   # The 'tolerance' parameter is not used in many places yet; if tolerance becomes a problem, add the
   # 'tolerance = tolerance' argument to `expect_equal`.
-
 
   original_clone = task$clone(deep = TRUE)
   expect_shallow_clone(task, original_clone)
@@ -297,8 +373,8 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
     }
     if (predict_like_train) {
       # if deterministic_train is FALSE then `trained` may be different from `predicted`!
-      expect_equal(trained2$data(), predicted2$data(), ignore.col.order = TRUE, tolerance = tolerance)
-      expect_equal(trained3$data(), predicted3$data(), ignore.col.order = TRUE, tolerance = tolerance)
+      expect_equal_data_table(trained2$data(), predicted2$data(), ignore_col_order = TRUE, tolerance = tolerance)
+      expect_equal_data_table(trained3$data(), predicted3$data(), ignore_col_order = TRUE, tolerance = tolerance)
     }
   }
   if (predict_rows_independent) {
@@ -343,10 +419,10 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
     # NOTE: the following should ensure that data has not changed
     # but at least one pipeop adds a new column even with 0 affect_cols, so we only check that original task's features have not changed.
     trained = po2$train(list(task))[[1]]
-    expect_equal(trained$data(cols = task$feature_names), task$data(cols = task$feature_names), ignore.col.order = TRUE, tolerance = tolerance)
+    expect_equal_data_table(trained$data(cols = task$feature_names), task$data(cols = task$feature_names), ignore_col_order = TRUE, tolerance = tolerance)
 
     predicted = po2$predict(list(task))[[1]]
-    expect_equal(predicted$data(cols = task$feature_names), task$data(cols = task$feature_names), ignore.col.order = TRUE, tolerance = tolerance)
+    expect_equal_data_table(predicted$data(cols = task$feature_names), task$data(cols = task$feature_names), ignore_col_order = TRUE, tolerance = tolerance)
 
     predicted2 = po2$predict(list(emptytask))[[1]]
     expect_equal(sort(predicted2$feature_names), sort(emptytaskfnames))
@@ -381,22 +457,33 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
     explicitpredresL0 = cbind(po_orig$predict(list(halftask$clone()$filter(task$row_ids[0])))[[1]]$data(), otherhalf[integer(0), ])
 
     if (deterministic_train) {
-      expect_equal(halftrainres, explicittrainres, ignore.col.order = TRUE, tolerance = tolerance)
+      expect_equal_data_table(halftrainres, explicittrainres, ignore_col_order = TRUE, tolerance = tolerance)
     }
     if (deterministic_predict) {
       if (deterministic_train) {
-        expect_equal(halfpredres, explicitpredres, ignore.col.order = TRUE, tolerance = tolerance)
-        expect_equal(halfpredresL1, explicitpredresL1, ignore.col.order = TRUE, tolerance = tolerance)
+        expect_equal_data_table(halfpredres, explicitpredres, ignore_col_order = TRUE, tolerance = tolerance)
+        expect_equal_data_table(halfpredresL1, explicitpredresL1, ignore_col_order = TRUE, tolerance = tolerance)
       }
-      expect_equal(halfpredresL1, halfpredres[1, ], ignore.col.order = TRUE, tolerance = tolerance)
+      expect_equal_data_table(halfpredresL1, halfpredres[1, ], ignore_col_order = TRUE, tolerance = tolerance)
       if (predict_like_train) {
-        expect_equal(halfpredres, halftrainres, ignore.col.order = TRUE, tolerance = tolerance)
-        expect_equal(explicitpredres, explicittrainres, ignore.col.order = TRUE, tolerance = tolerance)
+        expect_equal_data_table(halfpredres, halftrainres, ignore_col_order = TRUE, tolerance = tolerance)
+        expect_equal_data_table(explicitpredres, explicittrainres, ignore_col_order = TRUE, tolerance = tolerance)
       }
     }
-    expect_equal(halfpredresL0, explicitpredresL0, ignore.col.order = TRUE, tolerance = tolerance)
-    expect_equal(halfpredresL0, halfpredres[integer(0), ], ignore.col.order = TRUE, tolerance = tolerance)
+    expect_equal_data_table(halfpredresL0, explicitpredresL0, ignore_col_order = TRUE, tolerance = tolerance)
+    expect_equal_data_table(halfpredresL0, halfpredres[integer(0), ], ignore_col_order = TRUE, tolerance = tolerance)
 
+  }
+
+  # test that training works for classification tasks with empty target level, #881
+  if (po$input$train != "Task" && inherits(task, "TaskClassif")) {
+    task3 = task$clone(deep = TRUE)
+    new_levels = list(c(task3$levels(cols = task3$target_names)[[task3$target_names]], "empty_level"))
+    task3$set_levels(set_names(new_levels, task3$target_names))
+    expect_no_error({
+      train_out = po$train(list(task3))
+      expect_contains(train_out[[1L]]$levels(cols = task$target_names)[[1L]], "empty_level")
+    })
   }
 
   po$train(list(task))
@@ -404,7 +491,6 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   norowtask = task$clone(deep = TRUE)$filter(integer(0))
   whichrow = task$row_ids[[sample.int(task$nrow, 1)]]
   onerowtask = task$clone(deep = TRUE)$filter(whichrow)
-
 
   predicted = po$predict(list(norowtask))[[1]]
   if (predict_rows_independent) {
@@ -415,7 +501,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   if (predict_rows_independent) {
     expect_equal(predicted$nrow, 1)
     if (deterministic_predict) {
-      expect_equal(predicted$data(), po$predict(list(task))[[1]]$filter(whichrow)$data(), ignore.col.order = TRUE, tolerance = tolerance)
+      expect_equal_data_table(predicted$data(), po$predict(list(task))[[1]]$filter(whichrow)$data(), ignore_col_order = TRUE, tolerance = tolerance)
     }
   }
 
@@ -445,7 +531,8 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   expect_true(task$nrow >= 5)
 
   # overlap between use and test rows
-  tasktrain$divide(ids = tasktrain$row_roles$use[seq(n_use - 2, n_use)], remove = FALSE)
+  tasktrain$internal_valid_task = tasktrain$clone(deep = TRUE)$filter(tasktrain$row_roles$use[seq(n_use - 2, n_use)])
+
   tasktrain$row_roles$use = tasktrain$row_roles$use[seq(1, n_use - 2)]
 
   taskpredict = tasktrain$clone(deep = TRUE)
@@ -455,7 +542,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   taskouttrain = po$train(list(tasktrain))[[1L]]
   taskoutpredict = po$predict(list(taskpredict))[[1L]]
 
-  # other columns like weights are present during traing but not during predict
+  # other columns like weights are present during training but not during predict
   cols = unname(unlist(taskouttrain$col_roles[c("feature", "target")]))
   dtrain = taskouttrain$internal_valid_task$data(cols = cols)
   dpredict = taskoutpredict$data(cols = cols)
@@ -466,6 +553,19 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
 
   if (deterministic_predict && deterministic_train) {
     expect_equal(dtrain, dpredict)
+  }
+
+  # Test that preproc() works with PipeOp
+  expect_no_error(mlr3pipelines::preproc(task, po))
+  expect_no_error(mlr3pipelines::preproc(task, po, predict = TRUE))
+  if (po$input$train == "Task") {  # implies that PipeOp does not require target column
+    expect_no_error({
+      # Need to explicitly refer to mlr3pipelines namespace because this is loaded from inst/
+      dtout = mlr3pipelines::preproc(task$data(cols = task$feature_names), po)
+      expect_data_table(dtout)
+      dtout = mlr3pipelines::preproc(task$data(cols = task$feature_names), po, predict = TRUE)
+      expect_data_table(dtout)
+    })
   }
 }
 
@@ -499,11 +599,11 @@ predict_pipeop = function(po, inputs) {
 expect_pipeop_result_features = function(po, traintask, trainresult,
   predicttask = NULL, predictresult = NULL) {
   result = train_pipeop(po, list(traintask))
-  expect_equal(result$data(cols = result$feature_names), trainresult, ignore.col.order = TRUE, tolerance = tolerance)
+  expect_equal_data_table(result$data(cols = result$feature_names), trainresult, ignore_col_order = TRUE, tolerance = tolerance)
   assert(is.null(predicttask) == is.null(predictresult))
   if (!is.null(predicttask)) {
     result = predict_pipeop(po, list(traintask))
-    expect_equal(result$data(cols = result$feature_names), predicttask, ignore.col.order = TRUE, tolerance = tolerance)
+    expect_equal_data_table(result$data(cols = result$feature_names), predicttask, ignore_col_order = TRUE, tolerance = tolerance)
   }
 }
 
@@ -578,9 +678,17 @@ expect_multiplicity = function(x) {
 # See https://github.com/r-lib/R6/issues/208
 # This is quite sloppy right now.
 r6_to_list = function(x) {
-  actives = c(".__enclos_env__", names(x[[".__enclos_env__"]][[".__active__"]]))
+  active_bindings = x[[".__enclos_env__"]][[".__active__"]]
+  active_names = names(active_bindings)
+  actives = c(".__enclos_env__", active_names)
   ll = sapply(setdiff(names(x), actives), get, x, simplify = FALSE)
-  ll[[".__enclos_env__"]] = list(`.__active__` = x[[".__enclos_env__"]][[".__active__"]], private = x[[".__enclos_env__"]][["private"]])
+  private = x[[".__enclos_env__"]][["private"]]
+  if ("label" %in% active_names) {
+    # .label lazily caches the value of the active label binding and is not state.
+    private_names = sort(setdiff(names(private), ".label"))
+    private = sapply(private_names, get, private, simplify = FALSE)
+  }
+  ll[[".__enclos_env__"]] = list(`.__active__` = active_bindings, private = private)
   if (!is.null(x[[".__enclos_env__"]][["super"]])) {
     ll[[".__enclos_env__"]][["super"]] = r6_to_list(x[[".__enclos_env__"]][["super"]])
   }

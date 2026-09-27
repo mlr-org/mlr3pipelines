@@ -1,0 +1,51 @@
+{
+  "totals": {
+    "formulas": 17902,
+    "surviving_targets": 43010,
+    "hla": 24145,
+    "subsumption": 4064
+  },
+  "shards": [
+    {
+      "shard": 0,
+      "stats": {
+        "formulas": 4478,
+        "surviving_targets": 10742,
+        "hla": 5963,
+        "subsumption": 1016
+      },
+      "elapsed": 25.0849289894104
+    },
+    {
+      "shard": 1,
+      "stats": {
+        "surviving_targets": 10782,
+        "formulas": 4476,
+        "subsumption": 1024,
+        "hla": 5996
+      },
+      "elapsed": 25.592588901519775
+    },
+    {
+      "shard": 2,
+      "stats": {
+        "surviving_targets": 10781,
+        "formulas": 4474,
+        "hla": 6113,
+        "subsumption": 1033
+      },
+      "elapsed": 26.133124828338623
+    },
+    {
+      "shard": 3,
+      "stats": {
+        "surviving_targets": 10705,
+        "formulas": 4474,
+        "hla": 6073,
+        "subsumption": 991
+      },
+      "elapsed": 25.53016757965088
+    }
+  ],
+  "elapsed": 26.202504873275757
+}

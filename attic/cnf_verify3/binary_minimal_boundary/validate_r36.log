@@ -1,0 +1,10 @@
+Parity cycle: 2 variables, 4 clauses, complement distances 2,2,2,2 ; production FALSE: TRUE
+  Models after each single-clause deletion: 1,1,1,1
+Parity cycle: 3 variables, 6 clauses, complement distances 3,3,3,3,3,3 ; production FALSE: TRUE
+  Models after each single-clause deletion: 1,1,1,1,1,1
+Parity cycle: 4 variables, 8 clauses, complement distances 4,4,4,4,4,4,4,4 ; production FALSE: FALSE
+  Models after each single-clause deletion: 1,1,1,1,1,1,1,1
+Variable-sign, variable-name, and shuffled input checks: 384
+All within-clause symbol orderings: 256
+Unmodified production source MD5: 376aac6eb81334e751e9351f9eddc02f
+R: R version 3.6.3 (2020-02-29)

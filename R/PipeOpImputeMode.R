@@ -5,10 +5,8 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
-#' Impute features by their mode. Supports factors as well as logical and numerical features.
+#' Impute features by their mode. Supports factors, logical, numerical, POSIXct and Date features.
 #' If multiple modes are present then imputed values are sampled randomly from them.
-#'
-#'
 #'
 #' @section Construction:
 #' ```
@@ -42,13 +40,16 @@
 #' Note that every random imputation is drawn independently, so different values may be imputed
 #' if multiple values are missing.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @examples
 #' library("mlr3")
 #'
-#' task = tsk("pima")
+#' task = tsk("diabetes")
 #' task$missings()
 #'
 #' po = po("imputemode")
@@ -65,7 +66,7 @@ PipeOpImputeMode = R6Class("PipeOpImputeMode",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputemode", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals, feature_types = c("factor", "integer", "logical", "numeric", "ordered"))
+      super$initialize(id, param_vals = param_vals, feature_types = c("factor", "integer", "logical", "numeric", "ordered", "POSIXct", "Date"))
     }
   ),
   private = list(

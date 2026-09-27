@@ -1,0 +1,53 @@
+Runtime: R version 4.6.1 (2026-06-24)
+Package scope: isolated six-file CNF package; unchanged production code/registrations
+Dependency: checkmate 2.3.4
+Dependency: mlr3misc 0.23.0
+Dependency: digest 0.6.39
+Install exit status: 0
+Resolved binary methods are byte-compiled namespace closures.
+Shared resolved methods: & FALSE; | FALSE
+$scope
+[1] "Isolated six-file production CNF package, installed and byte-compiled"
+
+$stage
+[1] "baseline"
+
+$runtime
+[1] "R version 4.6.1 (2026-06-24)"
+
+$shared_resolved_methods
+    &     |
+FALSE FALSE
+
+$dependency_versions
+checkmate  mlr3misc    digest
+  "2.3.4"  "0.23.0"  "0.6.39"
+
+$binary_cases
+[1] 578
+
+$binary_errors
+[1] 0
+
+$binary_warning_cases
+[1] 0
+
+$binary_class_failures_without_error
+[1] 0
+
+$binary_truth_failures_without_error
+[1] 0
+
+$universe_error_cases
+[1] 36
+
+$negation_cases
+[1] 34
+
+$composition_cases
+[1] 6
+
+$expected_old_R_composition_errors
+[1] 0
+
+PASS: all installed-namespace checks matched their expected baseline/current outcomes.

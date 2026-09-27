@@ -1,0 +1,274 @@
+[
+  {
+    "tag": "R-3-6-3",
+    "file": "sysutils.c",
+    "url": "https://svn.r-project.org/R/tags/R-3-6-3/src/main/sysutils.c",
+    "sha256": "44936eb8b85696b35c2bfe818d757e970c390e57cc2b0c5c9059aa9c0fe5f563",
+    "locations": {
+      "SEXP installTrChar(": [
+        960
+      ],
+      "const char *translateChar(": [
+        941
+      ],
+      "<U+%04X>": [
+        916
+      ],
+      "<%02x>": [
+        706,
+        924,
+        929,
+        1043,
+        1146,
+        1253,
+        1359
+      ],
+      "unable to translate": []
+    }
+  },
+  {
+    "tag": "R-3-6-3",
+    "file": "memory.c",
+    "url": "https://svn.r-project.org/R/tags/R-3-6-3/src/main/memory.c",
+    "sha256": "104fb9b2adccd9388c8b1f23be7c99f8073a14ce5b9164dd62df850b5fe94842",
+    "locations": {
+      "int Seql(": [
+        4366
+      ]
+    }
+  },
+  {
+    "tag": "R-3-6-3",
+    "file": "subscript.c",
+    "url": "https://svn.r-project.org/R/tags/R-3-6-3/src/main/subscript.c",
+    "sha256": "1b52a64f4ad04a42204b9909d0300f334d37e2ac32b7de9809c1041067fad599",
+    "locations": {
+      "ss = translateChar(": [
+        225
+      ],
+      "streql(translateChar(STRING_ELT(names, i)), ss)": [
+        228
+      ]
+    }
+  },
+  {
+    "tag": "R-3-6-3",
+    "file": "subset.c",
+    "url": "https://svn.r-project.org/R/tags/R-3-6-3/src/main/subset.c",
+    "sha256": "bfe1bf97151420b9b5f96a9dc2a65c08877425fefff5a8506384c10c36642c2f",
+    "locations": {
+      "findVarInFrame(x, installTrChar": [
+        968,
+        1337
+      ]
+    }
+  },
+  {
+    "tag": "R-3-6-3",
+    "file": "subassign.c",
+    "url": "https://svn.r-project.org/R/tags/R-3-6-3/src/main/subassign.c",
+    "sha256": "ec03ac97ad5c8fef15ef9a95e517db0109d8a1ea09126581dd59a9a3c21132a9",
+    "locations": {
+      "defineVar(installTrChar": [
+        1788
+      ]
+    }
+  },
+  {
+    "tag": "R-3-6-3",
+    "file": "envir.c",
+    "url": "https://svn.r-project.org/R/tags/R-3-6-3/src/main/envir.c",
+    "sha256": "a73e745481d4e5b123d6d61b3dc86cbffa3078779bd373ba0d7ba29703344f36",
+    "locations": {
+      "name = installTrChar(STRING_ELT(CAR(args), 0))": [
+        1825
+      ],
+      "t1 = installTrChar(STRING_ELT(CAR(args), 0))": [
+        2011
+      ],
+      "static void FrameNames(": [
+        2636
+      ]
+    }
+  },
+  {
+    "tag": "R-3-6-3",
+    "file": "unique.c",
+    "url": "https://svn.r-project.org/R/tags/R-3-6-3/src/main/unique.c",
+    "sha256": "3689a0b693a3292da986d5a176dfe55b0e3b760a9b61abe9161d71aa7d41153c",
+    "locations": {
+      "return Seql(xi, yj)": [
+        253
+      ],
+      "translateCharUTF8(STRING_ELT(x, indx))": [
+        181
+      ]
+    }
+  },
+  {
+    "tag": "R-3-6-3",
+    "file": "relop.c",
+    "url": "https://svn.r-project.org/R/tags/R-3-6-3/src/main/relop.c",
+    "sha256": "f3c014893c17754c313dd3fcbe5bc4f339601ee6490fc7bd5050c4a37c45575e",
+    "locations": {
+      "Seql(c1, c2)": [
+        432,
+        443
+      ]
+    }
+  },
+  {
+    "tag": "R-3-6-3",
+    "file": "names.c",
+    "url": "https://svn.r-project.org/R/tags/R-3-6-3/src/main/names.c",
+    "sha256": "58588ff4a5e93fb8443d93622570f18b523ab551d34fee38e4c8a905a7a5afac",
+    "locations": {
+      "SEXP install(const char *name)": [
+        1222
+      ],
+      "strcmp(name, CHAR(PRINTNAME(CAR(sym))))": [
+        1231
+      ]
+    }
+  },
+  {
+    "tag": "R-4-6-1",
+    "file": "sysutils.c",
+    "url": "https://svn.r-project.org/R/tags/R-4-6-1/src/main/sysutils.c",
+    "sha256": "faf93145e370fa12d2c87fc5e64bd68db03ecfdadf5e9d3c8768209aa4f0a365",
+    "locations": {
+      "SEXP installTrChar(": [
+        1869
+      ],
+      "const char *translateChar(": [
+        1825
+      ],
+      "<U+%04X>": [
+        825,
+        833,
+        1771
+      ],
+      "<%02x>": [
+        887,
+        1779,
+        1784,
+        1966,
+        2159,
+        2288
+      ],
+      "unable to translate": [
+        1803,
+        1808,
+        1988,
+        1994,
+        2181,
+        2187
+      ]
+    }
+  },
+  {
+    "tag": "R-4-6-1",
+    "file": "memory.c",
+    "url": "https://svn.r-project.org/R/tags/R-4-6-1/src/main/memory.c",
+    "sha256": "a4e709acb428a6c59634cc812932f5fe34347a46513055854db0b3d4969a6bd9",
+    "locations": {
+      "int Seql(": [
+        5006
+      ]
+    }
+  },
+  {
+    "tag": "R-4-6-1",
+    "file": "subscript.c",
+    "url": "https://svn.r-project.org/R/tags/R-4-6-1/src/main/subscript.c",
+    "sha256": "463672e34f3e98d8edb35869f49ff4a364aed5a698c1a0053661f2bbbbbbfeb3",
+    "locations": {
+      "ss = translateChar(": [
+        279
+      ],
+      "streql(translateChar(STRING_ELT(names, i)), ss)": [
+        282
+      ]
+    }
+  },
+  {
+    "tag": "R-4-6-1",
+    "file": "subset.c",
+    "url": "https://svn.r-project.org/R/tags/R-4-6-1/src/main/subset.c",
+    "sha256": "74d927da1b25cfa88a2dbc98ef4ca2c5e2b4878c447bac1d73ba8935788ae6ce",
+    "locations": {
+      "findVarInFrame(x, installTrChar": [
+        1008,
+        1401
+      ]
+    }
+  },
+  {
+    "tag": "R-4-6-1",
+    "file": "subassign.c",
+    "url": "https://svn.r-project.org/R/tags/R-4-6-1/src/main/subassign.c",
+    "sha256": "4b2843ccc63cc8af9d67f1e60e14ebbe1e77847c5a3b68be24d0b10ebe32a6aa",
+    "locations": {
+      "defineVar(installTrChar": [
+        1829
+      ]
+    }
+  },
+  {
+    "tag": "R-4-6-1",
+    "file": "envir.c",
+    "url": "https://svn.r-project.org/R/tags/R-4-6-1/src/main/envir.c",
+    "sha256": "f5a241c9e6509630ae3723db13d0a53f76201b6208cca0f8241648ae9579aeb0",
+    "locations": {
+      "name = installTrChar(STRING_ELT(CAR(args), 0))": [
+        2209
+      ],
+      "t1 = installTrChar(STRING_ELT(CAR(args), 0))": [
+        2426
+      ],
+      "static void FrameNames(": [
+        3091
+      ]
+    }
+  },
+  {
+    "tag": "R-4-6-1",
+    "file": "unique.c",
+    "url": "https://svn.r-project.org/R/tags/R-4-6-1/src/main/unique.c",
+    "sha256": "410523f0423f85bfed96f6d9488889d21d67cd5a131d665094d4fdb427e3eb00",
+    "locations": {
+      "return Seql(xi, yj)": [
+        303
+      ],
+      "translateCharUTF8(STRING_ELT(x, indx))": [
+        231
+      ]
+    }
+  },
+  {
+    "tag": "R-4-6-1",
+    "file": "relop.c",
+    "url": "https://svn.r-project.org/R/tags/R-4-6-1/src/main/relop.c",
+    "sha256": "671021188791c48fb45f633f50c17e878f561cd083e3417c7a98b1125cd207e7",
+    "locations": {
+      "Seql(c1, c2)": [
+        571,
+        582
+      ]
+    }
+  },
+  {
+    "tag": "R-4-6-1",
+    "file": "names.c",
+    "url": "https://svn.r-project.org/R/tags/R-4-6-1/src/main/names.c",
+    "sha256": "251a73a49ccc462404dc78c14cded4c63a7a7707093db777d006608a6418fac0",
+    "locations": {
+      "SEXP install(const char *name)": [
+        1269
+      ],
+      "strcmp(name, CHAR(PRINTNAME(CAR(sym))))": [
+        1278
+      ]
+    }
+  }
+]

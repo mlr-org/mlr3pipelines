@@ -1,0 +1,6 @@
+exp04: 2 vars, domain 3 -> pool of 48 clauses; k in [1, 4]: 213,052 formulas
+  k=1: 48 formulas checked, 0 failures  (0s elapsed)
+  k=2: 1,128 formulas checked, 0 failures  (0s elapsed)
+  k=3: 17,296 formulas checked, 0 failures  (3s elapsed)
+  k=4: 194,580 formulas checked, 0 failures  (36s elapsed)
+exp04 done: 213,052 formulas, 0 failures

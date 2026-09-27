@@ -1,0 +1,10 @@
+R: R version 4.6.1 (2026-06-24)
+             cases      callback_rows    cartesian_pairs    surviving_pairs
+               795               1428               4428               3262
+tautological_pairs         valuations              swaps
+              1166              60878                279
+Cumulative-parent mutation rejected; disagreeing valuations: 3
+   x y z w
+7  0 1 1 0
+11 0 1 0 1
+15 0 1 1 1

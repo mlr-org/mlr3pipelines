@@ -1,0 +1,7 @@
+n=1 productive=1 order_only=0 mass=[9, 8, 8]
+n=2 productive=2 order_only=0 mass=[17, 16, 15, 15]
+n=3 productive=3 order_only=0 mass=[26, 25, 24, 23, 23]
+n=4 productive=4 order_only=0 mass=[36, 35, 34, 33, 32, 32]
+n=5 productive=5 order_only=0 mass=[47, 46, 45, 44, 43, 42, 42]
+n=8 productive=8 order_only=0 mass=[86, 85, 84, 83, 82, 81, 80, 79, 78, 78]
+n=12 productive=12 order_only=0 mass=[152, 151, 150, 149, 148, 147, 146, 145, 144, 143, 142, 141, 140, 140]

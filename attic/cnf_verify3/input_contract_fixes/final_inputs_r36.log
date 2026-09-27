@@ -1,0 +1,21 @@
+Harness: focused base-R assertion shim, using final test_CnfInputs.R verbatim
+R version 3.6.3 (2020-02-29)
+checkmate 2.3.4 mlr3misc 0.22.0
+Source/test MD5 hashes:
+d960f9d0b8f15417ccca3ac9666b16f2 R/CnfUniverse.R
+83f6db0bb86bfc7c10025ed818a266c6 R/CnfSymbol.R
+f88aea2085649a8309770f9f04a9dedb R/CnfAtom.R
+4856fb18dcc777ef447af0871f4ed92f R/CnfClause.R
+6e361ba42c0e43f1ba8f959fc8442ae5 R/CnfFormula.R
+376aac6eb81334e751e9351f9eddc02f R/CnfFormula_simplify.R
+c7393dc411ba6becf197a31d8fb346b1 tests/testthat/test_CnfInputs.R
+PASS:CNF constructors reject dimensional and classed character inputs(11 assertions)
+PASS:CNF constructors reject missing, byte-marked and invalid text(28 assertions)
+PASS:CNF text is normalized to UTF-8 without merging distinct Unicode values(9 assertions)
+PASS:CNF rejects UTF-8 encodings outside the Unicode scalar range(26 assertions)
+PASS:CNF constructors preserve ordinary metadata, repetitions and empty selections(20 assertions)
+PASS:CNF names must preserve native binding identity before insertion(9 assertions)
+PASS:invalid native text cannot be replaced by printable escapes(5 assertions)
+PASS:compatible locales retain Unicode symbols and correct formula truth(9 assertions)
+PASS:universe lookup validates and normalizes symbol names(11 assertions)
+RESULT: 9 tests; 128 assertions; 0 warnings; 0 skips

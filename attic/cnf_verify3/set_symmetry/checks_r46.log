@@ -1,0 +1,7 @@
+checked 100 cases and 500 transformations
+checked 200 cases and 1000 transformations
+checked 300 cases and 1500 transformations
+checked 400 cases and 2000 transformations
+checked 500 cases and 2500 transformations
+checked 600 cases and 3000 transformations
+PASS r46 : 615 cases, 3075 paired transformations, 3901722 source events; all three deliberate schedule controls detected

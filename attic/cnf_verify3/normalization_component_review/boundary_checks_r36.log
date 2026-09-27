@@ -1,0 +1,44 @@
+$R
+[1] "R version 3.6.3 (2020-02-29)"
+
+$checkmate
+[1] "2.3.4"
+
+$counts
+$counts$domains
+[1] 28
+
+$counts$proper_payloads
+[1] 462
+
+$counts$empty_atoms
+[1] 28
+
+$counts$full_atoms
+[1] 28
+
+$counts$unused_universe_payloads
+[1] 80
+
+$counts$unused_universe_traces
+[1] 80
+
+
+$source_site_counts
+$source_site_counts$`&&1`
+[1] 8
+
+$source_site_counts$`&&2`
+[1] 8
+
+$source_site_counts$`||1`
+[1] 26
+
+$source_site_counts$`||2`
+[1] 26
+
+$source_site_counts$`for`
+[1] 23
+
+$source_site_counts$`if`
+[1] 108

@@ -62,8 +62,7 @@
 #' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' library(mlr3)
 #' library(mlr3learners)
 #'
@@ -80,7 +79,6 @@
 #' g2$pipeops$regr.lm$learner$predict_type = "se"
 #' set.seed(2906)
 #' g2$predict(task2)
-#' \dontshow{ \} }
 PipeOpRandomResponse = R6Class("PipeOpRandomResponse",
   inherit = PipeOp,
   public = list(

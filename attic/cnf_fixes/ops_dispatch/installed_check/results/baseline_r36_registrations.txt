@@ -1,0 +1,7 @@
+     [,1] [,2]         [,3]           [,4]
+[1,] "&"  "CnfAtom"    "&.CnfAtom"    NA
+[2,] "&"  "CnfClause"  "&.CnfClause"  NA
+[3,] "&"  "CnfFormula" "&.CnfFormula" NA
+[4,] "|"  "CnfAtom"    "|.CnfAtom"    NA
+[5,] "|"  "CnfClause"  "|.CnfClause"  NA
+[6,] "|"  "CnfFormula" "|.CnfFormula" NA

@@ -1,0 +1,82 @@
+Profile pairs: 400 of 1621
+Profile pairs: 800 of 1621
+Profile pairs: 1200 of 1621
+Profile pairs: 1600 of 1621
+Interference cases: 100 of 400
+Interference cases: 200 of 400
+Interference cases: 300 of 400
+Interference cases: 400 of 400
+Transient fixture: decision_failure_seed27_trial1747.rds raw FALSE discrepancies = 1 raw TRUE discrepancies = 3
+Transient fixture: queued_comparison_control_seed_case.rds raw FALSE discrepancies = 222 raw TRUE discrepancies = 7091
+$R
+[1] "R version 3.6.3 (2020-02-29)"
+
+$sha256
+[1] "7d34ad60035509a463168752bb5f6f82d87fd7182a94a0e48461be7cdbe35fdc"
+
+$cases
+[1] 2033
+
+$profile_signatures
+[1] 44
+
+$profile_pairs
+[1] 1621
+
+$productive_passes
+[1] 620
+
+$sorting_only_calls
+[1] 152
+
+$sse2_calls
+[1] 6990
+
+$row_sums
+[1] 1980682
+
+$write_sites
+                 sort       range_or_symbol old_unit_intersection
+                 4626                   784                    71
+
+$callbacks
+[1] 23050
+
+$raw_true_discrepancies
+[1] 7160
+
+$frozen_bits
+[1] 920577
+
+$raw_false_discrepancies
+[1] 227
+
+$ghosts_checked
+[1] 24913
+
+$truth_rows
+[1] 432524
+
+$frozen_ranges
+[1] 74885
+
+$writes
+[1] 5481
+
+$calls
+[1] 4686
+
+$callback_sites
+               register_unit  on_updated_subset_relations
+                         925                         6744
+ handle_sse_2nd_order_twoend            try_sse_2nd_order
+                        4465                         6990
+    apply_domain_restriction  handle_sse_2nd_order_oneend
+                        3420                           79
+             on_update_range eliminate_symbol_from_clause
+                          66                          361
+
+$fiber_ranges
+[1] 79716
+
+All paired-output, first-change, fiber, row-count, potential and stability checks passed.

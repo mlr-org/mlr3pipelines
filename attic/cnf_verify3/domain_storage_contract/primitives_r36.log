@@ -1,0 +1,12 @@
+{
+  "version": "R version 3.6.3 (2020-02-29)",
+  "shapes": ["plain", "named", "matrix", "array", "attributes", "inert_class"],
+  "counts": {
+    "extensions": 15354,
+    "repeated_new": 11088,
+    "named_new": 10080,
+    "atom_empty_classifications": 234,
+    "atom_full_classifications": 234,
+    "proper_clause_constructions": 216
+  }
+}

@@ -1,0 +1,24 @@
+Recorded excerpts from the observed pre-fix R 4.6.1 devtools runs.
+These are concise excerpts, not full console transcripts.
+
+All stages used this wrapper and test filter:
+bash attic/cnf_verify3/review_semantics/run_r46.sh -e 'devtools::test(filter = "^CnfInputs$", stop_on_failure = TRUE)'
+The initial run additionally set options(testthat.progress.max_fails = Inf).
+
+Original constructors, initial regression file:
+[ FAIL 24 | WARN 0 | SKIP 0 | PASS 56 ]
+Confirmed accepted dimensional/classed inputs, accepted invalid text,
+unchanged Latin-1 encoding marks, and the C-CTYPE native escape collision.
+
+First constructor correction, new native-byte regression:
+[ FAIL 4 | WARN 0 | SKIP 0 | PASS 87 ]
+Unmarked 0xFF under C CTYPE was accepted as a name/domain/atom value and
+enc2utf8() substituted literal ASCII "<ff>". An invalid name created an
+environment binding. validEnc() alone returned TRUE.
+
+Before strict native-byte validation and before the universe getter change:
+11 failing checks, 89 passing checks before testthat stopped at its failure limit.
+Four checks were the native-byte failures above. Seven getter failures/errors
+showed retained Latin-1/native marks, accepted matrix/classed queries, accepted
+UTF-8/Latin-1 aliases of ASCII native escapes under C, and invalid native text
+reaching ordinary lookup instead of validation.

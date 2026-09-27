@@ -1,0 +1,10 @@
+{
+  "stats": {
+    "formulas": 3000,
+    "unit_births": 5244,
+    "skip_certificates": 4798,
+    "requires_older_unit": 246,
+    "outside_current_unit": 246
+  },
+  "elapsed": 536.1291086673737
+}

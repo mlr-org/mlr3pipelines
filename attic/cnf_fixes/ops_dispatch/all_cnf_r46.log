@@ -1,0 +1,31 @@
+ℹ Testing mlr3pipelines
+Starting 2 test processes.
+✔ | F W  S  OK | Context
+
+✔ |         52 | CnfAtom [1.5s]
+
+✔ |         44 | CnfComparisons
+
+✔ |         93 | CnfClause [2.0s]
+
+✔ |        206 | CnfConstructors [1.5s]
+
+✔ |        2121 | CnfFormula [135.5s]
+
+✔ |        128 | CnfInputs [1.2s]
+
+✔ |        136 | CnfOperators
+
+✔ |         34 | CnfSelectors
+
+✔ |         17 | CnfSymbol
+
+✔ |         18 | CnfUniverse
+
+✔ |        1542 | CnfFormula_simplify [177.3s]
+
+
+══ Results ═════════════════════════════════════════════════════════════════════
+Duration: 182.4 s
+
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 4391 ]

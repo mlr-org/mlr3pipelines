@@ -191,21 +191,32 @@ test_that("validation", {
   expect_equal(obj$validate, "predefined")
   expect_equal(obj$learner$validate, "predefined")
   set_validate(obj, NULL)
-  expect_equal(obj$validate, NULL)
-  expect_equal(obj$learner$validate, NULL)
+  expect_null(obj$validate)
+  expect_null(obj$learner$validate)
   expect_warning({obj$learner$validate = 0.3}, "unexpected behaviour") # nolint
 
   obj = as_pipeop(as_learner(as_graph(lrn("classif.debug"))))
   expect_error(set_validate(obj, "predefined", ids = "none_existing"), "Trying to heuristically")
-  expect_equal(obj$validate, NULL)
+  expect_null(obj$validate)
 })
 
 test_that("internal_tuned_values, internal_valid_scores", {
-  task = tsk("iris")$divide(0.2)
+  task = tsk("iris")
+  ids = partition(task)
+  task$internal_valid_task = task$clone(deep = TRUE)$filter(ids$test)
+  task$row_roles$use = ids$train
   obj = as_pipeop(lrn("classif.debug", validate = "predefined", early_stopping = TRUE, iter = 100))
   obj$train(list(task))
   expect_int(obj$internal_tuned_values$iter)
   expect_list(obj$internal_tuned_values, types = "numeric")
   expect_equal(names(obj$internal_valid_scores), "acc")
+  expect_equal(names(obj$best_valid_scores), "acc")
+  expect_true(obj$best_valid_scores$acc >= obj$internal_valid_scores$acc)
+
+  # PipeOps wrapping a Learner without validation report neither
+  obj_novalid = as_pipeop(lrn("classif.rpart"))
+  obj_novalid$train(list(task))
+  expect_null(obj_novalid$internal_valid_scores)
+  expect_null(obj_novalid$best_valid_scores)
 })
 

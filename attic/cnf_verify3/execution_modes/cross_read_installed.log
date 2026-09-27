@@ -1,0 +1,9 @@
+minimized_subsumption : class dispatch, constructor replay, truth function and shared universe preserved.
+minimized_sse1 : class dispatch, constructor replay, truth function and shared universe preserved.
+minimized_first_order_phase_sse1 : class dispatch, constructor replay, truth function and shared universe preserved.
+minimized_sse2 : class dispatch, constructor replay, truth function and shared universe preserved.
+directed_oneend_shrink_min : class dispatch, constructor replay, truth function and shared universe preserved.
+minimized_oneend_symbol_removal : class dispatch, constructor replay, truth function and shared universe preserved.
+minimized_deferred_skip : class dispatch, constructor replay, truth function and shared universe preserved.
+selector : class dispatch, constructor replay, truth function and shared universe preserved.
+R: R version 4.6.1 (2026-06-24) ; mode: read_installed

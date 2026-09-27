@@ -1,0 +1,35 @@
+$cases_recorded
+[1] 10017 20017
+
+$versions_recorded
+[1] "R version 3.6.3 (2020-02-29)" "R version 3.6.3 (2020-02-29)"
+
+$parser_if_sites
+[1] 108
+
+$parser_function_sites
+[1] 14
+
+$combined_evaluations
+[1] 62634404
+
+$covered_outcomes
+[1] 212
+
+$replayed_cases
+[1] 57
+
+$replayed_saved_obligations
+[1] 250
+
+$contract_checks
+            range_target stale_unit_absent_symbol          symbol_deletion
+                    2165                        1                      609
+         clause_deletion              nonunit_hla                 unit_hla
+                     454                      599                      119
+
+$source_sha256
+[1] "7d34ad60035509a463168752bb5f6f82d87fd7182a94a0e48461be7cdbe35fdc  R/CnfFormula_simplify.R"
+
+$version
+[1] "R version 4.6.1 (2026-06-24)"

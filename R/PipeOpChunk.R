@@ -22,9 +22,9 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output:
-#' [`PipeOpChunk`] has one input channel named `"input"`, taking a [`Task`][mlr3::Task] both during training and prediction.
+#' `PipeOpChunk` has one input channel named `"input"`, taking a [`Task`][mlr3::Task] both during training and prediction.
 #'
-#' [`PipeOpChunk`] has multiple output channels depending on the `options` construction argument, named `"output1"`, `"output2"`, ...
+#' `PipeOpChunk` has multiple output channels depending on the `options` construction argument, named `"output1"`, `"output2"`, ...
 #' All output channels produce (respectively disjoint, random) subsets of the input [`Task`][mlr3::Task] during training, and
 #' pass on the original [`Task`][mlr3::Task] during prediction.
 #'

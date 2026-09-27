@@ -3,6 +3,8 @@
 #' @title Create a bagging learner
 #' @name mlr_graphs_bagging
 #' @description
+#' Deprecated in favor of [`pipeline_bag()`] (`ppl("bag")`), which has different defaults.
+#'
 #' Creates a [`Graph`] that performs bagging for a supplied graph.
 #' This is done as follows:
 #' * `Subsample` the data in each step using [`PipeOpSubsample`], afterwards apply `graph`
@@ -33,8 +35,7 @@
 #'   Default `FALSE`.
 #' @return [`Graph`]
 #' @export
-#' @examples
-#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' @examplesIf requireNamespace("rpart")
 #' \donttest{
 #' library(mlr3)
 #' lrn_po = po("learner", lrn("regr.rpart"))
@@ -47,22 +48,13 @@
 #'   averager = po("regravg", collect_multiplicity = TRUE))
 #' resample(task, GraphLearner$new(gr), rsmp("holdout"))$aggregate()
 #' }
-#' \dontshow{ \} }
 pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL, replace = FALSE) {
-  g = as_graph(graph)
-  assert_count(iterations)
-  assert_number(frac, lower = 0, upper = 1)
-  if (!is.null(averager)) {
-    if (NROW(averager$input) != 1L || !(grepl("\\[*\\]", x = averager$input$train) && grepl("\\[*\\]", x = averager$input$predict))) {
-      stop("'averager' must collect multiplicities.")
-    }
-    averager = as_graph(averager, clone = TRUE)
-  }
-
-  po("replicate", param_vals = list(reps = iterations)) %>>!%
-    po("subsample", param_vals = list(frac = frac, replace = replace)) %>>!%
-    g %>>!%
-    averager
+  warningf(paste(
+    'ppl("bagging") / pipeline_bagging() is deprecated and will be removed in the future.',
+    'Use ppl("bag") / pipeline_bag() instead, which does real bagging with changed default argument values:',
+    'frac = 1 and replace = TRUE (instead of frac = 0.7 and replace = FALSE).'
+  ))
+  pipeline_bag(graph = graph, iterations = iterations, frac = frac, averager = averager, replace = replace)
 }
 
 mlr_graphs$add("bagging", pipeline_bagging)

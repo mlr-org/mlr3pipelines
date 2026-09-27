@@ -1,0 +1,75 @@
+{"calls": 60, "clauses": 5, "symbols": 8, "values": 11, "domains": [4, 1, 3]}
+{"calls": 87, "clauses": 3, "symbols": 6, "values": 9, "domains": [4, 1, 3]}
+{"calls": 112, "clauses": 3, "symbols": 6, "values": 9, "domains": [4, 1, 3]}
+{
+  "kind": "subsumption",
+  "domains": {
+    "X0": [
+      "1",
+      "2",
+      "4",
+      "5"
+    ],
+    "X1": [
+      "1"
+    ],
+    "X2": [
+      "2",
+      "3",
+      "5"
+    ]
+  },
+  "clauses": [
+    {
+      "X0": [
+        "2",
+        "4"
+      ],
+      "X2": [
+        "3"
+      ]
+    },
+    {
+      "X2": [
+        "5"
+      ],
+      "X0": [
+        "2",
+        "1"
+      ]
+    },
+    {
+      "X2": [
+        "2"
+      ],
+      "X0": [
+        "2",
+        "5"
+      ]
+    }
+  ],
+  "result": [
+    {
+      "X0": "2"
+    },
+    {
+      "X2": "2",
+      "X0": "2"
+    }
+  ],
+  "opportunities": [
+    {
+      "kind": "subsumption",
+      "donor": 0,
+      "target": 1
+    }
+  ],
+  "second_pass": [
+    {
+      "X0": "2"
+    }
+  ],
+  "idempotent": false,
+  "calls": 112,
+  "elapsed": 2.16251277923584
+}

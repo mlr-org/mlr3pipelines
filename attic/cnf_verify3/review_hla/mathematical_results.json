@@ -1,0 +1,65 @@
+{
+  "exhaustive": {
+    "gac_support_projection_checks": 2352,
+    "monotone_operation_pairs": 17328,
+    "target_donor_pairs": 54144,
+    "donor_order_checks": 108288,
+    "refutations": 15480,
+    "unit_omission_cases": 82890
+  },
+  "examples": {
+    "deletion_order": {
+      "initially_refutable": [
+        0,
+        1
+      ],
+      "distinct_outputs": [
+        [
+          0,
+          2,
+          3
+        ],
+        [
+          1,
+          2,
+          3
+        ]
+      ]
+    },
+    "multivalued_chain": {
+      "refuted": true,
+      "trace": [
+        {
+          "kind": "extension",
+          "donor": 0,
+          "pivot": 1,
+          "before": 0,
+          "after": 4
+        },
+        {
+          "kind": "extension",
+          "donor": 3,
+          "pivot": 2,
+          "before": 0,
+          "after": 3
+        },
+        {
+          "kind": "extension",
+          "donor": 1,
+          "pivot": 1,
+          "before": 4,
+          "after": 5
+        },
+        {
+          "kind": "conflict",
+          "donor": 2
+        }
+      ]
+    },
+    "sse2_oneend_oneend": "two-step domain refutation checked",
+    "naive_value_indicator_encoding": "unsatisfiable without Boolean UP conflict",
+    "unit_omission_without_containment": "counterexample checked",
+    "initial_zero_without_entry_check": "counterexample checked",
+    "entailment_without_domain_refutation": "counterexample checked"
+  }
+}

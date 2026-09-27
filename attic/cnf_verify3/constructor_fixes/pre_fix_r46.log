@@ -1,0 +1,99 @@
+Console output with transient progress-spinner lines removed.
+ℹ Testing mlr3pipelines
+✔ | F W  S  OK | Context
+
+✖ | 15       30 | CnfConstructors [1.0s]
+────────────────────────────────────────────────────────────────────────────────
+Error ('test_CnfConstructors.R:14:11'): CnfClause accepts universe-free constants in every position
+Error in `CnfClause(inputs)`: All symbols must be in the same universe.
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_identical(CnfClause(inputs), expected) at test_CnfConstructors.R:14:11
+ 2. │ └─testthat::quasi_label(enquo(object), label)
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─mlr3pipelines::CnfClause(inputs)
+
+Error ('test_CnfConstructors.R:34:11'): CnfFormula accepts universe-free constants in every position
+Error in `CnfFormula(inputs)`: All clauses must be in the same universe.
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_identical(CnfFormula(inputs), expected) at test_CnfConstructors.R:34:11
+ 2. │ └─testthat::quasi_label(enquo(object), label)
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─mlr3pipelines::CnfFormula(inputs)
+
+Error ('test_CnfConstructors.R:53:7'): constant-only constructors retain the first available universe
+Error in `CnfClause(list(constant, owned))`: All symbols must be in the same universe.
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_identical(...) at test_CnfConstructors.R:53:7
+ 2. │ └─testthat::quasi_label(enquo(object), label)
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─mlr3pipelines::CnfClause(list(constant, owned))
+
+Error ('test_CnfConstructors.R:87:7'): constant owners do not override a nonconstant universe
+Error in `CnfClause(list(convert(constant), clause))`: All symbols must be in the same universe.
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_identical(...) at test_CnfConstructors.R:87:7
+ 2. │ └─testthat::quasi_label(enquo(object), label)
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─mlr3pipelines::CnfClause(list(convert(constant), clause))
+
+Failure ('test_CnfConstructors.R:111:7'): constructors reject incompatible nonconstant universes before simplification
+Expected `CnfClause(c(list(as.CnfAtom(TRUE)), inputs))` to throw a error.
+
+Failure ('test_CnfConstructors.R:111:7'): constructors reject incompatible nonconstant universes before simplification
+Expected `CnfClause(c(list(as.CnfAtom(TRUE)), inputs))` to throw a error.
+
+Failure ('test_CnfConstructors.R:111:7'): constructors reject incompatible nonconstant universes before simplification
+Expected `CnfClause(c(list(as.CnfAtom(TRUE)), inputs))` to throw a error.
+
+Failure ('test_CnfConstructors.R:111:7'): constructors reject incompatible nonconstant universes before simplification
+Expected `CnfClause(c(list(as.CnfAtom(TRUE)), inputs))` to throw a error.
+
+Failure ('test_CnfConstructors.R:120:7'): constructors reject incompatible nonconstant universes before simplification
+Expected `CnfFormula(c(list(as.CnfClause(FALSE)), inputs))` to throw a error.
+
+Failure ('test_CnfConstructors.R:120:7'): constructors reject incompatible nonconstant universes before simplification
+Expected `CnfFormula(c(list(as.CnfClause(FALSE)), inputs))` to throw a error.
+
+Failure ('test_CnfConstructors.R:120:7'): constructors reject incompatible nonconstant universes before simplification
+Expected `CnfFormula(c(list(as.CnfClause(FALSE)), inputs))` to throw a error.
+
+Failure ('test_CnfConstructors.R:120:7'): constructors reject incompatible nonconstant universes before simplification
+Expected `CnfFormula(c(list(as.CnfClause(FALSE)), inputs))` to throw a error.
+
+Error ('test_CnfConstructors.R:141:9'): FALSE absorbs previously collected nested formulas
+Error in `unit_registry[[nu]]`: wrong arguments for subsetting an environment
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_identical(CnfFormula(inputs), as.CnfFormula(contradiction)) at test_CnfConstructors.R:141:9
+ 2. │ └─testthat::quasi_label(enquo(object), label)
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─mlr3pipelines::CnfFormula(inputs)
+ 5.   └─mlr3pipelines:::simplify_cnf(entries, universe) at work/R/CnfFormula.R:178:3
+ 6.     └─mlr3pipelines (local) register_unit(unit_idx) at work/R/CnfFormula_simplify.R:487:5
+
+Failure ('test_CnfConstructors.R:157:9'): logical disjunctions with clauses preserve their result class
+Expected `result` to be an S3 object.
+Actual OO type: none.
+
+Error ('test_CnfConstructors.R:163:9'): logical disjunctions with clauses preserve their result class
+Error in `CnfFormula(list(result))`: Assertion on 'clauses' failed: May only contain the following types: {CnfClause,CnfFormula}, but element 1 has type 'logical'.
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_s3_class(CnfFormula(list(result)), "CnfFormula") at test_CnfConstructors.R:163:9
+ 2. │ └─testthat::quasi_label(enquo(object))
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─mlr3pipelines::CnfFormula(list(result))
+ 5.   └─checkmate::assert_list(clauses, types = c("CnfClause", "CnfFormula")) at work/R/CnfFormula.R:146:3
+ 6.     └─checkmate::makeAssertion(x, res, .var.name, add)
+ 7.       └─checkmate:::mstop(...)
+────────────────────────────────────────────────────────────────────────────────
+
+Maximum number of failures exceeded; quitting.
+ℹ Increase this number with (e.g.) `testthat::set_max_fails(Inf)`
+Error:
+! Test failures.
+Execution halted

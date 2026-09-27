@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "versions": ["R version 3.6.3 (2020-02-29)", "R version 4.6.1 (2026-06-24)"],
+  "source_sha256": "7d34ad60035509a463168752bb5f6f82d87fd7182a94a0e48461be7cdbe35fdc",
+  "paired_cases_per_version": 615,
+  "complete_trace_control_pairs": 16,
+  "complete_trace_events_per_version": 3747,
+  "occurrence_control_pairs": 42,
+  "occurrence_trace_events_per_version": 62455,
+  "all_observed_value_catalogs_equal": true
+}

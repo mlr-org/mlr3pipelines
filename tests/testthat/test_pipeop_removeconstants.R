@@ -3,12 +3,7 @@ context("PipeOpRemoveConstants")
 test_that("PipeOpRemoveConstants - basic properties", {
   task = mlr_tasks$get("boston_housing_classic")
   task$cbind(data.table(xx = rep(1, 506), yy = rep("a", 506)))
-
-  op = PipeOpRemoveConstants$new()
-  expect_pipeop(op)
-
   expect_datapreproc_pipeop_class(PipeOpRemoveConstants, task = task)
-
 })
 
 test_that("PipeOpRemoveConstants removes expected cols", {
@@ -44,8 +39,8 @@ test_that("PipeOpRemoveConstants removes expected cols", {
   test_dropping = function(data, expected_data, params) {
     intask = TaskClassif$new("iris", cbind(data, target = factor(c("x", rep("y", nrow(data) - 1)))), "target")
     resulttask = PipeOpRemoveConstants$new(param_vals = params)$train(list(intask))[[1]]
-    expect_equal(resulttask$data(cols = resulttask$feature_names), as.data.table(expected_data),
-      ignore.col.order = TRUE)
+    expect_equal_data_table(resulttask$data(cols = resulttask$feature_names), as.data.table(expected_data),
+      ignore_col_order = TRUE)
   }
 
   test_dropping(iris, iris, list())
@@ -74,4 +69,20 @@ test_that("PipeOpRemoveConstants removes expected cols", {
   for (i in 1:4) minus.iris[i] = minus.iris[i] * -1
   test_dropping(minus.iris , minus.iris, list())
 
+})
+
+test_that("PipeOpRemoveConstants handles integer overflow constants", {
+  n = 5L
+  big = .Machine$integer.max
+  dt = data.table(
+    const = c(rep.int(big, n - 1L), big - 1L),
+    vary = c(big, big - 10L, big - 20L, big - 30L, big - 40L),
+    target = factor(c("a", "a", "b", "b", "b"))
+  )
+
+  task = TaskClassif$new("overflow", dt, target = "target")
+  po = PipeOpRemoveConstants$new(param_vals = list(abs_tol = 0))
+
+  result = po$train(list(task))[[1]]
+  expect_false("const" %in% result$feature_names)
 })

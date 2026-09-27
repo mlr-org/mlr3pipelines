@@ -1,0 +1,200 @@
+{
+  "metadata": {
+    "runtime": "4.6.1",
+    "locale": "LC_CTYPE=en_US.UTF-8;LC_NUMERIC=C;LC_TIME=en_US.UTF-8;LC_COLLATE=en_US.UTF-8;LC_MONETARY=en_US.UTF-8;LC_MESSAGES=en_US.UTF-8;LC_PAPER=en_US.UTF-8;LC_NAME=C;LC_ADDRESS=C;LC_TELEPHONE=C;LC_MEASUREMENT=en_US.UTF-8;LC_IDENTIFICATION=C",
+    "package_versions": {
+      "checkmate": "2.3.4",
+      "mlr3misc": "0.23.0",
+      "digest": "0.6.39",
+      "jsonlite": "2.0.0"
+    },
+    "source_md5": {
+      "attic/cnf_verify3/root/comparison_normalization.R": "cf41f193f045b086c2ae48fbc128e665",
+      "R/CnfAtom.R": "58699a7eb88f45c6aa5cdb8b77cc7c41",
+      "R/CnfClause.R": "f6c9659b31a511e696dc9d8d7cfa9349",
+      "R/CnfFormula.R": "7609c11610bbe9de566d9d9b448a07f7"
+    }
+  },
+  "variant_counts": {
+    "atoms": 432,
+    "clauses": 216,
+    "formulas": 648
+  },
+  "checks": 15552,
+  "name_encoding_marks": ["UTF-8", "latin1", "unknown"],
+  "value_encoding_marks": ["UTF-8", "unknown", "latin1"],
+  "formula_negative_control": {
+    "assignments": 125,
+    "reference_models": 16,
+    "negative_models": 29,
+    "differing_assignments": 25
+  },
+  "summary": [
+    {
+      "group": "atom",
+      "locale": "C",
+      "checks": 1728,
+      "expected_equal": 1296,
+      "expected_unequal": 432,
+      "production_false_negatives": 0,
+      "production_false_positives": 0,
+      "candidate_disagreements": 0,
+      "guarded_disagreements": 0,
+      "_row": "atom.C"
+    },
+    {
+      "group": "clause",
+      "locale": "C",
+      "checks": 864,
+      "expected_equal": 648,
+      "expected_unequal": 216,
+      "production_false_negatives": 0,
+      "production_false_positives": 0,
+      "candidate_disagreements": 0,
+      "guarded_disagreements": 0,
+      "_row": "clause.C"
+    },
+    {
+      "group": "formula",
+      "locale": "C",
+      "checks": 2592,
+      "expected_equal": 1944,
+      "expected_unequal": 648,
+      "production_false_negatives": 1152,
+      "production_false_positives": 0,
+      "candidate_disagreements": 0,
+      "guarded_disagreements": 0,
+      "_row": "formula.C"
+    },
+    {
+      "group": "atom",
+      "locale": "C.UTF-8",
+      "checks": 1728,
+      "expected_equal": 1296,
+      "expected_unequal": 432,
+      "production_false_negatives": 432,
+      "production_false_positives": 0,
+      "candidate_disagreements": 0,
+      "guarded_disagreements": 0,
+      "_row": "atom.C.UTF-8"
+    },
+    {
+      "group": "clause",
+      "locale": "C.UTF-8",
+      "checks": 864,
+      "expected_equal": 648,
+      "expected_unequal": 216,
+      "production_false_negatives": 324,
+      "production_false_positives": 0,
+      "candidate_disagreements": 0,
+      "guarded_disagreements": 0,
+      "_row": "clause.C.UTF-8"
+    },
+    {
+      "group": "formula",
+      "locale": "C.UTF-8",
+      "checks": 2592,
+      "expected_equal": 1944,
+      "expected_unequal": 648,
+      "production_false_negatives": 1296,
+      "production_false_positives": 0,
+      "candidate_disagreements": 0,
+      "guarded_disagreements": 0,
+      "_row": "formula.C.UTF-8"
+    },
+    {
+      "group": "atom",
+      "locale": "en_US.UTF-8",
+      "checks": 1728,
+      "expected_equal": 1296,
+      "expected_unequal": 432,
+      "production_false_negatives": 432,
+      "production_false_positives": 0,
+      "candidate_disagreements": 0,
+      "guarded_disagreements": 0,
+      "_row": "atom.en_US.UTF-8"
+    },
+    {
+      "group": "clause",
+      "locale": "en_US.UTF-8",
+      "checks": 864,
+      "expected_equal": 648,
+      "expected_unequal": 216,
+      "production_false_negatives": 324,
+      "production_false_positives": 0,
+      "candidate_disagreements": 0,
+      "guarded_disagreements": 0,
+      "_row": "clause.en_US.UTF-8"
+    },
+    {
+      "group": "formula",
+      "locale": "en_US.UTF-8",
+      "checks": 2592,
+      "expected_equal": 1944,
+      "expected_unequal": 648,
+      "production_false_negatives": 1296,
+      "production_false_positives": 0,
+      "candidate_disagreements": 0,
+      "guarded_disagreements": 0,
+      "_row": "formula.en_US.UTF-8"
+    }
+  ],
+  "original_failure_examples": {
+    "formula/C/forward_equal": {
+      "case": 1,
+      "message": ["Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: Lengths (1, 2) differ (string compare on first 1)", "Component 1: Component 2: 1 string mismatch", "Component 1: Component 3: Lengths (2, 1) differ (string compare on first 1)", "Component 1: Component 3: 1 string mismatch", "Component 3: Component 1: 1 string mismatch", "Component 3: Component 2: Lengths (2, 1) differ (string compare on first 1)", "Component 3: Component 2: 1 string mismatch", "Component 3: Component 3: Lengths (1, 2) differ (string compare on first 1)", "Component 3: Component 3: 1 string mismatch"]
+    },
+    "formula/C/reverse_equal": {
+      "case": 1,
+      "message": ["Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: Lengths (2, 1) differ (string compare on first 1)", "Component 1: Component 2: 1 string mismatch", "Component 1: Component 3: Lengths (1, 2) differ (string compare on first 1)", "Component 1: Component 3: 1 string mismatch", "Component 3: Component 1: 1 string mismatch", "Component 3: Component 2: Lengths (1, 2) differ (string compare on first 1)", "Component 3: Component 2: 1 string mismatch", "Component 3: Component 3: Lengths (2, 1) differ (string compare on first 1)", "Component 3: Component 3: 1 string mismatch"]
+    },
+    "atom/C.UTF-8/forward_equal": {
+      "case": 7,
+      "message": "Component “values”: 2 string mismatches"
+    },
+    "atom/C.UTF-8/reverse_equal": {
+      "case": 7,
+      "message": "Component “values”: 2 string mismatches"
+    },
+    "clause/C.UTF-8/forward_equal": {
+      "case": 2,
+      "message": "Component “é”: 2 string mismatches"
+    },
+    "clause/C.UTF-8/reverse_equal": {
+      "case": 2,
+      "message": "Component “é”: 2 string mismatches"
+    },
+    "formula/C.UTF-8/forward_equal": {
+      "case": 1,
+      "message": ["Component 1: Names: 2 string mismatches", "Component 1: Component 1: Lengths (1, 2) differ (string compare on first 1)", "Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: Lengths (2, 1) differ (string compare on first 1)", "Component 1: Component 2: 1 string mismatch", "Component 2: Component 1: 2 string mismatches"]
+    },
+    "formula/C.UTF-8/reverse_equal": {
+      "case": 1,
+      "message": ["Component 1: Names: 2 string mismatches", "Component 1: Component 1: Lengths (2, 1) differ (string compare on first 1)", "Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: Lengths (1, 2) differ (string compare on first 1)", "Component 1: Component 2: 1 string mismatch", "Component 2: Component 1: 2 string mismatches"]
+    },
+    "atom/en_US.UTF-8/forward_equal": {
+      "case": 7,
+      "message": "Component “values”: 2 string mismatches"
+    },
+    "atom/en_US.UTF-8/reverse_equal": {
+      "case": 7,
+      "message": "Component “values”: 2 string mismatches"
+    },
+    "clause/en_US.UTF-8/forward_equal": {
+      "case": 2,
+      "message": "Component “é”: 2 string mismatches"
+    },
+    "clause/en_US.UTF-8/reverse_equal": {
+      "case": 2,
+      "message": "Component “é”: 2 string mismatches"
+    },
+    "formula/en_US.UTF-8/forward_equal": {
+      "case": 1,
+      "message": ["Component 1: Names: 2 string mismatches", "Component 1: Component 1: Lengths (1, 2) differ (string compare on first 1)", "Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: Lengths (2, 1) differ (string compare on first 1)", "Component 1: Component 2: 1 string mismatch", "Component 2: Component 1: 2 string mismatches"]
+    },
+    "formula/en_US.UTF-8/reverse_equal": {
+      "case": 1,
+      "message": ["Component 1: Names: 2 string mismatches", "Component 1: Component 1: Lengths (2, 1) differ (string compare on first 1)", "Component 1: Component 1: 1 string mismatch", "Component 1: Component 2: Lengths (1, 2) differ (string compare on first 1)", "Component 1: Component 2: 1 string mismatch", "Component 2: Component 1: 2 string mismatches"]
+    }
+  }
+}

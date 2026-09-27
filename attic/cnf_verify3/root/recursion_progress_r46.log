@@ -1,0 +1,29 @@
+Completed 50 cases
+Completed 100 cases
+Completed 150 cases
+Completed 200 cases
+Completed 250 cases
+Completed 300 cases
+Completed 350 cases
+Completed 400 cases
+Completed 450 cases
+Completed 500 cases
+Completed 550 cases
+Completed 600 cases
+$R_version
+[1] "R version 4.6.1 (2026-06-24)"
+
+$cases
+[1] 625
+
+$max_helper_depth
+[1] 141
+
+$max_active_apply
+[1] 47
+
+$nested_apply_checks
+[1] 5736
+
+$longest_acyclic_nodes
+[1] 5

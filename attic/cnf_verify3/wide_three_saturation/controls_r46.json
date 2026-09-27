@@ -1,0 +1,5599 @@
+{
+  "source_sha256": "7d34ad60035509a463168752bb5f6f82d87fd7182a94a0e48461be7cdbe35fdc",
+  "version": "R version 4.6.1 (2026-06-24)",
+  "cases": [
+    {
+      "name": "debt_enabled",
+      "masks": [
+        0,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "5",
+          "7"
+        ],
+        "Y": [
+          "1",
+          "2",
+          "7"
+        ],
+        "Z": [
+          "2",
+          "3",
+          "4",
+          "7"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "1",
+            "7"
+          ],
+          "Z": [
+            "3",
+            "7"
+          ]
+        },
+        {
+          "X": [
+            "7"
+          ],
+          "Y": [
+            "2",
+            "7"
+          ],
+          "Z": [
+            "2",
+            "3",
+            "7"
+          ]
+        },
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 2592,
+        "private_target_range_checks": 116,
+        "constant_donor_intersection_checks": 232,
+        "matrix_count_checks": 170,
+        "enabled_conservative_true_observations": 8,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "debt_enabled",
+      "masks": [
+        1,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "5",
+          "7"
+        ],
+        "Y": [
+          "1",
+          "2",
+          "7"
+        ],
+        "Z": [
+          "2",
+          "3",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "1",
+            "7"
+          ],
+          "Z": [
+            "3",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "7"
+          ],
+          "Y": [
+            "2",
+            "7"
+          ],
+          "Z": [
+            "2",
+            "3",
+            "7"
+          ]
+        },
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5184,
+        "no_unit_state_checks": 49,
+        "private_target_range_checks": 231,
+        "constant_donor_intersection_checks": 693,
+        "matrix_count_checks": 282,
+        "enabled_conservative_true_observations": 9,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "debt_enabled",
+      "masks": [
+        2,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "5",
+          "7"
+        ],
+        "Y": [
+          "1",
+          "2",
+          "7"
+        ],
+        "Z": [
+          "2",
+          "3",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "1",
+            "7"
+          ],
+          "Z": [
+            "3",
+            "7"
+          ]
+        },
+        {
+          "X": [
+            "7"
+          ],
+          "Y": [
+            "2",
+            "7"
+          ],
+          "Z": [
+            "2",
+            "3",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5184,
+        "no_unit_state_checks": 26,
+        "private_target_range_checks": 130,
+        "constant_donor_intersection_checks": 390,
+        "matrix_count_checks": 112,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "debt_enabled",
+      "masks": [
+        3,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "5",
+          "7"
+        ],
+        "Y": [
+          "1",
+          "2",
+          "7"
+        ],
+        "Z": [
+          "2",
+          "3",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "1",
+            "7"
+          ],
+          "Z": [
+            "3",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "7"
+          ],
+          "Y": [
+            "2",
+            "7"
+          ],
+          "Z": [
+            "2",
+            "3",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5184,
+        "no_unit_state_checks": 48,
+        "private_target_range_checks": 168,
+        "constant_donor_intersection_checks": 504,
+        "matrix_count_checks": 252,
+        "enabled_conservative_true_observations": 8,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "debt_enabled",
+      "masks": [
+        4,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "5",
+          "7"
+        ],
+        "Y": [
+          "1",
+          "2",
+          "7"
+        ],
+        "Z": [
+          "2",
+          "3",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "1",
+            "7"
+          ],
+          "Z": [
+            "3",
+            "7"
+          ]
+        },
+        {
+          "X": [
+            "7"
+          ],
+          "Y": [
+            "2",
+            "7"
+          ],
+          "Z": [
+            "2",
+            "3",
+            "7"
+          ]
+        },
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5184,
+        "no_unit_state_checks": 50,
+        "private_target_range_checks": 227,
+        "constant_donor_intersection_checks": 681,
+        "matrix_count_checks": 288,
+        "enabled_conservative_true_observations": 8,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "debt_enabled",
+      "masks": [
+        5,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "5",
+          "7"
+        ],
+        "Y": [
+          "1",
+          "2",
+          "7"
+        ],
+        "Z": [
+          "2",
+          "3",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "1",
+            "7"
+          ],
+          "Z": [
+            "3",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "7"
+          ],
+          "Y": [
+            "2",
+            "7"
+          ],
+          "Z": [
+            "2",
+            "3",
+            "7"
+          ]
+        },
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5184,
+        "no_unit_state_checks": 36,
+        "private_target_range_checks": 119,
+        "constant_donor_intersection_checks": 357,
+        "matrix_count_checks": 188,
+        "enabled_conservative_true_observations": 9,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "debt_enabled",
+      "masks": [
+        6,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "5",
+          "7"
+        ],
+        "Y": [
+          "1",
+          "2",
+          "7"
+        ],
+        "Z": [
+          "2",
+          "3",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "1",
+            "7"
+          ],
+          "Z": [
+            "3",
+            "7"
+          ]
+        },
+        {
+          "X": [
+            "7"
+          ],
+          "Y": [
+            "2",
+            "7"
+          ],
+          "Z": [
+            "2",
+            "3",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5184,
+        "no_unit_state_checks": 50,
+        "private_target_range_checks": 177,
+        "constant_donor_intersection_checks": 531,
+        "matrix_count_checks": 288,
+        "enabled_conservative_true_observations": 8,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "debt_enabled",
+      "masks": [
+        7,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "5",
+          "7"
+        ],
+        "Y": [
+          "1",
+          "2",
+          "7"
+        ],
+        "Z": [
+          "2",
+          "3",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "1",
+            "7"
+          ],
+          "Z": [
+            "3",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "7"
+          ],
+          "Y": [
+            "2",
+            "7"
+          ],
+          "Z": [
+            "2",
+            "3",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5184,
+        "no_unit_state_checks": 37,
+        "private_target_range_checks": 116,
+        "constant_donor_intersection_checks": 348,
+        "matrix_count_checks": 170,
+        "enabled_conservative_true_observations": 8,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "debt_enabled",
+      "masks": [
+        1,
+        6
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "5",
+          "7"
+        ],
+        "Y": [
+          "1",
+          "2",
+          "7"
+        ],
+        "Z": [
+          "2",
+          "3",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "1",
+            "7"
+          ],
+          "Z": [
+            "3",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "7"
+          ],
+          "Y": [
+            "2",
+            "7"
+          ],
+          "Z": [
+            "2",
+            "3",
+            "7"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "V": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 10368,
+        "no_unit_state_checks": 22,
+        "private_target_range_checks": 110,
+        "constant_donor_intersection_checks": 440,
+        "matrix_count_checks": 120,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "debt_enabled",
+      "masks": [
+        2,
+        5
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "5",
+          "7"
+        ],
+        "Y": [
+          "1",
+          "2",
+          "7"
+        ],
+        "Z": [
+          "2",
+          "3",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "1",
+            "7"
+          ],
+          "Z": [
+            "3",
+            "7"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "7"
+          ],
+          "Y": [
+            "2",
+            "7"
+          ],
+          "Z": [
+            "2",
+            "3",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "V": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 10368,
+        "no_unit_state_checks": 16,
+        "private_target_range_checks": 80,
+        "constant_donor_intersection_checks": 320,
+        "matrix_count_checks": 68,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "debt_enabled",
+      "masks": [
+        3,
+        4
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "5",
+          "7"
+        ],
+        "Y": [
+          "1",
+          "2",
+          "7"
+        ],
+        "Z": [
+          "2",
+          "3",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "1",
+            "7"
+          ],
+          "Z": [
+            "3",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "7"
+          ],
+          "Y": [
+            "2",
+            "7"
+          ],
+          "Z": [
+            "2",
+            "3",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "V": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 10368,
+        "no_unit_state_checks": 22,
+        "private_target_range_checks": 110,
+        "constant_donor_intersection_checks": 440,
+        "matrix_count_checks": 120,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "debt_enabled",
+      "masks": [
+        4,
+        3
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "5",
+          "7"
+        ],
+        "Y": [
+          "1",
+          "2",
+          "7"
+        ],
+        "Z": [
+          "2",
+          "3",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "1",
+            "7"
+          ],
+          "Z": [
+            "3",
+            "7"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "7"
+          ],
+          "Y": [
+            "2",
+            "7"
+          ],
+          "Z": [
+            "2",
+            "3",
+            "7"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 10368,
+        "no_unit_state_checks": 22,
+        "private_target_range_checks": 110,
+        "constant_donor_intersection_checks": 440,
+        "matrix_count_checks": 120,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "debt_enabled",
+      "masks": [
+        5,
+        2
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "5",
+          "7"
+        ],
+        "Y": [
+          "1",
+          "2",
+          "7"
+        ],
+        "Z": [
+          "2",
+          "3",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "1",
+            "7"
+          ],
+          "Z": [
+            "3",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "7"
+          ],
+          "Y": [
+            "2",
+            "7"
+          ],
+          "Z": [
+            "2",
+            "3",
+            "7"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 10368,
+        "no_unit_state_checks": 16,
+        "private_target_range_checks": 80,
+        "constant_donor_intersection_checks": 320,
+        "matrix_count_checks": 68,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "debt_enabled",
+      "masks": [
+        6,
+        1
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "5",
+          "7"
+        ],
+        "Y": [
+          "1",
+          "2",
+          "7"
+        ],
+        "Z": [
+          "2",
+          "3",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "1",
+            "7"
+          ],
+          "Z": [
+            "3",
+            "7"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "7"
+          ],
+          "Y": [
+            "2",
+            "7"
+          ],
+          "Z": [
+            "2",
+            "3",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 10368,
+        "no_unit_state_checks": 22,
+        "private_target_range_checks": 110,
+        "constant_donor_intersection_checks": 440,
+        "matrix_count_checks": 120,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "debt_enabled",
+      "masks": [
+        7,
+        7
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "5",
+          "7"
+        ],
+        "Y": [
+          "1",
+          "2",
+          "7"
+        ],
+        "Z": [
+          "2",
+          "3",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "1",
+            "7"
+          ],
+          "Z": [
+            "3",
+            "7"
+          ],
+          "W": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "7"
+          ],
+          "Y": [
+            "2",
+            "7"
+          ],
+          "Z": [
+            "2",
+            "3",
+            "7"
+          ],
+          "W": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "5",
+            "7"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "W": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 10368,
+        "no_unit_state_checks": 37,
+        "private_target_range_checks": 116,
+        "constant_donor_intersection_checks": 464,
+        "matrix_count_checks": 170,
+        "enabled_conservative_true_observations": 8,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "enabled_batch_pending_one",
+      "masks": [
+        0,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "4",
+          "7"
+        ],
+        "Z": [
+          "1",
+          "2",
+          "4",
+          "7"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "1"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "1",
+            "7"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "2",
+            "7"
+          ]
+        },
+        {
+          "Y": [
+            "4",
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "X": [
+            "4"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 3456,
+        "private_target_range_checks": 346,
+        "constant_donor_intersection_checks": 692,
+        "matrix_count_checks": 324,
+        "enabled_conservative_true_observations": 10,
+        "enabled_pending_count_one_observations": 2,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "enabled_batch_pending_one",
+      "masks": [
+        1,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "4",
+          "7"
+        ],
+        "Z": [
+          "1",
+          "2",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "1"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "1",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "2",
+            "7"
+          ]
+        },
+        {
+          "Y": [
+            "4",
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "X": [
+            "4"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 6912,
+        "no_unit_state_checks": 18,
+        "private_target_range_checks": 144,
+        "constant_donor_intersection_checks": 432,
+        "matrix_count_checks": 96,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "enabled_batch_pending_one",
+      "masks": [
+        2,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "4",
+          "7"
+        ],
+        "Z": [
+          "1",
+          "2",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "1"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "1",
+            "7"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "2",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "Y": [
+            "4",
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "X": [
+            "4"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 6912,
+        "no_unit_state_checks": 18,
+        "private_target_range_checks": 144,
+        "constant_donor_intersection_checks": 432,
+        "matrix_count_checks": 96,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "enabled_batch_pending_one",
+      "masks": [
+        3,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "4",
+          "7"
+        ],
+        "Z": [
+          "1",
+          "2",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "1"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "1",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "2",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "Y": [
+            "4",
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "X": [
+            "4"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 6912,
+        "no_unit_state_checks": 18,
+        "private_target_range_checks": 126,
+        "constant_donor_intersection_checks": 378,
+        "matrix_count_checks": 96,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "enabled_batch_pending_one",
+      "masks": [
+        4,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "4",
+          "7"
+        ],
+        "Z": [
+          "1",
+          "2",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "1"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "1",
+            "7"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "2",
+            "7"
+          ]
+        },
+        {
+          "Y": [
+            "4",
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "X": [
+            "4"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 6912,
+        "no_unit_state_checks": 50,
+        "private_target_range_checks": 358,
+        "constant_donor_intersection_checks": 1074,
+        "matrix_count_checks": 288,
+        "enabled_conservative_true_observations": 6,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "enabled_batch_pending_one",
+      "masks": [
+        5,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "4",
+          "7"
+        ],
+        "Z": [
+          "1",
+          "2",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "1"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "1",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "2",
+            "7"
+          ]
+        },
+        {
+          "Y": [
+            "4",
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "X": [
+            "4"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 6912,
+        "no_unit_state_checks": 48,
+        "private_target_range_checks": 292,
+        "constant_donor_intersection_checks": 876,
+        "matrix_count_checks": 276,
+        "enabled_conservative_true_observations": 6,
+        "enabled_pending_count_one_observations": 1,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "enabled_batch_pending_one",
+      "masks": [
+        6,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "4",
+          "7"
+        ],
+        "Z": [
+          "1",
+          "2",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "1"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "1",
+            "7"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "2",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "Y": [
+            "4",
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "X": [
+            "4"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 6912,
+        "no_unit_state_checks": 48,
+        "private_target_range_checks": 292,
+        "constant_donor_intersection_checks": 876,
+        "matrix_count_checks": 276,
+        "enabled_conservative_true_observations": 6,
+        "enabled_pending_count_one_observations": 1,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "enabled_batch_pending_one",
+      "masks": [
+        7,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "4",
+          "7"
+        ],
+        "Z": [
+          "1",
+          "2",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "1"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "1",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "2",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "Y": [
+            "4",
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "X": [
+            "4"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 6912,
+        "no_unit_state_checks": 56,
+        "private_target_range_checks": 346,
+        "constant_donor_intersection_checks": 1038,
+        "matrix_count_checks": 324,
+        "enabled_conservative_true_observations": 10,
+        "enabled_pending_count_one_observations": 2,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "enabled_batch_pending_one",
+      "masks": [
+        1,
+        6
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "4",
+          "7"
+        ],
+        "Z": [
+          "1",
+          "2",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "1"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "1",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "2",
+            "7"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "Y": [
+            "4",
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "X": [
+            "4"
+          ],
+          "V": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 13824,
+        "no_unit_state_checks": 13,
+        "private_target_range_checks": 104,
+        "constant_donor_intersection_checks": 416,
+        "matrix_count_checks": 66,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "enabled_batch_pending_one",
+      "masks": [
+        2,
+        5
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "4",
+          "7"
+        ],
+        "Z": [
+          "1",
+          "2",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "1"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "1",
+            "7"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "2",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "Y": [
+            "4",
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "X": [
+            "4"
+          ],
+          "V": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 13824,
+        "no_unit_state_checks": 13,
+        "private_target_range_checks": 104,
+        "constant_donor_intersection_checks": 416,
+        "matrix_count_checks": 66,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "enabled_batch_pending_one",
+      "masks": [
+        3,
+        4
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "4",
+          "7"
+        ],
+        "Z": [
+          "1",
+          "2",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "1"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "1",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "2",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "Y": [
+            "4",
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "X": [
+            "4"
+          ],
+          "V": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 13824,
+        "no_unit_state_checks": 18,
+        "private_target_range_checks": 144,
+        "constant_donor_intersection_checks": 576,
+        "matrix_count_checks": 96,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "enabled_batch_pending_one",
+      "masks": [
+        4,
+        3
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "4",
+          "7"
+        ],
+        "Z": [
+          "1",
+          "2",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "1"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "1",
+            "7"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "2",
+            "7"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "Y": [
+            "4",
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "X": [
+            "4"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 13824,
+        "no_unit_state_checks": 18,
+        "private_target_range_checks": 144,
+        "constant_donor_intersection_checks": 576,
+        "matrix_count_checks": 96,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "enabled_batch_pending_one",
+      "masks": [
+        5,
+        2
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "4",
+          "7"
+        ],
+        "Z": [
+          "1",
+          "2",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "1"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "1",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "2",
+            "7"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "Y": [
+            "4",
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "X": [
+            "4"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 13824,
+        "no_unit_state_checks": 13,
+        "private_target_range_checks": 104,
+        "constant_donor_intersection_checks": 416,
+        "matrix_count_checks": 66,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "enabled_batch_pending_one",
+      "masks": [
+        6,
+        1
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "4",
+          "7"
+        ],
+        "Z": [
+          "1",
+          "2",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "1"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "1",
+            "7"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "2",
+            "7"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "Y": [
+            "4",
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "X": [
+            "4"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 13824,
+        "no_unit_state_checks": 13,
+        "private_target_range_checks": 104,
+        "constant_donor_intersection_checks": 416,
+        "matrix_count_checks": 66,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "enabled_batch_pending_one",
+      "masks": [
+        7,
+        7
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "4",
+          "7"
+        ],
+        "Z": [
+          "1",
+          "2",
+          "4",
+          "7"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "1"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "1",
+            "7"
+          ],
+          "W": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "2"
+          ],
+          "Y": [
+            "7"
+          ],
+          "Z": [
+            "2",
+            "7"
+          ],
+          "W": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "Y": [
+            "4",
+            "7"
+          ],
+          "Z": [
+            "4",
+            "7"
+          ],
+          "X": [
+            "4"
+          ],
+          "W": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 13824,
+        "no_unit_state_checks": 56,
+        "private_target_range_checks": 346,
+        "constant_donor_intersection_checks": 1384,
+        "matrix_count_checks": 324,
+        "enabled_conservative_true_observations": 10,
+        "enabled_pending_count_one_observations": 2,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_nonempty",
+      "masks": [
+        0,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 2880,
+        "private_target_range_checks": 77,
+        "constant_donor_intersection_checks": 154,
+        "matrix_count_checks": 152,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_nonempty",
+      "masks": [
+        1,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5760,
+        "no_unit_state_checks": 30,
+        "private_target_range_checks": 95,
+        "constant_donor_intersection_checks": 285,
+        "matrix_count_checks": 136,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_nonempty",
+      "masks": [
+        2,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5760,
+        "no_unit_state_checks": 31,
+        "private_target_range_checks": 107,
+        "constant_donor_intersection_checks": 321,
+        "matrix_count_checks": 132,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_nonempty",
+      "masks": [
+        3,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5760,
+        "no_unit_state_checks": 33,
+        "private_target_range_checks": 78,
+        "constant_donor_intersection_checks": 234,
+        "matrix_count_checks": 152,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_nonempty",
+      "masks": [
+        4,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5760,
+        "no_unit_state_checks": 40,
+        "private_target_range_checks": 123,
+        "constant_donor_intersection_checks": 369,
+        "matrix_count_checks": 188,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_nonempty",
+      "masks": [
+        5,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5760,
+        "no_unit_state_checks": 41,
+        "private_target_range_checks": 123,
+        "constant_donor_intersection_checks": 369,
+        "matrix_count_checks": 234,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_nonempty",
+      "masks": [
+        6,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5760,
+        "no_unit_state_checks": 35,
+        "private_target_range_checks": 73,
+        "constant_donor_intersection_checks": 219,
+        "matrix_count_checks": 174,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_nonempty",
+      "masks": [
+        7,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5760,
+        "no_unit_state_checks": 37,
+        "private_target_range_checks": 77,
+        "constant_donor_intersection_checks": 231,
+        "matrix_count_checks": 152,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_nonempty",
+      "masks": [
+        1,
+        6
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 11520,
+        "no_unit_state_checks": 27,
+        "private_target_range_checks": 90,
+        "constant_donor_intersection_checks": 360,
+        "matrix_count_checks": 150,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_nonempty",
+      "masks": [
+        2,
+        5
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 11520,
+        "no_unit_state_checks": 27,
+        "private_target_range_checks": 108,
+        "constant_donor_intersection_checks": 432,
+        "matrix_count_checks": 132,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_nonempty",
+      "masks": [
+        3,
+        4
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 11520,
+        "no_unit_state_checks": 26,
+        "private_target_range_checks": 81,
+        "constant_donor_intersection_checks": 324,
+        "matrix_count_checks": 104,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_nonempty",
+      "masks": [
+        4,
+        3
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 11520,
+        "no_unit_state_checks": 26,
+        "private_target_range_checks": 81,
+        "constant_donor_intersection_checks": 324,
+        "matrix_count_checks": 104,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_nonempty",
+      "masks": [
+        5,
+        2
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 11520,
+        "no_unit_state_checks": 27,
+        "private_target_range_checks": 108,
+        "constant_donor_intersection_checks": 432,
+        "matrix_count_checks": 132,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_nonempty",
+      "masks": [
+        6,
+        1
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 11520,
+        "no_unit_state_checks": 27,
+        "private_target_range_checks": 90,
+        "constant_donor_intersection_checks": 360,
+        "matrix_count_checks": 150,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_nonempty",
+      "masks": [
+        7,
+        7
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "1",
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 11520,
+        "no_unit_state_checks": 37,
+        "private_target_range_checks": 77,
+        "constant_donor_intersection_checks": 308,
+        "matrix_count_checks": 152,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_complete_pivot",
+      "masks": [
+        0,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 2880,
+        "private_target_range_checks": 60,
+        "constant_donor_intersection_checks": 120,
+        "matrix_count_checks": 66,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_complete_pivot",
+      "masks": [
+        1,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5760,
+        "no_unit_state_checks": 29,
+        "private_target_range_checks": 109,
+        "constant_donor_intersection_checks": 327,
+        "matrix_count_checks": 130,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_complete_pivot",
+      "masks": [
+        2,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5760,
+        "no_unit_state_checks": 13,
+        "private_target_range_checks": 49,
+        "constant_donor_intersection_checks": 147,
+        "matrix_count_checks": 30,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_complete_pivot",
+      "masks": [
+        3,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5760,
+        "no_unit_state_checks": 22,
+        "private_target_range_checks": 47,
+        "constant_donor_intersection_checks": 141,
+        "matrix_count_checks": 66,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_complete_pivot",
+      "masks": [
+        4,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5760,
+        "no_unit_state_checks": 40,
+        "private_target_range_checks": 163,
+        "constant_donor_intersection_checks": 489,
+        "matrix_count_checks": 188,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_complete_pivot",
+      "masks": [
+        5,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5760,
+        "no_unit_state_checks": 34,
+        "private_target_range_checks": 111,
+        "constant_donor_intersection_checks": 333,
+        "matrix_count_checks": 192,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_complete_pivot",
+      "masks": [
+        6,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5760,
+        "no_unit_state_checks": 35,
+        "private_target_range_checks": 108,
+        "constant_donor_intersection_checks": 324,
+        "matrix_count_checks": 174,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_complete_pivot",
+      "masks": [
+        7,
+        0
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 5760,
+        "no_unit_state_checks": 25,
+        "private_target_range_checks": 60,
+        "constant_donor_intersection_checks": 180,
+        "matrix_count_checks": 66,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_complete_pivot",
+      "masks": [
+        1,
+        6
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 11520,
+        "no_unit_state_checks": 27,
+        "private_target_range_checks": 117,
+        "constant_donor_intersection_checks": 468,
+        "matrix_count_checks": 150,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_complete_pivot",
+      "masks": [
+        2,
+        5
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 11520,
+        "no_unit_state_checks": 23,
+        "private_target_range_checks": 99,
+        "constant_donor_intersection_checks": 396,
+        "matrix_count_checks": 106,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_complete_pivot",
+      "masks": [
+        3,
+        4
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 11520,
+        "no_unit_state_checks": 26,
+        "private_target_range_checks": 107,
+        "constant_donor_intersection_checks": 428,
+        "matrix_count_checks": 104,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_complete_pivot",
+      "masks": [
+        4,
+        3
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 11520,
+        "no_unit_state_checks": 26,
+        "private_target_range_checks": 107,
+        "constant_donor_intersection_checks": 428,
+        "matrix_count_checks": 104,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_complete_pivot",
+      "masks": [
+        5,
+        2
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 11520,
+        "no_unit_state_checks": 23,
+        "private_target_range_checks": 99,
+        "constant_donor_intersection_checks": 396,
+        "matrix_count_checks": 106,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_complete_pivot",
+      "masks": [
+        6,
+        1
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 11520,
+        "no_unit_state_checks": 27,
+        "private_target_range_checks": 117,
+        "constant_donor_intersection_checks": 468,
+        "matrix_count_checks": 150,
+        "observed_calls_identical_to_plain": 1
+      }
+    },
+    {
+      "name": "relay_complete_pivot",
+      "masks": [
+        7,
+        7
+      ],
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "0",
+          "1"
+        ],
+        "V": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "0",
+            "1"
+          ],
+          "Y": [
+            "0",
+            "1"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "0",
+            "2"
+          ],
+          "Y": [
+            "0",
+            "1",
+            "2"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        },
+        {
+          "X": [
+            "3"
+          ],
+          "Y": [
+            "0"
+          ],
+          "Z": [
+            "0"
+          ],
+          "W": [
+            "0"
+          ],
+          "V": [
+            "0"
+          ]
+        }
+      ],
+      "counts": {
+        "arrangements": 36,
+        "ordinary_production_calls": 72,
+        "truth_valuation_rows": 11520,
+        "no_unit_state_checks": 25,
+        "private_target_range_checks": 60,
+        "constant_donor_intersection_checks": 240,
+        "matrix_count_checks": 66,
+        "observed_calls_identical_to_plain": 1
+      }
+    }
+  ],
+  "negative_controls": [
+    {
+      "name": "three_binary_unit_equality",
+      "domains": {
+        "X": [
+          "1",
+          "2",
+          "4",
+          "5"
+        ],
+        "Y": [
+          "2",
+          "3",
+          "5"
+        ]
+      },
+      "clauses": [
+        {
+          "X": [
+            "2",
+            "4"
+          ],
+          "Y": [
+            "3"
+          ]
+        },
+        {
+          "Y": [
+            "5"
+          ],
+          "X": [
+            "2",
+            "1"
+          ]
+        },
+        {
+          "Y": [
+            "2"
+          ],
+          "X": [
+            "2",
+            "5"
+          ]
+        }
+      ],
+      "first": [
+        {
+          "X": "2"
+        },
+        {
+          "Y": "2",
+          "X": "2"
+        }
+      ],
+      "second": [
+        {
+          "X": "2"
+        }
+      ],
+      "residual": [
+        {
+          "kind": "direct",
+          "target": 1,
+          "donor": 0
+        },
+        {
+          "kind": "sse1",
+          "target": 1,
+          "donor": 0,
+          "symbol": "Y"
+        },
+        {
+          "kind": "hla",
+          "target": 1
+        }
+      ]
+    },
+    {
+      "name": "four_clause_sse1_gap",
+      "domains": {
+        "X0": [
+          "0",
+          "1",
+          "4",
+          "5"
+        ],
+        "X1": [
+          "0",
+          "1",
+          "4",
+          "5"
+        ]
+      },
+      "clauses": [
+        {
+          "X1": [
+            "0",
+            "5"
+          ],
+          "X0": [
+            "0",
+            "5"
+          ]
+        },
+        {
+          "X0": [
+            "1"
+          ],
+          "X1": [
+            "0",
+            "1",
+            "4"
+          ]
+        },
+        {
+          "X0": [
+            "0"
+          ],
+          "X1": [
+            "4",
+            "0",
+            "5"
+          ]
+        },
+        {
+          "X1": [
+            "0"
+          ],
+          "X0": [
+            "4",
+            "5"
+          ]
+        }
+      ],
+      "first": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X0": "0",
+          "X1": [
+            "4",
+            "0"
+          ]
+        }
+      ],
+      "second": [
+        {
+          "X1": "0",
+          "X0": "5"
+        },
+        {
+          "X1": [
+            "4",
+            "0"
+          ]
+        }
+      ],
+      "residual": [
+        {
+          "kind": "sse1",
+          "target": 1,
+          "donor": 0,
+          "symbol": "X0"
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "arrangements": 2160,
+    "ordinary_production_calls": 4324,
+    "truth_valuation_rows": 507744,
+    "private_target_range_checks": 7899,
+    "constant_donor_intersection_checks": 26205,
+    "matrix_count_checks": 9034,
+    "enabled_conservative_true_observations": 114,
+    "observed_calls_identical_to_plain": 60,
+    "no_unit_state_checks": 1672,
+    "enabled_pending_count_one_observations": 8,
+    "negative_controls_rejected": 2
+  },
+  "group_counts": {
+    "common_triple": {
+      "arrangements": 144,
+      "ordinary_production_calls": 288,
+      "truth_valuation_rows": 11808,
+      "private_target_range_checks": 599,
+      "constant_donor_intersection_checks": 1198,
+      "matrix_count_checks": 712,
+      "enabled_conservative_true_observations": 18,
+      "observed_calls_identical_to_plain": 4,
+      "enabled_pending_count_one_observations": 2
+    },
+    "different_supports": {
+      "arrangements": 1728,
+      "ordinary_production_calls": 3456,
+      "truth_valuation_rows": 425088,
+      "no_unit_state_checks": 1362,
+      "private_target_range_checks": 6102,
+      "constant_donor_intersection_checks": 20814,
+      "matrix_count_checks": 6898,
+      "enabled_conservative_true_observations": 60,
+      "observed_calls_identical_to_plain": 48,
+      "enabled_pending_count_one_observations": 2
+    },
+    "common_wider": {
+      "arrangements": 288,
+      "ordinary_production_calls": 576,
+      "truth_valuation_rows": 70848,
+      "no_unit_state_checks": 310,
+      "private_target_range_checks": 1198,
+      "constant_donor_intersection_checks": 4193,
+      "matrix_count_checks": 1424,
+      "enabled_conservative_true_observations": 36,
+      "observed_calls_identical_to_plain": 8,
+      "enabled_pending_count_one_observations": 4
+    }
+  },
+  "seconds": 19.830453604459763
+}

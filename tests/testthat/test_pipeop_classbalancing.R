@@ -3,9 +3,6 @@ context("PipeOpClassBalancing")
 test_that("PipeOpClassBalancing - basic properties", {
   op = PipeOpClassBalancing$new()
   task = mlr_tasks$get("iris")
-  expect_pipeop(op)
-  train_pipeop(op, inputs = list(task))
-  predict_pipeop(op, inputs = list(task))
 
   expect_datapreproc_pipeop_class(PipeOpClassBalancing, task = task,
     predict_like_train = FALSE, deterministic_train = FALSE)
@@ -13,7 +10,7 @@ test_that("PipeOpClassBalancing - basic properties", {
 
 test_that("PipeOpClassBalancing", {
   op = PipeOpClassBalancing$new()
-  task = mlr_tasks$get("pima")
+  task = mlr_tasks$get("diabetes")
 
   op$param_set$values = list(ratio = 0.5, reference = "major", adjust = "major", shuffle = TRUE)
   nt = op$train(list(task))[[1L]]

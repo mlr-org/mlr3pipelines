@@ -1,0 +1,5 @@
+n=3: reverse 3 useful passes, forward 1, reverse seconds 0.787
+n=8: reverse 8 useful passes, forward 1, reverse seconds 0.315
+n=16: reverse 16 useful passes, forward 1, reverse seconds 1.683
+n=24: reverse 24 useful passes, forward 1, reverse seconds 5.298
+n=32: reverse 32 useful passes, forward 1, reverse seconds 8.618

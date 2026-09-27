@@ -1,0 +1,4 @@
+Exact cross-version payload agreement: 6250 saved composition results.
+There are 182 precisely checked implicit raw-matrix class metadata differences.
+The diagnostic kernel gate leaves every saved result exactly unchanged on each runtime.
+Primitive counts and source hashes agree across runtimes.

@@ -18,7 +18,7 @@ test_that("PipeOpUnbranch - basic properties", {
 
 test_that("PipeOpUnbranch - train and predict", {
   t1 = mlr_tasks$get("iris")
-  t2 = mlr_tasks$get("pima")
+  t2 = mlr_tasks$get("diabetes")
 
   ubranch = PipeOpUnbranch$new(2)
   expect_true(ubranch$innum == 2L)

@@ -49,6 +49,9 @@
 #' that is rotation invariant, as per Eaton: Multivariate Statistics, A Vector Space
 #' Approach, Pg. 234.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'

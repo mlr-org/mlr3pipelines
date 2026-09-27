@@ -11,7 +11,6 @@ test_that("PipeOpFixFactors", {
   expect_datapreproc_pipeop_class(PipeOpFixFactors, task = mlr_tasks$get("iris"))
 
   op = PipeOpFixFactors$new()
-  expect_pipeop(op)
 
   nt = train_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names

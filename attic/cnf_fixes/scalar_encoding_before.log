@@ -1,0 +1,9 @@
+bytes ed a0 80 validEnc TRUE
+Accepted as domain: 2 values
+Accepted as proper atom: TRUE
+bytes ed bf bf validEnc TRUE
+Accepted as domain: 2 values
+Accepted as proper atom: TRUE
+bytes f4 90 80 80 validEnc TRUE
+Accepted as domain: 2 values
+Accepted as proper atom: TRUE

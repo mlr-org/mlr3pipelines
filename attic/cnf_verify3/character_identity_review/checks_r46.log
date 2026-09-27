@@ -1,0 +1,17 @@
+{
+  "runtime": "4.6.1",
+  "checkmate": "2.3.4",
+  "cases": 20,
+  "formulas": 1920,
+  "public_api_configurations": 96,
+  "truth_assignments": 122880,
+  "trace_events": 1992576,
+  "site_count": 290,
+  "observed_sites": 287,
+  "helpers": ["char_intersect", "char_setdiff", "char_union", "return_entries", "register_unit", "apply_domain_restriction", "eliminate_symbol_from_clause", "on_updated_subset_relations", "on_update_range", "handle_sse_2nd_order_oneend", "handle_sse_2nd_order_twoend", "try_sse_2nd_order", "eliminate_clause_update_sr"],
+  "independent_semantic_controls": true,
+  "observer_control_detected": true,
+  "payloads_equal": true,
+  "source_traces_equal": true,
+  "universe_unchanged": true
+}

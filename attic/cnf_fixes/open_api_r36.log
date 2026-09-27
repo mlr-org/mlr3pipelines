@@ -1,0 +1,7 @@
+R version 3.6.3 (2020-02-29)
+9: Cannot convert object to CnfAtom.
+10: names(as.list(proper_clause)) = NULL
+19: mixed atom & clause: [1] "operations are possible only for numeric, logical or complex types"
+Warning message:
+In doTryCatch(return(expr), name, parentenv, handler) :
+  Incompatible methods ("&.CnfAtom", "&.CnfClause") for "&"

@@ -20,6 +20,7 @@
 #' ```
 #' PipeOpEncode$new(id = "encode", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"encode"`.
 #' * `param_vals` :: named `list`\cr
@@ -28,13 +29,13 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with all affected `factor` and `ordered` parameters encoded according to the `method`
+#' The output is the input [`Task`][mlr3::Task] with all affected `factor` and `ordered` columns encoded according to the `method`
 #' parameter.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `constrasts` :: named `list` of `matrix`\cr
-#'   List of contrast matrices, one for each affected discrete feature. The rows of each matrix correspond to (training task) levels, the the
+#' * `contrasts` :: named `list` of `matrix`\cr
+#'   List of contrast matrices, one for each affected discrete feature. The rows of each matrix correspond to (training task) levels, the
 #'   columns to the new columns that replace the old discrete feature. See [`stats::contrasts`].
 #'
 #' @section Parameters:
@@ -49,6 +50,9 @@
 #'
 #' @section Internals:
 #' Uses the [`stats::contrasts`] functions. This is relatively inefficient for features with a large number of levels.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].

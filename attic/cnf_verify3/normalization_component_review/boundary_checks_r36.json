@@ -1,0 +1,20 @@
+{
+  "R": "R version 3.6.3 (2020-02-29)",
+  "checkmate": "2.3.4",
+  "counts": {
+    "domains": 28,
+    "proper_payloads": 462,
+    "empty_atoms": 28,
+    "full_atoms": 28,
+    "unused_universe_payloads": 80,
+    "unused_universe_traces": 80
+  },
+  "source_site_counts": {
+    "&&1": 8,
+    "&&2": 8,
+    "||1": 26,
+    "||2": 26,
+    "for": 23,
+    "if": 108
+  }
+}

@@ -1,0 +1,13 @@
+trials=250 branch_decisions=67201 failures=0
+trials=500 branch_decisions=135708 failures=0
+trials=750 branch_decisions=212487 failures=0
+trials=1000 branch_decisions=273234 failures=0
+trials=1250 branch_decisions=345267 failures=0
+trials=1500 branch_decisions=418581 failures=0
+trials=1750 branch_decisions=490762 failures=0
+trials=2000 branch_decisions=559218 failures=0
+trials=2250 branch_decisions=629815 failures=0
+trials=2500 branch_decisions=706467 failures=0
+trials=2750 branch_decisions=783516 failures=0
+trials=3000 branch_decisions=852862 failures=0
+PASS: duplicates; 3000 transformations; 852862 matched branch decisions; 125 instrumented condition sites
