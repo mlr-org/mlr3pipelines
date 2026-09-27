@@ -104,6 +104,10 @@ Suggests:
     vtreat,
     future,
     htmlwidgets,
+    uwot (>= 0.2.5),
+    RcppAnnoy,
+    RcppHNSW,
+    rnndescent,
     ranger,
     themis,
     splines,
@@ -207,6 +211,7 @@ Collate:
     'PipeOpTomek.R'
     'PipeOpTrafo.R'
     'PipeOpTuneThreshold.R'
+    'PipeOpUMAP.R'
     'PipeOpUnbranch.R'
     'PipeOpVtreat.R'
     'PipeOpYeoJohnson.R'
