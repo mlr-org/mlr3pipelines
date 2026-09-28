@@ -18,6 +18,8 @@ set the `predict_type` in all relevant
 [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html)
 encapsulated within the
 [`Graph`](https://mlr3pipelines.mlr-org.com/dev/reference/Graph.md).
+[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)s
+whose `predict_type` already has the requested value are left untouched.
 Similarly, the predict_type of a Graph will always be the smallest
 denominator in the
 [`Graph`](https://mlr3pipelines.mlr-org.com/dev/reference/Graph.md).

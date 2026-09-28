@@ -20,6 +20,12 @@
   `ppl("bagging")` /
   [`pipeline_bagging()`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_bagging.md)
   is deprecated and will be removed in the future.
+- Fix: `GraphLearner$predict_type` no longer assigns the `predict_type`
+  of `PipeOp`s that already have the requested value. Read-only
+  `$predict_type` fields (`PipeOp`, `PipeOpLearnerQuantiles`,
+  `PipeOpLearnerPICVPlus`) now accept assignment of their current value
+  as a no-op
+  ([\#970](https://github.com/mlr-org/mlr3pipelines/issues/970)).
 
 ## mlr3pipelines 0.12.0
 

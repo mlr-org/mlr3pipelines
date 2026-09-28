@@ -58,6 +58,7 @@
 <li>Tests in <code>inst/testthat</code> no longer override <code>expect_equal</code>.</li>
 <li>Fix: <code><a href="../reference/po.html">pos()</a></code> now returns an unnamed list, preventing duplicated PipeOp IDs such as <code>pca.pca</code> when passed to <code><a href="../reference/as_graph.html">as_graph()</a></code>.</li>
 <li>New <code>ppl("bag")</code> / <code><a href="../reference/mlr_graphs_bag.html">pipeline_bag()</a></code> performs real bagging with <code>frac = 1</code> and <code>replace = TRUE</code> by default. <code>ppl("bagging")</code> / <code><a href="../reference/mlr_graphs_bagging.html">pipeline_bagging()</a></code> is deprecated and will be removed in the future.</li>
+<li>Fix: <code>GraphLearner$predict_type</code> no longer assigns the <code>predict_type</code> of <code>PipeOp</code>s that already have the requested value. Read-only <code>$predict_type</code> fields (<code>PipeOp</code>, <code>PipeOpLearnerQuantiles</code>, <code>PipeOpLearnerPICVPlus</code>) now accept assignment of their current value as a no-op (<a href="https://github.com/mlr-org/mlr3pipelines/issues/970" class="external-link">#970</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.12.0" id="mlr3pipelines-0120">mlr3pipelines 0.12.0<a class="anchor" aria-label="anchor" href="#mlr3pipelines-0120"></a></h2><p class="text-muted">CRAN release: 2026-09-05</p>

@@ -13,6 +13,7 @@ internal state changes during training are used.
 The predict_type of a GraphLearner can be obtained or set via it's predict_type active binding.
 Setting a new predict type will try to set the predict_type in all relevant
 PipeOp / Learner encapsulated within the Graph.
+PipeOps whose predict_type already has the requested value are left untouched.
 Similarly, the predict_type of a Graph will always be the smallest denominator in the Graph.
 A GraphLearner is always constructed in an untrained state. When the graph argument has a
 non-NULL $state, it is ignored."><meta property="og:description" content="A Learner that encapsulates a Graph to be used in
@@ -23,6 +24,7 @@ internal state changes during training are used.
 The predict_type of a GraphLearner can be obtained or set via it's predict_type active binding.
 Setting a new predict type will try to set the predict_type in all relevant
 PipeOp / Learner encapsulated within the Graph.
+PipeOps whose predict_type already has the requested value are left untouched.
 Similarly, the predict_type of a Graph will always be the smallest denominator in the Graph.
 A GraphLearner is always constructed in an untrained state. When the graph argument has a
 non-NULL $state, it is ignored."><meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png"><meta name="robots" content="noindex"></head><body>
@@ -81,6 +83,7 @@ internal state changes during training are used.</p>
 <p>The <code>predict_type</code> of a <code>GraphLearner</code> can be obtained or set via it's <code>predict_type</code> active binding.
 Setting a new predict type will try to set the <code>predict_type</code> in all relevant
 <code><a href="PipeOp.html">PipeOp</a></code> / <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> encapsulated within the <code><a href="Graph.html">Graph</a></code>.
+<code><a href="PipeOp.html">PipeOp</a></code>s whose <code>predict_type</code> already has the requested value are left untouched.
 Similarly, the predict_type of a Graph will always be the smallest denominator in the <code><a href="Graph.html">Graph</a></code>.</p>
 <p>A <code>GraphLearner</code> is always constructed in an untrained state. When the <code>graph</code> argument has a
 non-<code>NULL</code> <code>$state</code>, it is ignored.</p>
