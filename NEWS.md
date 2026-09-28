@@ -1,5 +1,6 @@
 # mlr3pipelines 0.12.0-9000
 
+* Fix: `GraphLearner$hash` and `$phash` now include the timeout, the deadline, the encapsulation method, and the `when` handler, matching `Learner$hash` in `mlr3`, so `GraphLearner`s differing only in these settings are no longer merged by `benchmark()`.
 * Fix: Deep-cloning a `GraphLearner` now also clones `R6` objects in its saved hyperparameter values (`$state$param_vals`).
 * Tests in `inst/testthat` no longer override `expect_equal`.
 * Fix: `pos()` now returns an unnamed list, preventing duplicated PipeOp IDs such as `pca.pca` when passed to `as_graph()`.

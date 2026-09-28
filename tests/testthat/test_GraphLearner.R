@@ -906,6 +906,38 @@ test_that("base_learner() works", {
 })
 
 
+test_that("GraphLearner hashes cover timeout, deadline, and encapsulation", {
+  skip_if_not_installed("rpart")
+
+  make_learner = function() as_learner(po("scale") %>>% lrn("classif.rpart"))
+  base = make_learner()
+  expect_equal(make_learner()$hash, base$hash)
+  expect_equal(make_learner()$phash, base$phash)
+
+  learner = make_learner()
+  learner$timeout = c(train = 5)
+  expect_string(all.equal(learner$hash, base$hash), "mismatch")
+  expect_string(all.equal(learner$phash, base$phash), "mismatch")
+
+  learner = make_learner()
+  learner$deadline = c(train = as.POSIXct("2030-01-01", tz = "UTC"))
+  expect_string(all.equal(learner$hash, base$hash), "mismatch")
+  expect_string(all.equal(learner$phash, base$phash), "mismatch")
+
+  learner = make_learner()
+  learner$encapsulate("evaluate", lrn("classif.featureless"))
+  learner_when = make_learner()
+  learner_when$encapsulate("evaluate", lrn("classif.featureless"), when = function(cond, ...) TRUE)
+  expect_string(all.equal(learner$hash, base$hash), "mismatch")
+  expect_string(all.equal(learner$hash, learner_when$hash), "mismatch")
+  expect_string(all.equal(learner$phash, learner_when$phash), "mismatch")
+
+  learner_when2 = make_learner()
+  learner_when2$encapsulate("evaluate", lrn("classif.featureless"), when = function(cond, ...) TRUE)
+  expect_equal(learner_when$hash, learner_when2$hash)
+  expect_equal(learner_when$phash, learner_when2$phash)
+})
+
 test_that("GraphLearner hashes", {
   skip_if_not_installed("rpart")
 
