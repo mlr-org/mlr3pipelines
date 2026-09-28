@@ -113,6 +113,7 @@ test_that("Dictionary contains all PipeOps", {
     expect_false(isTRUE(all.equal(other_obj$hash, test_obj$hash)), info = paste(dictname, "$new id test"))
     expect_false(isTRUE(all.equal(other_obj$phash, test_obj$phash)), info = paste(dictname, "$new id test"))
     test_obj$id = "TESTID"
+    test_obj = inflate(test_obj)
     other_obj = inflate(do.call(mlr_pipeops$get, c(list(dictname), args)))
     expect_equal(other_obj, test_obj, info = paste(dictname, "$new id test 2"))
     if (!dictname %in% pval_unhashable) {
