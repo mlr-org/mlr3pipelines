@@ -2,6 +2,11 @@
 
 ## mlr3pipelines 0.12.0-9000
 
+- Fix: `GraphLearner$hash` and `$phash` now include the timeout, the
+  deadline, the encapsulation method, and the `when` handler, matching
+  `Learner$hash` in `mlr3`, so `GraphLearner`s differing only in these
+  settings are no longer merged by
+  [`benchmark()`](https://mlr3.mlr-org.com/reference/benchmark.html).
 - Fix: Deep-cloning a `GraphLearner` now also clones `R6` objects in its
   saved hyperparameter values (`$state$param_vals`).
 - Tests in `inst/testthat` no longer override `expect_equal`.
