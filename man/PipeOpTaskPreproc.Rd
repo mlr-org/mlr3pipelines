@@ -86,7 +86,7 @@ The output \code{\link[mlr3:Task]{Task}} is the modified input \code{\link[mlr3:
 
 The \verb{$state} is a named \code{list}; besides members added by inheriting classes, the members are:
 \itemize{
-\item \code{affect_cols} :: \code{character}\cr
+\item \code{affected_cols} :: \code{character}\cr
 Names of features being selected by the \code{affect_columns} parameter, if present; names of \emph{all} present features otherwise.
 \item \code{intasklayout} :: \code{\link[data.table:data.table]{data.table}}\cr
 Copy of the training \code{\link[mlr3:Task]{Task}}'s \verb{$feature_types} slot. This is used during prediction to ensure that
@@ -94,11 +94,13 @@ the prediction \code{\link[mlr3:Task]{Task}} has the same features, feature layo
 \item \code{outtasklayout} :: \code{\link[data.table:data.table]{data.table}}\cr
 Copy of the trained \code{\link[mlr3:Task]{Task}}'s \verb{$feature_types} slot. This is used during prediction to ensure that
 the \code{\link[mlr3:Task]{Task}} resulting from the prediction operation has the same features, feature layout, and feature types as after training.
+\item \code{outtaskshell} :: \code{\link[data.table:data.table]{data.table}}\cr
+Zero-row \code{data.table} with the target and feature columns of the trained \code{\link[mlr3:Task]{Task}}.
+This is used during prediction on a \code{\link[mlr3:Task]{Task}} without rows, to create the output \code{\link[mlr3:Task]{Task}}
+with the same features as after training without calling \code{private$.predict_task()}.
 \item \code{dt_columns} :: \code{character}\cr
 Names of features selected by the \code{private$.select_cols()} call during training. This is only present if the \code{private$.train_dt()} functionality is used,
 and not present if the \code{private$.train_task()} function is overloaded instead.
-\item \code{feature_types} :: \code{character}\cr
-Feature types affected by the \code{PipeOp}. See \code{private$.select_cols()} for more information.
 }
 }
 
@@ -128,7 +130,13 @@ processing, and adding them afterwards by setting the col_role to \code{"feature
 
 \section{Fields}{
 
-Fields inherited from \code{\link{PipeOp}}.
+Fields inherited from \code{\link{PipeOp}}, as well as:
+\itemize{
+\item \code{feature_types} :: \code{character}\cr
+Feature types affected by the \code{PipeOp}, as given by the \code{feature_types} construction argument.
+See \code{private$.select_cols()} for more information.
+Read-only.
+}
 }
 
 \section{Methods}{
