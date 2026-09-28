@@ -50,23 +50,39 @@
 #' ordinary prediction made on the data by a [`Learner`][mlr3::Learner] trained on the training phase data.
 #'
 #' @section State:
-#' The `$state` is set to the `$state` slot of the [`Learner`][mlr3::Learner] object, together with the `$state` elements inherited from the
-#' [`PipeOpTaskPreproc`]. It is a named `list` with the inherited members, as well as:
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
+#' * `predict_method` :: `character(1)`\cr
+#'   `"full"` when prediction uses a learner fitted on all training data,
+#'   `"cv_ensemble"` when predictions are averaged over models trained on resampling folds.
+#' * `cv_model_states` :: `NULL` | `list`\cr
+#'   Present for `predict_method = "cv_ensemble"`.
+#'   Contains the states of the learners trained on each resampling fold.
+#'
+#' For `predict_method = "full"`, the `$state` also contains all members of the `$state` slot of the
+#' [`Learner`][mlr3::Learner] trained on the complete training data.
+#' This is the named `list` of class `"learner_state"` that \CRANpkg{mlr3} creates during `$train()`,
+#' which is considered an internal data structure that may change
+#' (see the `$state` field of [`Learner`][mlr3::Learner]).
+#' Its most important members are:
 #' * `model` :: `any`\cr
 #'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function.
-#' * `train_log` :: [`data.table`][data.table::data.table] with columns `class` (`character`), `msg` (`character`)\cr
-#'   Errors logged during training.
+#' * `log` :: [`data.table`][data.table::data.table] with columns `stage` (`factor`), `class` (`factor`),
+#'   `condition` (`list`)\cr
+#'   Output, warnings and errors logged during training.
 #' * `train_time` :: `numeric(1)`\cr
 #'   Training time, in seconds.
-#' * `predict_log` :: `NULL` | [`data.table`][data.table::data.table] with columns `class` (`character`), `msg` (`character`)\cr
-#'   Errors logged during prediction.
-#' * `predict_time` :: `NULL` | `numeric(1)`
-#'   Prediction time, in seconds.
-#' * `predict_method` :: `character(1)`\cr
-#'   `"full"` when prediction uses a learner fitted on all training data, `"cv_ensemble"` when predictions are averaged over
-#'   models trained on resampling folds.
-#' * `cv_model_states` :: `NULL` | `list`\cr
-#'   Present for `predict_method = "cv_ensemble"`. Contains the states of the learners trained on each resampling fold.
+#' * `param_vals` :: named `list`\cr
+#'   Hyperparameter values used for training.
+#' * `task_hash` :: `character(1)`\cr
+#'   Hash of the training [`Task`][mlr3::Task].
+#' * `feature_names` :: `character`\cr
+#'   Feature names of the training [`Task`][mlr3::Task].
+#'
+#' \CRANpkg{mlr3} adds further members, e.g. `train_task`, `data_prototype`, `validate` and `mlr3_version`.
+#'
+#' For `predict_method = "cv_ensemble"`, no [`Learner`][mlr3::Learner] is trained on the complete training data.
+#' Of the members listed above, the `$state` then only contains `model` and `log`, which are `NULL`,
+#' and `train_time`, which is `NA`.
 #'
 #' This state is given the class `"pipeop_learner_cv_state"`.
 #'
@@ -103,7 +119,8 @@
 #'   Only present for learners that support `"se"` predictions.
 #'
 #' @section Internals:
-#' The `$state` is currently not updated by prediction, so the `$state$predict_log` and `$state$predict_time` will always be `NULL`.
+#' The `$state` is currently not updated by prediction, so `$state$log` never contains entries with `stage` `"predict"`
+#' and `$state$predict_time` is always `NULL`.
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`], as well as:
@@ -387,10 +404,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     make_cv_state = function(cv_model_states) {
       list(
         model = NULL,
-        train_log = NULL,
+        log = NULL,
         train_time = NA_real_,
-        predict_log = NULL,
-        predict_time = NULL,
         predict_method = "cv_ensemble",
         cv_model_states = cv_model_states
       )

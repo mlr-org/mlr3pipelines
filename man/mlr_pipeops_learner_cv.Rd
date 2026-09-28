@@ -59,25 +59,43 @@ ordinary prediction made on the data by a \code{\link[mlr3:Learner]{Learner}} tr
 
 \section{State}{
 
-The \verb{$state} is set to the \verb{$state} slot of the \code{\link[mlr3:Learner]{Learner}} object, together with the \verb{$state} elements inherited from the
-\code{\link{PipeOpTaskPreproc}}. It is a named \code{list} with the inherited members, as well as:
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
+\itemize{
+\item \code{predict_method} :: \code{character(1)}\cr
+\code{"full"} when prediction uses a learner fitted on all training data,
+\code{"cv_ensemble"} when predictions are averaged over models trained on resampling folds.
+\item \code{cv_model_states} :: \code{NULL} | \code{list}\cr
+Present for \code{predict_method = "cv_ensemble"}.
+Contains the states of the learners trained on each resampling fold.
+}
+
+For \code{predict_method = "full"}, the \verb{$state} also contains all members of the \verb{$state} slot of the
+\code{\link[mlr3:Learner]{Learner}} trained on the complete training data.
+This is the named \code{list} of class \code{"learner_state"} that \CRANpkg{mlr3} creates during \verb{$train()},
+which is considered an internal data structure that may change
+(see the \verb{$state} field of \code{\link[mlr3:Learner]{Learner}}).
+Its most important members are:
 \itemize{
 \item \code{model} :: \code{any}\cr
 Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function.
-\item \code{train_log} :: \code{\link[data.table:data.table]{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
-Errors logged during training.
+\item \code{log} :: \code{\link[data.table:data.table]{data.table}} with columns \code{stage} (\code{factor}), \code{class} (\code{factor}),
+\code{condition} (\code{list})\cr
+Output, warnings and errors logged during training.
 \item \code{train_time} :: \code{numeric(1)}\cr
 Training time, in seconds.
-\item \code{predict_log} :: \code{NULL} | \code{\link[data.table:data.table]{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
-Errors logged during prediction.
-\item \code{predict_time} :: \code{NULL} | \code{numeric(1)}
-Prediction time, in seconds.
-\item \code{predict_method} :: \code{character(1)}\cr
-\code{"full"} when prediction uses a learner fitted on all training data, \code{"cv_ensemble"} when predictions are averaged over
-models trained on resampling folds.
-\item \code{cv_model_states} :: \code{NULL} | \code{list}\cr
-Present for \code{predict_method = "cv_ensemble"}. Contains the states of the learners trained on each resampling fold.
+\item \code{param_vals} :: named \code{list}\cr
+Hyperparameter values used for training.
+\item \code{task_hash} :: \code{character(1)}\cr
+Hash of the training \code{\link[mlr3:Task]{Task}}.
+\item \code{feature_names} :: \code{character}\cr
+Feature names of the training \code{\link[mlr3:Task]{Task}}.
 }
+
+\CRANpkg{mlr3} adds further members, e.g. \code{train_task}, \code{data_prototype}, \code{validate} and \code{mlr3_version}.
+
+For \code{predict_method = "cv_ensemble"}, no \code{\link[mlr3:Learner]{Learner}} is trained on the complete training data.
+Of the members listed above, the \verb{$state} then only contains \code{model} and \code{log}, which are \code{NULL},
+and \code{train_time}, which is \code{NA}.
 
 This state is given the class \code{"pipeop_learner_cv_state"}.
 }
@@ -120,7 +138,8 @@ Only present for learners that support \code{"se"} predictions.
 
 \section{Internals}{
 
-The \verb{$state} is currently not updated by prediction, so the \verb{$state$predict_log} and \verb{$state$predict_time} will always be \code{NULL}.
+The \verb{$state} is currently not updated by prediction, so \verb{$state$log} never contains entries with \code{stage} \code{"predict"}
+and \verb{$state$predict_time} is always \code{NULL}.
 }
 
 \section{Fields}{

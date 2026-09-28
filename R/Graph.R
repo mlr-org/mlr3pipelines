@@ -22,6 +22,34 @@
 #' performs topological sorting of the [`PipeOp`]s and executes their respective `$train()` or `$predict()` functions in order, moving
 #' the [`PipeOp`] results along the edges as input to other [`PipeOp`]s.
 #'
+#' A `Graph` has no trained state of its own: everything learned during `$train()` is stored in the `$state` of the
+#' individual [`PipeOp`]s (see the `$state` field of [`PipeOp`]).
+#' The `$state` field of the `Graph` is only a view on these: reading it collects the `$state` of each [`PipeOp`] into a
+#' named `list`, and assigning a named `list` sets the `$state` of each [`PipeOp`] to the element of the same name
+#' (`NULL` if absent), so assigning `NULL` resets all of them.
+#' Training a `Graph` therefore modifies it in place,
+#' and `$is_trained` is `TRUE` exactly when all its [`PipeOp`]s have a non-`NULL` `$state`.
+#'
+#' The `$model` of a [`GraphLearner`] is the `$state` of the wrapped `Graph`, captured after training.
+#' Like any [`Learner`][mlr3::Learner], a [`GraphLearner`] stores everything it learns in its own `$state`
+#' (e.g. the log, the training time and the hyperparameter values used),
+#' where `$model` is an alias for `$state$model` and is set by \CRANpkg{mlr3} to the return value of `private$.train()`.
+#' `private$.train()` of a [`GraphLearner`] therefore trains `$graph` in place,
+#' returns the resulting `$state` of `$graph` with the added class `"graph_learner_model"`
+#' (which [`marshal_model()`][mlr3::marshal_model] dispatches on),
+#' and resets the `$state` of `$graph` to `NULL`, as is also done on construction.
+#' After `$train()`, `$graph` is thus the untrained prototype, used e.g. for configuration via `$param_set$values`,
+#' while `$model` holds the named `list` of trained [`PipeOp`] states.
+#' For prediction, `$model` is assigned to the `$state` of `$graph` only for the duration of `private$.predict()`.
+#' `$graph_model` reunites the two for inspection: it is a deep clone of `$graph` with `$state` set to `$model`,
+#' or `$graph` itself while `$model` is `NULL`, so that `$graph_model$pipeops$<id>$state` is `$model$<id>`.
+#' This separation is necessary because \CRANpkg{mlr3} may run `private$.train()` in a separate R process
+#' (`"callr"` or `"mirai"` encapsulation), and because resampling only keeps the `$state` of a
+#' [`Learner`][mlr3::Learner] and rebuilds trained learners from it,
+#' so trained information kept only by reference inside `$graph` would be lost.
+#' [`PipeOpLearner`] applies the same pattern one level down: `$learner` stays untrained,
+#' `$state` is the `$state` of the wrapped [`Learner`][mlr3::Learner], and `$learner_model` combines the two.
+#'
 #' @section Fields:
 #' * `pipeops` :: named `list` of [`PipeOp`] \cr
 #'   Contains all [`PipeOp`]s in the `Graph`, named by the [`PipeOp`]'s `$id`s.
@@ -127,8 +155,8 @@
 #'   in order in which they are listed in `$input`.
 #' * `predict(input, single_input = TRUE)` \cr
 #'   (`any`, `logical(1)`) -> `list` of `any` \cr
-#'   Predict with the `Graph` by calling all the [`PipeOp`]'s `$train` methods. Input and output, as well as the function
-#'   of the `single_input` argument, are analogous to `$train()`.
+#'   Predict with the `Graph` by calling all the [`PipeOp`]'s `$predict` methods.
+#'   Input and output, as well as the function of the `single_input` argument, are analogous to `$train()`.
 #' * `help(help_type)` \cr
 #'   (`character(1)`) -> help file\cr
 #'   Displays the help file of the concrete `PipeOp` instance. `help_type` is one of `"text"`, `"html"`, `"pdf"` and behaves
