@@ -108,6 +108,13 @@ test_that("PipeOpLearnerQuantiles - predict_type is fixed", {
   lrn = lrn("regr.debug")
   po = PipeOpLearnerQuantiles$new(lrn)
   expect_equal(po$predict_type, c("response", "quantiles"))
+
+  # assigning the current value is a no-op, anything else errors
+  po$predict_type = c("response", "quantiles")
+  expect_equal(po$predict_type, c("response", "quantiles"))
+  expect_error({po$predict_type = "quantiles"}, "read-only")
+  expect_error({po$predict_type = "response"}, "read-only")
+  expect_equal(po$predict_type, c("response", "quantiles"))
 })
 
 test_that("PipeOpLearnerQuantiles - integration with larger graph", {

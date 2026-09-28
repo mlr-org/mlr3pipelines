@@ -101,6 +101,13 @@ test_that("PipeOpLearnerPICVPlus - predict_type is fixed", {
   lrn = lrn("regr.rpart")
   po = PipeOpLearnerPICVPlus$new(lrn)
   expect_equal(po$predict_type, c("response", "quantiles"))
+
+  # assigning the current value is a no-op, anything else errors
+  po$predict_type = c("response", "quantiles")
+  expect_equal(po$predict_type, c("response", "quantiles"))
+  expect_error({po$predict_type = "quantiles"}, "read-only")
+  expect_error({po$predict_type = "response"}, "read-only")
+  expect_equal(po$predict_type, c("response", "quantiles"))
 })
 
 test_that("PipeOpLearnerPICVPlus - integration with larger graph", {

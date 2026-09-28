@@ -18,6 +18,7 @@ internal state changes during training are used.
 The \code{predict_type} of a \code{\link{GraphLearner}} can be obtained or set via it's \code{predict_type} active binding.
 Setting a new predict type will try to set the \code{predict_type} in all relevant
 \code{\link{PipeOp}} / \code{\link[mlr3:Learner]{Learner}} encapsulated within the \code{\link{Graph}}.
+\code{\link{PipeOp}}s whose \code{predict_type} already has the requested value are left untouched.
 Similarly, the predict_type of a Graph will always be the smallest denominator in the \code{\link{Graph}}.
 
 A \code{GraphLearner} is always constructed in an untrained state. When the \code{graph} argument has a
