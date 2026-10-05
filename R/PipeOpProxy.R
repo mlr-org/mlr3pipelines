@@ -104,7 +104,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
             },
             error = function(error_condition) "`content` must be an object that can be converted to a Graph")
           }, innum, outnum),
-          tags = c("train", "predidct", "required")
+          tags = c("train", "predict", "required")
         )
       )
       ps$values = list(content = PipeOpFeatureUnion$new(innum = innum))
