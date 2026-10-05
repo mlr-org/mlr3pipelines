@@ -46,7 +46,7 @@
 #' * `graph` :: [`Graph`]\cr
 #'   [`Graph`] that is being wrapped. This field contains the prototype of the [`Graph`] that is being trained, but does *not*
 #'   contain the model. Use `graph_model` to access the trained [`Graph`] after `$train()`. Read-only.
-#' * `graph_model` :: [`Learner`][mlr3::Learner]\cr
+#' * `graph_model` :: [`Graph`]\cr
 #'   [`Graph`] that is being wrapped. This [`Graph`] contains a trained state after `$train()`. Read-only.
 #'   Accessing it while the `GraphLearner` is marshaled throws an error; call `$unmarshal()` first.
 #' * `pipeops` :: named `list` of [`PipeOp`] \cr
