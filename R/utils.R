@@ -104,6 +104,17 @@ add_synthetic_name_col = function(task, new_data, id) {
   new_data
 }
 
+# Assert that a Task inherits from TaskRegr or TaskClassif and return "regr" or "classif", respectively.
+# Uses class inheritance instead of `task$task_type`, since Tasks inheriting from TaskRegr / TaskClassif can have a
+# different task type (e.g. "regr_st" for TaskRegrST from mlr3spatiotempcv).
+# @param task [Task] the Task to check
+# @return [character(1)] "regr" if `task` inherits from TaskRegr, "classif" if it inherits from TaskClassif
+assert_regr_or_classif_task = function(task) {
+  if (inherits(task, "TaskRegr")) return("regr")
+  if (inherits(task, "TaskClassif")) return("classif")
+  stopf("Only TaskRegr, TaskClassif, or tasks inheriting from them are supported, but got %s.", class(task)[[1L]])
+}
+
 # these must be at the root and can not be anonymous functions because all.equal fails otherwise.
 check_function_or_null = function(x) check_function(x, null.ok = TRUE)
 check_numeric_valid_threshold = function(x) check_numeric(x, any.missing = FALSE, min.len = 1, lower = 0, upper = 1)
