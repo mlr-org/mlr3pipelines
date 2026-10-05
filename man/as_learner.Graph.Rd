@@ -24,14 +24,16 @@ Object to convert.}
 
 \item{clone}{(\code{logical(1)})\cr
 Whether to deep clone \code{x} before wrapping it.
-If \code{FALSE} (default), the resulting \code{\link{GraphLearner}} wraps \code{x} by reference.
-Changing one then changes the other,
-and the \verb{$state} of \code{x} is reset when the \code{\link{GraphLearner}} is constructed, trained, or used for prediction.}
+If \code{FALSE} (default), \code{x} is wrapped by reference,
+so changes to \code{x}, such as new hyperparameter values, also affect the resulting \code{\link{GraphLearner}}, and vice versa.
+Furthermore, if \code{x} is trained, its \verb{$state} is reset by reference during conversion,
+as well as whenever the \code{\link{GraphLearner}} is trained or used for prediction.
+If \code{TRUE}, \code{x} is left unchanged.}
 
 \item{discard_state}{(\code{logical(1)})\cr
 Exists for compatibility with the \code{\link[mlr3:as_learner]{as_learner()}} method for \code{\link[mlr3:Learner]{Learner}}s,
 which \code{\link[mlr3:resample]{resample()}} relies on.
-Has no effect, since the resulting \code{\link{GraphLearner}} is always untrained.}
+Has no effect, since the resulting \code{\link{GraphLearner}} is always untrained, even if \code{x} is trained.}
 
 \item{...}{(any)\cr
 For \code{as_learner.PipeOp()}, passed on to \code{as_learner.Graph()}.
@@ -59,14 +61,13 @@ If \code{NULL} (default), it is inferred from \code{x}.}
 \description{
 Methods for \code{\link[mlr3:as_learner]{as_learner()}} that wrap a \code{\link{Graph}} or a \code{\link{PipeOp}} in a \code{\link{GraphLearner}}.
 A \code{\link{PipeOp}} is first converted to a \code{\link{Graph}} using \code{\link[=as_graph]{as_graph()}}.
+}
+\section{Internals}{
 
 The arguments \code{id}, \code{param_vals}, \code{task_type}, and \code{predict_type} are passed on to the \code{\link{GraphLearner}} constructor.
-Except for \code{task_type}, these settings can also be changed after conversion,
-using the \verb{$configure()} method of the resulting \code{\link[mlr3:Learner]{Learner}}.
-Unlike the constructor arguments, \verb{$configure()} also works when \code{x} is already a \code{\link[mlr3:Learner]{Learner}}.
-
 Unknown arguments raise an error.
 }
+
 \examples{
 \dontshow{if (requireNamespace("rpart")) withAutoprint(\{ # examplesIf}
 library("mlr3")

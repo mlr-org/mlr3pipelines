@@ -25,8 +25,6 @@
 #' GraphLearner$new(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL, clone_graph = TRUE)
 #' ```
 #'
-#' Alternatively, use [`as_learner()`][as_learner.Graph], which does not clone `graph` by default.
-#'
 #' * `graph` :: [`Graph`] | [`PipeOp`]\cr
 #'   [`Graph`] to wrap. Can be a [`PipeOp`], which is automatically converted to a [`Graph`].
 #'  This argument is usually cloned, unless `clone_graph` is `FALSE`; to access the [`Graph`] inside `GraphLearner` by-reference, use `$graph`.\cr
@@ -39,9 +37,13 @@
 #' * `predict_type` :: `character(1)`\cr
 #'   What `predict_type` the `GraphLearner` should have; usually automatically inferred for [`Graph`]s that are simple enough.
 #' * `clone_graph` :: `logical(1)`\cr
-#'   Whether to clone `graph` upon construction. Unintentionally changing `graph` by reference can lead to unexpected behaviour,
-#'   so `TRUE` (default) is recommended. In particular, note that the `$state` of `$graph` is set to `NULL` by reference on
-#'   construction of `GraphLearner`, during `$train()`, and during `$predict()` when `clone_graph` is `FALSE`.
+#'   Whether to deep clone `graph` upon construction.
+#'   If `FALSE`, `graph` is wrapped by reference,
+#'   so changes to `graph`, such as new hyperparameter values, also affect the `GraphLearner`, and vice versa.
+#'   Furthermore, if `graph` is trained, its `$state` is reset by reference during construction,
+#'   as well as whenever the `GraphLearner` is trained or used for prediction.
+#'   Since unintentionally changing `graph` by reference can lead to unexpected behaviour,
+#'   `TRUE` (default) is recommended.
 #'
 #' @section Fields:
 #' Fields inherited from [`Learner`][mlr3::Learner], as well as:
@@ -663,24 +665,23 @@ unmarshal_model.graph_learner_model_marshaled = function(model, inplace = FALSE,
 #' Methods for [`as_learner()`][mlr3::as_learner] that wrap a [`Graph`] or a [`PipeOp`] in a [`GraphLearner`].
 #' A [`PipeOp`] is first converted to a [`Graph`] using [`as_graph()`].
 #'
+#' @section Internals:
 #' The arguments `id`, `param_vals`, `task_type`, and `predict_type` are passed on to the [`GraphLearner`] constructor.
-#' Except for `task_type`, these settings can also be changed after conversion,
-#' using the `$configure()` method of the resulting [`Learner`][mlr3::Learner].
-#' Unlike the constructor arguments, `$configure()` also works when `x` is already a [`Learner`][mlr3::Learner].
-#'
 #' Unknown arguments raise an error.
 #'
 #' @param x ([`Graph`] | [`PipeOp`])\cr
 #'   Object to convert.
 #' @param clone (`logical(1)`)\cr
 #'   Whether to deep clone `x` before wrapping it.
-#'   If `FALSE` (default), the resulting [`GraphLearner`] wraps `x` by reference.
-#'   Changing one then changes the other,
-#'   and the `$state` of `x` is reset when the [`GraphLearner`] is constructed, trained, or used for prediction.
+#'   If `FALSE` (default), `x` is wrapped by reference,
+#'   so changes to `x`, such as new hyperparameter values, also affect the resulting [`GraphLearner`], and vice versa.
+#'   Furthermore, if `x` is trained, its `$state` is reset by reference during conversion,
+#'   as well as whenever the [`GraphLearner`] is trained or used for prediction.
+#'   If `TRUE`, `x` is left unchanged.
 #' @param discard_state (`logical(1)`)\cr
 #'   Exists for compatibility with the [`as_learner()`][mlr3::as_learner] method for [`Learner`][mlr3::Learner]s,
 #'   which [`resample()`][mlr3::resample] relies on.
-#'   Has no effect, since the resulting [`GraphLearner`] is always untrained.
+#'   Has no effect, since the resulting [`GraphLearner`] is always untrained, even if `x` is trained.
 #' @param ... (any)\cr
 #'   For `as_learner.PipeOp()`, passed on to `as_learner.Graph()`.
 #'   For `as_learner.Graph()`, must be empty.
