@@ -22,8 +22,10 @@
 #'
 #' @section Construction:
 #' ```
-#' GraphLearner$new(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL)
+#' GraphLearner$new(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL, clone_graph = TRUE)
 #' ```
+#'
+#' Alternatively, use [`as_learner()`][as_learner.Graph], which does not clone `graph` by default.
 #'
 #' * `graph` :: [`Graph`] | [`PipeOp`]\cr
 #'   [`Graph`] to wrap. Can be a [`PipeOp`], which is automatically converted to a [`Graph`].
@@ -179,7 +181,7 @@
 #' graph = po("pca") %>>% lrn("classif.rpart")
 #'
 #' lr = GraphLearner$new(graph)
-#' lr = as_learner(graph)  # equivalent
+#' lr = as_learner(graph, clone = TRUE)  # equivalent
 #'
 #' lr$train(tsk("iris"))
 #'
@@ -655,22 +657,71 @@ unmarshal_model.graph_learner_model_marshaled = function(model, inplace = FALSE,
   )
 }
 
+#' @title Conversion of Graph or PipeOp to GraphLearner
+#'
+#' @description
+#' Methods for [`as_learner()`][mlr3::as_learner] that wrap a [`Graph`] or a [`PipeOp`] in a [`GraphLearner`].
+#' A [`PipeOp`] is first converted to a [`Graph`] using [`as_graph()`].
+#'
+#' The arguments `id`, `param_vals`, `task_type`, and `predict_type` are passed on to the [`GraphLearner`] constructor.
+#' Except for `task_type`, these settings can also be changed after conversion,
+#' using the `$configure()` method of the resulting [`Learner`][mlr3::Learner].
+#' Unlike the constructor arguments, `$configure()` also works when `x` is already a [`Learner`][mlr3::Learner].
+#'
+#' Unknown arguments raise an error.
+#'
+#' @param x ([`Graph`] | [`PipeOp`])\cr
+#'   Object to convert.
+#' @param clone (`logical(1)`)\cr
+#'   Whether to deep clone `x` before wrapping it.
+#'   If `FALSE` (default), the resulting [`GraphLearner`] wraps `x` by reference.
+#'   Changing one then changes the other,
+#'   and the `$state` of `x` is reset when the [`GraphLearner`] is constructed, trained, or used for prediction.
+#' @param discard_state (`logical(1)`)\cr
+#'   Exists for compatibility with the [`as_learner()`][mlr3::as_learner] method for [`Learner`][mlr3::Learner]s,
+#'   which [`resample()`][mlr3::resample] relies on.
+#'   Has no effect, since the resulting [`GraphLearner`] is always untrained.
+#' @param ... (any)\cr
+#'   For `as_learner.PipeOp()`, passed on to `as_learner.Graph()`.
+#'   For `as_learner.Graph()`, must be empty.
+#' @param id (`character(1)` | `NULL`)\cr
+#'   Identifier of the resulting [`GraphLearner`].
+#'   If `NULL` (default), the IDs of the [`PipeOp`]s in `x` are concatenated.
+#' @param param_vals (named `list()`)\cr
+#'   Hyperparameter settings of the resulting [`GraphLearner`].
+#'   Default `list()`.
+#' @param task_type (`character(1)` | `NULL`)\cr
+#'   Task type of the resulting [`GraphLearner`].
+#'   If `NULL` (default), it is inferred from `x`.
+#' @param predict_type (`character(1)` | `NULL`)\cr
+#'   Predict type of the resulting [`GraphLearner`].
+#'   If `NULL` (default), it is inferred from `x`.
+#' @return [`GraphLearner`]
+#' @seealso [`mlr_learners_graph`] for details on [`GraphLearner`].
 #' @export
-as_learner.Graph = function(x, clone = TRUE, discard_state = FALSE, ..., id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL) {
-  learner = GraphLearner$new(
-    x,
-    id = id,
-    param_vals = param_vals,
-    task_type = task_type,
-    predict_type = predict_type,
-    clone_graph = clone
-  )
-  if (clone && discard_state) {
-    learner$state = NULL
-  }
-  learner
+#' @examplesIf requireNamespace("rpart")
+#' library("mlr3")
+#'
+#' graph = po("pca") %>>% lrn("classif.rpart")
+#' learner = as_learner(graph, id = "pca_rpart", param_vals = list(classif.rpart.cp = 0.1))
+#' learner$id
+#' learner$param_set$values$classif.rpart.cp
+#'
+#' # x is wrapped by reference, unless clone is TRUE
+#' identical(learner$graph, graph)
+#' identical(as_learner(graph, clone = TRUE)$graph, graph)
+as_learner.Graph = function(x, clone = FALSE, discard_state = FALSE, ..., id = NULL, param_vals = list(),
+  task_type = NULL, predict_type = NULL) {
+  assert_empty_ellipsis(...)
+  # `discard_state` is unused, since a newly constructed GraphLearner is always untrained.
+  # It is accepted because resample() calls `as_learner(learner, clone = ..., discard_state = TRUE)`,
+  # following the signature of mlr3's as_learner.Learner().
+  assert_flag(discard_state)
+  GraphLearner$new(x, id = id, param_vals = param_vals, task_type = task_type, predict_type = predict_type,
+    clone_graph = clone)
 }
 
+#' @rdname as_learner.Graph
 #' @export
 as_learner.PipeOp = function(x, clone = FALSE, ...) {
   as_learner(as_graph(x, clone = FALSE), clone = clone, ...)

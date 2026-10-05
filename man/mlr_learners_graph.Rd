@@ -27,8 +27,10 @@ non-\code{NULL} \verb{$state}, it is ignored.
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{GraphLearner$new(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{GraphLearner$new(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL, clone_graph = TRUE)
 }\if{html}{\out{</div>}}
+
+Alternatively, use \code{\link[=as_learner.Graph]{as_learner()}}, which does not clone \code{graph} by default.
 \itemize{
 \item \code{graph} :: \code{\link{Graph}} | \code{\link{PipeOp}}\cr
 \code{\link{Graph}} to wrap. Can be a \code{\link{PipeOp}}, which is automatically converted to a \code{\link{Graph}}.
@@ -198,7 +200,7 @@ library("mlr3")
 graph = po("pca") \%>>\% lrn("classif.rpart")
 
 lr = GraphLearner$new(graph)
-lr = as_learner(graph)  # equivalent
+lr = as_learner(graph, clone = TRUE)  # equivalent
 
 lr$train(tsk("iris"))
 
