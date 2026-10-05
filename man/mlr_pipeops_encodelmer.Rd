@@ -81,6 +81,9 @@ Initialized to \code{TRUE}.
 \section{Internals}{
 
 Uses the \code{\link[lme4:glmer]{lme4::glmer}}. This is relatively inefficient for features with a large number of levels.
+
+Only \code{\link[mlr3:TaskRegr]{TaskRegr}} and \code{\link[mlr3:TaskClassif]{TaskClassif}} (or \code{\link[mlr3:Task]{Task}}s inheriting from
+them) are supported, other \code{\link[mlr3:Task]{Task}}s give an error during training.
 }
 
 \section{Fields}{

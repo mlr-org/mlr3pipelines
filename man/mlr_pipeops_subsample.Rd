@@ -47,7 +47,9 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \item \code{frac} :: \code{numeric(1)}\cr
 Fraction of rows in the \code{\link[mlr3:Task]{Task}} to keep. May only be greater than 1 if \code{replace} is \code{TRUE}. Initialized to \code{(1 - exp(-1)) == 0.6321}.
 \item \code{stratify} :: \code{logical(1)}\cr
-Should the subsamples be stratified by target? Initialized to \code{FALSE}. May only be \code{TRUE} for \code{\link[mlr3:TaskClassif]{TaskClassif}} input and if \code{use_groups = FALSE}.
+Should the subsamples be stratified by target? Initialized to \code{FALSE}.
+May only be \code{TRUE} for \code{\link[mlr3:TaskClassif]{TaskClassif}} input
+(or \code{\link[mlr3:Task]{Task}}s inheriting from it) and if \code{use_groups = FALSE}.
 \item \code{use_groups} :: \code{logical(1)}\cr
 If \code{TRUE} and if the \code{\link[mlr3:Task]{Task}} has a column with role \code{group}, grouped observations are kept together during subsampling. In case of  sampling with
 \item \code{replace} :: \code{logical(1)}\cr
