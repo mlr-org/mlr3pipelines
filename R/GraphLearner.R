@@ -48,6 +48,7 @@
 #'   contain the model. Use `graph_model` to access the trained [`Graph`] after `$train()`. Read-only.
 #' * `graph_model` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Graph`] that is being wrapped. This [`Graph`] contains a trained state after `$train()`. Read-only.
+#'   Accessing it while the `GraphLearner` is marshaled throws an error; call `$unmarshal()` first.
 #' * `pipeops` :: named `list` of [`PipeOp`] \cr
 #'   Contains all [`PipeOp`]s in the underlying [`Graph`], named by the [`PipeOp`]'s `$id`s. Shortcut for `$graph_model$pipeops`. See [`Graph`] for details.
 #' * `edges` :: [`data.table`][data.table::data.table]  with columns `src_id` (`character`), `src_channel` (`character`), `dst_id` (`character`), `dst_channel` (`character`)\cr
@@ -421,6 +422,9 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       if (is.null(self$model)) {
         private$.graph
       } else {
+        if (self$marshaled) {
+          stopf("GraphLearner '%s' is marshaled, call $unmarshal() first.", self$id)
+        }
         g = private$.graph$clone(deep = TRUE)
         g$state = self$model
         g
