@@ -55,8 +55,9 @@ Fields inherited from \code{\link[mlr3:Learner]{Learner}}, as well as:
 \item \code{graph} :: \code{\link{Graph}}\cr
 \code{\link{Graph}} that is being wrapped. This field contains the prototype of the \code{\link{Graph}} that is being trained, but does \emph{not}
 contain the model. Use \code{graph_model} to access the trained \code{\link{Graph}} after \verb{$train()}. Read-only.
-\item \code{graph_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
+\item \code{graph_model} :: \code{\link{Graph}}\cr
 \code{\link{Graph}} that is being wrapped. This \code{\link{Graph}} contains a trained state after \verb{$train()}. Read-only.
+Accessing it while the \code{GraphLearner} is marshaled throws an error; call \verb{$unmarshal()} first.
 \item \code{pipeops} :: named \code{list} of \code{\link{PipeOp}} \cr
 Contains all \code{\link{PipeOp}}s in the underlying \code{\link{Graph}}, named by the \code{\link{PipeOp}}'s \verb{$id}s. Shortcut for \verb{$graph_model$pipeops}. See \code{\link{Graph}} for details.
 \item \code{edges} :: \code{\link[data.table:data.table]{data.table}}  with columns \code{src_id} (\code{character}), \code{src_channel} (\code{character}), \code{dst_id} (\code{character}), \code{dst_channel} (\code{character})\cr

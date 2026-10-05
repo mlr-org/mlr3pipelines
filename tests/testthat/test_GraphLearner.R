@@ -1290,6 +1290,19 @@ test_that("marshal has no effect when nothing needed marshaling", {
   expect_learner(glrn, task = task)
 })
 
+test_that("graph_model errs informatively when marshaled", {
+  task = tsk("iris")
+  glrn = as_learner(as_graph(lrn("classif.debug")))
+  glrn$train(task)
+  glrn$marshal()
+  expect_error(glrn$graph_model, "GraphLearner 'classif.debug' is marshaled, call \\$unmarshal\\(\\) first")
+  expect_error(glrn$pipeops, "is marshaled")
+  expect_error(glrn$base_learner(), "is marshaled")
+  expect_prediction(glrn$predict(task))
+  glrn$unmarshal()
+  expect_class(glrn$graph_model, "Graph")
+})
+
 
 # in case Debug ever gets these properties, we remove them here.
 DebugBasic = R6Class("DebugBasic", inherit = LearnerClassifDebug,
