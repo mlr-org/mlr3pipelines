@@ -311,19 +311,18 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
     # we need to overload the deep_clone method because state$treatment_plan$settings$state is an environment
     deep_clone = function(name, value) {
       if (name == "state" && "NO_OP" %nin% class(value)) {
-        if (!is.null(value$treatment_plan)) {
-          # NOTE: not sure if multiplicity_recurse is actually needed
-          multiplicity_recurse(value, .fun = function(value) {
-            state = value
-            state$treatment_plan = value$treatment_plan$fresh_copy()
-            state$treatment_plan$settings$params = value$treatment_plan$settings$params
-            state$treatment_plan$settings$state$score_frame = value$treatment_plan$settings$state$score_frame
-            state$treatment_plan$settings$state$transform = value$treatment_plan$settings$state$transform
-            state
-          })
-        } else {
-          super$deep_clone(name, value)
-        }
+        # recurse first: a Multiplicity state has no $treatment_plan itself, only its elements do
+        multiplicity_recurse(value, .fun = function(value) {
+          if (is.null(value$treatment_plan)) {
+            return(value)
+          }
+          state = value
+          state$treatment_plan = value$treatment_plan$fresh_copy()
+          state$treatment_plan$settings$params = value$treatment_plan$settings$params
+          state$treatment_plan$settings$state$score_frame = value$treatment_plan$settings$state$score_frame
+          state$treatment_plan$settings$state$transform = value$treatment_plan$settings$state$transform
+          state
+        })
       } else {
         super$deep_clone(name, value)
       }
