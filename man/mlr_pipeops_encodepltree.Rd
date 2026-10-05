@@ -21,10 +21,12 @@ column into account, and using decision boundaries as bin boundaries.
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{task_type} :: \code{character(1)}\cr
-The class of \code{\link[mlr3:Task]{Task}} that should be accepted as input, given as a \code{character(1)}. This is used to
-construct the appropriate \code{\link[mlr3:Learner]{Learner}} to be used for obtaining the bins for piecewise linear
-encoding. Supported options are \code{"TaskClassif"}for \code{\link[mlr3:LearnerClassifRpart]{LearnerClassifRpart}} or
-\code{"TaskRegr"}for \code{\link[mlr3:LearnerRegrRpart]{LearnerRegrRpart}}.
+The class of \code{\link[mlr3:Task]{Task}} that should be accepted as input, given as a \code{character(1)}.
+This determines the \code{\link[mlr3:Learner]{Learner}} used for obtaining the bins:
+\code{\link[mlr3:LearnerClassifRpart]{LearnerClassifRpart}} for \code{"TaskClassif"} and
+\code{\link[mlr3:LearnerRegrRpart]{LearnerRegrRpart}} for \code{"TaskRegr"}.
+Classes inheriting from these that are registered in \code{\link[mlr3:mlr_reflections]{mlr_reflections$task_types}},
+are also supported, and it should usually be sufficient to pass the name of the respective super-class.
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"encodeplquantiles"}.
 \item \code{param_vals} :: named \code{list}\cr
@@ -35,8 +37,8 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 \section{Input and Output Channels}{
 
 Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}. Instead of a \code{\link[mlr3:Task]{Task}}, a
-\code{\link[mlr3:TaskClassif]{TaskClassif}} or \code{\link[mlr3:TaskRegr]{TaskRegr}} is used as input and output during training and
-prediction, depending on the \code{task_type} construction argument.
+\code{Task} of the class given by the \code{task_type} construction argument is used as input and output
+during training and prediction.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with all affected \code{numeric} and \code{integer} columns encoded using piecewise
 linear encoding with bins being derived from a decision tree \code{\link[mlr3:Learner]{Learner}} trained on the respective feature column.

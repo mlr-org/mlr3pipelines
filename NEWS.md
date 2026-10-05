@@ -3,6 +3,7 @@
 * Fix: Deep-cloning a `GraphLearner` now also clones `R6` objects in its saved hyperparameter values (`$state$param_vals`).
 * Tests in `inst/testthat` no longer override `expect_equal`.
 * Fix: `PipeOpEncodeImpact`, `PipeOpEncodeLmer`, and `PipeOpVtreat` now always give an informative error during training for `TaskSupervised` `Task`s that inherit from neither `TaskRegr` nor `TaskClassif` (e.g. `TaskSurv` from `mlr3proba`), even if no columns are affected, instead of silently producing wrong encodings or failing obscurely (#913).
+* feat: `PipeOpEncodePLTree` now also accepts the names of `Task` classes derived from `TaskRegr` / `TaskClassif` that are registered by extension packages (e.g. `"TaskRegrST"`) as `task_type` (#913).
 * Fix: `PipeOpVtreat` now works with `Task`s inheriting from `TaskRegr` / `TaskClassif` that have a different task type (e.g. `TaskRegrST` / `TaskClassifST` from `mlr3spatiotempcv`) (#913).
 * Fix: `pos()` now returns an unnamed list, preventing duplicated PipeOp IDs such as `pca.pca` when passed to `as_graph()`.
 * New `ppl("bag")` / `pipeline_bag()` performs real bagging with `frac = 1` and `replace = TRUE` by default. `ppl("bagging")` / `pipeline_bagging()` is deprecated and will be removed in the future.
