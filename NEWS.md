@@ -1,6 +1,6 @@
 # mlr3pipelines 0.12.0-9000
 
-* Fix: `GraphLearner$graph_model` now throws an informative error asking to call `$unmarshal()` first when the `GraphLearner` is marshaled, instead of failing with an assertion on the state names. This also affects `$pipeops`, `$base_learner()`, `$importance()`, `$selected_features()`, `$oob_error()`, and `$loglik()` (#1038).
+* Fix: `GraphLearner$graph_model` now throws an informative error asking to call `$unmarshal()` first when the `GraphLearner` is marshaled. This also affects `$pipeops`, `$base_learner()`, `$importance()`, `$selected_features()`, `$oob_error()`, and `$loglik()` (#1038).
 * Fix: `GraphLearner$hash` and `$phash` now include the timeout, the deadline, the encapsulation method, and the `when` handler, matching `Learner$hash` in `mlr3`, so `GraphLearner`s differing only in these settings are no longer merged by `benchmark()`.
 * Fix: Deep-cloning a `GraphLearner` now also clones `R6` objects in its saved hyperparameter values (`$state$param_vals`).
 * Tests in `inst/testthat` no longer override `expect_equal`.
