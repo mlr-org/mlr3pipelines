@@ -37,7 +37,7 @@ test_that("PipeOpLearnerPICVPlus - basic properties", {
   expect_list(po$state$cv_model_states)
   expect_data_table(po$state$residuals)
 
-  expect_equal(po$predict_type, c("response", "quantiles"))
+  expect_equal(po$predict_type, "quantiles")
   prds = predict_pipeop(po, list(task))
   expect_class(prds$output, "PredictionRegr")
   expect_true(all(c("response", "quantiles") %in% names(prds$output)))
@@ -100,14 +100,29 @@ test_that("PipeOpLearnerPICVPlus - predict_type is fixed", {
   skip_if_not_installed("rpart")
   lrn = lrn("regr.rpart")
   po = PipeOpLearnerPICVPlus$new(lrn)
-  expect_equal(po$predict_type, c("response", "quantiles"))
+  expect_equal(po$predict_type, "quantiles")
 
   # assigning the current value is a no-op, anything else errors
-  po$predict_type = c("response", "quantiles")
-  expect_equal(po$predict_type, c("response", "quantiles"))
-  expect_error({po$predict_type = "quantiles"}, "read-only")
+  po$predict_type = "quantiles"
+  expect_equal(po$predict_type, "quantiles")
   expect_error({po$predict_type = "response"}, "read-only")
-  expect_equal(po$predict_type, c("response", "quantiles"))
+  expect_error({po$predict_type = c("response", "quantiles")}, "read-only")
+  expect_equal(po$predict_type, "quantiles")
+})
+
+test_that("PipeOpLearnerPICVPlus - predict_type of GraphLearner", {
+  glrn = as_learner(po("learner_pi_cvplus", lrn("regr.featureless")))
+  expect_equal(glrn$predict_type, "quantiles")
+  glrn$predict_type = "quantiles"
+  expect_equal(glrn$predict_type, "quantiles")
+  expect_error({glrn$predict_type = "response"}, "read-only")
+
+  glrn = as_learner(po("learner_pi_cvplus", lrn("regr.featureless")), predict_type = "quantiles")
+  expect_equal(glrn$predict_type, "quantiles")
+
+  # measures requiring quantiles do not warn about a missing predict type
+  rr = resample(tsk("mtcars"), glrn, rsmp("holdout"))
+  expect_no_warning(rr$aggregate(msr("regr.pinball", alpha = 0.05)))
 })
 
 test_that("PipeOpLearnerPICVPlus - integration with larger graph", {

@@ -7,7 +7,8 @@
 #' @description
 #' Wraps a [`LearnerRegr`][mlr3::LearnerRegr] into a [`PipeOp`] to predict multiple quantiles.
 #'
-#' `PipeOpLearnerQuantiles` only supports [`LearnerRegr`][mlr3::LearnerRegr]s that have `quantiles` as a possible `pedict_type`.
+#' `PipeOpLearnerQuantiles` only supports [`LearnerRegr`][mlr3::LearnerRegr]s
+#' that have `quantiles` as a possible `predict_type`.
 #'
 #' It produces quantile-based predictions for multiple quantiles in one [`PredictionRegr`][mlr3::Prediction]. This is especially helpful if the [`LearnerRegr`][mlr3::LearnerRegr] can only predict one quantile (like for example `LearnerRegrGBM` in `mlr3extralearners`)
 #'
@@ -20,7 +21,8 @@
 #'
 #' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`\cr
 #'   [`Learner`][mlr3::Learner] to wrap, or a string identifying a [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
-#'   The [`Learner`][mlr3::Learner] has to be a [`LearnerRegr`][mlr3::LearnerRegr] with `predict_type` `"quantiles"`.
+#'   The [`Learner`][mlr3::Learner] has to be a [`LearnerRegr`][mlr3::LearnerRegr] that can predict `"quantiles"`.
+#'   Its `$predict_type` is set to `"quantiles"` during training and prediction.
 #'   This argument is always cloned; to access the [`Learner`][mlr3::Learner] inside `PipeOpLearnerQuantiles` by-reference, use `$learner`.
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
@@ -64,7 +66,8 @@
 #'   Otherwise, this contains the [`Learner`][mlr3::Learner] that is being wrapped.
 #'   Read-only.
 #' * `predict_type` :: `character(1)`\cr
-#'   Predict type of the `PipeOpLearnerQuantiles`, which is always `"response"  "quantiles"`.
+#'   Predict type of the `PipeOpLearnerQuantiles`, which is always `"quantiles"`.
+#'   Read-only.
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
@@ -141,12 +144,11 @@ PipeOpLearnerQuantiles = R6Class("PipeOpLearnerQuantiles",
       }
     },
     predict_type = function(val) {
-      predict_type = mlr_reflections$learner_predict_types$regr$quantiles  # c("response", "quantiles")
       # read-only, but assigning the current value is a no-op
-      if (!missing(val) && !identical(val, predict_type)) {
+      if (!missing(val) && !identical(val, "quantiles")) {
         stop("$predict_type is read-only.")
       }
-      predict_type
+      "quantiles"
     }
   ),
   private = list(
@@ -178,6 +180,8 @@ PipeOpLearnerQuantiles = R6Class("PipeOpLearnerQuantiles",
     .predict = function(inputs) {
       task = inputs[[1L]]
       pv = private$.quantiles_param_set$values
+      # also set here, since the assignment in .train() is lost if training ran in another process (e.g. callr)
+      private$.learner$predict_type = "quantiles"
 
       prds = pmap(list(self$state$model_states, pv$q_vals), function(state, quantile) {
         on.exit({private$.learner$state = NULL})
