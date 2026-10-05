@@ -4,6 +4,7 @@
 * Tests in `inst/testthat` no longer override `expect_equal`.
 * Fix: `PipeOpEncodeImpact`, `PipeOpEncodeLmer`, and `PipeOpVtreat` now always give an informative error during training for `TaskSupervised` `Task`s that inherit from neither `TaskRegr` nor `TaskClassif` (e.g. `TaskSurv` from `mlr3proba`), even if no columns are affected, instead of silently producing wrong encodings or failing obscurely (#913).
 * feat: `PipeOpEncodePLTree` now also accepts the names of `Task` classes derived from `TaskRegr` / `TaskClassif` that are registered by extension packages (e.g. `"TaskRegrST"`) as `task_type` (#913).
+* Fix: `PipeOpSubsample` with `stratify = TRUE` now gives a single, informative error message for `Task`s that do not inherit from `TaskClassif` (#913).
 * Fix: `PipeOpTuneThreshold` input channels now have type `TaskClassif`, so other `Task`s are rejected by the type check instead of failing while constructing the `PredictionClassif` (#913).
 * Fix: `PipeOpVtreat` now works with `Task`s inheriting from `TaskRegr` / `TaskClassif` that have a different task type (e.g. `TaskRegrST` / `TaskClassifST` from `mlr3spatiotempcv`) (#913).
 * Fix: `pos()` now returns an unnamed list, preventing duplicated PipeOp IDs such as `pca.pca` when passed to `as_graph()`.
