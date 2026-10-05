@@ -88,9 +88,10 @@ Read-only.
 If the \code{PipeOpLearnerPICVPlus} has been trained, this is a \code{list} containing the \code{\link[mlr3:Learner]{Learner}}s of the cross validation models.
 Otherwise, this contains the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
 Read-only.
-\item \code{predict_type}\cr
-Predict type of the \code{PipeOpLearnerPICVPlus}, which is always \verb{"response"  "quantiles"}.
+\item \code{predict_type} :: \code{character(1)}\cr
+Predict type of the \code{PipeOpLearnerPICVPlus}, which is always \code{"quantiles"}.
 This can be different to the predict type of the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
+Read-only.
 }
 }
 

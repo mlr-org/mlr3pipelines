@@ -3,6 +3,8 @@
 * Fix: `GraphLearner$hash` and `$phash` now include the timeout, the deadline, the encapsulation method, and the `when` handler, matching `Learner$hash` in `mlr3`, so `GraphLearner`s differing only in these settings are no longer merged by `benchmark()`.
 * Fix: Deep-cloning a `GraphLearner` now also clones `R6` objects in its saved hyperparameter values (`$state$param_vals`).
 * Tests in `inst/testthat` no longer override `expect_equal`.
+* Fix: `PipeOpLearnerPICVPlus` and `PipeOpLearnerQuantiles` now report `$predict_type` as `"quantiles"` instead of `c("response", "quantiles")`, so a `GraphLearner` containing them also reports and accepts `"quantiles"` (#1035).
+* Fix: `PipeOpLearnerQuantiles` no longer predicts the same value for every quantile when its model was trained in a different process, e.g. with `callr` encapsulation or with stored models from a parallelized `resample()`.
 * Fix: `pos()` now returns an unnamed list, preventing duplicated PipeOp IDs such as `pca.pca` when passed to `as_graph()`.
 * New `ppl("bag")` / `pipeline_bag()` performs real bagging with `frac = 1` and `replace = TRUE` by default. `ppl("bagging")` / `pipeline_bagging()` is deprecated and will be removed in the future.
 * Fix: `GraphLearner$predict_type` no longer assigns the `predict_type` of `PipeOp`s that already have the requested value. Read-only `$predict_type` fields (`PipeOp`, `PipeOpLearnerQuantiles`, `PipeOpLearnerPICVPlus`) now accept assignment of their current value as a no-op (#970).
