@@ -47,7 +47,7 @@
 #' * `residuals` :: `data.table`\cr
 #'   `data.table` with columns `fold` and `residual`. Lists the Regression residuals for each observation and cross validation fold.
 #'
-#' This state is given the class `"pipeop_learner_cv_state"`.
+#' This state is given the class `"pipeop_learner_pi_cvplus_state"`.
 #'
 #' @section Parameters:
 #' The parameters of the [`Learner`][mlr3::Learner] wrapped by this object, as well as:

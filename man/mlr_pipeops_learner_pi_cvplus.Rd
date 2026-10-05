@@ -58,7 +58,7 @@ List of the state of each cross validation model created by the \code{\link[mlr3
 \code{data.table} with columns \code{fold} and \code{residual}. Lists the Regression residuals for each observation and cross validation fold.
 }
 
-This state is given the class \code{"pipeop_learner_cv_state"}.
+This state is given the class \code{"pipeop_learner_pi_cvplus_state"}.
 }
 
 \section{Parameters}{
