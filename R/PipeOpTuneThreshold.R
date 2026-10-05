@@ -30,7 +30,8 @@
 #'   that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOp`].
+#' Input and output channels are inherited from [`PipeOp`]. Instead of a [`Task`][mlr3::Task], a
+#' [`TaskClassif`][mlr3::TaskClassif] is used as input during training and prediction.
 #'
 #' @section State:
 #' The `$state` is a named `list` with elements
@@ -93,7 +94,7 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       )
       ps$values = list(measure = "classif.ce", optimizer = "gensa", log_level = "warn")
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "bbotk",
-        input = data.table(name = "input", train = "Task", predict = "Task"),
+        input = data.table(name = "input", train = "TaskClassif", predict = "TaskClassif"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction"),
         tags = "target transform"
       )

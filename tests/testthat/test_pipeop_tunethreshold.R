@@ -89,6 +89,24 @@ test_that("tunethreshold graph works", {
 
 })
 
+test_that("tunethreshold on derived task types", {
+  skip_if_not_installed("rpart")
+
+  # Tasks inheriting from TaskClassif with a different task type work like TaskClassif
+  task = as_derived_task(tsk("iris"))
+  graph = po("learner_cv", lrn("classif.rpart", predict_type = "prob")) %>>% po("tunethreshold")
+  graph$train(task)
+  expect_numeric(graph$state$tunethreshold$threshold, len = 3L, lower = 0, upper = 1)
+  out = graph$predict(task)[[1L]]
+  expect_prediction(out)
+  expect_class(out, "PredictionClassif")
+
+  # other Tasks are rejected by the input channel type check
+  expect_error(po("learner_cv", lrn("regr.rpart")) %>>% po("tunethreshold"), "incompatible")
+  expect_error(po("tunethreshold")$train(list(as_derived_task(tsk("mtcars")))), "Must inherit from class 'TaskClassif'")
+  expect_error(graph$pipeops$tunethreshold$predict(list(tsk("mtcars"))), "Must inherit from class 'TaskClassif'")
+})
+
 test_that("threshold works for classes that are not valid R names", {
   skip_if_not_installed("rpart")
   ppl = po("learner_cv", lrn("classif.rpart", predict_type = "prob")) %>>% po("tunethreshold")
