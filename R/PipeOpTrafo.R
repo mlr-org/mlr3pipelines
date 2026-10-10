@@ -279,10 +279,12 @@ PipeOpTargetInvert = R6Class("PipeOpTargetInvert",
 
     .predict = function(inputs) {
       output = inputs[[1L]](inputs[-1L])
-      # Keep "extra" slot if inverter does not handle it already
-      extra = inputs[[2L]]$data$extra
-      if (!is.null(extra) && is.null(output[[1L]]$data$extra)) {
-        output[[1L]]$data$extra = extra
+      # Keep "extra" and "weights" slots if inverter does not handle them already
+      for (slot in c("extra", "weights")) {
+        value = inputs[[2L]]$data[[slot]]
+        if (!is.null(value) && is.null(output[[1L]]$data[[slot]])) {
+          output[[1L]]$data[[slot]] = value
+        }
       }
       output
     }
