@@ -446,6 +446,7 @@ mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 #' where \eqn{scale} is \eqn{(upper - lower) / (max(x) - min(x))} and
 #' \eqn{offset} is \eqn{-min(x) * scale + lower}. The same transformation is applied during training and
 #' prediction.
+#' When inverting a prediction, a standard error (`se`) is divided by \eqn{|scale|}.
 #'
 #' @section Construction:
 #' ```
@@ -529,8 +530,9 @@ PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
 
     .invert = function(prediction, predict_phase_state) {
       response = (prediction$response - self$state$offset) / self$state$scale
+      se = if ("se" %in% prediction$predict_types) prediction$se / abs(self$state$scale)
       PredictionRegr$new(row_ids = prediction$row_ids,
-        truth = predict_phase_state$truth, response = response)
+        truth = predict_phase_state$truth, response = response, se = se)
     }
   )
 )
