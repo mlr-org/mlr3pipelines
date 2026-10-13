@@ -10,7 +10,8 @@
 \description{
 Wraps a \code{\link[mlr3:LearnerRegr]{LearnerRegr}} into a \code{\link{PipeOp}} to predict multiple quantiles.
 
-\code{PipeOpLearnerQuantiles} only supports \code{\link[mlr3:LearnerRegr]{LearnerRegr}}s that have \code{quantiles} as a possible \code{pedict_type}.
+\code{PipeOpLearnerQuantiles} only supports \code{\link[mlr3:LearnerRegr]{LearnerRegr}}s
+that have \code{quantiles} as a possible \code{predict_type}.
 
 It produces quantile-based predictions for multiple quantiles in one \code{\link[mlr3:Prediction]{PredictionRegr}}. This is especially helpful if the \code{\link[mlr3:LearnerRegr]{LearnerRegr}} can only predict one quantile (like for example \code{LearnerRegrGBM} in \code{mlr3extralearners})
 
@@ -24,7 +25,8 @@ Inherits the \verb{$param_set} (and therefore \verb{$param_set$values}) from the
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} | \code{character(1)}\cr
 \code{\link[mlr3:Learner]{Learner}} to wrap, or a string identifying a \code{\link[mlr3:Learner]{Learner}} in the \code{\link[mlr3:mlr_learners]{mlr3::mlr_learners}} \code{\link[mlr3misc:Dictionary]{Dictionary}}.
-The \code{\link[mlr3:Learner]{Learner}} has to be a \code{\link[mlr3:LearnerRegr]{LearnerRegr}} with \code{predict_type} \code{"quantiles"}.
+The \code{\link[mlr3:Learner]{Learner}} has to be a \code{\link[mlr3:LearnerRegr]{LearnerRegr}} that can predict \code{"quantiles"}.
+Its \verb{$predict_type} is set to \code{"quantiles"} during training and prediction.
 This argument is always cloned; to access the \code{\link[mlr3:Learner]{Learner}} inside \code{PipeOpLearnerQuantiles} by-reference, use \verb{$learner}.
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting  object, internally defaulting to the \code{id} of the \code{\link[mlr3:Learner]{Learner}} being wrapped.
@@ -83,7 +85,8 @@ If \code{PipeOpLearnerQuantiles} has been trained, this is a \code{list} contain
 Otherwise, this contains the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
 Read-only.
 \item \code{predict_type} :: \code{character(1)}\cr
-Predict type of the \code{PipeOpLearnerQuantiles}, which is always \verb{"response"  "quantiles"}.
+Predict type of the \code{PipeOpLearnerQuantiles}, which is always \code{"quantiles"}.
+Read-only.
 }
 }
 

@@ -79,6 +79,34 @@ test_that("PipeOpEncodePLTree - basic properties", {
 
   # error for not supported task type
   expect_error(PipeOpEncodePLTree$new(task_type = "TaskUnsupervised"), "not supported")
+  expect_error(PipeOpEncodePLTree$new(task_type = "TaskSupervisedDerived"), "not supported")
+})
+
+test_that("PipeOpEncodePLTree - derived task types", {
+  skip_if_not_installed("rpart")
+
+  task_regr = mlr_tasks$get("mtcars")
+  task_classif = mlr_tasks$get("iris")
+
+  for (task in list(task_regr, task_classif)) {
+    task_derived = as_derived_task(task)
+    base_type = class(task)[[1L]]
+    derived_type = class(task_derived)[[1L]]
+
+    expect_datapreproc_pipeop_class(PipeOpEncodePLTree, constargs = list(task_type = base_type), task = task_derived)
+
+    expected = PipeOpEncodePLTree$new(task_type = base_type)$train(list(task))[[1L]]$data()
+    # derived Tasks are accepted both when the base class and when the derived class is given as task_type
+    for (task_type in c(base_type, derived_type)) {
+      op = PipeOpEncodePLTree$new(task_type = task_type)
+      expect_equal(op$input$train, task_type)
+      expect_equal(op$input$predict, task_type)
+      train_out = op$train(list(task_derived))[[1L]]
+      expect_class(train_out, derived_type)
+      expect_equal(train_out$data(), expected)
+      expect_equal(op$predict(list(task_derived))[[1L]]$data(), expected)
+    }
+  }
 })
 
 test_that("PipeOpEncodePLTree - TaskRegr train and predict", {

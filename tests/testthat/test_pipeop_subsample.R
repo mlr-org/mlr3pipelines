@@ -68,6 +68,24 @@ test_that("PipeOpSubsample works stratified", {
     table(list(Species = rep(c("setosa", "versicolor", "virginica"), 100))))
 })
 
+test_that("PipeOpSubsample - stratification on derived task types", {
+  po = PipeOpSubsample$new(param_vals = list(stratify = TRUE, use_groups = FALSE, frac = 0.6))
+
+  # Tasks inheriting from TaskClassif with a different task type are stratified
+  task = as_derived_task(tsk("iris"))
+  tnew = po$train(list(task))[[1L]]
+  expect_class(tnew, "TaskClassifDerived")
+  expect_equal(table(tnew$truth()), table(factor(rep(task$class_names, 30), levels = task$class_names)))
+
+  # other Tasks give a single informative error message
+  for (task in list(tsk("mtcars"), as_derived_task(tsk("mtcars")))) {
+    err = tryCatch(po$train(list(task)), error = identity)
+    expect_string(conditionMessage(err))
+    expect_match(conditionMessage(err),
+      sprintf("only supported for TaskClassif or tasks inheriting from it, but got %s", class(task)[[1L]]))
+  }
+})
+
 test_that("PipeOpSubsample - use_groups - Sanity Checks", {
   op = PipeOpSubsample$new()
   op$param_set$set_values(frac = 0.5)

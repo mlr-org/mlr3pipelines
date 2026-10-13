@@ -97,6 +97,7 @@ reference:
       - assert_graph
       - as_pipeop
       - assert_pipeop
+      - as_learner.Graph
       - is_noop
       - NO_OP
       - filter_noop
