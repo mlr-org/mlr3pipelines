@@ -1,0 +1,6 @@
+R 4.6.1 four input clauses of width 258
+First output, with common padding omitted:
+list(list(Y = "0", X = "5"), list(X = "0", Y = c("4", "0")))
+Second output, with common padding omitted:
+list(list(Y = "0", X = "5"), list(Y = c("4", "0")))
+The second pass removes the X=0 literal from clause 2; all padding remains.

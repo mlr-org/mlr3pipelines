@@ -1,0 +1,14 @@
+$identical_saved_records
+[1] TRUE
+
+$normalization_case_trace_records
+[1] 135
+
+$component_repeated_trace_records
+[1] 2433
+
+$binary_serialization_digests_not_compared
+[1] TRUE
+
+$exact_counter_and_control_comparisons
+[1] TRUE

@@ -1,0 +1,3113 @@
+{
+  "domains": {
+    "G": [
+      "g0",
+      "g1",
+      "g2",
+      "g3"
+    ],
+    "T": [
+      "0",
+      "1"
+    ],
+    "S0": [
+      "0",
+      "1"
+    ],
+    "S1": [
+      "0",
+      "1"
+    ],
+    "S2": [
+      "0",
+      "1"
+    ]
+  },
+  "clauses": [
+    {
+      "S0": [
+        "0"
+      ],
+      "S1": [
+        "0"
+      ]
+    },
+    {
+      "S0": [
+        "1"
+      ],
+      "T": [
+        "1"
+      ],
+      "G": [
+        "g0"
+      ]
+    },
+    {
+      "S1": [
+        "1"
+      ],
+      "T": [
+        "1"
+      ],
+      "G": [
+        "g1"
+      ]
+    },
+    {
+      "S2": [
+        "1"
+      ],
+      "T": [
+        "1"
+      ]
+    },
+    {
+      "T": [
+        "0"
+      ],
+      "G": [
+        "g0",
+        "g1",
+        "g2"
+      ]
+    },
+    {
+      "S2": [
+        "0"
+      ],
+      "T": [
+        "0"
+      ],
+      "G": [
+        "g0",
+        "g1"
+      ]
+    },
+    {
+      "S1": [
+        "0"
+      ],
+      "S2": [
+        "0"
+      ],
+      "T": [
+        "0"
+      ],
+      "G": [
+        "g0"
+      ]
+    }
+  ],
+  "accepted": [
+    {
+      "action": "delete literal 3:G",
+      "productive": 3,
+      "clauses": 7,
+      "symbols": 7,
+      "mass": 25
+    },
+    {
+      "action": "delete literal 4:S4",
+      "productive": 3,
+      "clauses": 7,
+      "symbols": 6,
+      "mass": 24
+    },
+    {
+      "action": "delete literal 5:S3",
+      "productive": 3,
+      "clauses": 7,
+      "symbols": 6,
+      "mass": 23
+    },
+    {
+      "action": "delete literal 4:S3",
+      "productive": 3,
+      "clauses": 7,
+      "symbols": 5,
+      "mass": 22
+    }
+  ],
+  "minimization_calls": 114,
+  "trace": [
+    [
+      {
+        "S0": [
+          "0"
+        ],
+        "S1": [
+          "0"
+        ]
+      },
+      {
+        "S0": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ],
+        "G": [
+          "g0"
+        ]
+      },
+      {
+        "S1": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ],
+        "G": [
+          "g1"
+        ]
+      },
+      {
+        "S2": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ]
+      },
+      {
+        "T": [
+          "0"
+        ],
+        "G": [
+          "g0",
+          "g1",
+          "g2"
+        ]
+      },
+      {
+        "S2": [
+          "0"
+        ],
+        "T": [
+          "0"
+        ],
+        "G": [
+          "g0",
+          "g1"
+        ]
+      },
+      {
+        "S1": [
+          "0"
+        ],
+        "S2": [
+          "0"
+        ],
+        "T": [
+          "0"
+        ],
+        "G": [
+          "g0"
+        ]
+      }
+    ],
+    [
+      {
+        "S0": [
+          "0"
+        ],
+        "S1": [
+          "0"
+        ]
+      },
+      {
+        "S2": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ]
+      },
+      {
+        "T": [
+          "0"
+        ],
+        "G": [
+          "g0",
+          "g1",
+          "g2"
+        ]
+      },
+      {
+        "S0": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ],
+        "G": [
+          "g0"
+        ]
+      },
+      {
+        "S1": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ],
+        "G": [
+          "g1"
+        ]
+      },
+      {
+        "S2": [
+          "0"
+        ],
+        "T": [
+          "0"
+        ],
+        "G": [
+          "g0",
+          "g1"
+        ]
+      },
+      {
+        "S1": [
+          "0"
+        ],
+        "S2": [
+          "0"
+        ],
+        "G": [
+          "g0"
+        ]
+      }
+    ],
+    [
+      {
+        "S0": [
+          "0"
+        ],
+        "S1": [
+          "0"
+        ]
+      },
+      {
+        "S2": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ]
+      },
+      {
+        "T": [
+          "0"
+        ],
+        "G": [
+          "g0",
+          "g1",
+          "g2"
+        ]
+      },
+      {
+        "S0": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ],
+        "G": [
+          "g0"
+        ]
+      },
+      {
+        "S1": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ],
+        "G": [
+          "g1"
+        ]
+      },
+      {
+        "S2": [
+          "0"
+        ],
+        "G": [
+          "g0",
+          "g1"
+        ]
+      },
+      {
+        "S1": [
+          "0"
+        ],
+        "S2": [
+          "0"
+        ],
+        "G": [
+          "g0"
+        ]
+      }
+    ],
+    [
+      {
+        "S0": [
+          "0"
+        ],
+        "S1": [
+          "0"
+        ]
+      },
+      {
+        "S2": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ]
+      },
+      {
+        "G": [
+          "g0",
+          "g1",
+          "g2"
+        ]
+      },
+      {
+        "S2": [
+          "0"
+        ],
+        "G": [
+          "g0",
+          "g1"
+        ]
+      },
+      {
+        "S0": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ],
+        "G": [
+          "g0"
+        ]
+      },
+      {
+        "S1": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ],
+        "G": [
+          "g1"
+        ]
+      },
+      {
+        "S1": [
+          "0"
+        ],
+        "S2": [
+          "0"
+        ],
+        "G": [
+          "g0"
+        ]
+      }
+    ],
+    [
+      {
+        "G": [
+          "g0",
+          "g1",
+          "g2"
+        ]
+      },
+      {
+        "S0": [
+          "0"
+        ],
+        "S1": [
+          "0"
+        ]
+      },
+      {
+        "S2": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ]
+      },
+      {
+        "S2": [
+          "0"
+        ],
+        "G": [
+          "g0",
+          "g1"
+        ]
+      },
+      {
+        "S0": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ],
+        "G": [
+          "g0"
+        ]
+      },
+      {
+        "S1": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ],
+        "G": [
+          "g1"
+        ]
+      },
+      {
+        "S1": [
+          "0"
+        ],
+        "S2": [
+          "0"
+        ],
+        "G": [
+          "g0"
+        ]
+      }
+    ],
+    [
+      {
+        "G": [
+          "g0",
+          "g1",
+          "g2"
+        ]
+      },
+      {
+        "S0": [
+          "0"
+        ],
+        "S1": [
+          "0"
+        ]
+      },
+      {
+        "S2": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ]
+      },
+      {
+        "S2": [
+          "0"
+        ],
+        "G": [
+          "g0",
+          "g1"
+        ]
+      },
+      {
+        "S0": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ],
+        "G": [
+          "g0"
+        ]
+      },
+      {
+        "S1": [
+          "1"
+        ],
+        "T": [
+          "1"
+        ],
+        "G": [
+          "g1"
+        ]
+      },
+      {
+        "S1": [
+          "0"
+        ],
+        "S2": [
+          "0"
+        ],
+        "G": [
+          "g0"
+        ]
+      }
+    ]
+  ],
+  "events": [
+    [
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "symbol": "S2",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "symbol": "S2",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "T": "0",
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "target": {
+          "S2": "0",
+          "T": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "symbol": "G",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "0",
+          "T": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "T": "0",
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "symbol": "S2",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S0": "0",
+          "S1": "0"
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "T": "0",
+          "G": "g0"
+        },
+        "symbol": "S0",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "T": "0",
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "T": "0",
+          "G": "g0"
+        },
+        "symbol": "G",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "0",
+          "T": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "T": "0",
+          "G": "g0"
+        },
+        "symbol": "G",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S1": "0",
+          "S2": "0",
+          "T": "0",
+          "G": "g0"
+        },
+        "target": {
+          "S2": "0",
+          "T": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "symbol": "S1",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse2",
+        "donor_a": {
+          "S0": "0",
+          "S1": "0"
+        },
+        "donor_b": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "T": "0",
+          "G": "g0"
+        },
+        "intersect_symbol": "S0",
+        "restrict_symbol": "T",
+        "active_donors": [
+          true,
+          true
+        ],
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "target_id": 4,
+        "donor_id": 2,
+        "symbol": "S2",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0",
+          "S2": "0"
+        },
+        "target_id": 4,
+        "donor_id": 7,
+        "symbol": "S1",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0",
+          "S2": "0",
+          "S1": "1"
+        },
+        "target_id": 4,
+        "donor_id": 5,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g2",
+          "g3"
+        ],
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "target_id": 5,
+        "donor_id": 2,
+        "symbol": "S2",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target": {
+          "S2": "0",
+          "T": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target_id": 6,
+        "donor_id": 7,
+        "symbol": "S1",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "target": {
+          "S2": "0",
+          "T": "0",
+          "G": [
+            "g0",
+            "g1"
+          ],
+          "S1": "1"
+        },
+        "target_id": 6,
+        "donor_id": 5,
+        "symbol": "T",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "T": "0",
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "target": {
+          "S2": "0",
+          "T": "0",
+          "G": [
+            "g0",
+            "g1"
+          ],
+          "S1": "1"
+        },
+        "target_id": 6,
+        "donor_id": 3,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g1",
+          "g3"
+        ],
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S0": "0",
+          "S1": "0"
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target_id": 7,
+        "donor_id": 1,
+        "symbol": "S0",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0",
+          "S0": "1"
+        },
+        "target_id": 7,
+        "donor_id": 4,
+        "symbol": "T",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "0",
+          "T": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0",
+          "S0": "1",
+          "T": "0"
+        },
+        "target_id": 7,
+        "donor_id": 6,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g2",
+          "g3"
+        ],
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "T": "0",
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": [
+            "g0",
+            "g2",
+            "g3"
+          ],
+          "S0": "1",
+          "T": "0"
+        },
+        "target_id": 7,
+        "donor_id": 3,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g2",
+          "g3"
+        ],
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "0",
+          "T": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "T": "0",
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "target_id": 3,
+        "donor_id": 6,
+        "symbol": "S2",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "T": "0",
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ],
+          "S2": "1"
+        },
+        "target_id": 3,
+        "donor_id": 2,
+        "symbol": "T",
+        "extended": "0",
+        "units": []
+      }
+    ],
+    [
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "symbol": "S2",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "symbol": "S2",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "T": "0",
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "target": {
+          "S2": "0",
+          "T": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "symbol": "G",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "0",
+          "T": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "T": "0",
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "symbol": "S2",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S0": "0",
+          "S1": "0"
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "symbol": "S0",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target": {
+          "S2": "0",
+          "T": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "symbol": "S1",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse2",
+        "donor_a": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "donor_b": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "target": {
+          "S2": "0",
+          "T": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "intersect_symbol": "S1",
+        "restrict_symbol": "T",
+        "active_donors": [
+          true,
+          true
+        ],
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "symbol": "G",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "target_id": 4,
+        "donor_id": 2,
+        "symbol": "S2",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0",
+          "S2": "0"
+        },
+        "target_id": 4,
+        "donor_id": 7,
+        "symbol": "S1",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0",
+          "S2": "0",
+          "S1": "1"
+        },
+        "target_id": 4,
+        "donor_id": 5,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g2",
+          "g3"
+        ],
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": [
+            "g0",
+            "g2",
+            "g3"
+          ],
+          "S2": "0",
+          "S1": "1"
+        },
+        "target_id": 4,
+        "donor_id": 6,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g2",
+          "g3"
+        ],
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "target_id": 5,
+        "donor_id": 2,
+        "symbol": "S2",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1",
+          "S2": "0"
+        },
+        "target_id": 5,
+        "donor_id": 6,
+        "symbol": "G",
+        "extended": [
+          "g1",
+          "g2",
+          "g3"
+        ],
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S0": "0",
+          "S1": "0"
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target_id": 7,
+        "donor_id": 1,
+        "symbol": "S0",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0",
+          "S0": "1"
+        },
+        "target_id": 7,
+        "donor_id": 4,
+        "symbol": "T",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "T": "0",
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0",
+          "S0": "1",
+          "T": "0"
+        },
+        "target_id": 7,
+        "donor_id": 3,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g3"
+        ],
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": [
+            "g0",
+            "g3"
+          ],
+          "S0": "1",
+          "T": "0"
+        },
+        "target_id": 7,
+        "donor_id": 6,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g3",
+          "g2"
+        ],
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "T": "0",
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "target_id": 3,
+        "donor_id": 6,
+        "symbol": "S2",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "T": "0",
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ],
+          "S2": "1"
+        },
+        "target_id": 3,
+        "donor_id": 2,
+        "symbol": "T",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target_id": 6,
+        "donor_id": 7,
+        "symbol": "S1",
+        "extended": "1",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "target": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ],
+          "S1": "1"
+        },
+        "target_id": 6,
+        "donor_id": 5,
+        "symbol": "T",
+        "extended": "0",
+        "units": []
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "T": "0",
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "target": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ],
+          "S1": "1",
+          "T": "0"
+        },
+        "target_id": 6,
+        "donor_id": 3,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g1",
+          "g3"
+        ],
+        "units": []
+      }
+    ],
+    [
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "T": "0",
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "symbol": "S2",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "symbol": "S2",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "symbol": "S2",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S0": "0",
+          "S1": "0"
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "symbol": "S0",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "symbol": "G",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "symbol": "S1",
+        "active_donor": true,
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "sse2",
+        "donor_a": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "donor_b": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "T": "0",
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "intersect_symbol": "S2",
+        "restrict_symbol": "T",
+        "active_donors": [
+          true,
+          true
+        ],
+        "active_target": true,
+        "units": []
+      },
+      {
+        "kind": "unit_skip",
+        "target": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "symbol": "G",
+        "allowed": [
+          "g0",
+          "g1",
+          "g2"
+        ],
+        "source": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "source_id": 3,
+        "target_id": 4,
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "unit_skip",
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "symbol": "G",
+        "allowed": [
+          "g0",
+          "g1",
+          "g2"
+        ],
+        "source": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "source_id": 3,
+        "target_id": 5,
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "unit_skip",
+        "target": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "symbol": "G",
+        "allowed": [
+          "g0",
+          "g1",
+          "g2"
+        ],
+        "source": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "source_id": 3,
+        "target_id": 6,
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "unit_skip",
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "symbol": "G",
+        "allowed": [
+          "g0",
+          "g1",
+          "g2"
+        ],
+        "source": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "source_id": 3,
+        "target_id": 7,
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "target_id": 5,
+        "donor_id": 2,
+        "symbol": "S2",
+        "extended": "0",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0",
+          "S2": "0"
+        },
+        "target_id": 5,
+        "donor_id": 7,
+        "symbol": "S1",
+        "extended": "1",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0",
+          "S2": "0",
+          "S1": "1"
+        },
+        "target_id": 5,
+        "donor_id": 6,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g2",
+          "g3"
+        ],
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": [
+            "g0",
+            "g2",
+            "g3"
+          ],
+          "S2": "0",
+          "S1": "1"
+        },
+        "target_id": 5,
+        "donor_id": 4,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g2",
+          "g3"
+        ],
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "target_id": 6,
+        "donor_id": 2,
+        "symbol": "S2",
+        "extended": "0",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1",
+          "S2": "0"
+        },
+        "target_id": 6,
+        "donor_id": 4,
+        "symbol": "G",
+        "extended": [
+          "g1",
+          "g2",
+          "g3"
+        ],
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S0": "0",
+          "S1": "0"
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target_id": 7,
+        "donor_id": 1,
+        "symbol": "S0",
+        "extended": "1",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0",
+          "S0": "1"
+        },
+        "target_id": 7,
+        "donor_id": 5,
+        "symbol": "T",
+        "extended": "0",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0",
+          "S0": "1",
+          "T": "0"
+        },
+        "target_id": 7,
+        "donor_id": 4,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g2",
+          "g3"
+        ],
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target_id": 4,
+        "donor_id": 7,
+        "symbol": "S1",
+        "extended": "1",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "target": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ],
+          "S1": "1"
+        },
+        "target_id": 4,
+        "donor_id": 6,
+        "symbol": "T",
+        "extended": "0",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "unit_hla",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "target_id": 3,
+        "donor_id": 4,
+        "symbol": "S2",
+        "extended": "1",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "unit_hla",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ],
+          "S2": "1"
+        },
+        "target_id": 3,
+        "donor_id": 2,
+        "symbol": "T",
+        "extended": "0",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      }
+    ],
+    [
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "symbol": "S2",
+        "active_donor": true,
+        "active_target": true,
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "symbol": "S2",
+        "active_donor": true,
+        "active_target": true,
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S0": "0",
+          "S1": "0"
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "symbol": "S0",
+        "active_donor": true,
+        "active_target": true,
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "symbol": "G",
+        "active_donor": true,
+        "active_target": true,
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "symbol": "S1",
+        "active_donor": true,
+        "active_target": true,
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "target_id": 5,
+        "donor_id": 3,
+        "symbol": "S2",
+        "extended": "0",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0",
+          "S2": "0"
+        },
+        "target_id": 5,
+        "donor_id": 7,
+        "symbol": "S1",
+        "extended": "1",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0",
+          "S2": "0",
+          "S1": "1"
+        },
+        "target_id": 5,
+        "donor_id": 6,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g2",
+          "g3"
+        ],
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": [
+            "g0",
+            "g2",
+            "g3"
+          ],
+          "S2": "0",
+          "S1": "1"
+        },
+        "target_id": 5,
+        "donor_id": 4,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g2",
+          "g3"
+        ],
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "target_id": 6,
+        "donor_id": 3,
+        "symbol": "S2",
+        "extended": "0",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1",
+          "S2": "0"
+        },
+        "target_id": 6,
+        "donor_id": 4,
+        "symbol": "G",
+        "extended": [
+          "g1",
+          "g2",
+          "g3"
+        ],
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S0": "0",
+          "S1": "0"
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target_id": 7,
+        "donor_id": 2,
+        "symbol": "S0",
+        "extended": "1",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0",
+          "S0": "1"
+        },
+        "target_id": 7,
+        "donor_id": 5,
+        "symbol": "T",
+        "extended": "0",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0",
+          "S0": "1",
+          "T": "0"
+        },
+        "target_id": 7,
+        "donor_id": 4,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g2",
+          "g3"
+        ],
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target_id": 4,
+        "donor_id": 7,
+        "symbol": "S1",
+        "extended": "1",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "target": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ],
+          "S1": "1"
+        },
+        "target_id": 4,
+        "donor_id": 6,
+        "symbol": "T",
+        "extended": "0",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "unit_hla",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "target_id": 1,
+        "donor_id": 4,
+        "symbol": "S2",
+        "extended": "1",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "unit_hla",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ],
+          "S2": "1"
+        },
+        "target_id": 1,
+        "donor_id": 3,
+        "symbol": "T",
+        "extended": "0",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      }
+    ],
+    [
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "symbol": "S2",
+        "active_donor": true,
+        "active_target": true,
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "symbol": "S2",
+        "active_donor": true,
+        "active_target": true,
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S0": "0",
+          "S1": "0"
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "symbol": "S0",
+        "active_donor": true,
+        "active_target": true,
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "symbol": "G",
+        "active_donor": true,
+        "active_target": true,
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "sse1",
+        "donor": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "symbol": "S1",
+        "active_donor": true,
+        "active_target": true,
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "target_id": 5,
+        "donor_id": 3,
+        "symbol": "S2",
+        "extended": "0",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0",
+          "S2": "0"
+        },
+        "target_id": 5,
+        "donor_id": 7,
+        "symbol": "S1",
+        "extended": "1",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0",
+          "S2": "0",
+          "S1": "1"
+        },
+        "target_id": 5,
+        "donor_id": 6,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g2",
+          "g3"
+        ],
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S0": "1",
+          "T": "1",
+          "G": [
+            "g0",
+            "g2",
+            "g3"
+          ],
+          "S2": "0",
+          "S1": "1"
+        },
+        "target_id": 5,
+        "donor_id": 4,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g2",
+          "g3"
+        ],
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "target_id": 6,
+        "donor_id": 3,
+        "symbol": "S2",
+        "extended": "0",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1",
+          "S2": "0"
+        },
+        "target_id": 6,
+        "donor_id": 4,
+        "symbol": "G",
+        "extended": [
+          "g1",
+          "g2",
+          "g3"
+        ],
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S0": "0",
+          "S1": "0"
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target_id": 7,
+        "donor_id": 2,
+        "symbol": "S0",
+        "extended": "1",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S0": "1",
+          "T": "1",
+          "G": "g0"
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0",
+          "S0": "1"
+        },
+        "target_id": 7,
+        "donor_id": 5,
+        "symbol": "T",
+        "extended": "0",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0",
+          "S0": "1",
+          "T": "0"
+        },
+        "target_id": 7,
+        "donor_id": 4,
+        "symbol": "G",
+        "extended": [
+          "g0",
+          "g2",
+          "g3"
+        ],
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "0",
+          "S2": "0",
+          "G": "g0"
+        },
+        "target": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target_id": 4,
+        "donor_id": 7,
+        "symbol": "S1",
+        "extended": "1",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "hla",
+        "donor": {
+          "S1": "1",
+          "T": "1",
+          "G": "g1"
+        },
+        "target": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ],
+          "S1": "1"
+        },
+        "target_id": 4,
+        "donor_id": 6,
+        "symbol": "T",
+        "extended": "0",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "unit_hla",
+        "donor": {
+          "S2": "0",
+          "G": [
+            "g0",
+            "g1"
+          ]
+        },
+        "target": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        },
+        "target_id": 1,
+        "donor_id": 4,
+        "symbol": "S2",
+        "extended": "1",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      },
+      {
+        "kind": "unit_hla",
+        "donor": {
+          "S2": "1",
+          "T": "1"
+        },
+        "target": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ],
+          "S2": "1"
+        },
+        "target_id": 1,
+        "donor_id": 3,
+        "symbol": "T",
+        "extended": "0",
+        "units": {
+          "G": [
+            "g0",
+            "g1",
+            "g2"
+          ]
+        }
+      }
+    ]
+  ],
+  "seconds": [
+    1.01,
+    0.00599999999999934,
+    0.00499999999999989,
+    0.00499999999999989,
+    0.00699999999999967
+  ],
+  "productive": 3,
+  "order_only": 1,
+  "calls": 5,
+  "mass": [
+    22,
+    21,
+    20,
+    19,
+    19,
+    19
+  ]
+}

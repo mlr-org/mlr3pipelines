@@ -1,0 +1,383 @@
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Solving dependencies...
+The following package was automatically installed and is no longer required:
+  rpcsvc-proto
+Use 'apt autoremove' to remove it.
+The following additional packages will be installed:
+  fonts-font-awesome fonts-font-awesome-legacy fonts-glyphicons-halflings
+  fonts-mathjax git git-man javascript-common libc-bin libc-dev-bin
+  libc-gconv-modules-extra libc-l10n libc6 libc6-dev libcurl3t64-gnutls
+  libcurl4-gnutls libcurl4t64 liberror-perl libgit2-1.9 libjs-bootstrap
+  libjs-bootstrap4 libjs-bootswatch libjs-d3 libjs-es5-shim libjs-highlight.js
+  libjs-jquery libjs-jquery-datatables libjs-jquery-selectize.js
+  libjs-jquery-ui libjs-json libjs-mathjax libjs-microplugin.js
+  libjs-modernizr libjs-popper.js libjs-prettify libjs-sifter.js
+  libjs-twitter-bootstrap-datepicker libllhttp9.4 liblua5.4-0 libngtcp2-16
+  libngtcp2-crypto-gnutls8 libngtcp2-crypto-ossl0 libnuma1 libuv1t64
+  libwebpmux3 libxml2-16 libyaml-0-2 locales node-bootstrap-sass
+  node-html5shiv node-normalize.css pandoc pandoc-data r-cran-askpass
+  r-cran-base64enc r-cran-brew r-cran-brio r-cran-bslib r-cran-cachem
+  r-cran-callr r-cran-cli r-cran-clipr r-cran-commonmark r-cran-cpp11
+  r-cran-crayon r-cran-credentials r-cran-curl r-cran-desc r-cran-diffobj
+  r-cran-digest r-cran-downlit r-cran-ellipsis r-cran-evaluate r-cran-fansi
+  r-cran-fastmap r-cran-fontawesome r-cran-fs r-cran-gert r-cran-gh
+  r-cran-gitcreds r-cran-glue r-cran-highr r-cran-htmltools r-cran-htmlwidgets
+  r-cran-httpuv r-cran-httr2 r-cran-ini r-cran-jquerylib r-cran-jsonlite
+  r-cran-knitr r-cran-later r-cran-lifecycle r-cran-magrittr r-cran-memoise
+  r-cran-mime r-cran-miniui r-cran-openssl r-cran-otel r-cran-pillar
+  r-cran-pkgbuild r-cran-pkgconfig r-cran-pkgdown r-cran-pkgkitten
+  r-cran-pkgload r-cran-praise r-cran-prettyunits r-cran-processx
+  r-cran-profvis r-cran-promises r-cran-ps r-cran-purrr r-cran-r6 r-cran-ragg
+  r-cran-rappdirs r-cran-rcmdcheck r-cran-rcpp r-cran-rdtools r-cran-remotes
+  r-cran-rlang r-cran-rmarkdown r-cran-roxygen2 r-cran-rprojroot
+  r-cran-rstudioapi r-cran-rversions r-cran-sass r-cran-sessioninfo
+  r-cran-shiny r-cran-sourcetools r-cran-stringi r-cran-sys r-cran-systemfonts
+  r-cran-textshaping r-cran-tibble r-cran-tinytex r-cran-urlchecker
+  r-cran-usethis r-cran-utf8 r-cran-vctrs r-cran-waldo r-cran-whisker
+  r-cran-withr r-cran-xfun r-cran-xml2 r-cran-xopen r-cran-xtable r-cran-yaml
+  r-cran-zip r-pkg-team-core-architecture
+Suggested packages:
+  node-fortawesome-fontawesome-free gettext-base git-doc git-email git-gui
+  gitk gitweb git-cvs git-svn apache2 | lighttpd | httpd libjs-jquery-ui-docs
+  fonts-mathjax-extras fonts-stix libjs-mathjax-doc nodejs
+  citation-style-language-styles context ghc groff libjs-katex librsvg2-bin
+  pandoc-citeproc php python3 ruby texlive-latex-extra
+  texlive-latex-recommended texlive-luatex texlive-xetex wkhtmltopdf
+  r-cran-inline
+Recommended packages:
+  ssh-client node-jquery node-highlight.js
+The following NEW packages will be installed:
+  fonts-font-awesome fonts-font-awesome-legacy fonts-glyphicons-halflings
+  fonts-mathjax git git-man javascript-common libcurl3t64-gnutls
+  libcurl4-gnutls liberror-perl libgit2-1.9 libjs-bootstrap libjs-bootstrap4
+  libjs-bootswatch libjs-d3 libjs-es5-shim libjs-highlight.js libjs-jquery
+  libjs-jquery-datatables libjs-jquery-selectize.js libjs-jquery-ui libjs-json
+  libjs-mathjax libjs-microplugin.js libjs-modernizr libjs-popper.js
+  libjs-prettify libjs-sifter.js libjs-twitter-bootstrap-datepicker
+  libllhttp9.4 liblua5.4-0 libngtcp2-crypto-gnutls8 libnuma1 libuv1t64
+  libwebpmux3 libxml2-16 libyaml-0-2 node-bootstrap-sass node-html5shiv
+  node-normalize.css pandoc pandoc-data r-cran-askpass r-cran-base64enc
+  r-cran-brew r-cran-brio r-cran-bslib r-cran-cachem r-cran-callr r-cran-cli
+  r-cran-clipr r-cran-commonmark r-cran-cpp11 r-cran-crayon r-cran-credentials
+  r-cran-curl r-cran-desc r-cran-devtools r-cran-diffobj r-cran-digest
+  r-cran-downlit r-cran-ellipsis r-cran-evaluate r-cran-fansi r-cran-fastmap
+  r-cran-fontawesome r-cran-fs r-cran-gert r-cran-gh r-cran-gitcreds
+  r-cran-glue r-cran-highr r-cran-htmltools r-cran-htmlwidgets r-cran-httpuv
+  r-cran-httr2 r-cran-ini r-cran-jquerylib r-cran-jsonlite r-cran-knitr
+  r-cran-later r-cran-lifecycle r-cran-magrittr r-cran-memoise r-cran-mime
+  r-cran-miniui r-cran-openssl r-cran-otel r-cran-pillar r-cran-pkgbuild
+  r-cran-pkgconfig r-cran-pkgdown r-cran-pkgkitten r-cran-pkgload
+  r-cran-praise r-cran-prettyunits r-cran-processx r-cran-profvis
+  r-cran-promises r-cran-ps r-cran-purrr r-cran-r6 r-cran-ragg r-cran-rappdirs
+  r-cran-rcmdcheck r-cran-rcpp r-cran-rdtools r-cran-remotes r-cran-rlang
+  r-cran-rmarkdown r-cran-roxygen2 r-cran-rprojroot r-cran-rstudioapi
+  r-cran-rversions r-cran-sass r-cran-sessioninfo r-cran-shiny
+  r-cran-sourcetools r-cran-stringi r-cran-sys r-cran-systemfonts
+  r-cran-testthat r-cran-textshaping r-cran-tibble r-cran-tinytex
+  r-cran-urlchecker r-cran-usethis r-cran-utf8 r-cran-vctrs r-cran-waldo
+  r-cran-whisker r-cran-withr r-cran-xfun r-cran-xml2 r-cran-xopen
+  r-cran-xtable r-cran-yaml r-cran-zip r-pkg-team-core-architecture
+The following packages will be upgraded:
+  libc-bin libc-dev-bin libc-gconv-modules-extra libc-l10n libc6 libc6-dev
+  libcurl4t64 libngtcp2-16 libngtcp2-crypto-ossl0 locales
+10 upgraded, 139 newly installed, 0 to remove and 136 not upgraded.
+Inst libc-gconv-modules-extra [2.42-17] (2.43-4 Debian:testing [amd64]) [libc6:amd64 ]
+Conf libc-gconv-modules-extra (2.43-4 Debian:testing [amd64]) [libc6:amd64 ]
+Inst libc-l10n [2.42-17] (2.43-4 Debian:testing [all]) [libc6:amd64 ]
+Inst locales [2.42-17] (2.43-4 Debian:testing [all]) [libc6:amd64 ]
+Inst libc6 [2.42-17] (2.43-4 Debian:testing [amd64]) [libc-dev-bin:amd64 libc-bin:amd64 libc6-dev:amd64 ]
+Conf libc6 (2.43-4 Debian:testing [amd64]) [libc-dev-bin:amd64 libc-bin:amd64 libc6-dev:amd64 ]
+Inst libc-bin [2.42-17] (2.43-4 Debian:testing [amd64]) [libc-dev-bin:amd64 libc6-dev:amd64 ]
+Conf libc-bin (2.43-4 Debian:testing [amd64]) [libc-dev-bin:amd64 libc6-dev:amd64 ]
+Inst libc-dev-bin [2.42-17] (2.43-4 Debian:testing [amd64]) [libc6-dev:amd64 ]
+Inst libc6-dev [2.42-17] (2.43-4 Debian:testing [amd64])
+Inst fonts-font-awesome-legacy (6-3 Debian:unstable, Debian:testing [all])
+Inst fonts-font-awesome (7.3.0+dfsg-1 Debian:unstable, Debian:testing [all])
+Inst fonts-glyphicons-halflings (1.009~3.4.1+dfsg-7 Debian:unstable, Debian:testing [all])
+Inst fonts-mathjax (2.7.9+dfsg-1 Debian:unstable, Debian:testing [all])
+Inst libngtcp2-16 [1.22.1-1] (1.24.0-1 Debian:unstable, Debian:testing [amd64])
+Inst libngtcp2-crypto-gnutls8 (1.24.0-1 Debian:unstable, Debian:testing [amd64])
+Inst libcurl4-gnutls (8.21.0-2 Debian:testing [amd64])
+Inst libcurl3t64-gnutls (8.21.0-2 Debian:testing [amd64])
+Inst liberror-perl (0.17030-1 Debian:unstable, Debian:testing [all])
+Inst git-man (1:2.53.0-1 Debian:testing [all])
+Inst git (1:2.53.0-1 Debian:testing [amd64])
+Inst javascript-common (12+nmu1 Debian:unstable, Debian:testing [all])
+Inst libngtcp2-crypto-ossl0 [1.22.1-1] (1.24.0-1 Debian:unstable, Debian:testing [amd64])
+Inst libcurl4t64 [8.21.0~rc3-1] (8.21.0-2 Debian:testing [amd64])
+Inst libllhttp9.4 (9.4.3+~cs12.11.9-2 Debian:unstable, Debian:testing [amd64])
+Inst libgit2-1.9 (1.9.7+ds-1 Debian:unstable, Debian:testing [amd64])
+Inst libjs-bootstrap (3.4.1+dfsg-7 Debian:unstable, Debian:testing [all])
+Inst libjs-popper.js (1.16.1+ds-7 Debian:unstable, Debian:testing [all])
+Inst libjs-bootstrap4 (4.6.2+dfsg-3 Debian:unstable, Debian:testing [all])
+Inst libjs-bootswatch (3.4.1+1+dfsg-0.1 Debian:unstable, Debian:testing [all])
+Inst libjs-d3 (3.5.17-4 Debian:unstable, Debian:testing [all])
+Inst libjs-es5-shim (4.6.7-2 Debian:unstable, Debian:testing [all])
+Inst libjs-highlight.js (10.7.3+dfsg-6 Debian:unstable, Debian:testing [all])
+Inst libjs-jquery (3.7.1+dfsg+~3.5.33-1 Debian:unstable, Debian:testing [all])
+Inst libjs-jquery-datatables (1.11.5+dfsg-2 Debian:unstable, Debian:testing [all])
+Inst libjs-sifter.js (0.6.0+dfsg-3 Debian:unstable, Debian:testing [all])
+Inst libjs-microplugin.js (0.0.3+dfsg-2 Debian:unstable, Debian:testing [all])
+Inst libjs-jquery-selectize.js (0.12.6+dfsg-1.1 Debian:unstable, Debian:testing [all])
+Inst libjs-jquery-ui (1.14.2+dfsg-1 Debian:unstable, Debian:testing [all])
+Inst libjs-json (0~20221030+~1.0.8-1 Debian:unstable, Debian:testing [all])
+Inst libjs-mathjax (2.7.9+dfsg-1 Debian:unstable, Debian:testing [all])
+Inst libjs-modernizr (3.13.0-0.1 Debian:unstable, Debian:testing [all])
+Inst libjs-prettify (2015.12.04+dfsg-3 Debian:unstable, Debian:testing [all])
+Inst libjs-twitter-bootstrap-datepicker (1.3.1+dfsg1-4.1 Debian:unstable, Debian:testing [all])
+Inst liblua5.4-0 (5.4.9-1 Debian:unstable, Debian:testing [amd64])
+Inst libnuma1 (2.0.19-1+b2 Debian:unstable, Debian:testing [amd64])
+Inst libuv1t64 (1.52.1-4 Debian:unstable, Debian:testing [amd64])
+Inst libwebpmux3 (1.5.0-0.1+b2 Debian:unstable, Debian:testing [amd64])
+Inst libxml2-16 (2.15.3+dfsg-1+b1 Debian:testing [amd64])
+Inst libyaml-0-2 (0.2.5-2+b1 Debian:unstable, Debian:testing [amd64])
+Inst node-bootstrap-sass (3.4.3-2 Debian:unstable, Debian:testing [all])
+Inst node-html5shiv (3.7.3+dfsg-5 Debian:unstable, Debian:testing [all])
+Inst node-normalize.css (8.0.1-5.1 Debian:unstable, Debian:testing [all])
+Inst pandoc-data (3.10.2-1 Debian:testing [all])
+Inst pandoc (3.10.2-1 Debian:testing [amd64])
+Inst r-cran-sys (3.4.3-3 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-askpass (1.2.1-3 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-base64enc (0.1-6-2 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-brew (1.0-10-2 Debian:unstable, Debian:testing [all])
+Inst r-cran-brio (1.1.5-3 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-rlang (1.3.0-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-fastmap (1.2.0-3 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-cachem (1.1.0-3 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-digest (0.6.39-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-htmltools (0.5.9-2 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-jquerylib (0.1.4+dfsg-6 Debian:unstable, Debian:testing [all])
+Inst r-cran-jsonlite (2.0.0+dfsg-2 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-cli (3.6.6-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-lifecycle (1.0.5+dfsg-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-memoise (2.0.1-2 Debian:unstable, Debian:testing [all])
+Inst r-cran-mime (0.13-2 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-fs (2.1.0+dfsg-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-r6 (2.6.1-2 Debian:unstable, Debian:testing [all])
+Inst r-cran-rappdirs (0.3.4-2 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-sass (0.4.10+dfsg-3 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-bslib (0.10.0+dfsg-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-otel (0.2.0-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-ps (1.9.3-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-processx (3.9.0-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-callr (3.8.0-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-clipr (0.8.1-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-commonmark (2.0.0-3 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-cpp11 (0.5.5-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-crayon (1.5.3-2 Debian:unstable, Debian:testing [all])
+Inst r-cran-openssl (2.4.2+dfsg-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-curl (7.1.0+dfsg-2 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-credentials (2.0.3-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-desc (1.4.3-2 Debian:unstable, Debian:testing [all])
+Inst r-cran-rstudioapi (0.19.0-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-zip (3.0.2-1 Debian:unstable, Debian:testing [amd64])
+Inst r-pkg-team-core-architecture (20260707 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-gert (2.4.1+dfsg-1 Debian:unstable [amd64])
+Inst r-cran-gitcreds (0.1.2-2 Debian:unstable, Debian:testing [all])
+Inst r-cran-glue (1.8.1-2 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-magrittr (2.0.5-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-vctrs (0.7.3-2 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-withr (3.0.3+dfsg-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-httr2 (1.3.0-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-ini (0.3.1-3 Debian:unstable, Debian:testing [all])
+Inst r-cran-gh (1.6.1-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-purrr (1.2.2-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-rprojroot (2.1.1-3 Debian:unstable, Debian:testing [all])
+Inst r-cran-whisker (0.4.1-2 Debian:unstable, Debian:testing [all])
+Inst r-cran-yaml (2.3.12-2 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-usethis (3.2.1-1 Debian:unstable [all])
+Inst r-cran-ellipsis (0.3.3-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-fontawesome (0.5.3-2 Debian:unstable, Debian:testing [all])
+Inst r-cran-pkgkitten (0.2.4-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-rcpp (1.1.2-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-later (1.4.8+dfsg-3 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-promises (1.5.0+dfsg-3 Debian:unstable, Debian:testing [all])
+Inst r-cran-httpuv (1.6.16+dfsg-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-sourcetools (0.1.7-2-2 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-xtable (1:1.8-8-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-shiny (1.13.0+dfsg-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-miniui (0.1.2-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-pkgbuild (1.4.8-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-evaluate (1.0.5-3 Debian:unstable, Debian:testing [all])
+Inst r-cran-fansi (1.0.7-2 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-downlit (0.4.5-2 Debian:unstable, Debian:testing [all])
+Inst r-cran-systemfonts (1.3.2-3 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-stringi (1.8.9-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-textshaping (1.0.5-2 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-ragg (1.5.2-2 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-xfun (0.60+dfsg-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-highr (0.12+dfsg-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-knitr (1.51+dfsg-2 Debian:unstable, Debian:testing [all])
+Inst r-cran-tinytex (0.60-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-rmarkdown (2.31+dfsg-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-utf8 (1.2.6-2 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-pillar (1.11.1+dfsg-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-pkgconfig (2.0.3-3 Debian:unstable, Debian:testing [all])
+Inst r-cran-tibble (3.3.1+dfsg-2 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-xml2 (1.6.0-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-pkgdown (2.2.0-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-pkgload (1.5.3-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-htmlwidgets (1.6.4+dfsg-2 Debian:unstable, Debian:testing [all])
+Inst r-cran-profvis (0.4.0+dfsg-2 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-prettyunits (1.2.0-2 Debian:unstable, Debian:testing [all])
+Inst r-cran-sessioninfo (1.2.4-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-xopen (1.0.1+dfsg-2 Debian:unstable, Debian:testing [all])
+Inst r-cran-rcmdcheck (1.4.0-5 Debian:unstable, Debian:testing [all])
+Inst r-cran-remotes (2.5.0+dfsg-2 Debian:unstable, Debian:testing [all])
+Inst r-cran-rdtools (0.1.0-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-roxygen2 (8.1.0-1 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-rversions (3.0.0-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-praise (1.0.0-5 Debian:unstable, Debian:testing [all])
+Inst r-cran-diffobj (0.3.6-2 Debian:testing [amd64])
+Inst r-cran-waldo (0.6.2-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-testthat (3.3.2-3 Debian:unstable, Debian:testing [amd64])
+Inst r-cran-urlchecker (2.0.0-1 Debian:unstable, Debian:testing [all])
+Inst r-cran-devtools (2.4.6-2 Debian:unstable [all])
+Conf libc-l10n (2.43-4 Debian:testing [all])
+Conf locales (2.43-4 Debian:testing [all])
+Conf libc-dev-bin (2.43-4 Debian:testing [amd64])
+Conf libc6-dev (2.43-4 Debian:testing [amd64])
+Conf fonts-font-awesome-legacy (6-3 Debian:unstable, Debian:testing [all])
+Conf fonts-font-awesome (7.3.0+dfsg-1 Debian:unstable, Debian:testing [all])
+Conf fonts-glyphicons-halflings (1.009~3.4.1+dfsg-7 Debian:unstable, Debian:testing [all])
+Conf fonts-mathjax (2.7.9+dfsg-1 Debian:unstable, Debian:testing [all])
+Conf libngtcp2-16 (1.24.0-1 Debian:unstable, Debian:testing [amd64])
+Conf libngtcp2-crypto-gnutls8 (1.24.0-1 Debian:unstable, Debian:testing [amd64])
+Conf libcurl4-gnutls (8.21.0-2 Debian:testing [amd64])
+Conf libcurl3t64-gnutls (8.21.0-2 Debian:testing [amd64])
+Conf liberror-perl (0.17030-1 Debian:unstable, Debian:testing [all])
+Conf git-man (1:2.53.0-1 Debian:testing [all])
+Conf git (1:2.53.0-1 Debian:testing [amd64])
+Conf javascript-common (12+nmu1 Debian:unstable, Debian:testing [all])
+Conf libngtcp2-crypto-ossl0 (1.24.0-1 Debian:unstable, Debian:testing [amd64])
+Conf libcurl4t64 (8.21.0-2 Debian:testing [amd64])
+Conf libllhttp9.4 (9.4.3+~cs12.11.9-2 Debian:unstable, Debian:testing [amd64])
+Conf libgit2-1.9 (1.9.7+ds-1 Debian:unstable, Debian:testing [amd64])
+Conf libjs-bootstrap (3.4.1+dfsg-7 Debian:unstable, Debian:testing [all])
+Conf libjs-popper.js (1.16.1+ds-7 Debian:unstable, Debian:testing [all])
+Conf libjs-bootstrap4 (4.6.2+dfsg-3 Debian:unstable, Debian:testing [all])
+Conf libjs-bootswatch (3.4.1+1+dfsg-0.1 Debian:unstable, Debian:testing [all])
+Conf libjs-d3 (3.5.17-4 Debian:unstable, Debian:testing [all])
+Conf libjs-es5-shim (4.6.7-2 Debian:unstable, Debian:testing [all])
+Conf libjs-highlight.js (10.7.3+dfsg-6 Debian:unstable, Debian:testing [all])
+Conf libjs-jquery (3.7.1+dfsg+~3.5.33-1 Debian:unstable, Debian:testing [all])
+Conf libjs-jquery-datatables (1.11.5+dfsg-2 Debian:unstable, Debian:testing [all])
+Conf libjs-sifter.js (0.6.0+dfsg-3 Debian:unstable, Debian:testing [all])
+Conf libjs-microplugin.js (0.0.3+dfsg-2 Debian:unstable, Debian:testing [all])
+Conf libjs-jquery-selectize.js (0.12.6+dfsg-1.1 Debian:unstable, Debian:testing [all])
+Conf libjs-jquery-ui (1.14.2+dfsg-1 Debian:unstable, Debian:testing [all])
+Conf libjs-json (0~20221030+~1.0.8-1 Debian:unstable, Debian:testing [all])
+Conf libjs-mathjax (2.7.9+dfsg-1 Debian:unstable, Debian:testing [all])
+Conf libjs-modernizr (3.13.0-0.1 Debian:unstable, Debian:testing [all])
+Conf libjs-prettify (2015.12.04+dfsg-3 Debian:unstable, Debian:testing [all])
+Conf libjs-twitter-bootstrap-datepicker (1.3.1+dfsg1-4.1 Debian:unstable, Debian:testing [all])
+Conf liblua5.4-0 (5.4.9-1 Debian:unstable, Debian:testing [amd64])
+Conf libnuma1 (2.0.19-1+b2 Debian:unstable, Debian:testing [amd64])
+Conf libuv1t64 (1.52.1-4 Debian:unstable, Debian:testing [amd64])
+Conf libwebpmux3 (1.5.0-0.1+b2 Debian:unstable, Debian:testing [amd64])
+Conf libxml2-16 (2.15.3+dfsg-1+b1 Debian:testing [amd64])
+Conf libyaml-0-2 (0.2.5-2+b1 Debian:unstable, Debian:testing [amd64])
+Conf node-bootstrap-sass (3.4.3-2 Debian:unstable, Debian:testing [all])
+Conf node-html5shiv (3.7.3+dfsg-5 Debian:unstable, Debian:testing [all])
+Conf node-normalize.css (8.0.1-5.1 Debian:unstable, Debian:testing [all])
+Conf pandoc-data (3.10.2-1 Debian:testing [all])
+Conf pandoc (3.10.2-1 Debian:testing [amd64])
+Conf r-cran-sys (3.4.3-3 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-askpass (1.2.1-3 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-base64enc (0.1-6-2 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-brew (1.0-10-2 Debian:unstable, Debian:testing [all])
+Conf r-cran-brio (1.1.5-3 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-rlang (1.3.0-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-fastmap (1.2.0-3 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-cachem (1.1.0-3 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-digest (0.6.39-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-htmltools (0.5.9-2 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-jquerylib (0.1.4+dfsg-6 Debian:unstable, Debian:testing [all])
+Conf r-cran-jsonlite (2.0.0+dfsg-2 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-cli (3.6.6-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-lifecycle (1.0.5+dfsg-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-memoise (2.0.1-2 Debian:unstable, Debian:testing [all])
+Conf r-cran-mime (0.13-2 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-fs (2.1.0+dfsg-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-r6 (2.6.1-2 Debian:unstable, Debian:testing [all])
+Conf r-cran-rappdirs (0.3.4-2 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-sass (0.4.10+dfsg-3 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-bslib (0.10.0+dfsg-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-otel (0.2.0-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-ps (1.9.3-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-processx (3.9.0-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-callr (3.8.0-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-clipr (0.8.1-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-commonmark (2.0.0-3 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-cpp11 (0.5.5-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-crayon (1.5.3-2 Debian:unstable, Debian:testing [all])
+Conf r-cran-openssl (2.4.2+dfsg-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-curl (7.1.0+dfsg-2 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-credentials (2.0.3-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-desc (1.4.3-2 Debian:unstable, Debian:testing [all])
+Conf r-cran-rstudioapi (0.19.0-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-zip (3.0.2-1 Debian:unstable, Debian:testing [amd64])
+Conf r-pkg-team-core-architecture (20260707 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-gert (2.4.1+dfsg-1 Debian:unstable [amd64])
+Conf r-cran-gitcreds (0.1.2-2 Debian:unstable, Debian:testing [all])
+Conf r-cran-glue (1.8.1-2 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-magrittr (2.0.5-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-vctrs (0.7.3-2 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-withr (3.0.3+dfsg-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-httr2 (1.3.0-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-ini (0.3.1-3 Debian:unstable, Debian:testing [all])
+Conf r-cran-gh (1.6.1-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-purrr (1.2.2-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-rprojroot (2.1.1-3 Debian:unstable, Debian:testing [all])
+Conf r-cran-whisker (0.4.1-2 Debian:unstable, Debian:testing [all])
+Conf r-cran-yaml (2.3.12-2 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-usethis (3.2.1-1 Debian:unstable [all])
+Conf r-cran-ellipsis (0.3.3-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-fontawesome (0.5.3-2 Debian:unstable, Debian:testing [all])
+Conf r-cran-pkgkitten (0.2.4-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-rcpp (1.1.2-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-later (1.4.8+dfsg-3 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-promises (1.5.0+dfsg-3 Debian:unstable, Debian:testing [all])
+Conf r-cran-httpuv (1.6.16+dfsg-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-sourcetools (0.1.7-2-2 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-xtable (1:1.8-8-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-shiny (1.13.0+dfsg-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-miniui (0.1.2-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-pkgbuild (1.4.8-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-evaluate (1.0.5-3 Debian:unstable, Debian:testing [all])
+Conf r-cran-fansi (1.0.7-2 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-downlit (0.4.5-2 Debian:unstable, Debian:testing [all])
+Conf r-cran-systemfonts (1.3.2-3 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-stringi (1.8.9-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-textshaping (1.0.5-2 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-ragg (1.5.2-2 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-xfun (0.60+dfsg-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-highr (0.12+dfsg-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-knitr (1.51+dfsg-2 Debian:unstable, Debian:testing [all])
+Conf r-cran-tinytex (0.60-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-rmarkdown (2.31+dfsg-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-utf8 (1.2.6-2 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-pillar (1.11.1+dfsg-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-pkgconfig (2.0.3-3 Debian:unstable, Debian:testing [all])
+Conf r-cran-tibble (3.3.1+dfsg-2 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-xml2 (1.6.0-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-pkgdown (2.2.0-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-pkgload (1.5.3-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-htmlwidgets (1.6.4+dfsg-2 Debian:unstable, Debian:testing [all])
+Conf r-cran-profvis (0.4.0+dfsg-2 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-prettyunits (1.2.0-2 Debian:unstable, Debian:testing [all])
+Conf r-cran-sessioninfo (1.2.4-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-xopen (1.0.1+dfsg-2 Debian:unstable, Debian:testing [all])
+Conf r-cran-rcmdcheck (1.4.0-5 Debian:unstable, Debian:testing [all])
+Conf r-cran-remotes (2.5.0+dfsg-2 Debian:unstable, Debian:testing [all])
+Conf r-cran-rdtools (0.1.0-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-roxygen2 (8.1.0-1 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-rversions (3.0.0-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-praise (1.0.0-5 Debian:unstable, Debian:testing [all])
+Conf r-cran-diffobj (0.3.6-2 Debian:testing [amd64])
+Conf r-cran-waldo (0.6.2-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-testthat (3.3.2-3 Debian:unstable, Debian:testing [amd64])
+Conf r-cran-urlchecker (2.0.0-1 Debian:unstable, Debian:testing [all])
+Conf r-cran-devtools (2.4.6-2 Debian:unstable [all])

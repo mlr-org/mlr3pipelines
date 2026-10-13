@@ -1,0 +1,66 @@
+Seed 15446 clauses 4 atoms 6 selected 9 calls 125
+list(case = list(domains = list(X1 = c("v2", "v3", "v4"), X2 = c("v1",
+"v2")), raw = list(list(X1 = "v4"), list(X1 = c("v3", "v4")),
+    list(X2 = "v2", X1 = "v3"), list(X2 = "v1", X1 = "v2")),
+    selectors = list(c(1L, 1L, 1L), c(1L, 1L), 2:1, 2:1)), output = list(
+    list(X1 = c("v3", "v4")), list(X2 = "v1"), list(X1 = "v4",
+        X1 = "v4")), assignments = structure(list(X1 = c("v2",
+"v3", "v4", "v2", "v3", "v4"), X2 = c("v1", "v1", "v1", "v2",
+"v2", "v2")), out.attrs = list(dim = structure(3:2, .Names = c("X1",
+"X2")), dimnames = list(X1 = c("X1=v2", "X1=v3", "X1=v4"), X2 = c("X2=v1",
+"X2=v2"))), class = "data.frame", row.names = c(NA, -6L)), expected = c(FALSE,
+FALSE, FALSE, FALSE, FALSE, FALSE), positional = c(FALSE, FALSE,
+TRUE, FALSE, FALSE, FALSE), named = c(FALSE, FALSE, TRUE, FALSE,
+FALSE, FALSE), positional_mismatch = 3L, named_mismatch = 3L)
+Seed 33079 clauses 4 atoms 7 selected 8 calls 201
+list(case = list(domains = list(X1 = c("v1", "v2", "v3"), X2 = c("v1",
+"v2", "v3")), raw = list(list(X1 = c("v2", "v3")), list(X2 = "v3",
+    X1 = "v2"), list(X1 = "v3", X2 = "v2"), list(X1 = "v1", X2 = "v1")),
+    selectors = list(c(1L, 1L), 2:1, 1:2, 1:2)), output = list(
+    list(X1 = "v3"), list(X2 = "v1")), assignments = structure(list(
+    X1 = c("v1", "v2", "v3", "v1", "v2", "v3", "v1", "v2", "v3"
+    ), X2 = c("v1", "v1", "v1", "v2", "v2", "v2", "v3", "v3",
+    "v3")), out.attrs = list(dim = c(X1 = 3L, X2 = 3L), dimnames = list(
+    X1 = c("X1=v1", "X1=v2", "X1=v3"), X2 = c("X2=v1", "X2=v2",
+    "X2=v3"))), class = "data.frame", row.names = c(NA, -9L)),
+    expected = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+    FALSE, FALSE), positional = c(FALSE, FALSE, TRUE, FALSE,
+    FALSE, FALSE, FALSE, FALSE, FALSE), named = c(FALSE, FALSE,
+    TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), positional_mismatch = 3L,
+    named_mismatch = 3L)
+Seed 43067 clauses 4 atoms 7 selected 10 calls 457
+list(case = list(domains = list(X1 = c("v1", "v2", "v3"), X2 = c("v1",
+"v4", "v5")), raw = list(list(X1 = "v1", X2 = c("v4", "v5")),
+    list(X2 = "v1", X1 = "v2"), list(X1 = "v1", X2 = c("v5",
+    "v1")), list(X1 = c("v1", "v3"))), selectors = list(2:1,
+    c(2L, 1L, 2L, 1L), c(2L, 1L, 2L), 1L)), output = list(list(
+    X1 = c("v1", "v3")), list(X1 = "v1", X2 = c("v5", "v1")),
+    list(X2 = "v1", X2 = "v1")), assignments = structure(list(
+    X1 = c("v1", "v2", "v3", "v1", "v2", "v3", "v1", "v2", "v3"
+    ), X2 = c("v1", "v1", "v1", "v4", "v4", "v4", "v5", "v5",
+    "v5")), out.attrs = list(dim = c(X1 = 3L, X2 = 3L), dimnames = list(
+    X1 = c("X1=v1", "X1=v2", "X1=v3"), X2 = c("X2=v1", "X2=v4",
+    "X2=v5"))), class = "data.frame", row.names = c(NA, -9L)),
+    expected = c(TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+    FALSE, FALSE), positional = c(TRUE, FALSE, TRUE, FALSE, FALSE,
+    FALSE, FALSE, FALSE, FALSE), named = c(TRUE, FALSE, TRUE,
+    FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), positional_mismatch = 3L,
+    named_mismatch = 3L)
+Seed 91398 clauses 4 atoms 7 selected 10 calls 760
+list(case = list(domains = list(X1 = c("v2", "v3", "v4"), X2 = c("v1",
+"v3", "v5")), raw = list(list(X1 = "v4", X2 = "v1"), list(X2 = c("v3",
+"v5")), list(X2 = "v5", X1 = c("v2", "v4")), list(X2 = "v5",
+    X1 = c("v3", "v2"))), selectors = list(c(1L, 2L, 1L, 2L),
+    1L, c(2L, 1L, 2L), 2:1)), output = list(list(X2 = c("v3",
+"v5")), list(X2 = "v5", X1 = c("v2", "v4")), list(X1 = "v4",
+    X1 = "v4")), assignments = structure(list(X1 = c("v2", "v3",
+"v4", "v2", "v3", "v4", "v2", "v3", "v4"), X2 = c("v1", "v1",
+"v1", "v3", "v3", "v3", "v5", "v5", "v5")), out.attrs = list(
+    dim = c(X1 = 3L, X2 = 3L), dimnames = list(X1 = c("X1=v2",
+    "X1=v3", "X1=v4"), X2 = c("X2=v1", "X2=v3", "X2=v5"))), class = "data.frame", row.names = c(NA,
+-9L)), expected = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+FALSE, FALSE, TRUE), positional = c(FALSE, FALSE, FALSE, FALSE,
+FALSE, TRUE, FALSE, FALSE, TRUE), named = c(FALSE, FALSE, FALSE,
+FALSE, FALSE, TRUE, FALSE, FALSE, TRUE), positional_mismatch = 6L,
+    named_mismatch = 6L)
+R: R version 3.6.3 (2020-02-29) ; checkmate: 2.3.4

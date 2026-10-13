@@ -174,8 +174,16 @@ test_that("Cloning as expected", {
 
   lg2 = lg$clone(deep = TRUE)
 
+  expect_false(identical(
+    lg$state$param_vals$proxy.content,
+    lg2$state$param_vals$proxy.content
+  ))
   expect_deep_clone(lg, lg2)
 
   expect_deep_clone(lg$param_set$values$proxy.content, lg2$param_set$values$proxy.content)
+
+  original_center = lg$state$param_vals$proxy.content$param_set$values$center
+  lg2$state$param_vals$proxy.content$param_set$values$center = !original_center
+  expect_identical(lg$state$param_vals$proxy.content$param_set$values$center, original_center)
 
 })

@@ -1,0 +1,197 @@
+{
+  "reports": [
+    {
+      "version": "host",
+      "n": 16,
+      "order": "forward",
+      "exit_code": 0,
+      "stdout": "R version 3.6.3 (2020-02-29)\ncheckmate: 2.3.4 \nsymbols: 16 reverse: FALSE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      38224          1          5 \nseconds: 0.546 \nPASS: exactly the 16 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "host",
+      "n": 16,
+      "order": "reverse",
+      "exit_code": 0,
+      "stdout": "R version 3.6.3 (2020-02-29)\ncheckmate: 2.3.4 \nsymbols: 16 reverse: TRUE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      36912          1          5 \nseconds: 0.536 \nPASS: exactly the 16 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "host",
+      "n": 32,
+      "order": "forward",
+      "exit_code": 0,
+      "stdout": "R version 3.6.3 (2020-02-29)\ncheckmate: 2.3.4 \nsymbols: 32 reverse: FALSE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      39232          1          5 \nseconds: 0.517 \nPASS: exactly the 32 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "host",
+      "n": 32,
+      "order": "reverse",
+      "exit_code": 0,
+      "stdout": "R version 3.6.3 (2020-02-29)\ncheckmate: 2.3.4 \nsymbols: 32 reverse: TRUE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      32256          1          5 \nseconds: 0.411 \nPASS: exactly the 32 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "host",
+      "n": 64,
+      "order": "forward",
+      "exit_code": 0,
+      "stdout": "R version 3.6.3 (2020-02-29)\ncheckmate: 2.3.4 \nsymbols: 64 reverse: FALSE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      35856          1          5 \nseconds: 0.408 \nPASS: exactly the 64 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "host",
+      "n": 64,
+      "order": "reverse",
+      "exit_code": 0,
+      "stdout": "R version 3.6.3 (2020-02-29)\ncheckmate: 2.3.4 \nsymbols: 64 reverse: TRUE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      33872          1          5 \nseconds: 0.414 \nPASS: exactly the 64 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "host",
+      "n": 128,
+      "order": "forward",
+      "exit_code": 0,
+      "stdout": "R version 3.6.3 (2020-02-29)\ncheckmate: 2.3.4 \nsymbols: 128 reverse: FALSE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      35536          1          5 \nseconds: 0.435 \nPASS: exactly the 128 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "host",
+      "n": 128,
+      "order": "reverse",
+      "exit_code": 0,
+      "stdout": "R version 3.6.3 (2020-02-29)\ncheckmate: 2.3.4 \nsymbols: 128 reverse: TRUE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      35120          1          5 \nseconds: 0.417 \nPASS: exactly the 128 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "host",
+      "n": 256,
+      "order": "forward",
+      "exit_code": 0,
+      "stdout": "R version 3.6.3 (2020-02-29)\ncheckmate: 2.3.4 \nsymbols: 256 reverse: FALSE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      34848          1          5 \nseconds: 0.42 \nPASS: exactly the 256 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "host",
+      "n": 256,
+      "order": "reverse",
+      "exit_code": 0,
+      "stdout": "R version 3.6.3 (2020-02-29)\ncheckmate: 2.3.4 \nsymbols: 256 reverse: TRUE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      36096          1          5 \nseconds: 0.427 \nERROR: C stack usage  7973716 is too close to the limit \n",
+      "stderr": ""
+    },
+    {
+      "version": "host",
+      "n": 512,
+      "order": "forward",
+      "exit_code": 0,
+      "stdout": "R version 3.6.3 (2020-02-29)\ncheckmate: 2.3.4 \nsymbols: 512 reverse: FALSE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      32192          1          5 \nseconds: 0.436 \nPASS: exactly the 512 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "host",
+      "n": 512,
+      "order": "reverse",
+      "exit_code": 0,
+      "stdout": "R version 3.6.3 (2020-02-29)\ncheckmate: 2.3.4 \nsymbols: 512 reverse: TRUE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      37584          1          5 \nseconds: 0.427 \nERROR: C stack usage  7975204 is too close to the limit \n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 16,
+      "order": "forward",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 16 reverse: FALSE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      20080          1          5 \nseconds: 0.682 \nPASS: exactly the 16 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 16,
+      "order": "reverse",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 16 reverse: TRUE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      21232          1          5 \nseconds: 0.662 \nPASS: exactly the 16 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 32,
+      "order": "forward",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 32 reverse: FALSE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      21648          1          5 \nseconds: 0.658 \nPASS: exactly the 32 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 32,
+      "order": "reverse",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 32 reverse: TRUE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      17216          1          5 \nseconds: 0.684 \nPASS: exactly the 32 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 64,
+      "order": "forward",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 64 reverse: FALSE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      24032          1          5 \nseconds: 0.67 \nPASS: exactly the 64 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 64,
+      "order": "reverse",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 64 reverse: TRUE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      23984          1          5 \nseconds: 0.686 \nPASS: exactly the 64 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 128,
+      "order": "forward",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 128 reverse: FALSE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      23424          1          5 \nseconds: 0.678 \nPASS: exactly the 128 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 128,
+      "order": "reverse",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 128 reverse: TRUE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      17872          1          5 \nseconds: 0.688 \nPASS: exactly the 128 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 256,
+      "order": "forward",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 256 reverse: FALSE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      24688          1          5 \nseconds: 0.764 \nPASS: exactly the 256 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 256,
+      "order": "reverse",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 256 reverse: TRUE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      17344          1          5 \nseconds: 0.705 \nPASS: exactly the 256 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 512,
+      "order": "forward",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 512 reverse: FALSE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      19744          1          5 \nseconds: 0.68 \nPASS: exactly the 512 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 512,
+      "order": "reverse",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 512 reverse: TRUE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      23456          1          5 \nseconds: 0.725 \nPASS: exactly the 512 entailed units\n",
+      "stderr": ""
+    }
+  ],
+  "elapsed": 27.915733098983765
+}

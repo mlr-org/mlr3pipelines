@@ -1,0 +1,8 @@
+{
+  "R_version": "R version 3.6.3 (2020-02-29)",
+  "cases": 625,
+  "max_helper_depth": 141,
+  "max_active_apply": 47,
+  "nested_apply_checks": 5736,
+  "longest_acyclic_nodes": 5
+}

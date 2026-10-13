@@ -1,0 +1,36 @@
+{"stats": {"inputs": 1000, "different_supports": 595, "source_calls": 2000, "first_productive": 453, "second_productive": 0, "retained_units": 0, "mdd_comparisons": 2000, "sat_calibrations": 4}, "seconds": 10.630501568317413}
+{"stats": {"inputs": 2000, "different_supports": 1201, "source_calls": 4000, "first_productive": 899, "second_productive": 0, "retained_units": 0, "mdd_comparisons": 4000, "sat_calibrations": 8}, "seconds": 19.667642131447792}
+{"stats": {"inputs": 3000, "different_supports": 1796, "source_calls": 6000, "first_productive": 1350, "second_productive": 0, "retained_units": 0, "mdd_comparisons": 6000, "sat_calibrations": 12}, "seconds": 28.76973494887352}
+{"stats": {"inputs": 4000, "different_supports": 2401, "source_calls": 8000, "first_productive": 1774, "second_productive": 0, "retained_units": 0, "mdd_comparisons": 8000, "sat_calibrations": 16}, "seconds": 37.85388885438442}
+{"stats": {"inputs": 5000, "different_supports": 2989, "source_calls": 10000, "first_productive": 2232, "second_productive": 0, "retained_units": 0, "mdd_comparisons": 10000, "sat_calibrations": 20}, "seconds": 47.033183708786964}
+{"stats": {"inputs": 6000, "different_supports": 3608, "source_calls": 12000, "first_productive": 2662, "second_productive": 0, "retained_units": 0, "mdd_comparisons": 12000, "sat_calibrations": 24}, "seconds": 56.14621818065643}
+{"stats": {"inputs": 7000, "different_supports": 4208, "source_calls": 14000, "first_productive": 3106, "second_productive": 0, "retained_units": 0, "mdd_comparisons": 14000, "sat_calibrations": 28}, "seconds": 65.1700786948204}
+{"stats": {"inputs": 8000, "different_supports": 4813, "source_calls": 16000, "first_productive": 3559, "second_productive": 0, "retained_units": 0, "mdd_comparisons": 16000, "sat_calibrations": 32}, "seconds": 74.24312052130699}
+{"stats": {"inputs": 9000, "different_supports": 5412, "source_calls": 18000, "first_productive": 4018, "second_productive": 0, "retained_units": 0, "mdd_comparisons": 18000, "sat_calibrations": 36}, "seconds": 83.16151566803455}
+{"stats": {"inputs": 10000, "different_supports": 6015, "source_calls": 20000, "first_productive": 4456, "second_productive": 0, "retained_units": 0, "mdd_comparisons": 20000, "sat_calibrations": 39}, "seconds": 92.22507797181606}
+{"stats": {"inputs": 11000, "different_supports": 6621, "source_calls": 22000, "first_productive": 4908, "second_productive": 0, "retained_units": 0, "mdd_comparisons": 22000, "sat_calibrations": 43}, "seconds": 101.22783359885216}
+{"stats": {"inputs": 12000, "different_supports": 7209, "source_calls": 24000, "first_productive": 5347, "second_productive": 0, "retained_units": 0, "mdd_comparisons": 24000, "sat_calibrations": 47}, "seconds": 110.20019879937172}
+{"stats": {"inputs": 13000, "different_supports": 7807, "source_calls": 26000, "first_productive": 5805, "second_productive": 0, "retained_units": 0, "mdd_comparisons": 26000, "sat_calibrations": 51}, "seconds": 119.16214516758919}
+{"stats": {"inputs": 14000, "different_supports": 8401, "source_calls": 28000, "first_productive": 6283, "second_productive": 0, "retained_units": 0, "mdd_comparisons": 28000, "sat_calibrations": 55}, "seconds": 128.05953530967236}
+{"stats": {"inputs": 15000, "different_supports": 9012, "source_calls": 30000, "first_productive": 6730, "second_productive": 0, "retained_units": 1, "mdd_comparisons": 30000, "sat_calibrations": 59}, "seconds": 137.06050550937653}
+{"stats": {"inputs": 16000, "different_supports": 9617, "source_calls": 32000, "first_productive": 7175, "second_productive": 0, "retained_units": 1, "mdd_comparisons": 32000, "sat_calibrations": 63}, "seconds": 146.14928376674652}
+{"stats": {"inputs": 17000, "different_supports": 10207, "source_calls": 34000, "first_productive": 7632, "second_productive": 0, "retained_units": 1, "mdd_comparisons": 34000, "sat_calibrations": 67}, "seconds": 155.23879182338715}
+{"stats": {"inputs": 18000, "different_supports": 10798, "source_calls": 36000, "first_productive": 8080, "second_productive": 0, "retained_units": 1, "mdd_comparisons": 36000, "sat_calibrations": 71}, "seconds": 164.19189037382603}
+{"stats": {"inputs": 19000, "different_supports": 11404, "source_calls": 38000, "first_productive": 8530, "second_productive": 0, "retained_units": 1, "mdd_comparisons": 38000, "sat_calibrations": 74}, "seconds": 173.38532879948616}
+{"stats": {"inputs": 20000, "different_supports": 11996, "source_calls": 40000, "first_productive": 8979, "second_productive": 0, "retained_units": 1, "mdd_comparisons": 40000, "sat_calibrations": 78}, "seconds": 182.73006203770638}
+{
+  "stats": {
+    "inputs": 20000,
+    "different_supports": 11996,
+    "source_calls": 40000,
+    "first_productive": 8979,
+    "second_productive": 0,
+    "retained_units": 1,
+    "mdd_comparisons": 40000,
+    "sat_calibrations": 78
+  },
+  "examples": {},
+  "seed": 2609061709,
+  "seconds": 182.7456759661436,
+  "runtime": "R3.6.3"
+}

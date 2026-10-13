@@ -1,0 +1,233 @@
+{"random_done": 250, "stats": {"characterized_relations": 484, "characterized_model_pairs": 47459, "gac_domain_comparisons": 9250, "mdd_equivalence_checks": 18500, "sat_equivalence_checks": 126, "complete_class_cases": 8706, "complete_class_sat": 7788, "least_models": 7788, "enumerated_least_model_checks": 6228, "cases": 9250, "exhaustive_boolean_cases": 1539, "complete_class_unsat": 918, "constants_cases": 3, "outside_cases": 913, "outside_class_unrecognized_prefix_unsat": 4, "horn_projection_control_cases": 1, "exhaustive_ternary_chain_cases": 6544, "semilattice_cases": 84, "chain_cases": 166}}
+{"random_done": 500, "stats": {"characterized_relations": 484, "characterized_model_pairs": 47459, "gac_domain_comparisons": 9500, "mdd_equivalence_checks": 19000, "sat_equivalence_checks": 128, "complete_class_cases": 8956, "complete_class_sat": 7961, "least_models": 7961, "enumerated_least_model_checks": 7037, "cases": 9500, "exhaustive_boolean_cases": 1539, "complete_class_unsat": 995, "constants_cases": 3, "outside_cases": 913, "outside_class_unrecognized_prefix_unsat": 4, "horn_projection_control_cases": 1, "exhaustive_ternary_chain_cases": 6544, "semilattice_cases": 167, "chain_cases": 333}}
+{"random_done": 750, "stats": {"characterized_relations": 484, "characterized_model_pairs": 47459, "gac_domain_comparisons": 9750, "mdd_equivalence_checks": 19500, "sat_equivalence_checks": 132, "complete_class_cases": 9206, "complete_class_sat": 8132, "least_models": 8132, "enumerated_least_model_checks": 9219, "cases": 9750, "exhaustive_boolean_cases": 1539, "complete_class_unsat": 1074, "constants_cases": 3, "outside_cases": 913, "outside_class_unrecognized_prefix_unsat": 4, "horn_projection_control_cases": 1, "exhaustive_ternary_chain_cases": 6544, "semilattice_cases": 250, "chain_cases": 500}}
+{"random_done": 1000, "stats": {"characterized_relations": 484, "characterized_model_pairs": 47459, "gac_domain_comparisons": 10000, "mdd_equivalence_checks": 20000, "sat_equivalence_checks": 136, "complete_class_cases": 9456, "complete_class_sat": 8305, "least_models": 8305, "enumerated_least_model_checks": 10193, "cases": 10000, "exhaustive_boolean_cases": 1539, "complete_class_unsat": 1151, "constants_cases": 3, "outside_cases": 913, "outside_class_unrecognized_prefix_unsat": 4, "horn_projection_control_cases": 1, "exhaustive_ternary_chain_cases": 6544, "semilattice_cases": 334, "chain_cases": 666}}
+{"random_done": 1250, "stats": {"characterized_relations": 484, "characterized_model_pairs": 47459, "gac_domain_comparisons": 10250, "mdd_equivalence_checks": 20500, "sat_equivalence_checks": 138, "complete_class_cases": 9706, "complete_class_sat": 8478, "least_models": 8478, "enumerated_least_model_checks": 11419, "cases": 10250, "exhaustive_boolean_cases": 1539, "complete_class_unsat": 1228, "constants_cases": 3, "outside_cases": 913, "outside_class_unrecognized_prefix_unsat": 4, "horn_projection_control_cases": 1, "exhaustive_ternary_chain_cases": 6544, "semilattice_cases": 417, "chain_cases": 833}}
+{"random_done": 1500, "stats": {"characterized_relations": 484, "characterized_model_pairs": 47459, "gac_domain_comparisons": 10500, "mdd_equivalence_checks": 21000, "sat_equivalence_checks": 142, "complete_class_cases": 9956, "complete_class_sat": 8650, "least_models": 8650, "enumerated_least_model_checks": 15274, "cases": 10500, "exhaustive_boolean_cases": 1539, "complete_class_unsat": 1306, "constants_cases": 3, "outside_cases": 913, "outside_class_unrecognized_prefix_unsat": 4, "horn_projection_control_cases": 1, "exhaustive_ternary_chain_cases": 6544, "semilattice_cases": 500, "chain_cases": 1000}}
+{"random_done": 1750, "stats": {"characterized_relations": 484, "characterized_model_pairs": 47459, "gac_domain_comparisons": 10750, "mdd_equivalence_checks": 21500, "sat_equivalence_checks": 146, "complete_class_cases": 10206, "complete_class_sat": 8815, "least_models": 8815, "enumerated_least_model_checks": 18312, "cases": 10750, "exhaustive_boolean_cases": 1539, "complete_class_unsat": 1391, "constants_cases": 3, "outside_cases": 913, "outside_class_unrecognized_prefix_unsat": 4, "horn_projection_control_cases": 1, "exhaustive_ternary_chain_cases": 6544, "semilattice_cases": 584, "chain_cases": 1166}}
+{"random_done": 2000, "stats": {"characterized_relations": 484, "characterized_model_pairs": 47459, "gac_domain_comparisons": 11000, "mdd_equivalence_checks": 22000, "sat_equivalence_checks": 148, "complete_class_cases": 10456, "complete_class_sat": 9001, "least_models": 9001, "enumerated_least_model_checks": 19988, "cases": 11000, "exhaustive_boolean_cases": 1539, "complete_class_unsat": 1455, "constants_cases": 3, "outside_cases": 913, "outside_class_unrecognized_prefix_unsat": 4, "horn_projection_control_cases": 1, "exhaustive_ternary_chain_cases": 6544, "semilattice_cases": 667, "chain_cases": 1333}}
+{"random_done": 2250, "stats": {"characterized_relations": 484, "characterized_model_pairs": 47459, "gac_domain_comparisons": 11250, "mdd_equivalence_checks": 22500, "sat_equivalence_checks": 152, "complete_class_cases": 10706, "complete_class_sat": 9157, "least_models": 9157, "enumerated_least_model_checks": 20783, "cases": 11250, "exhaustive_boolean_cases": 1539, "complete_class_unsat": 1549, "constants_cases": 3, "outside_cases": 913, "outside_class_unrecognized_prefix_unsat": 4, "horn_projection_control_cases": 1, "exhaustive_ternary_chain_cases": 6544, "semilattice_cases": 750, "chain_cases": 1500}}
+{"random_done": 2500, "stats": {"characterized_relations": 484, "characterized_model_pairs": 47459, "gac_domain_comparisons": 11500, "mdd_equivalence_checks": 23000, "sat_equivalence_checks": 156, "complete_class_cases": 10956, "complete_class_sat": 9339, "least_models": 9339, "enumerated_least_model_checks": 23339, "cases": 11500, "exhaustive_boolean_cases": 1539, "complete_class_unsat": 1617, "constants_cases": 3, "outside_cases": 913, "outside_class_unrecognized_prefix_unsat": 4, "horn_projection_control_cases": 1, "exhaustive_ternary_chain_cases": 6544, "semilattice_cases": 834, "chain_cases": 1666}}
+{"random_done": 2750, "stats": {"characterized_relations": 484, "characterized_model_pairs": 47459, "gac_domain_comparisons": 11750, "mdd_equivalence_checks": 23500, "sat_equivalence_checks": 158, "complete_class_cases": 11206, "complete_class_sat": 9506, "least_models": 9506, "enumerated_least_model_checks": 24702, "cases": 11750, "exhaustive_boolean_cases": 1539, "complete_class_unsat": 1700, "constants_cases": 3, "outside_cases": 913, "outside_class_unrecognized_prefix_unsat": 4, "horn_projection_control_cases": 1, "exhaustive_ternary_chain_cases": 6544, "semilattice_cases": 917, "chain_cases": 1833}}
+{"random_done": 3000, "stats": {"characterized_relations": 484, "characterized_model_pairs": 47459, "gac_domain_comparisons": 12000, "mdd_equivalence_checks": 24000, "sat_equivalence_checks": 162, "complete_class_cases": 11456, "complete_class_sat": 9687, "least_models": 9687, "enumerated_least_model_checks": 26183, "cases": 12000, "exhaustive_boolean_cases": 1539, "complete_class_unsat": 1769, "constants_cases": 3, "outside_cases": 913, "outside_class_unrecognized_prefix_unsat": 4, "horn_projection_control_cases": 1, "exhaustive_ternary_chain_cases": 6544, "semilattice_cases": 1000, "chain_cases": 2000}}
+{
+  "stats": {
+    "characterized_relations": 484,
+    "characterized_model_pairs": 47459,
+    "gac_domain_comparisons": 12000,
+    "mdd_equivalence_checks": 24000,
+    "sat_equivalence_checks": 162,
+    "complete_class_cases": 11456,
+    "complete_class_sat": 9687,
+    "least_models": 9687,
+    "enumerated_least_model_checks": 26183,
+    "cases": 12000,
+    "exhaustive_boolean_cases": 1539,
+    "complete_class_unsat": 1769,
+    "constants_cases": 3,
+    "outside_cases": 913,
+    "outside_class_unrecognized_prefix_unsat": 4,
+    "horn_projection_control_cases": 1,
+    "exhaustive_ternary_chain_cases": 6544,
+    "semilattice_cases": 1000,
+    "chain_cases": 2000
+  },
+  "examples": {
+    "exhaustive_boolean": {
+      "domains": {
+        "X": [
+          "0",
+          "1"
+        ],
+        "Y": [
+          "0",
+          "1"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "Z": [
+            "0"
+          ]
+        }
+      ],
+      "prefix": [
+        {
+          "Z": "0"
+        }
+      ],
+      "least_model": {
+        "X": "0",
+        "Y": "0",
+        "Z": "0"
+      }
+    },
+    "outside": {
+      "domains": {
+        "X": [
+          "0",
+          "1"
+        ],
+        "Y": [
+          "0",
+          "1"
+        ],
+        "Z": [
+          "0",
+          "1"
+        ]
+      },
+      "clauses": [
+        {
+          "Z": [
+            "0"
+          ]
+        }
+      ],
+      "prefix": [
+        {
+          "Z": "0"
+        }
+      ],
+      "least_model": {
+        "X": "0",
+        "Y": "0",
+        "Z": "0"
+      }
+    },
+    "exhaustive_ternary_chain": {
+      "domains": {
+        "X": [
+          "0",
+          "1",
+          "2"
+        ],
+        "Y": [
+          "0",
+          "1",
+          "2"
+        ]
+      },
+      "clauses": [
+        {
+          "Y": [
+            "0"
+          ]
+        }
+      ],
+      "prefix": [
+        {
+          "Y": "0"
+        }
+      ],
+      "least_model": {
+        "X": "0",
+        "Y": "0"
+      }
+    },
+    "chain": {
+      "domains": {
+        "S0": [
+          "2",
+          "1",
+          "0",
+          "3"
+        ]
+      },
+      "clauses": [
+        {
+          "S0": [
+            "2",
+            "1",
+            "3"
+          ]
+        }
+      ],
+      "prefix": [
+        {
+          "S0": [
+            "2",
+            "1",
+            "3"
+          ]
+        }
+      ],
+      "least_model": {
+        "S0": "2"
+      }
+    },
+    "semilattice": {
+      "domains": {
+        "S0": [
+          "0",
+          "3",
+          "1",
+          "2"
+        ],
+        "S1": [
+          "6",
+          "7",
+          "0",
+          "3",
+          "4",
+          "2",
+          "1",
+          "5"
+        ],
+        "S2": [
+          "1",
+          "3",
+          "2",
+          "0"
+        ],
+        "S3": [
+          "6",
+          "7",
+          "4",
+          "5",
+          "0",
+          "2",
+          "1",
+          "3"
+        ]
+      },
+      "clauses": [
+        {
+          "S3": [
+            "2",
+            "4",
+            "1",
+            "3",
+            "0",
+            "5"
+          ]
+        }
+      ],
+      "prefix": [
+        {
+          "S3": [
+            "2",
+            "4",
+            "1",
+            "3",
+            "0",
+            "5"
+          ]
+        }
+      ],
+      "least_model": {
+        "S0": "0",
+        "S1": "0",
+        "S2": "0",
+        "S3": "0"
+      }
+    }
+  },
+  "seed": 2609061629,
+  "runtime": "R3.6.3",
+  "source": "Unchanged full kernel; private source copy returns at the initial UP boundary"
+}

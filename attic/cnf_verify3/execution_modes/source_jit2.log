@@ -1,0 +1,12 @@
+minimized_subsumption : 12 worlds; 3 input models; weight 9 -> 3 -> 1 ; chain 3 ; first mismatches 0
+minimized_sse1 : 18 worlds; 5 input models; weight 11 -> 7 -> 6 ; chain 6 ; first mismatches 0
+minimized_first_order_phase_sse1 : 16 worlds; 5 input models; weight 15 -> 5 -> 4 ; chain 5 ; first mismatches 0
+minimized_sse2 : 48 worlds; 9 input models; weight 23 -> 18 -> 17 ; chain 17 ; first mismatches 0
+directed_oneend_shrink_min : 32 worlds; 9 input models; weight 17 -> 12 -> 11 ; chain 12 ; first mismatches 0
+minimized_oneend_symbol_removal : 24 worlds; 9 input models; weight 14 -> 10 -> 9 ; chain 10 ; first mismatches 0
+minimized_deferred_skip : 16 worlds; 1 input models; weight 15 -> 2 -> 2 ; chain 2 ; first mismatches 0
+selector : 9 worlds; 0 input models; weight 8 -> 2 -> 2 ; chain 0 ; first mismatches 1
+Runtime: source ; JIT: 2 ; R: R version 4.6.1 (2026-06-24) ; package: NA
+Bytecode before: CnfFormula FALSE, CnfClause FALSE, simplify_cnf FALSE
+Bytecode after: CnfFormula TRUE, CnfClause TRUE, simplify_cnf TRUE
+All runtime assertions completed.

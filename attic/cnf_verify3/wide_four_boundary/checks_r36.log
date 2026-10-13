@@ -1,0 +1,18 @@
+padding 0 width 2 truth rows 16 core trace lengths 42 9
+padding 1 width 3 truth rows 32 core trace lengths 58 16
+padding 2 width 4 truth rows 64 core trace lengths 58 16
+padding 3 width 5 truth rows 128 core trace lengths 58 16
+padding 7 width 9 truth rows 2048 core trace lengths 58 16
+padding 31 width 33 truth rows 528 core trace lengths 58 16
+padding 256 width 258 truth rows 4128 core trace lengths 58 16
+{
+  "runtime": "3.6.3",
+  "checkmate": "2.3.4",
+  "configurations": 7,
+  "largest_initial_width": 258,
+  "assignment_rows": 6944,
+  "positive_padding_traces_equal": true,
+  "every_second_pass_productive": true,
+  "common_padding_factored_truth_preserved": true,
+  "all_public_outputs_match_observer": true
+}

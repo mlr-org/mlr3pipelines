@@ -1,0 +1,109 @@
+Forest checks passed.
+                       cases                       worlds
+                         240                        25336
+               unsatisfiable             clause_witnesses
+                          38                          585
+             value_witnesses              matching_models
+                        1127                            0
+         broad_clause_inputs nonunit_unit_overlap_outputs
+                         196                            0
+Pseudoforest checks passed.
+                       cases                       worlds
+                         240                        12817
+               unsatisfiable             clause_witnesses
+                          66                            0
+             value_witnesses              matching_models
+                           0                          174
+         broad_clause_inputs nonunit_unit_overlap_outputs
+                          88                            0
+Renamable Horn checks passed.
+                       cases                       worlds
+                         400                        12792
+               unsatisfiable             clause_witnesses
+                          92                            0
+             value_witnesses              matching_models
+                           0                            0
+         broad_clause_inputs nonunit_unit_overlap_outputs
+                         378                            0
+Equal/disjoint binary checks passed.
+                       cases                       worlds
+                         300                       118811
+               unsatisfiable             clause_witnesses
+                         201                            0
+             value_witnesses              matching_models
+                           0                            0
+         broad_clause_inputs nonunit_unit_overlap_outputs
+                           0                            0
+Boundary examples and independent predicate calibrations passed.
+R: R version 4.6.1 (2026-06-24) ; installed package: 0.11.0.9000
+$forest
+                       cases                       worlds
+                         240                        25336
+               unsatisfiable             clause_witnesses
+                          38                          585
+             value_witnesses              matching_models
+                        1127                            0
+         broad_clause_inputs nonunit_unit_overlap_outputs
+                         196                            0
+
+$pseudoforest
+                       cases                       worlds
+                         240                        12817
+               unsatisfiable             clause_witnesses
+                          66                            0
+             value_witnesses              matching_models
+                           0                          174
+         broad_clause_inputs nonunit_unit_overlap_outputs
+                          88                            0
+
+$renamable_horn
+                       cases                       worlds
+                         400                        12792
+               unsatisfiable             clause_witnesses
+                          92                            0
+             value_witnesses              matching_models
+                           0                            0
+         broad_clause_inputs nonunit_unit_overlap_outputs
+                         378                            0
+
+$equal_disjoint_binary
+                       cases                       worlds
+                         300                       118811
+               unsatisfiable             clause_witnesses
+                         201                            0
+             value_witnesses              matching_models
+                           0                            0
+         broad_clause_inputs nonunit_unit_overlap_outputs
+                           0                            0
+
+$single_cycle_control
+                       cases                       worlds
+                           1                           16
+               unsatisfiable             clause_witnesses
+                           0                            0
+             value_witnesses              matching_models
+                           0                            1
+         broad_clause_inputs nonunit_unit_overlap_outputs
+                           0                            0
+
+$opposed_cycles_control
+                       cases                       worlds
+                           1                          128
+               unsatisfiable             clause_witnesses
+                           1                            0
+             value_witnesses              matching_models
+                           0                            0
+         broad_clause_inputs nonunit_unit_overlap_outputs
+                           0                            0
+
+$overlapping_binary_control
+                       cases                       worlds
+                           1                           16
+               unsatisfiable             clause_witnesses
+                           0                            0
+             value_witnesses              matching_models
+                           0                            0
+         broad_clause_inputs nonunit_unit_overlap_outputs
+                           0                            0
+
+All structural review checks passed.

@@ -1,0 +1,11 @@
+{
+  "stats": {
+    "formulas": 5000,
+    "baseline_seconds": 105.45299999999938,
+    "candidate_seconds": 99.11499999999923,
+    "second_pass_seconds": 81.99800000000018,
+    "changed_output": 14
+  },
+  "failures": [],
+  "elapsed": 540.4824888706207
+}

@@ -12,7 +12,7 @@
 #'
 #' `po()` taks a single `obj` (`PipeOp` id, [`Learner`][mlr3::Learner], ...) and converts
 #' it to a [`PipeOp`]. `pos()` (with plural-s) takes either a `character`-vector, or a
-#' list of objects, and creates a `list` of [`PipeOp`]s.
+#' list of objects, and creates an unnamed `list` of [`PipeOp`]s.
 #'
 #' @param .obj `[any]`\cr
 #'   The object from which to construct a `PipeOp`. If this is a
@@ -21,7 +21,7 @@
 #' @param .objs `character` | `list`\cr
 #'   Either a `character` of [`PipeOp`]s to look up in [`mlr_pipeops`],
 #'   or a list of other objects to be converted to a [`PipeOp`].
-#'   If this is a named `list`, then the names are used as `$id` slot for the resulting
+#'   If this is a named `character` or `list`, then the names are used as `$id` slot for the resulting
 #'   [`PipeOp`]s.
 #' @param ... `any`\cr
 #'   Additional parameters to give to constructed object.
@@ -29,7 +29,7 @@
 #'   `PipeOp`, in which case it is given to this constructor;
 #'   or it may be a parameter value, in which case it is
 #'   given to the `param_vals` argument of the constructor.
-#' @return A [`PipeOp`] (for `po()`), or a `list` of [`PipeOp`]s (for `pos()`).
+#' @return A [`PipeOp`] (for `po()`), or an unnamed `list` of [`PipeOp`]s (for `pos()`).
 #' @export
 #' @examplesIf requireNamespace("rpart")
 #' library("mlr3")
@@ -111,11 +111,11 @@ pos.NULL = function(.objs, ...) {
 
 #' @export
 pos.character = function(.objs, ...) {
-  dictionary_sugar_inc_mget(dict = mlr_pipeops, .keys = .objs, ..., .dicts_suggest = list("ppls()" = mlr_graphs))
+  unname(dictionary_sugar_inc_mget(dict = mlr_pipeops, .keys = .objs, ..., .dicts_suggest = list("ppls()" = mlr_graphs)))
 }
 
 #' @export
 pos.list = function(.objs, ...) {
-  imap(.x = .objs, .f = function(x, n) if (is.character(n) && n != "") po(x, id = n, ...) else po(x, ...))
+  unname(imap(.x = .objs, .f = function(x, n) if (is.character(n) && n != "") po(x, id = n, ...) else po(x, ...)))
 }
 

@@ -11,7 +11,7 @@ A simple \code{\link[mlr3misc:Dictionary]{Dictionary}} storing objects of class 
 The dictionary contains a collection of often-used graph structures, and it's aim
 is solely to make often-used functions more accessible.
 Each \code{Graph} has an associated help page, which can be accessed via \verb{?mlr_graphs_<key>}, i.e.
-\code{?mlr_graphs_bagging}.
+\code{?mlr_graphs_bag}.
 }
 \section{Methods}{
 

@@ -1,0 +1,24 @@
+List of 4
+ $ R      : chr "R version 3.6.3 (2020-02-29)"
+ $ cases  : int 1872
+ $ totals :List of 19
+  ..$ enter_on_updated_subset_relations : int 26877
+  ..$ semantic_boundary_checks          : int 149746
+  ..$ cache_pair_checks                 : int 3194170
+  ..$ enter_eliminate_clause_update_sr  : int 1053
+  ..$ enter_handle_sse_2nd_order_twoend : int 23250
+  ..$ enter_try_sse_2nd_order           : int 12778
+  ..$ correct_formulas                  : int 1872
+  ..$ assignment_rows                   : int 119808
+  ..$ enter_apply_domain_restriction    : int 5786
+  ..$ enter_eliminate_symbol_from_clause: int 3237
+  ..$ nonunit_hla_donor                 : int 2716
+  ..$ nonunit_hla_deletion              : int 32
+  ..$ delete_first_with_copy_left       : int 618
+  ..$ orphan_occurrence                 : int 14748
+  ..$ delete_orphan_clause              : int 56
+  ..$ enter_register_unit               : int 1873
+  ..$ unit_cache_skip                   : int 77
+  ..$ same_name_twoend_try              : int 644
+  ..$ enter_handle_sse_2nd_order_oneend : int 19
+ $ seconds: num 208

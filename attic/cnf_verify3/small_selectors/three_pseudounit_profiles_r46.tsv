@@ -1,0 +1,8 @@
+category	count
+canonical_correct	440
+noncanonical_correct	14028
+noncanonical_stale	800
+noncanonical_named_wrong	0
+noncanonical_both_wrong	0
+canonical_wrong	0
+error	944

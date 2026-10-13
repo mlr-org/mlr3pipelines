@@ -1,0 +1,7 @@
+Reduced nested unit-merge control:
+list(label = "reduced_effective_unit_proper_subset", domains = list(
+    V1 = c("q1", "q2", "q3", "q4"), V2 = c("q1", "q2", "q3")),
+    clauses = list(list(V1 = "q1", V2 = "q1"), list(V2 = "q1",
+        V1 = "q2"), list(V1 = "q1", V2 = "q3"), list(V1 = "q3",
+        V2 = c("q3", "q1"))))
+PASS: 16 full original/split-permuted control trace pairs, 3747 events per representation

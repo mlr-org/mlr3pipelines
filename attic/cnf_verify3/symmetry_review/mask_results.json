@@ -1,0 +1,24 @@
+{
+  "independent_profiles": 193,
+  "profile_domain_size_counts": {
+    "2": 4,
+    "3": 32,
+    "4": 64,
+    "5": 56,
+    "6": 28,
+    "7": 8,
+    "8": 1
+  },
+  "full_inputs": 7189057,
+  "initial_valuation_checks": 663054848,
+  "shape_calibrations": 512,
+  "literal_membership_words": 6912,
+  "formula_truth_words": 10240,
+  "individual_formula_valuations": 933120,
+  "witness_calibrations": 1531,
+  "errors": [],
+  "source_hashes": {
+    "full_three_symbol_quotient.py": "c3ac3fc2678a1e9417591c750358036e780bd65eff578197be2c7fb62322b967",
+    "three_symbol_quotient.py": "c7a3d954a68ecb327c580cfd53231911276984de87c992012cc7edb897927164"
+  }
+}

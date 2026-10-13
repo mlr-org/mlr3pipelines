@@ -1,0 +1,3 @@
+The single incidence cycle has four models, all with x=1, and remains true-equivalent after removing a1=1 from clause 1.
+The single cycle is also renamable Horn in the recorded polarities.
+All eight opposed-cycle clause deletions restore satisfiability.

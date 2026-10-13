@@ -1,0 +1,77 @@
+{
+  "rows": [
+    {
+      "domain_values": 1,
+      "capacity_vectors": 3,
+      "selected_extensions": 3,
+      "repeated_new": 0,
+      "nonsaturated_old": 0
+    },
+    {
+      "domain_values": 2,
+      "capacity_vectors": 9,
+      "selected_extensions": 99,
+      "repeated_new": 48,
+      "nonsaturated_old": 36
+    },
+    {
+      "domain_values": 3,
+      "capacity_vectors": 27,
+      "selected_extensions": 2457,
+      "repeated_new": 1800,
+      "nonsaturated_old": 1458
+    },
+    {
+      "domain_values": 4,
+      "capacity_vectors": 81,
+      "selected_extensions": 54351,
+      "repeated_new": 46752,
+      "nonsaturated_old": 40176
+    },
+    {
+      "domain_values": 5,
+      "capacity_vectors": 243,
+      "selected_extensions": 1130193,
+      "repeated_new": 1047000,
+      "nonsaturated_old": 940410
+    }
+  ],
+  "selected_extensions": 1187103,
+  "false_negative_without_exception": {
+    "capacity": [
+      2,
+      1
+    ],
+    "old": [
+      1,
+      0
+    ],
+    "donor": [
+      false,
+      false
+    ],
+    "new": [
+      1,
+      1
+    ]
+  },
+  "false_positive_without_capacity_bound": {
+    "capacity": [
+      1,
+      1
+    ],
+    "old": [
+      2,
+      0
+    ],
+    "donor": [
+      false,
+      true
+    ],
+    "new": [
+      2,
+      0
+    ]
+  },
+  "donor_append_mutation_killed": true
+}

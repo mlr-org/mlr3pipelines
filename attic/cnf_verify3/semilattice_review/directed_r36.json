@@ -1,0 +1,3438 @@
+{
+  "nested_current_unit_is_narrowed": {
+    "domains": {
+      "X": [
+        "0",
+        "1",
+        "2"
+      ],
+      "Y": [
+        "0",
+        "1",
+        "2"
+      ],
+      "Z": [
+        "0",
+        "1",
+        "2"
+      ],
+      "W": [
+        "0",
+        "1",
+        "2"
+      ]
+    },
+    "clauses": [
+      {
+        "X": [
+          "2"
+        ]
+      },
+      {
+        "Y": [
+          "0"
+        ],
+        "Z": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "Z": [
+          "0"
+        ],
+        "Y": [
+          "2"
+        ]
+      },
+      {
+        "Y": [
+          "0",
+          "1"
+        ],
+        "W": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "X": [
+          "0"
+        ],
+        "Y": [
+          "1",
+          "2"
+        ]
+      }
+    ],
+    "answer": {
+      "ok": true,
+      "prefix": [
+        {
+          "X": "2"
+        },
+        {
+          "Z": [
+            "1",
+            "2"
+          ]
+        },
+        {
+          "W": [
+            "1",
+            "2"
+          ]
+        },
+        {
+          "Y": "2"
+        }
+      ],
+      "full": [
+        {
+          "X": "2"
+        },
+        {
+          "Z": [
+            "1",
+            "2"
+          ]
+        },
+        {
+          "W": [
+            "1",
+            "2"
+          ]
+        },
+        {
+          "Y": "2"
+        }
+      ],
+      "final": {
+        "entries": [
+          {
+            "X": "2"
+          },
+          {
+            "Z": [
+              "1",
+              "2"
+            ]
+          },
+          {
+            "Y": "2"
+          },
+          {
+            "W": [
+              "1",
+              "2"
+            ]
+          },
+          {
+            "Y": "2"
+          }
+        ],
+        "eliminated": [
+          false,
+          false,
+          true,
+          false,
+          false
+        ],
+        "is_unit": [
+          true,
+          true,
+          false,
+          true,
+          true
+        ],
+        "clause_idx": 5,
+        "clause_symbol_isct": "X",
+        "unit_domains": {
+          "W": [
+            "1",
+            "2"
+          ],
+          "X": "2",
+          "Y": "2",
+          "Z": [
+            "1",
+            "2"
+          ]
+        },
+        "unit_registry": {
+          "W": 4,
+          "X": 1,
+          "Y": 5,
+          "Z": 2
+        },
+        "symbol_registry": {
+          "W": [],
+          "X": null,
+          "Y": [],
+          "Z": []
+        }
+      },
+      "events": [
+        {
+          "label": "register_unit_enter",
+          "local": {
+            "unit_idx": 1,
+            "clause_idx": null,
+            "symbol": null,
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Y": "0",
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Z": "0",
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "X": "0",
+                "Y": [
+                  "1",
+                  "2"
+                ]
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "clause_idx": null,
+            "clause_symbol_isct": null,
+            "unit_domains": [],
+            "unit_registry": [],
+            "symbol_registry": []
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "register_unit",
+            "observe"
+          ]
+        },
+        {
+          "label": "register_unit_exit",
+          "local": {
+            "unit_idx": 1,
+            "clause_idx": null,
+            "symbol": null,
+            "restringent": null,
+            "nu": "X",
+            "unit": {
+              "X": "2"
+            }
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Y": "0",
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Z": "0",
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "X": "0",
+                "Y": [
+                  "1",
+                  "2"
+                ]
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "clause_idx": null,
+            "clause_symbol_isct": null,
+            "unit_domains": {
+              "X": "2"
+            },
+            "unit_registry": {
+              "X": 1
+            },
+            "symbol_registry": []
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "register_unit",
+            "observe"
+          ]
+        },
+        {
+          "label": "captured_symbols",
+          "local": {
+            "unit_idx": 1,
+            "clause_idx": 2,
+            "symbol": null,
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Y": "0",
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Z": "0",
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "X": "0",
+                "Y": [
+                  "1",
+                  "2"
+                ]
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "clause_idx": 2,
+            "clause_symbol_isct": [],
+            "unit_domains": {
+              "X": "2"
+            },
+            "unit_registry": {
+              "X": 1
+            },
+            "symbol_registry": []
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "observe"
+          ]
+        },
+        {
+          "label": "captured_symbols",
+          "local": {
+            "unit_idx": 1,
+            "clause_idx": 3,
+            "symbol": "Z",
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Y": "0",
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Z": "0",
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "X": "0",
+                "Y": [
+                  "1",
+                  "2"
+                ]
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "clause_idx": 3,
+            "clause_symbol_isct": [],
+            "unit_domains": {
+              "X": "2"
+            },
+            "unit_registry": {
+              "X": 1
+            },
+            "symbol_registry": {
+              "Y": 2,
+              "Z": 2
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "observe"
+          ]
+        },
+        {
+          "label": "captured_symbols",
+          "local": {
+            "unit_idx": 1,
+            "clause_idx": 4,
+            "symbol": "Y",
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Y": "0",
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Z": "0",
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "X": "0",
+                "Y": [
+                  "1",
+                  "2"
+                ]
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "clause_idx": 4,
+            "clause_symbol_isct": [],
+            "unit_domains": {
+              "X": "2"
+            },
+            "unit_registry": {
+              "X": 1
+            },
+            "symbol_registry": {
+              "Y": [
+                2,
+                3
+              ],
+              "Z": [
+                2,
+                3
+              ]
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "observe"
+          ]
+        },
+        {
+          "label": "captured_symbols",
+          "local": {
+            "unit_idx": 1,
+            "clause_idx": 5,
+            "symbol": "W",
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Y": "0",
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Z": "0",
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "X": "0",
+                "Y": [
+                  "1",
+                  "2"
+                ]
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "X": "2"
+            },
+            "unit_registry": {
+              "X": 1
+            },
+            "symbol_registry": {
+              "W": 4,
+              "Y": [
+                2,
+                3,
+                4
+              ],
+              "Z": [
+                2,
+                3
+              ]
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "observe"
+          ]
+        },
+        {
+          "label": "apply_domain_restriction_enter",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 5,
+            "symbol": "X",
+            "restringent": "2",
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Y": "0",
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Z": "0",
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "X": "0",
+                "Y": [
+                  "1",
+                  "2"
+                ]
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "X": "2"
+            },
+            "unit_registry": {
+              "X": 1
+            },
+            "symbol_registry": {
+              "W": 4,
+              "Y": [
+                2,
+                3,
+                4
+              ],
+              "Z": [
+                2,
+                3
+              ]
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "observe"
+          ]
+        },
+        {
+          "label": "eliminate_symbol_from_clause_enter",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 5,
+            "symbol": "X",
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Y": "0",
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Z": "0",
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "X": "0",
+                "Y": [
+                  "1",
+                  "2"
+                ]
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "X": "2"
+            },
+            "unit_registry": {
+              "X": 1
+            },
+            "symbol_registry": {
+              "W": 4,
+              "Y": [
+                2,
+                3,
+                4
+              ],
+              "Z": [
+                2,
+                3
+              ]
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "observe"
+          ]
+        },
+        {
+          "label": "register_unit_enter",
+          "local": {
+            "unit_idx": 5,
+            "clause_idx": null,
+            "symbol": null,
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Y": "0",
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Z": "0",
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": [
+                  "1",
+                  "2"
+                ]
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "X": "2"
+            },
+            "unit_registry": {
+              "X": 1
+            },
+            "symbol_registry": {
+              "W": 4,
+              "X": null,
+              "Y": [
+                2,
+                3,
+                4
+              ],
+              "Z": [
+                2,
+                3
+              ]
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "observe"
+          ]
+        },
+        {
+          "label": "apply_domain_restriction_enter",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 2,
+            "symbol": "Y",
+            "restringent": [
+              "1",
+              "2"
+            ],
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Y": "0",
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Z": "0",
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": [
+                  "1",
+                  "2"
+                ]
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              false,
+              false,
+              false,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "X": "2",
+              "Y": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "X": 1,
+              "Y": 5
+            },
+            "symbol_registry": {
+              "W": 4,
+              "X": null,
+              "Y": [
+                2,
+                3,
+                4
+              ],
+              "Z": [
+                2,
+                3
+              ]
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "observe"
+          ]
+        },
+        {
+          "label": "eliminate_symbol_from_clause_enter",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 2,
+            "symbol": "Y",
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Y": "0",
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Z": "0",
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": [
+                  "1",
+                  "2"
+                ]
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              false,
+              false,
+              false,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "X": "2",
+              "Y": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "X": 1,
+              "Y": 5
+            },
+            "symbol_registry": {
+              "W": 4,
+              "X": null,
+              "Y": [
+                2,
+                3,
+                4
+              ],
+              "Z": [
+                2,
+                3
+              ]
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "observe"
+          ]
+        },
+        {
+          "label": "register_unit_enter",
+          "local": {
+            "unit_idx": 2,
+            "clause_idx": null,
+            "symbol": null,
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Z": "0",
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": [
+                  "1",
+                  "2"
+                ]
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              false,
+              false,
+              false,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "X": "2",
+              "Y": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "X": 1,
+              "Y": 5
+            },
+            "symbol_registry": {
+              "W": 4,
+              "X": null,
+              "Y": [
+                3,
+                4
+              ],
+              "Z": 3
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "observe"
+          ]
+        },
+        {
+          "label": "apply_domain_restriction_enter",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 3,
+            "symbol": "Z",
+            "restringent": [
+              "1",
+              "2"
+            ],
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Z": "0",
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": [
+                  "1",
+                  "2"
+                ]
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              false,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "X": "2",
+              "Y": [
+                "1",
+                "2"
+              ],
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": 4,
+              "X": null,
+              "Y": [
+                3,
+                4
+              ],
+              "Z": 3
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "observe"
+          ]
+        },
+        {
+          "label": "eliminate_symbol_from_clause_enter",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 3,
+            "symbol": "Z",
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Z": "0",
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": [
+                  "1",
+                  "2"
+                ]
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              false,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "X": "2",
+              "Y": [
+                "1",
+                "2"
+              ],
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": 4,
+              "X": null,
+              "Y": [
+                3,
+                4
+              ],
+              "Z": 3
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "observe"
+          ]
+        },
+        {
+          "label": "register_unit_enter",
+          "local": {
+            "unit_idx": 3,
+            "clause_idx": null,
+            "symbol": null,
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": [
+                  "1",
+                  "2"
+                ]
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              false,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "X": "2",
+              "Y": [
+                "1",
+                "2"
+              ],
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": 4,
+              "X": null,
+              "Y": 4,
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "observe"
+          ]
+        },
+        {
+          "label": "apply_domain_restriction_enter",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 4,
+            "symbol": "Y",
+            "restringent": "2",
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              false,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": 4,
+              "X": null,
+              "Y": 4,
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "observe"
+          ]
+        },
+        {
+          "label": "eliminate_symbol_from_clause_enter",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 4,
+            "symbol": "Y",
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "Y": [
+                  "0",
+                  "1"
+                ],
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              false,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": 4,
+              "X": null,
+              "Y": 4,
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "observe"
+          ]
+        },
+        {
+          "label": "register_unit_enter",
+          "local": {
+            "unit_idx": 4,
+            "clause_idx": null,
+            "symbol": null,
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              false,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": [],
+              "X": null,
+              "Y": [],
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "observe"
+          ]
+        },
+        {
+          "label": "register_unit_exit",
+          "local": {
+            "unit_idx": 4,
+            "clause_idx": null,
+            "symbol": null,
+            "restringent": null,
+            "nu": "W",
+            "unit": {
+              "W": [
+                "1",
+                "2"
+              ]
+            }
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              true,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "W": [
+                "1",
+                "2"
+              ],
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "W": 4,
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": [],
+              "X": null,
+              "Y": [],
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "observe"
+          ]
+        },
+        {
+          "label": "eliminate_symbol_from_clause_exit",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 4,
+            "symbol": "Y",
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              true,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "W": [
+                "1",
+                "2"
+              ],
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "W": 4,
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": [],
+              "X": null,
+              "Y": [],
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "observe"
+          ]
+        },
+        {
+          "label": "apply_domain_restriction_exit",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 4,
+            "symbol": "Y",
+            "restringent": "2",
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              true,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "W": [
+                "1",
+                "2"
+              ],
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "W": 4,
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": [],
+              "X": null,
+              "Y": [],
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "observe"
+          ]
+        },
+        {
+          "label": "register_unit_exit",
+          "local": {
+            "unit_idx": 3,
+            "clause_idx": null,
+            "symbol": null,
+            "restringent": null,
+            "nu": "Y",
+            "unit": {
+              "Y": "2"
+            }
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              true,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "W": [
+                "1",
+                "2"
+              ],
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "W": 4,
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": [],
+              "X": null,
+              "Y": [],
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "observe"
+          ]
+        },
+        {
+          "label": "eliminate_symbol_from_clause_exit",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 3,
+            "symbol": "Z",
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              true,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "W": [
+                "1",
+                "2"
+              ],
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "W": 4,
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": [],
+              "X": null,
+              "Y": [],
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "observe"
+          ]
+        },
+        {
+          "label": "apply_domain_restriction_exit",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 3,
+            "symbol": "Z",
+            "restringent": [
+              "1",
+              "2"
+            ],
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              true,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "W": [
+                "1",
+                "2"
+              ],
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "W": 4,
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": [],
+              "X": null,
+              "Y": [],
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "observe"
+          ]
+        },
+        {
+          "label": "register_unit_exit",
+          "local": {
+            "unit_idx": 2,
+            "clause_idx": null,
+            "symbol": null,
+            "restringent": null,
+            "nu": "Z",
+            "unit": {
+              "Z": [
+                "1",
+                "2"
+              ]
+            }
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              true,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "W": [
+                "1",
+                "2"
+              ],
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "W": 4,
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": [],
+              "X": null,
+              "Y": [],
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "observe"
+          ]
+        },
+        {
+          "label": "eliminate_symbol_from_clause_exit",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 2,
+            "symbol": "Y",
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              true,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "W": [
+                "1",
+                "2"
+              ],
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "W": 4,
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": [],
+              "X": null,
+              "Y": [],
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "observe"
+          ]
+        },
+        {
+          "label": "apply_domain_restriction_exit",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 2,
+            "symbol": "Y",
+            "restringent": [
+              "1",
+              "2"
+            ],
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              true,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "W": [
+                "1",
+                "2"
+              ],
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "W": 4,
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": [],
+              "X": null,
+              "Y": [],
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "observe"
+          ]
+        },
+        {
+          "label": "apply_domain_restriction_enter",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 4,
+            "symbol": "Y",
+            "restringent": "2",
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              true,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "W": [
+                "1",
+                "2"
+              ],
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "W": 4,
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": [],
+              "X": null,
+              "Y": [],
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "observe"
+          ]
+        },
+        {
+          "label": "apply_domain_restriction_exit",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 4,
+            "symbol": "Y",
+            "restringent": "2",
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              true,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "W": [
+                "1",
+                "2"
+              ],
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "W": 4,
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": [],
+              "X": null,
+              "Y": [],
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "apply_domain_restriction",
+            "observe"
+          ]
+        },
+        {
+          "label": "register_unit_exit",
+          "local": {
+            "unit_idx": 5,
+            "clause_idx": null,
+            "symbol": null,
+            "restringent": null,
+            "nu": "Y",
+            "unit": {
+              "Y": [
+                "1",
+                "2"
+              ]
+            }
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              true,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "W": [
+                "1",
+                "2"
+              ],
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "W": 4,
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": [],
+              "X": null,
+              "Y": [],
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "register_unit",
+            "observe"
+          ]
+        },
+        {
+          "label": "eliminate_symbol_from_clause_exit",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 5,
+            "symbol": "X",
+            "restringent": null,
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              true,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "W": [
+                "1",
+                "2"
+              ],
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "W": 4,
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": [],
+              "X": null,
+              "Y": [],
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "eliminate_symbol_from_clause",
+            "observe"
+          ]
+        },
+        {
+          "label": "apply_domain_restriction_exit",
+          "local": {
+            "unit_idx": null,
+            "clause_idx": 5,
+            "symbol": "X",
+            "restringent": "2",
+            "nu": null,
+            "unit": null
+          },
+          "state": {
+            "entries": [
+              {
+                "X": "2"
+              },
+              {
+                "Z": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              },
+              {
+                "W": [
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "Y": "2"
+              }
+            ],
+            "eliminated": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "is_unit": [
+              true,
+              true,
+              false,
+              true,
+              true
+            ],
+            "clause_idx": 5,
+            "clause_symbol_isct": "X",
+            "unit_domains": {
+              "W": [
+                "1",
+                "2"
+              ],
+              "X": "2",
+              "Y": "2",
+              "Z": [
+                "1",
+                "2"
+              ]
+            },
+            "unit_registry": {
+              "W": 4,
+              "X": 1,
+              "Y": 5,
+              "Z": 2
+            },
+            "symbol_registry": {
+              "W": [],
+              "X": null,
+              "Y": [],
+              "Z": []
+            }
+          },
+          "stack": [
+            "tryCatch",
+            "tryCatchList",
+            "tryCatchOne",
+            "doTryCatch",
+            "prefix_simplify",
+            "apply_domain_restriction",
+            "observe"
+          ]
+        }
+      ]
+    }
+  },
+  "nonchain_least_model": {
+    "domains": {
+      "X": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "Y": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    "clauses": [
+      {
+        "X": [
+          "3"
+        ]
+      },
+      {
+        "X": [
+          "0",
+          "1"
+        ],
+        "Y": [
+          "0",
+          "1"
+        ]
+      },
+      {
+        "X": [
+          "0",
+          "1"
+        ],
+        "Y": [
+          "0",
+          "2"
+        ]
+      },
+      {
+        "X": [
+          "0",
+          "2"
+        ],
+        "Y": [
+          "0",
+          "1"
+        ]
+      },
+      {
+        "X": [
+          "0",
+          "2"
+        ],
+        "Y": [
+          "0",
+          "2"
+        ]
+      }
+    ],
+    "answer": {
+      "ok": true,
+      "prefix": [
+        {
+          "X": "3"
+        },
+        {
+          "Y": "0"
+        }
+      ],
+      "full": [
+        {
+          "X": "3"
+        },
+        {
+          "Y": "0"
+        }
+      ],
+      "final": {
+        "entries": [
+          {
+            "X": "3"
+          },
+          {
+            "Y": "0"
+          },
+          {
+            "Y": [
+              "0",
+              "2"
+            ]
+          },
+          {
+            "Y": [
+              "0",
+              "1"
+            ]
+          },
+          {
+            "Y": [
+              "0",
+              "2"
+            ]
+          }
+        ],
+        "eliminated": [
+          false,
+          false,
+          true,
+          true,
+          true
+        ],
+        "is_unit": [
+          true,
+          true,
+          false,
+          false,
+          false
+        ],
+        "clause_idx": 5,
+        "clause_symbol_isct": [
+          "X",
+          "Y"
+        ],
+        "unit_domains": {
+          "X": "3",
+          "Y": "0"
+        },
+        "unit_registry": {
+          "X": 1,
+          "Y": 2
+        },
+        "symbol_registry": {
+          "X": null,
+          "Y": null
+        }
+      },
+      "events": []
+    },
+    "independent_total_order_pairs_excluded": 576
+  },
+  "outside_class_unsat": {
+    "domains": {
+      "X": [
+        "0",
+        "1"
+      ],
+      "Y": [
+        "0",
+        "1"
+      ]
+    },
+    "clauses": [
+      {
+        "X": [
+          "0"
+        ],
+        "Y": [
+          "0"
+        ]
+      },
+      {
+        "X": [
+          "0"
+        ],
+        "Y": [
+          "1"
+        ]
+      },
+      {
+        "X": [
+          "1"
+        ],
+        "Y": [
+          "0"
+        ]
+      },
+      {
+        "X": [
+          "1"
+        ],
+        "Y": [
+          "1"
+        ]
+      }
+    ],
+    "answer": {
+      "ok": true,
+      "prefix": [
+        {
+          "X": "0",
+          "Y": "0"
+        },
+        {
+          "X": "0",
+          "Y": "1"
+        },
+        {
+          "X": "1",
+          "Y": "0"
+        },
+        {
+          "X": "1",
+          "Y": "1"
+        }
+      ],
+      "full": false,
+      "final": {
+        "entries": [
+          {
+            "X": "0",
+            "Y": "0"
+          },
+          {
+            "X": "0",
+            "Y": "1"
+          },
+          {
+            "X": "1",
+            "Y": "0"
+          },
+          {
+            "X": "1",
+            "Y": "1"
+          }
+        ],
+        "eliminated": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "is_unit": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "clause_idx": 4,
+        "clause_symbol_isct": [],
+        "unit_domains": [],
+        "unit_registry": [],
+        "symbol_registry": {
+          "X": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "Y": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      },
+      "events": []
+    }
+  },
+  "domains_are_not_model_projections": {
+    "domains": {
+      "X": [
+        "0",
+        "1",
+        "2"
+      ],
+      "Y": [
+        "0",
+        "1",
+        "2"
+      ]
+    },
+    "clauses": [
+      {
+        "X": [
+          "0"
+        ],
+        "Y": [
+          "0"
+        ]
+      },
+      {
+        "X": [
+          "0"
+        ],
+        "Y": [
+          "1"
+        ]
+      }
+    ],
+    "answer": {
+      "ok": true,
+      "prefix": [
+        {
+          "X": "0",
+          "Y": "0"
+        },
+        {
+          "X": "0",
+          "Y": "1"
+        }
+      ],
+      "full": [
+        {
+          "X": "0"
+        }
+      ],
+      "final": {
+        "entries": [
+          {
+            "X": "0",
+            "Y": "0"
+          },
+          {
+            "X": "0",
+            "Y": "1"
+          }
+        ],
+        "eliminated": [
+          false,
+          false
+        ],
+        "is_unit": [
+          false,
+          false
+        ],
+        "clause_idx": 2,
+        "clause_symbol_isct": [],
+        "unit_domains": [],
+        "unit_registry": [],
+        "symbol_registry": {
+          "X": [
+            1,
+            2
+          ],
+          "Y": [
+            1,
+            2
+          ]
+        }
+      },
+      "events": []
+    }
+  }
+}

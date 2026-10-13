@@ -1,0 +1,28 @@
+$R
+[1] "R version 4.6.1 (2026-06-24)"
+
+$counts
+$counts$multiplicity_vectors
+[1] 14
+
+$counts$selected_states
+[1] 526
+
+$counts$shape_checks
+[1] 2104
+
+$counts$repeated_results
+[1] 1268
+
+$counts$named_results
+[1] 512
+
+$counts$two_step_checks
+[1] 8984
+
+
+$full_support_is_not_length_equality
+[1] TRUE
+
+$missing_value_without_capacity_is_insufficient
+[1] TRUE

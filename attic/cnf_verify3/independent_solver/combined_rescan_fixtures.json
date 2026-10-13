@@ -1,0 +1,160 @@
+[
+  {
+    "file": "minimized_sse1.json",
+    "result": [
+      {
+        "X0": "3",
+        "X2": "4"
+      },
+      {
+        "X1": "3",
+        "X0": "2"
+      },
+      {
+        "X2": [
+          "4",
+          "2"
+        ]
+      }
+    ],
+    "residual": []
+  },
+  {
+    "file": "minimized_first_order_phase_sse1.json",
+    "result": [
+      {
+        "X1": "0",
+        "X0": "5"
+      },
+      {
+        "X1": [
+          "4",
+          "0"
+        ]
+      }
+    ],
+    "residual": []
+  },
+  {
+    "file": "minimized_sse2.json",
+    "result": [
+      {
+        "X0": [
+          "5",
+          "4",
+          "0"
+        ],
+        "X2": [
+          "2",
+          "4"
+        ]
+      },
+      {
+        "X2": [
+          "2",
+          "1"
+        ],
+        "X1": "6"
+      },
+      {
+        "X0": "1",
+        "X2": [
+          "0",
+          "1"
+        ]
+      },
+      {
+        "X2": "0",
+        "X0": [
+          "1",
+          "4"
+        ]
+      },
+      {
+        "X0": "4",
+        "X1": [
+          "0",
+          "6"
+        ]
+      }
+    ],
+    "residual": []
+  },
+  {
+    "file": "directed_oneend_shrink_min.json",
+    "result": [
+      {
+        "T": [
+          "0",
+          "2"
+        ],
+        "C": "0"
+      },
+      {
+        "S": "0",
+        "T": "0"
+      },
+      {
+        "S": "1",
+        "T": [
+          "2",
+          "3"
+        ]
+      },
+      {
+        "U": "1",
+        "T": [
+          "0",
+          "2"
+        ]
+      }
+    ],
+    "residual": []
+  },
+  {
+    "file": "minimized_oneend_symbol_removal.json",
+    "result": [
+      {
+        "T": "2",
+        "R": "0"
+      },
+      {
+        "S": "1",
+        "T": [
+          "2",
+          "3"
+        ]
+      },
+      {
+        "U": "1",
+        "T": "2"
+      },
+      {
+        "S": "0",
+        "R": "0"
+      }
+    ],
+    "residual": []
+  },
+  {
+    "file": "minimized_subsumption.json",
+    "result": [
+      {
+        "X0": "2"
+      }
+    ],
+    "residual": []
+  },
+  {
+    "file": "minimized_deferred_skip.json",
+    "result": [
+      {
+        "X0": "5"
+      },
+      {
+        "X1": "6"
+      }
+    ],
+    "residual": []
+  }
+]

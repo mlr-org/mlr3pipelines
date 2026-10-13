@@ -1,0 +1,58 @@
+R 4.6.1 LC_CTYPE C.UTF-8 input models 0 output models 0
+CnfFormula: FALSE
+[1] X Y
+<0 rows> (or 0-length row.names)
+name encoding UTF-8 name bytes 195 169
+[1] "é"
+same name found by membership: TRUE
+R 4.6.1 LC_CTYPE C input models 0 output models 2
+CnfFormula:
+     (<U+00E9> <U+2208> {b} | Y <U+2208> {a})
+   & (<U+00E9> <U+2208> {c} | Y <U+2208> {b})
+  X Y
+3 c a
+5 b b
+name encoding UTF-8 name bytes 195 169
+[1] "<U+00E9>"
+same name found by membership: FALSE
+There were 22 warnings (use warnings() to see them)
+Warning messages:
+1: In exists(name, universe) : unable to translate '<U+00E9>' to native encoding
+2: In assign(name, domain, universe) :
+  unable to translate '<U+00E9>' to native encoding
+3: In CnfAtom(e1, e2) : unable to translate '<U+00E9>' to native encoding
+4: In universe[[a$symbol]] %in% entries[[a$symbol]] :
+  unable to translate '<U+00E9>' to native encoding
+5: In CnfAtom(e1, e2) : unable to translate '<U+00E9>' to native encoding
+6: In universe[[a$symbol]] %in% entries[[a$symbol]] :
+  unable to translate '<U+00E9>' to native encoding
+7: In CnfAtom(e1, e2) : unable to translate '<U+00E9>' to native encoding
+8: In universe[[a$symbol]] %in% entries[[a$symbol]] :
+  unable to translate '<U+00E9>' to native encoding
+9: In register_unit(unit_idx) : unable to translate '<U+00E9>' to native encoding
+10: In unit_registry[[nu]] <- unit_idx :
+  unable to translate '<U+00E9>' to native encoding
+11: In unit_domains[[nu]] <- unit[[1L]] :
+  unable to translate '<U+00E9>' to native encoding
+12: In register_unit(unit_idx) :
+  unable to translate '<U+00E9>' to native encoding
+13: In simplify_cnf(entries, universe) :
+  unable to translate '<U+00E9>' to native encoding
+14: In symbol_registry[[symbol]] <- clause_idx :
+  unable to translate '<U+00E9>' to native encoding
+15: In simplify_cnf(entries, universe) :
+  unable to translate '<U+00E9>' to native encoding
+16: In simplify_cnf(entries, universe) :
+  unable to translate '<U+00E9>' to native encoding
+17: In symbol_registry[[symbol]] <- `*vtmp*` :
+  unable to translate '<U+00E9>' to native encoding
+18: In handle_sse_2nd_order_twoend(meta_idx, meta_idx_other,  ... :
+  unable to translate '<U+00E9>' to native encoding
+19: In handle_sse_2nd_order_twoend(meta_idx, meta_idx_other,  ... :
+  unable to translate '<U+00E9>' to native encoding
+20: In remaining_nonunit_entries %in% symbol_registry[[unitsymbol]] :
+  unable to translate '<U+00E9>' to native encoding
+21: In unit_domains[[name]] <- "a" :
+  unable to translate '<U+00E9>' to native encoding
+22: In stopifnot(length(u) == 2L, identical(u[[name]], c("a",  ... :
+  unable to translate '<U+00E9>' to native encoding

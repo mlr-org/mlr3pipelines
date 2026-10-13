@@ -1,0 +1,11 @@
+{"stats": {"formulas": 500, "baseline_seconds": 11.865999999999996, "candidate_seconds": 10.967999999999995, "second_pass_seconds": 8.912000000000043, "changed_output": 0}, "elapsed": 55.996869802474976}
+{"stats": {"formulas": 1000, "baseline_seconds": 22.317000000000167, "candidate_seconds": 20.613000000000206, "second_pass_seconds": 17.00599999999998, "changed_output": 0}, "elapsed": 109.22524309158325}
+{"stats": {"formulas": 1500, "baseline_seconds": 32.19900000000035, "candidate_seconds": 30.06700000000054, "second_pass_seconds": 24.54699999999979, "changed_output": 1}, "elapsed": 160.73535799980164}
+{"stats": {"formulas": 2000, "baseline_seconds": 42.490000000000435, "candidate_seconds": 39.55500000000003, "second_pass_seconds": 32.319999999999844, "changed_output": 1}, "elapsed": 216.0820610523224}
+{"stats": {"formulas": 2500, "baseline_seconds": 54.126000000000346, "candidate_seconds": 50.45700000000024, "second_pass_seconds": 41.813000000000464, "changed_output": 2}, "elapsed": 275.06466341018677}
+{"stats": {"formulas": 3000, "baseline_seconds": 67.4069999999999, "candidate_seconds": 62.950999999999134, "second_pass_seconds": 52.594000000000804, "changed_output": 5}, "elapsed": 339.1472041606903}
+{"stats": {"formulas": 3500, "baseline_seconds": 77.23699999999909, "candidate_seconds": 72.38399999999855, "second_pass_seconds": 60.272000000000915, "changed_output": 7}, "elapsed": 390.58718252182007}
+{"stats": {"formulas": 4000, "baseline_seconds": 87.45699999999877, "candidate_seconds": 81.96299999999862, "second_pass_seconds": 68.43500000000155, "changed_output": 12}, "elapsed": 442.42115592956543}
+{"stats": {"formulas": 4500, "baseline_seconds": 96.790999999999, "candidate_seconds": 90.88099999999925, "second_pass_seconds": 75.37500000000087, "changed_output": 14}, "elapsed": 492.4434278011322}
+{"stats": {"formulas": 5000, "baseline_seconds": 105.45299999999938, "candidate_seconds": 99.11499999999923, "second_pass_seconds": 81.99800000000018, "changed_output": 14}, "elapsed": 540.4667208194733}
+{"stats": {"formulas": 5000, "baseline_seconds": 105.45299999999938, "candidate_seconds": 99.11499999999923, "second_pass_seconds": 81.99800000000018, "changed_output": 14}, "elapsed": 540.4824888706207}

@@ -8,7 +8,7 @@
 #' The dictionary contains a collection of often-used graph structures, and it's aim
 #' is solely to make often-used functions more accessible.
 #' Each `Graph` has an associated help page, which can be accessed via `?mlr_graphs_<key>`, i.e.
-#' `?mlr_graphs_bagging`.
+#' `?mlr_graphs_bag`.
 #'
 #' @section Methods:
 #' Methods inherited from [`Dictionary`][mlr3misc::Dictionary].

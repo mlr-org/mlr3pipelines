@@ -62,7 +62,7 @@ test_that("PipeOpDecode - one-hot-encoding", {
     target = dt$target,
     x = as.factor(c(1, 2, 1, 2, 2))
   )
-  expect_equal(train_out, dt_compare)
+  expect_equal_data_table(train_out, dt_compare)
 
   op$param_set$values$ties_method = "last"
   train_out = op$train(list(task))[[1]]$data()
@@ -122,7 +122,7 @@ test_that("PipeOpDecode - treatment encoding", {
     a = dt$a,
     x = as.factor(rep(c("1", "ref", "ref"), times = 5))
   )
-  expect_equal(train_out, dt_compare)
+  expect_equal_data_table(train_out, dt_compare)
   op$param_set$values$treatment_cutoff = 0
 
   # test incrementing reference level name

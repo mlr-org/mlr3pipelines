@@ -35,8 +35,8 @@ test_that("basic properties", {
 
   po$param_set$values[c("center", "scale")] = c(FALSE, FALSE)
 
-  expect_equal(data, po$train(list(task))[[1]]$data(), ignore.col.order = TRUE)
-  expect_equal(data, po$predict(list(task))[[1]]$data(), ignore.col.order = TRUE)
+  expect_equal_data_table(data, po$train(list(task))[[1]]$data(), ignore_col_order = TRUE)
+  expect_equal_data_table(data, po$predict(list(task))[[1]]$data(), ignore_col_order = TRUE)
 
   po$param_set$values[c("center", "scale")] = c(TRUE, FALSE)
 
@@ -52,8 +52,8 @@ test_that("basic properties", {
     i = rep(TRUE, 5),
     class = data$class)
 
-  expect_equal(data.center, po$train(list(task))[[1]]$data(), ignore.col.order = TRUE)
-  expect_equal(data.center, po$predict(list(task))[[1]]$data(), ignore.col.order = TRUE)
+  expect_equal_data_table(data.center, po$train(list(task))[[1]]$data(), ignore_col_order = TRUE)
+  expect_equal_data_table(data.center, po$predict(list(task))[[1]]$data(), ignore_col_order = TRUE)
 
   po$param_set$values[c("center", "scale")] = c(FALSE, TRUE)
 
@@ -70,8 +70,8 @@ test_that("basic properties", {
     i = rep(TRUE, 5),
     class = data$class)
 
-  expect_equal(data.center, po$train(list(task))[[1]]$data(), ignore.col.order = TRUE)
-  expect_equal(data.center, po$predict(list(task))[[1]]$data(), ignore.col.order = TRUE)
+  expect_equal_data_table(data.center, po$train(list(task))[[1]]$data(), ignore_col_order = TRUE)
+  expect_equal_data_table(data.center, po$predict(list(task))[[1]]$data(), ignore_col_order = TRUE)
 
   po$param_set$values[c("center", "scale")] = c(TRUE, TRUE)
 
@@ -88,8 +88,8 @@ test_that("basic properties", {
     i = rep(TRUE, 5),
     class = data$class)
 
-  expect_equal(data.center, po$train(list(task))[[1]]$data(), ignore.col.order = TRUE)
-  expect_equal(data.center, po$predict(list(task))[[1]]$data(), ignore.col.order = TRUE)
+  expect_equal_data_table(data.center, po$train(list(task))[[1]]$data(), ignore_col_order = TRUE)
+  expect_equal_data_table(data.center, po$predict(list(task))[[1]]$data(), ignore_col_order = TRUE)
 })
 
 

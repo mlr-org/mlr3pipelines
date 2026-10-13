@@ -1,0 +1,10 @@
+{
+  "version": "R version 3.6.3 (2020-02-29)",
+  "counts": {
+    "normal": 41,
+    "error": 1,
+    "transformations": 84,
+    "events": 187365
+  },
+  "success": true
+}

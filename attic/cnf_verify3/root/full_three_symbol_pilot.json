@@ -1,0 +1,33 @@
+{
+  "scope": "three clauses, three symbols in every clause; aligned X,Y,Z occurrence order",
+  "parameters": {
+    "workers": 2,
+    "x_start": 0,
+    "x_stop": 2,
+    "y_limit": 3,
+    "z_limit": 4,
+    "out": "full_three_symbol_pilot.json"
+  },
+  "source_manifest": "34ceb2fb392db49ba47adf2a970a824222dfa792b93a895147f0a437b5bdd13d  R/CnfUniverse.R\n19a159daa63d2bafb8f5238cfd91d9940a81c08f366bbc5ecb81eca3a3807341  R/CnfSymbol.R\nd03da14a7bce4989477efa09303e099a3d5b7a8abb3be3526ee850161a59dce6  R/CnfAtom.R\n40d021025c290a5ad6522fadcda166ff55d83bdd1d27eb0f4fd1fbc6222f12f8  R/CnfClause.R\ne94aabfb277cf3bc2c951a09571658fd7dba0b14bce484f8c7d642e8d7e41f60  R/CnfFormula.R\n7d34ad60035509a463168752bb5f6f82d87fd7182a94a0e48461be7cdbe35fdc  R/CnfFormula_simplify.R\n",
+  "expected_inputs": 24,
+  "mask_shape_calibrations": 343,
+  "completed": [
+    0,
+    1
+  ],
+  "stats": {
+    "inputs": 24,
+    "executions": 28,
+    "valuations": 826,
+    "independent_calibrations": 2
+  },
+  "productive_pass_counts": {
+    "0": 20,
+    "1": 4
+  },
+  "examples": {},
+  "errors": [],
+  "started_utc": "2026-09-06 15:05:32 UTC",
+  "elapsed": 1.4458272457122803,
+  "finished_utc": "2026-09-06 15:05:34 UTC"
+}

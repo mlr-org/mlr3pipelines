@@ -1,0 +1,5 @@
+Opposed four-edge cycles: 128 assignments; zero models; every clause indispensable.
+Production preserves all eight clauses; !formula is TRUE; !!formula is FALSE.
+Triangle contradiction is stored as FALSE
+Its negation is literal TRUE.
+The documented three-clause example is already literal FALSE in current source.

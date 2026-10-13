@@ -1,0 +1,23 @@
+{
+  "R": "R version 3.6.3 (2020-02-29)",
+  "checkmate": "2.3.4",
+  "seed": 612906,
+  "source_md5": {
+    "R/CnfUniverse.R": "45fa56698900fc42440b5dda34fbe4ff",
+    "R/CnfSymbol.R": "d1aa6bcd59ced1aa4e5ea3317d640897",
+    "R/CnfAtom.R": "58699a7eb88f45c6aa5cdb8b77cc7c41",
+    "R/CnfClause.R": "f6c9659b31a511e696dc9d8d7cfa9349",
+    "R/CnfFormula.R": "7609c11610bbe9de566d9d9b448a07f7",
+    "R/CnfFormula_simplify.R": "376aac6eb81334e751e9351f9eddc02f"
+  },
+  "counts": {
+    "unique_shapes": 4570,
+    "atom_pairs": 1645,
+    "repeated_atom_payloads": 470,
+    "dimensional_atom_payloads": 658,
+    "exact_formula_comparisons": 90,
+    "truth_objects": 8290,
+    "truth_rows": 246650,
+    "grammar_controls": 0
+  }
+}

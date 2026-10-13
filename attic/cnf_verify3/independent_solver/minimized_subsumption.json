@@ -1,0 +1,145 @@
+{
+  "kind": "subsumption",
+  "domains": {
+    "X0": [
+      "1",
+      "2",
+      "4",
+      "5"
+    ],
+    "X1": [
+      "1"
+    ],
+    "X2": [
+      "2",
+      "3",
+      "5"
+    ]
+  },
+  "clauses": [
+    {
+      "X0": [
+        "2",
+        "4"
+      ],
+      "X2": [
+        "3"
+      ]
+    },
+    {
+      "X2": [
+        "5"
+      ],
+      "X0": [
+        "2",
+        "1"
+      ]
+    },
+    {
+      "X2": [
+        "2"
+      ],
+      "X0": [
+        "2",
+        "5"
+      ]
+    }
+  ],
+  "result": [
+    {
+      "X0": "2"
+    },
+    {
+      "X2": "2",
+      "X0": "2"
+    }
+  ],
+  "opportunities": [
+    {
+      "kind": "subsumption",
+      "donor": 0,
+      "target": 1
+    }
+  ],
+  "second_pass": [
+    {
+      "X0": "2"
+    }
+  ],
+  "idempotent": false,
+  "events": [
+    {
+      "kind": "sse2",
+      "donor_a": {
+        "X2": "2",
+        "X0": [
+          "2",
+          "5"
+        ]
+      },
+      "donor_b": {
+        "X2": "5",
+        "X0": [
+          "2",
+          "1"
+        ]
+      },
+      "target": {
+        "X0": [
+          "2",
+          "4"
+        ],
+        "X2": "3"
+      },
+      "intersect_symbol": "X2",
+      "restrict_symbol": "X0"
+    },
+    {
+      "kind": "sse1",
+      "donor": {
+        "X0": "2",
+        "X2": "3"
+      },
+      "target": {
+        "X2": "5",
+        "X0": [
+          "2",
+          "1"
+        ]
+      },
+      "symbol": "X2"
+    },
+    {
+      "kind": "sse1",
+      "donor": {
+        "X2": "2",
+        "X0": "2"
+      },
+      "target": {
+        "X0": "2",
+        "X2": "3"
+      },
+      "symbol": "X2"
+    },
+    {
+      "kind": "unit_hla",
+      "donor": {
+        "X2": "2",
+        "X0": "2"
+      },
+      "target": {
+        "X0": "2"
+      },
+      "target_id": 2,
+      "donor_id": 3,
+      "symbol": "X2",
+      "extended": [
+        "3",
+        "5"
+      ]
+    }
+  ],
+  "second_pass_events": [],
+  "calls": 112,
+  "elapsed": 2.16251277923584
+}

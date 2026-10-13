@@ -1,0 +1,35 @@
+CnfSymbol 'X' with domain {0, 1}.
+$R_version
+[1] "R version 3.6.3 (2020-02-29)"
+
+$cases
+[1] 1023
+
+$helper_calls
+[1] 61029
+
+$helper_roots
+[1] 26853
+
+$max_helper_depth
+[1] 141
+
+$max_children
+              char_intersect                 char_setdiff
+                           1                            0
+                  char_union               return_entries
+                           0                            0
+               register_unit     apply_domain_restriction
+                          11                            5
+eliminate_symbol_from_clause  on_updated_subset_relations
+                          47                            2
+             on_update_range  handle_sse_2nd_order_oneend
+                           5                            4
+ handle_sse_2nd_order_twoend            try_sse_2nd_order
+                          10                            1
+  eliminate_clause_update_sr
+                           0
+
+$negative_controls
+                        extra_children                            extra_roots
+  "Direct helper child bound exceeded" "Top-level helper root bound exceeded"

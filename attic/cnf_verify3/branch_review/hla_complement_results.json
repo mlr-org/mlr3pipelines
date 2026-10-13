@@ -1,0 +1,37 @@
+{
+  "records": [
+    {
+      "domain_size": 1,
+      "selected_donor_pairs": 1
+    },
+    {
+      "domain_size": 2,
+      "selected_donor_pairs": 7
+    },
+    {
+      "domain_size": 3,
+      "selected_donor_pairs": 37
+    },
+    {
+      "domain_size": 4,
+      "selected_donor_pairs": 175
+    },
+    {
+      "domain_size": 5,
+      "selected_donor_pairs": 781
+    },
+    {
+      "domain_size": 6,
+      "selected_donor_pairs": 3367
+    },
+    {
+      "domain_size": 7,
+      "selected_donor_pairs": 14197
+    },
+    {
+      "domain_size": 8,
+      "selected_donor_pairs": 58975
+    }
+  ],
+  "total": 77540
+}

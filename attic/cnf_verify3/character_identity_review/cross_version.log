@@ -1,0 +1,9 @@
+{
+  "cases_equal": true,
+  "exact_normalized_baselines_equal": true,
+  "sites_equal": true,
+  "site_counts_equal": true,
+  "per_formula_records_equal": true,
+  "public_api_records_equal": true,
+  "value_locale_baselines_equal": true
+}

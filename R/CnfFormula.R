@@ -46,6 +46,10 @@
 #' These values can be converted to, and from, `logical(1)` values using `as.logical()`
 #' and `as.CnfFormula()`.
 #'
+#' Nonconstant inputs must belong to the same universe. Constant inputs adopt that
+#' universe regardless of their own universe. If all inputs are constant, the first
+#' available universe is retained, or `NULL` if none has a universe.
+#'
 #' `CnfFormula` objects can be negated using the `!` operator. Beware that this
 #' may lead to an exponential blow-up in the number of clauses.
 #'
@@ -146,24 +150,25 @@ CnfFormula = function(clauses) {
   assert_list(clauses, types = c("CnfClause", "CnfFormula"))
   if (!length(clauses)) return(as.CnfFormula(TRUE))
 
+  nonconstant = Filter(function(cl) !is.logical(cl), clauses)
+  universe = NULL
+  for (cl in if (length(nonconstant)) nonconstant else clauses) {
+    if (is.null(universe)) universe = attr(cl, "universe")
+    if (length(nonconstant) && !identical(attr(cl, "universe"), universe)) {
+      stop("All clauses must be in the same universe.")
+    }
+  }
+
   entries = list()
   other_entries = list()
-  universe = attr(clauses[[1]], "universe")
   for (cl in clauses) {
     cl_bare = c(cl)
     if (isFALSE(cl_bare)) {
-      entries = FALSE
-      break
+      return(structure(FALSE, universe = universe, class = "CnfFormula"))
     }
     if (isTRUE(cl_bare)) {
       next
     }
-    if (!identical(attr(cl, "universe"), universe)) {
-      # if clauses[[1]] is FALSE, then it is possible that it has no
-      # universe; however, in that case we will break before coming here.
-      stop("All clauses must be in the same universe.")
-    }
-
     ## don't unclass() here, since we check the class in the next line!
     if (inherits(cl, "CnfClause")) {
       entries[[length(entries) + 1]] = cl_bare
@@ -282,13 +287,15 @@ all.equal.CnfFormula = function(target, current, ...) {
 
   normalize = function(formula) {
     formula[] = lapply(unclass(formula), function(clause) {
-      lapply(unclass(clause)[order(names(clause))], sort)
+      names(clause) = enc2utf8(names(clause))
+      lapply(unclass(clause)[order(names(clause), method = "radix")],
+        function(values) sort(enc2utf8(values), method = "radix"))
     })
     # sort by symbol names, then by hash
     # note we had to sort elements internally first before we can do this!
     reorder = order(map_chr(unclass(formula), function(clause) {
       paste0(paste(names(clause), collapse = ".__."), digest::digest(c(clause), algo = "xxhash64"))
-    }))
+    }), method = "radix")
     formula[] = formula[reorder]
     # formula should not have names, but in case this ever changes:
     # change the names in the same order as the clauses
@@ -302,11 +309,12 @@ all.equal.CnfFormula = function(target, current, ...) {
   all.equal.list(target, current, ...)
 }
 
-#' @rawNamespace if (getRversion() >= "4.3.0") S3method(chooseOpsMethod,CnfFormula)
-chooseOpsMethod.CnfFormula <- function(x, y, mx, my, cl, reverse) TRUE
-
-#' @export
-`&.CnfFormula` = function(e1, e2) {
+# Both operands must dispatch to the same function, including on R < 4.3.
+#' @noRd
+#' @rawNamespace S3method("&", CnfAtom, cnf_and)
+#' @rawNamespace S3method("&", CnfClause, cnf_and)
+#' @rawNamespace S3method("&", CnfFormula, cnf_and)
+cnf_and = function(e1, e2) {
   e1_bare = unclass(e1)
   e2_bare = unclass(e2)
   e1 = as.CnfFormula(e1)
@@ -319,10 +327,18 @@ chooseOpsMethod.CnfFormula <- function(x, y, mx, my, cl, reverse) TRUE
   simplify_cnf(c(e1, e2), attr(e1, "universe"))
 }
 
-#' @export
-`|.CnfFormula` = function(e1, e2) {
+#' @noRd
+#' @rawNamespace S3method("|", CnfAtom, cnf_or)
+#' @rawNamespace S3method("|", CnfClause, cnf_or)
+#' @rawNamespace S3method("|", CnfFormula, cnf_or)
+cnf_or = function(e1, e2) {
   e1_bare = unclass(e1)
   e2_bare = unclass(e2)
+  if (!inherits(e1, "CnfFormula") && !inherits(e2, "CnfFormula")) {
+    if (isFALSE(e1_bare) || isTRUE(e2_bare)) return(as.CnfClause(e2))
+    if (isFALSE(e2_bare) || isTRUE(e1_bare)) return(as.CnfClause(e1))
+    return(CnfClause(list(e1, e2)))
+  }
   e1 = as.CnfFormula(e1)
   if (isFALSE(e2_bare) || isTRUE(e1_bare)) return(e1)
   e2 = as.CnfFormula(e2)

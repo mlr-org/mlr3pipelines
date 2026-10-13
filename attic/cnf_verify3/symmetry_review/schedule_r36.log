@@ -1,0 +1,15 @@
+Completed 300 inputs
+Completed 600 inputs
+Completed 900 inputs
+Completed 1200 inputs
+Completed 1500 inputs
+Completed 1800 inputs
+          inputs duplicate_inputs     error_inputs  transformations
+            1805              871               54             9025
+ observed_events
+         3469794
+          unit_hla     empty_unit_hla      handler_count twoend_two_columns
+              2094                324              26586              16464
+       nonunit_hla oneend_two_columns
+              4854                354
+PASS: independent trace and selector checks

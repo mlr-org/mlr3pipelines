@@ -1,0 +1,5 @@
+All 64 truth assignments agree after every actual-object pass.
+Value-occurrence counts: 22 21 20 19 19 19
+Productive passes: 1 2 3
+Ordering-only passes: 4
+Exact storage equality confirmed on pass 5.

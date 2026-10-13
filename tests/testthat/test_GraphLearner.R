@@ -531,6 +531,95 @@ test_that("graphlearner predict type inference", {
   expect_error({lrrp = po(lrn("classif.featureless", predict_type = "se"))})
 })
 
+test_that("graphlearner predict_type setter only assigns where the value changes", {
+  # PipeOpLearner that counts assignments to $predict_type
+  PipeOpLearnerCounting = R6Class("PipeOpLearnerCounting", inherit = PipeOpLearner,
+    public = list(n_assigned = 0L),
+    active = list(
+      predict_type = function(val) {
+        if (!missing(val)) {
+          self$n_assigned = self$n_assigned + 1L
+          private$.learner$predict_type = val
+        }
+        private$.learner$predict_type
+      }
+    )
+  )
+  # PipeOpLearner with a strictly read-only $predict_type that errors on *any* assignment,
+  # as a third-party PipeOp might have
+  PipeOpLearnerFixed = R6Class("PipeOpLearnerFixed", inherit = PipeOpLearner,
+    active = list(
+      predict_type = function(val) {
+        if (!missing(val)) stop("$predict_type is read-only.")
+        "response"
+      }
+    )
+  )
+
+  # linear: assignment happens only when the value changes
+  lrn = GraphLearner$new(PipeOpLearnerCounting$new(lrn("classif.featureless")))
+  po_counting = lrn$graph$pipeops$classif.featureless
+  expect_equal(po_counting$n_assigned, 0L)
+  expect_equal(lrn$predict_type, "response")
+
+  lrn$predict_type = "response"
+  expect_equal(po_counting$n_assigned, 0L)
+  expect_equal(lrn$predict_type, "response")
+
+  lrn$predict_type = "prob"
+  expect_equal(po_counting$n_assigned, 1L)
+  expect_equal(lrn$predict_type, "prob")
+  expect_equal(po_counting$learner$predict_type, "prob")
+
+  lrn$predict_type = "prob"
+  expect_equal(po_counting$n_assigned, 1L)
+  expect_equal(lrn$predict_type, "prob")
+
+  # read-only PipeOp: assigning the value it already has must not error
+  lrn = GraphLearner$new(PipeOpLearnerFixed$new(lrn("classif.featureless")))
+  expect_equal(lrn$predict_type, "response")
+  lrn$predict_type = "response"
+  expect_equal(lrn$predict_type, "response")
+  expect_error({lrn$predict_type = "prob"}, "read-only")
+
+  # same on construction
+  lrn = GraphLearner$new(PipeOpLearnerFixed$new(lrn("classif.featureless")), predict_type = "response")
+  expect_equal(lrn$predict_type, "response")
+  expect_error(GraphLearner$new(PipeOpLearnerFixed$new(lrn("classif.featureless")), predict_type = "prob"), "read-only")
+
+  # branching: all branches are visited, each PipeOp is compared individually
+  po_a = PipeOpLearnerCounting$new(lrn("classif.featureless", id = "a"))
+  po_b = PipeOpLearnerCounting$new(lrn("classif.featureless", id = "b", predict_type = "prob"))
+  lrn = GraphLearner$new(po("branch", 2) %>>% gunion(list(po_a, po_b)) %>>% po("unbranch"))
+  po_a = lrn$graph$pipeops$a
+  po_b = lrn$graph$pipeops$b
+
+  lrn$predict_type = "prob"
+  expect_equal(po_a$n_assigned, 1L)
+  expect_equal(po_b$n_assigned, 0L)
+  expect_equal(po_a$predict_type, "prob")
+  expect_equal(po_b$predict_type, "prob")
+
+  lrn$predict_type = "response"
+  expect_equal(po_a$n_assigned, 2L)
+  expect_equal(po_b$n_assigned, 1L)
+  expect_equal(po_a$predict_type, "response")
+  expect_equal(po_b$predict_type, "response")
+
+  # read-only PipeOp in an inactive branch does not get in the way as long as its value is not changed
+  po_fixed = PipeOpLearnerFixed$new(lrn("classif.featureless", id = "fixed"))
+  po_c = PipeOpLearnerCounting$new(lrn("classif.featureless", id = "c", predict_type = "prob"))
+  lrn = GraphLearner$new(po("branch", 2) %>>% gunion(list(po_fixed, po_c)) %>>% po("unbranch"))
+  lrn$param_set$values$branch.selection = 2
+  expect_equal(lrn$predict_type, "prob")
+
+  lrn$predict_type = "response"
+  expect_equal(lrn$graph$pipeops$c$n_assigned, 1L)
+  expect_equal(lrn$graph$pipeops$c$predict_type, "response")
+  expect_equal(lrn$predict_type, "response")
+  expect_error({lrn$predict_type = "prob"}, "read-only")
+})
+
 
 test_that("GraphLearner model", {
   skip_if_not_installed("rpart")
@@ -540,25 +629,25 @@ test_that("GraphLearner model", {
 
   lr = GraphLearner$new(graph)
 
-  expect_equal(lr$graph, graph)
-  expect_equal(lr$graph_model, graph)
+  expect_equal_r6(lr$graph, graph)
+  expect_equal_r6(lr$graph_model, graph)
 
   graph2$train(tsk("iris"))
 
   lr$train(tsk("iris"))
 
-  expect_equal(graph, graph_orig)
+  expect_equal_r6(graph, graph_orig)
   expect_null(graph$state$pca)
 
-  # behind-the-scenes param_set cache ruins expect_equal if we don't do this:
+  # behind-the-scenes param_set cache ruins equality if we don't do this:
   graph_orig$param_set
 
-  expect_equal(lr$graph, graph_orig)
+  expect_equal_r6(lr$graph, graph_orig)
 
   graph2$state$classif.rpart$train_time = 0
   lr$state$model$classif.rpart$train_time = 0
 
-  expect_equal(lr$graph_model, graph2)
+  expect_equal_r6(lr$graph_model, graph2)
 
   imp = graph2$pipeops$classif.rpart$learner_model$importance()
 
@@ -811,7 +900,7 @@ test_that("base_learner() works", {
   expect_error(as_learner(po("nop"))$base_learner(), "No base learner found in Graph.")
 
 
-  bagger = as_learner(ppl("bagging", iterations = 1, lrn("classif.rpart"),
+  bagger = as_learner(ppl("bag", iterations = 1, lrn("classif.rpart"),
     averager = po("classifavg", collect_multiplicity = TRUE)))
 
   expect_identical(bagger$base_learner(), bagger$graph_model$pipeops$classif.rpart$learner_model)
@@ -827,8 +916,8 @@ test_that("base_learner() works", {
 
   expect_error(bagger$base_learner(), "Multiplicity that does not contain exactly one Learner")
 
-  metabagger = as_learner(ppl("bagging", iterations = 1,
-      ppl("bagging", iterations = 1, lrn("classif.rpart"),
+  metabagger = as_learner(ppl("bag", iterations = 1,
+      ppl("bag", iterations = 1, lrn("classif.rpart"),
         averager = po("classifavg_1", collect_multiplicity = TRUE))$set_names(c("replicate", "subsample"), c("replicate_1", "subsample_1")),
     averager = po("classifavg_2", collect_multiplicity = TRUE)))
 
@@ -905,6 +994,38 @@ test_that("base_learner() works", {
   # infer task type and other things: use base_learner, but don't do that if things are given explicitly.
 })
 
+
+test_that("GraphLearner hashes cover timeout, deadline, and encapsulation", {
+  skip_if_not_installed("rpart")
+
+  make_learner = function() as_learner(po("scale") %>>% lrn("classif.rpart"))
+  base = make_learner()
+  expect_equal(make_learner()$hash, base$hash)
+  expect_equal(make_learner()$phash, base$phash)
+
+  learner = make_learner()
+  learner$timeout = c(train = 5)
+  expect_string(all.equal(learner$hash, base$hash), "mismatch")
+  expect_string(all.equal(learner$phash, base$phash), "mismatch")
+
+  learner = make_learner()
+  learner$deadline = c(train = as.POSIXct("2030-01-01", tz = "UTC"))
+  expect_string(all.equal(learner$hash, base$hash), "mismatch")
+  expect_string(all.equal(learner$phash, base$phash), "mismatch")
+
+  learner = make_learner()
+  learner$encapsulate("evaluate", lrn("classif.featureless"))
+  learner_when = make_learner()
+  learner_when$encapsulate("evaluate", lrn("classif.featureless"), when = function(cond, ...) TRUE)
+  expect_string(all.equal(learner$hash, base$hash), "mismatch")
+  expect_string(all.equal(learner$hash, learner_when$hash), "mismatch")
+  expect_string(all.equal(learner$phash, learner_when$phash), "mismatch")
+
+  learner_when2 = make_learner()
+  learner_when2$encapsulate("evaluate", lrn("classif.featureless"), when = function(cond, ...) TRUE)
+  expect_equal(learner_when$hash, learner_when2$hash)
+  expect_equal(learner_when$phash, learner_when2$phash)
+})
 
 test_that("GraphLearner hashes", {
   skip_if_not_installed("rpart")
@@ -1209,7 +1330,7 @@ test_that("GraphLearner Importance", {
 
   expect_equal(g_importance$importance(), c(Petal.Length = 1, Petal.Width = 1, Sepal.Length = 1, Sepal.Width = 1))
 
-  g_bagging = as_learner(ppl("bagging", DebugWithImportance$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
+  g_bagging = as_learner(ppl("bag", DebugWithImportance$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
 
   expect_true("importance" %in% g_bagging$properties)
   g_bagging$train(tsk("iris"))
@@ -1290,7 +1411,7 @@ test_that("GraphLearner Selected Features", {
   g_featsel$impute_selected_features = TRUE
   expect_equal(g_featsel$selected_features(), tsk("iris")$feature_names[[1]])
 
-  g_bagging = as_learner(ppl("bagging", DebugWithSelectedFeatures$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
+  g_bagging = as_learner(ppl("bag", DebugWithSelectedFeatures$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
 
   expect_true("selected_features" %in% g_bagging$properties)
   g_bagging$train(tsk("iris"))
@@ -1388,7 +1509,7 @@ test_that("GraphLearner other properties", {
   expect_equal(g_properties$loglik(), 1)
   expect_equal(g_properties$oob_error(), 2)
 
-  g_bagging = as_learner(ppl("bagging", DebugWithProperties$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
+  g_bagging = as_learner(ppl("bag", DebugWithProperties$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
 
   expect_true(all(c("loglik", "oob_error") %in% g_bagging$properties))
   g_bagging$train(tsk("iris"))

@@ -1,0 +1,108 @@
+R version 3.6.3 (2020-02-29)
+checkmate 2.3.4
+function (x, y)
+{
+    x <- as.vector(x)
+    y <- as.vector(y)
+    unique(if (length(x) || length(y))
+        x[match(x, y, 0L) == 0L]
+    else x)
+}
+<bytecode: 0x55f1a0111768>
+<environment: namespace:base>
+function (x, incomparables = FALSE, MARGIN = 1, fromLast = FALSE,
+    ...)
+{
+    if (!isFALSE(incomparables))
+        .NotYetUsed("incomparables != FALSE")
+    dx <- dim(x)
+    ndim <- length(dx)
+    if (length(MARGIN) != 1L || (MARGIN > ndim))
+        stop(gettextf("MARGIN = %s is invalid for dim = %s",
+            paste(MARGIN, collapse = ","), paste(dx, collapse = ",")),
+            domain = NA)
+    temp <- if ((ndim > 1L) && (prod(dx[-MARGIN]) > 1L))
+        asplit(x, MARGIN)
+    else x
+    args <- rep(alist(a = ), ndim)
+    names(args) <- NULL
+    args[[MARGIN]] <- !duplicated.default(temp, fromLast = fromLast,
+        ...)
+    do.call("[", c(list(x), args, list(drop = FALSE)))
+}
+<bytecode: 0x55f1a032dfd8>
+<environment: namespace:base>
+function (x, incomparables = FALSE, MARGIN = 1, fromLast = FALSE,
+    ...)
+{
+    if (!isFALSE(incomparables))
+        .NotYetUsed("incomparables != FALSE")
+    dx <- dim(x)
+    ndim <- length(dx)
+    if (length(MARGIN) != 1L || (MARGIN > ndim))
+        stop(gettextf("MARGIN = %s is invalid for dim = %s",
+            paste(MARGIN, collapse = ","), paste(dx, collapse = ",")),
+            domain = NA)
+    temp <- if ((ndim > 1L) && (prod(dx[-MARGIN]) > 1L))
+        asplit(x, MARGIN)
+    else x
+    args <- rep(alist(a = ), ndim)
+    names(args) <- NULL
+    args[[MARGIN]] <- !duplicated.default(temp, fromLast = fromLast,
+        ...)
+    do.call("[", c(list(x), args, list(drop = FALSE)))
+}
+<bytecode: 0x55f1a04ad5a8>
+<environment: namespace:base>
+
+Shape: plain
+class(input): character ; class(input[0]): character
+ chr [1:2] "b" "c"
+
+Shape: named
+class(input): character ; class(input[0]): character
+ chr [1:2] "b" "c"
+
+Shape: metadata
+class(input): character ; class(input[0]): character
+ chr [1:2] "b" "c"
+
+Shape: one_array
+class(input): array ; class(input[0]): character
+ chr [1:2] "b" "c"
+
+Shape: row_matrix
+class(input): matrix ; class(input[0]): character
+ chr [1:2] "b" "c"
+
+Shape: column_matrix
+class(input): matrix ; class(input[0]): character
+ chr [1:2] "b" "c"
+
+Shape: first_array
+class(input): array ; class(input[0]): character
+ chr [1:2] "b" "c"
+
+Shape: last_array
+class(input): array ; class(input[0]): character
+ chr [1:2] "b" "c"
+
+Shape: as_is
+class(input): AsIs ; class(input[0]): AsIs
+ chr [1:2] "b" "c"
+
+Shape: inert_class
+class(input): cnf_closure_no_methods ; class(input[0]): character
+ chr [1:2] "b" "c"
+
+Shape: named_matrix
+class(input): matrix ; class(input[0]): character
+ chr [1:2] "b" "c"
+
+Shape: two_matrix
+class(input): matrix ; class(input[0]): character
+ chr [1:2] "b" "c"
+
+Shape: two_array
+class(input): array ; class(input[0]): character
+ chr [1:2] "b" "c"

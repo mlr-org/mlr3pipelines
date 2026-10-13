@@ -1,0 +1,96 @@
+{
+  "R_version": "R version 4.6.1 (2026-06-24)",
+  "valuations": 360,
+  "models": 2,
+  "modes": {
+    "production": {
+      "error": null,
+      "warnings": [],
+      "events": [],
+      "output": [
+        {
+          "X1": "v6",
+          "X3": "v3"
+        },
+        {
+          "X2": "v4"
+        },
+        {
+          "X1": "v5",
+          "X4": "v4"
+        },
+        {
+          "X4": "v2",
+          "X3": "v6"
+        }
+      ],
+      "agrees_with_truth_table": true
+    },
+    "observed_production": {
+      "error": null,
+      "warnings": [],
+      "events": [
+        {
+          "kind": "already cleared",
+          "donor": 11,
+          "target": 10,
+          "symbol": "X2",
+          "stored_count": 2,
+          "row_sum": 2,
+          "call_heads": ["tryCatch", "tryCatchList", "tryCatchOne", "doTryCatch", "withCallingHandlers", "environment$simplify_cnf", "identical", "on_updated_subset_relations", "handle_sse_2nd_order_twoend", "try_sse_2nd_order", "apply_domain_restriction", "on_update_range", "handle_sse_2nd_order_oneend", "try_sse_2nd_order", "apply_domain_restriction", ".record"]
+        }
+      ],
+      "output": [
+        {
+          "X1": "v6",
+          "X3": "v3"
+        },
+        {
+          "X2": "v4"
+        },
+        {
+          "X1": "v5",
+          "X4": "v4"
+        },
+        {
+          "X4": "v2",
+          "X3": "v6"
+        }
+      ],
+      "agrees_with_truth_table": true
+    },
+    "changed_copy": {
+      "error": "the condition has length > 1",
+      "warnings": [],
+      "events": [],
+      "output": null,
+      "agrees_with_truth_table": null
+    },
+    "observed_changed_copy": {
+      "error": "the condition has length > 1",
+      "warnings": [],
+      "events": [
+        {
+          "kind": "already cleared",
+          "donor": 11,
+          "target": 10,
+          "symbol": "X2",
+          "stored_count": 2,
+          "row_sum": 2,
+          "call_heads": ["tryCatch", "tryCatchList", "tryCatchOne", "doTryCatch", "withCallingHandlers", "environment$simplify_cnf", "identical", "on_updated_subset_relations", "handle_sse_2nd_order_twoend", "try_sse_2nd_order", "apply_domain_restriction", "on_update_range", "handle_sse_2nd_order_oneend", "try_sse_2nd_order", "apply_domain_restriction", ".record"]
+        },
+        {
+          "kind": "count differs from row",
+          "donor": 11,
+          "target": 10,
+          "symbol": "X2",
+          "stored_count": 1,
+          "row_sum": 2,
+          "call_heads": ["tryCatch", "tryCatchList", "tryCatchOne", "doTryCatch", "withCallingHandlers", "environment$simplify_cnf", "identical", "on_updated_subset_relations", "handle_sse_2nd_order_twoend", "try_sse_2nd_order", "apply_domain_restriction", "on_update_range", "handle_sse_2nd_order_oneend", "try_sse_2nd_order", "apply_domain_restriction", ".record"]
+        }
+      ],
+      "output": null,
+      "agrees_with_truth_table": null
+    }
+  }
+}

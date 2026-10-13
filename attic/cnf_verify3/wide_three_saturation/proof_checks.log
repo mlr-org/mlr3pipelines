@@ -1,0 +1,1 @@
+{"support_counts": {"satisfiable_support_triples": 78310, "fixed_symbol_support_checks": 543821, "common_triple_matching_exceptions": 105, "sorted_relay_support_checks": 64}, "projection_counts": {"common_triple_projection_checks": 373248, "fixed_values_excluded_by_disjoint_residual_ranges": 36}, "local_obligations": 454}

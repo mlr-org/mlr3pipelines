@@ -1,0 +1,201 @@
+
+CASE: four_clause
+Input: [1:X={b,c} OR 2:X={b,c}] AND [1:X={b} OR 2:Y={c}] AND [1:X={c} OR 2:Y={b}] AND [1:X={a} OR 2:Y={a}]
+Output: [1:X={c}] AND [1:Y={a}]
+Truth-table assignments:
+  X Y input positional projection
+1 a a FALSE      FALSE      FALSE
+2 b a FALSE      FALSE      FALSE
+3 c a FALSE       TRUE       TRUE
+4 a b FALSE      FALSE      FALSE
+5 b b FALSE      FALSE      FALSE
+6 c b FALSE      FALSE      FALSE
+7 a c FALSE      FALSE      FALSE
+8 b c FALSE      FALSE      FALSE
+9 c c FALSE      FALSE      FALSE
+
+Event 47 source line 167 clause 1
+Before: 1:X={b,c} OR 2:X={b,c}
+After:  1:X={b} OR 2:X={b,c}
+Still-live context: [1:X={b} OR 2:Y={c}] AND [1:X={c} OR 2:Y={b}] AND [1:X={a} OR 2:Y={a}]
+positional raw delta - under live units - under all live constraints -
+projection raw delta 3,6,9 under live units 3,6,9 under all live constraints -
+
+Event 57 source line 474 clause 2
+Before: 1:X={b} OR 2:Y={c}
+After:  TRUE
+Still-live context: [1:X={b} OR 2:X={b,c}] AND [1:X={c} OR 2:Y={b}] AND [1:X={a} OR 2:Y={a}]
+positional raw delta 1,3,4,6 under live units 1,3,4,6 under all live constraints 3
+projection raw delta 1,3,4,6 under live units 1,3,4,6 under all live constraints -
+
+Event 70 source line 244 clause 1
+Before: 1:X={b} OR 2:X={b,c}
+After:  1:X={b,c}
+Still-live context: [1:X={c} OR 2:Y={b}] AND [1:X={a} OR 2:Y={a}]
+positional raw delta - under live units - under all live constraints -
+projection raw delta 3,6,9 under live units 3,6,9 under all live constraints 3
+
+Event 82 source line 244 clause 4
+Before: 1:X={a} OR 2:Y={a}
+After:  1:Y={a}
+Still-live context: [1:X={b,c}] AND [1:X={c} OR 2:Y={b}]
+positional raw delta 4,7 under live units - under all live constraints -
+projection raw delta 4,7 under live units - under all live constraints -
+
+Event 92 source line 244 clause 3
+Before: 1:X={c} OR 2:Y={b}
+After:  1:X={c}
+Still-live context: [1:X={b,c}] AND [1:Y={a}]
+positional raw delta 4,5 under live units - under all live constraints -
+projection raw delta 4,5 under live units - under all live constraints -
+
+Event 95 source line 103 clause 1
+Before: 1:X={b,c}
+After:  1:X={c}
+Still-live context: [1:X={c}] AND [1:Y={a}]
+positional raw delta 2,5,8 under live units - under all live constraints -
+projection raw delta 2,5,8 under live units - under all live constraints -
+
+Event 96 source line 104 clause 3
+Before: 1:X={c}
+After:  TRUE
+Still-live context: [1:X={c}] AND [1:Y={a}]
+positional raw delta 1,2,4,5,7,8 under live units - under all live constraints -
+projection raw delta 1,2,4,5,7,8 under live units - under all live constraints -
+
+Unit registry commit event 73 source line 93 clause 1 : 1:X={b,c}
+The independently interpreted live formula already entails this recorded unit.
+
+Unit registry commit event 85 source line 93 clause 4 : 1:Y={a}
+The independently interpreted live formula already entails this recorded unit.
+
+Unit registry commit event 95 source line 103 clause 1 : 1:X={c}
+The independently interpreted live formula already entails this recorded unit.
+
+CASE: stale_range
+Input: [1:Y={b,c} OR 2:X={a}] AND [1:Y={c,a} OR 2:X={a} OR 3:Y={c,a}]
+Output: [1:Y={c} OR 2:X={a} OR 3:Y={c,a}]
+Truth-table assignments:
+  X Y input positional projection
+1 a a  TRUE       TRUE       TRUE
+2 b a FALSE       TRUE      FALSE
+3 a b  TRUE       TRUE       TRUE
+4 b b FALSE      FALSE      FALSE
+5 a c  TRUE       TRUE       TRUE
+6 b c  TRUE       TRUE       TRUE
+
+Event 21 source line 167 clause 2
+Before: 1:Y={c,a} OR 2:X={a} OR 3:Y={c,a}
+After:  1:Y={c} OR 2:X={a} OR 3:Y={c,a}
+Still-live context: [1:Y={b,c} OR 2:X={a}]
+positional raw delta - under live units - under all live constraints -
+projection raw delta 2 under live units 2 under all live constraints -
+
+Event 28 source line 474 clause 1
+Before: 1:Y={b,c} OR 2:X={a}
+After:  TRUE
+Still-live context: [1:Y={c} OR 2:X={a} OR 3:Y={c,a}]
+positional raw delta 2 under live units 2 under all live constraints 2
+projection raw delta 2 under live units 2 under all live constraints -
+
+CASE: unit_hla_error
+Input: [1:X={a} OR 2:X={a}] AND [1:X={a,b}]
+Error: attempt to select less than one element in get1index
+Truth-table assignments:
+  X input positional projection
+1 a  TRUE       TRUE       TRUE
+2 b FALSE      FALSE      FALSE
+3 c FALSE      FALSE      FALSE
+
+Unit registry commit event 8 source line 93 clause 1 : 1:X={a,b}
+The independently interpreted live formula already entails this recorded unit.
+
+CASE: hla_virtual_control
+Input: [1:S1={1} OR 2:S2={1}] AND [1:S1={1} OR 2:S3={1}] AND [1:S3={0} OR 2:S4={1}]
+Output: [1:S1={1} OR 2:S2={1}] AND [1:S1={1} OR 2:S3={1}] AND [1:S3={0} OR 2:S4={1}]
+Truth-table assignments:
+   S1 S2 S3 S4 input positional projection
+1   0  0  0  0 FALSE      FALSE      FALSE
+2   1  0  0  0  TRUE       TRUE       TRUE
+3   0  1  0  0 FALSE      FALSE      FALSE
+4   1  1  0  0  TRUE       TRUE       TRUE
+5   0  0  1  0 FALSE      FALSE      FALSE
+6   1  0  1  0 FALSE      FALSE      FALSE
+7   0  1  1  0 FALSE      FALSE      FALSE
+8   1  1  1  0 FALSE      FALSE      FALSE
+9   0  0  0  1 FALSE      FALSE      FALSE
+10  1  0  0  1  TRUE       TRUE       TRUE
+11  0  1  0  1 FALSE      FALSE      FALSE
+12  1  1  0  1  TRUE       TRUE       TRUE
+13  0  0  1  1 FALSE      FALSE      FALSE
+14  1  0  1  1  TRUE       TRUE       TRUE
+15  0  1  1  1  TRUE       TRUE       TRUE
+16  1  1  1  1  TRUE       TRUE       TRUE
+
+HLA proposal event 49 source line 693 target 1 donor 2 symbol S3
+Before: 1:S1={1} OR 2:S2={1}
+After:  1:S1={1} OR 2:S2={1} OR 3:S3={0}
+positional raw delta 1,9 under all live constraints -
+projection raw delta 1,9 under all live constraints -
+
+HLA proposal event 57 source line 693 target 1 donor 3 symbol S4
+Before: 1:S1={1} OR 2:S2={1} OR 3:S3={0}
+After:  1:S1={1} OR 2:S2={1} OR 3:S3={0} OR 4:S4={0}
+positional raw delta 5 under all live constraints -
+projection raw delta 5 under all live constraints -
+
+HLA proposal event 64 source line 693 target 2 donor 1 symbol S2
+Before: 1:S1={1} OR 2:S3={1}
+After:  1:S1={1} OR 2:S3={1} OR 3:S2={0}
+positional raw delta 1,9 under all live constraints -
+projection raw delta 1,9 under all live constraints -
+
+CASE: hla_orphan_deletion_control
+Input: [1:S1={0} OR 2:S2={1}] AND [1:S1={1} OR 2:S1={1} OR 3:S2={1} OR 4:S3={1}] AND [1:S1={1} OR 2:S2={0}] AND [1:S2={0} OR 2:S3={0}]
+Output: [1:S1={0} OR 2:S2={1}] AND [1:S2={0} OR 2:S3={0}] AND [1:S1={1} OR 2:S3={1}]
+Truth-table assignments:
+  S1 S2 S3 input positional projection
+1  0  0  0 FALSE      FALSE      FALSE
+2  1  0  0 FALSE      FALSE      FALSE
+3  0  1  0 FALSE      FALSE      FALSE
+4  1  1  0  TRUE       TRUE       TRUE
+5  0  0  1  TRUE       TRUE       TRUE
+6  1  0  1 FALSE      FALSE      FALSE
+7  0  1  1 FALSE      FALSE      FALSE
+8  1  1  1 FALSE      FALSE      FALSE
+
+Event 42 source line 244 clause 4
+Before: 1:S1={1} OR 2:S1={1} OR 3:S2={1} OR 4:S3={1}
+After:  1:S1={1} OR 2:S2={1} OR 3:S3={1}
+Still-live context: [1:S1={0} OR 2:S2={1}] AND [1:S1={1} OR 2:S2={0}] AND [1:S2={0} OR 2:S3={0}]
+positional raw delta - under live units - under all live constraints -
+projection raw delta - under live units - under all live constraints -
+
+Event 56 source line 244 clause 4
+Before: 1:S1={1} OR 2:S2={1} OR 3:S3={1}
+After:  1:S1={1} OR 2:S3={1}
+Still-live context: [1:S1={0} OR 2:S2={1}] AND [1:S1={1} OR 2:S2={0}] AND [1:S2={0} OR 2:S3={0}]
+positional raw delta 3 under live units 3 under all live constraints -
+projection raw delta 3 under live units 3 under all live constraints -
+
+Event 138 source line 474 clause 2
+Before: 1:S1={1} OR 2:S2={0}
+After:  TRUE
+Still-live context: [1:S1={0} OR 2:S2={1}] AND [1:S2={0} OR 2:S3={0}] AND [1:S1={1} OR 2:S3={1}]
+positional raw delta 3,7 under live units 3,7 under all live constraints -
+projection raw delta 3,7 under live units 3,7 under all live constraints -
+
+HLA proposal event 129 source line 693 target 2 donor 3 symbol S3
+Before: 1:S1={1} OR 2:S2={0}
+After:  1:S1={1} OR 2:S2={0} OR 3:S3={1}
+positional raw delta 7 under all live constraints -
+projection raw delta 7 under all live constraints -
+
+HLA proposal event 137 source line 693 target 2 donor 4 symbol S1
+Before: 1:S1={1} OR 2:S2={0} OR 3:S3={1}
+After:  1:S1={1,0} OR 2:S2={0} OR 3:S3={1}
+positional raw delta 3 under all live constraints -
+projection raw delta 3 under all live constraints -
+
+All unchanged/instrumented outputs agree, including duplicate positions and the runtime error.
+R: R version 4.6.1 (2026-06-24) ; checkmate: 2.3.4

@@ -1,0 +1,190 @@
+R version 4.6.1 (2026-06-24)
+
+all.equal.list
+function (target, current, ..., check.attributes = TRUE, use.names = TRUE)
+{
+    if (!is.logical(check.attributes))
+        stop(gettextf("'%s' must be logical", "check.attributes"),
+            domain = NA)
+    if (!is.logical(use.names))
+        stop(gettextf("'%s' must be logical", "use.names"), domain = NA)
+    msg <- if (check.attributes)
+        attr.all.equal(target, current, ...)
+    target <- unclass(target)
+    current <- unclass(current)
+    if (!is.list(target) && !is.vector(target))
+        return(c(msg, "target is not list-like"))
+    if (!is.list(current) && !is.vector(current))
+        return(c(msg, "current is not list-like"))
+    if ((n <- length(target)) != length(current)) {
+        if (!is.null(msg))
+            msg <- msg[-grep("\\bLengths\\b", msg)]
+        n <- min(n, length(current))
+        msg <- c(msg, paste("Length mismatch: comparison on first",
+            n, "components"))
+    }
+    iseq <- seq_len(n)
+    if (use.names)
+        use.names <- (length(nt <- names(target)[iseq]) == n &&
+            length(nc <- names(current)[iseq]) == n)
+    for (i in iseq) {
+        mi <- all.equal(target[[i]], current[[i]], check.attributes = check.attributes,
+            use.names = use.names, ...)
+        if (is.character(mi))
+            msg <- c(msg, paste0("Component ", if (use.names &&
+                nt[i] == nc[i]) dQuote(nt[i]) else i, ": ", mi))
+    }
+    if (is.null(msg))
+        TRUE
+    else msg
+}
+
+all.equal.character
+function (target, current, ..., check.attributes = TRUE, check.class = TRUE)
+{
+    if (!is.logical(check.attributes))
+        stop(gettextf("'%s' must be logical", "check.attributes"),
+            domain = NA)
+    msg <- if (check.attributes)
+        attr.all.equal(target, current, ...)
+    if (check.class && data.class(target) != data.class(current)) {
+        msg <- c(msg, paste0("target is ", data.class(target),
+            ", current is ", data.class(current)))
+        return(msg)
+    }
+    lt <- length(target)
+    lc <- length(current)
+    if (lt != lc) {
+        if (!is.null(msg))
+            msg <- msg[-grep("\\bLengths\\b", msg)]
+        msg <- c(msg, paste0("Lengths (", lt, ", ", lc, ") differ (string compare on first ",
+            ll <- min(lt, lc), ")"))
+        ll <- seq_len(ll)
+        target <- target[ll]
+        current <- current[ll]
+    }
+    nas <- is.na(target)
+    nasc <- is.na(current)
+    if (any(nas != nasc)) {
+        msg <- c(msg, paste("'is.NA' value mismatch:", sum(nasc),
+            "in current", sum(nas), "in target"))
+        return(msg)
+    }
+    ne <- !nas & (target != current)
+    if (!any(ne) && is.null(msg))
+        TRUE
+    else if (sum(ne) == 1L)
+        c(msg, paste("1 string mismatch"))
+    else if (sum(ne) > 1L)
+        c(msg, paste(sum(ne), "string mismatches"))
+    else msg
+}
+
+attr.all.equal
+function (target, current, ..., check.attributes = TRUE, check.names = TRUE)
+{
+    if (!is.logical(check.attributes))
+        stop(gettextf("'%s' must be logical", "check.attributes"),
+            domain = NA)
+    if (!is.logical(check.names))
+        stop(gettextf("'%s' must be logical", "check.names"),
+            domain = NA)
+    msg <- NULL
+    if (mode(target) != mode(current))
+        msg <- paste0("Modes: ", mode(target), ", ", mode(current))
+    if (length(target) != length(current))
+        msg <- c(msg, paste0("Lengths: ", length(target), ", ",
+            length(current)))
+    ax <- attributes(target)
+    ay <- attributes(current)
+    if (check.names) {
+        nx <- names(target)
+        ny <- names(current)
+        lx <- length(nx)
+        ly <- length(ny)
+        if (lx || ly) {
+            ax$names <- ay$names <- NULL
+            if (lx && ly) {
+                if (is.character(m <- all.equal.character(nx,
+                  ny, check.attributes = check.attributes)))
+                  msg <- c(msg, paste("Names:", m))
+            }
+            else if (lx)
+                msg <- c(msg, "names for target but not for current")
+            else msg <- c(msg, "names for current but not for target")
+        }
+    }
+    else {
+        ax[["names"]] <- NULL
+        ay[["names"]] <- NULL
+    }
+    if (check.attributes && (length(ax) || length(ay))) {
+        nx <- names(ax)
+        ny <- names(ay)
+        if (length(nx))
+            ax <- ax[order(nx)]
+        if (length(ny))
+            ay <- ay[order(ny)]
+        tt <- all.equal(ax, ay, ..., check.attributes = check.attributes)
+        if (is.character(tt))
+            msg <- c(msg, paste("Attributes: <", tt, ">"))
+    }
+    msg
+}
+
+all.equal.environment
+function (target, current, all.names = TRUE, evaluate = TRUE,
+    ...)
+{
+    if (!is.environment(target))
+        return("'target' is not an environment")
+    if (!is.environment(current))
+        return("'current' is not an environment")
+    if (identical(target, current))
+        return(TRUE)
+    ae.run <- dynGet("__all.eq.E__", NULL)
+    if (is.null(ae.run))
+        "__all.eq.E__" <- environment()
+    else {
+        do1 <- function(em) {
+            if (identical(target, em$target) && identical(current,
+                em$current))
+                TRUE
+            else if (!is.null(em$mm))
+                do1(em$mm)
+            else {
+                e <- new.env(parent = emptyenv())
+                e$target <- target
+                e$current <- current
+                em$mm <- e
+                FALSE
+            }
+        }
+        if (do1(ae.run))
+            return(TRUE)
+    }
+    if (evaluate) {
+        Lt <- as.list.environment(target, all.names = all.names,
+            sorted = TRUE)
+        Lc <- as.list.environment(current, all.names = all.names,
+            sorted = TRUE)
+        if (identical(Lt, Lc))
+            TRUE
+        else all.equal.list(Lt, Lc, ...)
+    }
+    else {
+        if (!identical(nt <- sort(names(target)), nc <- sort(names(current))))
+            paste("names of environments differ:", all.equal(nt,
+                nc, ...), collapse = " ")
+        else "environments contain objects of the same names, but are not identical"
+    }
+}
+
+sort.default
+function (x, decreasing = FALSE, na.last = NA, ...)
+{
+    if (is.object(x))
+        x[order(x, na.last = na.last, decreasing = decreasing)]
+    else sort.int(x, na.last = na.last, decreasing = decreasing,
+        ...)
+}

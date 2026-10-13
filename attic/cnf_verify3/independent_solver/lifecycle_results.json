@@ -1,0 +1,18 @@
+{
+  "elapsed": 527.3385553359985,
+  "stats": {
+    "sse1": 74998,
+    "sse2": 109814,
+    "hla": 259399,
+    "formulas": 5000,
+    "subsumption": 4531,
+    "unit_skip": 5229,
+    "unit_skip_proper": 5136,
+    "unit_hla": 6069,
+    "contextual_sse1": 7,
+    "unit_skip_outside": 57,
+    "contextual_sse2": 18,
+    "unit_skip_absent": 31,
+    "unit_skip_equal": 5
+  }
+}

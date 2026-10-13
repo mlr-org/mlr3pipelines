@@ -1,0 +1,26 @@
+R: R version 4.6.1 (2026-06-24) ; checkmate: 2.3.4
+Ordered Boolean cases: 2322 ; wrong truth tables: 0; errors: 0; warnings: 0; class losses: 20
+list(list(label = "logical_true | clause", expected = "CnfClause",
+    actual = "logical"), list(label = "logical_true | CnfClause_false",
+    expected = "CnfClause", actual = "logical"), list(label = "logical_true | CnfClause_named_false",
+    expected = "CnfClause", actual = "logical"), list(label = "logical_true | CnfClause_matrix_false",
+    expected = "CnfClause", actual = "logical"), list(label = "logical_true | CnfClause_attr_false",
+    expected = "CnfClause", actual = "logical"), list(label = "logical_named_true | clause",
+    expected = "CnfClause", actual = "logical"), list(label = "logical_named_true | CnfClause_false",
+    expected = "CnfClause", actual = "logical"), list(label = "logical_named_true | CnfClause_named_false",
+    expected = "CnfClause", actual = "logical"), list(label = "logical_named_true | CnfClause_matrix_false",
+    expected = "CnfClause", actual = "logical"), list(label = "logical_named_true | CnfClause_attr_false",
+    expected = "CnfClause", actual = "logical"), list(label = "logical_matrix_true | clause",
+    expected = "CnfClause", actual = c("matrix", "array")), list(
+    label = "logical_matrix_true | CnfClause_false", expected = "CnfClause",
+    actual = c("matrix", "array")), list(label = "logical_matrix_true | CnfClause_named_false",
+    expected = "CnfClause", actual = c("matrix", "array")), list(
+    label = "logical_matrix_true | CnfClause_matrix_false", expected = "CnfClause",
+    actual = c("matrix", "array")), list(label = "logical_matrix_true | CnfClause_attr_false",
+    expected = "CnfClause", actual = c("matrix", "array")), list(
+    label = "logical_attr_true | clause", expected = "CnfClause",
+    actual = "logical"), list(label = "logical_attr_true | CnfClause_false",
+    expected = "CnfClause", actual = "logical"), list(label = "logical_attr_true | CnfClause_named_false",
+    expected = "CnfClause", actual = "logical"), list(label = "logical_attr_true | CnfClause_matrix_false",
+    expected = "CnfClause", actual = "logical"), list(label = "logical_attr_true | CnfClause_attr_false",
+    expected = "CnfClause", actual = "logical"))

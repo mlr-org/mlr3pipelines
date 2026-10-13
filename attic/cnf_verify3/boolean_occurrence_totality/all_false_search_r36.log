@@ -1,0 +1,7 @@
+Found after 2 search cases; reduced signed clauses:
+list(c(-1L, 2L), c(3L, -2L), c(1L, 1L, 1L), c(-3L, -1L))
+Unit: X1 donor: 4 lazy row:
+   X1    X1
+FALSE FALSE
+Physical initial counts:
+[1] 2 2

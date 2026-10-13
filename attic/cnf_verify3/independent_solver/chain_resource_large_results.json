@@ -1,0 +1,53 @@
+{
+  "reports": [
+    {
+      "version": "r46",
+      "n": 1024,
+      "order": "forward",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 1024 reverse: FALSE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      24320          1          5 \nseconds: 0.844 \nPASS: exactly the 1024 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 1024,
+      "order": "reverse",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 1024 reverse: TRUE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      20592          1          5 \nseconds: 0.729 \nERROR: node stack overflow \n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 2048,
+      "order": "forward",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 2048 reverse: FALSE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      25088          1          5 \nseconds: 1.057 \nPASS: exactly the 2048 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 2048,
+      "order": "reverse",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 2048 reverse: TRUE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      24336          1          5 \nseconds: 0.708 \nERROR: node stack overflow \n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 4096,
+      "order": "forward",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 4096 reverse: FALSE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      22720          1          5 \nseconds: 1.709 \nPASS: exactly the 4096 entailed units\n",
+      "stderr": ""
+    },
+    {
+      "version": "r46",
+      "n": 4096,
+      "order": "reverse",
+      "exit_code": 0,
+      "stdout": "R version 4.6.1 (2026-06-24)\ncheckmate: 2.3.4 \nsymbols: 4096 reverse: TRUE expressions: 5000 \n      size    current  direction eval_depth \n   7969177      22320          1          5 \nseconds: 0.756 \nERROR: node stack overflow \n",
+      "stderr": ""
+    }
+  ],
+  "elapsed": 16.23202610015869
+}

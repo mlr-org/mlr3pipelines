@@ -1,0 +1,31 @@
+{
+  "runtime": "4.6.1",
+  "records": [
+    {
+      "ctype": "C.UTF-8",
+      "equivalent_names": true,
+      "alias_retrieved": true,
+      "second_registration_accepted": false,
+      "universe_binding_count": 1,
+      "clause_width": 1,
+      "clause_duplicate_r_names": false,
+      "returned_clause_width": 1,
+      "kernel_received_duplicate_names": false,
+      "formula_returned_duplicate_names": false,
+      "warnings": []
+    },
+    {
+      "ctype": "C",
+      "equivalent_names": true,
+      "alias_retrieved": false,
+      "second_registration_accepted": true,
+      "universe_binding_count": 2,
+      "clause_width": 2,
+      "clause_duplicate_r_names": true,
+      "returned_clause_width": 2,
+      "kernel_received_duplicate_names": true,
+      "formula_returned_duplicate_names": true,
+      "warnings": ["unable to translate '<U+00E9>' to native encoding", "unable to translate '<e9>' to native encoding"]
+    }
+  ]
+}

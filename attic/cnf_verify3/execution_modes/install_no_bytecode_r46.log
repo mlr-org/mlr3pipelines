@@ -1,0 +1,15 @@
+* installing *source* package ‘mlr3pipelines’ ...
+** this is package ‘mlr3pipelines’ version ‘0.11.0-9000’
+** using staged installation
+** R
+** inst
+** preparing package for lazy loading
+** help
+*** installing help indices
+*** copying figures
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (mlr3pipelines)

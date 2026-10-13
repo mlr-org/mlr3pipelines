@@ -1,0 +1,39 @@
+decision invariants: n=1 seed=804
+$enter_on_updated_subset_relations
+[1] 8
+
+$equivalence_checks
+[1] 54
+
+$projected_certificates
+[1] 11
+
+$pair_checks
+[1] 10
+
+$enter_apply_domain_restriction
+[1] 11
+
+$enter_eliminate_symbol_from_clause
+[1] 3
+
+$enter_register_unit
+[1] 3
+
+$matrix_skips
+[1] 2
+
+$enter_eliminate_clause_update_sr
+[1] 2
+
+$raw_stale_positive
+[1] 1
+
+$deferred_raw_restriction_skips
+[1] 1
+
+$nested_same_symbol_register_exit
+[1] 1
+
+$outermost_unit_postconditions
+[1] 2

@@ -1,0 +1,3 @@
+Two copies: equivalent to s1=b OR s2=b, with a proper nonempty range shrink.
+3 copies: all original ranges frozen; output unchanged.
+4 copies: all original ranges frozen; output unchanged.

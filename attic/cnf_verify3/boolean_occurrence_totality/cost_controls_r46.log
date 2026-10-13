@@ -1,0 +1,341 @@
+fixed_two_clauses_4
+$clauses
+[1] 2
+
+$occurrences
+[1] 6
+
+$helper_roots
+[1] 7
+
+$helper_calls
+[1] 16
+
+$max_children
+$max_children$register_unit
+[1] 0
+
+$max_children$char_intersect
+[1] 0
+
+$max_children$eliminate_symbol_from_clause
+[1] 1
+
+$max_children$apply_domain_restriction
+[1] 2
+
+$max_children$return_entries
+[1] 0
+
+
+$max_helper_depth
+[1] 3
+
+$strict_restriction_ancestor_checks
+[1] 0
+
+fixed_three_clauses_4
+$clauses
+[1] 3
+
+$occurrences
+[1] 9
+
+$helper_roots
+[1] 5
+
+$helper_calls
+[1] 25
+
+$max_children
+$max_children$char_intersect
+[1] 0
+
+$max_children$eliminate_clause_update_sr
+[1] 0
+
+$max_children$apply_domain_restriction
+[1] 2
+
+$max_children$eliminate_symbol_from_clause
+[1] 1
+
+$max_children$register_unit
+[1] 5
+
+$max_children$on_updated_subset_relations
+[1] 1
+
+$max_children$return_entries
+[1] 0
+
+
+$max_helper_depth
+[1] 7
+
+$strict_restriction_ancestor_checks
+[1] 5
+
+fixed_two_clauses_32
+$clauses
+[1] 2
+
+$occurrences
+[1] 34
+
+$helper_roots
+[1] 35
+
+$helper_calls
+[1] 100
+
+$max_children
+$max_children$register_unit
+[1] 0
+
+$max_children$char_intersect
+[1] 0
+
+$max_children$eliminate_symbol_from_clause
+[1] 1
+
+$max_children$apply_domain_restriction
+[1] 2
+
+$max_children$return_entries
+[1] 0
+
+
+$max_helper_depth
+[1] 3
+
+$strict_restriction_ancestor_checks
+[1] 0
+
+fixed_three_clauses_32
+$clauses
+[1] 3
+
+$occurrences
+[1] 37
+
+$helper_roots
+[1] 5
+
+$helper_calls
+[1] 109
+
+$max_children
+$max_children$char_intersect
+[1] 0
+
+$max_children$eliminate_clause_update_sr
+[1] 0
+
+$max_children$apply_domain_restriction
+[1] 2
+
+$max_children$eliminate_symbol_from_clause
+[1] 1
+
+$max_children$register_unit
+[1] 33
+
+$max_children$on_updated_subset_relations
+[1] 1
+
+$max_children$return_entries
+[1] 0
+
+
+$max_helper_depth
+[1] 7
+
+$strict_restriction_ancestor_checks
+[1] 33
+
+fixed_two_clauses_128
+$clauses
+[1] 2
+
+$occurrences
+[1] 130
+
+$helper_roots
+[1] 131
+
+$helper_calls
+[1] 388
+
+$max_children
+$max_children$register_unit
+[1] 0
+
+$max_children$char_intersect
+[1] 0
+
+$max_children$eliminate_symbol_from_clause
+[1] 1
+
+$max_children$apply_domain_restriction
+[1] 2
+
+$max_children$return_entries
+[1] 0
+
+
+$max_helper_depth
+[1] 3
+
+$strict_restriction_ancestor_checks
+[1] 0
+
+fixed_three_clauses_128
+$clauses
+[1] 3
+
+$occurrences
+[1] 133
+
+$helper_roots
+[1] 5
+
+$helper_calls
+[1] 397
+
+$max_children
+$max_children$char_intersect
+[1] 0
+
+$max_children$eliminate_clause_update_sr
+[1] 0
+
+$max_children$apply_domain_restriction
+[1] 2
+
+$max_children$eliminate_symbol_from_clause
+[1] 1
+
+$max_children$register_unit
+[1] 129
+
+$max_children$on_updated_subset_relations
+[1] 1
+
+$max_children$return_entries
+[1] 0
+
+
+$max_helper_depth
+[1] 7
+
+$strict_restriction_ancestor_checks
+[1] 129
+
+reverse_duplicate_unit_chain_8
+$clauses
+[1] 9
+
+$occurrences
+[1] 25
+
+$helper_roots
+[1] 12
+
+$helper_calls
+[1] 66
+
+$max_children
+$max_children$register_unit
+[1] 2
+
+$max_children$char_intersect
+[1] 0
+
+$max_children$eliminate_symbol_from_clause
+[1] 1
+
+$max_children$apply_domain_restriction
+[1] 2
+
+$max_children$return_entries
+[1] 0
+
+
+$max_helper_depth
+[1] 24
+
+$strict_restriction_ancestor_checks
+[1] 56
+
+reverse_duplicate_unit_chain_24
+$clauses
+[1] 25
+
+$occurrences
+[1] 73
+
+$helper_roots
+[1] 28
+
+$helper_calls
+[1] 194
+
+$max_children
+$max_children$register_unit
+[1] 2
+
+$max_children$char_intersect
+[1] 0
+
+$max_children$eliminate_symbol_from_clause
+[1] 1
+
+$max_children$apply_domain_restriction
+[1] 2
+
+$max_children$return_entries
+[1] 0
+
+
+$max_helper_depth
+[1] 72
+
+$strict_restriction_ancestor_checks
+[1] 552
+
+reverse_duplicate_unit_chain_48
+$clauses
+[1] 49
+
+$occurrences
+[1] 145
+
+$helper_roots
+[1] 52
+
+$helper_calls
+[1] 386
+
+$max_children
+$max_children$register_unit
+[1] 2
+
+$max_children$char_intersect
+[1] 0
+
+$max_children$eliminate_symbol_from_clause
+[1] 1
+
+$max_children$apply_domain_restriction
+[1] 2
+
+$max_children$return_entries
+[1] 0
+
+
+$max_helper_depth
+[1] 144
+
+$strict_restriction_ancestor_checks
+[1] 2256

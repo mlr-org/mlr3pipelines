@@ -1,0 +1,5 @@
+masks 1024/4096: {'cases': 2048, 'contradiction': 966, 'short_seed_occurrences': 5248, 'closure_unit_occurrences': 7915}
+masks 2048/4096: {'cases': 4096, 'contradiction': 2130, 'short_seed_occurrences': 12032, 'closure_unit_occurrences': 16929}
+masks 3072/4096: {'cases': 6144, 'contradiction': 3298, 'short_seed_occurrences': 18816, 'closure_unit_occurrences': 25957}
+masks 4096/4096: {'cases': 8192, 'contradiction': 4835, 'short_seed_occurrences': 27648, 'closure_unit_occurrences': 36447}
+{"stats": {"cases": 8238, "contradiction": 4851, "short_seed_occurrences": 27660, "closure_unit_occurrences": 36989}, "seconds": 18.836394548416138}

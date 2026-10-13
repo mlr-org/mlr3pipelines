@@ -1,0 +1,13 @@
+{"completed": 5, "stats": {"formulas": 10, "constant_results": 10}, "errors": 0, "elapsed": 2.4200987815856934}
+{"completed": 10, "stats": {"formulas": 20, "constant_results": 16}, "errors": 0, "elapsed": 3.4421839714050293}
+{"completed": 15, "stats": {"formulas": 30, "constant_results": 16}, "errors": 0, "elapsed": 4.662693500518799}
+{"completed": 20, "stats": {"formulas": 180, "constant_results": 72}, "errors": 0, "elapsed": 6.327804327011108}
+{"completed": 25, "stats": {"formulas": 330, "constant_results": 114}, "errors": 0, "elapsed": 8.492759466171265}
+{"completed": 30, "stats": {"formulas": 480, "constant_results": 132}, "errors": 0, "elapsed": 10.07176399230957}
+{"completed": 35, "stats": {"formulas": 2730, "constant_results": 792}, "errors": 0, "elapsed": 22.20659112930298}
+{"completed": 40, "stats": {"formulas": 4980, "constant_results": 1630}, "errors": 0, "elapsed": 28.99542236328125}
+{"completed": 45, "stats": {"formulas": 7230, "constant_results": 2088}, "errors": 0, "elapsed": 37.25601387023926}
+{"completed": 50, "stats": {"formulas": 40980, "constant_results": 19382}, "errors": 0, "elapsed": 204.75653672218323}
+{"completed": 55, "stats": {"formulas": 74730, "constant_results": 30086}, "errors": 0, "elapsed": 292.9971387386322}
+{"completed": 60, "stats": {"formulas": 108480, "constant_results": 40732}, "errors": 0, "elapsed": 397.20546650886536}
+{"stats": {"formulas": 108480, "constant_results": 40732}, "errors": [], "elapsed": 397.21566462516785}

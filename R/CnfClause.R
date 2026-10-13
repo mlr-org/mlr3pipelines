@@ -16,6 +16,7 @@
 #' `CnfClause` objects which are not tautologies or contradictions are named lists;
 #' the value ranges of each symbol can be accessed using `[[`, and these clauses
 #' can be subset using `[` to get clauses containing only the indicated symbols.
+#' Indices must be atomic vectors without missing values; matrices and arrays are not supported.
 #' However, to get a list of [`CnfAtom`] objects, use `as.list()`.
 #' Note that the simplified form of a clause containing a contradiction is the empty list.
 #'
@@ -30,6 +31,10 @@
 #' If it contains at least one atom that is always true, the clause evaluates to `TRUE`.
 #' These values can be converted to, and from, `logical(1)` values using `as.logical()`
 #' and `as.CnfClause()`.
+#'
+#' Nonconstant inputs must belong to the same universe. Constant inputs adopt that
+#' universe regardless of their own universe. If all inputs are constant, the first
+#' available universe is retained, or `NULL` if none has a universe.
 #'
 #' `CnfClause` objects can be negated using the `!` operator, and combined using the
 #' `&` operator. Both of these operations return a [`CnfFormula`], even if the result
@@ -88,13 +93,18 @@ CnfClause = function(atoms) {
   assert_list(atoms, types = c("CnfAtom", "CnfClause"))
   if (!length(atoms)) return(as.CnfClause(FALSE))
 
-  entries = list()
-  universe = attr(atoms[[1]], "universe")
-  for (a in atoms) {
-    a_bare = unclass(a)
-    if (!identical(attr(a, "universe"), universe)) {
+  nonconstant = Filter(function(a) !is.logical(a), atoms)
+  universe = NULL
+  for (a in if (length(nonconstant)) nonconstant else atoms) {
+    if (is.null(universe)) universe = attr(a, "universe")
+    if (length(nonconstant) && !identical(attr(a, "universe"), universe)) {
       stop("All symbols must be in the same universe.")
     }
+  }
+
+  entries = list()
+  for (a in atoms) {
+    a_bare = unclass(a)
     if (isTRUE(a_bare)) {
       entries = TRUE
       break
@@ -208,7 +218,7 @@ as.logical.CnfClause = function(x, ...) {
 #' @export
 `[.CnfClause` = function(x, i) {
   if (missing(i)) return(x)
-  assert_atomic(i)
+  if (!is.null(i)) assert_atomic_vector(i, any.missing = FALSE)
   i = unclass(i)
   x_bare = unclass(x)
   true_length = if (isFALSE(x_bare)) 0 else length(x_bare)
@@ -264,10 +274,11 @@ all.equal.CnfClause = function(target, current, ...) {
   }
 
   normalize = function(clause) {
-    reorder = order(names(clause))
+    symbols = enc2utf8(names(clause))
+    reorder = order(symbols, method = "radix")
     # []-assign to preserve class and attributes
-    clause[] = lapply(unclass(clause)[reorder], sort)
-    names(clause) = names(clause)[reorder]  # also reorder names
+    clause[] = lapply(unclass(clause)[reorder], function(values) sort(enc2utf8(values), method = "radix"))
+    names(clause) = symbols[reorder]  # also reorder names
     clause
   }
 
@@ -277,31 +288,7 @@ all.equal.CnfClause = function(target, current, ...) {
   all.equal.list(target, current, ...)
 }
 
-#' @rawNamespace if (getRversion() >= "4.3.0") S3method(chooseOpsMethod,CnfClause)
-chooseOpsMethod.CnfClause <- function(x, y, mx, my, cl, reverse) TRUE
-
-#' @export
-`&.CnfClause` = function(e1, e2) {
-  # Will return a CnfFormula, so we can just delegate to there.
-  # `&.CnfFormula` handles conversion.
-  `&.CnfFormula`(e1, e2)
-}
-
-#' @export
-`|.CnfClause` = function(e1, e2) {
-  if (inherits(e2, "CnfFormula")) {
-    # `|.CnfFormula` handles conversion
-    return(`|.CnfFormula`(e1, e2))
-  }
-  e1_bare = unclass(e1)
-  e2_bare = unclass(e2)
-  if (isFALSE(e1_bare) || isTRUE(e2_bare)) return(as.CnfClause(e2))
-  if (isFALSE(e2_bare) || isTRUE(e1_bare)) return(e1)
-  CnfClause(list(e1, e2))
-}
-
 #' @export
 `!.CnfClause` = function(x) {
   !as.CnfFormula(x)
 }
-

@@ -42,6 +42,8 @@ Default \code{FALSE}.}
 \code{\link{Graph}}
 }
 \description{
+Deprecated in favor of \code{\link[=pipeline_bag]{pipeline_bag()}} (\code{ppl("bag")}), which has different defaults.
+
 Creates a \code{\link{Graph}} that performs bagging for a supplied graph.
 This is done as follows:
 \itemize{

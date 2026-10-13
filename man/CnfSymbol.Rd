@@ -11,11 +11,14 @@ CnfSymbol(universe, name, domain)
 The universe in which the symbol is defined.}
 
 \item{name}{(\code{character(1)}) \cr
-The name of the symbol.}
+The nonempty name of the symbol. It must be representable without substitution
+in the current character locale so that environment bindings preserve its identity.}
 
 \item{domain}{(\code{character}) \cr
 The domain, i.e. the set of possible values for the symbol.
-Must not be empty.}
+Must not be empty. Names and domains must be character vectors without dimensions
+or custom classes, missing values, byte-marked strings, or invalid encodings.
+Accepted text is converted to UTF-8; distinct Unicode code-point sequences remain distinct.}
 }
 \value{
 A new \code{CnfSymbol} object.
@@ -25,6 +28,7 @@ Representation of Symbols used in CNF formulas. Symbols have a name and a
 domain (a set of possible values), and are stored in a \code{\link{CnfUniverse}}.
 
 Once created, it is currently not intended to modify or delete symbols.
+Keep the character locale (\code{LC_CTYPE}) unchanged while a universe is in use.
 
 Symbols can be used in CNF formulas by creating \code{\link{CnfAtom}} objects, either
 by using the \verb{\%among\%} operator or by using the \code{\link[=CnfAtom]{CnfAtom()}} constructor

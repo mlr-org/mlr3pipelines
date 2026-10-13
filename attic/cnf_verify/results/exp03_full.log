@@ -1,0 +1,22 @@
+all 17 mutant patterns match uniquely
+running 17 mutants x up to 30000 trials each
+mutant                           expect   result   trials  kind       note
+M01_unit_merge_union             kill     KILLED   1       semantic   12/20 assignments differ
+M02_drop_unit_contradiction      kill     KILLED   3       structure  clause 2, symbol V1: empty or non-character range
+M03_subsume_also_subset          kill     KILLED   4       semantic   12/144 assignments differ
+M04_subset_direction_flip        kill     KILLED   9       semantic   1/24 assignments differ
+M05_sse_restrict_swap            kill     KILLED   4       semantic   12/144 assignments differ
+M06_hla_literal_not_complement   kill     KILLED   4       semantic   12/144 assignments differ
+M07_hla_taut_eager_nonunit       kill     KILLED   4       semantic   12/144 assignments differ
+M08_hla_taut_eager_unit          kill     KILLED   9       semantic   2/24 assignments differ
+M09_2nd_order_disjoint_drop      kill     KILLED   4       semantic   5/144 assignments differ
+M10_restrict_union               kill     KILLED   4       semantic   24/144 assignments differ
+M11_subsume_eliminate_self       kill     KILLED   8       semantic   9/400 assignments differ
+M12_stale_symbol_registry        info     KILLED   9       error      subscript out of bounds
+M13_unit_hla_count_no_adjust     info     SURVIVED 30000              
+M14_use_inso_skip_all            info     KILLED   1353    semantic   1/6 assignments differ
+M15_ctrl_no_hla_nonunit          survive  SURVIVED 30000              
+M16_ctrl_no_hla_unit             survive  SURVIVED 30000              
+M17_ctrl_no_2nd_order_trigger    survive  SURVIVED 30000              
+
+MUTATION TESTING: all expectations met

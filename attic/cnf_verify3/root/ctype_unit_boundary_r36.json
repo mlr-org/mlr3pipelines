@@ -1,0 +1,305 @@
+{
+  "runtime": "R version 3.6.3 (2020-02-29)",
+  "initial_ctype": "C.UTF-8",
+  "records": [
+    {
+      "ctype": "C",
+      "name_kind": "ascii",
+      "clause_count": 0,
+      "stats": {
+        "calls": 1,
+        "errors": 0,
+        "truth_differences": 0,
+        "false_unsat": 0,
+        "missed_unsat": 0,
+        "changed_satisfiable": 0,
+        "added_assignments": 0,
+        "removed_assignments": 0
+      }
+    },
+    {
+      "ctype": "C",
+      "name_kind": "ascii",
+      "clause_count": 1,
+      "stats": {
+        "calls": 20,
+        "errors": 0,
+        "truth_differences": 0,
+        "false_unsat": 0,
+        "missed_unsat": 0,
+        "changed_satisfiable": 0,
+        "added_assignments": 0,
+        "removed_assignments": 0
+      }
+    },
+    {
+      "ctype": "C",
+      "name_kind": "ascii",
+      "clause_count": 2,
+      "stats": {
+        "calls": 400,
+        "errors": 0,
+        "truth_differences": 0,
+        "false_unsat": 0,
+        "missed_unsat": 0,
+        "changed_satisfiable": 0,
+        "added_assignments": 0,
+        "removed_assignments": 0
+      }
+    },
+    {
+      "ctype": "C",
+      "name_kind": "ascii",
+      "clause_count": 3,
+      "stats": {
+        "calls": 8000,
+        "errors": 0,
+        "truth_differences": 0,
+        "false_unsat": 0,
+        "missed_unsat": 0,
+        "changed_satisfiable": 0,
+        "added_assignments": 0,
+        "removed_assignments": 0
+      }
+    },
+    {
+      "ctype": "C",
+      "name_kind": "utf8",
+      "clause_count": 0,
+      "stats": {
+        "calls": 1,
+        "errors": 0,
+        "truth_differences": 0,
+        "false_unsat": 0,
+        "missed_unsat": 0,
+        "changed_satisfiable": 0,
+        "added_assignments": 0,
+        "removed_assignments": 0
+      }
+    },
+    {
+      "ctype": "C",
+      "name_kind": "utf8",
+      "clause_count": 1,
+      "stats": {
+        "calls": 20,
+        "errors": 0,
+        "truth_differences": 0,
+        "false_unsat": 0,
+        "missed_unsat": 0,
+        "changed_satisfiable": 0,
+        "added_assignments": 0,
+        "removed_assignments": 0
+      }
+    },
+    {
+      "ctype": "C",
+      "name_kind": "utf8",
+      "clause_count": 2,
+      "stats": {
+        "calls": 400,
+        "errors": 0,
+        "truth_differences": 0,
+        "false_unsat": 0,
+        "missed_unsat": 0,
+        "changed_satisfiable": 0,
+        "added_assignments": 0,
+        "removed_assignments": 0
+      }
+    },
+    {
+      "ctype": "C",
+      "name_kind": "utf8",
+      "clause_count": 3,
+      "stats": {
+        "calls": 8000,
+        "errors": 0,
+        "truth_differences": 612,
+        "false_unsat": 0,
+        "missed_unsat": 36,
+        "changed_satisfiable": 576,
+        "added_assignments": 972,
+        "removed_assignments": 0
+      }
+    },
+    {
+      "ctype": "C.UTF-8",
+      "name_kind": "ascii",
+      "clause_count": 0,
+      "stats": {
+        "calls": 1,
+        "errors": 0,
+        "truth_differences": 0,
+        "false_unsat": 0,
+        "missed_unsat": 0,
+        "changed_satisfiable": 0,
+        "added_assignments": 0,
+        "removed_assignments": 0
+      }
+    },
+    {
+      "ctype": "C.UTF-8",
+      "name_kind": "ascii",
+      "clause_count": 1,
+      "stats": {
+        "calls": 20,
+        "errors": 0,
+        "truth_differences": 0,
+        "false_unsat": 0,
+        "missed_unsat": 0,
+        "changed_satisfiable": 0,
+        "added_assignments": 0,
+        "removed_assignments": 0
+      }
+    },
+    {
+      "ctype": "C.UTF-8",
+      "name_kind": "ascii",
+      "clause_count": 2,
+      "stats": {
+        "calls": 400,
+        "errors": 0,
+        "truth_differences": 0,
+        "false_unsat": 0,
+        "missed_unsat": 0,
+        "changed_satisfiable": 0,
+        "added_assignments": 0,
+        "removed_assignments": 0
+      }
+    },
+    {
+      "ctype": "C.UTF-8",
+      "name_kind": "ascii",
+      "clause_count": 3,
+      "stats": {
+        "calls": 8000,
+        "errors": 0,
+        "truth_differences": 0,
+        "false_unsat": 0,
+        "missed_unsat": 0,
+        "changed_satisfiable": 0,
+        "added_assignments": 0,
+        "removed_assignments": 0
+      }
+    },
+    {
+      "ctype": "C.UTF-8",
+      "name_kind": "utf8",
+      "clause_count": 0,
+      "stats": {
+        "calls": 1,
+        "errors": 0,
+        "truth_differences": 0,
+        "false_unsat": 0,
+        "missed_unsat": 0,
+        "changed_satisfiable": 0,
+        "added_assignments": 0,
+        "removed_assignments": 0
+      }
+    },
+    {
+      "ctype": "C.UTF-8",
+      "name_kind": "utf8",
+      "clause_count": 1,
+      "stats": {
+        "calls": 20,
+        "errors": 0,
+        "truth_differences": 0,
+        "false_unsat": 0,
+        "missed_unsat": 0,
+        "changed_satisfiable": 0,
+        "added_assignments": 0,
+        "removed_assignments": 0
+      }
+    },
+    {
+      "ctype": "C.UTF-8",
+      "name_kind": "utf8",
+      "clause_count": 2,
+      "stats": {
+        "calls": 400,
+        "errors": 0,
+        "truth_differences": 0,
+        "false_unsat": 0,
+        "missed_unsat": 0,
+        "changed_satisfiable": 0,
+        "added_assignments": 0,
+        "removed_assignments": 0
+      }
+    },
+    {
+      "ctype": "C.UTF-8",
+      "name_kind": "utf8",
+      "clause_count": 3,
+      "stats": {
+        "calls": 8000,
+        "errors": 0,
+        "truth_differences": 0,
+        "false_unsat": 0,
+        "missed_unsat": 0,
+        "changed_satisfiable": 0,
+        "added_assignments": 0,
+        "removed_assignments": 0
+      }
+    }
+  ],
+  "examples": {
+    "C:utf8:3:satisfiable": {
+      "indices": [12, 9, 1],
+      "input": [
+        {
+          "X": "b",
+          "Y": "b"
+        },
+        {
+          "X": "a",
+          "Y": "a"
+        },
+        {
+          "X": "a"
+        }
+      ],
+      "output": [
+        {
+          "X": "b",
+          "Y": "b"
+        },
+        {
+          "X": "a",
+          "Y": "a"
+        }
+      ],
+      "expected": [false, false, false, true, false, false],
+      "actual": [false, true, false, true, false, false]
+    },
+    "C:utf8:3:unsatisfiable": {
+      "indices": [16, 11, 1],
+      "input": [
+        {
+          "X": "c",
+          "Y": "b"
+        },
+        {
+          "X": "b",
+          "Y": "a"
+        },
+        {
+          "X": "a"
+        }
+      ],
+      "output": [
+        {
+          "X": "c",
+          "Y": "b"
+        },
+        {
+          "X": "b",
+          "Y": "a"
+        }
+      ],
+      "expected": [false, false, false, false, false, false],
+      "actual": [false, false, true, false, true, false]
+    }
+  },
+  "elapsed_seconds": 16.272
+}

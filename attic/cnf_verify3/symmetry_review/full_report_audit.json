@@ -1,0 +1,16 @@
+{
+  "complete": true,
+  "completed_profiles": 193,
+  "total_profiles": 193,
+  "covered_inputs": 7189057,
+  "expected_inputs": 7189057,
+  "productive_pass_counts": {
+    "0": 4646328,
+    "1": 2542729
+  },
+  "executions": 9731786,
+  "initial_valuation_checks": 663054848,
+  "all_pass_valuation_checks": 849165820,
+  "finished_utc": "2026-09-06 15:50:08 UTC",
+  "consistency_checks_passed": true
+}

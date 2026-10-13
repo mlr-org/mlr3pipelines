@@ -1,0 +1,2 @@
+exp08 invariant-instrumented fuzz: 150000 trials, gen=both, seed 1
+trials: 150000, failures: 0

@@ -1,0 +1,2025 @@
+{
+  "runtime": "R version 4.6.1 (2026-06-24)",
+  "comparisons": 248,
+  "false_negatives": 116,
+  "unequal_controls": 248,
+  "positional_rows": 744,
+  "examples": {
+    "row": {
+      "input": [
+        ["a", "a"]
+      ],
+      "stored": [
+        ["a", "a"]
+      ],
+      "reference": "a",
+      "comparison": "Component “values”: Lengths (2, 1) differ (string compare on first 1)",
+      "truth": [true, false, false],
+      "clause_comparison": true
+    },
+    "array": {
+      "input": [
+        [
+          ["a"],
+          ["a"]
+        ]
+      ],
+      "stored": [
+        [
+          ["a"],
+          ["a"]
+        ]
+      ],
+      "reference": "a",
+      "comparison": "Component “values”: Lengths (2, 1) differ (string compare on first 1)",
+      "truth": [true, false, false],
+      "clause_comparison": true
+    }
+  },
+  "records": [
+    {
+      "size": 1,
+      "row": 1,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 1,
+      "row": 1,
+      "shape": "row",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 1,
+      "row": 1,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 1,
+      "row": 1,
+      "shape": "array",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 1,
+      "row": 2,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 1,
+      "row": 2,
+      "shape": "row",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 1,
+      "row": 2,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 1,
+      "row": 2,
+      "shape": "array",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 2,
+      "row": 1,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 2,
+      "row": 1,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 2,
+      "support_length": 1
+    },
+    {
+      "size": 2,
+      "row": 1,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 2,
+      "row": 1,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 2,
+      "support_length": 1
+    },
+    {
+      "size": 2,
+      "row": 2,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 2,
+      "row": 2,
+      "shape": "row",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 2,
+      "row": 2,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 2,
+      "row": 2,
+      "shape": "array",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 2,
+      "row": 3,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 2,
+      "row": 3,
+      "shape": "row",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 2,
+      "row": 3,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 2,
+      "row": 3,
+      "shape": "array",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 2,
+      "row": 4,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 2,
+      "row": 4,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 2,
+      "support_length": 1
+    },
+    {
+      "size": 2,
+      "row": 4,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 2,
+      "row": 4,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 2,
+      "support_length": 1
+    },
+    {
+      "size": 3,
+      "row": 1,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 3,
+      "row": 1,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 3,
+      "support_length": 1
+    },
+    {
+      "size": 3,
+      "row": 1,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 3,
+      "row": 1,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 3,
+      "support_length": 1
+    },
+    {
+      "size": 3,
+      "row": 2,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 2,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 3,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 2,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 2,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 3,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 3,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 3,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 3,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 3,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 3,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 3,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 4,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 4,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 3,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 4,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 4,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 3,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 5,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 5,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 3,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 5,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 5,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 3,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 6,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 6,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 3,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 6,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 6,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 3,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 7,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 7,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 3,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 7,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 7,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 3,
+      "support_length": 2
+    },
+    {
+      "size": 3,
+      "row": 8,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 3,
+      "row": 8,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 3,
+      "support_length": 1
+    },
+    {
+      "size": 3,
+      "row": 8,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 3,
+      "row": 8,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 3,
+      "support_length": 1
+    },
+    {
+      "size": 4,
+      "row": 1,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 4,
+      "row": 1,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 1
+    },
+    {
+      "size": 4,
+      "row": 1,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 4,
+      "row": 1,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 1
+    },
+    {
+      "size": 4,
+      "row": 2,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 2,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 2,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 2,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 3,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 3,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 3,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 3,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 4,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 4,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 4,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 4,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 5,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 5,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 5,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 5,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 6,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 6,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 6,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 6,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 7,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 7,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 7,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 7,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 8,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 8,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 8,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 8,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 9,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 9,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 9,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 9,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 10,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 10,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 10,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 10,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 11,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 11,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 11,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 11,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 12,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 12,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 12,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 12,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 13,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 13,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 13,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 13,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 14,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 14,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 14,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 14,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 15,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 15,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 15,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 15,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 2
+    },
+    {
+      "size": 4,
+      "row": 16,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 4,
+      "row": 16,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 1
+    },
+    {
+      "size": 4,
+      "row": 16,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 4,
+      "row": 16,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 4,
+      "support_length": 1
+    },
+    {
+      "size": 5,
+      "row": 1,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 5,
+      "row": 1,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 1
+    },
+    {
+      "size": 5,
+      "row": 1,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 5,
+      "row": 1,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 1
+    },
+    {
+      "size": 5,
+      "row": 2,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 2,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 2,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 2,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 3,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 3,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 3,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 3,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 4,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 4,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 4,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 4,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 5,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 5,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 5,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 5,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 6,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 6,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 6,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 6,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 7,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 7,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 7,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 7,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 8,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 8,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 8,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 8,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 9,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 9,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 9,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 9,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 10,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 10,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 10,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 10,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 11,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 11,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 11,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 11,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 12,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 12,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 12,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 12,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 13,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 13,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 13,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 13,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 14,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 14,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 14,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 14,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 15,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 15,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 15,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 15,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 16,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 16,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 16,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 16,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 17,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 17,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 17,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 17,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 18,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 18,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 18,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 18,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 19,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 19,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 19,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 19,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 20,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 20,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 20,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 20,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 21,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 21,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 21,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 21,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 22,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 22,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 22,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 22,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 23,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 23,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 23,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 23,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 24,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 24,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 24,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 24,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 25,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 25,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 25,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 25,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 26,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 26,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 26,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 26,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 27,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 27,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 27,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 27,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 28,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 28,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 28,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 28,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 29,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 29,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 29,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 29,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 30,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 30,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 30,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 30,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 31,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 31,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 31,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 2,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 31,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 2
+    },
+    {
+      "size": 5,
+      "row": 32,
+      "shape": "vector",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 5,
+      "row": 32,
+      "shape": "row",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 1
+    },
+    {
+      "size": 5,
+      "row": 32,
+      "shape": "column",
+      "equal": true,
+      "actual_length": 1,
+      "support_length": 1
+    },
+    {
+      "size": 5,
+      "row": 32,
+      "shape": "array",
+      "equal": false,
+      "actual_length": 5,
+      "support_length": 1
+    }
+  ]
+}

@@ -5,6 +5,8 @@
 #' that stores the domain of each symbol. Symbols are created with [`CnfSymbol()`]
 #' and can be retrieved with `$`.
 #' Using `[[` retrieves a given symbol's domain.
+#' Symbol lookup with `$` uses the same name checks and UTF-8 normalization as
+#' [`CnfSymbol()`]. Keep the character locale (`LC_CTYPE`) unchanged while a universe is in use.
 #'
 #' It is only possible to combine symbols from the same (identical) universe.
 #'
@@ -34,7 +36,7 @@ CnfUniverse = function() structure(new.env(parent = emptyenv()), class = "CnfUni
 # We allow retrieving symbols from the universe by name.
 #' @export
 `$.CnfUniverse` = function(universe, name) {
-  assert_string(name)
+  name = normalize_cnf_name(name)
   if (!exists(name, universe)) {
     stopf("Variable '%s' does not exist in the universe.", name)
   }
@@ -43,6 +45,25 @@ CnfUniverse = function() structure(new.env(parent = emptyenv()), class = "CnfUni
     universe = universe,
     class = "CnfSymbol"
   )
+}
+
+#' @method all.equal CnfUniverse
+#' @export
+all.equal.CnfUniverse = function(target, current, all.names = TRUE, evaluate = TRUE, ...) {
+  assert_flag(all.names)
+  assert_flag(evaluate)
+  if (!is.environment(target) || !is.environment(current) || !evaluate) {
+    return(base::all.equal.environment(target, current, all.names = all.names, evaluate = evaluate, ...))
+  }
+  if (identical(target, current)) return(TRUE)
+
+  normalize = function(universe) {
+    entries = as.list.environment(universe, all.names = all.names, sorted = FALSE)
+    if (!length(entries)) return(entries)
+    names(entries) = enc2utf8(names(entries))
+    entries[order(names(entries), method = "radix")]
+  }
+  all.equal.list(normalize(target), normalize(current), ...)
 }
 
 #' @export

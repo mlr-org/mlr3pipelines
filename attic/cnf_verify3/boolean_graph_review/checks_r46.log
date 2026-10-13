@@ -1,0 +1,34 @@
+Local guard checks: {'subsumptions_are_duplicates': 40, 'sse1_two_edge_seeds': 80, 'twoend_orientations': 16448, 'productive_sse2_patterns': 560, 'sse2_intersection_is_survivor': 80, 'sse2_from_two_edge_seed': 320, 'sse1_absent_pivot_noops': 240, 'sse2_intersection_is_third_symbol': 480, 'sse2_three_edge_seeds': 240}
+Random inputs: 500 ; cases: 1083
+Random inputs: 1000 ; cases: 1750
+Random inputs: 1500 ; cases: 2416
+Random inputs: 2000 ; cases: 3083
+{
+  "runtime": "r46",
+  "local": {
+    "subsumptions_are_duplicates": 40,
+    "sse1_two_edge_seeds": 80,
+    "twoend_orientations": 16448,
+    "productive_sse2_patterns": 560,
+    "sse2_intersection_is_survivor": 80,
+    "sse2_from_two_edge_seed": 320,
+    "sse1_absent_pivot_noops": 240,
+    "sse2_intersection_is_third_symbol": 480,
+    "sse2_three_edge_seeds": 240
+  },
+  "production": {
+    "unit_births_in_K": 12260,
+    "original_edge_representation": 11049,
+    "input_edge_closure": 22098,
+    "boundaries_with_all_seeds": 1822,
+    "units_preserved_through_hla": 4610,
+    "snapshots": 83884,
+    "unchanged_binary_checks": 743884,
+    "exact_live_pairs": 2224998,
+    "unit_symbol_absence_checks": 2355,
+    "cases": 3088,
+    "contradictions": 1263,
+    "short_path_scheduler_cases": 416
+  },
+  "seconds": 104.62311720848083
+}

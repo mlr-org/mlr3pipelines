@@ -1,0 +1,176 @@
+{
+  "reports": [
+    {
+      "symbols": 8,
+      "clause_bound": 4,
+      "verdict": "unsat",
+      "seconds": 2.1224815398454666
+    },
+    {
+      "symbols": 8,
+      "clause_bound": 5,
+      "verdict": "unsat",
+      "seconds": 41.547763645648956
+    },
+    {
+      "symbols": 8,
+      "clause_bound": 6,
+      "verdict": "unknown",
+      "seconds": 120.0007643699646,
+      "reason": "canceled"
+    },
+    {
+      "symbols": 8,
+      "clause_bound": 7,
+      "verdict": "unknown",
+      "seconds": 120.00060118734837,
+      "reason": "canceled"
+    },
+    {
+      "symbols": 8,
+      "clause_bound": 8,
+      "verdict": "sat",
+      "seconds": 0.03929626941680908,
+      "signed_clauses": [
+        [
+          -1,
+          -2
+        ],
+        [
+          -1,
+          -5
+        ],
+        [
+          1,
+          -6
+        ],
+        [
+          1,
+          -7
+        ],
+        [
+          2,
+          -8
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          7,
+          -8
+        ]
+      ],
+      "clauses": [
+        {
+          "X0": [
+            "0"
+          ],
+          "X1": [
+            "0"
+          ]
+        },
+        {
+          "X0": [
+            "0"
+          ],
+          "X4": [
+            "0"
+          ]
+        },
+        {
+          "X0": [
+            "1"
+          ],
+          "X5": [
+            "0"
+          ]
+        },
+        {
+          "X0": [
+            "1"
+          ],
+          "X6": [
+            "0"
+          ]
+        },
+        {
+          "X1": [
+            "1"
+          ],
+          "X7": [
+            "0"
+          ]
+        },
+        {
+          "X4": [
+            "1"
+          ],
+          "X7": [
+            "1"
+          ]
+        },
+        {
+          "X5": [
+            "1"
+          ],
+          "X7": [
+            "1"
+          ]
+        },
+        {
+          "X6": [
+            "1"
+          ],
+          "X7": [
+            "0"
+          ]
+        }
+      ],
+      "domains": {
+        "X0": [
+          "0",
+          "1"
+        ],
+        "X1": [
+          "0",
+          "1"
+        ],
+        "X2": [
+          "0",
+          "1"
+        ],
+        "X3": [
+          "0",
+          "1"
+        ],
+        "X4": [
+          "0",
+          "1"
+        ],
+        "X5": [
+          "0",
+          "1"
+        ],
+        "X6": [
+          "0",
+          "1"
+        ],
+        "X7": [
+          "0",
+          "1"
+        ]
+      }
+    }
+  ],
+  "symbols": 8,
+  "selected_clause_variables": 112,
+  "short_path_forbidden_subsets": 1456,
+  "base_assertions": 1713,
+  "z3_version": "4.12.2",
+  "scope": "Proper binary clauses; no short complement path anywhere; exact full assignment coverage"
+}

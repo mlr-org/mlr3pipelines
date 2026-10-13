@@ -1,0 +1,27 @@
+source JIT 0 exit 0
+source JIT 1 exit 0
+source JIT 2 exit 0
+source JIT 3 exit 0
+cmpfun0 JIT 0 exit 0
+cmpfun0 JIT 1 exit 0
+cmpfun0 JIT 2 exit 0
+cmpfun0 JIT 3 exit 0
+cmpfun3 JIT 0 exit 0
+cmpfun3 JIT 1 exit 0
+cmpfun3 JIT 2 exit 0
+cmpfun3 JIT 3 exit 0
+development JIT 0 exit 0
+development JIT 1 exit 0
+development JIT 2 exit 0
+development JIT 3 exit 0
+installed JIT 0 exit 0
+installed JIT 1 exit 0
+installed JIT 2 exit 0
+installed JIT 3 exit 0
+installed_no_bytecode JIT 0 exit 0
+installed_no_bytecode JIT 1 exit 0
+installed_no_bytecode JIT 2 exit 0
+installed_no_bytecode JIT 3 exit 0
+           runtimes       fixture_cases          path_cases serialization_cases
+                 24                 192                1752                 384
+All runtime outputs, error outcomes, truth functions, and serialization comparisons agree exactly.

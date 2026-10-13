@@ -1,0 +1,16 @@
+$R_version
+[1] "R version 3.6.3 (2020-02-29)"
+
+$checkmate
+[1] "2.3.4"
+
+$counts
+                     calls                   accepted
+                      1703                       1093
+missing_selectors_rejected      baseline_noncanonical
+                       435                        339
+        exact_flat_matches
+                      1093
+
+$production_unchanged
+[1] TRUE

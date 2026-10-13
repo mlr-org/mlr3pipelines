@@ -1,0 +1,177 @@
+{
+  "R_version": "R version 4.6.1 (2026-06-24)",
+  "stats": {
+    "cases": 14261,
+    "assignment_rows": 213400,
+    "dag_cases": 1696,
+    "duplicate_cases": 1,
+    "clause_essentiality_checks": 57726
+  },
+  "complete_three_outputs": {
+    "1:3,2:3,3:1,3:2": {
+      "input": [
+        [2, 1],
+        [3, 1],
+        [1, 2],
+        [3, 2],
+        [1, 3],
+        [2, 3]
+      ],
+      "output": [
+        [3, 1],
+        [3, 2],
+        [1, 3],
+        [2, 3]
+      ],
+      "label": "three:1,2,3,4,5,6",
+      "occurrences": 80
+    },
+    "1:2,2:3,3:1": {
+      "input": [
+        [2, 1],
+        [3, 1],
+        [3, 2],
+        [1, 2],
+        [1, 3],
+        [2, 3]
+      ],
+      "output": [
+        [3, 1],
+        [1, 2],
+        [2, 3]
+      ],
+      "label": "three:1,2,4,3,5,6",
+      "occurrences": 241
+    },
+    "1:3,2:1,3:2": {
+      "input": [
+        [3, 1],
+        [2, 1],
+        [1, 2],
+        [3, 2],
+        [1, 3],
+        [2, 3]
+      ],
+      "output": [
+        [2, 1],
+        [3, 2],
+        [1, 3]
+      ],
+      "label": "three:2,1,3,4,5,6",
+      "occurrences": 241
+    },
+    "1:2,2:1,2:3,3:2": {
+      "input": [
+        [3, 1],
+        [2, 1],
+        [3, 2],
+        [1, 3],
+        [1, 2],
+        [2, 3]
+      ],
+      "output": [
+        [2, 1],
+        [3, 2],
+        [1, 2],
+        [2, 3]
+      ],
+      "label": "three:2,1,4,5,3,6",
+      "occurrences": 80
+    },
+    "1:2,1:3,2:1,3:1": {
+      "input": [
+        [3, 2],
+        [3, 1],
+        [1, 2],
+        [2, 3],
+        [2, 1],
+        [1, 3]
+      ],
+      "output": [
+        [3, 1],
+        [1, 2],
+        [2, 1],
+        [1, 3]
+      ],
+      "label": "three:4,2,3,6,1,5",
+      "occurrences": 81
+    }
+  },
+  "family_results": [
+    {
+      "symbols": 3,
+      "surviving_edges": 3,
+      "key": "1:2,2:3,3:1"
+    },
+    {
+      "symbols": 3,
+      "surviving_edges": 3,
+      "key": "1:3,2:1,3:2"
+    },
+    {
+      "symbols": 3,
+      "surviving_edges": 4,
+      "key": "1:2,1:3,2:1,3:1"
+    },
+    {
+      "symbols": 4,
+      "surviving_edges": 4,
+      "key": "1:2,2:3,3:4,4:1"
+    },
+    {
+      "symbols": 4,
+      "surviving_edges": 4,
+      "key": "1:4,2:1,3:2,4:3"
+    },
+    {
+      "symbols": 4,
+      "surviving_edges": 6,
+      "key": "1:2,1:3,1:4,2:1,3:1,4:1"
+    },
+    {
+      "symbols": 5,
+      "surviving_edges": 5,
+      "key": "1:2,2:3,3:4,4:5,5:1"
+    },
+    {
+      "symbols": 5,
+      "surviving_edges": 5,
+      "key": "1:5,2:1,3:2,4:3,5:4"
+    },
+    {
+      "symbols": 5,
+      "surviving_edges": 8,
+      "key": "1:2,1:3,1:4,1:5,2:1,3:1,4:1,5:1"
+    },
+    {
+      "symbols": 6,
+      "surviving_edges": 6,
+      "key": "1:2,2:3,3:4,4:5,5:6,6:1"
+    },
+    {
+      "symbols": 6,
+      "surviving_edges": 6,
+      "key": "1:6,2:1,3:2,4:3,5:4,6:5"
+    },
+    {
+      "symbols": 6,
+      "surviving_edges": 10,
+      "key": "1:2,1:3,1:4,1:5,1:6,2:1,3:1,4:1,5:1,6:1"
+    },
+    {
+      "symbols": 8,
+      "surviving_edges": 8,
+      "key": "1:2,2:3,3:4,4:5,5:6,6:7,7:8,8:1"
+    },
+    {
+      "symbols": 8,
+      "surviving_edges": 8,
+      "key": "1:8,2:1,3:2,4:3,5:4,6:5,7:6,8:7"
+    },
+    {
+      "symbols": 8,
+      "surviving_edges": 14,
+      "key": "1:2,1:3,1:4,1:5,1:6,1:7,1:8,2:1,3:1,4:1,5:1,6:1,7:1,8:1"
+    }
+  ]
+}

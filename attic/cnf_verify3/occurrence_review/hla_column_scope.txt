@@ -1,0 +1,175 @@
+$R
+[1] "R version 4.6.1 (2026-06-24)"
+
+$counts
+$counts$semantic_boundaries
+[1] 52
+
+$counts$cached_pairs
+[1] 284
+
+$counts$hla_virtual_semantics
+[1] 11
+
+$counts$hla_cached_pairs
+[1] 22
+
+$counts$hla_starting_donor
+[1] 5
+
+$counts$hla_containment_needs_virtual_target
+[1] 4
+
+$counts$formulas
+[1] 2
+
+$counts$assignment_rows
+[1] 32
+
+
+$examples
+$examples$hla_starting_donor
+$examples$hla_starting_donor$words
+$examples$hla_starting_donor$words[[1]]
+[1] 1 2
+
+$examples$hla_starting_donor$words[[2]]
+[1] 1 3
+
+$examples$hla_starting_donor$words[[3]]
+[1] -3  4
+
+
+$examples$hla_starting_donor$label
+[1] "simple retained HLA expansion"
+
+$examples$hla_starting_donor$detail
+$examples$hla_starting_donor$detail$target
+[1] 1
+
+$examples$hla_starting_donor$detail$donor
+[1] 2
+
+
+$examples$hla_starting_donor$entries
+$examples$hla_starting_donor$entries[[1]]
+$examples$hla_starting_donor$entries[[1]]$X1
+[1] "yes"
+
+$examples$hla_starting_donor$entries[[1]]$X2
+[1] "yes"
+
+
+$examples$hla_starting_donor$entries[[2]]
+$examples$hla_starting_donor$entries[[2]]$X1
+[1] "yes"
+
+$examples$hla_starting_donor$entries[[2]]$X3
+[1] "yes"
+
+
+$examples$hla_starting_donor$entries[[3]]
+$examples$hla_starting_donor$entries[[3]]$X3
+[1] "no"
+
+$examples$hla_starting_donor$entries[[3]]$X4
+[1] "yes"
+
+
+
+$examples$hla_starting_donor$eliminated
+[1] FALSE FALSE FALSE
+
+$examples$hla_starting_donor$registry
+$examples$hla_starting_donor$registry$X1
+[1] 1 2
+
+$examples$hla_starting_donor$registry$X2
+[1] 1
+
+$examples$hla_starting_donor$registry$X3
+[1] 2 3
+
+$examples$hla_starting_donor$registry$X4
+[1] 3
+
+
+
+$examples$hla_containment_needs_virtual_target
+$examples$hla_containment_needs_virtual_target$words
+$examples$hla_containment_needs_virtual_target$words[[1]]
+[1] 1 2
+
+$examples$hla_containment_needs_virtual_target$words[[2]]
+[1] 1 3
+
+$examples$hla_containment_needs_virtual_target$words[[3]]
+[1] -3  4
+
+
+$examples$hla_containment_needs_virtual_target$label
+[1] "simple retained HLA expansion"
+
+$examples$hla_containment_needs_virtual_target$detail
+$examples$hla_containment_needs_virtual_target$detail$target
+[1] 1
+
+$examples$hla_containment_needs_virtual_target$detail$donor
+[1] 3
+
+$examples$hla_containment_needs_virtual_target$detail$symbol
+[1] "X3"
+
+$examples$hla_containment_needs_virtual_target$detail$virtual
+$examples$hla_containment_needs_virtual_target$detail$virtual$X1
+[1] "yes"
+
+$examples$hla_containment_needs_virtual_target$detail$virtual$X2
+[1] "yes"
+
+$examples$hla_containment_needs_virtual_target$detail$virtual$X3
+[1] "no"
+
+
+
+$examples$hla_containment_needs_virtual_target$entries
+$examples$hla_containment_needs_virtual_target$entries[[1]]
+$examples$hla_containment_needs_virtual_target$entries[[1]]$X1
+[1] "yes"
+
+$examples$hla_containment_needs_virtual_target$entries[[1]]$X2
+[1] "yes"
+
+
+$examples$hla_containment_needs_virtual_target$entries[[2]]
+$examples$hla_containment_needs_virtual_target$entries[[2]]$X1
+[1] "yes"
+
+$examples$hla_containment_needs_virtual_target$entries[[2]]$X3
+[1] "yes"
+
+
+$examples$hla_containment_needs_virtual_target$entries[[3]]
+$examples$hla_containment_needs_virtual_target$entries[[3]]$X3
+[1] "no"
+
+$examples$hla_containment_needs_virtual_target$entries[[3]]$X4
+[1] "yes"
+
+
+
+$examples$hla_containment_needs_virtual_target$eliminated
+[1] FALSE FALSE FALSE
+
+$examples$hla_containment_needs_virtual_target$registry
+$examples$hla_containment_needs_virtual_target$registry$X1
+[1] 1 2
+
+$examples$hla_containment_needs_virtual_target$registry$X2
+[1] 1
+
+$examples$hla_containment_needs_virtual_target$registry$X3
+[1] 2 3
+
+$examples$hla_containment_needs_virtual_target$registry$X4
+[1] 3

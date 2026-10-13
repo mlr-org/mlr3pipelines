@@ -1,0 +1,83 @@
+$R
+[1] "R version 4.6.1 (2026-06-24)"
+
+$controls
+$controls$reversed_unit_chain
+              restriction_entries          ancestor_decrease_checks
+                                7                                21
+             physical_pair_checks             orphan_snapshot_skips
+                                0                                 0
+         unit_hla_initializations           raw_hla_counterexamples
+                                8                                 0
+hypothetical_lazy_counterexamples
+                                0
+
+$controls$raw_hla_canonical
+              restriction_entries          ancestor_decrease_checks
+                                2                                 0
+             physical_pair_checks             orphan_snapshot_skips
+                               28                                 0
+         unit_hla_initializations           raw_hla_counterexamples
+                                0                                 2
+hypothetical_lazy_counterexamples
+                                0
+
+$controls$raw_hla_occurrences
+              restriction_entries          ancestor_decrease_checks
+                                1                                 0
+             physical_pair_checks             orphan_snapshot_skips
+                               28                                 0
+         unit_hla_initializations           raw_hla_counterexamples
+                                0                                 2
+hypothetical_lazy_counterexamples
+                                0
+
+$controls$equal_name_sse
+              restriction_entries          ancestor_decrease_checks
+                                1                                 0
+             physical_pair_checks             orphan_snapshot_skips
+                               26                                 0
+         unit_hla_initializations           raw_hla_counterexamples
+                                0                                 0
+hypothetical_lazy_counterexamples
+                                0
+
+$controls$unit_lazy_mismatch
+              restriction_entries          ancestor_decrease_checks
+                                5                                 2
+             physical_pair_checks             orphan_snapshot_skips
+                               44                                 2
+         unit_hla_initializations           raw_hla_counterexamples
+                                1                                 0
+hypothetical_lazy_counterexamples
+                                1
+
+
+$interrupted_prefix
+$interrupted_prefix$ancestor_stored_values
+[1] 15
+
+$interrupted_prefix$descendant_stored_values
+[1] 14
+
+
+$canonical_longest
+[1] "eliminate_symbol_from_clause" "on_updated_subset_relations"
+[3] "handle_sse_2nd_order_twoend"  "try_sse_2nd_order"
+[5] "char_union"
+
+$occurrence_longest
+[1] "on_updated_subset_relations" "handle_sse_2nd_order_twoend"
+[3] "try_sse_2nd_order"           "apply_domain_restriction"
+[5] "char_intersect"              "char_union"
+
+$repeated_match_countermodel
+$repeated_match_countermodel$row
+   X    Y
+TRUE TRUE
+
+$repeated_match_countermodel$exceptional_names
+[1] "X" "X"
+
+$repeated_match_countermodel$repeated_positions
+[1] 1 1

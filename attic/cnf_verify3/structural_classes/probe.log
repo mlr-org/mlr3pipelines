@@ -1,0 +1,21 @@
+opposed cycles 3,3: returned FALSE
+opposed cycles 3,4: returned FALSE
+opposed cycles 4,4: returned unchanged unsatisfiable clauses
+opposed cycles 4,5: returned unchanged unsatisfiable clauses
+opposed cycles 5,5: returned unchanged unsatisfiable clauses
+opposed cycles 4,8: returned unchanged unsatisfiable clauses
+Boolean binary masks 512/4096; {'cases': 1024, 'unsatisfiable': 226, 'recognized_unsatisfiable': 226}
+Boolean binary masks 1024/4096; {'cases': 2048, 'unsatisfiable': 554, 'recognized_unsatisfiable': 554}
+Boolean binary masks 1536/4096; {'cases': 3072, 'unsatisfiable': 882, 'recognized_unsatisfiable': 882}
+Boolean binary masks 2048/4096; {'cases': 4096, 'unsatisfiable': 1332, 'recognized_unsatisfiable': 1332}
+Boolean binary masks 2560/4096; {'cases': 5120, 'unsatisfiable': 1622, 'recognized_unsatisfiable': 1622}
+Boolean binary masks 3072/4096; {'cases': 6144, 'unsatisfiable': 2110, 'recognized_unsatisfiable': 2110}
+Boolean binary masks 3584/4096; {'cases': 7168, 'unsatisfiable': 2598, 'recognized_unsatisfiable': 2598}
+Boolean binary masks 4096/4096; {'cases': 8192, 'unsatisfiable': 3398, 'recognized_unsatisfiable': 3398}
+ternary forest labels 216/1296; {'cases': 864, 'unsatisfiable': 0, 'essential_clauses': 2316, 'essential_values': 5034}
+ternary forest labels 432/1296; {'cases': 1728, 'unsatisfiable': 0, 'essential_clauses': 4632, 'essential_values': 10068}
+ternary forest labels 648/1296; {'cases': 2592, 'unsatisfiable': 12, 'essential_clauses': 6732, 'essential_values': 13947}
+ternary forest labels 864/1296; {'cases': 3456, 'unsatisfiable': 12, 'essential_clauses': 8640, 'essential_values': 18303}
+ternary forest labels 1080/1296; {'cases': 4320, 'unsatisfiable': 12, 'essential_clauses': 10956, 'essential_values': 23661}
+ternary forest labels 1296/1296; {'cases': 5184, 'unsatisfiable': 12, 'essential_clauses': 13272, 'essential_values': 29019}
+{"boolean_binary": {"cases": 8192, "unsatisfiable": 3398, "recognized_unsatisfiable": 3398}, "ternary_forests": {"cases": 5184, "unsatisfiable": 12, "essential_clauses": 13272, "essential_values": 29019}, "seconds": 85.09598088264465}

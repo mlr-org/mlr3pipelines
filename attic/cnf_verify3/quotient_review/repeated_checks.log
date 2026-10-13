@@ -1,0 +1,13 @@
+n=1: reverse mass 9 -> 8 -> 8; forward deletes 1 values; 32 complete assignments.
+n=2: reverse mass 17 -> 16 -> 15 -> 15; forward deletes 2 values; 96 complete assignments.
+n=3: reverse mass 26 -> 25 -> 24 -> 23 -> 23; forward deletes 3 values; 256 complete assignments.
+n=4: reverse mass 36 -> 35 -> 34 -> 33 -> 32 -> 32; forward deletes 4 values; 640 complete assignments.
+n=5: reverse mass 47 -> 46 -> 45 -> 44 -> 43 -> 42 -> 42; forward deletes 5 values; 1536 complete assignments.
+n=6: reverse mass 59 -> 58 -> 57 -> 56 -> 55 -> 54 -> 53 -> 53; forward deletes 6 values; 3584 complete assignments.
+Minimized member: mass 22 -> 21 -> 20 -> 19 -> 19 -> 19 ; fourth call sorts only; fifth call is identical; 64 complete assignments.
+R: R version 4.6.1 (2026-06-24) ; package: 0.11.0.9000
+      frontier_states      clause_witnesses     literal_witnesses
+                   27                   251                   876
+public_reverse_passes public_forward_passes    checked_truth_rows
+                   27                    12                 51168
+All independent public-call, full-truth, storage-order, and witness checks passed.
