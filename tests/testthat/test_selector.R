@@ -55,6 +55,18 @@ test_that("Selectors work", {
   expect_set_equal(selcgt(diabetes_task), character(0))
 })
 
+test_that("selectors do not select the target", {
+  task = mlr3::TaskClassif$new("target", backend = data.table::data.table(
+    target = factor(c("a", "b", "c", NA)),
+    factor = factor(c("a", "b", "c", "a")),
+    ordered = factor(c("a", "b", "c", "a"), ordered = TRUE),
+    numeric = c(1, NA, 3, 4)
+  ), target = "target")
+
+  expect_set_equal(selector_cardinality_greater_than(2)(task), c("factor", "ordered"))
+  expect_set_equal(selector_missing()(task), "numeric")
+})
+
 test_that("numeric value selectors work", {
   task = mlr3::TaskUnsupervised$new("numeric_values", backend = data.table::data.table(
     positive = c(1, 2, 3),
