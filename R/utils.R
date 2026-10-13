@@ -176,3 +176,22 @@ assert_po_validate = function(rhs) {
 test_po_validate = function(x) {
   test_choice(x, "predefined", null.ok = TRUE)
 }
+
+# Local copy of mlr3::assert_empty_ellipsis(), which is only exported since mlr3 0.23.0.
+# `...names()` is base R since 4.1.0; older versions get it from `backports::import()` in `.onLoad()`.
+assert_empty_ellipsis = function(...) {
+  nx = ...length()
+  if (nx == 0L) {
+    return(NULL)
+  }
+  names = ...names()
+  if (is.null(names)) {
+    stopf("Received %i unnamed argument that was not used.", nx)
+  }
+  names2 = names[nzchar(names)]
+  if (length(names2) == length(names)) {
+    stopf("Received the following named arguments that were unused: %s.", toString(names2))
+  }
+  stopf("Received unused arguments: %i unnamed, as well as named arguments %s.",
+    length(names) - length(names2), toString(names2))
+}
