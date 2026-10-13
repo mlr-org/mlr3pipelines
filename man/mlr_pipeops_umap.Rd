@@ -101,10 +101,18 @@ A list containing additional arguments to pass to the nearest neighbor method. F
 The size of the neighborhood used for manifold approximation. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{nn_index} :: named \code{list()}\cr
 Nearest neighbor index that can be used for transformation of new data points.
+Not copied by \verb{$clone(deep = TRUE)}, see below.
 \item \code{pca_models} :: \code{list()}\cr
 PCA models used for preprocessing when \code{pca} is specified.
 For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 }
+
+If \code{nn_method} is \code{"annoy"} or \code{"hnsw"}, \code{nn_index$ann} is an external C++ object that cannot be copied in memory.
+Therefore, \verb{$clone(deep = TRUE)} does not copy it, and the clone shares the nearest neighbor index with the original.
+This is safe for regular use, because prediction only reads the index and training replaces the \verb{$state} as a whole.
+However, modifying the shared index directly, e.g. with \code{\link[uwot:unload_uwot]{uwot::unload_uwot()}}, affects all clones.
+This is the same behavior as for the \verb{$model} of a \code{\link[mlr3:Learner]{Learner}},
+which \verb{$clone(deep = TRUE)} does not copy either.
 }
 
 \section{Parameters}{

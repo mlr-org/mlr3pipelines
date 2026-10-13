@@ -91,9 +91,17 @@
 #'   The size of the neighborhood used for manifold approximation. For details, see [uwot::umap2()].
 #' * `nn_index` :: named `list()`\cr
 #'   Nearest neighbor index that can be used for transformation of new data points.
+#'   Not copied by `$clone(deep = TRUE)`, see below.
 #' * `pca_models` :: `list()`\cr
 #'   PCA models used for preprocessing when `pca` is specified.
 #'   For details, see [uwot::umap2()].
+#'
+#' If `nn_method` is `"annoy"` or `"hnsw"`, `nn_index$ann` is an external C++ object that cannot be copied in memory.
+#' Therefore, `$clone(deep = TRUE)` does not copy it, and the clone shares the nearest neighbor index with the original.
+#' This is safe for regular use, because prediction only reads the index and training replaces the `$state` as a whole.
+#' However, modifying the shared index directly, e.g. with [uwot::unload_uwot()], affects all clones.
+#' This is the same behavior as for the `$model` of a [`Learner`][mlr3::Learner],
+#' which `$clone(deep = TRUE)` does not copy either.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
@@ -467,6 +475,11 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         pv_args = insert_named(pv_args, list(init = pv$init_custom))
       }
       umap = invoke(uwot::umap2, dt, .args = pv_args)
+      # For nn_method "annoy" and "hnsw", umap$nn_index$ann is an Rcpp module object that cannot be copied in memory
+      # (its $copy() returns an uninitialized object). We therefore do not overload deep_clone(): PipeOp's deep_clone()
+      # leaves the list state as is, so deep clones share the index. mlr3 does the same for learner models: the private
+      # deep_clone() of mlr3::Learner (mlr3 R/Learner.R) does not copy state$model. This is safe because prediction only
+      # reads the index and training always assigns a new state instead of modifying the old one.
       self$state = umap
       umap$embedding
     },
@@ -483,25 +496,6 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         pv_args = insert_named(pv_args, list(init = pv$init_transform_custom))
       }
       invoke(uwot::umap_transform, dt, self$state, .args = pv_args)
-    },
-
-    # We need to overload deep_clone since state$nn_index$ann is a RefClass if nn_method is "annoy" or "hnsw"
-    deep_clone = function(name, value) {
-      if (name == "state" && "NO_OP" %nin% class(value)) {
-        if (!is.null(value$nn_index)) {
-          if (methods::is(value$nn_index$ann, "envRefClass")) {
-            state = value
-            state$nn_index$ann = value$nn_index$ann$copy()
-            state
-          } else {
-            super$deep_clone(name, value)
-          }
-        } else {
-          super$deep_clone(name, value)
-        }
-      } else {
-        super$deep_clone(name, value)
-      }
     }
   )
 )

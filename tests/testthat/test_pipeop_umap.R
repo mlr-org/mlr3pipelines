@@ -82,7 +82,7 @@ test_that("PipeOpUMAP - basic properties", {
 
   task = mlr_tasks$get("iris")$filter(1:30)
 
-  # Test for different nn_methods since they are relying on different packages and deep clone is implemented differently
+  # Test for different nn_methods since they are relying on different packages and store their index differently
   expect_datapreproc_pipeop_class(PipeOpUMAP, constargs = list(param_vals = list(nn_method = "annoy")),
                                   deterministic_train = FALSE, deterministic_predict = FALSE, task = task)
   expect_datapreproc_pipeop_class(PipeOpUMAP, constargs = list(param_vals = list(nn_method = "hnsw")),
@@ -90,6 +90,26 @@ test_that("PipeOpUMAP - basic properties", {
   expect_datapreproc_pipeop_class(PipeOpUMAP, constargs = list(param_vals = list(nn_method = "nndescent")),
                                   deterministic_train = FALSE, deterministic_predict = FALSE, task = task)
 
+})
+
+test_that("PipeOpUMAP - deep clones share the nearest neighbor index", {
+  skip_if_not_installed("uwot", "0.2.5")
+  skip_if_not_installed("RcppAnnoy")
+  skip_if_not_installed("RcppHNSW")
+  task = tsk("iris")$filter(1:30)
+
+  for (nn_method in c("annoy", "hnsw")) {
+    op = PipeOpUMAP$new(param_vals = list(nn_method = nn_method, seed = 1L, n_threads = 1L, n_build_threads = 1L))
+    op$train(list(task))
+    expected = op$predict(list(task))[[1L]]$data()
+
+    op_clone = op$clone(deep = TRUE)
+    expect_identical(op_clone$state$nn_index$ann$.pointer, op$state$nn_index$ann$.pointer)
+    expect_equal(op_clone$predict(list(task))[[1L]]$data(), expected)
+
+    op_clone$train(list(tsk("iris")$filter(31:90)))
+    expect_equal(op$predict(list(task))[[1L]]$data(), expected)
+  }
 })
 
 test_that("PipeOpUMAP - Compare to uwot::umap2 and uwot::umap_transform; Default Params, nn_method = annoy", {
