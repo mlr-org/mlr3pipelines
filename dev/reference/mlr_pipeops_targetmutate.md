@@ -179,6 +179,7 @@ Other PipeOps:
 [`mlr_pipeops_threshold`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_threshold.md),
 [`mlr_pipeops_tomek`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_tomek.md),
 [`mlr_pipeops_tunethreshold`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_tunethreshold.md),
+[`mlr_pipeops_umap`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_umap.md),
 [`mlr_pipeops_unbranch`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_unbranch.md),
 [`mlr_pipeops_updatetarget`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_updatetarget.md),
 [`mlr_pipeops_vtreat`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_vtreat.md),
@@ -217,8 +218,8 @@ po$predict(list(task))
 #>     assert_list(inputs, len = 1L, types = "Prediction")
 #>     list(private$.invert(inputs[[1L]], predict_phase_state))
 #> }
-#> <bytecode: 0x55e978d2b390>
-#> <environment: 0x55e96ef7a878>
+#> <bytecode: 0x55b3fb63f660>
+#> <environment: 0x55b3fcdb6540>
 #> 
 #> $output
 #> 

@@ -129,6 +129,7 @@
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_threshold.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_tomek.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_tunethreshold.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_umap.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_unbranch.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_updatetarget.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_vtreat.html</loc></url>

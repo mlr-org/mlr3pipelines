@@ -2,6 +2,8 @@
 
 ## mlr3pipelines 0.12.0-9000
 
+- New `PipeOpUMAP` / `po("umap")` uses `uwot` for dimensionality
+  reduction, including transformation of new observations.
 - Fix: `GraphLearner$graph_model` now throws an informative error asking
   to call `$unmarshal()` first when the `GraphLearner` is marshaled.
   This also affects `$pipeops`, `$base_learner()`, `$importance()`,

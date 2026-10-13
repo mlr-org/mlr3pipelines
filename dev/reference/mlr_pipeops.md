@@ -200,6 +200,7 @@ Other PipeOps:
 [`mlr_pipeops_threshold`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_threshold.md),
 [`mlr_pipeops_tomek`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_tomek.md),
 [`mlr_pipeops_tunethreshold`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_tunethreshold.md),
+[`mlr_pipeops_umap`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_umap.md),
 [`mlr_pipeops_unbranch`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_unbranch.md),
 [`mlr_pipeops_updatetarget`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_updatetarget.md),
 [`mlr_pipeops_vtreat`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_vtreat.md),
@@ -326,9 +327,10 @@ as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num", "packages")]
 #> 75:             threshold         1          1
 #> 76:                 tomek         1          1
 #> 77:         tunethreshold         1          1
-#> 78:              unbranch        NA          1
-#> 79:                vtreat         1          1
-#> 80:            yeojohnson         1          1
+#> 78:                  umap         1          1
+#> 79:              unbranch        NA          1
+#> 80:                vtreat         1          1
+#> 81:            yeojohnson         1          1
 #>                       key input.num output.num
 #>                    <char>     <int>      <int>
 #>                                            packages
@@ -410,9 +412,10 @@ as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num", "packages")]
 #> 75:                                   mlr3pipelines
 #> 76:                            mlr3pipelines,themis
 #> 77:                             mlr3pipelines,bbotk
-#> 78:                                   mlr3pipelines
-#> 79:                            mlr3pipelines,vtreat
-#> 80:                     mlr3pipelines,bestNormalize
+#> 78:                              mlr3pipelines,uwot
+#> 79:                                   mlr3pipelines
+#> 80:                            mlr3pipelines,vtreat
+#> 81:                     mlr3pipelines,bestNormalize
 #>                                            packages
 #>                                              <list>
 ```

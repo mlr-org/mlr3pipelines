@@ -405,6 +405,9 @@ the *[dplyr](https://github.com/tidyverse/dplyr)* package.
 - [`mlr_pipeops_tunethreshold`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_tunethreshold.md)
   [`PipeOpTuneThreshold`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_tunethreshold.md)
   : Tune the Threshold of a Classification Prediction
+- [`mlr_pipeops_umap`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_umap.md)
+  [`PipeOpUMAP`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_umap.md)
+  : Uniform Manifold Approximation and Projection (UMAP)
 - [`mlr_pipeops_unbranch`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_unbranch.md)
   [`PipeOpUnbranch`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_unbranch.md)
   : Unbranch Different Paths
