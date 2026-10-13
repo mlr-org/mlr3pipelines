@@ -103,6 +103,12 @@ expect_deep_clone = function(one, two) {
     visited[[addr_a]] = path
     visited_b[[addr_b]] = path
 
+    # Rcpp module objects (e.g. RcppAnnoy / RcppHNSW indices) cannot be copied in memory and are shared between deep
+    # clones, just like the private deep_clone() of mlr3::Learner (mlr3 R/Learner.R) does not copy state$model.
+    if (base::isS4(a) && methods::is(a, "C++Object")) {
+      return(invisible(NULL))
+    }
+
     # follow attributes, even for non-recursive objects
     if (utils::tail(path, 1) != "[attributes]" && !is.null(base::attributes(a))) {
       expect_references_differ(base::attributes(a), base::attributes(b), c(path, "[attributes]"))
