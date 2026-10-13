@@ -191,3 +191,20 @@ test_that("PipeOpVtreat - Edge Cases", {
   predict_out2 = po$predict(list(task))[[1L]]
 })
 
+test_that("PipeOpVtreat - deep clone of Multiplicity state", {
+  skip_if_not_installed("vtreat")
+
+  task = tsk("boston_housing_classic")
+  op = PipeOpVtreat$new()
+  op$train(list(Multiplicity(a = task, b = task$clone()$filter(1:300))))
+  op_clone = op$clone(deep = TRUE)
+
+  for (nm in c("a", "b")) {
+    expect_false(identical(
+      op$state[[nm]]$treatment_plan$settings$state,
+      op_clone$state[[nm]]$treatment_plan$settings$state
+    ))
+  }
+  input = list(Multiplicity(a = task, b = task))
+  expect_equal(op$predict(input)[[1L]]$a$data(), op_clone$predict(input)[[1L]]$a$data())
+})
