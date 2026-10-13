@@ -77,6 +77,8 @@
   `PipeOpLearnerPICVPlus`) now accept assignment of their current value
   as a no-op
   ([\#970](https://github.com/mlr-org/mlr3pipelines/issues/970)).
+- Fix: `PipeOpTargetInvert` now keeps the observation weights of the
+  incoming prediction.
 
 ## mlr3pipelines 0.12.0
 
