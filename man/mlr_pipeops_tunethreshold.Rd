@@ -44,8 +44,8 @@ Input and output channels are inherited from \code{\link{PipeOp}}.
 
 The \verb{$state} is a named \code{list} with elements
 \itemize{
-\item \code{thresholds} :: \code{numeric}\cr
-Learned thresholds;
+\item \code{threshold} :: \code{numeric}\cr
+Learned thresholds.
 }
 }
 
