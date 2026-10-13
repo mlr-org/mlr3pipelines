@@ -34,8 +34,8 @@
 #'
 #' @section State:
 #' The `$state` is a named `list` with elements
-#' * `thresholds` :: `numeric`\cr
-#'   Learned thresholds;
+#' * `threshold` :: `numeric`\cr
+#'   Learned thresholds.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOp`], as well as:
