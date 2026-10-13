@@ -8,7 +8,7 @@ predict multiple quantiles.
 
 `PipeOpLearnerQuantiles` only supports
 [`LearnerRegr`](https://mlr3.mlr-org.com/reference/LearnerRegr.html)s
-that have `quantiles` as a possible `pedict_type`.
+that have `quantiles` as a possible `predict_type`.
 
 It produces quantile-based predictions for multiple quantiles in one
 [`PredictionRegr`](https://mlr3.mlr-org.com/reference/Prediction.html).
@@ -42,8 +42,9 @@ inheriting from
   The [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) has
   to be a
   [`LearnerRegr`](https://mlr3.mlr-org.com/reference/LearnerRegr.html)
-  with `predict_type` `"quantiles"`. This argument is always cloned; to
-  access the
+  that can predict `"quantiles"`. Its `$predict_type` is set to
+  `"quantiles"` during training and prediction. This argument is always
+  cloned; to access the
   [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) inside
   `PipeOpLearnerQuantiles` by-reference, use `$learner`.
 
@@ -127,7 +128,7 @@ as well as:
 
 - `predict_type` :: `character(1)`  
   Predict type of the `PipeOpLearnerQuantiles`, which is always
-  `"response" "quantiles"`.
+  `"quantiles"`. Read-only.
 
 ## Methods
 

@@ -139,9 +139,10 @@ Read-only.</p></li>
 If the <code>PipeOpLearnerPICVPlus</code> has been trained, this is a <code>list</code> containing the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>s of the cross validation models.
 Otherwise, this contains the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> that is being wrapped.
 Read-only.</p></li>
-<li><p><code>predict_type</code><br>
-Predict type of the <code>PipeOpLearnerPICVPlus</code>, which is always <code>"response"  "quantiles"</code>.
-This can be different to the predict type of the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> that is being wrapped.</p></li>
+<li><p><code>predict_type</code> :: <code>character(1)</code><br>
+Predict type of the <code>PipeOpLearnerPICVPlus</code>, which is always <code>"quantiles"</code>.
+This can be different to the predict type of the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> that is being wrapped.
+Read-only.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>

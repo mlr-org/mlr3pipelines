@@ -119,11 +119,11 @@ as well as:
   [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) that is
   being wrapped. Read-only.
 
-- `predict_type`  
+- `predict_type` :: `character(1)`  
   Predict type of the `PipeOpLearnerPICVPlus`, which is always
-  `"response" "quantiles"`. This can be different to the predict type of
-  the [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) that
-  is being wrapped.
+  `"quantiles"`. This can be different to the predict type of the
+  [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) that is
+  being wrapped. Read-only.
 
 ## Methods
 

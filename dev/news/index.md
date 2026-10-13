@@ -10,6 +10,16 @@
 - Fix: Deep-cloning a `GraphLearner` now also clones `R6` objects in its
   saved hyperparameter values (`$state$param_vals`).
 - Tests in `inst/testthat` no longer override `expect_equal`.
+- Fix: `PipeOpLearnerPICVPlus` and `PipeOpLearnerQuantiles` now report
+  `$predict_type` as `"quantiles"` instead of
+  `c("response", "quantiles")`, so a `GraphLearner` containing them also
+  reports and accepts `"quantiles"`
+  ([\#1035](https://github.com/mlr-org/mlr3pipelines/issues/1035)).
+- Fix: `PipeOpLearnerQuantiles` no longer predicts the same value for
+  every quantile when its model was trained in a different process,
+  e.g. with `callr` encapsulation or with stored models from a
+  parallelized
+  [`resample()`](https://mlr3.mlr-org.com/reference/resample.html).
 - Fix: Deep-cloning a `PipeOpVtreat` trained on a `Multiplicity` now
   also clones the treatment plans’ internal environments, which were
   previously shared between the clone and the original.
