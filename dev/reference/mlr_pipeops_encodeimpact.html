@@ -128,6 +128,8 @@ If <code>TRUE</code>, impute missing values as impact 0; otherwise the respectiv
 
 
 <p>Uses Laplace smoothing, mostly to avoid infinite values for <a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">classification Task</a>.</p>
+<p>Only <code><a href="https://mlr3.mlr-org.com/reference/TaskRegr.html" class="external-link">TaskRegr</a></code> and <code><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></code> (or <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>s inheriting from
+them) are supported, other <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>s give an error during training.</p>
     </div>
     <div class="section level2">
     <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>

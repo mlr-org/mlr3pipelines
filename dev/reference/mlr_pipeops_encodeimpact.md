@@ -82,6 +82,13 @@ Uses Laplace smoothing, mostly to avoid infinite values for
 [classification
 Task](https://mlr3.mlr-org.com/reference/TaskClassif.html).
 
+Only [`TaskRegr`](https://mlr3.mlr-org.com/reference/TaskRegr.html) and
+[`TaskClassif`](https://mlr3.mlr-org.com/reference/TaskClassif.html) (or
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html)s inheriting from
+them) are supported, other
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html)s give an error
+during training.
+
 ## Fields
 
 Only fields inherited from

@@ -85,6 +85,13 @@ as well as:
 Uses the [`lme4::glmer`](https://rdrr.io/pkg/lme4/man/glmer.html). This
 is relatively inefficient for features with a large number of levels.
 
+Only [`TaskRegr`](https://mlr3.mlr-org.com/reference/TaskRegr.html) and
+[`TaskClassif`](https://mlr3.mlr-org.com/reference/TaskClassif.html) (or
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html)s inheriting from
+them) are supported, other
+[`Task`](https://mlr3.mlr-org.com/reference/Task.html)s give an error
+during training.
+
 ## Fields
 
 Only fields inherited from

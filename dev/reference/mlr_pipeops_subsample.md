@@ -59,7 +59,8 @@ parameters are:
   Should the subsamples be stratified by target? Initialized to `FALSE`.
   May only be `TRUE` for
   [`TaskClassif`](https://mlr3.mlr-org.com/reference/TaskClassif.html)
-  input and if `use_groups = FALSE`.
+  input (or [`Task`](https://mlr3.mlr-org.com/reference/Task.html)s
+  inheriting from it) and if `use_groups = FALSE`.
 
 - `use_groups` :: `logical(1)`  
   If `TRUE` and if the

@@ -22,14 +22,17 @@ inheriting from
 
 - `task_type` :: `character(1)`  
   The class of [`Task`](https://mlr3.mlr-org.com/reference/Task.html)
-  that should be accepted as input, given as a `character(1)`. This is
-  used to construct the appropriate
-  [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) to be
-  used for obtaining the bins for piecewise linear encoding. Supported
-  options are `"TaskClassif"`for
+  that should be accepted as input, given as a `character(1)`. This
+  determines the
+  [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) used for
+  obtaining the bins:
   [`LearnerClassifRpart`](https://mlr3.mlr-org.com/reference/mlr_learners_classif.rpart.html)
-  or `"TaskRegr"`for
-  [`LearnerRegrRpart`](https://mlr3.mlr-org.com/reference/mlr_learners_regr.rpart.html).
+  for `"TaskClassif"` and
+  [`LearnerRegrRpart`](https://mlr3.mlr-org.com/reference/mlr_learners_regr.rpart.html)
+  for `"TaskRegr"`. Classes inheriting from these that are registered in
+  [`mlr_reflections$task_types`](https://mlr3.mlr-org.com/reference/mlr_reflections.html),
+  are also supported, and it should usually be sufficient to pass the
+  name of the respective super-class.
 
 - `id` :: `character(1)`  
   Identifier of resulting object, default `"encodeplquantiles"`.
@@ -44,10 +47,8 @@ inheriting from
 Input and output channels are inherited from
 [`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md).
 Instead of a [`Task`](https://mlr3.mlr-org.com/reference/Task.html), a
-[`TaskClassif`](https://mlr3.mlr-org.com/reference/TaskClassif.html) or
-[`TaskRegr`](https://mlr3.mlr-org.com/reference/TaskRegr.html) is used
-as input and output during training and prediction, depending on the
-`task_type` construction argument.
+`Task` of the class given by the `task_type` construction argument is
+used as input and output during training and prediction.
 
 The output is the input
 [`Task`](https://mlr3.mlr-org.com/reference/Task.html) with all affected

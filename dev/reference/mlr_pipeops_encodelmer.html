@@ -164,6 +164,8 @@ Initialized to <code>TRUE</code>.</p></li>
 
 
 <p>Uses the <code><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">lme4::glmer</a></code>. This is relatively inefficient for features with a large number of levels.</p>
+<p>Only <code><a href="https://mlr3.mlr-org.com/reference/TaskRegr.html" class="external-link">TaskRegr</a></code> and <code><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></code> (or <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>s inheriting from
+them) are supported, other <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>s give an error during training.</p>
     </div>
     <div class="section level2">
     <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>

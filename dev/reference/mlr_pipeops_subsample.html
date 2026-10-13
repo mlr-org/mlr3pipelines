@@ -101,7 +101,9 @@ The output during prediction is the unchanged input.</p>
 <p>The parameters are the parameters inherited from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>; however, the <code>affect_columns</code> parameter is <em>not</em> present. Further parameters are:</p><ul><li><p><code>frac</code> :: <code>numeric(1)</code><br>
 Fraction of rows in the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> to keep. May only be greater than 1 if <code>replace</code> is <code>TRUE</code>. Initialized to <code>(1 - exp(-1)) == 0.6321</code>.</p></li>
 <li><p><code>stratify</code> :: <code>logical(1)</code><br>
-Should the subsamples be stratified by target? Initialized to <code>FALSE</code>. May only be <code>TRUE</code> for <code><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></code> input and if <code>use_groups = FALSE</code>.</p></li>
+Should the subsamples be stratified by target? Initialized to <code>FALSE</code>.
+May only be <code>TRUE</code> for <code><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></code> input
+(or <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>s inheriting from it) and if <code>use_groups = FALSE</code>.</p></li>
 <li><p><code>use_groups</code> :: <code>logical(1)</code><br>
 If <code>TRUE</code> and if the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> has a column with role <code>group</code>, grouped observations are kept together during subsampling. In case of  sampling with</p></li>
 <li><p><code>replace</code> :: <code>logical(1)</code><br>

@@ -41,6 +41,9 @@ inheriting from
 
 Input and output channels are inherited from
 [`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md).
+Instead of a [`Task`](https://mlr3.mlr-org.com/reference/Task.html), a
+[`TaskClassif`](https://mlr3.mlr-org.com/reference/TaskClassif.html) is
+used as input during training and prediction.
 
 ## State
 
