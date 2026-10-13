@@ -112,7 +112,7 @@ The <code>response</code> is the median of the prediction of all cross validatio
 <p>The <code>$state</code> is a named <code>list</code> with members:</p><ul><li><p><code>cv_model_states</code> :: <code>list</code><br>
 List of the state of each cross validation model created by the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>'s <code>$.train()</code> function during resampling with method <code>"cv"</code>.</p></li>
 <li><p><code>residuals</code> :: <code>data.table</code><br><code>data.table</code> with columns <code>fold</code> and <code>residual</code>. Lists the Regression residuals for each observation and cross validation fold.</p></li>
-</ul><p>This state is given the class <code>"pipeop_learner_cv_state"</code>.</p>
+</ul><p>This state is given the class <code>"pipeop_learner_pi_cvplus_state"</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a></h2>

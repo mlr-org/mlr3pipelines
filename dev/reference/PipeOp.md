@@ -162,7 +162,9 @@ to return the same identical-by-reference objects to multiple outputs.
   can be reliably modified during `$train()`, because `private$.train()`
   may theoretically be executed in a different `R`-session (e.g. for
   parallelization). `$state` should furthermore always be set to
-  something with copy-semantics, since it is never cloned. This is a
+  something with copy-semantics: a `$state` that is itself an `R6`
+  object is cloned when the `PipeOp` is deep-cloned, but reference
+  objects contained within it (e.g. inside a `list`) are not. This is a
   limitation not of `PipeOp` or `mlr3pipelines`, but of the way the
   system as a whole works, together with
   [`GraphLearner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_learners_graph.md)

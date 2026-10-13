@@ -79,7 +79,7 @@ The `$state` is a named `list` with members:
   `data.table` with columns `fold` and `residual`. Lists the Regression
   residuals for each observation and cross validation fold.
 
-This state is given the class `"pipeop_learner_cv_state"`.
+This state is given the class `"pipeop_learner_pi_cvplus_state"`.
 
 ## Parameters
 

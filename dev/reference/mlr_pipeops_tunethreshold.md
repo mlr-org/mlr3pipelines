@@ -46,8 +46,8 @@ Input and output channels are inherited from
 
 The `$state` is a named `list` with elements
 
-- `thresholds` :: `numeric`  
-  Learned thresholds;
+- `threshold` :: `numeric`  
+  Learned thresholds.
 
 ## Parameters
 
