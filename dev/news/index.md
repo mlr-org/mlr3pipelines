@@ -2,6 +2,22 @@
 
 ## mlr3pipelines 0.12.0-9000
 
+- Fix: `GraphLearner$graph_model` now throws an informative error asking
+  to call `$unmarshal()` first when the `GraphLearner` is marshaled.
+  This also affects `$pipeops`, `$base_learner()`, `$importance()`,
+  `$selected_features()`, `$oob_error()`, and `$loglik()`
+  ([\#1038](https://github.com/mlr-org/mlr3pipelines/issues/1038)).
+- [`as_learner()`](https://mlr3.mlr-org.com/reference/as_learner.html)
+  for `Graph` input defaults to `clone = FALSE` again, as it did before
+  0.12.0, consistent with
+  [`as_learner()`](https://mlr3.mlr-org.com/reference/as_learner.html)
+  for `PipeOp` and `Learner` input
+  ([\#1039](https://github.com/mlr-org/mlr3pipelines/issues/1039)).
+- Fix:
+  [`as_learner()`](https://mlr3.mlr-org.com/reference/as_learner.html)
+  for `Graph` and `PipeOp` input now throws an error on unknown
+  arguments instead of silently ignoring them
+  ([\#1039](https://github.com/mlr-org/mlr3pipelines/issues/1039)).
 - Fix: `GraphLearner$hash` and `$phash` now include the timeout, the
   deadline, the encapsulation method, and the `when` handler, matching
   `Learner$hash` in `mlr3`, so `GraphLearner`s differing only in these

@@ -509,6 +509,9 @@ the *[dplyr](https://github.com/tidyverse/dplyr)* package.
   : Conversion to mlr3pipelines PipeOp
 - [`assert_pipeop()`](https://mlr3pipelines.mlr-org.com/dev/reference/assert_pipeop.md)
   : Assertion for mlr3pipelines PipeOp
+- [`as_learner(`*`<Graph>`*`)`](https://mlr3pipelines.mlr-org.com/dev/reference/as_learner.Graph.md)
+  [`as_learner(`*`<PipeOp>`*`)`](https://mlr3pipelines.mlr-org.com/dev/reference/as_learner.Graph.md)
+  : Conversion of Graph or PipeOp to GraphLearner
 - [`is_noop()`](https://mlr3pipelines.mlr-org.com/dev/reference/is_noop.md)
   : Test for NO_OP
 - [`NO_OP`](https://mlr3pipelines.mlr-org.com/dev/reference/NO_OP.md) :

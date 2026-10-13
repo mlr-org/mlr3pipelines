@@ -99,7 +99,7 @@ non-<code>NULL</code> <code>$state</code>, it is ignored.</p>
 
 
 
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>GraphLearner<span class="sc">$</span><span class="fu">new</span>(graph, <span class="at">id =</span> <span class="cn">NULL</span>, <span class="at">param_vals =</span> <span class="fu">list</span>(), <span class="at">task_type =</span> <span class="cn">NULL</span>, <span class="at">predict_type =</span> <span class="cn">NULL</span>)</span></code></pre><p></p></div><ul><li><p><code>graph</code> :: <code><a href="Graph.html">Graph</a></code> | <code><a href="PipeOp.html">PipeOp</a></code><br><code><a href="Graph.html">Graph</a></code> to wrap. Can be a <code><a href="PipeOp.html">PipeOp</a></code>, which is automatically converted to a <code><a href="Graph.html">Graph</a></code>.
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>GraphLearner<span class="sc">$</span><span class="fu">new</span>(graph, <span class="at">id =</span> <span class="cn">NULL</span>, <span class="at">param_vals =</span> <span class="fu">list</span>(), <span class="at">task_type =</span> <span class="cn">NULL</span>, <span class="at">predict_type =</span> <span class="cn">NULL</span>, <span class="at">clone_graph =</span> <span class="cn">TRUE</span>)</span></code></pre><p></p></div><ul><li><p><code>graph</code> :: <code><a href="Graph.html">Graph</a></code> | <code><a href="PipeOp.html">PipeOp</a></code><br><code><a href="Graph.html">Graph</a></code> to wrap. Can be a <code><a href="PipeOp.html">PipeOp</a></code>, which is automatically converted to a <code><a href="Graph.html">Graph</a></code>.
 This argument is usually cloned, unless <code>clone_graph</code> is <code>FALSE</code>; to access the <code><a href="Graph.html">Graph</a></code> inside <code>GraphLearner</code> by-reference, use <code>$graph</code>.<br></p></li>
 <li><p><code>id</code> :: <code>character(1)</code>
 Identifier of the resulting <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>.</p></li>
@@ -110,9 +110,13 @@ What <code>task_type</code> the <code>GraphLearner</code> should have; usually a
 <li><p><code>predict_type</code> :: <code>character(1)</code><br>
 What <code>predict_type</code> the <code>GraphLearner</code> should have; usually automatically inferred for <code><a href="Graph.html">Graph</a></code>s that are simple enough.</p></li>
 <li><p><code>clone_graph</code> :: <code>logical(1)</code><br>
-Whether to clone <code>graph</code> upon construction. Unintentionally changing <code>graph</code> by reference can lead to unexpected behaviour,
-so <code>TRUE</code> (default) is recommended. In particular, note that the <code>$state</code> of <code>$graph</code> is set to <code>NULL</code> by reference on
-construction of <code>GraphLearner</code>, during <code>$train()</code>, and during <code>$predict()</code> when <code>clone_graph</code> is <code>FALSE</code>.</p></li>
+Whether to deep clone <code>graph</code> upon construction.
+If <code>FALSE</code>, <code>graph</code> is wrapped by reference,
+so changes to <code>graph</code>, such as new hyperparameter values, also affect the <code>GraphLearner</code>, and vice versa.
+Furthermore, if <code>graph</code> is trained, its <code>$state</code> is reset by reference during construction,
+as well as whenever the <code>GraphLearner</code> is trained or used for prediction.
+Since unintentionally changing <code>graph</code> by reference can lead to unexpected behaviour,
+<code>TRUE</code> (default) is recommended.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>
@@ -120,7 +124,8 @@ construction of <code>GraphLearner</code>, during <code>$train()</code>, and dur
 
 <p>Fields inherited from <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>, as well as:</p><ul><li><p><code>graph</code> :: <code><a href="Graph.html">Graph</a></code><br><code><a href="Graph.html">Graph</a></code> that is being wrapped. This field contains the prototype of the <code><a href="Graph.html">Graph</a></code> that is being trained, but does <em>not</em>
 contain the model. Use <code>graph_model</code> to access the trained <code><a href="Graph.html">Graph</a></code> after <code>$train()</code>. Read-only.</p></li>
-<li><p><code>graph_model</code> :: <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code><br><code><a href="Graph.html">Graph</a></code> that is being wrapped. This <code><a href="Graph.html">Graph</a></code> contains a trained state after <code>$train()</code>. Read-only.</p></li>
+<li><p><code>graph_model</code> :: <code><a href="Graph.html">Graph</a></code><br><code><a href="Graph.html">Graph</a></code> that is being wrapped. This <code><a href="Graph.html">Graph</a></code> contains a trained state after <code>$train()</code>. Read-only.
+Accessing it while the <code>GraphLearner</code> is marshaled throws an error; call <code>$unmarshal()</code> first.</p></li>
 <li><p><code>pipeops</code> :: named <code>list</code> of <code><a href="PipeOp.html">PipeOp</a></code> <br>
 Contains all <code><a href="PipeOp.html">PipeOp</a></code>s in the underlying <code><a href="Graph.html">Graph</a></code>, named by the <code><a href="PipeOp.html">PipeOp</a></code>'s <code>$id</code>s. Shortcut for <code>$graph_model$pipeops</code>. See <code><a href="Graph.html">Graph</a></code> for details.</p></li>
 <li><p><code>edges</code> :: <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code>  with columns <code>src_id</code> (<code>character</code>), <code>src_channel</code> (<code>character</code>), <code>dst_id</code> (<code>character</code>), <code>dst_channel</code> (<code>character</code>)<br>
@@ -258,7 +263,7 @@ recommended.</p>
 <span class="r-in"><span><span class="va">graph</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"pca"</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">lr</span> <span class="op">=</span> <span class="va">GraphLearner</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">lr</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_learner.html" class="external-link">as_learner</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span>  <span class="co"># equivalent</span></span></span>
+<span class="r-in"><span><span class="va">lr</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_learner.html" class="external-link">as_learner</a></span><span class="op">(</span><span class="va">graph</span>, clone <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  <span class="co"># equivalent</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">lr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>

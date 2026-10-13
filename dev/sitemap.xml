@@ -26,6 +26,7 @@
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/add_class_hierarchy_cache.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/as.Multiplicity.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/as_graph.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/as_learner.Graph.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/as_pipeop.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/assert_graph.html</loc></url>
 <url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/assert_pipeop.html</loc></url>

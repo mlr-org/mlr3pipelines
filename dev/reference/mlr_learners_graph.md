@@ -35,7 +35,7 @@ inheriting from
 
 ## Construction
 
-    GraphLearner$new(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL)
+    GraphLearner$new(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL, clone_graph = TRUE)
 
 - `graph` ::
   [`Graph`](https://mlr3pipelines.mlr-org.com/dev/reference/Graph.md) \|
@@ -70,12 +70,14 @@ inheriting from
   that are simple enough.
 
 - `clone_graph` :: `logical(1)`  
-  Whether to clone `graph` upon construction. Unintentionally changing
-  `graph` by reference can lead to unexpected behaviour, so `TRUE`
-  (default) is recommended. In particular, note that the `$state` of
-  `$graph` is set to `NULL` by reference on construction of
-  `GraphLearner`, during `$train()`, and during `$predict()` when
-  `clone_graph` is `FALSE`.
+  Whether to deep clone `graph` upon construction. If `FALSE`, `graph`
+  is wrapped by reference, so changes to `graph`, such as new
+  hyperparameter values, also affect the `GraphLearner`, and vice versa.
+  Furthermore, if `graph` is trained, its `$state` is reset by reference
+  during construction, as well as whenever the `GraphLearner` is trained
+  or used for prediction. Since unintentionally changing `graph` by
+  reference can lead to unexpected behaviour, `TRUE` (default) is
+  recommended.
 
 ## Fields
 
@@ -94,11 +96,13 @@ as:
   after `$train()`. Read-only.
 
 - `graph_model` ::
-  [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html)  
+  [`Graph`](https://mlr3pipelines.mlr-org.com/dev/reference/Graph.md)  
   [`Graph`](https://mlr3pipelines.mlr-org.com/dev/reference/Graph.md)
   that is being wrapped. This
   [`Graph`](https://mlr3pipelines.mlr-org.com/dev/reference/Graph.md)
-  contains a trained state after `$train()`. Read-only.
+  contains a trained state after `$train()`. Read-only. Accessing it
+  while the `GraphLearner` is marshaled throws an error; call
+  `$unmarshal()` first.
 
 - `pipeops` :: named `list` of
   [`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)  
@@ -383,7 +387,7 @@ library("mlr3")
 graph = po("pca") %>>% lrn("classif.rpart")
 
 lr = GraphLearner$new(graph)
-lr = as_learner(graph)  # equivalent
+lr = as_learner(graph, clone = TRUE)  # equivalent
 
 lr$train(tsk("iris"))
 
