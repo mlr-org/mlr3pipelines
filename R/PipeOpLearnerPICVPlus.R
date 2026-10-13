@@ -68,9 +68,10 @@
 #'   If the `PipeOpLearnerPICVPlus` has been trained, this is a `list` containing the [`Learner`][mlr3::Learner]s of the cross validation models.
 #'   Otherwise, this contains the [`Learner`][mlr3::Learner] that is being wrapped.
 #'   Read-only.
-#' * `predict_type`\cr
-#'   Predict type of the `PipeOpLearnerPICVPlus`, which is always `"response"  "quantiles"`.
+#' * `predict_type` :: `character(1)`\cr
+#'   Predict type of the `PipeOpLearnerPICVPlus`, which is always `"quantiles"`.
 #'   This can be different to the predict type of the [`Learner`][mlr3::Learner] that is being wrapped.
+#'   Read-only.
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
@@ -149,12 +150,11 @@ PipeOpLearnerPICVPlus = R6Class("PipeOpLearnerPICVPlus",
       }
     },
     predict_type = function(val) {
-      predict_type = mlr_reflections$learner_predict_types$regr$quantiles  # c("response", "quantiles")
       # read-only, but assigning the current value is a no-op
-      if (!missing(val) && !identical(val, predict_type)) {
+      if (!missing(val) && !identical(val, "quantiles")) {
         stop("$predict_type is read-only.")
       }
-      predict_type
+      "quantiles"
     }
   ),
   private = list(
