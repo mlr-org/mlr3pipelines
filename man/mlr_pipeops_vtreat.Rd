@@ -115,6 +115,9 @@ For more information, see \code{\link[vtreat:regression_parameters]{vtreat::regr
 
 Follows vtreat's fit/prepare interface. See \code{\link[vtreat:NumericOutcomeTreatment]{vtreat::NumericOutcomeTreatment()}}, \code{\link[vtreat:BinomialOutcomeTreatment]{vtreat::BinomialOutcomeTreatment()}},
 \code{\link[vtreat:MultinomialOutcomeTreatment]{vtreat::MultinomialOutcomeTreatment()}}, \code{\link[vtreat:fit_prepare]{vtreat::fit_prepare()}} and \code{\link[vtreat:prepare]{vtreat::prepare()}}.
+
+Only \code{\link[mlr3:TaskRegr]{TaskRegr}} and \code{\link[mlr3:TaskClassif]{TaskClassif}} (or \code{\link[mlr3:Task]{Task}}s inheriting from
+them) are supported, other \code{\link[mlr3:Task]{Task}}s give an error during training.
 }
 
 \section{Fields}{

@@ -93,6 +93,33 @@ test_that("PipeOpEncodeLmer Edge Cases", {
 })
 
 
+test_that("PipeOpEncodeLmer on derived task types", {
+  skip_if_not_installed("nloptr")
+  skip_if_not_installed("lme4")
+  set.seed(8008135)
+  task_classif = mlr3::TaskClassif$new("task",
+    data.table::data.table(x = sample_n_letters(40), y = sample_n_letters(40), z = seq_len(40)), "x")
+  task_regr = mlr3::TaskRegr$new("task",
+    data.table::data.table(x = rnorm(40), y = sample_n_letters(40), z = seq_len(40)), "x")
+
+  op = PipeOpEncodeLmer$new()
+
+  for (task in list(task_classif, task_regr)) {
+    task_derived = as_derived_task(task)
+
+    # Tasks derived from TaskRegr / TaskClassif are encoded like the base Task and keep their class
+    train_out = op$train(list(task_derived))[[1L]]
+    expect_class(train_out, class(task_derived)[[1L]])
+    expect_true("factor" %nin% train_out$feature_types$type)
+    expect_equal(train_out$data(), op$train(list(task))[[1L]]$data())
+    expect_equal(op$predict(list(task_derived))[[1L]]$data(), op$predict(list(task))[[1L]]$data())
+  }
+
+  # other supervised Tasks give an informative error
+  task_other = TaskSupervisedDerived$new("other", task_regr$data(), target = c("x", "z"))
+  expect_error(op$train(list(task_other)), "Only TaskRegr, TaskClassif.*but got TaskSupervisedDerived")
+})
+
 test_that("Confirms to sensible values", {
   skip_if_not_installed("nloptr")
   skip_if_not_installed("lme4")

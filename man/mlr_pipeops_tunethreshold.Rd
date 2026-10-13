@@ -37,7 +37,8 @@ that would otherwise be set during construction. Default \code{list()}.
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOp}}.
+Input and output channels are inherited from \code{\link{PipeOp}}. Instead of a \code{\link[mlr3:Task]{Task}}, a
+\code{\link[mlr3:TaskClassif]{TaskClassif}} is used as input during training and prediction.
 }
 
 \section{State}{

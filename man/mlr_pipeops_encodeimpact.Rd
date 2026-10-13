@@ -71,6 +71,9 @@ If \code{TRUE}, impute missing values as impact 0; otherwise the respective impa
 \section{Internals}{
 
 Uses Laplace smoothing, mostly to avoid infinite values for \link[mlr3:TaskClassif]{classification Task}.
+
+Only \code{\link[mlr3:TaskRegr]{TaskRegr}} and \code{\link[mlr3:TaskClassif]{TaskClassif}} (or \code{\link[mlr3:Task]{Task}}s inheriting from
+them) are supported, other \code{\link[mlr3:Task]{Task}}s give an error during training.
 }
 
 \section{Fields}{
