@@ -37,7 +37,7 @@ test_that("PipeOpLearnerQuantiles - basic properties", {
   expect_list(po$state$model_states)
   expect_equal(length(po$state$model_states), length(po$param_set$values$quantiles.q_vals))
 
-  expect_equal(po$predict_type, c("response", "quantiles"))
+  expect_equal(po$predict_type, "quantiles")
   prds = predict_pipeop(po, list(task))
   expect_class(prds$output, "PredictionRegr")
   expect_true(all(c("response", "quantiles") %in% names(prds$output)))
@@ -107,14 +107,40 @@ test_that("PipeOpLearnerQuantiles - model active binding to state", {
 test_that("PipeOpLearnerQuantiles - predict_type is fixed", {
   lrn = lrn("regr.debug")
   po = PipeOpLearnerQuantiles$new(lrn)
-  expect_equal(po$predict_type, c("response", "quantiles"))
+  expect_equal(po$predict_type, "quantiles")
 
   # assigning the current value is a no-op, anything else errors
-  po$predict_type = c("response", "quantiles")
-  expect_equal(po$predict_type, c("response", "quantiles"))
-  expect_error({po$predict_type = "quantiles"}, "read-only")
+  po$predict_type = "quantiles"
+  expect_equal(po$predict_type, "quantiles")
   expect_error({po$predict_type = "response"}, "read-only")
-  expect_equal(po$predict_type, c("response", "quantiles"))
+  expect_error({po$predict_type = c("response", "quantiles")}, "read-only")
+  expect_equal(po$predict_type, "quantiles")
+})
+
+test_that("PipeOpLearnerQuantiles - predict_type of GraphLearner", {
+  glrn = as_learner(po("learner_quantiles", lrn("regr.featureless")))
+  expect_equal(glrn$predict_type, "quantiles")
+  glrn$predict_type = "quantiles"
+  expect_equal(glrn$predict_type, "quantiles")
+  expect_error({glrn$predict_type = "response"}, "read-only")
+
+  glrn = as_learner(po("learner_quantiles", lrn("regr.featureless")), predict_type = "quantiles")
+  expect_equal(glrn$predict_type, "quantiles")
+
+  # measures requiring quantiles do not warn about a missing predict type
+  rr = resample(tsk("mtcars"), glrn, rsmp("holdout"))
+  expect_no_warning(rr$aggregate(msr("regr.pinball")))
+})
+
+test_that("PipeOpLearnerQuantiles - predict does not rely on predict_type set during training", {
+  task = tsk("mtcars")
+  po = po("learner_quantiles", lrn("regr.featureless"))
+  po$train(list(task))
+  quantiles = po$predict(list(task))[[1L]]$quantiles
+
+  # as if training had run in another process, e.g. with callr encapsulation
+  po$learner$predict_type = "response"
+  expect_equal(po$predict(list(task))[[1L]]$quantiles, quantiles)
 })
 
 test_that("PipeOpLearnerQuantiles - integration with larger graph", {
