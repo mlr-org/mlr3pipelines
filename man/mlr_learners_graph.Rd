@@ -18,6 +18,7 @@ internal state changes during training are used.
 The \code{predict_type} of a \code{\link{GraphLearner}} can be obtained or set via it's \code{predict_type} active binding.
 Setting a new predict type will try to set the \code{predict_type} in all relevant
 \code{\link{PipeOp}} / \code{\link[mlr3:Learner]{Learner}} encapsulated within the \code{\link{Graph}}.
+\code{\link{PipeOp}}s whose \code{predict_type} already has the requested value are left untouched.
 Similarly, the predict_type of a Graph will always be the smallest denominator in the \code{\link{Graph}}.
 
 A \code{GraphLearner} is always constructed in an untrained state. When the \code{graph} argument has a
@@ -26,7 +27,7 @@ non-\code{NULL} \verb{$state}, it is ignored.
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{GraphLearner$new(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{GraphLearner$new(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL, clone_graph = TRUE)
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{graph} :: \code{\link{Graph}} | \code{\link{PipeOp}}\cr
@@ -41,9 +42,13 @@ What \code{task_type} the \code{GraphLearner} should have; usually automatically
 \item \code{predict_type} :: \code{character(1)}\cr
 What \code{predict_type} the \code{GraphLearner} should have; usually automatically inferred for \code{\link{Graph}}s that are simple enough.
 \item \code{clone_graph} :: \code{logical(1)}\cr
-Whether to clone \code{graph} upon construction. Unintentionally changing \code{graph} by reference can lead to unexpected behaviour,
-so \code{TRUE} (default) is recommended. In particular, note that the \verb{$state} of \verb{$graph} is set to \code{NULL} by reference on
-construction of \code{GraphLearner}, during \verb{$train()}, and during \verb{$predict()} when \code{clone_graph} is \code{FALSE}.
+Whether to deep clone \code{graph} upon construction.
+If \code{FALSE}, \code{graph} is wrapped by reference,
+so changes to \code{graph}, such as new hyperparameter values, also affect the \code{GraphLearner}, and vice versa.
+Furthermore, if \code{graph} is trained, its \verb{$state} is reset by reference during construction,
+as well as whenever the \code{GraphLearner} is trained or used for prediction.
+Since unintentionally changing \code{graph} by reference can lead to unexpected behaviour,
+\code{TRUE} (default) is recommended.
 }
 }
 
@@ -54,8 +59,9 @@ Fields inherited from \code{\link[mlr3:Learner]{Learner}}, as well as:
 \item \code{graph} :: \code{\link{Graph}}\cr
 \code{\link{Graph}} that is being wrapped. This field contains the prototype of the \code{\link{Graph}} that is being trained, but does \emph{not}
 contain the model. Use \code{graph_model} to access the trained \code{\link{Graph}} after \verb{$train()}. Read-only.
-\item \code{graph_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
+\item \code{graph_model} :: \code{\link{Graph}}\cr
 \code{\link{Graph}} that is being wrapped. This \code{\link{Graph}} contains a trained state after \verb{$train()}. Read-only.
+Accessing it while the \code{GraphLearner} is marshaled throws an error; call \verb{$unmarshal()} first.
 \item \code{pipeops} :: named \code{list} of \code{\link{PipeOp}} \cr
 Contains all \code{\link{PipeOp}}s in the underlying \code{\link{Graph}}, named by the \code{\link{PipeOp}}'s \verb{$id}s. Shortcut for \verb{$graph_model$pipeops}. See \code{\link{Graph}} for details.
 \item \code{edges} :: \code{\link[data.table:data.table]{data.table}}  with columns \code{src_id} (\code{character}), \code{src_channel} (\code{character}), \code{dst_id} (\code{character}), \code{dst_channel} (\code{character})\cr
@@ -197,7 +203,7 @@ library("mlr3")
 graph = po("pca") \%>>\% lrn("classif.rpart")
 
 lr = GraphLearner$new(graph)
-lr = as_learner(graph)  # equivalent
+lr = as_learner(graph, clone = TRUE)  # equivalent
 
 lr$train(tsk("iris"))
 
