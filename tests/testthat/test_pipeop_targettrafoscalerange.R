@@ -87,6 +87,21 @@ test_that("PipeOpTargetTrafoScaleRange - row use subsets", {
   expect_equivalent((predict_out1$response - a) / b, predict_out2[[1L]]$response)
 })
 
+test_that("PipeOpTargetTrafoScaleRange - inverts se", {
+  task = tsk("mtcars")
+  pred_orig = lrn("regr.featureless", predict_type = "se")$train(task)$predict(task)
+
+  # lower > upper gives a negative scale
+  for (bounds in list(c(0, 1), c(1, -2))) {
+    glrn = as_learner(ppl("targettrafo", graph = lrn("regr.featureless", predict_type = "se"),
+      trafo_pipeop = po("targettrafoscalerange", lower = bounds[1L], upper = bounds[2L])))
+    pred = glrn$train(task)$predict(task)
+    expect_set_equal(pred$predict_types, c("response", "se"))
+    expect_equal(pred$response, pred_orig$response)
+    expect_equal(pred$se, pred_orig$se)
+  }
+})
+
 test_that("PipeOpTargetTrafoScaleRange - does not drop missing levels, #631", {
   task = tsk("boston_housing")$filter(1:100)
   op = po("targettrafoscalerange")
