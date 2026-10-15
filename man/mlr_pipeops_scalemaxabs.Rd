@@ -47,6 +47,11 @@ The maximum absolute value for each column after transformation. Default is 1.
 }
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
