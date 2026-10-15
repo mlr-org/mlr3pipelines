@@ -164,6 +164,38 @@ test_that("PipeOpVtreat - Multiclass Classification", {
   expect_true(train_out2$missings("x") == 0)
 })
 
+test_that("PipeOpVtreat - derived task types", {
+  skip_if_not_installed("vtreat")
+
+  op = PipeOpVtreat$new()
+
+  task_regr = as_derived_task(mlr_tasks$get("boston_housing_classic"))
+  expect_datapreproc_pipeop_class(PipeOpVtreat, task = task_regr,
+    deterministic_train = FALSE, deterministic_predict = FALSE)
+  train_out = op$train(list(task_regr))[[1L]]
+  expect_class(train_out, "TaskRegrDerived")
+  expect_equal(op$state$treatment_plan$treatment_type, "NumericOutcomeTreatment")
+  expect_class(op$predict(list(task_regr))[[1L]], "TaskRegrDerived")
+
+  task_classiftc = as_derived_task(mlr_tasks$get("diabetes"))
+  train_out = op$train(list(task_classiftc))[[1L]]
+  expect_class(train_out, "TaskClassifDerived")
+  expect_equal(op$state$treatment_plan$treatment_type, "BinomialOutcomeTreatment")
+  expect_equal(op$state$treatment_plan$settings$outcome_target, task_classiftc$positive)
+  expect_class(op$predict(list(task_classiftc))[[1L]], "TaskClassifDerived")
+
+  task_classifmc = as_derived_task(mlr_tasks$get("penguins"))
+  train_out = op$train(list(task_classifmc))[[1L]]
+  expect_class(train_out, "TaskClassifDerived")
+  expect_equal(op$state$treatment_plan$treatment_type, "MultinomialOutcomeTreatment")
+  expect_class(op$predict(list(task_classifmc))[[1L]], "TaskClassifDerived")
+
+  # other supervised Tasks give an informative error
+  task_other = TaskSupervisedDerived$new("other", mlr_tasks$get("boston_housing_classic")$data(),
+    target = c("medv", "chas"))
+  expect_error(op$train(list(task_other)), "Only TaskRegr, TaskClassif.*but got TaskSupervisedDerived")
+})
+
 test_that("PipeOpVtreat - Edge Cases", {
   skip_if_not_installed("vtreat")
 
@@ -191,3 +223,20 @@ test_that("PipeOpVtreat - Edge Cases", {
   predict_out2 = po$predict(list(task))[[1L]]
 })
 
+test_that("PipeOpVtreat - deep clone of Multiplicity state", {
+  skip_if_not_installed("vtreat")
+
+  task = tsk("boston_housing_classic")
+  op = PipeOpVtreat$new()
+  op$train(list(Multiplicity(a = task, b = task$clone()$filter(1:300))))
+  op_clone = op$clone(deep = TRUE)
+
+  for (nm in c("a", "b")) {
+    expect_false(identical(
+      op$state[[nm]]$treatment_plan$settings$state,
+      op_clone$state[[nm]]$treatment_plan$settings$state
+    ))
+  }
+  input = list(Multiplicity(a = task, b = task))
+  expect_equal(op$predict(input)[[1L]]$a$data(), op_clone$predict(input)[[1L]]$a$data())
+})

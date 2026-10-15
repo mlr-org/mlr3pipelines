@@ -53,6 +53,9 @@
 #'
 #' @section Internals:
 #' Uses Laplace smoothing, mostly to avoid infinite values for [classification Task][mlr3::TaskClassif].
+#' 
+#' Only [`TaskRegr`][mlr3::TaskRegr] and [`TaskClassif`][mlr3::TaskClassif] (or [`Task`][mlr3::Task]s inheriting from
+#' them) are supported, other [`Task`][mlr3::Task]s give an error during training.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -92,8 +95,14 @@ PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",
   ),
   private = list(
 
+    .get_state = function(task) {
+      # .get_state_dt() relies on the target being numeric (TaskRegr) or a factor (TaskClassif)
+      assert_regr_or_classif_task(task)
+      super$.get_state(task)
+    },
+
     .get_state_dt = function(dt, levels, target) {
-      # FIXME: Handle non-Regr / non-Classif Tasks that inherit from TaskSupervised, #913
+      # other Tasks are rejected in .get_state()
       task_type = if (is.numeric(target)) "regr" else "classif"
       state = list()
 

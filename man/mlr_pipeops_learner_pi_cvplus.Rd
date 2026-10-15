@@ -58,7 +58,7 @@ List of the state of each cross validation model created by the \code{\link[mlr3
 \code{data.table} with columns \code{fold} and \code{residual}. Lists the Regression residuals for each observation and cross validation fold.
 }
 
-This state is given the class \code{"pipeop_learner_cv_state"}.
+This state is given the class \code{"pipeop_learner_pi_cvplus_state"}.
 }
 
 \section{Parameters}{
@@ -88,9 +88,10 @@ Read-only.
 If the \code{PipeOpLearnerPICVPlus} has been trained, this is a \code{list} containing the \code{\link[mlr3:Learner]{Learner}}s of the cross validation models.
 Otherwise, this contains the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
 Read-only.
-\item \code{predict_type}\cr
-Predict type of the \code{PipeOpLearnerPICVPlus}, which is always \verb{"response"  "quantiles"}.
+\item \code{predict_type} :: \code{character(1)}\cr
+Predict type of the \code{PipeOpLearnerPICVPlus}, which is always \code{"quantiles"}.
 This can be different to the predict type of the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
+Read-only.
 }
 }
 
@@ -204,6 +205,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_tunethreshold}},
+\code{\link{mlr_pipeops_umap}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_vtreat}},

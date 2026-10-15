@@ -37,15 +37,16 @@ that would otherwise be set during construction. Default \code{list()}.
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOp}}.
+Input and output channels are inherited from \code{\link{PipeOp}}. Instead of a \code{\link[mlr3:Task]{Task}}, a
+\code{\link[mlr3:TaskClassif]{TaskClassif}} is used as input during training and prediction.
 }
 
 \section{State}{
 
 The \verb{$state} is a named \code{list} with elements
 \itemize{
-\item \code{thresholds} :: \code{numeric}\cr
-Learned thresholds;
+\item \code{threshold} :: \code{numeric}\cr
+Learned thresholds.
 }
 }
 
@@ -189,6 +190,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_tomek}},
+\code{\link{mlr_pipeops_umap}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_vtreat}},
