@@ -33,6 +33,9 @@
 #' * `maxabs`  :: `numeric(1)` \cr
 #'   The maximum absolute value for each column after transformation. Default is 1.
 #'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
