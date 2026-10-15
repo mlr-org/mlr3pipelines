@@ -34,7 +34,9 @@
 #' * `frac` :: `numeric(1)`\cr
 #'   Fraction of rows in the [`Task`][mlr3::Task] to keep. May only be greater than 1 if `replace` is `TRUE`. Initialized to `(1 - exp(-1)) == 0.6321`.
 #' * `stratify` :: `logical(1)`\cr
-#'   Should the subsamples be stratified by target? Initialized to `FALSE`. May only be `TRUE` for [`TaskClassif`][mlr3::TaskClassif] input and if `use_groups = FALSE`.
+#'   Should the subsamples be stratified by target? Initialized to `FALSE`.
+#'   May only be `TRUE` for [`TaskClassif`][mlr3::TaskClassif] input
+#'   (or [`Task`][mlr3::Task]s inheriting from it) and if `use_groups = FALSE`.
 #' * `use_groups` :: `logical(1)`\cr
 #'  If `TRUE` and if the [`Task`][mlr3::Task] has a column with role `group`, grouped observations are kept together during subsampling. In case of  sampling with
 #  `replace = TRUE`, the group entry of duplicate samples is suffixed (`_1`, `_2`, ...). May only be `TRUE` if `strafiy = FALSE`. Initialized to `TRUE`.
@@ -126,7 +128,8 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
         keep = task$groups[list(keep_grps), on = "group", allow.cartesian = TRUE]$row_id
       } else if (pv$stratify) {
         if (!inherits(task, "TaskClassif")) {
-          stopf("Stratification not supported for %s", class(task))
+          stopf("Stratification is only supported for TaskClassif or tasks inheriting from it, but got %s.",
+            class(task)[[1L]])
         }
         splt = split(task$row_roles$use, task$data(cols = task$target_names))
         keep = unlist(map(splt, function(x) {

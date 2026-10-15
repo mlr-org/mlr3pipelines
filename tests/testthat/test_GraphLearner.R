@@ -146,18 +146,39 @@ test_that("as_learner.Graph forwards GraphLearner constructor arguments", {
   expect_identical(learner$task_type, "classif")
   expect_identical(learner$predict_type, "prob")
   expect_identical(learner$param_set$values$classif.debug.x, 0.5)
-  expect_false(identical(learner$graph, graph))
 })
 
-test_that("as_learner.Graph supports discarding state", {
+test_that("as_learner.Graph and as_learner.PipeOp do not clone by default", {
   graph = as_graph(lrn("classif.debug"))
-  graph$train(tsk("iris"))
+  expect_identical(as_learner(graph)$graph, graph)
+  expect_false(identical(as_learner(graph, clone = TRUE)$graph, graph))
 
-  learner = as_learner(graph, discard_state = TRUE)
+  pipeop = po("learner", lrn("classif.debug"))
+  expect_identical(as_learner(pipeop)$graph$pipeops$classif.debug, pipeop)
+  expect_false(identical(as_learner(pipeop, clone = TRUE)$graph$pipeops$classif.debug, pipeop))
+})
 
+test_that("as_learner.Graph and as_learner.PipeOp reject unknown arguments", {
+  graph = as_graph(lrn("classif.debug"))
+  expect_error(as_learner(graph, param_values = list()), "named arguments that were unused: param_values")
+  expect_error(as_learner(graph, clone_graph = FALSE), "named arguments that were unused: clone_graph")
+  expect_error(as_learner(graph, FALSE, FALSE, "a"), "1 unnamed argument")
+  expect_error(as_learner(graph, FALSE, FALSE, "a", idd = "b"), "1 unnamed, as well as named arguments idd")
+  expect_error(as_learner(po("nop"), idd = "a"), "named arguments that were unused: idd")
+})
+
+test_that("resample() works with Graph and PipeOp without changing them", {
+  task = tsk("iris")
+
+  graph = as_graph(lrn("classif.debug"))
+  graph$train(task)
+  expect_class(resample(task, graph, rsmp("holdout")), "ResampleResult")
   expect_true(graph$is_trained)
-  expect_null(learner$state)
-  expect_false(learner$graph$is_trained)
+
+  pipeop = po("learner", lrn("classif.debug"))
+  pipeop$train(list(task))
+  expect_class(resample(task, pipeop, rsmp("holdout")), "ResampleResult")
+  expect_true(pipeop$is_trained)
 })
 
 test_that("graphlearner parameters behave as they should", {
@@ -1288,6 +1309,19 @@ test_that("marshal has no effect when nothing needed marshaling", {
   expect_class(glrn$marshal()$model, "graph_learner_model")
   expect_class(glrn$unmarshal()$model, "graph_learner_model")
   expect_learner(glrn, task = task)
+})
+
+test_that("graph_model errs informatively when marshaled", {
+  task = tsk("iris")
+  glrn = as_learner(as_graph(lrn("classif.debug")))
+  glrn$train(task)
+  glrn$marshal()
+  expect_error(glrn$graph_model, "GraphLearner 'classif.debug' is marshaled, call \\$unmarshal\\(\\) first")
+  expect_error(glrn$pipeops, "is marshaled")
+  expect_error(glrn$base_learner(), "is marshaled")
+  expect_prediction(glrn$predict(task))
+  glrn$unmarshal()
+  expect_class(glrn$graph_model, "Graph")
 })
 
 

@@ -167,6 +167,28 @@ test_that("PipeOpImpactEncode on Regression", {
 
 })
 
+test_that("PipeOpEncodeImpact on derived task types", {
+  op = PipeOpEncodeImpact$new()
+
+  task_regr = mlr_tasks$get("boston_housing_classic")
+  task_classif = po("histbin")$train(list(tsk("iris")))[[1L]]
+
+  for (task in list(task_regr, task_classif)) {
+    task_derived = as_derived_task(task)
+    expect_datapreproc_pipeop_class(PipeOpEncodeImpact, task = task_derived)
+
+    # Tasks derived from TaskRegr / TaskClassif are encoded like the base Task and keep their class
+    train_out = op$train(list(task_derived))[[1L]]
+    expect_class(train_out, class(task_derived)[[1L]])
+    expect_equal(train_out$data(), op$train(list(task))[[1L]]$data())
+    expect_equal(op$predict(list(task_derived))[[1L]]$data(), op$predict(list(task))[[1L]]$data())
+  }
+
+  # other supervised Tasks give an informative error
+  task_other = TaskSupervisedDerived$new("other", task_regr$data(), target = c("medv", "chas"))
+  expect_error(op$train(list(task_other)), "Only TaskRegr, TaskClassif.*but got TaskSupervisedDerived")
+})
+
 test_that("PipeOpImpactEncode factor level ``", {
 
   op = PipeOpEncodeImpact$new()

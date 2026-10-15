@@ -42,3 +42,36 @@ test_that("PipeOpTargetInvert propagates extra prediction data", {
 
   expect_identical(output$data$extra, list(source = "inverter"))
 })
+
+test_that("PipeOpTargetInvert propagates prediction weights", {
+  po = PipeOpTargetInvert$new()
+  po$train(list(NULL, NULL))
+
+  prediction = PredictionRegr$new(
+    row_ids = 1:3,
+    truth = 1:3,
+    response = 4:6,
+    weights = c(0.5, 1, 2)
+  )
+
+  inverter = function(inputs) {
+    prediction = inputs[[1L]]
+    list(PredictionRegr$new(
+      row_ids = prediction$row_ids,
+      truth = prediction$truth,
+      response = prediction$response * 2
+    ))
+  }
+  output = po$predict(list(inverter, prediction))[[1L]]
+
+  expect_identical(output$weights, c(0.5, 1, 2))
+
+  inverter = function(inputs) {
+    output = inputs[[1L]]$clone(deep = TRUE)
+    output$data$weights = c(3, 3, 3)
+    list(output)
+  }
+  output = po$predict(list(inverter, prediction))[[1L]]
+
+  expect_identical(output$weights, c(3, 3, 3))
+})
