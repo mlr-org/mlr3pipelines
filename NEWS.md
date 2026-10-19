@@ -18,6 +18,7 @@
 * Fix: `pos()` now returns an unnamed list, preventing duplicated PipeOp IDs such as `pca.pca` when passed to `as_graph()`.
 * New `ppl("bag")` / `pipeline_bag()` performs real bagging with `frac = 1` and `replace = TRUE` by default. `ppl("bagging")` / `pipeline_bagging()` is deprecated and will be removed in the future.
 * Fix: `GraphLearner$predict_type` no longer assigns the `predict_type` of `PipeOp`s that already have the requested value. Read-only `$predict_type` fields (`PipeOp`, `PipeOpLearnerQuantiles`, `PipeOpLearnerPICVPlus`) now accept assignment of their current value as a no-op (#970).
+* Fix: `selector_cardinality_greater_than()` and `selector_missing()` no longer return the target column, which made `PipeOp`s using them as `affect_columns` fail (#1050).
 * Fix: `PipeOpTargetInvert` now keeps the observation weights of the incoming prediction.
 
 # mlr3pipelines 0.12.0
