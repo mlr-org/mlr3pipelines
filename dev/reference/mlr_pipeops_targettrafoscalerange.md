@@ -5,7 +5,8 @@ Linearly transforms a numeric target of a
 between `lower` and `upper`. The formula for this is \\x' = offset + x
 \* scale\\, where \\scale\\ is \\(upper - lower) / (max(x) - min(x))\\
 and \\offset\\ is \\-min(x) \* scale + lower\\. The same transformation
-is applied during training and prediction.
+is applied during training and prediction. When inverting a prediction,
+a standard error (`se`) is divided by \\\|scale\|\\.
 
 ## Format
 
@@ -187,8 +188,8 @@ po$predict(list(task))
 #>     assert_list(inputs, len = 1L, types = "Prediction")
 #>     list(private$.invert(inputs[[1L]], predict_phase_state))
 #> }
-#> <bytecode: 0x55a7bea3ed88>
-#> <environment: 0x55a7b86c64c0>
+#> <bytecode: 0x56240d8494e8>
+#> <environment: 0x562407643548>
 #> 
 #> $output
 #> 
@@ -256,7 +257,7 @@ ttscalerange$state$regr.rpart
 #> 
 #> $train_time
 #> elapsed 
-#>   0.009 
+#>   0.008 
 #> 
 #> $task_hash
 #> [1] "88d153e8827d7aff"

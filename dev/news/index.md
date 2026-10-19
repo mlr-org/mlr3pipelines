@@ -79,6 +79,9 @@
   `PipeOpLearnerPICVPlus`) now accept assignment of their current value
   as a no-op
   ([\#970](https://github.com/mlr-org/mlr3pipelines/issues/970)).
+- Fix: `PipeOpTargetTrafoScaleRange` no longer drops the standard error
+  (`se`) when inverting predictions, and instead rescales it to the
+  original target scale.
 - Fix:
   [`selector_cardinality_greater_than()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md)
   and
