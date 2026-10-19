@@ -79,6 +79,13 @@
   `PipeOpLearnerPICVPlus`) now accept assignment of their current value
   as a no-op
   ([\#970](https://github.com/mlr-org/mlr3pipelines/issues/970)).
+- Fix:
+  [`selector_cardinality_greater_than()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md)
+  and
+  [`selector_missing()`](https://mlr3pipelines.mlr-org.com/dev/reference/Selector.md)
+  no longer return the target column, which made `PipeOp`s using them as
+  `affect_columns` fail
+  ([\#1050](https://github.com/mlr-org/mlr3pipelines/issues/1050)).
 - Fix: `PipeOpTargetInvert` now keeps the observation weights of the
   incoming prediction.
 
