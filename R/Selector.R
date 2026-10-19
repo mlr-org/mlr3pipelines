@@ -228,7 +228,7 @@ selector_setdiff = function(selector_x, selector_y) {
 #' @describeIn Selector `selector_missing` selects features with missing values.
 #' @export
 selector_missing = function() make_selector(function(task) {
-  missings = task$missings()
+  missings = task$missings(cols = task$feature_names)
   names(missings)[missings != 0]
 }, "selector_missing()")
 
@@ -248,7 +248,8 @@ selector_non_missing = function() make_selector(function(task) {
 selector_cardinality_greater_than = function(min_cardinality) {
   assert_int(min_cardinality)
   make_selector(function(task) {
-    levlens = map_int(task$clone(deep = TRUE)$droplevels()$levels(), length)
+    factor_cols = task$feature_types[get("type") %in% c("factor", "ordered"), get("id")]
+    levlens = map_int(task$clone(deep = TRUE)$droplevels()$levels(cols = factor_cols), length)
     names(levlens[levlens > min_cardinality])
   }, "selector_cardinality_greater_than(%s)", min_cardinality)
 }
