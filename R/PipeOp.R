@@ -139,6 +139,10 @@
 #'   Identifying string of the help page that shows with `help()`.
 #' * `label` :: `character(1)`\cr
 #'   Description of the `PipeOp`'s functionality. Derived from the title of its help page.
+#' * `predict_type` :: `character(1)` | `NULL`\cr
+#'   Predict type of the [`Prediction`][mlr3::Prediction] that the `PipeOp` returns.
+#'   `NULL` for the base class; `PipeOp`s that return a [`Prediction`][mlr3::Prediction], such as [`PipeOpLearner`],
+#'   overload it.
 #' * `properties` :: `character()`\cr
 #'   The properties of the `PipeOp`.
 #'   Currently supported values are:

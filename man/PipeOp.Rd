@@ -146,6 +146,10 @@ and done, if requested, by the \code{\link{Graph}} backend itself; it should \em
 Identifying string of the help page that shows with \code{help()}.
 \item \code{label} :: \code{character(1)}\cr
 Description of the \code{PipeOp}'s functionality. Derived from the title of its help page.
+\item \code{predict_type} :: \code{character(1)} | \code{NULL}\cr
+Predict type of the \code{\link[mlr3:Prediction]{Prediction}} that the \code{PipeOp} returns.
+\code{NULL} for the base class; \code{PipeOp}s that return a \code{\link[mlr3:Prediction]{Prediction}}, such as \code{\link{PipeOpLearner}},
+overload it.
 \item \code{properties} :: \code{character()}\cr
 The properties of the \code{PipeOp}.
 Currently supported values are:
