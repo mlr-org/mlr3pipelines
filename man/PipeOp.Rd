@@ -226,10 +226,10 @@ When you are implementing a \code{PipeOp} that operates a task (and is not a \co
 \verb{$internal_valid_task} field of the input task, if there is one.
 
 To make fields available for export to a \code{\link{GraphLearner}}, overload the private methods described in section
-\emph{Exported Fields}.
+\emph{Exportable Fields}.
 }
 
-\section{Exported Fields}{
+\section{Exportable Fields}{
 
 A \code{PipeOp} can make some of its fields, or fields of an object it wraps, available for export.
 A \code{\link{GraphLearner}} then has these fields as its own fields,
@@ -258,12 +258,11 @@ By default, this sets the field \code{name} of the \code{PipeOp} itself.
 A \code{PipeOp} that exports its own fields therefore only needs to overload \code{.exportable_fields()},
 while a \code{PipeOp} that exports fields of a wrapped object, such as \code{\link{PipeOpLearner}}, also overloads the other two.
 
-The \code{\link{GraphLearner}} calls these methods using \code{\link[mlr3misc:get_private]{get_private()}}.
-It only calls \code{.get_exported_field()} and \code{.set_exported_field()} with names returned by \code{.exportable_fields()},
-so these methods do not need to check \code{name} themselves.
-The \code{\link{GraphLearner}} accesses the untrained \code{PipeOp}s in its \verb{$graph},
+The \code{\link{GraphLearner}} calls these methods using \code{\link[mlr3misc:get_private]{get_private()}}
+on the untrained \code{PipeOp}s in its \verb{$graph},
 so exported fields should be settings of the \code{PipeOp}, and not results of training, which are part of the \verb{$state}.
-See \code{\link{GraphLearner}} for which \code{PipeOp}s of a \code{\link{Graph}} are considered.
+Only \code{PipeOp}s with a non-\code{NULL} \verb{$predict_type} are considered, and only if no other such \code{PipeOp} lies between them
+and the output of the \code{\link{Graph}}, see \code{\link{GraphLearner}}.
 }
 
 \examples{

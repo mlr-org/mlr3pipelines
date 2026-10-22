@@ -99,18 +99,9 @@ The best internal validation scores observed during training if the wrapped \cod
 
 \section{Exported Fields}{
 
-\code{PipeOpLearner} makes fields of the wrapped \code{\link[mlr3:Learner]{Learner}} available for export,
-see section \emph{Exported Fields} in \code{\link{PipeOp}}.
-A \code{\link{GraphLearner}} containing the \code{PipeOpLearner} then has these fields as its own fields.
-Candidates are the active bindings of the \code{Learner} that are not defined by \code{\link[mlr3:Learner]{Learner}} itself,
-i.e. that are specific to the class of the wrapped \code{Learner}.
-Currently, only \code{quantiles} and \code{quantile_response} are made available,
-and only if the \code{Learner} can predict quantiles, i.e. has \code{"quantiles"} in its \verb{$predict_types},
-such as many \code{\link[mlr3:LearnerRegr]{LearnerRegr}}s.
-The fields are read from and set on \verb{$learner}.
-
-If the wrapped \code{Learner} is itself a \code{\link{GraphLearner}}, its exported fields are active bindings as well,
-so fields are passed on through nested \code{GraphLearner}s.
+The fields \code{quantiles} and \code{quantile_response} of the wrapped \code{\link[mlr3:Learner]{Learner}}
+are made available for export if it can predict quantiles, see section \emph{Exportable Fields} in \code{\link{PipeOp}}.
+They are read from and set on \verb{$learner}, which can also be a \code{\link{GraphLearner}} that exports them itself.
 }
 
 \section{Methods}{

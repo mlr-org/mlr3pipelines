@@ -70,19 +70,12 @@
 #'   Read-only.
 #'
 #' @section Exported Fields:
-#' `PipeOpLearnerQuantiles` makes the fields `quantiles` and `quantile_response` available for export,
-#' see section *Exported Fields* in [`PipeOp`].
-#' A [`GraphLearner`] containing it therefore has these fields,
-#' which behave like the fields of the same name of a [`LearnerRegr`][mlr3::LearnerRegr].
-#' They read and set the hyperparameters `q_vals` and `q_response`:
-#' * `quantiles` corresponds to `q_vals`.
-#'   Setting a single quantile also sets `q_response` to it.
-#'   Unlike for a [`LearnerRegr`][mlr3::LearnerRegr], it cannot be set to `NULL`, since `q_vals` is required.
-#' * `quantile_response` corresponds to `q_response`.
-#'   Setting it also adds it to `q_vals`.
-#'
+#' The fields `quantiles` and `quantile_response` are made available for export,
+#' see section *Exportable Fields* in [`PipeOp`].
+#' They behave like the fields of a [`LearnerRegr`][mlr3::LearnerRegr],
+#' but read and set the required hyperparameters `q_vals` and `q_response`, so `quantiles` cannot be set to `NULL`.
 #' The `quantiles` field of the wrapped [`Learner`][mlr3::Learner] is not exported,
-#' since it is overwritten during training and prediction.
+#' since it is overwritten during training.
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].

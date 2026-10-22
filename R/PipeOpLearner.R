@@ -78,18 +78,9 @@
 #'    `NULL` otherwise.
 #'
 #' @section Exported Fields:
-#' `PipeOpLearner` makes fields of the wrapped [`Learner`][mlr3::Learner] available for export,
-#' see section *Exported Fields* in [`PipeOp`].
-#' A [`GraphLearner`] containing the `PipeOpLearner` then has these fields as its own fields.
-#' Candidates are the active bindings of the `Learner` that are not defined by [`Learner`][mlr3::Learner] itself,
-#' i.e. that are specific to the class of the wrapped `Learner`.
-#' Currently, only `quantiles` and `quantile_response` are made available,
-#' and only if the `Learner` can predict quantiles, i.e. has `"quantiles"` in its `$predict_types`,
-#' such as many [`LearnerRegr`][mlr3::LearnerRegr]s.
-#' The fields are read from and set on `$learner`.
-#'
-#' If the wrapped `Learner` is itself a [`GraphLearner`], its exported fields are active bindings as well,
-#' so fields are passed on through nested `GraphLearner`s.
+#' The fields `quantiles` and `quantile_response` of the wrapped [`Learner`][mlr3::Learner]
+#' are made available for export if it can predict quantiles, see section *Exportable Fields* in [`PipeOp`].
+#' They are read from and set on `$learner`, which can also be a [`GraphLearner`] that exports them itself.
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].

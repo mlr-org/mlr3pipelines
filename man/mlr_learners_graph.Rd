@@ -21,15 +21,6 @@ Setting a new predict type will try to set the \code{predict_type} in all releva
 \code{\link{PipeOp}}s whose \code{predict_type} already has the requested value are left untouched.
 Similarly, the predict_type of a Graph will always be the smallest denominator in the \code{\link{Graph}}.
 
-Fields that \code{\link{PipeOp}}s make available for export are also fields of the \code{GraphLearner},
-e.g. \verb{$quantiles} and \verb{$quantile_response} of a wrapped \code{\link[mlr3:LearnerRegr]{LearnerRegr}} or of a
-\code{\link{PipeOpLearnerQuantiles}}.
-They are taken from the same \code{\link{PipeOp}}s as the \code{predict_type}, and fields that the \code{GraphLearner} already has are skipped.
-Setting such a field sets it in all of these \code{\link{PipeOp}}s.
-Getting it returns its value in the \code{\link{PipeOp}}s of the active branch, and throws an error if these values differ.
-The fields are determined when the \code{GraphLearner} is constructed.
-See section \emph{Exported Fields} in \code{\link{PipeOp}} for how a \code{PipeOp} makes fields available for export.
-
 A \code{GraphLearner} is always constructed in an untrained state. When the \code{graph} argument has a
 non-\code{NULL} \verb{$state}, it is ignored.
 }
@@ -99,8 +90,6 @@ How to construct the validation data. This also has to be configured for the ind
 For more details on the possible values, see \code{\link[mlr3:Learner]{mlr3::Learner}}.
 \item \code{marshaled} :: \code{logical(1)}\cr
 Whether the learner is marshaled.
-\item Exported fields, e.g. \code{quantiles} and \code{quantile_response}\cr
-Fields that the \code{\link{PipeOp}}s in the \code{\link{Graph}} make available for export, see the description above.
 \item \code{impute_selected_features} :: \code{logical(1)}\cr
 Whether to heuristically determine \verb{$selected_features()} as all \verb{$selected_features()} of all "base learner" Learners,
 even if they do not have the \code{"selected_features"} property / do not implement \verb{$selected_features()}.
@@ -114,6 +103,13 @@ This is a heuristic and may report more features than actually used by the base 
 in cases where the base learners do not implement \verb{$selected_features()}.
 The default is \code{FALSE}.
 }
+
+Fields that \code{\link{PipeOp}}s make available for export, e.g. \verb{$quantiles} and \verb{$quantile_response},
+are fields of the \code{GraphLearner} as well.
+They are taken from the \code{\link{PipeOp}}s found by traversing the \code{\link{Graph}} backwards from its output,
+stopping on each path at the first \code{PipeOp} with a non-\code{NULL} \verb{$predict_type}, such as a \code{\link{PipeOpLearner}}.
+Setting such a field sets it in all of these \code{\link{PipeOp}}s, and getting it throws an error if their values differ.
+See section \emph{Exportable Fields} in \code{\link{PipeOp}} and section \emph{Internals} for details.
 }
 
 \section{Methods}{
@@ -209,9 +205,11 @@ recommended.
 Exported fields are added as active bindings during construction, after which the object is locked.
 Subclasses of \code{GraphLearner} therefore only get exported fields if they are created with \code{lock_objects = FALSE},
 see \code{\link[R6:R6Class]{R6Class}}.
+Fields that the \code{GraphLearner} already has are skipped.
 Reading or setting an exported field calls the private methods \code{.get_exported_field()} or \code{.set_exported_field()}
 of those \code{\link{PipeOp}}s whose private \code{.exportable_fields()} contain the field,
-see section \emph{Exported Fields} in \code{\link{PipeOp}}.
+see section \emph{Exportable Fields} in \code{\link{PipeOp}}.
+Reading only considers the \code{\link{PipeOp}}s of the active branch, while setting considers all branches.
 Setting a field that none of these \code{\link{PipeOp}}s makes available, e.g. because the \code{\link{Graph}} was modified after
 construction, throws an error.
 }

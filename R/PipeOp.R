@@ -206,9 +206,9 @@
 #' `$internal_valid_task` field of the input task, if there is one.
 #'
 #' To make fields available for export to a [`GraphLearner`], overload the private methods described in section
-#' *Exported Fields*.
+#' *Exportable Fields*.
 #'
-#' @section Exported Fields:
+#' @section Exportable Fields:
 #' A `PipeOp` can make some of its fields, or fields of an object it wraps, available for export.
 #' A [`GraphLearner`] then has these fields as its own fields,
 #' so that they can be read and set like the fields of any other [`Learner`][mlr3::Learner].
@@ -234,12 +234,11 @@
 #' A `PipeOp` that exports its own fields therefore only needs to overload `.exportable_fields()`,
 #' while a `PipeOp` that exports fields of a wrapped object, such as [`PipeOpLearner`], also overloads the other two.
 #'
-#' The [`GraphLearner`] calls these methods using [`get_private()`][mlr3misc::get_private].
-#' It only calls `.get_exported_field()` and `.set_exported_field()` with names returned by `.exportable_fields()`,
-#' so these methods do not need to check `name` themselves.
-#' The [`GraphLearner`] accesses the untrained `PipeOp`s in its `$graph`,
+#' The [`GraphLearner`] calls these methods using [`get_private()`][mlr3misc::get_private]
+#' on the untrained `PipeOp`s in its `$graph`,
 #' so exported fields should be settings of the `PipeOp`, and not results of training, which are part of the `$state`.
-#' See [`GraphLearner`] for which `PipeOp`s of a [`Graph`] are considered.
+#' Only `PipeOp`s with a non-`NULL` `$predict_type` are considered, and only if no other such `PipeOp` lies between them
+#' and the output of the [`Graph`], see [`GraphLearner`].
 #'
 #' @examples
 #' # example (bogus) PipeOp that returns the sum of two numbers during $train()

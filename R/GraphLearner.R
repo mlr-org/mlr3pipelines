@@ -17,15 +17,6 @@
 #' [`PipeOp`]s whose `predict_type` already has the requested value are left untouched.
 #' Similarly, the predict_type of a Graph will always be the smallest denominator in the [`Graph`].
 #'
-#' Fields that [`PipeOp`]s make available for export are also fields of the `GraphLearner`,
-#' e.g. `$quantiles` and `$quantile_response` of a wrapped [`LearnerRegr`][mlr3::LearnerRegr] or of a
-#' [`PipeOpLearnerQuantiles`].
-#' They are taken from the same [`PipeOp`]s as the `predict_type`, and fields that the `GraphLearner` already has are skipped.
-#' Setting such a field sets it in all of these [`PipeOp`]s.
-#' Getting it returns its value in the [`PipeOp`]s of the active branch, and throws an error if these values differ.
-#' The fields are determined when the `GraphLearner` is constructed.
-#' See section *Exported Fields* in [`PipeOp`] for how a `PipeOp` makes fields available for export.
-#'
 #' A `GraphLearner` is always constructed in an untrained state. When the `graph` argument has a
 #' non-`NULL` `$state`, it is ignored.
 #'
@@ -90,8 +81,6 @@
 #'   For more details on the possible values, see [`mlr3::Learner`].
 #' * `marshaled` :: `logical(1)`\cr
 #'   Whether the learner is marshaled.
-#' * Exported fields, e.g. `quantiles` and `quantile_response`\cr
-#'   Fields that the [`PipeOp`]s in the [`Graph`] make available for export, see the description above.
 #' * `impute_selected_features` :: `logical(1)`\cr
 #'   Whether to heuristically determine `$selected_features()` as all `$selected_features()` of all "base learner" Learners,
 #'   even if they do not have the `"selected_features"` property / do not implement `$selected_features()`.
@@ -104,6 +93,13 @@
 #'   This is a heuristic and may report more features than actually used by the base learners,
 #'   in cases where the base learners do not implement `$selected_features()`.
 #'   The default is `FALSE`.
+#'
+#' Fields that [`PipeOp`]s make available for export, e.g. `$quantiles` and `$quantile_response`,
+#' are fields of the `GraphLearner` as well.
+#' They are taken from the [`PipeOp`]s found by traversing the [`Graph`] backwards from its output,
+#' stopping on each path at the first `PipeOp` with a non-`NULL` `$predict_type`, such as a [`PipeOpLearner`].
+#' Setting such a field sets it in all of these [`PipeOp`]s, and getting it throws an error if their values differ.
+#' See section *Exportable Fields* in [`PipeOp`] and section *Internals* for details.
 #'
 #' @section Methods:
 #' Methods inherited from [`Learner`][mlr3::Learner], as well as:
@@ -190,9 +186,11 @@
 #' Exported fields are added as active bindings during construction, after which the object is locked.
 #' Subclasses of `GraphLearner` therefore only get exported fields if they are created with `lock_objects = FALSE`,
 #' see [`R6Class`][R6::R6Class].
+#' Fields that the `GraphLearner` already has are skipped.
 #' Reading or setting an exported field calls the private methods `.get_exported_field()` or `.set_exported_field()`
 #' of those [`PipeOp`]s whose private `.exportable_fields()` contain the field,
-#' see section *Exported Fields* in [`PipeOp`].
+#' see section *Exportable Fields* in [`PipeOp`].
+#' Reading only considers the [`PipeOp`]s of the active branch, while setting considers all branches.
 #' Setting a field that none of these [`PipeOp`]s makes available, e.g. because the [`Graph`] was modified after
 #' construction, throws an error.
 #'

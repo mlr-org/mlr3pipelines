@@ -92,21 +92,12 @@ Read-only.
 
 \section{Exported Fields}{
 
-\code{PipeOpLearnerQuantiles} makes the fields \code{quantiles} and \code{quantile_response} available for export,
-see section \emph{Exported Fields} in \code{\link{PipeOp}}.
-A \code{\link{GraphLearner}} containing it therefore has these fields,
-which behave like the fields of the same name of a \code{\link[mlr3:LearnerRegr]{LearnerRegr}}.
-They read and set the hyperparameters \code{q_vals} and \code{q_response}:
-\itemize{
-\item \code{quantiles} corresponds to \code{q_vals}.
-Setting a single quantile also sets \code{q_response} to it.
-Unlike for a \code{\link[mlr3:LearnerRegr]{LearnerRegr}}, it cannot be set to \code{NULL}, since \code{q_vals} is required.
-\item \code{quantile_response} corresponds to \code{q_response}.
-Setting it also adds it to \code{q_vals}.
-}
-
+The fields \code{quantiles} and \code{quantile_response} are made available for export,
+see section \emph{Exportable Fields} in \code{\link{PipeOp}}.
+They behave like the fields of a \code{\link[mlr3:LearnerRegr]{LearnerRegr}},
+but read and set the required hyperparameters \code{q_vals} and \code{q_response}, so \code{quantiles} cannot be set to \code{NULL}.
 The \code{quantiles} field of the wrapped \code{\link[mlr3:Learner]{Learner}} is not exported,
-since it is overwritten during training and prediction.
+since it is overwritten during training.
 }
 
 \section{Methods}{
