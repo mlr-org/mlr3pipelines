@@ -146,6 +146,12 @@ and done, if requested, by the \code{\link{Graph}} backend itself; it should \em
 Identifying string of the help page that shows with \code{help()}.
 \item \code{label} :: \code{character(1)}\cr
 Description of the \code{PipeOp}'s functionality. Derived from the title of its help page.
+\item \code{exportable_fields} :: \code{character()}\cr
+Names of the fields that the \code{PipeOp} makes available for export.
+They can be accessed through \verb{$get_exported_field()} and \verb{$set_exported_field()}.
+This can be used to give access to settings of an object wrapped by the \code{PipeOp}, see e.g. \code{\link{PipeOpLearner}}.
+\code{character(0)} for the base class.
+Read-only.
 \item \code{properties} :: \code{character()}\cr
 The properties of the \code{PipeOp}.
 Currently supported values are:
@@ -176,6 +182,12 @@ Prints the \code{PipeOp}s most salient information: \verb{$id}, \verb{$is_traine
 (\code{character(1)}) -> help file\cr
 Displays the help file of the concrete \code{PipeOp} instance. \code{help_type} is one of \code{"text"}, \code{"html"}, \code{"pdf"} and behaves
 as the \code{help_type} argument of R's \code{help()}.
+\item \code{get_exported_field(name)} \cr
+(\code{character(1)}) -> \code{any}\cr
+Returns the value of the exported field \code{name}, which must be one of \verb{$exportable_fields}.
+\item \code{set_exported_field(name, value)} \cr
+(\code{character(1)}, \code{any}) -> \code{self}\cr
+Sets the exported field \code{name}, which must be one of \verb{$exportable_fields}, to \code{value}.
 }
 
 The following public \verb{$train()} and \verb{$predict()} methods are the primary user-facing functions intended for direct use:
@@ -224,6 +236,11 @@ of the class, the id, the \verb{$state}, and the \verb{$param_set$values}. The l
 
 When you are implementing a \code{PipeOp} that operates a task (and is not a \code{\link{PipeOpTaskPreproc}}), you also need to handle the
 \verb{$internal_valid_task} field of the input task, if there is one.
+
+To make fields available for export, overload the \verb{$exportable_fields} active binding.
+By default, these are fields of the \code{PipeOp} itself.
+To make fields of another object available instead, e.g. of a wrapped object,
+also overload \code{private$.get_exported_field(name)} and \code{private$.set_exported_field(name, value)}.
 }
 
 \examples{

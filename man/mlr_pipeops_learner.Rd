@@ -94,6 +94,13 @@ The internal validation scores if the wrapped \code{Learner} supports internal v
 \item \code{best_valid_scores} :: named \code{list()} or \code{NULL}\cr
 The best internal validation scores observed during training if the wrapped \code{Learner} tracks them,
 \code{NULL} otherwise.
+\item \code{exportable_fields} :: \code{character()}\cr
+Active bindings of the wrapped \code{\link[mlr3:Learner]{Learner}} that are not shared by all \code{Learner}s
+and that are made available for export, see \code{\link{PipeOp}}.
+Currently, only \code{quantiles} and \code{quantile_response} are made available,
+e.g. for a \code{\link[mlr3:LearnerRegr]{LearnerRegr}}.
+\verb{$get_exported_field()} and \verb{$set_exported_field()} read and set these fields of \verb{$learner}.
+Read-only.
 }
 }
 

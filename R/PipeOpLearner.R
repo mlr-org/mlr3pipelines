@@ -76,6 +76,13 @@
 #' * `best_valid_scores` :: named `list()` or `NULL`\cr
 #'    The best internal validation scores observed during training if the wrapped `Learner` tracks them,
 #'    `NULL` otherwise.
+#' * `exportable_fields` :: `character()`\cr
+#'    Active bindings of the wrapped [`Learner`][mlr3::Learner] that are not shared by all `Learner`s
+#'    and that are made available for export, see [`PipeOp`].
+#'    Currently, only `quantiles` and `quantile_response` are made available,
+#'    e.g. for a [`LearnerRegr`][mlr3::LearnerRegr].
+#'    `$get_exported_field()` and `$set_exported_field()` read and set these fields of `$learner`.
+#'    Read-only.
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
@@ -183,10 +190,20 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
         private$.learner$predict_type = val
       }
       private$.learner$predict_type
+    },
+    exportable_fields = function(rhs) {
+      assert_ro_binding(rhs)
+      fields = ls(private$.learner)
+      fields = setdiff(fields[map_lgl(fields, bindingIsActive, env = private$.learner)], names(Learner$active))
+      # restricted to the quantile fields for now
+      intersect(fields, c("quantiles", "quantile_response"))
     }
   ),
   private = list(
     .learner = NULL,
+
+    .get_exported_field = function(name) private$.learner[[name]],
+    .set_exported_field = function(name, value) private$.learner[[name]] = value,
 
     .train = function(inputs) {
       on.exit({private$.learner$state = NULL})

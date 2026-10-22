@@ -139,6 +139,12 @@
 #'   Identifying string of the help page that shows with `help()`.
 #' * `label` :: `character(1)`\cr
 #'   Description of the `PipeOp`'s functionality. Derived from the title of its help page.
+#' * `exportable_fields` :: `character()`\cr
+#'   Names of the fields that the `PipeOp` makes available for export.
+#'   They can be accessed through `$get_exported_field()` and `$set_exported_field()`.
+#'   This can be used to give access to settings of an object wrapped by the `PipeOp`, see e.g. [`PipeOpLearner`].
+#'   `character(0)` for the base class.
+#'   Read-only.
 #' * `properties` :: `character()`\cr
 #'   The properties of the `PipeOp`.
 #'   Currently supported values are:
@@ -163,6 +169,12 @@
 #'   (`character(1)`) -> help file\cr
 #'   Displays the help file of the concrete `PipeOp` instance. `help_type` is one of `"text"`, `"html"`, `"pdf"` and behaves
 #'   as the `help_type` argument of R's `help()`.
+#' * `get_exported_field(name)` \cr
+#'   (`character(1)`) -> `any`\cr
+#'   Returns the value of the exported field `name`, which must be one of `$exportable_fields`.
+#' * `set_exported_field(name, value)` \cr
+#'   (`character(1)`, `any`) -> `self`\cr
+#'   Sets the exported field `name`, which must be one of `$exportable_fields`, to `value`.
 #'
 #' The following public `$train()` and `$predict()` methods are the primary user-facing functions intended for direct use:
 #' * `train(input)`\cr
@@ -204,6 +216,11 @@
 #'
 #' When you are implementing a `PipeOp` that operates a task (and is not a [`PipeOpTaskPreproc`]), you also need to handle the
 #' `$internal_valid_task` field of the input task, if there is one.
+#'
+#' To make fields available for export, overload the `$exportable_fields` active binding.
+#' By default, these are fields of the `PipeOp` itself.
+#' To make fields of another object available instead, e.g. of a wrapped object,
+#' also overload `private$.get_exported_field(name)` and `private$.set_exported_field(name, value)`.
 #'
 #' @examples
 #' # example (bogus) PipeOp that returns the sum of two numbers during $train()
@@ -382,6 +399,15 @@ PipeOp = R6Class("PipeOp",
     help = function(help_type = getOption("help_type")) {
       parts = strsplit(self$man, split = "::", fixed = TRUE)[[1]]
       match.fun("help")(parts[[2]], package = parts[[1]], help_type = help_type)
+    },
+    get_exported_field = function(name) {
+      assert_choice(name, self$exportable_fields)
+      private$.get_exported_field(name)
+    },
+    set_exported_field = function(name, value) {
+      assert_choice(name, self$exportable_fields)
+      private$.set_exported_field(name, value)
+      invisible(self)
     }
   ),
 
@@ -412,6 +438,10 @@ PipeOp = R6Class("PipeOp",
         stop("$predict_type is read-only.")
       }
       return(NULL)
+    },
+    exportable_fields = function(rhs) {
+      assert_ro_binding(rhs)
+      character(0)
     },
     innum = function() nrow(self$input),
     outnum = function() nrow(self$output),
@@ -485,6 +515,8 @@ The hash and phash of a PipeOp must differ when it represents a different operat
 This warning will become an error in the future.", class(self)[[1]], class(self)[[1]])
       }
     },
+    .get_exported_field = function(name) self[[name]],
+    .set_exported_field = function(name, value) self[[name]] = value,
     .param_set = NULL,
     .param_set_source = NULL,
     .label = NULL,
