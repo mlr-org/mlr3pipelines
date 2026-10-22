@@ -228,20 +228,14 @@ test_that("PipeOp - predict_type is read-only, but assigning its current value i
 })
 
 test_that("PipeOp - exported fields", {
-  po_1 = PipeOpDebugBasic$new()
-  expect_equal(po_1$exportable_fields, character(0))
-  expect_error({
-    po_1$exportable_fields = "id"
-  }, "read-only")
-  expect_error(po_1$get_exported_field("id"), "Must be element of set")
-  expect_error(po_1$set_exported_field("id", "x"), "Must be element of set")
+  expect_equal(get_private(PipeOpDebugBasic$new())$.exportable_fields(), character(0))
 
   PipeOpExport = R6Class("PipeOpExport", inherit = PipeOpNOP,
     public = list(x = 1),
-    active = list(exportable_fields = function(rhs) "x")
+    private = list(.exportable_fields = function() "x")
   )
-  po_2 = PipeOpExport$new()
-  expect_equal(po_2$get_exported_field("x"), 1)
-  po_2$set_exported_field("x", 2)
-  expect_equal(po_2$x, 2)
+  po_1 = PipeOpExport$new()
+  expect_equal(get_private(po_1)$.get_exported_field("x"), 1)
+  get_private(po_1)$.set_exported_field("x", 2)
+  expect_equal(po_1$x, 2)
 })

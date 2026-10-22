@@ -1632,3 +1632,82 @@ test_that("GraphLearner - predict_newdata_fast", {
   glrn_pred = as_learner(po("learner", learner))$train(task)$predict_newdata_fast(newdata)
   expect_equal(glrn_pred$quantiles[, 1L], lrn_pred$quantiles[, 1L])
 })
+
+test_that("exported fields", {
+  glrn = as_learner(po("scale") %>>% lrn("regr.debug", predict_type = "quantiles"))
+  expect_subset(c("quantiles", "quantile_response"), names(glrn))
+
+  glrn$quantiles = c(0.1, 0.9)
+  glrn$quantile_response = 0.5
+  expect_equal(glrn$base_learner()$quantiles, c(0.1, 0.5, 0.9))
+  expect_equal(glrn$quantiles, c(0.1, 0.5, 0.9))
+
+  glrn$train(tsk("mtcars"))
+  expect_equal(attr(glrn$predict(tsk("mtcars"))$quantiles, "probs"), c(0.1, 0.5, 0.9))
+
+  expect_error({
+    glrn$not_a_field = 1
+  }, "locked")
+})
+
+test_that("exported fields - only from PipeOps that offer them", {
+  expect_false("quantiles" %in% names(as_learner(po("scale") %>>% lrn("classif.debug"))))
+  expect_false("quantiles" %in% names(as_learner(po("learner_quantiles", lrn("regr.debug")))))
+})
+
+test_that("exported fields - setting a field that no PipeOp exports", {
+  glrn = as_learner(po("scale") %>>% lrn("regr.debug"))
+  expect_error(get_private(glrn)$.set_exported_field("not_exported", 1), "available for export")
+})
+
+test_that("exported fields - cloning", {
+  glrn = as_learner(po("scale") %>>% lrn("regr.debug", quantiles = 0.5))
+  glrn_clone = glrn$clone(deep = TRUE)
+  expect_deep_clone(glrn, glrn_clone)
+
+  glrn_clone$quantiles = 0.9
+  expect_equal(glrn_clone$base_learner()$quantiles, 0.9)
+  expect_equal(glrn$quantiles, 0.5)
+  expect_error({
+    glrn_clone$not_a_field = 1
+  }, "locked")
+})
+
+test_that("exported fields - nested GraphLearner", {
+  glrn = as_learner(po("learner", as_learner(po("scale") %>>% lrn("regr.debug"))))
+  expect_subset(c("quantiles", "quantile_response"), names(glrn))
+  glrn$quantiles = 0.5
+  expect_equal(glrn$base_learner()$quantiles, 0.5)
+})
+
+test_that("exported fields - several PipeOps", {
+  glrn = as_learner(gunion(list(
+    po("learner", lrn("regr.debug"), id = "a"),
+    po("learner", lrn("regr.debug"), id = "b")
+  )) %>>% po("regravg", innum = 2))
+  glrn$quantiles = 0.5
+  expect_equal(glrn$graph$pipeops$b$learner$quantiles, 0.5)
+  expect_equal(glrn$quantiles, 0.5)
+
+  glrn$graph$pipeops$b$learner$quantiles = 0.9
+  expect_error(glrn$quantiles, "different values")
+})
+
+test_that("exported fields - branching", {
+  glrn = as_learner(ppl("branch", list(lrn("regr.debug"), lrn("regr.featureless"))))
+  glrn$quantiles = 0.5
+  expect_equal(glrn$graph$pipeops$regr.featureless$learner$quantiles, 0.5)
+
+  glrn$graph$pipeops$regr.featureless$learner$quantiles = 0.9
+  expect_equal(glrn$quantiles, 0.5)
+  glrn$param_set$values$branch.selection = 2L
+  expect_equal(glrn$quantiles, 0.9)
+})
+
+test_that("exported fields - Learners that cannot predict quantiles are skipped", {
+  skip_if_not_installed("rpart")
+  glrn = as_learner(gunion(list(lrn("regr.debug"), lrn("regr.rpart"))) %>>% po("regravg", innum = 2))
+  glrn$quantiles = 0.5
+  expect_equal(glrn$graph$pipeops$regr.debug$learner$quantiles, 0.5)
+  expect_null(glrn$graph$pipeops$regr.rpart$learner$quantiles)
+})

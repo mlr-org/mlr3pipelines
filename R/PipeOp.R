@@ -139,12 +139,6 @@
 #'   Identifying string of the help page that shows with `help()`.
 #' * `label` :: `character(1)`\cr
 #'   Description of the `PipeOp`'s functionality. Derived from the title of its help page.
-#' * `exportable_fields` :: `character()`\cr
-#'   Names of the fields that the `PipeOp` makes available for export.
-#'   They can be accessed through `$get_exported_field()` and `$set_exported_field()`.
-#'   This can be used to give access to settings of an object wrapped by the `PipeOp`, see e.g. [`PipeOpLearner`].
-#'   `character(0)` for the base class.
-#'   Read-only.
 #' * `properties` :: `character()`\cr
 #'   The properties of the `PipeOp`.
 #'   Currently supported values are:
@@ -169,12 +163,6 @@
 #'   (`character(1)`) -> help file\cr
 #'   Displays the help file of the concrete `PipeOp` instance. `help_type` is one of `"text"`, `"html"`, `"pdf"` and behaves
 #'   as the `help_type` argument of R's `help()`.
-#' * `get_exported_field(name)` \cr
-#'   (`character(1)`) -> `any`\cr
-#'   Returns the value of the exported field `name`, which must be one of `$exportable_fields`.
-#' * `set_exported_field(name, value)` \cr
-#'   (`character(1)`, `any`) -> `self`\cr
-#'   Sets the exported field `name`, which must be one of `$exportable_fields`, to `value`.
 #'
 #' The following public `$train()` and `$predict()` methods are the primary user-facing functions intended for direct use:
 #' * `train(input)`\cr
@@ -217,10 +205,41 @@
 #' When you are implementing a `PipeOp` that operates a task (and is not a [`PipeOpTaskPreproc`]), you also need to handle the
 #' `$internal_valid_task` field of the input task, if there is one.
 #'
-#' To make fields available for export, overload the `$exportable_fields` active binding.
-#' By default, these are fields of the `PipeOp` itself.
-#' To make fields of another object available instead, e.g. of a wrapped object,
-#' also overload `private$.get_exported_field(name)` and `private$.set_exported_field(name, value)`.
+#' To make fields available for export to a [`GraphLearner`], overload the private methods described in section
+#' *Exported Fields*.
+#'
+#' @section Exported Fields:
+#' A `PipeOp` can make some of its fields, or fields of an object it wraps, available for export.
+#' A [`GraphLearner`] then has these fields as its own fields,
+#' so that they can be read and set like the fields of any other [`Learner`][mlr3::Learner].
+#' For example, a [`PipeOpLearner`] makes `$quantiles` of a wrapped [`LearnerRegr`][mlr3::LearnerRegr] available,
+#' so a [`GraphLearner`] containing it has a `$quantiles` field.
+#'
+#' This is implemented by the following private methods, which inheriting `PipeOp`s can overload:
+#' * `.exportable_fields()`\cr
+#'   () -> `character`\cr
+#'   Names of the fields that the `PipeOp` makes available for export.
+#'   Returns `character(0)` by default.
+#'   A [`GraphLearner`] determines its fields from this when it is constructed,
+#'   so the result should only depend on how the `PipeOp` was constructed.
+#' * `.get_exported_field(name)`\cr
+#'   (`character(1)`) -> `any`\cr
+#'   Returns the value of the field `name`.
+#'   By default, this is the field `name` of the `PipeOp` itself.
+#' * `.set_exported_field(name, value)`\cr
+#'   (`character(1)`, `any`) -> `NULL`\cr
+#'   Sets the field `name` to `value`.
+#'   By default, this sets the field `name` of the `PipeOp` itself.
+#'
+#' A `PipeOp` that exports its own fields therefore only needs to overload `.exportable_fields()`,
+#' while a `PipeOp` that exports fields of a wrapped object, such as [`PipeOpLearner`], also overloads the other two.
+#'
+#' The [`GraphLearner`] calls these methods using [`get_private()`][mlr3misc::get_private].
+#' It only calls `.get_exported_field()` and `.set_exported_field()` with names returned by `.exportable_fields()`,
+#' so these methods do not need to check `name` themselves.
+#' The [`GraphLearner`] accesses the untrained `PipeOp`s in its `$graph`,
+#' so exported fields should be settings of the `PipeOp`, and not results of training, which are part of the `$state`.
+#' See [`GraphLearner`] for which `PipeOp`s of a [`Graph`] are considered.
 #'
 #' @examples
 #' # example (bogus) PipeOp that returns the sum of two numbers during $train()
@@ -399,15 +418,6 @@ PipeOp = R6Class("PipeOp",
     help = function(help_type = getOption("help_type")) {
       parts = strsplit(self$man, split = "::", fixed = TRUE)[[1]]
       match.fun("help")(parts[[2]], package = parts[[1]], help_type = help_type)
-    },
-    get_exported_field = function(name) {
-      assert_choice(name, self$exportable_fields)
-      private$.get_exported_field(name)
-    },
-    set_exported_field = function(name, value) {
-      assert_choice(name, self$exportable_fields)
-      private$.set_exported_field(name, value)
-      invisible(self)
     }
   ),
 
@@ -438,10 +448,6 @@ PipeOp = R6Class("PipeOp",
         stop("$predict_type is read-only.")
       }
       return(NULL)
-    },
-    exportable_fields = function(rhs) {
-      assert_ro_binding(rhs)
-      character(0)
     },
     innum = function() nrow(self$input),
     outnum = function() nrow(self$output),
@@ -515,6 +521,7 @@ The hash and phash of a PipeOp must differ when it represents a different operat
 This warning will become an error in the future.", class(self)[[1]], class(self)[[1]])
       }
     },
+    .exportable_fields = function() character(0),
     .get_exported_field = function(name) self[[name]],
     .set_exported_field = function(name, value) self[[name]] = value,
     .param_set = NULL,

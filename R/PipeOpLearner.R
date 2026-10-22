@@ -76,13 +76,20 @@
 #' * `best_valid_scores` :: named `list()` or `NULL`\cr
 #'    The best internal validation scores observed during training if the wrapped `Learner` tracks them,
 #'    `NULL` otherwise.
-#' * `exportable_fields` :: `character()`\cr
-#'    Active bindings of the wrapped [`Learner`][mlr3::Learner] that are not shared by all `Learner`s
-#'    and that are made available for export, see [`PipeOp`].
-#'    Currently, only `quantiles` and `quantile_response` are made available,
-#'    e.g. for a [`LearnerRegr`][mlr3::LearnerRegr].
-#'    `$get_exported_field()` and `$set_exported_field()` read and set these fields of `$learner`.
-#'    Read-only.
+#'
+#' @section Exported Fields:
+#' `PipeOpLearner` makes fields of the wrapped [`Learner`][mlr3::Learner] available for export,
+#' see section *Exported Fields* in [`PipeOp`].
+#' A [`GraphLearner`] containing the `PipeOpLearner` then has these fields as its own fields.
+#' Candidates are the active bindings of the `Learner` that are not defined by [`Learner`][mlr3::Learner] itself,
+#' i.e. that are specific to the class of the wrapped `Learner`.
+#' Currently, only `quantiles` and `quantile_response` are made available,
+#' and only if the `Learner` can predict quantiles, i.e. has `"quantiles"` in its `$predict_types`,
+#' such as many [`LearnerRegr`][mlr3::LearnerRegr]s.
+#' The fields are read from and set on `$learner`.
+#'
+#' If the wrapped `Learner` is itself a [`GraphLearner`], its exported fields are active bindings as well,
+#' so fields are passed on through nested `GraphLearner`s.
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
@@ -190,18 +197,18 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
         private$.learner$predict_type = val
       }
       private$.learner$predict_type
-    },
-    exportable_fields = function(rhs) {
-      assert_ro_binding(rhs)
-      fields = ls(private$.learner)
-      fields = setdiff(fields[map_lgl(fields, bindingIsActive, env = private$.learner)], names(Learner$active))
-      # restricted to the quantile fields for now
-      intersect(fields, c("quantiles", "quantile_response"))
     }
   ),
   private = list(
     .learner = NULL,
 
+    .exportable_fields = function() {
+      # restricted to the quantile fields of Learners that can predict quantiles for now
+      if ("quantiles" %nin% private$.learner$predict_types) return(character(0))
+      fields = ls(private$.learner)
+      fields = setdiff(fields[map_lgl(fields, bindingIsActive, env = private$.learner)], names(Learner$active))
+      intersect(fields, c("quantiles", "quantile_response"))
+    },
     .get_exported_field = function(name) private$.learner[[name]],
     .set_exported_field = function(name, value) private$.learner[[name]] = value,
 

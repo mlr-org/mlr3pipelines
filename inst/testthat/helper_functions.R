@@ -201,9 +201,10 @@ expect_pipeop = function(po, check_ps_default_values = TRUE) {
   expect_int(po$innum, lower = 1)
   expect_int(po$outnum, lower = 1)
   expect_valid_pipeop_param_set(po, check_ps_default_values = check_ps_default_values)
-  expect_character(po$exportable_fields, any.missing = FALSE, unique = TRUE, label = label)
-  for (field in po$exportable_fields) {
-    expect_no_error(po$get_exported_field(field))
+  exportable_fields = get_private(po)$.exportable_fields()
+  expect_character(exportable_fields, any.missing = FALSE, unique = TRUE, label = label)
+  for (field in exportable_fields) {
+    testthat::expect_no_error(get_private(po)$.get_exported_field(field))
   }
   if ("validation" %in% po$properties) {
     testthat::expect_true(exists("validate", envir = po))

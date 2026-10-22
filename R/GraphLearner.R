@@ -17,6 +17,14 @@
 #' [`PipeOp`]s whose `predict_type` already has the requested value are left untouched.
 #' Similarly, the predict_type of a Graph will always be the smallest denominator in the [`Graph`].
 #'
+#' Fields that [`PipeOp`]s make available for export are also fields of the `GraphLearner`,
+#' e.g. `$quantiles` and `$quantile_response` of a wrapped [`LearnerRegr`][mlr3::LearnerRegr].
+#' They are taken from the same [`PipeOp`]s as the `predict_type`, and fields that the `GraphLearner` already has are skipped.
+#' Setting such a field sets it in all of these [`PipeOp`]s.
+#' Getting it returns its value in the [`PipeOp`]s of the active branch, and throws an error if these values differ.
+#' The fields are determined when the `GraphLearner` is constructed.
+#' See section *Exported Fields* in [`PipeOp`] for how a `PipeOp` makes fields available for export.
+#'
 #' A `GraphLearner` is always constructed in an untrained state. When the `graph` argument has a
 #' non-`NULL` `$state`, it is ignored.
 #'
@@ -81,6 +89,8 @@
 #'   For more details on the possible values, see [`mlr3::Learner`].
 #' * `marshaled` :: `logical(1)`\cr
 #'   Whether the learner is marshaled.
+#' * Exported fields, e.g. `quantiles` and `quantile_response`\cr
+#'   Fields that the [`PipeOp`]s in the [`Graph`] make available for export, see the description above.
 #' * `impute_selected_features` :: `logical(1)`\cr
 #'   Whether to heuristically determine `$selected_features()` as all `$selected_features()` of all "base learner" Learners,
 #'   even if they do not have the `"selected_features"` property / do not implement `$selected_features()`.
@@ -176,6 +186,15 @@
 #' wrapped in a [`Graph`], which is then again wrapped in a `GraphLearner` object; this usually only adds overhead and is not
 #' recommended.
 #'
+#' Exported fields are added as active bindings during construction, after which the object is locked.
+#' Subclasses of `GraphLearner` therefore only get exported fields if they are created with `lock_objects = FALSE`,
+#' see [`R6Class`][R6::R6Class].
+#' Reading or setting an exported field calls the private methods `.get_exported_field()` or `.set_exported_field()`
+#' of those [`PipeOp`]s whose private `.exportable_fields()` contain the field,
+#' see section *Exported Fields* in [`PipeOp`].
+#' Setting a field that none of these [`PipeOp`]s makes available, e.g. because the [`Graph`] was modified after
+#' construction, throws an error.
+#'
 #' @family Learners
 #' @export
 #' @examplesIf requireNamespace("rpart")
@@ -248,6 +267,13 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         private$.graph$param_set$values = insert_named(private$.graph$param_set$values, param_vals)
       }
       if (!is.null(predict_type)) self$predict_type = predict_type
+
+      # objects of subclasses that keep R6's default lock_objects = TRUE arrive locked, so no fields can be added
+      if (!environmentIsLocked(self)) {
+        private$.add_exported_fields()
+        lockEnvironment(self)
+        lockEnvironment(private)
+      }
     },
     base_learner = function(recursive = Inf, return_po = FALSE, return_all = FALSE, resolve_branching = TRUE) {
       assert(check_numeric(recursive, lower = Inf), check_int(recursive))
@@ -475,6 +501,47 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     .validate = NULL,
     .can_validate = NULL,
     .can_internal_tuning = NULL,
+    .add_exported_fields = function() {
+      pos = graph_base_learner(private$.graph, resolve_branching = FALSE, lookup_field = "predict_type")
+      fields = map(pos, function(po) get_private(po)$.exportable_fields())
+      fields = setdiff(unique(as.character(unlist(fields, use.names = FALSE))), names(self))
+      enclos_env = self$.__enclos_env__
+      for (field in fields) {
+        binding = eval(bquote(function(rhs) {
+          if (missing(rhs)) return(private$.get_exported_field(.(field)))
+          private$.set_exported_field(.(field), rhs)
+        }))
+        # R6's clone() only re-creates the active bindings listed in .__active__, with their environment remapped
+        environment(binding) = enclos_env
+        makeActiveBinding(field, binding, self)
+        enclos_env$.__active__[[field]] = binding
+      }
+    },
+    .exported_field_pipeops = function(name, resolve_branching) {
+      pos = graph_base_learner(private$.graph, resolve_branching = resolve_branching, lookup_field = "predict_type")
+      # name check: the private accessors of a PipeOp are only called for fields that it makes available for export
+      keep(pos, function(po) name %in% get_private(po)$.exportable_fields())
+    },
+    .get_exported_field = function(name) {
+      pos = private$.exported_field_pipeops(name, resolve_branching = TRUE)
+      values = unique(map(pos, function(po) get_private(po)$.get_exported_field(name)))
+      if (!length(values)) return(NULL)
+      if (length(values) > 1L) {
+        stopf(
+          "PipeOps %s of GraphLearner '%s' have different values for '%s'. Set it on the GraphLearner to align them.",
+          str_collapse(ids(pos), quote = "'"), self$id, name
+        )
+      }
+      values[[1L]]
+    },
+    .set_exported_field = function(name, value) {
+      pos = private$.exported_field_pipeops(name, resolve_branching = FALSE)
+      if (!length(pos)) {
+        # only possible if the Graph was modified after construction
+        stopf("No PipeOp of GraphLearner '%s' makes field '%s' available for export.", self$id, name)
+      }
+      walk(pos, function(po) get_private(po)$.set_exported_field(name, value))
+    },
     .extract_internal_tuned_values = function() {
       if (!private$.can_internal_tuning) return(NULL)
       itvs = unlist(map(pos_with_property(self$graph_model, "internal_tuning"), "internal_tuned_values"), recursive = FALSE)
@@ -536,7 +603,9 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         .var.name = sprintf("Prediction returned by Graph %s", self$id))
       prediction[[1]]
     }
-  )
+  ),
+  # exported fields are added as active bindings in initialize(), which locks the object afterwards
+  lock_objects = FALSE
 )
 
 #' @title Configure Validation for a GraphLearner

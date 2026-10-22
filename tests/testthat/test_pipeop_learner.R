@@ -221,22 +221,23 @@ test_that("internal_tuned_values, internal_valid_scores", {
 })
 
 test_that("exported fields", {
-  expect_equal(po("learner", lrn("classif.debug"))$exportable_fields, character(0))
+  expect_equal(get_private(po("learner", lrn("classif.debug")))$.exportable_fields(), character(0))
 
   obj = po("learner", lrn("regr.debug", predict_type = "quantiles"))
-  expect_set_equal(obj$exportable_fields, c("quantiles", "quantile_response"))
+  obj_private = get_private(obj)
+  expect_set_equal(obj_private$.exportable_fields(), c("quantiles", "quantile_response"))
 
-  obj$set_exported_field("quantiles", c(0.1, 0.9))
-  obj$set_exported_field("quantile_response", 0.5)
+  obj_private$.set_exported_field("quantiles", c(0.1, 0.9))
+  obj_private$.set_exported_field("quantile_response", 0.5)
   expect_equal(obj$learner$quantiles, c(0.1, 0.5, 0.9))
-  expect_equal(obj$get_exported_field("quantiles"), c(0.1, 0.5, 0.9))
+  expect_equal(obj_private$.get_exported_field("quantiles"), c(0.1, 0.5, 0.9))
 
   obj$train(list(tsk("mtcars")))
   prediction = obj$predict(list(tsk("mtcars")))[[1L]]
   expect_equal(attr(prediction$quantiles, "probs"), c(0.1, 0.5, 0.9))
-  expect_equal(obj$get_exported_field("quantile_response"), 0.5)
+  expect_equal(obj_private$.get_exported_field("quantile_response"), 0.5)
 
   obj$train(list(Multiplicity(tsk("mtcars"), tsk("mtcars"))))
-  expect_equal(obj$get_exported_field("quantiles"), c(0.1, 0.5, 0.9))
+  expect_equal(obj_private$.get_exported_field("quantiles"), c(0.1, 0.5, 0.9))
 })
 
