@@ -18,7 +18,8 @@
 #' Similarly, the predict_type of a Graph will always be the smallest denominator in the [`Graph`].
 #'
 #' Fields that [`PipeOp`]s make available for export are also fields of the `GraphLearner`,
-#' e.g. `$quantiles` and `$quantile_response` of a wrapped [`LearnerRegr`][mlr3::LearnerRegr].
+#' e.g. `$quantiles` and `$quantile_response` of a wrapped [`LearnerRegr`][mlr3::LearnerRegr] or of a
+#' [`PipeOpLearnerQuantiles`].
 #' They are taken from the same [`PipeOp`]s as the `predict_type`, and fields that the `GraphLearner` already has are skipped.
 #' Setting such a field sets it in all of these [`PipeOp`]s.
 #' Getting it returns its value in the [`PipeOp`]s of the active branch, and throws an error if these values differ.

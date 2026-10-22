@@ -22,7 +22,8 @@ Setting a new predict type will try to set the \code{predict_type} in all releva
 Similarly, the predict_type of a Graph will always be the smallest denominator in the \code{\link{Graph}}.
 
 Fields that \code{\link{PipeOp}}s make available for export are also fields of the \code{GraphLearner},
-e.g. \verb{$quantiles} and \verb{$quantile_response} of a wrapped \code{\link[mlr3:LearnerRegr]{LearnerRegr}}.
+e.g. \verb{$quantiles} and \verb{$quantile_response} of a wrapped \code{\link[mlr3:LearnerRegr]{LearnerRegr}} or of a
+\code{\link{PipeOpLearnerQuantiles}}.
 They are taken from the same \code{\link{PipeOp}}s as the \code{predict_type}, and fields that the \code{GraphLearner} already has are skipped.
 Setting such a field sets it in all of these \code{\link{PipeOp}}s.
 Getting it returns its value in the \code{\link{PipeOp}}s of the active branch, and throws an error if these values differ.

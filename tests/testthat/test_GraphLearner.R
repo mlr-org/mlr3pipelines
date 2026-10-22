@@ -1652,7 +1652,17 @@ test_that("exported fields", {
 
 test_that("exported fields - only from PipeOps that offer them", {
   expect_false("quantiles" %in% names(as_learner(po("scale") %>>% lrn("classif.debug"))))
-  expect_false("quantiles" %in% names(as_learner(po("learner_quantiles", lrn("regr.debug")))))
+  expect_false("quantiles" %in% names(as_learner(po("learner_pi_cvplus", lrn("regr.debug")))))
+})
+
+test_that("exported fields - PipeOpLearnerQuantiles", {
+  glrn = as_learner(po("learner_quantiles", lrn("regr.debug")))
+  glrn$quantiles = c(0.1, 0.9)
+  glrn$quantile_response = 0.5
+  expect_equal(glrn$param_set$values$regr.debug.quantiles.q_vals, c(0.1, 0.5, 0.9))
+
+  glrn$train(tsk("mtcars"))
+  expect_equal(attr(glrn$predict(tsk("mtcars"))$quantiles, "probs"), c(0.1, 0.5, 0.9))
 })
 
 test_that("exported fields - setting a field that no PipeOp exports", {
