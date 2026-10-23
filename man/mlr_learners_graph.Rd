@@ -104,8 +104,7 @@ in cases where the base learners do not implement \verb{$selected_features()}.
 The default is \code{FALSE}.
 }
 
-Fields that \code{\link{PipeOp}}s make available for export, e.g. \verb{$quantiles} and \verb{$quantile_response},
-are fields of the \code{GraphLearner} as well.
+Additionally, the \code{GraphLearner} may have fields exported from \code{\link{PipeOp}}s.
 For each field, the \code{\link{Graph}} is traversed backwards from its output,
 stopping on each path at the first \code{\link{PipeOp}} that makes the field available for export.
 Setting such a field sets it in all of these \code{\link{PipeOp}}s, and getting it throws an error if their values differ.

@@ -93,9 +93,8 @@
 #'   This is a heuristic and may report more features than actually used by the base learners,
 #'   in cases where the base learners do not implement `$selected_features()`.
 #'   The default is `FALSE`.
-#'
-#' Fields that [`PipeOp`]s make available for export, e.g. `$quantiles` and `$quantile_response`,
-#' are fields of the `GraphLearner` as well.
+#' 
+#' Additionally, the `GraphLearner` may have fields exported from [`PipeOp`]s.
 #' For each field, the [`Graph`] is traversed backwards from its output,
 #' stopping on each path at the first [`PipeOp`] that makes the field available for export.
 #' Setting such a field sets it in all of these [`PipeOp`]s, and getting it throws an error if their values differ.
@@ -506,6 +505,24 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     .validate = NULL,
     .can_validate = NULL,
     .can_internal_tuning = NULL,
+    .extract_internal_tuned_values = function() {
+      if (!private$.can_internal_tuning) return(NULL)
+      itvs = unlist(map(pos_with_property(self$graph_model, "internal_tuning"), "internal_tuned_values"), recursive = FALSE)
+      if (!length(itvs)) return(named_list())
+      itvs
+    },
+    .extract_internal_valid_scores = function() {
+      private$.collect_valid_scores("internal_valid_scores")
+    },
+    .extract_best_valid_scores = function() {
+      private$.collect_valid_scores("best_valid_scores")
+    },
+    .collect_valid_scores = function(field) {
+      if (!private$.can_validate) return(NULL)
+      ivs = unlist(map(pos_with_property(self$graph_model, "validation"), field), recursive = FALSE)
+      if (!length(ivs)) return(named_list())
+      ivs
+    },
     .add_exported_fields = function() {
       # every PipeOp leads to the single output, so each of these fields is found by .exported_field_pipeops()
       fields = map(private$.graph$pipeops, function(po) get_private(po)$.exportable_fields())
@@ -524,7 +541,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     },
     .exported_field_pipeops = function(name, resolve_branching) {
       # on each path, the PipeOp closest to the output that makes the field available for export hides those behind it;
-      # this is also the name check: the private accessors of a PipeOp are only called for fields it makes available
+      # private accessors of a PipeOp are only called for fields it makes available
       graph_find_backward(private$.graph,
         function(po) name %in% get_private(po)$.exportable_fields(),
         resolve_branching = resolve_branching
@@ -549,24 +566,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         stopf("No PipeOp of GraphLearner '%s' makes field '%s' available for export.", self$id, name)
       }
       walk(pos, function(po) get_private(po)$.set_exported_field(name, value))
-    },
-    .extract_internal_tuned_values = function() {
-      if (!private$.can_internal_tuning) return(NULL)
-      itvs = unlist(map(pos_with_property(self$graph_model, "internal_tuning"), "internal_tuned_values"), recursive = FALSE)
-      if (!length(itvs)) return(named_list())
-      itvs
-    },
-    .extract_internal_valid_scores = function() {
-      private$.collect_valid_scores("internal_valid_scores")
-    },
-    .extract_best_valid_scores = function() {
-      private$.collect_valid_scores("best_valid_scores")
-    },
-    .collect_valid_scores = function(field) {
-      if (!private$.can_validate) return(NULL)
-      ivs = unlist(map(pos_with_property(self$graph_model, "validation"), field), recursive = FALSE)
-      if (!length(ivs)) return(named_list())
-      ivs
     },
     deep_clone = function(name, value) {
       # Learner's deep_clone only handles specific fields; also clone our R6
