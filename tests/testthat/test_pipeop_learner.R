@@ -241,3 +241,32 @@ test_that("exported fields", {
   expect_equal(obj_private$.get_exported_field("quantiles"), c(0.1, 0.5, 0.9))
 })
 
+test_that("exported fields - only if the Learner can predict quantiles", {
+  skip_if_not_installed("rpart")
+  expect_equal(get_private(po("learner", lrn("regr.rpart")))$.exportable_fields(), character(0))
+  glrn_rpart = as_learner(po("scale") %>>% lrn("regr.rpart"))
+  expect_equal(get_private(po("learner", glrn_rpart))$.exportable_fields(), character(0))
+
+  glrn = as_learner(gunion(list(lrn("regr.debug"), lrn("regr.rpart"))) %>>% po("regravg", innum = 2))
+  glrn$quantiles = 0.5
+  expect_equal(glrn$graph$pipeops$regr.debug$learner$quantiles, 0.5)
+  expect_null(glrn$graph$pipeops$regr.rpart$learner$quantiles)
+})
+
+test_that("exported fields - GraphLearner", {
+  glrn = as_learner(po("scale") %>>% lrn("regr.debug", predict_type = "quantiles"))
+  glrn$quantiles = c(0.1, 0.9)
+  glrn$quantile_response = 0.5
+  expect_equal(glrn$base_learner()$quantiles, c(0.1, 0.5, 0.9))
+  expect_equal(glrn$quantiles, c(0.1, 0.5, 0.9))
+
+  rr = resample(tsk("mtcars"), glrn, rsmp("holdout"))
+  expect_equal(attr(rr$prediction()$quantiles, "probs"), c(0.1, 0.5, 0.9))
+})
+
+test_that("exported fields - nested GraphLearner", {
+  glrn = as_learner(po("learner", as_learner(po("scale") %>>% lrn("regr.debug"))))
+  glrn$quantiles = 0.5
+  expect_equal(glrn$base_learner()$quantiles, 0.5)
+  expect_equal(glrn$quantiles, 0.5)
+})
