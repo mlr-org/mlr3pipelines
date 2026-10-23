@@ -226,3 +226,12 @@ test_that("PipeOp - predict_type is read-only, but assigning its current value i
   expect_error({po_1$predict_type = "response"}, "read-only")
   expect_null(po_1$predict_type)
 })
+
+test_that("PipeOp - exported fields", {
+  expect_equal(get_private(PipeOpDebugBasic$new())$.exportable_fields(), character(0))
+
+  po_1 = PipeOpDebugExport$new()
+  expect_equal(get_private(po_1)$.get_exported_field("x"), 1)
+  get_private(po_1)$.set_exported_field("x", 2)
+  expect_equal(po_1$x, 2)
+})

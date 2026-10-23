@@ -139,6 +139,10 @@
 #'   Identifying string of the help page that shows with `help()`.
 #' * `label` :: `character(1)`\cr
 #'   Description of the `PipeOp`'s functionality. Derived from the title of its help page.
+#' * `predict_type` :: `character(1)` | `NULL`\cr
+#'   Predict type of the [`Prediction`][mlr3::Prediction] that the `PipeOp` returns.
+#'   `NULL` for the base class; `PipeOp`s that return a [`Prediction`][mlr3::Prediction], such as [`PipeOpLearner`],
+#'   overload it.
 #' * `properties` :: `character()`\cr
 #'   The properties of the `PipeOp`.
 #'   Currently supported values are:
@@ -204,6 +208,41 @@
 #'
 #' When you are implementing a `PipeOp` that operates a task (and is not a [`PipeOpTaskPreproc`]), you also need to handle the
 #' `$internal_valid_task` field of the input task, if there is one.
+#'
+#' To make fields available for export to a [`GraphLearner`], overload the private methods described in section
+#' *Exportable Fields*.
+#'
+#' @section Exportable Fields:
+#' A `PipeOp` can make some of its fields, or fields of an object it wraps, available for export.
+#' A [`GraphLearner`] then has these fields as its own fields,
+#' so that they can be read and set like the fields of any other [`Learner`][mlr3::Learner].
+#' For example, a [`PipeOpLearner`] makes `$quantiles` of a wrapped [`LearnerRegr`][mlr3::LearnerRegr] available,
+#' so a [`GraphLearner`] containing it has a `$quantiles` field.
+#'
+#' This is implemented by the following private methods, which inheriting `PipeOp`s can overload:
+#' * `.exportable_fields()`\cr
+#'   () -> `character`\cr
+#'   Names of the fields that the `PipeOp` makes available for export.
+#'   Returns `character(0)` by default.
+#'   A [`GraphLearner`] determines its fields from this when it is constructed,
+#'   so the result should only depend on how the `PipeOp` was constructed.
+#' * `.get_exported_field(name)`\cr
+#'   (`character(1)`) -> `any`\cr
+#'   Returns the value of the field `name`.
+#'   By default, this is the field `name` of the `PipeOp` itself.
+#' * `.set_exported_field(name, value)`\cr
+#'   (`character(1)`, `any`) -> `NULL`\cr
+#'   Sets the field `name` to `value`.
+#'   By default, this sets the field `name` of the `PipeOp` itself.
+#'
+#' A `PipeOp` that exports its own fields therefore only needs to overload `.exportable_fields()`,
+#' while a `PipeOp` that exports fields of a wrapped object, such as [`PipeOpLearner`], also overloads the other two.
+#'
+#' The [`GraphLearner`] calls these methods using [`get_private()`][mlr3misc::get_private]
+#' on the untrained `PipeOp`s in its `$graph`,
+#' so exported fields should be settings of the `PipeOp`, and not results of training, which are part of the `$state`.
+#' If several `PipeOp`s on a path to the output of the [`Graph`] make the same field available,
+#' only the one closest to the output is used, see [`GraphLearner`].
 #'
 #' @examples
 #' # example (bogus) PipeOp that returns the sum of two numbers during $train()
@@ -485,6 +524,9 @@ The hash and phash of a PipeOp must differ when it represents a different operat
 This warning will become an error in the future.", class(self)[[1]], class(self)[[1]])
       }
     },
+    .exportable_fields = function() character(0),
+    .get_exported_field = function(name) self[[name]],
+    .set_exported_field = function(name, value) self[[name]] = value,
     .param_set = NULL,
     .param_set_source = NULL,
     .label = NULL,

@@ -103,6 +103,12 @@ This is a heuristic and may report more features than actually used by the base 
 in cases where the base learners do not implement \verb{$selected_features()}.
 The default is \code{FALSE}.
 }
+
+Additionally, the \code{GraphLearner} may have fields exported from \code{\link{PipeOp}}s.
+For each field, the \code{\link{Graph}} is traversed backwards from its output,
+stopping on each path at the first \code{\link{PipeOp}} that makes the field available for export.
+Setting such a field sets it in all of these \code{\link{PipeOp}}s, and getting it throws an error if their values differ.
+See section \emph{Exportable Fields} in \code{\link{PipeOp}} and section \emph{Internals} for details.
 }
 
 \section{Methods}{
@@ -194,6 +200,18 @@ automatically converted to a \code{\link{Graph}} via \code{\link[=gunion]{gunion
 work as a \code{\link[mlr3:Learner]{Learner}}. \code{graph} can furthermore be a \code{\link[mlr3:Learner]{Learner}}, which is then automatically
 wrapped in a \code{\link{Graph}}, which is then again wrapped in a \code{GraphLearner} object; this usually only adds overhead and is not
 recommended.
+
+Exported fields, i.e. all fields that any \code{\link{PipeOp}} of the \code{\link{Graph}} makes available for export,
+are added as active bindings during construction, after which the object is locked.
+Subclasses of \code{GraphLearner} therefore only get exported fields if they are created with \code{lock_objects = FALSE},
+see \code{\link[R6:R6Class]{R6Class}}.
+Fields that the \code{GraphLearner} already has are skipped.
+Reading or setting an exported field calls the private methods \code{.get_exported_field()} or \code{.set_exported_field()}
+of the \code{\link{PipeOp}}s found by the search described above, which uses their private \code{.exportable_fields()},
+see section \emph{Exportable Fields} in \code{\link{PipeOp}}.
+Reading only considers the \code{\link{PipeOp}}s of the active branch, while setting considers all branches.
+Setting a field that none of these \code{\link{PipeOp}}s makes available, e.g. because the \code{\link{Graph}} was modified after
+construction, throws an error.
 }
 
 \examples{

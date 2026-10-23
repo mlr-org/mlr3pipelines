@@ -97,6 +97,13 @@ The best internal validation scores observed during training if the wrapped \cod
 }
 }
 
+\section{Exported Fields}{
+
+The fields \code{quantiles} and \code{quantile_response} of the wrapped \code{\link[mlr3:Learner]{Learner}}
+are made available for export if it can predict quantiles, see section \emph{Exportable Fields} in \code{\link{PipeOp}}.
+They are read from and set on \verb{$learner}, which can also be a \code{\link{GraphLearner}} that exports them itself.
+}
+
 \section{Methods}{
 
 Methods inherited from \code{\link{PipeOp}}.

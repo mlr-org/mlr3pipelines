@@ -77,6 +77,11 @@
 #'    The best internal validation scores observed during training if the wrapped `Learner` tracks them,
 #'    `NULL` otherwise.
 #'
+#' @section Exported Fields:
+#' The fields `quantiles` and `quantile_response` of the wrapped [`Learner`][mlr3::Learner]
+#' are made available for export if it can predict quantiles, see section *Exportable Fields* in [`PipeOp`].
+#' They are read from and set on `$learner`, which can also be a [`GraphLearner`] that exports them itself.
+#'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
 #'
@@ -187,6 +192,16 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   ),
   private = list(
     .learner = NULL,
+
+    .exportable_fields = function() {
+      # restricted to the quantile fields of Learners that can predict quantiles for now
+      if ("quantiles" %nin% private$.learner$predict_types) return(character(0))
+      fields = ls(private$.learner)
+      fields = setdiff(fields[map_lgl(fields, bindingIsActive, env = private$.learner)], names(Learner$active))
+      intersect(fields, c("quantiles", "quantile_response"))
+    },
+    .get_exported_field = function(name) private$.learner[[name]],
+    .set_exported_field = function(name, value) private$.learner[[name]] = value,
 
     .train = function(inputs) {
       on.exit({private$.learner$state = NULL})

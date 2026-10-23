@@ -66,6 +66,13 @@ PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
   )
 )
 
+# makes its own field `x` available for export
+PipeOpDebugExport = R6Class("PipeOpDebugExport",
+  inherit = PipeOpNOP,
+  public = list(x = 1),
+  private = list(.exportable_fields = function() "x")
+)
+
 VarargPipeop = R6Class("VarargPipeop",
   inherit = PipeOp,
   public = list(

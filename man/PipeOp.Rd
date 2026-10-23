@@ -146,6 +146,10 @@ and done, if requested, by the \code{\link{Graph}} backend itself; it should \em
 Identifying string of the help page that shows with \code{help()}.
 \item \code{label} :: \code{character(1)}\cr
 Description of the \code{PipeOp}'s functionality. Derived from the title of its help page.
+\item \code{predict_type} :: \code{character(1)} | \code{NULL}\cr
+Predict type of the \code{\link[mlr3:Prediction]{Prediction}} that the \code{PipeOp} returns.
+\code{NULL} for the base class; \code{PipeOp}s that return a \code{\link[mlr3:Prediction]{Prediction}}, such as \code{\link{PipeOpLearner}},
+overload it.
 \item \code{properties} :: \code{character()}\cr
 The properties of the \code{PipeOp}.
 Currently supported values are:
@@ -224,6 +228,45 @@ of the class, the id, the \verb{$state}, and the \verb{$param_set$values}. The l
 
 When you are implementing a \code{PipeOp} that operates a task (and is not a \code{\link{PipeOpTaskPreproc}}), you also need to handle the
 \verb{$internal_valid_task} field of the input task, if there is one.
+
+To make fields available for export to a \code{\link{GraphLearner}}, overload the private methods described in section
+\emph{Exportable Fields}.
+}
+
+\section{Exportable Fields}{
+
+A \code{PipeOp} can make some of its fields, or fields of an object it wraps, available for export.
+A \code{\link{GraphLearner}} then has these fields as its own fields,
+so that they can be read and set like the fields of any other \code{\link[mlr3:Learner]{Learner}}.
+For example, a \code{\link{PipeOpLearner}} makes \verb{$quantiles} of a wrapped \code{\link[mlr3:LearnerRegr]{LearnerRegr}} available,
+so a \code{\link{GraphLearner}} containing it has a \verb{$quantiles} field.
+
+This is implemented by the following private methods, which inheriting \code{PipeOp}s can overload:
+\itemize{
+\item \code{.exportable_fields()}\cr
+() -> \code{character}\cr
+Names of the fields that the \code{PipeOp} makes available for export.
+Returns \code{character(0)} by default.
+A \code{\link{GraphLearner}} determines its fields from this when it is constructed,
+so the result should only depend on how the \code{PipeOp} was constructed.
+\item \code{.get_exported_field(name)}\cr
+(\code{character(1)}) -> \code{any}\cr
+Returns the value of the field \code{name}.
+By default, this is the field \code{name} of the \code{PipeOp} itself.
+\item \code{.set_exported_field(name, value)}\cr
+(\code{character(1)}, \code{any}) -> \code{NULL}\cr
+Sets the field \code{name} to \code{value}.
+By default, this sets the field \code{name} of the \code{PipeOp} itself.
+}
+
+A \code{PipeOp} that exports its own fields therefore only needs to overload \code{.exportable_fields()},
+while a \code{PipeOp} that exports fields of a wrapped object, such as \code{\link{PipeOpLearner}}, also overloads the other two.
+
+The \code{\link{GraphLearner}} calls these methods using \code{\link[mlr3misc:get_private]{get_private()}}
+on the untrained \code{PipeOp}s in its \verb{$graph},
+so exported fields should be settings of the \code{PipeOp}, and not results of training, which are part of the \verb{$state}.
+If several \code{PipeOp}s on a path to the output of the \code{\link{Graph}} make the same field available,
+only the one closest to the output is used, see \code{\link{GraphLearner}}.
 }
 
 \examples{

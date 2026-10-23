@@ -1632,3 +1632,98 @@ test_that("GraphLearner - predict_newdata_fast", {
   glrn_pred = as_learner(po("learner", learner))$train(task)$predict_newdata_fast(newdata)
   expect_equal(glrn_pred$quantiles[, 1L], lrn_pred$quantiles[, 1L])
 })
+
+test_that("exported fields", {
+  glrn = as_learner(PipeOpDebugExport$new("a") %>>% lrn("regr.debug"))
+  expect_equal(glrn$x, 1)
+
+  glrn$x = 2
+  expect_equal(glrn$graph$pipeops$a$x, 2)
+  expect_equal(glrn$x, 2)
+
+  glrn$configure(x = 3)
+  expect_equal(glrn$graph$pipeops$a$x, 3)
+
+  expect_error({
+    glrn$not_a_field = 1
+  }, "locked")
+})
+
+test_that("exported fields - existing fields are not overwritten", {
+  PipeOpExportExisting = R6Class("PipeOpExportExisting", inherit = PipeOpNOP,
+    private = list(.exportable_fields = function() c("id", "predict_type"))
+  )
+  glrn = as_learner(PipeOpExportExisting$new() %>>% lrn("regr.debug"))
+  expect_equal(glrn$id, "nop.regr.debug")
+  glrn$predict_type = "se"
+  expect_equal(glrn$graph$pipeops$regr.debug$predict_type, "se")
+})
+
+test_that("exported fields - only the PipeOp closest to the output", {
+  glrn = as_learner(PipeOpDebugExport$new("a") %>>% PipeOpDebugExport$new("b") %>>% lrn("regr.debug"))
+  glrn$x = 2
+  expect_equal(glrn$graph$pipeops$b$x, 2)
+  expect_equal(glrn$graph$pipeops$a$x, 1)
+  expect_equal(glrn$x, 2)
+})
+
+test_that("exported fields - several PipeOps", {
+  graph = gunion(list(PipeOpDebugExport$new("a"), PipeOpDebugExport$new("b"))) %>>% po("featureunion")
+  glrn = as_learner(graph %>>% lrn("regr.debug"))
+  glrn$x = 2
+  expect_equal(glrn$graph$pipeops$a$x, 2)
+  expect_equal(glrn$graph$pipeops$b$x, 2)
+  expect_equal(glrn$x, 2)
+
+  glrn$graph$pipeops$b$x = 3
+  expect_error(glrn$x, "different values")
+})
+
+test_that("exported fields - branching", {
+  glrn = as_learner(ppl("branch", list(PipeOpDebugExport$new("a"), PipeOpDebugExport$new("b"))) %>>% lrn("regr.debug"))
+  glrn$x = 2
+  expect_equal(glrn$graph$pipeops$b$x, 2)
+
+  glrn$graph$pipeops$b$x = 3
+  expect_equal(glrn$x, 2)
+  glrn$param_set$values$branch.selection = 2L
+  expect_equal(glrn$x, 3)
+})
+
+test_that("exported fields - Graph modified after construction", {
+  glrn = as_learner(PipeOpDebugExport$new("a") %>>% lrn("regr.debug"))
+  glrn$graph$pipeops$a = po("nop", id = "a")
+  expect_null(glrn$x)
+  expect_error({
+    glrn$x = 2
+  }, "available for export")
+})
+
+test_that("exported fields - cloning and serialization", {
+  glrn = as_learner(PipeOpDebugExport$new("a") %>>% lrn("regr.debug"))
+  expect_deep_clone(glrn, glrn$clone(deep = TRUE))
+
+  for (glrn_copy in list(glrn$clone(deep = TRUE), unserialize(serialize(glrn, NULL)))) {
+    glrn_copy$x = 2
+    expect_equal(glrn_copy$graph$pipeops$a$x, 2)
+    expect_equal(glrn$x, 1)
+    expect_error({
+      glrn_copy$not_a_field = 1
+    }, "locked")
+  }
+})
+
+test_that("exported fields - subclasses", {
+  graph = PipeOpDebugExport$new("a") %>>% lrn("regr.debug")
+
+  GraphLearnerUnlocked = R6Class("GraphLearnerUnlocked", inherit = GraphLearner, lock_objects = FALSE)
+  glrn = GraphLearnerUnlocked$new(graph)
+  glrn$x = 2
+  expect_equal(glrn$graph$pipeops$a$x, 2)
+  expect_error({
+    glrn$not_a_field = 1
+  }, "locked")
+
+  GraphLearnerLocked = R6Class("GraphLearnerLocked", inherit = GraphLearner)
+  expect_false("x" %in% names(GraphLearnerLocked$new(graph)))
+})
