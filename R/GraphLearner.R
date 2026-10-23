@@ -96,8 +96,8 @@
 #'
 #' Fields that [`PipeOp`]s make available for export, e.g. `$quantiles` and `$quantile_response`,
 #' are fields of the `GraphLearner` as well.
-#' They are taken from the [`PipeOp`]s found by traversing the [`Graph`] backwards from its output,
-#' stopping on each path at the first `PipeOp` with a non-`NULL` `$predict_type`, such as a [`PipeOpLearner`].
+#' For each field, the [`Graph`] is traversed backwards from its output,
+#' stopping on each path at the first [`PipeOp`] that makes the field available for export.
 #' Setting such a field sets it in all of these [`PipeOp`]s, and getting it throws an error if their values differ.
 #' See section *Exportable Fields* in [`PipeOp`] and section *Internals* for details.
 #'
@@ -183,12 +183,13 @@
 #' wrapped in a [`Graph`], which is then again wrapped in a `GraphLearner` object; this usually only adds overhead and is not
 #' recommended.
 #'
-#' Exported fields are added as active bindings during construction, after which the object is locked.
+#' Exported fields, i.e. all fields that any [`PipeOp`] of the [`Graph`] makes available for export,
+#' are added as active bindings during construction, after which the object is locked.
 #' Subclasses of `GraphLearner` therefore only get exported fields if they are created with `lock_objects = FALSE`,
 #' see [`R6Class`][R6::R6Class].
 #' Fields that the `GraphLearner` already has are skipped.
 #' Reading or setting an exported field calls the private methods `.get_exported_field()` or `.set_exported_field()`
-#' of those [`PipeOp`]s whose private `.exportable_fields()` contain the field,
+#' of the [`PipeOp`]s found by the search described above, which uses their private `.exportable_fields()`,
 #' see section *Exportable Fields* in [`PipeOp`].
 #' Reading only considers the [`PipeOp`]s of the active branch, while setting considers all branches.
 #' Setting a field that none of these [`PipeOp`]s makes available, e.g. because the [`Graph`] was modified after
@@ -282,8 +283,11 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       if (recursive <= 0) return(if (return_all) list(self) else self)
       if (return_all && recursive > 1) stop("recursive must be <= 1 if return_all is TRUE")
 
-      # graph_base_learner() corresponds to base_learner(recursive = 1, return_po = TRUE, return_all = TRUE)
-      result = graph_base_learner(self$graph_model, resolve_branching = resolve_branching)
+      # this corresponds to base_learner(recursive = 1, return_po = TRUE, return_all = TRUE)
+      result = graph_find_backward(self$graph_model,
+        function(po) !is.null(get0("learner_model", po, ifnotfound = NULL)),
+        resolve_branching = resolve_branching
+      )
 
       if (!return_all) {
         if (length(result) < 1) stopf("No base learner found in Graph %s.", self$id)
@@ -422,8 +426,10 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       # we look for *all* pipeops with a predict_type if we want to set it, but
       # we only retrieve the predict_type of the active Learner (from branching) if we
       # are getting.
-      predict_type_pipeops = graph_base_learner(
-        self$graph, resolve_branching = missing(rhs), lookup_field = "predict_type")
+      predict_type_pipeops = graph_find_backward(self$graph,
+        function(po) !is.null(get0("predict_type", po, ifnotfound = NULL)),
+        resolve_branching = missing(rhs)
+      )
       if (!missing(rhs)) {
         walk(predict_type_pipeops, function(po) {
           # skip PipeOps that already have the requested value: assigning to a
@@ -501,8 +507,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     .can_validate = NULL,
     .can_internal_tuning = NULL,
     .add_exported_fields = function() {
-      pos = graph_base_learner(private$.graph, resolve_branching = FALSE, lookup_field = "predict_type")
-      fields = map(pos, function(po) get_private(po)$.exportable_fields())
+      # every PipeOp leads to the single output, so each of these fields is found by .exported_field_pipeops()
+      fields = map(private$.graph$pipeops, function(po) get_private(po)$.exportable_fields())
       fields = setdiff(unique(as.character(unlist(fields, use.names = FALSE))), names(self))
       enclos_env = self$.__enclos_env__
       for (field in fields) {
@@ -517,9 +523,12 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
     },
     .exported_field_pipeops = function(name, resolve_branching) {
-      pos = graph_base_learner(private$.graph, resolve_branching = resolve_branching, lookup_field = "predict_type")
-      # name check: the private accessors of a PipeOp are only called for fields that it makes available for export
-      keep(pos, function(po) name %in% get_private(po)$.exportable_fields())
+      # on each path, the PipeOp closest to the output that makes the field available for export hides those behind it;
+      # this is also the name check: the private accessors of a PipeOp are only called for fields it makes available
+      graph_find_backward(private$.graph,
+        function(po) name %in% get_private(po)$.exportable_fields(),
+        resolve_branching = resolve_branching
+      )
     },
     .get_exported_field = function(name) {
       pos = private$.exported_field_pipeops(name, resolve_branching = TRUE)
@@ -841,7 +850,11 @@ infer_task_type = function(graph) {
   }
   if (length(task_type) != 1L) {
     # We could not infer type from any PipeOp output channels, so we try to infer it from the base learners
-    baselearners = map(graph_base_learner(graph, resolve_branching = FALSE), "learner_model")
+    baselearner_pos = graph_find_backward(graph,
+      function(po) !is.null(get0("learner_model", po, ifnotfound = NULL)),
+      resolve_branching = FALSE
+    )
+    baselearners = map(baselearner_pos, "learner_model")
     task_type = unique(unlist(map(baselearners, function(x) {
       # Currently we should not have Multiplicities here, since Graph gets NULLed explicitly upon construction.
       # If we ever allow initializing a Learner with a trained Graph, the following will be necessary.
@@ -964,9 +977,11 @@ andpaste = function(x, sep = ", ", lastsep = ", and ") {
   paste0(paste(first(x, -1), collapse = sep), lastsep, last(x))
 }
 
-graph_base_learner = function(graph, resolve_branching = TRUE, lookup_field = "learner_model") {
-  # GraphLearner$base_learner(), where return_all is TRUE, return_po is TRUE, and recursive is 1.
-  # We are looking for all PipeOps with the non-NULL field named `lookup_field`, typically "learner_model", possibly resolving branching.
+graph_find_backward = function(graph, is_target, resolve_branching = TRUE) {
+  # Traverses the Graph backwards from its output and returns, as a list, the first PipeOp on each path for which
+  # `is_target(<PipeOp>)` is TRUE, possibly resolving branching.
+  # E.g. GraphLearner$base_learner(), where return_all is TRUE, return_po is TRUE, and recursive is 1,
+  # looks for PipeOps with a non-NULL `$learner_model`.
 
   gm_output = graph$output
   if (nrow(gm_output) != 1) {
@@ -983,13 +998,12 @@ graph_base_learner = function(graph, resolve_branching = TRUE, lookup_field = "l
   delayedAssign("po_unbranch_active_input", get_po_unbranch_active_input(graph))  # only call get_pobranch_active_output() if we encounter a PipeOpUnbranch
 
   pipeops_visited = new.env(parent = emptyenv())
-  search_base_learner_pipeops = function(current_pipeop) {
+  search_pipeops = function(current_pipeop) {
     repeat {
       last_pipeop = graph$pipeops[[current_pipeop]]
       if (get0(current_pipeop, pipeops_visited, ifnotfound = FALSE)) return(list())
       assign(current_pipeop, TRUE, pipeops_visited)
-      field_content = get0(lookup_field, last_pipeop, ifnotfound = NULL)
-      if (!is.null(field_content)) return(list(last_pipeop))
+      if (is_target(last_pipeop)) return(list(last_pipeop))
       next_pipeop = graph$edges[dst_id == current_pipeop, src_id]
       if (length(next_pipeop) > 1) {
         # more than one predecessor
@@ -1005,7 +1019,7 @@ graph_base_learner = function(graph, resolve_branching = TRUE, lookup_field = "l
           })
         }
         if (!inherits(last_pipeop, "PipeOpUnbranch") || !resolve_branching) {
-          return(unique(unlist(lapply(next_pipeop, search_base_learner_pipeops), recursive = FALSE, use.names = FALSE)))
+          return(unique(unlist(lapply(next_pipeop, search_pipeops), recursive = FALSE, use.names = FALSE)))
         }
         # PipeOpUnbranch inference succeeded; continue with selected branch.
         if (next_pipeop == "") next_pipeop = character(0)
@@ -1015,5 +1029,5 @@ graph_base_learner = function(graph, resolve_branching = TRUE, lookup_field = "l
     }
   }
 
-  unique(search_base_learner_pipeops(last_pipeop_id))
+  unique(search_pipeops(last_pipeop_id))
 }

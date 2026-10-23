@@ -265,8 +265,8 @@ while a \code{PipeOp} that exports fields of a wrapped object, such as \code{\li
 The \code{\link{GraphLearner}} calls these methods using \code{\link[mlr3misc:get_private]{get_private()}}
 on the untrained \code{PipeOp}s in its \verb{$graph},
 so exported fields should be settings of the \code{PipeOp}, and not results of training, which are part of the \verb{$state}.
-Only \code{PipeOp}s with a non-\code{NULL} \verb{$predict_type} are considered, and only if no other such \code{PipeOp} lies between them
-and the output of the \code{\link{Graph}}, see \code{\link{GraphLearner}}.
+If several \code{PipeOp}s on a path to the output of the \code{\link{Graph}} make the same field available,
+only the one closest to the output is used, see \code{\link{GraphLearner}}.
 }
 
 \examples{

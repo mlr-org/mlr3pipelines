@@ -106,8 +106,8 @@ The default is \code{FALSE}.
 
 Fields that \code{\link{PipeOp}}s make available for export, e.g. \verb{$quantiles} and \verb{$quantile_response},
 are fields of the \code{GraphLearner} as well.
-They are taken from the \code{\link{PipeOp}}s found by traversing the \code{\link{Graph}} backwards from its output,
-stopping on each path at the first \code{PipeOp} with a non-\code{NULL} \verb{$predict_type}, such as a \code{\link{PipeOpLearner}}.
+For each field, the \code{\link{Graph}} is traversed backwards from its output,
+stopping on each path at the first \code{\link{PipeOp}} that makes the field available for export.
 Setting such a field sets it in all of these \code{\link{PipeOp}}s, and getting it throws an error if their values differ.
 See section \emph{Exportable Fields} in \code{\link{PipeOp}} and section \emph{Internals} for details.
 }
@@ -202,12 +202,13 @@ work as a \code{\link[mlr3:Learner]{Learner}}. \code{graph} can furthermore be a
 wrapped in a \code{\link{Graph}}, which is then again wrapped in a \code{GraphLearner} object; this usually only adds overhead and is not
 recommended.
 
-Exported fields are added as active bindings during construction, after which the object is locked.
+Exported fields, i.e. all fields that any \code{\link{PipeOp}} of the \code{\link{Graph}} makes available for export,
+are added as active bindings during construction, after which the object is locked.
 Subclasses of \code{GraphLearner} therefore only get exported fields if they are created with \code{lock_objects = FALSE},
 see \code{\link[R6:R6Class]{R6Class}}.
 Fields that the \code{GraphLearner} already has are skipped.
 Reading or setting an exported field calls the private methods \code{.get_exported_field()} or \code{.set_exported_field()}
-of those \code{\link{PipeOp}}s whose private \code{.exportable_fields()} contain the field,
+of the \code{\link{PipeOp}}s found by the search described above, which uses their private \code{.exportable_fields()},
 see section \emph{Exportable Fields} in \code{\link{PipeOp}}.
 Reading only considers the \code{\link{PipeOp}}s of the active branch, while setting considers all branches.
 Setting a field that none of these \code{\link{PipeOp}}s makes available, e.g. because the \code{\link{Graph}} was modified after

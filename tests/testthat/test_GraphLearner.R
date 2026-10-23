@@ -1703,6 +1703,18 @@ test_that("exported fields - several PipeOps", {
   expect_error(glrn$quantiles, "different values")
 })
 
+test_that("exported fields - only the PipeOp closest to the output", {
+  PipeOpExport = R6Class("PipeOpExport", inherit = PipeOpNOP,
+    public = list(x = 1),
+    private = list(.exportable_fields = function() "x")
+  )
+  glrn = as_learner(PipeOpExport$new("a") %>>% PipeOpExport$new("b") %>>% lrn("regr.debug"))
+  glrn$x = 2
+  expect_equal(glrn$graph$pipeops$b$x, 2)
+  expect_equal(glrn$graph$pipeops$a$x, 1)
+  expect_equal(glrn$x, 2)
+})
+
 test_that("exported fields - branching", {
   glrn = as_learner(ppl("branch", list(lrn("regr.debug"), lrn("regr.featureless"))))
   glrn$quantiles = 0.5

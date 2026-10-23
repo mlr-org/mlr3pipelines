@@ -241,8 +241,8 @@
 #' The [`GraphLearner`] calls these methods using [`get_private()`][mlr3misc::get_private]
 #' on the untrained `PipeOp`s in its `$graph`,
 #' so exported fields should be settings of the `PipeOp`, and not results of training, which are part of the `$state`.
-#' Only `PipeOp`s with a non-`NULL` `$predict_type` are considered, and only if no other such `PipeOp` lies between them
-#' and the output of the [`Graph`], see [`GraphLearner`].
+#' If several `PipeOp`s on a path to the output of the [`Graph`] make the same field available,
+#' only the one closest to the output is used, see [`GraphLearner`].
 #'
 #' @examples
 #' # example (bogus) PipeOp that returns the sum of two numbers during $train()
