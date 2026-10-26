@@ -35,26 +35,7 @@ named \code{list}, and assigning a named \code{list} sets the \verb{$state} of e
 (\code{NULL} if absent), so assigning \code{NULL} resets all of them.
 Training a \code{Graph} therefore modifies it in place,
 and \verb{$is_trained} is \code{TRUE} exactly when all its \code{\link{PipeOp}}s have a non-\code{NULL} \verb{$state}.
-
-The \verb{$model} of a \code{\link{GraphLearner}} is the \verb{$state} of the wrapped \code{Graph}, captured after training.
-Like any \code{\link[mlr3:Learner]{Learner}}, a \code{\link{GraphLearner}} stores everything it learns in its own \verb{$state}
-(e.g. the log, the training time and the hyperparameter values used),
-where \verb{$model} is an alias for \verb{$state$model} and is set by \CRANpkg{mlr3} to the return value of \code{private$.train()}.
-\code{private$.train()} of a \code{\link{GraphLearner}} therefore trains \verb{$graph} in place,
-returns the resulting \verb{$state} of \verb{$graph} with the added class \code{"graph_learner_model"}
-(which \code{\link[mlr3:marshal_model]{marshal_model()}} dispatches on),
-and resets the \verb{$state} of \verb{$graph} to \code{NULL}, as is also done on construction.
-After \verb{$train()}, \verb{$graph} is thus the untrained prototype, used e.g. for configuration via \verb{$param_set$values},
-while \verb{$model} holds the named \code{list} of trained \code{\link{PipeOp}} states.
-For prediction, \verb{$model} is assigned to the \verb{$state} of \verb{$graph} only for the duration of \code{private$.predict()}.
-\verb{$graph_model} reunites the two for inspection: it is a deep clone of \verb{$graph} with \verb{$state} set to \verb{$model},
-or \verb{$graph} itself while \verb{$model} is \code{NULL}, so that \verb{$graph_model$pipeops$<id>$state} is \verb{$model$<id>}.
-This separation is necessary because \CRANpkg{mlr3} may run \code{private$.train()} in a separate R process
-(\code{"callr"} or \code{"mirai"} encapsulation), and because resampling only keeps the \verb{$state} of a
-\code{\link[mlr3:Learner]{Learner}} and rebuilds trained learners from it,
-so trained information kept only by reference inside \verb{$graph} would be lost.
-\code{\link{PipeOpLearner}} applies the same pattern one level down: \verb{$learner} stays untrained,
-\verb{$state} is the \verb{$state} of the wrapped \code{\link[mlr3:Learner]{Learner}}, and \verb{$learner_model} combines the two.
+A \code{\link{GraphLearner}} stores this \verb{$state} as its \verb{$model}, see Section \emph{Internals} of \code{\link{GraphLearner}}.
 }
 
 \section{Fields}{

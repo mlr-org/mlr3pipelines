@@ -69,35 +69,12 @@ Present for \code{predict_method = "cv_ensemble"}.
 Contains the states of the learners trained on each resampling fold.
 }
 
-For \code{predict_method = "full"}, the \verb{$state} also contains all members of the \verb{$state} slot of the
-\code{\link[mlr3:Learner]{Learner}} trained on the complete training data.
-This is the named \code{list} of class \code{"learner_state"} that \CRANpkg{mlr3} creates during \verb{$train()},
-which is considered an internal data structure that may change
-(see the \verb{$state} field of \code{\link[mlr3:Learner]{Learner}}).
-Its most important members are:
-\itemize{
-\item \code{model} :: \code{any}\cr
-Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function.
-\item \code{log} :: \code{\link[data.table:data.table]{data.table}} with columns \code{stage} (\code{factor}), \code{class} (\code{factor}),
-\code{condition} (\code{list})\cr
-Output, warnings and errors logged during training.
-\item \code{train_time} :: \code{numeric(1)}\cr
-Training time, in seconds.
-\item \code{param_vals} :: named \code{list}\cr
-Hyperparameter values used for training.
-\item \code{task_hash} :: \code{character(1)}\cr
-Hash of the training \code{\link[mlr3:Task]{Task}}.
-\item \code{feature_names} :: \code{character}\cr
-Feature names of the training \code{\link[mlr3:Task]{Task}}.
-}
+For \code{predict_method = "full"}, it also contains the members of the \verb{$state} slot of the \code{\link[mlr3:Learner]{Learner}}
+trained on the complete training data, such as \code{model}, \code{log} and \code{train_time} (see \code{\link{PipeOpLearner}}).
+For \code{predict_method = "cv_ensemble"}, \code{model} and \code{log} are \code{NULL} and \code{train_time} is \code{NA}.
 
-\CRANpkg{mlr3} adds further members, e.g. \code{train_task}, \code{data_prototype}, \code{validate} and \code{mlr3_version}.
-
-For \code{predict_method = "cv_ensemble"}, no \code{\link[mlr3:Learner]{Learner}} is trained on the complete training data.
-Of the members listed above, the \verb{$state} then only contains \code{model} and \code{log}, which are \code{NULL},
-and \code{train_time}, which is \code{NA}.
-
-This state is given the class \code{"pipeop_learner_cv_state"}.
+This state is given the class \code{"pipeop_learner_cv_state"},
+in addition to the class \code{"learner_state"} for \code{predict_method = "full"}.
 }
 
 \section{Parameters}{
@@ -138,7 +115,7 @@ Only present for learners that support \code{"se"} predictions.
 
 \section{Internals}{
 
-The \verb{$state} is currently not updated by prediction, so \verb{$state$log} never contains entries with \code{stage} \code{"predict"}
+The \verb{$state} is currently not updated by prediction, so \verb{$state$log} contains no entries from prediction
 and \verb{$state$predict_time} is always \code{NULL}.
 }
 

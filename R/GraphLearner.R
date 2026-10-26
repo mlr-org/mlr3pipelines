@@ -10,7 +10,6 @@
 #' The Graph must return a single [`Prediction`][mlr3::Prediction] on its `$predict()`
 #' call. The result of the `$train()` call is discarded, only the
 #' internal state changes during training are used.
-#' See Section *Internals* of [`Graph`] for how the `$state` of a [`Graph`] relates to the `$model` of a `GraphLearner`.
 #'
 #' The `predict_type` of a [`GraphLearner`] can be obtained or set via it's `predict_type` active binding.
 #' Setting a new predict type will try to set the `predict_type` in all relevant
@@ -165,6 +164,13 @@
 #'   Throws an error otherwise.
 #'
 #' @section Internals:
+#' The `$model` of a `GraphLearner` is the `$state` of `$graph` after training,
+#' i.e. a named `list` containing the `$state` of each [`PipeOp`] (see Section *Internals* of [`Graph`]).
+#' The `$state` of `$graph` itself is then reset to `NULL`, so `$graph` stays untrained,
+#' and `$graph_model` gives a copy of `$graph` with `$model` as its `$state`.
+#' This is necessary because \CRANpkg{mlr3} only keeps the `$state` of a [`Learner`][mlr3::Learner],
+#' e.g. when training in a separate R process via encapsulation, or when storing models during resampling.
+#'
 #' [`as_graph()`] is called on the `graph` argument, so it can technically also be a `list` of things, which is
 #' automatically converted to a [`Graph`] via [`gunion()`]; however, this will usually not result in a valid [`Graph`] that can
 #' work as a [`Learner`][mlr3::Learner]. `graph` can furthermore be a [`Learner`][mlr3::Learner], which is then automatically

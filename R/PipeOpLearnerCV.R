@@ -58,33 +58,12 @@
 #'   Present for `predict_method = "cv_ensemble"`.
 #'   Contains the states of the learners trained on each resampling fold.
 #'
-#' For `predict_method = "full"`, the `$state` also contains all members of the `$state` slot of the
-#' [`Learner`][mlr3::Learner] trained on the complete training data.
-#' This is the named `list` of class `"learner_state"` that \CRANpkg{mlr3} creates during `$train()`,
-#' which is considered an internal data structure that may change
-#' (see the `$state` field of [`Learner`][mlr3::Learner]).
-#' Its most important members are:
-#' * `model` :: `any`\cr
-#'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function.
-#' * `log` :: [`data.table`][data.table::data.table] with columns `stage` (`factor`), `class` (`factor`),
-#'   `condition` (`list`)\cr
-#'   Output, warnings and errors logged during training.
-#' * `train_time` :: `numeric(1)`\cr
-#'   Training time, in seconds.
-#' * `param_vals` :: named `list`\cr
-#'   Hyperparameter values used for training.
-#' * `task_hash` :: `character(1)`\cr
-#'   Hash of the training [`Task`][mlr3::Task].
-#' * `feature_names` :: `character`\cr
-#'   Feature names of the training [`Task`][mlr3::Task].
+#' For `predict_method = "full"`, it also contains the members of the `$state` slot of the [`Learner`][mlr3::Learner]
+#' trained on the complete training data, such as `model`, `log` and `train_time` (see [`PipeOpLearner`]).
+#' For `predict_method = "cv_ensemble"`, `model` and `log` are `NULL` and `train_time` is `NA`.
 #'
-#' \CRANpkg{mlr3} adds further members, e.g. `train_task`, `data_prototype`, `validate` and `mlr3_version`.
-#'
-#' For `predict_method = "cv_ensemble"`, no [`Learner`][mlr3::Learner] is trained on the complete training data.
-#' Of the members listed above, the `$state` then only contains `model` and `log`, which are `NULL`,
-#' and `train_time`, which is `NA`.
-#'
-#' This state is given the class `"pipeop_learner_cv_state"`.
+#' This state is given the class `"pipeop_learner_cv_state"`,
+#' in addition to the class `"learner_state"` for `predict_method = "full"`.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from the [`PipeOpTaskPreproc`], as well as the parameters of the [`Learner`][mlr3::Learner] wrapped by this object.
@@ -119,7 +98,7 @@
 #'   Only present for learners that support `"se"` predictions.
 #'
 #' @section Internals:
-#' The `$state` is currently not updated by prediction, so `$state$log` never contains entries with `stage` `"predict"`
+#' The `$state` is currently not updated by prediction, so `$state$log` contains no entries from prediction
 #' and `$state$predict_time` is always `NULL`.
 #'
 #' @section Fields:
