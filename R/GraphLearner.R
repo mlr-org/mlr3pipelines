@@ -122,9 +122,12 @@
 #'   If `return_po` is `TRUE`, the container-`PipeOp` is returned instead of the `Learner`.
 #'   This will typically be a [`PipeOpLearner`] or a [`PipeOpLearnerCV`].\cr
 #'   If `return_all` is `TRUE`, a `list` of `Learner`s or `PipeOp`s is returned.
-#'   If `return_po` is `FALSE`, this list may contain [`Multiplicity`] objects, which are not unwrapped.
+#'   If `return_po` is `FALSE`, this list may contain [`Multiplicity`] objects,
+#'   or plain `list`s of `Learner`s from `PipeOp`s that fit multiple models, which are not unwrapped.
 #'   If `return_all` is `FALSE` and there are multiple possible base learners, an error is thrown.
-#'   This may also happen if only a single [`PipeOpLearner`] is present that was trained with a [`Multiplicity`].\cr
+#'   This may also happen if only a single [`PipeOpLearner`] is present that was trained with a [`Multiplicity`],
+#'   or if the base learner `PipeOp` fits multiple models during training,
+#'   such as [`PipeOpLearnerPICVPlus`] (one per fold) or [`PipeOpLearnerQuantiles`] (one per quantile).\cr
 #'   If `resolve_branching` is `TRUE`, and when a [`PipeOpUnbranch`] is encountered, the
 #'   corresponding [`PipeOpBranch`] is searched, and its hyperparameter configuration is used to select the base learner.
 #'   There may be multiple corresponding [`PipeOpBranch`]s, which are all considered.
@@ -264,10 +267,13 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         if (length(result) < 1) stopf("No base learner found in Graph %s.", self$id)
         if (length(result) > 1) stopf("Graph %s has no unique PipeOp containing a Learner.", self$id)
         if (!return_po) {
-          result = multiplicity_flatten(result[[1]]$learner_model)
+          po_id = result[[1]]$id
+          result = learner_model_flatten(result[[1]]$learner_model)
           if (length(result) != 1) {
-            # if learner_model is not a Multiplicity, multiplicity_flatten will return a list of length 1
-            stopf("Graph %s's base learner is a Multiplicity that does not contain exactly one Learner.", self$id)
+            # if learner_model is a single Learner, learner_model_flatten will return a list of length 1
+            stopf(paste("Base learner PipeOp %s of Graph %s does not contain exactly one Learner but %i,",
+              "e.g. because it was trained on a Multiplicity or because it fits multiple models."),
+              po_id, self$id, length(result))
           }
           return(result[[1]]$base_learner(recursive - 1))
         } else {
@@ -296,7 +302,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     },
     selected_features = function() {
       base_learners = self$base_learner(recursive = 1, return_all = TRUE)
-      base_learners_flat = unlist(lapply(base_learners, multiplicity_flatten), recursive = FALSE, use.names = FALSE)
+      base_learners_flat = unlist(lapply(base_learners, learner_model_flatten), recursive = FALSE, use.names = FALSE)
       selected_features_all = lapply(base_learners_flat, function(x) {
         if ("selected_features" %in% x$properties && !is.null(x$selected_features)) {
           x$selected_features()
@@ -948,4 +954,15 @@ graph_base_learner = function(graph, resolve_branching = TRUE, lookup_field = "l
   }
 
   unique(search_base_learner_pipeops(last_pipeop_id))
+}
+
+# Returns a flat list of the Learners contained in a PipeOp's `$learner_model`.
+# This is usually a single Learner, but it can also be a Multiplicity (when trained on a Multiplicity),
+# or a plain list (e.g. for a trained PipeOpLearnerPICVPlus or PipeOpLearnerQuantiles), possibly nested.
+learner_model_flatten = function(learner_model) {
+  if (is.Multiplicity(learner_model) || (is.list(learner_model) && !is.object(learner_model))) {
+    unlist(map(learner_model, learner_model_flatten), recursive = FALSE, use.names = FALSE)
+  } else {
+    list(learner_model)
+  }
 }
