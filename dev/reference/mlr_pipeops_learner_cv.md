@@ -96,40 +96,40 @@ the training phase data.
 
 ## State
 
-The `$state` is set to the `$state` slot of the
-[`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) object,
-together with the `$state` elements inherited from the
-[`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md).
-It is a named `list` with the inherited members, as well as:
+The `$state` is a named `list` with the `$state` elements inherited from
+[`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md),
+as well as:
 
 - `model` :: `any`  
   Model created by the
   [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html)'s
-  `$.train()` function.
+  `$.train()` function on the complete training data. `NULL` for
+  `predict_method = "cv_ensemble"`.
 
-- `train_log` ::
-  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
-  with columns `class` (`character`), `msg` (`character`)  
-  Errors logged during training.
+- `log` ::
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html) \|
+  `NULL`  
+  Output, warnings and errors logged during training on the complete
+  training data. `NULL` for `predict_method = "cv_ensemble"`.
 
 - `train_time` :: `numeric(1)`  
-  Training time, in seconds.
-
-- `predict_log` :: `NULL` \|
-  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
-  with columns `class` (`character`), `msg` (`character`)  
-  Errors logged during prediction.
-
-- `predict_time` :: `NULL` \| `numeric(1)` Prediction time, in seconds.
+  Training time on the complete training data, in seconds. `NA` for
+  `predict_method = "cv_ensemble"`.
 
 - `predict_method` :: `character(1)`  
   `"full"` when prediction uses a learner fitted on all training data,
   `"cv_ensemble"` when predictions are averaged over models trained on
   resampling folds.
 
-- `cv_model_states` :: `NULL` \| `list`  
-  Present for `predict_method = "cv_ensemble"`. Contains the states of
-  the learners trained on each resampling fold.
+- `cv_model_states` :: `list`  
+  States of the learners trained on each resampling fold. Only present
+  for `predict_method = "cv_ensemble"`.
+
+For `predict_method = "full"`, the `$state` furthermore contains all
+other members of the `$state` slot of the
+[`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) trained on
+the complete training data, such as `param_vals` (see
+[`PipeOpLearner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner.md)).
 
 This state is given the class `"pipeop_learner_cv_state"`.
 
@@ -198,8 +198,9 @@ this object. Besides that, parameters introduced are:
 
 ## Internals
 
-The `$state` is currently not updated by prediction, so the
-`$state$predict_log` and `$state$predict_time` will always be `NULL`.
+The `$state` is currently not updated by prediction, so `$state$log`
+contains no entries from prediction and `$state$predict_time` is always
+`NULL`.
 
 ## Fields
 

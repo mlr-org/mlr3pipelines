@@ -28,6 +28,12 @@
 - Fix: Deep-cloning a `GraphLearner` now also clones `R6` objects in its
   saved hyperparameter values (`$state$param_vals`).
 - Tests in `inst/testthat` no longer override `expect_equal`.
+- Fix: `PipeOpLearnerCV` with
+  `resampling.predict_method = "cv_ensemble"` now has a `NULL`
+  `$state$log` member instead of `$state$train_log`, and its `$state` no
+  longer contains `predict_log` and `predict_time`, matching the member
+  names of a trained `Learner`’s `$state`
+  ([\#298](https://github.com/mlr-org/mlr3pipelines/issues/298)).
 - Fix: `PipeOpEncodeImpact`, `PipeOpEncodeLmer`, and `PipeOpVtreat` now
   always give an informative error during training for `TaskSupervised`
   `Task`s that inherit from neither `TaskRegr` nor `TaskClassif`

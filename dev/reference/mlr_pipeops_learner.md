@@ -73,27 +73,22 @@ the training input data.
 
 The `$state` is set to the `$state` slot of the
 [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html) object. It
-is a named `list` with members:
+is a named `list` of class `"learner_state"` with members such as:
 
 - `model` :: `any`  
   Model created by the
   [`Learner`](https://mlr3.mlr-org.com/reference/Learner.html)'s
   `$.train()` function.
 
-- `train_log` ::
-  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
-  with columns `class` (`character`), `msg` (`character`)  
-  Errors logged during training.
+- `log` ::
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)  
+  Output, warnings and errors logged during training.
 
 - `train_time` :: `numeric(1)`  
   Training time, in seconds.
 
-- `predict_log` :: `NULL` \|
-  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)
-  with columns `class` (`character`), `msg` (`character`)  
-  Errors logged during prediction.
-
-- `predict_time` :: `NULL` \| `numeric(1)` Prediction time, in seconds.
+- `param_vals` :: named `list`  
+  Hyperparameter values used for training.
 
 ## Parameters
 
@@ -103,8 +98,9 @@ this object.
 
 ## Internals
 
-The `$state` is currently not updated by prediction, so the
-`$state$predict_log` and `$state$predict_time` will always be `NULL`.
+The `$state` is currently not updated by prediction, so `$state$log`
+contains no entries from prediction and `$state$predict_time` is always
+`NULL`.
 
 ## Fields
 

@@ -358,6 +358,20 @@ known to not have an impact on the relevant properties.
 
 ## Internals
 
+The `$model` of a `GraphLearner` is the `$state` of `$graph` after
+training, i.e. a named `list` containing the `$state` of each
+[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)
+(see Section *Internals* of
+[`Graph`](https://mlr3pipelines.mlr-org.com/dev/reference/Graph.md)).
+The `$state` of `$graph` itself is set to `NULL` after training, so the
+`$graph` field stays untrained, and `$graph_model` gives a copy of
+`$graph` with `$model` as its `$state`. This is necessary because
+[mlr3](https://CRAN.R-project.org/package=mlr3) does not always keep the
+trained `GraphLearner` object itself: with encapsulation, training runs
+on a copy in a separate R process and only the trained model is
+returned, and resampling only stores the `$state` of each trained
+learner, so a trained `$graph` would be lost.
+
 [`as_graph()`](https://mlr3pipelines.mlr-org.com/dev/reference/as_graph.md)
 is called on the `graph` argument, so it can technically also be a
 `list` of things, which is automatically converted to a

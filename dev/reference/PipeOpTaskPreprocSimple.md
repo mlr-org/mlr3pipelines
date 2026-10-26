@@ -117,7 +117,7 @@ having the default implementations of `private$.get_state()` and
 ## Fields
 
 Fields inherited from
-[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md).
+[`PipeOpTaskPreproc`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.md)/[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md).
 
 ## Methods
 

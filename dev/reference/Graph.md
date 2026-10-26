@@ -43,6 +43,26 @@ order, moving the
 results along the edges as input to other
 [`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)s.
 
+A `Graph` has no trained state of its own: everything learned during
+`$train()` is stored in the `$state` of the individual
+[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)s
+(see the `$state` field of
+[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)).
+The `$state` field of the `Graph` is only a view on these: reading it
+collects the `$state` of each
+[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)
+into a named `list`, and assigning a named `list` sets the `$state` of
+each
+[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md) to
+the element of the same name (`NULL` if absent), so assigning `NULL`
+resets all of them. Training a `Graph` therefore modifies it in-place,
+and `$is_trained` is `TRUE` exactly when all its
+[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)s
+have a non-`NULL` `$state`. A
+[`GraphLearner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_learners_graph.md)
+stores this `$state` as its `$model`, see Section *Internals* of
+[`GraphLearner`](https://mlr3pipelines.mlr-org.com/dev/reference/mlr_learners_graph.md).
+
 ## Fields
 
 - `pipeops` :: named `list` of
@@ -307,7 +327,7 @@ results along the edges as input to other
   (`any`, `logical(1)`) -\> `list` of `any`  
   Predict with the `Graph` by calling all the
   [`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md)'s
-  `$train` methods. Input and output, as well as the function of the
+  `$predict` methods. Input and output, as well as the function of the
   `single_input` argument, are analogous to `$train()`.
 
 - `help(help_type)`  

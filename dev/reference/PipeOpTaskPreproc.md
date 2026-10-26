@@ -138,7 +138,7 @@ according to the overloaded
 The `$state` is a named `list`; besides members added by inheriting
 classes, the members are:
 
-- `affect_cols` :: `character`  
+- `affected_cols` :: `character`  
   Names of features being selected by the `affect_columns` parameter, if
   present; names of *all* present features otherwise.
 
@@ -160,15 +160,21 @@ classes, the members are:
   from the prediction operation has the same features, feature layout,
   and feature types as after training.
 
+- `outtaskshell` ::
+  [`data.table`](https://rdrr.io/pkg/data.table/man/data.table.html)  
+  Zero-row `data.table` with the target and feature columns of the
+  trained [`Task`](https://mlr3.mlr-org.com/reference/Task.html). This
+  is used during prediction on a
+  [`Task`](https://mlr3.mlr-org.com/reference/Task.html) without rows,
+  to create the output
+  [`Task`](https://mlr3.mlr-org.com/reference/Task.html) with the same
+  features as after training without calling `private$.predict_task()`.
+
 - `dt_columns` :: `character`  
   Names of features selected by the `private$.select_cols()` call during
   training. This is only present if the `private$.train_dt()`
   functionality is used, and not present if the `private$.train_task()`
   function is overloaded instead.
-
-- `feature_types` :: `character`  
-  Feature types affected by the `PipeOp`. See `private$.select_cols()`
-  for more information.
 
 ## Parameters
 
@@ -206,7 +212,13 @@ by setting the col_role to `"feature"`.
 ## Fields
 
 Fields inherited from
-[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md).
+[`PipeOp`](https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.md),
+as well as:
+
+- `feature_types` :: `character`  
+  Feature types affected by the `PipeOp`, as given by the
+  `feature_types` construction argument. See `private$.select_cols()`
+  for more information. Read-only.
 
 ## Methods
 
