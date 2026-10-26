@@ -80,7 +80,7 @@ Fields inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:LearnerRegr]{LearnerRegr}}\cr
 \code{\link[mlr3:Learner]{Learner}} that is being wrapped. Read-only.
-\item \code{learner_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
+\item \code{learner_model} :: \code{\link[mlr3:Learner]{Learner}} or \code{list}\cr
 If \code{PipeOpLearnerQuantiles} has been trained, this is a \code{list} containing the \code{\link[mlr3:Learner]{Learner}}s for each quantile.
 Otherwise, this contains the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
 Read-only.

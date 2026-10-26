@@ -935,7 +935,7 @@ test_that("base_learner() works", {
 
   bagger$train(tsk("iris"))
 
-  expect_error(bagger$base_learner(), "Multiplicity that does not contain exactly one Learner")
+  expect_error(bagger$base_learner(), "does not contain exactly one Learner")
 
   metabagger = as_learner(ppl("bag", iterations = 1,
       ppl("bag", iterations = 1, lrn("classif.rpart"),
@@ -949,7 +949,7 @@ test_that("base_learner() works", {
 
   metabagger$param_set$values$replicate.reps = 2
   metabagger$train(tsk("iris"))
-  expect_error(metabagger$base_learner(), "Multiplicity that does not contain exactly one Learner")
+  expect_error(metabagger$base_learner(), "does not contain exactly one Learner")
 
   metabagger$param_set$values$replicate.reps = 1
   metabagger$train(tsk("iris"))
@@ -957,7 +957,7 @@ test_that("base_learner() works", {
 
   metabagger$param_set$values$replicate_1.reps = 2
   metabagger$train(tsk("iris"))
-  expect_error(metabagger$base_learner(), "Multiplicity that does not contain exactly one Learner")
+  expect_error(metabagger$base_learner(), "does not contain exactly one Learner")
 
   # double-channel pipeop cascade: see there is no exponential explosion
   gchain = chain_graphs(
@@ -1369,7 +1369,7 @@ test_that("GraphLearner Importance", {
   expect_true("importance" %in% g_bagging$properties)
   g_bagging$train(tsk("iris"))
   expect_true("importance" %in% g_bagging$properties)
-  expect_error(g_bagging$importance(), "Multiplicity that does not contain exactly one Learner")
+  expect_error(g_bagging$importance(), "does not contain exactly one Learner")
 
   g_bagging$param_set$values$replicate.reps = 1
   g_bagging$train(tsk("iris"))
@@ -1508,6 +1508,18 @@ test_that("GraphLearner Selected Features", {
   expect_equal(g_avg$selected_features(), c("Sepal.Length", "Sepal.Width", "Petal.Length"))
 })
 
+test_that("base_learner() and selected_features() with PipeOps that fit multiple models", {
+  for (key in c("learner_pi_cvplus", "learner_quantiles")) {
+    glrn = as_learner(po("select", selector = selector_grep("^c")) %>>% po(key, lrn("regr.debug")))
+    expect_identical(glrn$base_learner(), glrn$graph_model$pipeops$regr.debug$learner_model)
+    glrn$train(tsk("mtcars"))
+    expect_error(glrn$base_learner(), "PipeOp regr.debug of Graph .* does not contain exactly one Learner but 3")
+    expect_error(glrn$selected_features(), "regr.debug .*does not implement.*selected_features")
+    glrn$impute_selected_features = TRUE
+    expect_set_equal(glrn$selected_features(), c("carb", "cyl"))
+  }
+})
+
 
 
 test_that("GraphLearner other properties", {
@@ -1548,8 +1560,8 @@ test_that("GraphLearner other properties", {
   expect_true(all(c("loglik", "oob_error") %in% g_bagging$properties))
   g_bagging$train(tsk("iris"))
   expect_true(all(c("loglik", "oob_error") %in% g_bagging$properties))
-  expect_error(g_bagging$loglik(), "Multiplicity that does not contain exactly one Learner")
-  expect_error(g_bagging$oob_error(), "Multiplicity that does not contain exactly one Learner")
+  expect_error(g_bagging$loglik(), "does not contain exactly one Learner")
+  expect_error(g_bagging$oob_error(), "does not contain exactly one Learner")
 
   g_bagging$param_set$values$replicate.reps = 1
   g_bagging$train(tsk("iris"))

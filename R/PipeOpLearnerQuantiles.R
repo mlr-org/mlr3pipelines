@@ -61,7 +61,7 @@
 #' Fields inherited from [`PipeOp`], as well as:
 #' * `learner` :: [`LearnerRegr`][mlr3::LearnerRegr]\cr
 #'   [`Learner`][mlr3::Learner] that is being wrapped. Read-only.
-#' * `learner_model` :: [`Learner`][mlr3::Learner]\cr
+#' * `learner_model` :: [`Learner`][mlr3::Learner] or `list`\cr
 #'   If `PipeOpLearnerQuantiles` has been trained, this is a `list` containing the [`Learner`][mlr3::Learner]s for each quantile.
 #'   Otherwise, this contains the [`Learner`][mlr3::Learner] that is being wrapped.
 #'   Read-only.

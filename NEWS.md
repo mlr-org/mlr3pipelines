@@ -21,6 +21,7 @@
 * Fix: `PipeOpTargetTrafoScaleRange` no longer drops the standard error (`se`) when inverting predictions, and instead rescales it to the original target scale.
 * Fix: `selector_cardinality_greater_than()` and `selector_missing()` no longer return the target column, which made `PipeOp`s using them as `affect_columns` fail (#1050).
 * Fix: `PipeOpTargetInvert` now keeps the observation weights of the incoming prediction.
+* Fix: `GraphLearner$base_learner()` now gives an informative error instead of failing cryptically when the base learner is a trained `PipeOpLearnerPICVPlus` or `PipeOpLearnerQuantiles`, whose `$learner_model` is a `list` of `Learner`s. `$selected_features()` now returns the union of the selected features of all these `Learner`s, as it already did for `Multiplicity` objects (#1054).
 
 # mlr3pipelines 0.12.0
 

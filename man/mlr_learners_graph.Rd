@@ -135,9 +135,12 @@ If \code{recursive} is greater than 1, the discovered base learner's \code{base_
 If \code{return_po} is \code{TRUE}, the container-\code{PipeOp} is returned instead of the \code{Learner}.
 This will typically be a \code{\link{PipeOpLearner}} or a \code{\link{PipeOpLearnerCV}}.\cr
 If \code{return_all} is \code{TRUE}, a \code{list} of \code{Learner}s or \code{PipeOp}s is returned.
-If \code{return_po} is \code{FALSE}, this list may contain \code{\link{Multiplicity}} objects, which are not unwrapped.
+If \code{return_po} is \code{FALSE}, this list may contain \code{\link{Multiplicity}} objects,
+or plain \code{list}s of \code{Learner}s from \code{PipeOp}s that fit multiple models, which are not unwrapped.
 If \code{return_all} is \code{FALSE} and there are multiple possible base learners, an error is thrown.
-This may also happen if only a single \code{\link{PipeOpLearner}} is present that was trained with a \code{\link{Multiplicity}}.\cr
+This may also happen if only a single \code{\link{PipeOpLearner}} is present that was trained with a \code{\link{Multiplicity}},
+or if the base learner \code{PipeOp} fits multiple models during training,
+such as \code{\link{PipeOpLearnerPICVPlus}} (one per fold) or \code{\link{PipeOpLearnerQuantiles}} (one per quantile).\cr
 If \code{resolve_branching} is \code{TRUE}, and when a \code{\link{PipeOpUnbranch}} is encountered, the
 corresponding \code{\link{PipeOpBranch}} is searched, and its hyperparameter configuration is used to select the base learner.
 There may be multiple corresponding \code{\link{PipeOpBranch}}s, which are all considered.
