@@ -27,6 +27,15 @@ dependency structure (although the \code{\link{PipeOp}}s for this would need to 
 A \code{Graph} is made up of a list of \code{\link{PipeOp}}s, and a \code{\link[data.table:data.table]{data.table}} of edges. Both for training and prediction, the \code{Graph}
 performs topological sorting of the \code{\link{PipeOp}}s and executes their respective \verb{$train()} or \verb{$predict()} functions in order, moving
 the \code{\link{PipeOp}} results along the edges as input to other \code{\link{PipeOp}}s.
+
+A \code{Graph} has no trained state of its own: everything learned during \verb{$train()} is stored in the \verb{$state} of the
+individual \code{\link{PipeOp}}s (see the \verb{$state} field of \code{\link{PipeOp}}).
+The \verb{$state} field of the \code{Graph} is only a view on these: reading it collects the \verb{$state} of each \code{\link{PipeOp}} into a
+named \code{list}, and assigning a named \code{list} sets the \verb{$state} of each \code{\link{PipeOp}} to the element of the same name
+(\code{NULL} if absent), so assigning \code{NULL} resets all of them.
+Training a \code{Graph} therefore modifies it in-place,
+and \verb{$is_trained} is \code{TRUE} exactly when all its \code{\link{PipeOp}}s have a non-\code{NULL} \verb{$state}.
+A \code{\link{GraphLearner}} stores this \verb{$state} as its \verb{$model}, see Section \emph{Internals} of \code{\link{GraphLearner}}.
 }
 
 \section{Fields}{
@@ -140,8 +149,8 @@ names (\verb{$input$name}) and inputs will be sent to the channels by name; othe
 in order in which they are listed in \verb{$input}.
 \item \code{predict(input, single_input = TRUE)} \cr
 (\code{any}, \code{logical(1)}) -> \code{list} of \code{any} \cr
-Predict with the \code{Graph} by calling all the \code{\link{PipeOp}}'s \verb{$train} methods. Input and output, as well as the function
-of the \code{single_input} argument, are analogous to \verb{$train()}.
+Predict with the \code{Graph} by calling all the \code{\link{PipeOp}}'s \verb{$predict} methods.
+Input and output, as well as the function of the \code{single_input} argument, are analogous to \verb{$train()}.
 \item \code{help(help_type)} \cr
 (\code{character(1)}) -> help file\cr
 Displays the help file of the concrete \code{PipeOp} instance. \code{help_type} is one of \code{"text"}, \code{"html"}, \code{"pdf"} and behaves

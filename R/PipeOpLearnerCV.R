@@ -50,23 +50,25 @@
 #' ordinary prediction made on the data by a [`Learner`][mlr3::Learner] trained on the training phase data.
 #'
 #' @section State:
-#' The `$state` is set to the `$state` slot of the [`Learner`][mlr3::Learner] object, together with the `$state` elements inherited from the
-#' [`PipeOpTaskPreproc`]. It is a named `list` with the inherited members, as well as:
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `model` :: `any`\cr
-#'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function.
-#' * `train_log` :: [`data.table`][data.table::data.table] with columns `class` (`character`), `msg` (`character`)\cr
-#'   Errors logged during training.
+#'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function on the complete training data.
+#'   `NULL` for `predict_method = "cv_ensemble"`.
+#' * `log` :: [`data.table`][data.table::data.table] | `NULL`\cr
+#'   Output, warnings and errors logged during training on the complete training data.
+#'   `NULL` for `predict_method = "cv_ensemble"`.
 #' * `train_time` :: `numeric(1)`\cr
-#'   Training time, in seconds.
-#' * `predict_log` :: `NULL` | [`data.table`][data.table::data.table] with columns `class` (`character`), `msg` (`character`)\cr
-#'   Errors logged during prediction.
-#' * `predict_time` :: `NULL` | `numeric(1)`
-#'   Prediction time, in seconds.
+#'   Training time on the complete training data, in seconds.
+#'   `NA` for `predict_method = "cv_ensemble"`.
 #' * `predict_method` :: `character(1)`\cr
-#'   `"full"` when prediction uses a learner fitted on all training data, `"cv_ensemble"` when predictions are averaged over
-#'   models trained on resampling folds.
-#' * `cv_model_states` :: `NULL` | `list`\cr
-#'   Present for `predict_method = "cv_ensemble"`. Contains the states of the learners trained on each resampling fold.
+#'   `"full"` when prediction uses a learner fitted on all training data,
+#'   `"cv_ensemble"` when predictions are averaged over models trained on resampling folds.
+#' * `cv_model_states` :: `list`\cr
+#'   States of the learners trained on each resampling fold.
+#'   Only present for `predict_method = "cv_ensemble"`.
+#'
+#' For `predict_method = "full"`, the `$state` furthermore contains all other members of the `$state` slot of the
+#' [`Learner`][mlr3::Learner] trained on the complete training data, such as `param_vals` (see [`PipeOpLearner`]).
 #'
 #' This state is given the class `"pipeop_learner_cv_state"`.
 #'
@@ -103,7 +105,8 @@
 #'   Only present for learners that support `"se"` predictions.
 #'
 #' @section Internals:
-#' The `$state` is currently not updated by prediction, so the `$state$predict_log` and `$state$predict_time` will always be `NULL`.
+#' The `$state` is currently not updated by prediction, so `$state$log` contains no entries from prediction
+#' and `$state$predict_time` is always `NULL`.
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`], as well as:
@@ -387,10 +390,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     make_cv_state = function(cv_model_states) {
       list(
         model = NULL,
-        train_log = NULL,
+        log = NULL,
         train_time = NA_real_,
-        predict_log = NULL,
-        predict_time = NULL,
         predict_method = "cv_ensemble",
         cv_model_states = cv_model_states
       )

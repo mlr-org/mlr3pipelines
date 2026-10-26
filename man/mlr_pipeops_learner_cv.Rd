@@ -59,25 +59,27 @@ ordinary prediction made on the data by a \code{\link[mlr3:Learner]{Learner}} tr
 
 \section{State}{
 
-The \verb{$state} is set to the \verb{$state} slot of the \code{\link[mlr3:Learner]{Learner}} object, together with the \verb{$state} elements inherited from the
-\code{\link{PipeOpTaskPreproc}}. It is a named \code{list} with the inherited members, as well as:
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{model} :: \code{any}\cr
-Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function.
-\item \code{train_log} :: \code{\link[data.table:data.table]{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
-Errors logged during training.
+Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function on the complete training data.
+\code{NULL} for \code{predict_method = "cv_ensemble"}.
+\item \code{log} :: \code{\link[data.table:data.table]{data.table}} | \code{NULL}\cr
+Output, warnings and errors logged during training on the complete training data.
+\code{NULL} for \code{predict_method = "cv_ensemble"}.
 \item \code{train_time} :: \code{numeric(1)}\cr
-Training time, in seconds.
-\item \code{predict_log} :: \code{NULL} | \code{\link[data.table:data.table]{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
-Errors logged during prediction.
-\item \code{predict_time} :: \code{NULL} | \code{numeric(1)}
-Prediction time, in seconds.
+Training time on the complete training data, in seconds.
+\code{NA} for \code{predict_method = "cv_ensemble"}.
 \item \code{predict_method} :: \code{character(1)}\cr
-\code{"full"} when prediction uses a learner fitted on all training data, \code{"cv_ensemble"} when predictions are averaged over
-models trained on resampling folds.
-\item \code{cv_model_states} :: \code{NULL} | \code{list}\cr
-Present for \code{predict_method = "cv_ensemble"}. Contains the states of the learners trained on each resampling fold.
+\code{"full"} when prediction uses a learner fitted on all training data,
+\code{"cv_ensemble"} when predictions are averaged over models trained on resampling folds.
+\item \code{cv_model_states} :: \code{list}\cr
+States of the learners trained on each resampling fold.
+Only present for \code{predict_method = "cv_ensemble"}.
 }
+
+For \code{predict_method = "full"}, the \verb{$state} furthermore contains all other members of the \verb{$state} slot of the
+\code{\link[mlr3:Learner]{Learner}} trained on the complete training data, such as \code{param_vals} (see \code{\link{PipeOpLearner}}).
 
 This state is given the class \code{"pipeop_learner_cv_state"}.
 }
@@ -120,7 +122,8 @@ Only present for learners that support \code{"se"} predictions.
 
 \section{Internals}{
 
-The \verb{$state} is currently not updated by prediction, so the \verb{$state$predict_log} and \verb{$state$predict_time} will always be \code{NULL}.
+The \verb{$state} is currently not updated by prediction, so \verb{$state$log} contains no entries from prediction
+and \verb{$state$predict_time} is always \code{NULL}.
 }
 
 \section{Fields}{

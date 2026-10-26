@@ -137,6 +137,18 @@ test_that("PipeOpLearnerCV - cv ensemble averages fold learners", {
   )
 })
 
+test_that("PipeOpLearnerCV - cv ensemble state only uses member names of a full state", {
+  skip_on_cran()
+  task = tsk("iris")
+  po_full = PipeOpLearnerCV$new(lrn("classif.featureless"))
+  po_full$train(list(task))
+  po_cv = PipeOpLearnerCV$new(lrn("classif.featureless"),
+    param_vals = list(resampling.predict_method = "cv_ensemble")
+  )
+  po_cv$train(list(task))
+  expect_subset(names(po_cv$state), c(names(po_full$state), "cv_model_states"))
+})
+
 test_that("PipeOpLearnerCV - cv ensemble drops response when requested", {
   skip_on_cran()
   skip_if_not_installed("rpart")

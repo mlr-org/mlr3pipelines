@@ -38,23 +38,23 @@
 #' trained on the training input data.
 #'
 #' @section State:
-#' The `$state` is set to the `$state` slot of the [`Learner`][mlr3::Learner] object. It is a named `list` with members:
+#' The `$state` is set to the `$state` slot of the [`Learner`][mlr3::Learner] object.
+#' It is a named `list` of class `"learner_state"` with members such as:
 #' * `model` :: `any`\cr
 #'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function.
-#' * `train_log` :: [`data.table`][data.table::data.table] with columns `class` (`character`), `msg` (`character`)\cr
-#'   Errors logged during training.
+#' * `log` :: [`data.table`][data.table::data.table]\cr
+#'   Output, warnings and errors logged during training.
 #' * `train_time` :: `numeric(1)`\cr
 #'   Training time, in seconds.
-#' * `predict_log` :: `NULL` | [`data.table`][data.table::data.table] with columns `class` (`character`), `msg` (`character`)\cr
-#'   Errors logged during prediction.
-#' * `predict_time` :: `NULL` | `numeric(1)`
-#'   Prediction time, in seconds.
+#' * `param_vals` :: named `list`\cr
+#'   Hyperparameter values used for training.
 #'
 #' @section Parameters:
 #' The parameters are exactly the parameters of the [`Learner`][mlr3::Learner] wrapped by this object.
 #'
 #' @section Internals:
-#' The `$state` is currently not updated by prediction, so the `$state$predict_log` and `$state$predict_time` will always be `NULL`.
+#' The `$state` is currently not updated by prediction, so `$state$log` contains no entries from prediction
+#' and `$state$predict_time` is always `NULL`.
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`], as well as:

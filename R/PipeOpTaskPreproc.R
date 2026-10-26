@@ -75,7 +75,7 @@
 #'
 #' @section State:
 #' The `$state` is a named `list`; besides members added by inheriting classes, the members are:
-#' * `affect_cols` :: `character`\cr
+#' * `affected_cols` :: `character`\cr
 #'   Names of features being selected by the `affect_columns` parameter, if present; names of *all* present features otherwise.
 #' * `intasklayout` :: [`data.table`][data.table::data.table]\cr
 #'   Copy of the training [`Task`][mlr3::Task]'s `$feature_types` slot. This is used during prediction to ensure that
@@ -83,11 +83,13 @@
 #' * `outtasklayout` :: [`data.table`][data.table::data.table]\cr
 #'   Copy of the trained [`Task`][mlr3::Task]'s `$feature_types` slot. This is used during prediction to ensure that
 #'   the [`Task`][mlr3::Task] resulting from the prediction operation has the same features, feature layout, and feature types as after training.
+#' * `outtaskshell` :: [`data.table`][data.table::data.table]\cr
+#'   Zero-row `data.table` with the target and feature columns of the trained [`Task`][mlr3::Task].
+#'   This is used during prediction on a [`Task`][mlr3::Task] without rows, to create the output [`Task`][mlr3::Task]
+#'   with the same features as after training without calling `private$.predict_task()`.
 #' * `dt_columns` :: `character`\cr
 #'   Names of features selected by the `private$.select_cols()` call during training. This is only present if the `private$.train_dt()` functionality is used,
 #'   and not present if the `private$.train_task()` function is overloaded instead.
-#' * `feature_types` :: `character`\cr
-#'   Feature types affected by the `PipeOp`. See `private$.select_cols()` for more information.
 #'
 #' @section Parameters:
 #' * `affect_columns` :: `function` | [`Selector`] | `NULL` \cr
@@ -108,7 +110,11 @@
 #' processing, and adding them afterwards by setting the col_role to `"feature"`.
 #'
 #' @section Fields:
-#' Fields inherited from [`PipeOp`].
+#' Fields inherited from [`PipeOp`], as well as:
+#' * `feature_types` :: `character`\cr
+#'   Feature types affected by the `PipeOp`, as given by the `feature_types` construction argument.
+#'   See `private$.select_cols()` for more information.
+#'   Read-only.
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`], as well as:
@@ -368,7 +374,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #' `private$.get_state()` and `private$.transform()` call `private$.get_state_dt()` and `private$.transform_dt()`.
 #'
 #' @section Fields:
-#' Fields inherited from [`PipeOp`].
+#' Fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOpTaskPreproc`], as well as:

@@ -22,6 +22,15 @@
 #' performs topological sorting of the [`PipeOp`]s and executes their respective `$train()` or `$predict()` functions in order, moving
 #' the [`PipeOp`] results along the edges as input to other [`PipeOp`]s.
 #'
+#' A `Graph` has no trained state of its own: everything learned during `$train()` is stored in the `$state` of the
+#' individual [`PipeOp`]s (see the `$state` field of [`PipeOp`]).
+#' The `$state` field of the `Graph` is only a view on these: reading it collects the `$state` of each [`PipeOp`] into a
+#' named `list`, and assigning a named `list` sets the `$state` of each [`PipeOp`] to the element of the same name
+#' (`NULL` if absent), so assigning `NULL` resets all of them.
+#' Training a `Graph` therefore modifies it in-place,
+#' and `$is_trained` is `TRUE` exactly when all its [`PipeOp`]s have a non-`NULL` `$state`.
+#' A [`GraphLearner`] stores this `$state` as its `$model`, see Section *Internals* of [`GraphLearner`].
+#'
 #' @section Fields:
 #' * `pipeops` :: named `list` of [`PipeOp`] \cr
 #'   Contains all [`PipeOp`]s in the `Graph`, named by the [`PipeOp`]'s `$id`s.
@@ -127,8 +136,8 @@
 #'   in order in which they are listed in `$input`.
 #' * `predict(input, single_input = TRUE)` \cr
 #'   (`any`, `logical(1)`) -> `list` of `any` \cr
-#'   Predict with the `Graph` by calling all the [`PipeOp`]'s `$train` methods. Input and output, as well as the function
-#'   of the `single_input` argument, are analogous to `$train()`.
+#'   Predict with the `Graph` by calling all the [`PipeOp`]'s `$predict` methods.
+#'   Input and output, as well as the function of the `single_input` argument, are analogous to `$train()`.
 #' * `help(help_type)` \cr
 #'   (`character(1)`) -> help file\cr
 #'   Displays the help file of the concrete `PipeOp` instance. `help_type` is one of `"text"`, `"html"`, `"pdf"` and behaves

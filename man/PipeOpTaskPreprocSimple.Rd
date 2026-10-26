@@ -86,7 +86,7 @@ functions \code{private$.get_state()} and \code{private$.transform()}, or altern
 
 \section{Fields}{
 
-Fields inherited from \code{\link{PipeOp}}.
+Fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \section{Methods}{
