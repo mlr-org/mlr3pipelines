@@ -47,7 +47,7 @@
 #' * `residuals` :: `data.table`\cr
 #'   `data.table` with columns `fold` and `residual`. Lists the Regression residuals for each observation and cross validation fold.
 #'
-#' This state is given the class `"pipeop_learner_cv_state"`.
+#' This state is given the class `"pipeop_learner_pi_cvplus_state"`.
 #'
 #' @section Parameters:
 #' The parameters of the [`Learner`][mlr3::Learner] wrapped by this object, as well as:
@@ -68,9 +68,10 @@
 #'   If the `PipeOpLearnerPICVPlus` has been trained, this is a `list` containing the [`Learner`][mlr3::Learner]s of the cross validation models.
 #'   Otherwise, this contains the [`Learner`][mlr3::Learner] that is being wrapped.
 #'   Read-only.
-#' * `predict_type`\cr
-#'   Predict type of the `PipeOpLearnerPICVPlus`, which is always `"response"  "quantiles"`.
+#' * `predict_type` :: `character(1)`\cr
+#'   Predict type of the `PipeOpLearnerPICVPlus`, which is always `"quantiles"`.
 #'   This can be different to the predict type of the [`Learner`][mlr3::Learner] that is being wrapped.
+#'   Read-only.
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
@@ -149,10 +150,11 @@ PipeOpLearnerPICVPlus = R6Class("PipeOpLearnerPICVPlus",
       }
     },
     predict_type = function(val) {
-      if (!missing(val)) {
+      # read-only, but assigning the current value is a no-op
+      if (!missing(val) && !identical(val, "quantiles")) {
         stop("$predict_type is read-only.")
       }
-      mlr_reflections$learner_predict_types$regr$quantiles  # Returns c("response", "quantiles")
+      "quantiles"
     }
   ),
   private = list(

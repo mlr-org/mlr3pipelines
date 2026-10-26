@@ -47,6 +47,11 @@ The maximum absolute value for each column after transformation. Default is 1.
 }
 }
 
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
@@ -150,6 +155,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_tunethreshold}},
+\code{\link{mlr_pipeops_umap}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_vtreat}},

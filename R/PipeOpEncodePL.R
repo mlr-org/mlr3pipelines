@@ -265,10 +265,12 @@ mlr_pipeops$add("encodeplquantiles", PipeOpEncodePLQuantiles)
 #' PipeOpEncodePLTree$new(task_type, id = "encodepltree", param_vals = list())
 #' ```
 #' * `task_type` :: `character(1)`\cr
-#'   The class of [`Task`][mlr3::Task] that should be accepted as input, given as a `character(1)`. This is used to
-#'   construct the appropriate [`Learner`][mlr3::Learner] to be used for obtaining the bins for piecewise linear
-#'   encoding. Supported options are `"TaskClassif"`for [`LearnerClassifRpart`][mlr3::LearnerClassifRpart] or
-#'   `"TaskRegr"`for [`LearnerRegrRpart`][mlr3::LearnerRegrRpart].
+#'   The class of [`Task`][mlr3::Task] that should be accepted as input, given as a `character(1)`.
+#'   This determines the [`Learner`][mlr3::Learner] used for obtaining the bins:
+#'   [`LearnerClassifRpart`][mlr3::LearnerClassifRpart] for `"TaskClassif"` and
+#'   [`LearnerRegrRpart`][mlr3::LearnerRegrRpart] for `"TaskRegr"`.
+#'   Classes inheriting from these that are registered in [`mlr_reflections$task_types`][mlr3::mlr_reflections],
+#'   are also supported, and it should usually be sufficient to pass the name of the respective super-class.
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"encodeplquantiles"`.
 #' * `param_vals` :: named `list`\cr
@@ -276,8 +278,8 @@ mlr_pipeops$add("encodeplquantiles", PipeOpEncodePLQuantiles)
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`]. Instead of a [`Task`][mlr3::Task], a
-#' [`TaskClassif`][mlr3::TaskClassif] or [`TaskRegr`][mlr3::TaskRegr] is used as input and output during training and
-#' prediction, depending on the `task_type` construction argument.
+#' `Task` of the class given by the `task_type` construction argument is used as input and output
+#' during training and prediction.
 #'
 #' The output is the input [`Task`][mlr3::Task] with all affected `numeric` and `integer` columns encoded using piecewise
 #' linear encoding with bins being derived from a decision tree [`Learner`][mlr3::Learner] trained on the respective feature column.
@@ -351,13 +353,14 @@ PipeOpEncodePLTree = R6Class("PipeOpEncodePLTree",
   public = list(
     initialize = function(task_type, id = "encodepltree", param_vals = list()) {
       assert_choice(task_type, mlr_reflections$task_types$task)
-      if (task_type == "TaskRegr") {
-        private$.tree_learner = LearnerRegrRpart$new()
-      } else if (task_type == "TaskClassif") {
-        private$.tree_learner = LearnerClassifRpart$new()
-      } else {
+      # Choose the tree Learner by the Learner class registered for the Task class, so that registered classes
+      # inheriting from TaskRegr / TaskClassif (e.g. TaskRegrST) are supported as well.
+      learner_class = mlr_reflections$task_types$learner[[match(task_type, mlr_reflections$task_types$task)]]
+      private$.tree_learner = switch(learner_class,
+        LearnerRegr = LearnerRegrRpart$new(),
+        LearnerClassif = LearnerClassifRpart$new(),
         stopf("Task type %s not supported.", task_type)
-      }
+      )
 
       super$initialize(id, param_set = alist(private$.tree_learner$param_set), param_vals = param_vals,
         packages = private$.tree_learner$packages, task_type = task_type)
