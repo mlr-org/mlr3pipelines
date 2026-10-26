@@ -98,6 +98,9 @@
 #' @section Internals:
 #' Follows vtreat's fit/prepare interface. See [vtreat::NumericOutcomeTreatment()], [vtreat::BinomialOutcomeTreatment()],
 #' [vtreat::MultinomialOutcomeTreatment()], [vtreat::fit_prepare()] and [vtreat::prepare()].
+#' 
+#' Only [`TaskRegr`][mlr3::TaskRegr] and [`TaskClassif`][mlr3::TaskClassif] (or [`Task`][mlr3::Task]s inheriting from
+#' them) are supported, other [`Task`][mlr3::Task]s give an error during training.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -200,6 +203,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
   private = list(
 
     .train_task = function(task) {
+      task_type = assert_regr_or_classif_task(task)
 
       var_list = task$feature_names
       if (length(var_list) == 0L) {
@@ -210,8 +214,6 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         assert_subset(names(self$param_set$values$imputation_map), choices = var_list, empty.ok = TRUE)
       }
 
-      # FIXME: Handle non-Regr / non-Classif Tasks that inherit from TaskSupervised, #913
-      task_type = task$task_type
       transform_design = if (task_type == "regr") {
         invoke(vtreat::NumericOutcomeTreatment,
           var_list = var_list,
@@ -219,7 +221,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
           cols_to_copy = self$param_set$values$cols_to_copy(task),
           params = vtreat::regression_parameters(insert_named(self$param_set$get_values(tags = "regression"), list(check_for_duplicate_frames = FALSE))),
           imputation_map = self$param_set$values$imputation_map)
-      } else if (task_type == "classif") {
+      } else {
         if (length(task$class_names) > 2L) {
           invoke(vtreat::MultinomialOutcomeTreatment,
             var_list = var_list,
@@ -311,19 +313,18 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
     # we need to overload the deep_clone method because state$treatment_plan$settings$state is an environment
     deep_clone = function(name, value) {
       if (name == "state" && "NO_OP" %nin% class(value)) {
-        if (!is.null(value$treatment_plan)) {
-          # NOTE: not sure if multiplicity_recurse is actually needed
-          multiplicity_recurse(value, .fun = function(value) {
-            state = value
-            state$treatment_plan = value$treatment_plan$fresh_copy()
-            state$treatment_plan$settings$params = value$treatment_plan$settings$params
-            state$treatment_plan$settings$state$score_frame = value$treatment_plan$settings$state$score_frame
-            state$treatment_plan$settings$state$transform = value$treatment_plan$settings$state$transform
-            state
-          })
-        } else {
-          super$deep_clone(name, value)
-        }
+        # recurse first: a Multiplicity state has no $treatment_plan itself, only its elements do
+        multiplicity_recurse(value, .fun = function(value) {
+          if (is.null(value$treatment_plan)) {
+            return(value)
+          }
+          state = value
+          state$treatment_plan = value$treatment_plan$fresh_copy()
+          state$treatment_plan$settings$params = value$treatment_plan$settings$params
+          state$treatment_plan$settings$state$score_frame = value$treatment_plan$settings$state$score_frame
+          state$treatment_plan$settings$state$transform = value$treatment_plan$settings$state$transform
+          state
+        })
       } else {
         super$deep_clone(name, value)
       }

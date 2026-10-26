@@ -13,6 +13,7 @@ and \code{upper}. The formula for this is \eqn{x' = offset + x * scale},
 where \eqn{scale} is \eqn{(upper - lower) / (max(x) - min(x))} and
 \eqn{offset} is \eqn{-min(x) * scale + lower}. The same transformation is applied during training and
 prediction.
+When inverting a prediction, a standard error (\code{se}) is divided by \eqn{|scale|}.
 }
 \section{Construction}{
 
@@ -169,6 +170,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_tomek}},
 \code{\link{mlr_pipeops_tunethreshold}},
+\code{\link{mlr_pipeops_umap}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_vtreat}},

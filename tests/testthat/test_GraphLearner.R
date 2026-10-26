@@ -146,18 +146,39 @@ test_that("as_learner.Graph forwards GraphLearner constructor arguments", {
   expect_identical(learner$task_type, "classif")
   expect_identical(learner$predict_type, "prob")
   expect_identical(learner$param_set$values$classif.debug.x, 0.5)
-  expect_false(identical(learner$graph, graph))
 })
 
-test_that("as_learner.Graph supports discarding state", {
+test_that("as_learner.Graph and as_learner.PipeOp do not clone by default", {
   graph = as_graph(lrn("classif.debug"))
-  graph$train(tsk("iris"))
+  expect_identical(as_learner(graph)$graph, graph)
+  expect_false(identical(as_learner(graph, clone = TRUE)$graph, graph))
 
-  learner = as_learner(graph, discard_state = TRUE)
+  pipeop = po("learner", lrn("classif.debug"))
+  expect_identical(as_learner(pipeop)$graph$pipeops$classif.debug, pipeop)
+  expect_false(identical(as_learner(pipeop, clone = TRUE)$graph$pipeops$classif.debug, pipeop))
+})
 
+test_that("as_learner.Graph and as_learner.PipeOp reject unknown arguments", {
+  graph = as_graph(lrn("classif.debug"))
+  expect_error(as_learner(graph, param_values = list()), "named arguments that were unused: param_values")
+  expect_error(as_learner(graph, clone_graph = FALSE), "named arguments that were unused: clone_graph")
+  expect_error(as_learner(graph, FALSE, FALSE, "a"), "1 unnamed argument")
+  expect_error(as_learner(graph, FALSE, FALSE, "a", idd = "b"), "1 unnamed, as well as named arguments idd")
+  expect_error(as_learner(po("nop"), idd = "a"), "named arguments that were unused: idd")
+})
+
+test_that("resample() works with Graph and PipeOp without changing them", {
+  task = tsk("iris")
+
+  graph = as_graph(lrn("classif.debug"))
+  graph$train(task)
+  expect_class(resample(task, graph, rsmp("holdout")), "ResampleResult")
   expect_true(graph$is_trained)
-  expect_null(learner$state)
-  expect_false(learner$graph$is_trained)
+
+  pipeop = po("learner", lrn("classif.debug"))
+  pipeop$train(list(task))
+  expect_class(resample(task, pipeop, rsmp("holdout")), "ResampleResult")
+  expect_true(pipeop$is_trained)
 })
 
 test_that("graphlearner parameters behave as they should", {
@@ -529,6 +550,95 @@ test_that("graphlearner predict type inference", {
 
   # Errors:
   expect_error({lrrp = po(lrn("classif.featureless", predict_type = "se"))})
+})
+
+test_that("graphlearner predict_type setter only assigns where the value changes", {
+  # PipeOpLearner that counts assignments to $predict_type
+  PipeOpLearnerCounting = R6Class("PipeOpLearnerCounting", inherit = PipeOpLearner,
+    public = list(n_assigned = 0L),
+    active = list(
+      predict_type = function(val) {
+        if (!missing(val)) {
+          self$n_assigned = self$n_assigned + 1L
+          private$.learner$predict_type = val
+        }
+        private$.learner$predict_type
+      }
+    )
+  )
+  # PipeOpLearner with a strictly read-only $predict_type that errors on *any* assignment,
+  # as a third-party PipeOp might have
+  PipeOpLearnerFixed = R6Class("PipeOpLearnerFixed", inherit = PipeOpLearner,
+    active = list(
+      predict_type = function(val) {
+        if (!missing(val)) stop("$predict_type is read-only.")
+        "response"
+      }
+    )
+  )
+
+  # linear: assignment happens only when the value changes
+  lrn = GraphLearner$new(PipeOpLearnerCounting$new(lrn("classif.featureless")))
+  po_counting = lrn$graph$pipeops$classif.featureless
+  expect_equal(po_counting$n_assigned, 0L)
+  expect_equal(lrn$predict_type, "response")
+
+  lrn$predict_type = "response"
+  expect_equal(po_counting$n_assigned, 0L)
+  expect_equal(lrn$predict_type, "response")
+
+  lrn$predict_type = "prob"
+  expect_equal(po_counting$n_assigned, 1L)
+  expect_equal(lrn$predict_type, "prob")
+  expect_equal(po_counting$learner$predict_type, "prob")
+
+  lrn$predict_type = "prob"
+  expect_equal(po_counting$n_assigned, 1L)
+  expect_equal(lrn$predict_type, "prob")
+
+  # read-only PipeOp: assigning the value it already has must not error
+  lrn = GraphLearner$new(PipeOpLearnerFixed$new(lrn("classif.featureless")))
+  expect_equal(lrn$predict_type, "response")
+  lrn$predict_type = "response"
+  expect_equal(lrn$predict_type, "response")
+  expect_error({lrn$predict_type = "prob"}, "read-only")
+
+  # same on construction
+  lrn = GraphLearner$new(PipeOpLearnerFixed$new(lrn("classif.featureless")), predict_type = "response")
+  expect_equal(lrn$predict_type, "response")
+  expect_error(GraphLearner$new(PipeOpLearnerFixed$new(lrn("classif.featureless")), predict_type = "prob"), "read-only")
+
+  # branching: all branches are visited, each PipeOp is compared individually
+  po_a = PipeOpLearnerCounting$new(lrn("classif.featureless", id = "a"))
+  po_b = PipeOpLearnerCounting$new(lrn("classif.featureless", id = "b", predict_type = "prob"))
+  lrn = GraphLearner$new(po("branch", 2) %>>% gunion(list(po_a, po_b)) %>>% po("unbranch"))
+  po_a = lrn$graph$pipeops$a
+  po_b = lrn$graph$pipeops$b
+
+  lrn$predict_type = "prob"
+  expect_equal(po_a$n_assigned, 1L)
+  expect_equal(po_b$n_assigned, 0L)
+  expect_equal(po_a$predict_type, "prob")
+  expect_equal(po_b$predict_type, "prob")
+
+  lrn$predict_type = "response"
+  expect_equal(po_a$n_assigned, 2L)
+  expect_equal(po_b$n_assigned, 1L)
+  expect_equal(po_a$predict_type, "response")
+  expect_equal(po_b$predict_type, "response")
+
+  # read-only PipeOp in an inactive branch does not get in the way as long as its value is not changed
+  po_fixed = PipeOpLearnerFixed$new(lrn("classif.featureless", id = "fixed"))
+  po_c = PipeOpLearnerCounting$new(lrn("classif.featureless", id = "c", predict_type = "prob"))
+  lrn = GraphLearner$new(po("branch", 2) %>>% gunion(list(po_fixed, po_c)) %>>% po("unbranch"))
+  lrn$param_set$values$branch.selection = 2
+  expect_equal(lrn$predict_type, "prob")
+
+  lrn$predict_type = "response"
+  expect_equal(lrn$graph$pipeops$c$n_assigned, 1L)
+  expect_equal(lrn$graph$pipeops$c$predict_type, "response")
+  expect_equal(lrn$predict_type, "response")
+  expect_error({lrn$predict_type = "prob"}, "read-only")
 })
 
 
@@ -906,6 +1016,38 @@ test_that("base_learner() works", {
 })
 
 
+test_that("GraphLearner hashes cover timeout, deadline, and encapsulation", {
+  skip_if_not_installed("rpart")
+
+  make_learner = function() as_learner(po("scale") %>>% lrn("classif.rpart"))
+  base = make_learner()
+  expect_equal(make_learner()$hash, base$hash)
+  expect_equal(make_learner()$phash, base$phash)
+
+  learner = make_learner()
+  learner$timeout = c(train = 5)
+  expect_string(all.equal(learner$hash, base$hash), "mismatch")
+  expect_string(all.equal(learner$phash, base$phash), "mismatch")
+
+  learner = make_learner()
+  learner$deadline = c(train = as.POSIXct("2030-01-01", tz = "UTC"))
+  expect_string(all.equal(learner$hash, base$hash), "mismatch")
+  expect_string(all.equal(learner$phash, base$phash), "mismatch")
+
+  learner = make_learner()
+  learner$encapsulate("evaluate", lrn("classif.featureless"))
+  learner_when = make_learner()
+  learner_when$encapsulate("evaluate", lrn("classif.featureless"), when = function(cond, ...) TRUE)
+  expect_string(all.equal(learner$hash, base$hash), "mismatch")
+  expect_string(all.equal(learner$hash, learner_when$hash), "mismatch")
+  expect_string(all.equal(learner$phash, learner_when$phash), "mismatch")
+
+  learner_when2 = make_learner()
+  learner_when2$encapsulate("evaluate", lrn("classif.featureless"), when = function(cond, ...) TRUE)
+  expect_equal(learner_when$hash, learner_when2$hash)
+  expect_equal(learner_when$phash, learner_when2$phash)
+})
+
 test_that("GraphLearner hashes", {
   skip_if_not_installed("rpart")
 
@@ -1167,6 +1309,19 @@ test_that("marshal has no effect when nothing needed marshaling", {
   expect_class(glrn$marshal()$model, "graph_learner_model")
   expect_class(glrn$unmarshal()$model, "graph_learner_model")
   expect_learner(glrn, task = task)
+})
+
+test_that("graph_model errs informatively when marshaled", {
+  task = tsk("iris")
+  glrn = as_learner(as_graph(lrn("classif.debug")))
+  glrn$train(task)
+  glrn$marshal()
+  expect_error(glrn$graph_model, "GraphLearner 'classif.debug' is marshaled, call \\$unmarshal\\(\\) first")
+  expect_error(glrn$pipeops, "is marshaled")
+  expect_error(glrn$base_learner(), "is marshaled")
+  expect_prediction(glrn$predict(task))
+  glrn$unmarshal()
+  expect_class(glrn$graph_model, "Graph")
 })
 
 
