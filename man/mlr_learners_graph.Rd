@@ -187,8 +187,9 @@ The \verb{$model} of a \code{GraphLearner} is the \verb{$state} of \verb{$graph}
 i.e. a named \code{list} containing the \verb{$state} of each \code{\link{PipeOp}} (see Section \emph{Internals} of \code{\link{Graph}}).
 The \verb{$state} of \verb{$graph} itself is then reset to \code{NULL}, so \verb{$graph} stays untrained,
 and \verb{$graph_model} gives a copy of \verb{$graph} with \verb{$model} as its \verb{$state}.
-This is necessary because \CRANpkg{mlr3} only keeps the \verb{$state} of a \code{\link[mlr3:Learner]{Learner}},
-e.g. when training in a separate R process via encapsulation, or when storing models during resampling.
+This is necessary because \CRANpkg{mlr3} does not always keep the trained \code{GraphLearner} object itself:
+with encapsulation, training runs on a copy in a separate R process and only the trained model is returned,
+and resampling only stores the \verb{$state} of each trained learner, so a trained \verb{$graph} would be lost.
 
 \code{\link[=as_graph]{as_graph()}} is called on the \code{graph} argument, so it can technically also be a \code{list} of things, which is
 automatically converted to a \code{\link{Graph}} via \code{\link[=gunion]{gunion()}}; however, this will usually not result in a valid \code{\link{Graph}} that can
