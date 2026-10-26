@@ -2,6 +2,7 @@
 
 * Fix: Deep-cloning a `GraphLearner` now also clones `R6` objects in its saved hyperparameter values (`$state$param_vals`).
 * Tests in `inst/testthat` no longer override `expect_equal`.
+* Fix: `PipeOpLearnerCV` with `resampling.predict_method = "cv_ensemble"` now has a `NULL` `$state$log` member instead of `$state$train_log`, and its `$state` no longer contains `predict_log` and `predict_time`, matching the member names of a trained `Learner`'s `$state` (#298).
 * Fix: `pos()` now returns an unnamed list, preventing duplicated PipeOp IDs such as `pca.pca` when passed to `as_graph()`.
 * New `ppl("bag")` / `pipeline_bag()` performs real bagging with `frac = 1` and `replace = TRUE` by default. `ppl("bagging")` / `pipeline_bagging()` is deprecated and will be removed in the future.
 
