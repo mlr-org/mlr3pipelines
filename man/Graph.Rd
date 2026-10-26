@@ -33,7 +33,7 @@ individual \code{\link{PipeOp}}s (see the \verb{$state} field of \code{\link{Pip
 The \verb{$state} field of the \code{Graph} is only a view on these: reading it collects the \verb{$state} of each \code{\link{PipeOp}} into a
 named \code{list}, and assigning a named \code{list} sets the \verb{$state} of each \code{\link{PipeOp}} to the element of the same name
 (\code{NULL} if absent), so assigning \code{NULL} resets all of them.
-Training a \code{Graph} therefore modifies it in place,
+Training a \code{Graph} therefore modifies it in-place,
 and \verb{$is_trained} is \code{TRUE} exactly when all its \code{\link{PipeOp}}s have a non-\code{NULL} \verb{$state}.
 A \code{\link{GraphLearner}} stores this \verb{$state} as its \verb{$model}, see Section \emph{Internals} of \code{\link{GraphLearner}}.
 }

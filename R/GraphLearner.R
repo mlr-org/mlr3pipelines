@@ -172,7 +172,7 @@
 #' @section Internals:
 #' The `$model` of a `GraphLearner` is the `$state` of `$graph` after training,
 #' i.e. a named `list` containing the `$state` of each [`PipeOp`] (see Section *Internals* of [`Graph`]).
-#' The `$state` of `$graph` itself is then reset to `NULL`, so `$graph` stays untrained,
+#' The `$state` of `$graph` itself is set to `NULL` after training, so the `$graph` field stays untrained,
 #' and `$graph_model` gives a copy of `$graph` with `$model` as its `$state`.
 #' This is necessary because \CRANpkg{mlr3} does not always keep the trained `GraphLearner` object itself:
 #' with encapsulation, training runs on a copy in a separate R process and only the trained model is returned,

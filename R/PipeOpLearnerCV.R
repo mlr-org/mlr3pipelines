@@ -51,19 +51,26 @@
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
+#' * `model` :: `any`\cr
+#'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function on the complete training data.
+#'   `NULL` for `predict_method = "cv_ensemble"`.
+#' * `log` :: [`data.table`][data.table::data.table] | `NULL`\cr
+#'   Output, warnings and errors logged during training on the complete training data.
+#'   `NULL` for `predict_method = "cv_ensemble"`.
+#' * `train_time` :: `numeric(1)`\cr
+#'   Training time on the complete training data, in seconds.
+#'   `NA` for `predict_method = "cv_ensemble"`.
 #' * `predict_method` :: `character(1)`\cr
 #'   `"full"` when prediction uses a learner fitted on all training data,
 #'   `"cv_ensemble"` when predictions are averaged over models trained on resampling folds.
-#' * `cv_model_states` :: `NULL` | `list`\cr
-#'   Present for `predict_method = "cv_ensemble"`.
-#'   Contains the states of the learners trained on each resampling fold.
+#' * `cv_model_states` :: `list`\cr
+#'   States of the learners trained on each resampling fold.
+#'   Only present for `predict_method = "cv_ensemble"`.
 #'
-#' For `predict_method = "full"`, it also contains the members of the `$state` slot of the [`Learner`][mlr3::Learner]
-#' trained on the complete training data, such as `model`, `log` and `train_time` (see [`PipeOpLearner`]).
-#' For `predict_method = "cv_ensemble"`, `model` and `log` are `NULL` and `train_time` is `NA`.
+#' For `predict_method = "full"`, the `$state` furthermore contains all other members of the `$state` slot of the
+#' [`Learner`][mlr3::Learner] trained on the complete training data, such as `param_vals` (see [`PipeOpLearner`]).
 #'
-#' This state is given the class `"pipeop_learner_cv_state"`,
-#' in addition to the class `"learner_state"` for `predict_method = "full"`.
+#' This state is given the class `"pipeop_learner_cv_state"`.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from the [`PipeOpTaskPreproc`], as well as the parameters of the [`Learner`][mlr3::Learner] wrapped by this object.

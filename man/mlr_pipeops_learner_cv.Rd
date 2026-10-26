@@ -61,20 +61,27 @@ ordinary prediction made on the data by a \code{\link[mlr3:Learner]{Learner}} tr
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
+\item \code{model} :: \code{any}\cr
+Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function on the complete training data.
+\code{NULL} for \code{predict_method = "cv_ensemble"}.
+\item \code{log} :: \code{\link[data.table:data.table]{data.table}} | \code{NULL}\cr
+Output, warnings and errors logged during training on the complete training data.
+\code{NULL} for \code{predict_method = "cv_ensemble"}.
+\item \code{train_time} :: \code{numeric(1)}\cr
+Training time on the complete training data, in seconds.
+\code{NA} for \code{predict_method = "cv_ensemble"}.
 \item \code{predict_method} :: \code{character(1)}\cr
 \code{"full"} when prediction uses a learner fitted on all training data,
 \code{"cv_ensemble"} when predictions are averaged over models trained on resampling folds.
-\item \code{cv_model_states} :: \code{NULL} | \code{list}\cr
-Present for \code{predict_method = "cv_ensemble"}.
-Contains the states of the learners trained on each resampling fold.
+\item \code{cv_model_states} :: \code{list}\cr
+States of the learners trained on each resampling fold.
+Only present for \code{predict_method = "cv_ensemble"}.
 }
 
-For \code{predict_method = "full"}, it also contains the members of the \verb{$state} slot of the \code{\link[mlr3:Learner]{Learner}}
-trained on the complete training data, such as \code{model}, \code{log} and \code{train_time} (see \code{\link{PipeOpLearner}}).
-For \code{predict_method = "cv_ensemble"}, \code{model} and \code{log} are \code{NULL} and \code{train_time} is \code{NA}.
+For \code{predict_method = "full"}, the \verb{$state} furthermore contains all other members of the \verb{$state} slot of the
+\code{\link[mlr3:Learner]{Learner}} trained on the complete training data, such as \code{param_vals} (see \code{\link{PipeOpLearner}}).
 
-This state is given the class \code{"pipeop_learner_cv_state"},
-in addition to the class \code{"learner_state"} for \code{predict_method = "full"}.
+This state is given the class \code{"pipeop_learner_cv_state"}.
 }
 
 \section{Parameters}{

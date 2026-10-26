@@ -191,7 +191,7 @@ Throws an error otherwise.
 
 The \verb{$model} of a \code{GraphLearner} is the \verb{$state} of \verb{$graph} after training,
 i.e. a named \code{list} containing the \verb{$state} of each \code{\link{PipeOp}} (see Section \emph{Internals} of \code{\link{Graph}}).
-The \verb{$state} of \verb{$graph} itself is then reset to \code{NULL}, so \verb{$graph} stays untrained,
+The \verb{$state} of \verb{$graph} itself is set to \code{NULL} after training, so the \verb{$graph} field stays untrained,
 and \verb{$graph_model} gives a copy of \verb{$graph} with \verb{$model} as its \verb{$state}.
 This is necessary because \CRANpkg{mlr3} does not always keep the trained \code{GraphLearner} object itself:
 with encapsulation, training runs on a copy in a separate R process and only the trained model is returned,
