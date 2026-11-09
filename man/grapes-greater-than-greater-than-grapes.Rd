@@ -20,7 +20,7 @@ g1 \%>>!\% g2
 \code{\link{Graph}} / \code{\link{PipeOp}} / object-convertible-to-\code{\link{PipeOp}} to put after \code{g1}.}
 
 \item{in_place}{(\code{logical(1)})\cr
-Whether to try to avoid cloning \code{g1}. If \code{g1} is not a \code{\link{Graph}}, then it is cloned regardless.}
+Whether to try to avoid cloning \code{g1}. If \code{g1} is not a \code{\link{Graph}}, then it is cloned regardless.\n}
 }
 \value{
 \code{\link{Graph}}: the constructed \code{\link{Graph}}.
