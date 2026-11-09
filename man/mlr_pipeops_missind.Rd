@@ -63,7 +63,7 @@ can be set to \code{selector_type("numeric")}.
 
 \section{Fields}{
 
-Fields inherited from \code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{

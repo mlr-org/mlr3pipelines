@@ -80,9 +80,12 @@ Fields inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:LearnerRegr]{LearnerRegr}}\cr
 \code{\link[mlr3:Learner]{Learner}} that is being wrapped. Read-only.
-\item \code{learner_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
-If \code{PipeOpLearnerQuantiles} has been trained, this is a \code{list} containing the \code{\link[mlr3:Learner]{Learner}}s for each quantile.
-Otherwise, this contains the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
+\item \code{learner_model} :: \code{\link[mlr3:Learner]{Learner}} | \code{\link{Multiplicity}} of \code{\link[mlr3:Learner]{Learner}}\cr
+If trained, this is a \code{\link{Multiplicity}} containing one \code{\link[mlr3:Learner]{Learner}} per quantile in \code{q_vals},
+each holding the model trained for that quantile.
+Otherwise, this is the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
+Because there is no single \code{\link[mlr3:Learner]{Learner}} after training, \code{\link{GraphLearner}}\verb{$base_learner()}
+throws an error for a trained \code{\link{GraphLearner}} in which this \code{PipeOp} is the base learner \code{PipeOp}.
 Read-only.
 \item \code{predict_type} :: \code{character(1)}\cr
 Predict type of the \code{PipeOpLearnerQuantiles}, which is always \code{"quantiles"}.

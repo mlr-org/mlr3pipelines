@@ -77,7 +77,16 @@ Fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}, as w
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}}\cr
 \code{\link[mlr3:Learner]{Learner}} that is being wrapped. Read-only.
+\item \code{learner_model} :: \code{\link[mlr3:Learner]{Learner}} | \code{\link{Multiplicity}} of \code{\link[mlr3:Learner]{Learner}}\cr
+If trained, this is a \code{\link{Multiplicity}} of \code{\link[mlr3:Learner]{Learner}}s, named by the features for which a \code{Learner}
+was fitted, each holding the model used to impute that feature.
+Features that were entirely \code{NA} during training are imputed by sampling and are therefore not included.
+Otherwise, this is the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
+As \code{PipeOpImputeLearner} is not tagged \code{"learner"},
+it is never considered a base learner by \code{\link{GraphLearner}}\verb{$base_learner()}.
+Read-only.
 \item \code{learner_models} :: \code{list} of \code{\link[mlr3:Learner]{Learner}} | \code{NULL}\cr
+Deprecated and will be removed in the future, use \verb{$learner_model} instead.\cr
 \code{\link[mlr3:Learner]{Learner}} that is being wrapped. This list is named by features for which a \code{Learner} was fitted, and
 contains the same \code{Learner}, but with different respective models for each feature. If this \code{PipeOp} is not trained,
 this is an empty \code{list}. For features that were entirely \code{NA} during training, the \code{list} contains \code{NULL} elements.

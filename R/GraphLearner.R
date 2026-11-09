@@ -115,7 +115,15 @@
 #' * `base_learner(recursive = Inf, return_po = FALSE, return_all = FALSE, resolve_branching = TRUE)`\cr
 #'   (`numeric(1)`, `logical(1)`, `logical(1)`, `character(1)`) -> `Learner` | [`PipeOp`] | `list` of `Learner` | `list` of [`PipeOp`]\cr
 #'   Return the base learner of the `GraphLearner`. If `recursive` is 0, the `GraphLearner` itself is returned.
-#'   Otherwise, the [`Graph`] is traversed backwards to find the first `PipeOp` containing a `$learner_model` field.
+#'   Otherwise, the [`Graph`] is traversed backwards from its output to find the first `PipeOp`
+#'   that is tagged `"learner"` and has a non-`NULL` `$learner_model` field,
+#'   which is how a `PipeOp` exposes the [`Learner`][mlr3::Learner] it wraps.
+#'   This field contains the wrapped `Learner`, holding the trained model if the `PipeOp` is trained,
+#'   or a [`Multiplicity`] of such `Learner`s if the `PipeOp` holds multiple models.
+#'   The latter is the case if the `PipeOp` was trained on a [`Multiplicity`], or if it fits multiple models by design,
+#'   such as [`PipeOpLearnerPICVPlus`] (one model per fold) or [`PipeOpLearnerQuantiles`] (one model per quantile).
+#'   `PipeOp`s that wrap a `Learner` for preprocessing, such as [`PipeOpImputeLearner`],
+#'   also have a `$learner_model` field but are not tagged `"learner"` and are therefore never base learners.
 #'   If `recursive` is 1, that `$learner_model` (or containing `PipeOp`, if `return_po` is `TRUE`) is returned.
 #'   If `recursive` is greater than 1, the discovered base learner's `base_learner()` method is called with `recursive - 1`.
 #'   `recursive` must be set to 1 if `return_po` is TRUE, and must be set to at most 1 if `return_all` is `TRUE`.\cr
@@ -124,7 +132,10 @@
 #'   If `return_all` is `TRUE`, a `list` of `Learner`s or `PipeOp`s is returned.
 #'   If `return_po` is `FALSE`, this list may contain [`Multiplicity`] objects, which are not unwrapped.
 #'   If `return_all` is `FALSE` and there are multiple possible base learners, an error is thrown.
-#'   This may also happen if only a single [`PipeOpLearner`] is present that was trained with a [`Multiplicity`].\cr
+#'   This may also happen if only a single `PipeOp` is present
+#'   whose `$learner_model` is a [`Multiplicity`] of more than one `Learner`,
+#'   e.g. a [`PipeOpLearner`] trained with a [`Multiplicity`],
+#'   or a trained [`PipeOpLearnerPICVPlus`] or [`PipeOpLearnerQuantiles`].\cr
 #'   If `resolve_branching` is `TRUE`, and when a [`PipeOpUnbranch`] is encountered, the
 #'   corresponding [`PipeOpBranch`] is searched, and its hyperparameter configuration is used to select the base learner.
 #'   There may be multiple corresponding [`PipeOpBranch`]s, which are all considered.
@@ -157,8 +168,10 @@
 #' * `selected_features()`\cr
 #'   () -> `character`\cr
 #'   The `$selected_features()` returned by the base learner, if it has the `"selected_features` property.
-#'   If the base learner does not have the `"selected_features"` property and `impute_selected_features` is `TRUE`,
-#'   all features seen by the base learners are returned.
+#'   If there are multiple base learners, because there are multiple base learner `PipeOp`s or because a base learner
+#'   `PipeOp` holds a [`Multiplicity`] of `Learner`s, the union of their selected features is returned.
+#'   If a base learner does not have the `"selected_features"` property and `impute_selected_features` is `TRUE`,
+#'   all features seen by that base learner are returned instead.
 #'   Throws an error otherwise.
 #' * `oob_error()`\cr
 #'   () -> `numeric(1)`\cr
@@ -406,7 +419,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       # we only retrieve the predict_type of the active Learner (from branching) if we
       # are getting.
       predict_type_pipeops = graph_base_learner(
-        self$graph, resolve_branching = missing(rhs), lookup_field = "predict_type")
+        self$graph, resolve_branching = missing(rhs), lookup_field = "predict_type", required_tag = NULL)
       if (!missing(rhs)) {
         walk(predict_type_pipeops, function(po) {
           # skip PipeOps that already have the requested value: assigning to a
@@ -904,9 +917,13 @@ andpaste = function(x, sep = ", ", lastsep = ", and ") {
   paste0(paste(first(x, -1), collapse = sep), lastsep, last(x))
 }
 
-graph_base_learner = function(graph, resolve_branching = TRUE, lookup_field = "learner_model") {
+graph_base_learner = function(graph, resolve_branching = TRUE, lookup_field = "learner_model",
+  required_tag = "learner") {
   # GraphLearner$base_learner(), where return_all is TRUE, return_po is TRUE, and recursive is 1.
   # We are looking for all PipeOps with the non-NULL field named `lookup_field`, typically "learner_model", possibly resolving branching.
+  # If `required_tag` is not NULL, only PipeOps with that tag are considered.
+  # The "learner" tag distinguishes PipeOps that wrap a Learner to model the target from PipeOps that wrap a Learner
+  # for preprocessing, such as PipeOpImputeLearner, which also have a $learner_model field.
 
   gm_output = graph$output
   if (nrow(gm_output) != 1) {
@@ -928,8 +945,10 @@ graph_base_learner = function(graph, resolve_branching = TRUE, lookup_field = "l
       last_pipeop = graph$pipeops[[current_pipeop]]
       if (get0(current_pipeop, pipeops_visited, ifnotfound = FALSE)) return(list())
       assign(current_pipeop, TRUE, pipeops_visited)
-      field_content = get0(lookup_field, last_pipeop, ifnotfound = NULL)
-      if (!is.null(field_content)) return(list(last_pipeop))
+      if (is.null(required_tag) || required_tag %in% last_pipeop$tags) {
+        field_content = get0(lookup_field, last_pipeop, ifnotfound = NULL)
+        if (!is.null(field_content)) return(list(last_pipeop))
+      }
       next_pipeop = graph$edges[dst_id == current_pipeop, src_id]
       if (length(next_pipeop) > 1) {
         # more than one predecessor

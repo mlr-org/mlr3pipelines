@@ -64,9 +64,12 @@
 #' * `learner` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Learner`][mlr3::Learner] that is being wrapped.
 #'   Read-only.
-#' * `learner_model` :: [`Learner`][mlr3::Learner] or `list`\cr
-#'   If the `PipeOpLearnerPICVPlus` has been trained, this is a `list` containing the [`Learner`][mlr3::Learner]s of the cross validation models.
-#'   Otherwise, this contains the [`Learner`][mlr3::Learner] that is being wrapped.
+#' * `learner_model` :: [`Learner`][mlr3::Learner] | [`Multiplicity`] of [`Learner`][mlr3::Learner]\cr
+#'   If trained, this is a [`Multiplicity`] containing one [`Learner`][mlr3::Learner] per cross validation fold,
+#'   each holding the model trained on that fold.
+#'   Otherwise, this is the [`Learner`][mlr3::Learner] that is being wrapped.
+#'   Because there is no single [`Learner`][mlr3::Learner] after training, [`GraphLearner`]`$base_learner()`
+#'   throws an error for a trained [`GraphLearner`] in which this `PipeOp` is the base learner `PipeOp`.
 #'   Read-only.
 #' * `predict_type` :: `character(1)`\cr
 #'   Predict type of the `PipeOpLearnerPICVPlus`, which is always `"quantiles"`.
@@ -145,7 +148,7 @@ PipeOpLearnerPICVPlus = R6Class("PipeOpLearnerPICVPlus",
         private$.learner
       } else {
         multiplicity_recurse(self$state, function(state) {
-          map(state$cv_model_states, clone_with_state, learner = private$.learner)
+          as.Multiplicity(map(state$cv_model_states, clone_with_state, learner = private$.learner))
         })
       }
     },

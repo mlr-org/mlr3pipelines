@@ -61,7 +61,16 @@
 #' Fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`], as well as:
 #' * `learner` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Learner`][mlr3::Learner] that is being wrapped. Read-only.
+#' * `learner_model` :: [`Learner`][mlr3::Learner] | [`Multiplicity`] of [`Learner`][mlr3::Learner]\cr
+#'   If trained, this is a [`Multiplicity`] of [`Learner`][mlr3::Learner]s, named by the features for which a `Learner`
+#'   was fitted, each holding the model used to impute that feature.
+#'   Features that were entirely `NA` during training are imputed by sampling and are therefore not included.
+#'   Otherwise, this is the [`Learner`][mlr3::Learner] that is being wrapped.
+#'   As `PipeOpImputeLearner` is not tagged `"learner"`,
+#'   it is never considered a base learner by [`GraphLearner`]`$base_learner()`.
+#'   Read-only.
 #' * `learner_models` :: `list` of [`Learner`][mlr3::Learner] | `NULL`\cr
+#'   Deprecated and will be removed in the future, use `$learner_model` instead.\cr
 #'   [`Learner`][mlr3::Learner] that is being wrapped. This list is named by features for which a `Learner` was fitted, and
 #'   contains the same `Learner`, but with different respective models for each feature. If this `PipeOp` is not trained,
 #'   this is an empty `list`. For features that were entirely `NA` during training, the `list` contains `NULL` elements.
@@ -124,10 +133,26 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
       }
       private$.learner
     },
+    learner_model = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$learner_model is read-only.")
+        }
+      }
+      if (is.null(self$state) || is_noop(self$state)) {
+        private$.learner
+      } else {
+        multiplicity_recurse(self$state, function(state) {
+          # atomic models are null models of features that were entirely NA during training
+          as.Multiplicity(map(discard(state$model, is.atomic), clone_with_state, learner = private$.learner))
+        })
+      }
+    },
     learner_models = function(val) {
       if (!missing(val)) {
         stop("$learner_models is read-only.")
       }
+      warningf("$learner_models of PipeOpImputeLearner is deprecated and will be removed in the future. Use $learner_model instead.")  # nolint
       if (is.null(self$state) || is_noop(self$state)) {
         list()
       } else {
