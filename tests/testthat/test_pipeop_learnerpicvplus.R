@@ -91,6 +91,12 @@ test_that("PipeOpLearnerPICVPlus - model active binding to state", {
   train_out = po$train(list(task))
   train_state = po$state
 
+  # after training learner_model is a Multiplicity with one Learner per fold
+  expect_class(po$learner_model, "Multiplicity")
+  expect_length(po$learner_model, po$param_set$values$picvplus.folds)
+  expect_class(po$learner_model[[1L]], "LearnerRegr")
+  expect_equal(map(po$learner_model, "state"), train_state$cv_model_states)
+
   # after predicting states are unchanged
   predict_out = po$predict(list(task))
   expect_equal(po$state, train_state)
@@ -195,6 +201,7 @@ test_that("state class and multiplicity", {
   expect_class(po$state, "Multiplicity")
   expect_class(po$state[[1L]], "pipeop_learner_pi_cvplus_state")
   expect_class(po$learner_model, "Multiplicity")
+  expect_class(po$learner_model[[1L]], "Multiplicity")
   expect_class(po$learner_model[[1L]][[1L]], "LearnerRegr")
   expect_equal(length(po$learner_model), length(input))
   expect_equal(length(po$learner_model[[1]]), po$param_set$values$picvplus.folds)
@@ -213,6 +220,7 @@ test_that("state class and multiplicity", {
 
   expect_class(po1$learner_model, "Multiplicity")
   expect_class(po1$learner_model[[1L]], "Multiplicity")
+  expect_class(po1$learner_model[[1L]][[1L]], "Multiplicity")
   expect_class(po1$learner_model[[1L]][[1L]][[1]], "LearnerRegr")
   expect_equal(length(po1$learner_model[[1L]]), length(input))
   expect_equal(length(po1$learner_model[[1L]][[1L]]), po1$param_set$values$picvplus.folds)

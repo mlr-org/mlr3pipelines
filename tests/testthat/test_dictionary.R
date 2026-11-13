@@ -7,6 +7,7 @@ test_that("Dictionary contains all PipeOps", {
   skip_on_cran()
 
   oldwarn = options(warn = 2)
+  on.exit(options(oldwarn), add = TRUE)
   # make sure all caching private member vars are extended
   inflate = function(x) {
     x$label
@@ -195,7 +196,6 @@ test_that("Dictionary contains all PipeOps", {
       )
     }
   }
-  options(warn = oldwarn$warn)
 })
 
 test_that("data.table of pipeops looks as it should", {

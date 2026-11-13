@@ -1508,6 +1508,37 @@ test_that("GraphLearner Selected Features", {
   expect_equal(g_avg$selected_features(), c("Sepal.Length", "Sepal.Width", "Petal.Length"))
 })
 
+test_that("base_learner() and selected_features() with PipeOps that fit multiple models", {
+  for (key in c("learner_pi_cvplus", "learner_quantiles")) {
+    glrn = as_learner(po("select", selector = selector_grep("^c")) %>>% po(key, lrn("regr.debug")))
+    expect_identical(glrn$base_learner(), glrn$graph_model$pipeops$regr.debug$learner_model)
+    glrn$train(tsk("mtcars"))
+    expect_error(glrn$base_learner(), "Multiplicity that does not contain exactly one Learner")
+    expect_class(glrn$base_learner(recursive = 1, return_po = TRUE), "PipeOp")
+    base_learners = glrn$base_learner(recursive = 1, return_all = TRUE)
+    expect_list(base_learners, len = 1)
+    expect_class(base_learners[[1]], "Multiplicity")
+    expect_length(base_learners[[1]], 3)
+    expect_error(glrn$selected_features(), "regr.debug .*does not implement.*selected_features")
+    glrn$impute_selected_features = TRUE
+    expect_set_equal(glrn$selected_features(), c("carb", "cyl"))
+  }
+})
+
+test_that("base_learner() ignores PipeOps that wrap a Learner for preprocessing", {
+  # PipeOpImputeLearner has a $learner_model field, but is not tagged "learner"
+  glrn = as_learner(po("imputelearner", lrn("regr.featureless")) %>>% po("proxy", content = lrn("classif.debug")))
+  expect_equal(glrn$task_type, "classif")
+  expect_error(glrn$base_learner(), "No base learner found")
+  glrn$train(tsk("penguins"))
+  expect_error(glrn$base_learner(), "No base learner found")
+  expect_class(glrn$graph_model$pipeops$imputelearner$learner_model, "Multiplicity")
+
+  glrn = as_learner(po("imputelearner", lrn("regr.featureless")) %>>% lrn("classif.debug"))
+  glrn$train(tsk("penguins"))
+  expect_equal(glrn$base_learner()$id, "classif.debug")
+})
+
 
 
 test_that("GraphLearner other properties", {

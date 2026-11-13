@@ -61,9 +61,10 @@
 #' Fields inherited from [`PipeOp`], as well as:
 #' * `learner` :: [`LearnerRegr`][mlr3::LearnerRegr]\cr
 #'   [`Learner`][mlr3::Learner] that is being wrapped. Read-only.
-#' * `learner_model` :: [`Learner`][mlr3::Learner]\cr
-#'   If `PipeOpLearnerQuantiles` has been trained, this is a `list` containing the [`Learner`][mlr3::Learner]s for each quantile.
-#'   Otherwise, this contains the [`Learner`][mlr3::Learner] that is being wrapped.
+#' * `learner_model` :: [`Learner`][mlr3::Learner] | [`Multiplicity`] of [`Learner`][mlr3::Learner]\cr
+#'   If trained, this is a [`Multiplicity`] containing one [`Learner`][mlr3::Learner] per quantile in `q_vals`,
+#'   each holding the model trained for that quantile.
+#'   Before training, this is the [`Learner`][mlr3::Learner] that is being wrapped.
 #'   Read-only.
 #' * `predict_type` :: `character(1)`\cr
 #'   Predict type of the `PipeOpLearnerQuantiles`, which is always `"quantiles"`.
@@ -139,7 +140,7 @@ PipeOpLearnerQuantiles = R6Class("PipeOpLearnerQuantiles",
         private$.learner
       } else {
         multiplicity_recurse(self$state, function(state) {
-          map(state$model_states, clone_with_state, learner = private$.learner)
+          as.Multiplicity(map(state$model_states, clone_with_state, learner = private$.learner))
         })
       }
     },
