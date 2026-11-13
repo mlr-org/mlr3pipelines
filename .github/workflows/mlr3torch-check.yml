@@ -66,11 +66,13 @@ jobs:
 
       - name: Get download cache paths
         run: |
+          # mlr3torch itself is not installed here, R CMD check installs it from the tarball.
+          mlr3torch_version = read.dcf("mlr3torch/DESCRIPTION", fields = "Version")[1L, 1L]
           env = c(
             TORCH_CACHE_PATH = rappdirs::user_cache_dir("torch"),
             MLR3TORCH_CACHE_PATH = tools::R_user_dir("mlr3torch", "cache"),
             DOWNLOAD_CACHE_KEY = sprintf("mlr3torch-downloads-%s-mlr3torch-%s-torchvision-%s",
-              Sys.getenv("RUNNER_OS"), packageVersion("mlr3torch"), packageVersion("torchvision"))
+              Sys.getenv("RUNNER_OS"), mlr3torch_version, packageVersion("torchvision"))
           )
           cat(sprintf("%s=%s\n", names(env), env), sep = "", file = Sys.getenv("GITHUB_ENV"), append = TRUE)
         shell: Rscript {0}
@@ -92,6 +94,7 @@ jobs:
 
       # Check the CRAN tarball as is, like CRAN's reverse dependency checks do, instead of rebuilding it.
       - name: Check mlr3torch
+        id: check
         run: |
           options(crayon.enabled = TRUE)
           rcmdcheck::rcmdcheck(Sys.getenv("MLR3TORCH_TARBALL"), args = c("--no-manual", "--as-cran"),
@@ -102,11 +105,11 @@ jobs:
           _R_CHECK_CRAN_INCOMING_: false
 
       - name: Show testthat output
-        if: always()
+        if: always() && steps.check.outcome != 'skipped'
         run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
 
       - name: Upload check results
-        if: failure()
+        if: failure() && steps.check.outcome == 'failure'
         uses: actions/upload-artifact@v7
         with:
           name: mlr3torch-check-results
