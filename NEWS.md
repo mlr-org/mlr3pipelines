@@ -23,8 +23,8 @@
 * Fix: `selector_cardinality_greater_than()` and `selector_missing()` no longer return the target column, which made `PipeOp`s using them as `affect_columns` fail (#1050).
 * Fix: `PipeOpTargetInvert` now keeps the observation weights of the incoming prediction.
 * `GraphLearner$base_learner()` now only considers `PipeOp`s tagged `"learner"` as base learners, so `PipeOp`s that wrap a `Learner` for preprocessing, such as `PipeOpImputeLearner`, are never base learners (#1054).
-* `PipeOpImputeLearner` now has a `$learner_model` field, consistent with other `PipeOp`s wrapping a `Learner`. It returns the wrapped `Learner` before training and a `Multiplicity` of `Learner`s, named by imputed feature, after training. The `$learner_models` field is deprecated and will be removed in the future (#1054).
-* `PipeOpLearnerPICVPlus` and `PipeOpLearnerQuantiles` now return a `Multiplicity` of `Learner`s from `$learner_model` after training, one per fold or quantile, instead of a plain `list`. This is consistent with a `PipeOpLearner` trained on a `Multiplicity`, so `GraphLearner$base_learner()` and the methods building on it, such as `$importance()`, now give an informative error for these `PipeOp`s instead of failing cryptically, and `GraphLearner$selected_features()` returns the union over all contained `Learner`s (#1054).
+* `PipeOpImputeLearner` now has a `$learner_model` field, consistent with other `PipeOp`s wrapping a `Learner`. The `$learner_models` field is deprecated and will be removed in the future (#1054).
+* `PipeOpLearnerPICVPlus` and `PipeOpLearnerQuantiles` now return a `Multiplicity` of `Learner`s from `$learner_model` after training, instead of a plain `list`, so `GraphLearner$base_learner()` now gives an informative error for these `PipeOp`s instead of failing cryptically (#1054).
 
 # mlr3pipelines 0.12.0
 
