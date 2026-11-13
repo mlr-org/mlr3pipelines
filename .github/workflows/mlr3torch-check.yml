@@ -1,0 +1,122 @@
+# Checks that the CRAN release of mlr3torch still passes R CMD check with this version of mlr3pipelines.
+# mlr3torch sources the test helpers in inst/testthat/ and builds on the Graph / PipeOp internals,
+# so changes here can break it without affecting mlr3pipelines' own checks.
+# The torch setup follows mlr3torch's r-cmd-check workflow: https://github.com/mlr-org/mlr3torch
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+name: mlr3torch-check
+
+jobs:
+  mlr3torch-check:
+    runs-on: ubuntu-latest
+
+    name: mlr3torch (CRAN)
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      # mlr3torch's tests/testthat.R skips all tests unless this is set.
+      TORCH_TEST: 1
+      # The dataset hosts (e.g. cs.toronto.edu for CIFAR) are frequently throttled,
+      # R's default download timeout of 60s is too short to fill a cold cache.
+      R_DEFAULT_INTERNET_TIMEOUT: 3600
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: mlr3pipelines
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: release
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Download mlr3torch from CRAN
+        run: |
+          # setup-r points the repos option to P3M, which serves Linux binaries, so we ask CRAN for the source directly.
+          tarball = download.packages("mlr3torch", destdir = ".", type = "source", repos = "https://cloud.r-project.org")[1L, 2L]
+          untar(tarball)
+          cat("MLR3TORCH_TARBALL=", normalizePath(tarball), "\n", sep = "", file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+        shell: Rscript {0}
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          working-directory: mlr3torch
+          extra-packages: any::rcmdcheck, any::rappdirs
+          needs: check
+
+      - name: Install mlr3pipelines from this branch
+        run: |
+          pak::pkg_install("local::./mlr3pipelines")
+          cat("Using mlr3pipelines", format(packageVersion("mlr3pipelines")), "\n")
+        shell: Rscript {0}
+
+      # LibTorch is installed into the torch package directory, which is part of the package cache of
+      # setup-r-dependencies, so this only downloads it when that cache is cold.
+      - name: Install torch
+        run: torch::install_torch()
+        shell: Rscript {0}
+
+      - name: Get download cache paths
+        run: |
+          env = c(
+            TORCH_CACHE_PATH = rappdirs::user_cache_dir("torch"),
+            MLR3TORCH_CACHE_PATH = tools::R_user_dir("mlr3torch", "cache"),
+            DOWNLOAD_CACHE_KEY = sprintf("mlr3torch-downloads-%s-mlr3torch-%s-torchvision-%s",
+              Sys.getenv("RUNNER_OS"), packageVersion("mlr3torch"), packageVersion("torchvision"))
+          )
+          cat(sprintf("%s=%s\n", names(env), env), sep = "", file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+        shell: Rscript {0}
+
+      # The datasets used in the tests (MNIST, CIFAR, ...) are downloaded from hosts that are often slow.
+      # Restore and save are split because actions/cache only saves when the job succeeds,
+      # so a failing run on a cold cache would never warm it.
+      - name: Restore downloads
+        id: download-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            ${{ env.TORCH_CACHE_PATH }}
+            ${{ env.MLR3TORCH_CACHE_PATH }}
+          key: ${{ env.DOWNLOAD_CACHE_KEY }}
+          # The cached archives rarely change between versions, so a version bump should not start from scratch.
+          restore-keys: |
+            mlr3torch-downloads-${{ runner.os }}-
+
+      # Check the CRAN tarball as is, like CRAN's reverse dependency checks do, instead of rebuilding it.
+      - name: Check mlr3torch
+        run: |
+          options(crayon.enabled = TRUE)
+          rcmdcheck::rcmdcheck(Sys.getenv("MLR3TORCH_TARBALL"), args = c("--no-manual", "--as-cran"),
+            error_on = "warning", check_dir = "check")
+        shell: Rscript {0}
+        env:
+          _R_CHECK_FORCE_SUGGESTS_: false
+          _R_CHECK_CRAN_INCOMING_: false
+
+      - name: Show testthat output
+        if: always()
+        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
+
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: mlr3torch-check-results
+          path: check
+
+      - name: Save downloads
+        if: always() && env.DOWNLOAD_CACHE_KEY != '' && steps.download-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            ${{ env.TORCH_CACHE_PATH }}
+            ${{ env.MLR3TORCH_CACHE_PATH }}
+          key: ${{ env.DOWNLOAD_CACHE_KEY }}
