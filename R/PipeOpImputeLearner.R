@@ -152,7 +152,12 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
       if (!missing(val)) {
         stop("$learner_models is read-only.")
       }
-      warningf("$learner_models of PipeOpImputeLearner is deprecated and will be removed in the future. Use $learner_model instead.")  # nolint
+      # all.equal() and waldo read every active binding via as.list.environment(), don't warn when comparing objects.
+      # The stack is searched instead of only checking sys.call(-1L), as leanify_package() adds a wrapper call.
+      if (!some(sys.calls(), function(x) identical(x[[1L]], quote(as.list.environment)))) {
+        # nolint next
+        warningf("$learner_models of PipeOpImputeLearner is deprecated and will be removed in the future. Use $learner_model instead.")
+      }
       if (is.null(self$state) || is_noop(self$state)) {
         list()
       } else {
