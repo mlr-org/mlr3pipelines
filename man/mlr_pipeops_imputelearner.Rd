@@ -82,8 +82,6 @@ If trained, this is a \code{\link{Multiplicity}} of \code{\link[mlr3:Learner]{Le
 was fitted, each holding the model used to impute that feature.
 Features that were entirely \code{NA} during training are imputed by sampling and are therefore not included.
 Otherwise, this is the \code{\link[mlr3:Learner]{Learner}} that is being wrapped.
-As \code{PipeOpImputeLearner} is not tagged \code{"learner"},
-it is never considered a base learner by \code{\link{GraphLearner}}\verb{$base_learner()}.
 Read-only.
 \item \code{learner_models} :: \code{list} of \code{\link[mlr3:Learner]{Learner}} | \code{NULL}\cr
 Deprecated and will be removed in the future, use \verb{$learner_model} instead.\cr

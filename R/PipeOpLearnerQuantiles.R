@@ -64,9 +64,7 @@
 #' * `learner_model` :: [`Learner`][mlr3::Learner] | [`Multiplicity`] of [`Learner`][mlr3::Learner]\cr
 #'   If trained, this is a [`Multiplicity`] containing one [`Learner`][mlr3::Learner] per quantile in `q_vals`,
 #'   each holding the model trained for that quantile.
-#'   Otherwise, this is the [`Learner`][mlr3::Learner] that is being wrapped.
-#'   Because there is no single [`Learner`][mlr3::Learner] after training, [`GraphLearner`]`$base_learner()`
-#'   throws an error for a trained [`GraphLearner`] in which this `PipeOp` is the base learner `PipeOp`.
+#'   Before training, this is the [`Learner`][mlr3::Learner] that is being wrapped.
 #'   Read-only.
 #' * `predict_type` :: `character(1)`\cr
 #'   Predict type of the `PipeOpLearnerQuantiles`, which is always `"quantiles"`.

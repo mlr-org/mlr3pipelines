@@ -66,8 +66,6 @@
 #'   was fitted, each holding the model used to impute that feature.
 #'   Features that were entirely `NA` during training are imputed by sampling and are therefore not included.
 #'   Otherwise, this is the [`Learner`][mlr3::Learner] that is being wrapped.
-#'   As `PipeOpImputeLearner` is not tagged `"learner"`,
-#'   it is never considered a base learner by [`GraphLearner`]`$base_learner()`.
 #'   Read-only.
 #' * `learner_models` :: `list` of [`Learner`][mlr3::Learner] | `NULL`\cr
 #'   Deprecated and will be removed in the future, use `$learner_model` instead.\cr
@@ -143,8 +141,9 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
         private$.learner
       } else {
         multiplicity_recurse(self$state, function(state) {
-          # atomic models are null models of features that were entirely NA during training
-          as.Multiplicity(map(discard(state$model, is.atomic), clone_with_state, learner = private$.learner))
+          # null models of features that were entirely NA during training are not learner states
+          learner_states = keep(state$model, inherits, "learner_state")
+          as.Multiplicity(map(learner_states, clone_with_state, learner = private$.learner))
         })
       }
     },
