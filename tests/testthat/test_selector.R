@@ -4,6 +4,7 @@ test_that("Selectors work", {
   iris_task = mlr3::mlr_tasks$get("iris")
   bh_task = mlr3::mlr_tasks$get("boston_housing_classic")
   diabetes_task = mlr3::mlr_tasks$get("diabetes")
+  bc_task = mlr3::mlr_tasks$get("breast_cancer")
 
   sela = selector_all()
   expect_set_equal(sela(iris_task), iris_task$feature_names)
@@ -53,6 +54,47 @@ test_that("Selectors work", {
   expect_set_equal(selcgt(bh_task), "town")
   expect_set_equal(selcgt(bh_task$filter(1:3)), character(0))
   expect_set_equal(selcgt(diabetes_task), character(0))
+  expect_set_equal(selcgt(bc_task), bc_task$feature_names)
+})
+
+test_that("selectors do not select the target", {
+  selectors = list(
+    selector_all(),
+    selector_none(),
+    selector_type(c("factor", "numeric")),
+    selector_grep("target"),
+    selector_name("target"),
+    selector_invert(selector_none()),
+    selector_intersect(selector_all(), selector_all()),
+    selector_union(selector_all(), selector_none()),
+    selector_setdiff(selector_all(), selector_none()),
+    selector_missing(),
+    selector_non_missing(),
+    selector_cardinality_greater_than(1),
+    selector_positive(),
+    selector_negative(),
+    selector_non_negative(),
+    selector_non_positive(),
+    selector_non_zero()
+  )
+  # every selector (except selector_none()) would select the target of at least one task if it were a feature
+  targets = list(
+    factor(c("a", "b", "c", NA)),
+    c(1, 2, NA, 4),
+    c(-1, -2, -3, -4)
+  )
+
+  for (target in targets) {
+    backend = data.table(target = target, feature = 1:4)
+    task = if (is.factor(target)) {
+      TaskClassif$new("classif", backend, target = "target")
+    } else {
+      TaskRegr$new("regr", backend, target = "target")
+    }
+    for (selector in selectors) {
+      expect_false("target" %in% selector(task), info = paste(task$id, selector_repr(selector)))
+    }
+  }
 })
 
 test_that("numeric value selectors work", {
