@@ -1724,6 +1724,8 @@ test_that("exported fields - subclasses", {
     glrn$not_a_field = 1
   }, "locked")
 
+  # also without exported fields, so that subclasses notice independently of the Graph
   GraphLearnerLocked = R6Class("GraphLearnerLocked", inherit = GraphLearner)
-  expect_false("x" %in% names(GraphLearnerLocked$new(graph)))
+  expect_error(GraphLearnerLocked$new(graph), "'GraphLearnerLocked'.*lock_objects = FALSE")
+  expect_error(GraphLearnerLocked$new(lrn("classif.featureless")), "'GraphLearnerLocked'.*lock_objects = FALSE")
 })

@@ -184,8 +184,9 @@
 #'
 #' Exported fields, i.e. all fields that any [`PipeOp`] of the [`Graph`] makes available for export,
 #' are added as active bindings during construction, after which the object is locked.
-#' Subclasses of `GraphLearner` therefore only get exported fields if they are created with `lock_objects = FALSE`,
-#' see [`R6Class`][R6::R6Class].
+#' Classes inheriting from `GraphLearner` must therefore be created with `lock_objects = FALSE`,
+#' see [`R6Class`][R6::R6Class], otherwise construction throws an error.
+#' Their objects are locked after `super$initialize()`.
 #' Fields that the `GraphLearner` already has are skipped.
 #' Reading or setting an exported field calls the private methods `.get_exported_field()` or `.set_exported_field()`
 #' of the [`PipeOp`]s found by the search described above, which uses their private `.exportable_fields()`,
@@ -219,6 +220,14 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
     impute_selected_features = FALSE,
     initialize = function(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL, clone_graph = TRUE) {
+      # R6 locks objects of classes with the default lock_objects = TRUE before initialize() is called,
+      # which would prevent adding the exported fields
+      if (environmentIsLocked(self)) {
+        stopf(paste(
+          "Class '%s' inherits from GraphLearner and must be created with R6Class(..., lock_objects = FALSE),",
+          "so that GraphLearner can add the fields exported by its PipeOps during construction."
+        ), class(self)[[1L]])
+      }
       graph = as_graph(graph, clone = assert_flag(clone_graph))
       graph$state = NULL
 
@@ -267,12 +276,10 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       if (!is.null(predict_type)) self$predict_type = predict_type
 
-      # objects of subclasses that keep R6's default lock_objects = TRUE arrive locked, so no fields can be added
-      if (!environmentIsLocked(self)) {
-        private$.add_exported_fields()
-        lockEnvironment(self)
-        lockEnvironment(private)
-      }
+      private$.add_exported_fields()
+      # restores R6's protection against adding fields, which lock_objects = FALSE turns off
+      lockEnvironment(self)
+      lockEnvironment(private)
     },
     base_learner = function(recursive = Inf, return_po = FALSE, return_all = FALSE, resolve_branching = TRUE) {
       assert(check_numeric(recursive, lower = Inf), check_int(recursive))
@@ -526,6 +533,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     .add_exported_fields = function() {
       # every PipeOp leads to the single output, so each of these fields is found by .exported_field_pipeops()
       fields = map(private$.graph$pipeops, function(po) get_private(po)$.exportable_fields())
+      # fields the GraphLearner (or a subclass) already has take precedence and are not exported
       fields = setdiff(unique(as.character(unlist(fields, use.names = FALSE))), names(self))
       enclos_env = self$.__enclos_env__
       for (field in fields) {

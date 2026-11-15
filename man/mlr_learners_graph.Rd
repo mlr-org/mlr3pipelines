@@ -203,8 +203,9 @@ recommended.
 
 Exported fields, i.e. all fields that any \code{\link{PipeOp}} of the \code{\link{Graph}} makes available for export,
 are added as active bindings during construction, after which the object is locked.
-Subclasses of \code{GraphLearner} therefore only get exported fields if they are created with \code{lock_objects = FALSE},
-see \code{\link[R6:R6Class]{R6Class}}.
+Classes inheriting from \code{GraphLearner} must therefore be created with \code{lock_objects = FALSE},
+see \code{\link[R6:R6Class]{R6Class}}, otherwise construction throws an error.
+Their objects are locked after \code{super$initialize()}.
 Fields that the \code{GraphLearner} already has are skipped.
 Reading or setting an exported field calls the private methods \code{.get_exported_field()} or \code{.set_exported_field()}
 of the \code{\link{PipeOp}}s found by the search described above, which uses their private \code{.exportable_fields()},
