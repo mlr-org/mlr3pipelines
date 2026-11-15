@@ -8,6 +8,7 @@
 * Fix: Deep-cloning a `GraphLearner` now also clones `R6` objects in its saved hyperparameter values (`$state$param_vals`).
 * Tests in `inst/testthat` no longer override `expect_equal`.
 * feat: `GraphLearner` now has the fields that its `PipeOp`s make available for export as its own fields, e.g. `$quantiles` and `$quantile_response` of a wrapped `LearnerRegr` that can predict quantiles, or of a `PipeOpLearnerQuantiles` (which map to its `q_vals` and `q_response` hyperparameters). Setting such a field sets it in all relevant `PipeOp`s. `PipeOp`s make fields available for export by overloading private methods, see section "Exportable Fields" in `?PipeOp` (#1044).
+* Fix: `PipeOpLearnerCV` with `resampling.predict_method = "cv_ensemble"` now has a `NULL` `$state$log` member instead of `$state$train_log`, and its `$state` no longer contains `predict_log` and `predict_time`, matching the member names of a trained `Learner`'s `$state` (#298).
 * Fix: `PipeOpEncodeImpact`, `PipeOpEncodeLmer`, and `PipeOpVtreat` now always give an informative error during training for `TaskSupervised` `Task`s that inherit from neither `TaskRegr` nor `TaskClassif` (e.g. `TaskSurv` from `mlr3proba`), even if no columns are affected, instead of silently producing wrong encodings or failing obscurely (#913).
 * feat: `PipeOpEncodePLTree` now also accepts the names of `Task` classes derived from `TaskRegr` / `TaskClassif` that are registered by extension packages (e.g. `"TaskRegrST"`) as `task_type` (#913).
 * Fix: `PipeOpSubsample` with `stratify = TRUE` now gives a single, informative error message for `Task`s that do not inherit from `TaskClassif` (#913).
@@ -19,6 +20,8 @@
 * Fix: `pos()` now returns an unnamed list, preventing duplicated PipeOp IDs such as `pca.pca` when passed to `as_graph()`.
 * New `ppl("bag")` / `pipeline_bag()` performs real bagging with `frac = 1` and `replace = TRUE` by default. `ppl("bagging")` / `pipeline_bagging()` is deprecated and will be removed in the future.
 * Fix: `GraphLearner$predict_type` no longer assigns the `predict_type` of `PipeOp`s that already have the requested value. Read-only `$predict_type` fields (`PipeOp`, `PipeOpLearnerQuantiles`, `PipeOpLearnerPICVPlus`) now accept assignment of their current value as a no-op (#970).
+* Fix: `PipeOpTargetTrafoScaleRange` no longer drops the standard error (`se`) when inverting predictions, and instead rescales it to the original target scale.
+* Fix: `selector_cardinality_greater_than()` and `selector_missing()` no longer return the target column, which made `PipeOp`s using them as `affect_columns` fail (#1050).
 * Fix: `PipeOpTargetInvert` now keeps the observation weights of the incoming prediction.
 
 # mlr3pipelines 0.12.0

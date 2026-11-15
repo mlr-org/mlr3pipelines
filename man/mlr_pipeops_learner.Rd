@@ -47,18 +47,17 @@ trained on the training input data.
 
 \section{State}{
 
-The \verb{$state} is set to the \verb{$state} slot of the \code{\link[mlr3:Learner]{Learner}} object. It is a named \code{list} with members:
+The \verb{$state} is set to the \verb{$state} slot of the \code{\link[mlr3:Learner]{Learner}} object.
+It is a named \code{list} of class \code{"learner_state"} with members such as:
 \itemize{
 \item \code{model} :: \code{any}\cr
 Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function.
-\item \code{train_log} :: \code{\link[data.table:data.table]{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
-Errors logged during training.
+\item \code{log} :: \code{\link[data.table:data.table]{data.table}}\cr
+Output, warnings and errors logged during training.
 \item \code{train_time} :: \code{numeric(1)}\cr
 Training time, in seconds.
-\item \code{predict_log} :: \code{NULL} | \code{\link[data.table:data.table]{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
-Errors logged during prediction.
-\item \code{predict_time} :: \code{NULL} | \code{numeric(1)}
-Prediction time, in seconds.
+\item \code{param_vals} :: named \code{list}\cr
+Hyperparameter values used for training.
 }
 }
 
@@ -69,7 +68,8 @@ The parameters are exactly the parameters of the \code{\link[mlr3:Learner]{Learn
 
 \section{Internals}{
 
-The \verb{$state} is currently not updated by prediction, so the \verb{$state$predict_log} and \verb{$state$predict_time} will always be \code{NULL}.
+The \verb{$state} is currently not updated by prediction, so \verb{$state$log} contains no entries from prediction
+and \verb{$state$predict_time} is always \code{NULL}.
 }
 
 \section{Fields}{
