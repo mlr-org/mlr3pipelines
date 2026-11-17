@@ -188,7 +188,10 @@ The \verb{$oob_error()} returned by the base learner, if it has the \verb{"oob_e
 Throws an error otherwise.
 \item \code{loglik()}\cr
 () -> \code{numeric(1)}\cr
-The \verb{$loglik()} returned by the base learner, if it has the \verb{"loglik} property.
+Deprecated and will be removed in the future.
+It is only kept for backwards compatibility with \CRANpkg{mlr3} versions before 0.22.0,
+which removed \verb{$loglik()} from all \code{\link[mlr3:Learner]{Learner}}s.
+The \verb{$loglik()} returned by the base learner, if it has the \code{"loglik"} property.
 Throws an error otherwise.
 }
 }

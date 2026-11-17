@@ -172,8 +172,10 @@
 #'   Throws an error otherwise.
 #' * `loglik()`\cr
 #'   () -> `numeric(1)`\cr
-#'   The `$loglik()` returned by the base learner, if it has the `"loglik` property.
+#'   The `$loglik()` returned by the base learner, if it has the `"loglik"` property.
 #'   Throws an error otherwise.
+#'   Deprecated and will be removed in the future.
+#'   It is only kept for backwards compatibility with \CRANpkg{mlr3} versions before 0.22.0.
 #'
 #' @section Internals:
 #' The `$model` of a `GraphLearner` is the `$state` of `$graph` after training,
@@ -329,14 +331,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     unmarshal = function(...) {
       learner_unmarshal(.learner = self, ...)
     },
-    importance = function() {
-      base_learner = self$base_learner(recursive = 1)
-      if ("importance" %in% base_learner$properties && !is.null(base_learner$importance)) {
-        base_learner$importance()
-      } else {
-        stopf("Baselearner %s of %s does not implement '$importance()'.", base_learner$id, self$id)
-      }
-    },
+    importance = function() private$.call_base_learner_method("importance"),
     selected_features = function() {
       base_learners = self$base_learner(recursive = 1, return_all = TRUE)
       base_learners_flat = unlist(lapply(base_learners, multiplicity_flatten), recursive = FALSE, use.names = FALSE)
@@ -354,21 +349,13 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       })
       unique(unlist(selected_features_all, recursive = FALSE, use.names = FALSE))
     },
-    oob_error = function() {
-      base_learner = self$base_learner(recursive = 1)
-      if ("oob_error" %in% base_learner$properties && !is.null(base_learner$oob_error)) {
-        base_learner$oob_error()
-      } else {
-        stopf("Baselearner %s of %s does not implement '$oob_error()'.", base_learner$id, self$id)
-      }
-    },
+    oob_error = function() private$.call_base_learner_method("oob_error"),
     loglik = function() {
-      base_learner = self$base_learner(recursive = 1)
-      if ("loglik" %in% base_learner$properties && !is.null(base_learner$loglik)) {
-        base_learner$loglik()
-      } else {
-        stopf("Baselearner %s of %s does not implement '$loglik()'.", base_learner$id, self$id)
-      }
+      warningf(paste(
+        "GraphLearner$loglik() is deprecated and will be removed in the future.",
+        "It only works with mlr3 versions before 0.22.0, which removed $loglik() from all Learners."
+      ))
+      private$.call_base_learner_method("loglik")
     },
     ids = function(sorted = FALSE) {
       private$.graph$ids(sorted = sorted)
@@ -537,6 +524,15 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       ivs = unlist(map(pos_with_property(self$graph_model, "validation"), field), recursive = FALSE)
       if (!length(ivs)) return(named_list())
       ivs
+    },
+    .call_base_learner_method = function(method) {
+      # $importance(), $oob_error(), and $loglik() are taken from the unique base learner,
+      # which must have the property of the same name
+      base_learner = self$base_learner(recursive = 1)
+      if (method %nin% base_learner$properties || is.null(base_learner[[method]])) {
+        stopf("Baselearner %s of %s does not implement '$%s()'.", base_learner$id, self$id, method)
+      }
+      base_learner[[method]]()
     },
     .add_exported_fields = function() {
       # every PipeOp leads to the single output, so each of these fields is found by .exported_field_pipeops()

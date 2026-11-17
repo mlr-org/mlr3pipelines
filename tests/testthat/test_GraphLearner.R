@@ -1584,6 +1584,11 @@ test_that("GraphLearner other properties", {
 
 })
 
+test_that("GraphLearner - loglik() is deprecated", {
+  glrn = GraphLearner$new(lrn("classif.debug"))$train(tsk("iris"))
+  expect_warning(expect_error(glrn$loglik(), "does not implement.*loglik"), "deprecated.*mlr3 versions before 0.22.0")
+})
+
 test_that("GraphLearner - predict_newdata_fast", {
   # Classification
   task = tsk("iris")

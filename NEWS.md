@@ -5,6 +5,7 @@
 * `as_learner()` for `Graph` input defaults to `clone = FALSE` again, as it did before 0.12.0, consistent with `as_learner()` for `PipeOp` and `Learner` input (#1039).
 * Fix: `as_learner()` for `Graph` and `PipeOp` input now throws an error on unknown arguments instead of silently ignoring them (#1039).
 * Fix: `GraphLearner$hash` and `$phash` now include the timeout, the deadline, the encapsulation method, and the `when` handler, matching `Learner$hash` in `mlr3`, so `GraphLearner`s differing only in these settings are no longer merged by `benchmark()`.
+* `GraphLearner$loglik()` is deprecated and will be removed in the future; only kept for backwards compatibility with `mlr3` versions before 0.22.0 (#1056).
 * Fix: Deep-cloning a `GraphLearner` now also clones `R6` objects in its saved hyperparameter values (`$state$param_vals`).
 * Tests in `inst/testthat` no longer override `expect_equal`.
 * feat: `GraphLearner` now has the fields that its `PipeOp`s make available for export as its own fields, e.g. `$quantiles` and `$quantile_response` of a wrapped `LearnerRegr` that can predict quantiles, or of a `PipeOpLearnerQuantiles` (which map to its `q_vals` and `q_response` hyperparameters). Setting such a field sets it in all relevant `PipeOp`s. `PipeOp`s make fields available for export by overloading private methods, see section "Exportable Fields" in `?PipeOp`. BREAKING CHANGE: Classes inheriting from `GraphLearner` must now be created with `R6Class(..., lock_objects = FALSE)`, otherwise construction throws an error (#1044).
