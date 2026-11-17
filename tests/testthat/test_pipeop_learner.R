@@ -241,16 +241,42 @@ test_that("exported fields", {
   expect_equal(obj_private$.get_exported_field("quantiles"), c(0.1, 0.5, 0.9))
 })
 
-test_that("exported fields - only if the Learner can predict quantiles", {
+test_that("exported fields - fields of Learner subclasses", {
+  # classif.debug also has fields that GraphLearner handles itself, e.g. validate and internal_valid_scores
+  LearnerClassifExport = R6Class("LearnerClassifExport", inherit = LearnerClassifDebug,
+    active = list(
+      x = function(rhs) {
+        if (!missing(rhs)) private$.x = rhs
+        private$.x
+      },
+      network = function(rhs) NULL
+    ),
+    private = list(.x = 1)
+  )
+  obj = po("learner", LearnerClassifExport$new())
+  expect_equal(get_private(obj)$.exportable_fields(), "x")
+
+  glrn = as_learner(obj)
+  glrn$x = 2
+  expect_equal(glrn$graph$pipeops$classif.debug$learner$x, 2)
+  expect_equal(glrn$x, 2)
+})
+
+test_that("exported fields - Learner that does not support the value", {
   skip_if_not_installed("rpart")
-  expect_equal(get_private(po("learner", lrn("regr.rpart")))$.exportable_fields(), character(0))
-  glrn_rpart = as_learner(po("scale") %>>% lrn("regr.rpart"))
-  expect_equal(get_private(po("learner", glrn_rpart))$.exportable_fields(), character(0))
+  obj = po("learner", lrn("regr.rpart"))
+  expect_set_equal(get_private(obj)$.exportable_fields(), c("quantiles", "quantile_response"))
+
+  glrn = as_learner(po("scale") %>>% lrn("regr.rpart"))
+  expect_null(glrn$quantiles)
+  expect_error({
+    glrn$quantiles = 0.5
+  }, "does not support predicting quantiles")
 
   glrn = as_learner(gunion(list(lrn("regr.debug"), lrn("regr.rpart"))) %>>% po("regravg", innum = 2))
-  glrn$quantiles = 0.5
-  expect_equal(glrn$graph$pipeops$regr.debug$learner$quantiles, 0.5)
-  expect_null(glrn$graph$pipeops$regr.rpart$learner$quantiles)
+  expect_error({
+    glrn$quantiles = 0.5
+  }, "does not support predicting quantiles")
 })
 
 test_that("exported fields - GraphLearner", {

@@ -194,11 +194,20 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     .learner = NULL,
 
     .exportable_fields = function() {
-      # restricted to the quantile fields of Learners that can predict quantiles for now
-      if ("quantiles" %nin% private$.learner$predict_types) return(character(0))
       fields = ls(private$.learner)
-      fields = setdiff(fields[map_lgl(fields, bindingIsActive, env = private$.learner)], names(Learner$active))
-      intersect(fields, c("quantiles", "quantile_response"))
+      # Only use active bindings
+      fields = fields[map_lgl(fields, bindingIsActive, env = private$.learner)]
+      setdiff(fields, c(
+        # We don't want general Learner/GraphLearner fields 
+        names(Learner$active), names(GraphLearner$active),
+        # ABs from other packages that would be non-sensical to export
+        # NOTE: Alternative would be to allow the classes owning these fields to have a
+        # private method `.non_exportable_fields` that tells us what to blaclist.
+        "learner", # mlr3tuning, mlr3fselect, mlr3forecast
+        "network", # mlr3torch
+        "archive", "tuning_instance", "tuning_result", # mlr3tuning
+        "fselect_instance", "fselect_result" # mlr3fselect
+      ))
     },
     .get_exported_field = function(name) private$.learner[[name]],
     .set_exported_field = function(name, value) private$.learner[[name]] = value,
