@@ -78,9 +78,30 @@
 #'    `NULL` otherwise.
 #'
 #' @section Exported Fields:
-#' The fields `quantiles` and `quantile_response` of the wrapped [`Learner`][mlr3::Learner]
-#' are made available for export if it can predict quantiles, see section *Exportable Fields* in [`PipeOp`].
-#' They are read from and set on `$learner`, which can also be a [`GraphLearner`] that exports them itself.
+#' `PipeOpLearner` makes the fields of its wrapped [`Learner`][mlr3::Learner] available for export to a
+#' [`GraphLearner`], see [`GraphLearner`] and section *Exportable Fields* in [`PipeOp`].
+#' However, not all fields of the wrapped [`Learner`][mlr3::Learner] are made available,
+#' only those that are not on a blacklist, which is implemented in the private method `.exportable_fields()`.
+#'
+#' The fields are read from and set on `$learner`, i.e. the untrained [`Learner`][mlr3::Learner], not `$learner_model`.
+#' `$learner` can also be a [`GraphLearner`], whose exported fields are then made available as well.
+#'
+#' The blacklist contains the following fields:
+#' * All fields of the base class [`Learner`][mlr3::Learner], e.g. `id` and `predict_type`.
+#'   They are a fixed set, which [`GraphLearner`] handles explicitly where needed,
+#'   see section *Internals* in [`GraphLearner`].
+#' * The fields of [`GraphLearner`], e.g. `validate` and `internal_valid_scores`,
+#'   which some [`Learner`][mlr3::Learner]s also have, but which a [`GraphLearner`] handles itself.
+#' * Fields that hold results of training or wrapped objects,
+#'   since they would always be read from the untrained `$learner`:
+#'   `learner`, `network`, `archive`, `tuning_instance`, `tuning_result`, `fselect_instance`, and `fselect_result`.
+#'
+#' Fields are made available even if the [`Learner`][mlr3::Learner] does not support them in its current configuration,
+#' e.g. `quantiles` of a [`LearnerRegr`][mlr3::LearnerRegr] that cannot predict quantiles,
+#' so that setting them throws the error of the [`Learner`][mlr3::Learner].
+#'
+#' `PipeOp`s inheriting from `PipeOpLearner` can overload the private method `.exportable_fields()`
+#' to exclude further fields.
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
@@ -198,11 +219,11 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       # Only use active bindings
       fields = fields[map_lgl(fields, bindingIsActive, env = private$.learner)]
       setdiff(fields, c(
-        # We don't want general Learner/GraphLearner fields 
+        # We don't want general Learner/GraphLearner fields
         names(Learner$active), names(GraphLearner$active),
         # ABs from other packages that would be non-sensical to export
         # NOTE: Alternative would be to allow the classes owning these fields to have a
-        # private method `.non_exportable_fields` that tells us what to blaclist.
+        # private method `.non_exportable_fields` that tells us what to blacklist.
         "learner", # mlr3tuning, mlr3fselect, mlr3forecast
         "network", # mlr3torch
         "archive", "tuning_instance", "tuning_result", # mlr3tuning

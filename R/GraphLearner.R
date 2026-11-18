@@ -94,7 +94,8 @@
 #'   in cases where the base learners do not implement `$selected_features()`.
 #'   The default is `FALSE`.
 #' 
-#' Additionally, the `GraphLearner` may have fields exported from [`PipeOp`]s.
+#' Additionally, the `GraphLearner` may have fields exported from [`PipeOp`]s,
+#' e.g. `$quantiles` of a [`LearnerRegr`][mlr3::LearnerRegr] wrapped in a [`PipeOpLearner`].
 #' For each field, the [`Graph`] is traversed backwards from its output,
 #' stopping on each path at the first [`PipeOp`] that makes the field available for export.
 #' Setting such a field sets it in all of these [`PipeOp`]s, and getting it throws an error if their values differ.
@@ -192,12 +193,24 @@
 #' wrapped in a [`Graph`], which is then again wrapped in a `GraphLearner` object; this usually only adds overhead and is not
 #' recommended.
 #'
-#' Exported fields, i.e. all fields that any [`PipeOp`] of the [`Graph`] makes available for export,
-#' are added as active bindings during construction, after which the object is locked.
+#' The `GraphLearner` handles the fields of [`Learner`][mlr3::Learner] explicitly where needed,
+#' e.g. setting `$predict_type` also sets it for the [`Learner`][mlr3::Learner]s in the [`Graph`].
+#' This is possible because the fields of [`Learner`][mlr3::Learner] are a fixed set.
+#' Classes inheriting from [`Learner`][mlr3::Learner] can add any fields,
+#' e.g. `$quantiles` of a [`LearnerRegr`][mlr3::LearnerRegr], so they cannot be handled explicitly.
+#' Instead, the [`PipeOp`]s of the [`Graph`] make such fields available for export.
+#'
+#' The `GraphLearner` exposes the fields that the [`PipeOp`]s of its [`Graph`] make available for export
+#' as active bindings, which are added dynamically during construction.
+#' Fields that the `GraphLearner` already has are skipped.
+#' Exported fields can come from [`Learner`][mlr3::Learner]s wrapped in a [`PipeOpLearner`],
+#' which makes available the fields that the class of its [`Learner`][mlr3::Learner] adds,
+#' e.g. `$loss` of a `LearnerTorch` from \CRANpkg{mlr3torch}, see section *Exported Fields* in [`PipeOpLearner`].
+#' The object is locked at the end of construction, after the exported fields have been added.
 #' Classes inheriting from `GraphLearner` must therefore be created with `lock_objects = FALSE`,
 #' see [`R6Class`][R6::R6Class], otherwise construction throws an error.
-#' Their objects are locked after `super$initialize()`.
-#' Fields that the `GraphLearner` already has are skipped.
+#' Their objects are already locked after `super$initialize()`,
+#' so their own `initialize()` cannot add new fields after calling it.
 #' Reading or setting an exported field calls the private methods `.get_exported_field()` or `.set_exported_field()`
 #' of the [`PipeOp`]s found by the search described above, which uses their private `.exportable_fields()`,
 #' see section *Exportable Fields* in [`PipeOp`].
