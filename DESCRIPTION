@@ -73,7 +73,7 @@ Imports:
     mlr3 (>= 0.20.0),
     mlr3misc (>= 0.17.0),
     paradox (>= 1.0.0),
-    R6
+    R6 (>= 2.4.1)
 Suggests:
     ggplot2,
     glmnet,

@@ -125,6 +125,11 @@ test_that("PipeOpLearnerPICVPlus - predict_type of GraphLearner", {
   expect_no_warning(rr$aggregate(msr("regr.pinball", alpha = 0.05)))
 })
 
+test_that("PipeOpLearnerPICVPlus - exported fields", {
+  # quantiles of the wrapped Learner are not exported, since the PipeOp computes its own
+  expect_equal(get_private(po("learner_pi_cvplus", lrn("regr.debug")))$.exportable_fields(), character(0))
+})
+
 test_that("PipeOpLearnerPICVPlus - integration with larger graph", {
   skip_if_not_installed("rpart")
 
