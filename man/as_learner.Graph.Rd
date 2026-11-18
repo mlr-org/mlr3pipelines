@@ -56,7 +56,7 @@ Predict type of the resulting \code{\link{GraphLearner}}.
 If \code{NULL} (default), it is inferred from \code{x}.}
 }
 \value{
-\code{\link{GraphLearner}}
+\code{\link{GraphLearner}}, or a subclass of it if \code{x} has a \verb{$graph_class}, see Section \emph{Specialized GraphLearners}.
 }
 \description{
 Methods for \code{\link[mlr3:as_learner]{as_learner()}} that wrap a \code{\link{Graph}} or a \code{\link{PipeOp}} in a \code{\link{GraphLearner}}.
@@ -66,6 +66,30 @@ A \code{\link{PipeOp}} is first converted to a \code{\link{Graph}} using \code{\
 
 The arguments \code{id}, \code{param_vals}, \code{task_type}, and \code{predict_type} are passed on to the \code{\link{GraphLearner}} constructor.
 Unknown arguments raise an error.
+}
+
+\section{Specialized GraphLearners}{
+
+Extension packages can make \code{as_learner()} return a subclass of \code{\link{GraphLearner}} with additional methods,
+for \code{\link{Graph}}s whose base learners are their \code{\link[mlr3:Learner]{Learner}}s.
+For this, the \code{\link[mlr3:Learner]{Learner}} gets a read-only \verb{$graph_class} field,
+a \code{character} vector of class names, most specific first,
+and the package registers an \code{as_learner()} method for at least one of these classes,
+which takes the same arguments as \code{as_learner.Graph()}.
+
+\code{as_learner.Graph()} calls the method of the first class in the \verb{$graph_class} field of \code{x} (see \code{\link{Graph}})
+that has one, and constructs a \code{\link{GraphLearner}} if there is none.
+The method receives the \code{\link{Graph}} as \code{x}, although \code{x} does not inherit from the class.
+It therefore has to construct the learner itself, e.g. via \verb{$new()}, instead of calling \code{as_learner()} on \code{x} again.
+
+The \verb{$graph_class} of \code{x} contains the classes that all possible base learners of \code{x} have in common,
+considering all branches.
+The resulting learner therefore has to cope with branching,
+as well as with \code{\link{Graph}}s that have several base learners, such as ensembles.
+It should throw an error from the methods that do not support the given \code{\link{Graph}}, and not from its construction.
+A \code{\link{GraphLearner}} that is a base learner of \code{x} contributes the \verb{$graph_class} of the \code{\link{Graph}} it wraps.
+The classes are determined when \code{as_learner()} is called, so changing \code{x} afterwards does not change the class of the
+resulting learner.
 }
 
 \examples{

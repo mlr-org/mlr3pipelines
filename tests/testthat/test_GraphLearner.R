@@ -181,6 +181,89 @@ test_that("resample() works with Graph and PipeOp without changing them", {
   expect_true(pipeop$is_trained)
 })
 
+LearnerClassifDebugGraphClass = R6Class("LearnerClassifDebugGraphClass", inherit = LearnerClassifDebug,
+  public = list(
+    initialize = function(id, graph_class) {
+      super$initialize()
+      self$id = id
+      private$.graph_class = graph_class
+    }
+  ),
+  active = list(
+    graph_class = function(rhs) {
+      assert_ro_binding(rhs)
+      private$.graph_class
+    }
+  ),
+  private = list(.graph_class = NULL)
+)
+
+GraphLearnerMock = R6Class("GraphLearnerMock", inherit = GraphLearner)
+registerS3method("as_learner", "GraphMock",
+  function(x, clone = FALSE, discard_state = FALSE, ..., id = NULL, param_vals = list(), task_type = NULL,
+    predict_type = NULL) {
+    GraphLearnerMock$new(x, id = id, param_vals = param_vals, task_type = task_type, predict_type = predict_type,
+      clone_graph = clone)
+  }
+)
+
+test_that("Graph$graph_class contains the classes that all possible base learners have in common", {
+  lrn_gc = function(id, graph_class) LearnerClassifDebugGraphClass$new(id, graph_class)
+
+  expect_identical(as_graph(lrn("classif.debug"))$graph_class, character(0))
+  graph = po("pca") %>>% lrn_gc("a", c("GraphSpecial", "GraphMock"))
+  expect_identical(graph$graph_class, c("GraphSpecial", "GraphMock"))
+  expect_error({graph$graph_class = "GraphMock"}, "read-only")
+
+  # all branches are considered, regardless of the selection
+  graph = ppl("branch", list(a = lrn_gc("a", c("GraphSpecial", "GraphMock")), b = lrn_gc("b", "GraphMock")))
+  expect_identical(graph$graph_class, "GraphMock")
+  graph$param_set$values$branch.selection = "b"
+  expect_identical(graph$graph_class, "GraphMock")
+  expect_identical(ppl("branch", list(a = lrn_gc("a", "GraphMock"), b = lrn("classif.debug", id = "b")))$graph_class,
+    character(0))
+
+  # ensembles
+  graph = gunion(list(lrn_gc("a", "GraphMock"), lrn_gc("b", "GraphMock"))) %>>% po("classifavg", innum = 2)
+  expect_identical(graph$graph_class, "GraphMock")
+
+  # no base learner or no unique output
+  expect_identical(as_graph(po("pca"))$graph_class, character(0))
+  expect_identical(gunion(list(lrn_gc("a", "GraphMock"), lrn_gc("b", "GraphMock")))$graph_class, character(0))
+
+  expect_error(as_graph(lrn_gc("a", 1))$graph_class, "graph_class of base learner 'a'")
+
+  # a GraphLearner contributes the classes of its Graph
+  glrn = GraphLearner$new(lrn_gc("a", "GraphMock"))
+  expect_identical(glrn$graph_class, "GraphMock")
+  expect_error({glrn$graph_class = "GraphMock"}, "read-only")
+  expect_identical((po("pca") %>>% glrn)$graph_class, "GraphMock")
+})
+
+test_that("as_learner.Graph dispatches on $graph_class", {
+  graph = as_graph(LearnerClassifDebugGraphClass$new("a", c("GraphUnregistered", "GraphMock")))
+  learner = as_learner(graph, id = "custom_id", param_vals = list(a.x = 0.5), predict_type = "prob")
+  expect_class(learner, "GraphLearnerMock")
+  expect_identical(learner$graph, graph)
+  expect_identical(learner$id, "custom_id")
+  expect_identical(learner$param_set$values$a.x, 0.5)
+  expect_identical(learner$predict_type, "prob")
+  expect_false(identical(as_learner(graph, clone = TRUE)$graph, graph))
+  expect_error(as_learner(graph, idd = "a"), "named arguments that were unused: idd")
+
+  pipeop = po("learner", LearnerClassifDebugGraphClass$new("a", "GraphMock"))
+  expect_class(as_learner(pipeop), "GraphLearnerMock")
+  expect_class(po("learner", graph)$learner, "GraphLearnerMock")
+  expect_class(as_learner(po("pca") %>>% learner), "GraphLearnerMock")
+  expect_class(resample(tsk("iris"), graph, rsmp("holdout"))$learner, "GraphLearnerMock")
+
+  # without a registered method, and for classes of the Graph itself, a GraphLearner is constructed
+  for (graph_class in c("GraphUnregistered", "Graph")) {
+    learner = as_learner(as_graph(LearnerClassifDebugGraphClass$new("a", graph_class)))
+    expect_identical(class(learner)[[1L]], "GraphLearner")
+  }
+})
+
 test_that("graphlearner parameters behave as they should", {
   dblrn = mlr_learners$get("classif.debug")
   dblrn$param_set$values$save_tasks = TRUE

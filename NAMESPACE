@@ -251,6 +251,7 @@ importFrom(digest,digest)
 importFrom(stats,setNames)
 importFrom(utils,
   bibentry,
+  getS3method,
   head,
   tail
 )
