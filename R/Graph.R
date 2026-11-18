@@ -53,6 +53,15 @@
 #' * `packages` :: `character`\cr
 #'   Set of all required packages for the various methods in the `Graph`, a set union of all required packages of all contained
 #'   [`PipeOp`] objects.
+#' * `graph_class` :: `character`\cr
+#'   Classes that [`as_learner()`][mlr3::as_learner] dispatches on when converting the `Graph` to a
+#'   [`Learner`][mlr3::Learner], see [`as_learner.Graph()`].
+#'   These are the classes in the `$graph_class` field that all possible base learners of the `Graph` have in common,
+#'   where all paths behind a [`PipeOpBranch`] are considered, regardless of its `selection`
+#'   (see `$base_learner()` of [`GraphLearner`] for what the base learners are).
+#'   A base learner without a `$graph_class` field contributes no classes, so the result is then empty.
+#'   It is also empty for `Graph`s without base learner or without a unique output.
+#'   Read-only.
 #' * `state` :: named `list`\cr
 #'   Get / Set the `$state` of each of the members of [`PipeOp`].
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
@@ -500,6 +509,10 @@ Graph = R6Class("Graph",
       graph_channels(self$edges$src_id, self$edges$src_channel, self$pipeops, "output")
     },
     packages = function() unique(unlist(map(self$pipeops, "packages"))),
+    graph_class = function(rhs) {
+      assert_ro_binding(rhs)
+      infer_graph_class(self)
+    },
     hash = function() calculate_hash(map(self$pipeops, "hash"), self$edges),
     phash = function() calculate_hash(map(self$pipeops, "phash"), self$edges),
     param_set = function(val) {

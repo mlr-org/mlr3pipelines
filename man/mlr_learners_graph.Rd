@@ -90,6 +90,12 @@ How to construct the validation data. This also has to be configured for the ind
 For more details on the possible values, see \code{\link[mlr3:Learner]{mlr3::Learner}}.
 \item \code{marshaled} :: \code{logical(1)}\cr
 Whether the learner is marshaled.
+\item \code{graph_class} :: \code{character}\cr
+Classes that this \code{GraphLearner} contributes to the \verb{$graph_class} of a \code{\link{Graph}} in which it is a base learner,
+see \code{\link[=as_learner.Graph]{as_learner.Graph()}}.
+This is the \verb{$graph_class} of \verb{$graph}, so a \code{\link{Graph}} containing a \code{GraphLearner} is converted to the same kind of
+\code{\link[mlr3:Learner]{Learner}} as the \code{\link{Graph}} it wraps.
+Read-only.
 \item \code{impute_selected_features} :: \code{logical(1)}\cr
 Whether to heuristically determine \verb{$selected_features()} as all \verb{$selected_features()} of all "base learner" Learners,
 even if they do not have the \code{"selected_features"} property / do not implement \verb{$selected_features()}.
