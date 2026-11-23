@@ -71,7 +71,7 @@ Imports:
     digest,
     lgr,
     mlr3 (>= 0.20.0),
-    mlr3misc (>= 0.17.0),
+    mlr3misc (>= 0.24.0),
     paradox (>= 1.0.0),
     R6
 Suggests:
