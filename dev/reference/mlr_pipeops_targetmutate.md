@@ -218,8 +218,8 @@ po$predict(list(task))
 #>     assert_list(inputs, len = 1L, types = "Prediction")
 #>     list(private$.invert(inputs[[1L]], predict_phase_state))
 #> }
-#> <bytecode: 0x56813f76e210>
-#> <environment: 0x56813cb62630>
+#> <bytecode: 0x5b7e720b0ea0>
+#> <environment: 0x5b7e77c48f58>
 #> 
 #> $output
 #> 
