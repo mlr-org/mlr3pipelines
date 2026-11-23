@@ -548,19 +548,19 @@ check_types = function(self, data, direction, operation) {
       msg = tryCatch({
         data_element = autoconverter$fun(data_element)
         ""
-      }, error = function(e) sprintf("\nConversion from given data to %s produced message:\n%s.", typereq, e$message))
+      }, error = function(e) sprintf("\nConversion from given data to %s produced message:\n%s", typereq, e$message))
     }
 
     if (inherits(data_element, typereq)) {
       return(data_element)
     } else {
-      stop(sprintf(
+      stopf(
         "Type mismatch for %s: Must inherit from class '%s', but has class(es) %s. %s",
         varname,
         typereq,
         str_collapse(class(data_element), quote = "'"),
-        msg
-      ), call. = FALSE)
+        msg,
+        call. = FALSE)
     }
   }
 
