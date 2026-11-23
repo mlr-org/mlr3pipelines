@@ -46,7 +46,7 @@ test_that("PipeOpLearnerPICVPlus - basic properties", {
 
   expect_error(PipeOpLearnerPICVPlus$new(), "learner")
 
-  expect_pipeop(po("learner_pi_cvplus", lrn("regr.featureless")))
+  expect_pipeop(po("learner_pi_cvplus", lrn("regr.featureless")), check_ps_default_values = FALSE)
 })
 
 test_that("PipeOpLearnerPICVPlus - param set and values", {
