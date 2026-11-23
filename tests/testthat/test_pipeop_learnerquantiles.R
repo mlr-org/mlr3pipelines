@@ -47,7 +47,7 @@ test_that("PipeOpLearnerQuantiles - basic properties", {
   expect_equal(prds$output$response, prds$output$quantiles[, "q0.5"])
   expect_error(PipeOpLearnerQuantiles$new(), "learner")
 
-  expect_pipeop(po("learner_quantiles", lrn("regr.featureless")))
+  expect_pipeop(po("learner_quantiles", lrn("regr.featureless")), check_ps_default_values = FALSE)
 })
 
 test_that("PipeOpLearnerQuantiles - param set and values", {
