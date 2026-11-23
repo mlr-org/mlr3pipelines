@@ -132,6 +132,36 @@ test_that("PipeOpLearnerQuantiles - predict_type of GraphLearner", {
   expect_no_warning(rr$aggregate(msr("regr.pinball")))
 })
 
+test_that("PipeOpLearnerQuantiles - exported fields", {
+  obj = po("learner_quantiles", lrn("regr.debug"))
+  obj_private = get_private(obj)
+  expect_set_equal(obj_private$.exportable_fields(), c("quantiles", "quantile_response"))
+  expect_equal(obj_private$.get_exported_field("quantiles"), c(0.05, 0.5, 0.95))
+  expect_equal(obj_private$.get_exported_field("quantile_response"), 0.5)
+
+  obj_private$.set_exported_field("quantiles", c(0.1, 0.9))
+  obj_private$.set_exported_field("quantile_response", 0.5)
+  expect_equal(obj$param_set$values$quantiles.q_vals, c(0.1, 0.5, 0.9))
+  expect_equal(obj$param_set$values$quantiles.q_response, 0.5)
+
+  obj_private$.set_exported_field("quantiles", 0.3)
+  expect_equal(obj$param_set$values$quantiles.q_response, 0.3)
+
+  expect_error(obj_private$.set_exported_field("quantiles", NULL), "quantiles")
+  expect_error(obj_private$.set_exported_field("quantiles", c(0.9, 0.1)), "sorted")
+  expect_equal(obj$param_set$values$quantiles.q_vals, 0.3)
+})
+
+test_that("PipeOpLearnerQuantiles - exported fields of GraphLearner", {
+  glrn = as_learner(po("learner_quantiles", lrn("regr.debug")))
+  glrn$quantiles = c(0.1, 0.9)
+  glrn$quantile_response = 0.5
+  expect_equal(glrn$param_set$values$regr.debug.quantiles.q_vals, c(0.1, 0.5, 0.9))
+
+  glrn$train(tsk("mtcars"))
+  expect_equal(attr(glrn$predict(tsk("mtcars"))$quantiles, "probs"), c(0.1, 0.5, 0.9))
+})
+
 test_that("PipeOpLearnerQuantiles - predict does not rely on predict_type set during training", {
   task = tsk("mtcars")
   po = po("learner_quantiles", lrn("regr.featureless"))

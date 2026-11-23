@@ -220,3 +220,79 @@ test_that("internal_tuned_values, internal_valid_scores", {
   expect_null(obj_novalid$best_valid_scores)
 })
 
+test_that("exported fields", {
+  expect_equal(get_private(po("learner", lrn("classif.debug")))$.exportable_fields(), character(0))
+
+  obj = po("learner", lrn("regr.debug", predict_type = "quantiles"))
+  obj_private = get_private(obj)
+  expect_set_equal(obj_private$.exportable_fields(), c("quantiles", "quantile_response"))
+
+  obj_private$.set_exported_field("quantiles", c(0.1, 0.9))
+  obj_private$.set_exported_field("quantile_response", 0.5)
+  expect_equal(obj$learner$quantiles, c(0.1, 0.5, 0.9))
+  expect_equal(obj_private$.get_exported_field("quantiles"), c(0.1, 0.5, 0.9))
+
+  obj$train(list(tsk("mtcars")))
+  prediction = obj$predict(list(tsk("mtcars")))[[1L]]
+  expect_equal(attr(prediction$quantiles, "probs"), c(0.1, 0.5, 0.9))
+  expect_equal(obj_private$.get_exported_field("quantile_response"), 0.5)
+
+  obj$train(list(Multiplicity(tsk("mtcars"), tsk("mtcars"))))
+  expect_equal(obj_private$.get_exported_field("quantiles"), c(0.1, 0.5, 0.9))
+})
+
+test_that("exported fields - fields of Learner subclasses", {
+  # classif.debug also has fields that GraphLearner handles itself, e.g. validate and internal_valid_scores
+  LearnerClassifExport = R6Class("LearnerClassifExport", inherit = LearnerClassifDebug,
+    active = list(
+      x = function(rhs) {
+        if (!missing(rhs)) private$.x = rhs
+        private$.x
+      },
+      network = function(rhs) NULL
+    ),
+    private = list(.x = 1)
+  )
+  obj = po("learner", LearnerClassifExport$new())
+  expect_equal(get_private(obj)$.exportable_fields(), "x")
+
+  glrn = as_learner(obj)
+  glrn$x = 2
+  expect_equal(glrn$graph$pipeops$classif.debug$learner$x, 2)
+  expect_equal(glrn$x, 2)
+})
+
+test_that("exported fields - Learner that does not support the value", {
+  skip_if_not_installed("rpart")
+  obj = po("learner", lrn("regr.rpart"))
+  expect_set_equal(get_private(obj)$.exportable_fields(), c("quantiles", "quantile_response"))
+
+  glrn = as_learner(po("scale") %>>% lrn("regr.rpart"))
+  expect_null(glrn$quantiles)
+  expect_error({
+    glrn$quantiles = 0.5
+  }, "does not support predicting quantiles")
+
+  glrn = as_learner(gunion(list(lrn("regr.debug"), lrn("regr.rpart"))) %>>% po("regravg", innum = 2))
+  expect_error({
+    glrn$quantiles = 0.5
+  }, "does not support predicting quantiles")
+})
+
+test_that("exported fields - GraphLearner", {
+  glrn = as_learner(po("scale") %>>% lrn("regr.debug", predict_type = "quantiles"))
+  glrn$quantiles = c(0.1, 0.9)
+  glrn$quantile_response = 0.5
+  expect_equal(glrn$base_learner()$quantiles, c(0.1, 0.5, 0.9))
+  expect_equal(glrn$quantiles, c(0.1, 0.5, 0.9))
+
+  rr = resample(tsk("mtcars"), glrn, rsmp("holdout"))
+  expect_equal(attr(rr$prediction()$quantiles, "probs"), c(0.1, 0.5, 0.9))
+})
+
+test_that("exported fields - nested GraphLearner", {
+  glrn = as_learner(po("learner", as_learner(po("scale") %>>% lrn("regr.debug"))))
+  glrn$quantiles = 0.5
+  expect_equal(glrn$base_learner()$quantiles, 0.5)
+  expect_equal(glrn$quantiles, 0.5)
+})

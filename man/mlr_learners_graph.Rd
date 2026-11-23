@@ -103,6 +103,13 @@ This is a heuristic and may report more features than actually used by the base 
 in cases where the base learners do not implement \verb{$selected_features()}.
 The default is \code{FALSE}.
 }
+
+Additionally, the \code{GraphLearner} may have fields exported from \code{\link{PipeOp}}s,
+e.g. \verb{$quantiles} of a \code{\link[mlr3:LearnerRegr]{LearnerRegr}} wrapped in a \code{\link{PipeOpLearner}}.
+For each field, the \code{\link{Graph}} is traversed backwards from its output,
+stopping on each path at the first \code{\link{PipeOp}} that makes the field available for export.
+Setting such a field sets it in all of these \code{\link{PipeOp}}s, and getting it throws an error if their values differ.
+See section \emph{Exportable Fields} in \code{\link{PipeOp}} and section \emph{Internals} for details.
 }
 
 \section{Methods}{
@@ -182,8 +189,10 @@ The \verb{$oob_error()} returned by the base learner, if it has the \verb{"oob_e
 Throws an error otherwise.
 \item \code{loglik()}\cr
 () -> \code{numeric(1)}\cr
-The \verb{$loglik()} returned by the base learner, if it has the \verb{"loglik} property.
+The \verb{$loglik()} returned by the base learner, if it has the \code{"loglik"} property.
 Throws an error otherwise.
+Deprecated and will be removed in the future.
+It is only kept for backwards compatibility with \CRANpkg{mlr3} versions before 0.22.0.
 }
 }
 
@@ -202,6 +211,31 @@ automatically converted to a \code{\link{Graph}} via \code{\link[=gunion]{gunion
 work as a \code{\link[mlr3:Learner]{Learner}}. \code{graph} can furthermore be a \code{\link[mlr3:Learner]{Learner}}, which is then automatically
 wrapped in a \code{\link{Graph}}, which is then again wrapped in a \code{GraphLearner} object; this usually only adds overhead and is not
 recommended.
+
+The \code{GraphLearner} handles the fields of \code{\link[mlr3:Learner]{Learner}} explicitly where needed,
+e.g. setting \verb{$predict_type} also sets it for the \code{\link[mlr3:Learner]{Learner}}s in the \code{\link{Graph}}.
+This is possible because the fields of \code{\link[mlr3:Learner]{Learner}} are a fixed set.
+Classes inheriting from \code{\link[mlr3:Learner]{Learner}} can add any fields,
+e.g. \verb{$quantiles} of a \code{\link[mlr3:LearnerRegr]{LearnerRegr}}, so they cannot be handled explicitly.
+Instead, the \code{\link{PipeOp}}s of the \code{\link{Graph}} make such fields available for export.
+
+The \code{GraphLearner} exposes the fields that the \code{\link{PipeOp}}s of its \code{\link{Graph}} make available for export
+as active bindings, which are added dynamically during construction.
+Fields that the \code{GraphLearner} already has are skipped.
+Exported fields can come from \code{\link[mlr3:Learner]{Learner}}s wrapped in a \code{\link{PipeOpLearner}},
+which makes available the fields that the class of its \code{\link[mlr3:Learner]{Learner}} adds,
+e.g. \verb{$loss} of a \code{LearnerTorch} from \CRANpkg{mlr3torch}, see section \emph{Exported Fields} in \code{\link{PipeOpLearner}}.
+The object is locked at the end of construction, after the exported fields have been added.
+Classes inheriting from \code{GraphLearner} must therefore be created with \code{lock_objects = FALSE},
+see \code{\link[R6:R6Class]{R6Class}}, otherwise construction throws an error.
+Their objects are already locked after \code{super$initialize()},
+so their own \code{initialize()} cannot add new fields after calling it.
+Reading or setting an exported field calls the private methods \code{.get_exported_field()} or \code{.set_exported_field()}
+of the \code{\link{PipeOp}}s found by the search described above, which uses their private \code{.exportable_fields()},
+see section \emph{Exportable Fields} in \code{\link{PipeOp}}.
+Reading only considers the \code{\link{PipeOp}}s of the active branch, while setting considers all branches.
+Setting a field that none of these \code{\link{PipeOp}}s makes available, e.g. because the \code{\link{Graph}} was modified after
+construction, throws an error.
 }
 
 \examples{

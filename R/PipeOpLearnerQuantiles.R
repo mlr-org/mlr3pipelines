@@ -69,6 +69,14 @@
 #'   Predict type of the `PipeOpLearnerQuantiles`, which is always `"quantiles"`.
 #'   Read-only.
 #'
+#' @section Exported Fields:
+#' The fields `quantiles` and `quantile_response` are made available for export,
+#' see section *Exportable Fields* in [`PipeOp`].
+#' They behave like the fields of a [`LearnerRegr`][mlr3::LearnerRegr],
+#' but read and set the required hyperparameters `q_vals` and `q_response`, so `quantiles` cannot be set to `NULL`.
+#' The `quantiles` field of the wrapped [`Learner`][mlr3::Learner] is not exported,
+#' since it is overwritten during training.
+#'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
 #'
@@ -201,7 +209,25 @@ PipeOpLearnerQuantiles = R6Class("PipeOpLearnerQuantiles",
 
     .quantiles_param_set = NULL,
     .learner = NULL,
-    .additional_phash_input = function() private$.learner$phash
+    .additional_phash_input = function() private$.learner$phash,
+
+    .exportable_fields = function() c("quantiles", "quantile_response"),
+    .get_exported_field = function(name) {
+      pv = private$.quantiles_param_set$values
+      switch(name, quantiles = pv$q_vals, quantile_response = pv$q_response)
+    },
+    .set_exported_field = function(name, value) {
+      # mirrors $quantiles and $quantile_response of LearnerRegr; the param set checks the values on assignment
+      ps = private$.quantiles_param_set
+      if (name == "quantiles") {
+        # assigning NULL would silently remove the required value
+        ps$values$q_vals = assert_numeric(value, .var.name = "quantiles")
+        if (length(value) == 1L) ps$values$q_response = value
+      } else {
+        ps$values$q_response = assert_number(value, .var.name = "quantile_response")
+        ps$values$q_vals = sort(union(ps$values$q_vals, value))
+      }
+    }
   )
 )
 

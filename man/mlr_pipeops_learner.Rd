@@ -97,6 +97,36 @@ The best internal validation scores observed during training if the wrapped \cod
 }
 }
 
+\section{Exported Fields}{
+
+\code{PipeOpLearner} makes the fields of its wrapped \code{\link[mlr3:Learner]{Learner}} available for export to a
+\code{\link{GraphLearner}}, see \code{\link{GraphLearner}} and section \emph{Exportable Fields} in \code{\link{PipeOp}}.
+However, not all fields of the wrapped \code{\link[mlr3:Learner]{Learner}} are made available,
+only those that are not on a blacklist, which is implemented in the private method \code{.exportable_fields()}.
+
+The fields are read from and set on \verb{$learner}, i.e. the untrained \code{\link[mlr3:Learner]{Learner}}, not \verb{$learner_model}.
+\verb{$learner} can also be a \code{\link{GraphLearner}}, whose exported fields are then made available as well.
+
+The blacklist contains the following fields:
+\itemize{
+\item All fields of the base class \code{\link[mlr3:Learner]{Learner}}, e.g. \code{id} and \code{predict_type}.
+They are a fixed set, which \code{\link{GraphLearner}} handles explicitly where needed,
+see section \emph{Internals} in \code{\link{GraphLearner}}.
+\item The fields of \code{\link{GraphLearner}}, e.g. \code{validate} and \code{internal_valid_scores},
+which some \code{\link[mlr3:Learner]{Learner}}s also have, but which a \code{\link{GraphLearner}} handles itself.
+\item Fields that hold results of training or wrapped objects,
+since they would always be read from the untrained \verb{$learner}:
+\code{learner}, \code{network}, \code{archive}, \code{tuning_instance}, \code{tuning_result}, \code{fselect_instance}, and \code{fselect_result}.
+}
+
+Fields are made available even if the \code{\link[mlr3:Learner]{Learner}} does not support them in its current configuration,
+e.g. \code{quantiles} of a \code{\link[mlr3:LearnerRegr]{LearnerRegr}} that cannot predict quantiles,
+so that setting them throws the error of the \code{\link[mlr3:Learner]{Learner}}.
+
+\code{PipeOp}s inheriting from \code{PipeOpLearner} can overload the private method \code{.exportable_fields()}
+to exclude further fields.
+}
+
 \section{Methods}{
 
 Methods inherited from \code{\link{PipeOp}}.
