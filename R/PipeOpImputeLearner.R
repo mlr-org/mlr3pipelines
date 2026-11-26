@@ -61,7 +61,14 @@
 #' Fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`], as well as:
 #' * `learner` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Learner`][mlr3::Learner] that is being wrapped. Read-only.
+#' * `learner_model` :: [`Learner`][mlr3::Learner] | [`Multiplicity`] of [`Learner`][mlr3::Learner]\cr
+#'   If trained, this is a [`Multiplicity`] of [`Learner`][mlr3::Learner]s, named by the features for which a `Learner`
+#'   was fitted, each holding the model used to impute that feature.
+#'   Features that were entirely `NA` during training are imputed by sampling and are therefore not included.
+#'   Otherwise, this is the [`Learner`][mlr3::Learner] that is being wrapped.
+#'   Read-only.
 #' * `learner_models` :: `list` of [`Learner`][mlr3::Learner] | `NULL`\cr
+#'   Deprecated and will be removed in the future, use `$learner_model` instead.\cr
 #'   [`Learner`][mlr3::Learner] that is being wrapped. This list is named by features for which a `Learner` was fitted, and
 #'   contains the same `Learner`, but with different respective models for each feature. If this `PipeOp` is not trained,
 #'   this is an empty `list`. For features that were entirely `NA` during training, the `list` contains `NULL` elements.
@@ -124,9 +131,31 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
       }
       private$.learner
     },
+    learner_model = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$learner_model is read-only.")
+        }
+      }
+      if (is.null(self$state) || is_noop(self$state)) {
+        private$.learner
+      } else {
+        multiplicity_recurse(self$state, function(state) {
+          # null models of features that were entirely NA during training are not learner states
+          learner_states = keep(state$model, inherits, "learner_state")
+          as.Multiplicity(map(learner_states, clone_with_state, learner = private$.learner))
+        })
+      }
+    },
     learner_models = function(val) {
       if (!missing(val)) {
         stop("$learner_models is read-only.")
+      }
+      # all.equal() and waldo read every active binding via as.list.environment(), don't warn when comparing objects.
+      # The stack is searched instead of only checking sys.call(-1L), as leanify_package() adds a wrapper call.
+      if (!some(sys.calls(), function(x) identical(x[[1L]], quote(as.list.environment)))) {
+        # nolint next
+        warningf("$learner_models of PipeOpImputeLearner is deprecated and will be removed in the future. Use $learner_model instead.")
       }
       if (is.null(self$state) || is_noop(self$state)) {
         list()

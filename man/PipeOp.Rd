@@ -130,6 +130,8 @@ Indicate whether the \code{PipeOp} was already trained and can therefore be used
 A set of tags associated with the \code{PipeOp}. Tags describe a PipeOp's purpose.
 Can be used to filter \code{\link[=mlr_pipeops]{as.data.table(mlr_pipeops)}}.
 \code{PipeOp} tags are inherited and child classes can introduce additional tags.
+The \code{"learner"} tag marks \code{PipeOp}s that wrap a \code{\link[mlr3:Learner]{Learner}} to model the target
+and expose it through a \verb{$learner_model} field; only these are considered by \code{\link{GraphLearner}}\verb{$base_learner()}.
 \item \code{hash} :: \code{character(1)} \cr
 Checksum calculated on the \code{PipeOp}, depending on the \code{PipeOp}'s \code{class} and the slots \verb{$id} and \verb{$param_set$values}. If a
 \code{PipeOp}'s functionality may change depending on more than these values, it should inherit the \verb{$hash} active

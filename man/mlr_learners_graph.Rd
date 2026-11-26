@@ -128,7 +128,15 @@ Unmarshal the model.
 \item \code{base_learner(recursive = Inf, return_po = FALSE, return_all = FALSE, resolve_branching = TRUE)}\cr
 (\code{numeric(1)}, \code{logical(1)}, \code{logical(1)}, \code{character(1)}) -> \code{Learner} | \code{\link{PipeOp}} | \code{list} of \code{Learner} | \code{list} of \code{\link{PipeOp}}\cr
 Return the base learner of the \code{GraphLearner}. If \code{recursive} is 0, the \code{GraphLearner} itself is returned.
-Otherwise, the \code{\link{Graph}} is traversed backwards to find the first \code{PipeOp} containing a \verb{$learner_model} field.
+Otherwise, the \code{\link{Graph}} is traversed backwards from its output to find the first \code{PipeOp}
+that is tagged \code{"learner"} and has a non-\code{NULL} \verb{$learner_model} field,
+which is how a \code{PipeOp} exposes the \code{\link[mlr3:Learner]{Learner}} it wraps.
+This field contains the wrapped \code{Learner}, holding the trained model if the \code{PipeOp} is trained,
+or a \code{\link{Multiplicity}} of such \code{Learner}s if the \code{PipeOp} holds multiple models.
+The latter is the case if the \code{PipeOp} was trained on a \code{\link{Multiplicity}}, or if it fits multiple models by design,
+such as \code{\link{PipeOpLearnerPICVPlus}} (one model per fold) or \code{\link{PipeOpLearnerQuantiles}} (one model per quantile).
+\code{PipeOp}s that wrap a \code{Learner} for preprocessing, such as \code{\link{PipeOpImputeLearner}},
+also have a \verb{$learner_model} field but are not tagged \code{"learner"} and are therefore never base learners.
 If \code{recursive} is 1, that \verb{$learner_model} (or containing \code{PipeOp}, if \code{return_po} is \code{TRUE}) is returned.
 If \code{recursive} is greater than 1, the discovered base learner's \code{base_learner()} method is called with \code{recursive - 1}.
 \code{recursive} must be set to 1 if \code{return_po} is TRUE, and must be set to at most 1 if \code{return_all} is \code{TRUE}.\cr
@@ -137,7 +145,10 @@ This will typically be a \code{\link{PipeOpLearner}} or a \code{\link{PipeOpLear
 If \code{return_all} is \code{TRUE}, a \code{list} of \code{Learner}s or \code{PipeOp}s is returned.
 If \code{return_po} is \code{FALSE}, this list may contain \code{\link{Multiplicity}} objects, which are not unwrapped.
 If \code{return_all} is \code{FALSE} and there are multiple possible base learners, an error is thrown.
-This may also happen if only a single \code{\link{PipeOpLearner}} is present that was trained with a \code{\link{Multiplicity}}.\cr
+This may also happen if only a single \code{PipeOp} is present
+whose \verb{$learner_model} is a \code{\link{Multiplicity}} of more than one \code{Learner},
+e.g. a \code{\link{PipeOpLearner}} trained with a \code{\link{Multiplicity}},
+or a trained \code{\link{PipeOpLearnerPICVPlus}} or \code{\link{PipeOpLearnerQuantiles}}.\cr
 If \code{resolve_branching} is \code{TRUE}, and when a \code{\link{PipeOpUnbranch}} is encountered, the
 corresponding \code{\link{PipeOpBranch}} is searched, and its hyperparameter configuration is used to select the base learner.
 There may be multiple corresponding \code{\link{PipeOpBranch}}s, which are all considered.
@@ -173,8 +184,10 @@ Throws an error otherwise.
 \item \code{selected_features()}\cr
 () -> \code{character}\cr
 The \verb{$selected_features()} returned by the base learner, if it has the \verb{"selected_features} property.
-If the base learner does not have the \code{"selected_features"} property and \code{impute_selected_features} is \code{TRUE},
-all features seen by the base learners are returned.
+If there are multiple base learners, because there are multiple base learner \code{PipeOp}s or because a base learner
+\code{PipeOp} holds a \code{\link{Multiplicity}} of \code{Learner}s, the union of their selected features is returned.
+If a base learner does not have the \code{"selected_features"} property and \code{impute_selected_features} is \code{TRUE},
+all features seen by that base learner are returned instead.
 Throws an error otherwise.
 \item \code{oob_error()}\cr
 () -> \code{numeric(1)}\cr

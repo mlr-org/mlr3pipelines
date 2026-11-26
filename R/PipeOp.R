@@ -123,6 +123,8 @@
 #'   A set of tags associated with the `PipeOp`. Tags describe a PipeOp's purpose.
 #'   Can be used to filter [`as.data.table(mlr_pipeops)`][mlr_pipeops].
 #'   `PipeOp` tags are inherited and child classes can introduce additional tags.
+#'   The `"learner"` tag marks `PipeOp`s that wrap a [`Learner`][mlr3::Learner] to model the target
+#'   and expose it through a `$learner_model` field; only these are considered by [`GraphLearner`]`$base_learner()`.
 #' * `hash` :: `character(1)` \cr
 #'   Checksum calculated on the `PipeOp`, depending on the `PipeOp`'s `class` and the slots `$id` and `$param_set$values`. If a
 #'   `PipeOp`'s functionality may change depending on more than these values, it should inherit the `$hash` active

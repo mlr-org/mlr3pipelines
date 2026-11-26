@@ -137,26 +137,46 @@ test_that("PipeOpImputeLearner - model active binding to state", {
   po = PipeOpImputeLearner$new(learner = lrn("regr.featureless"))
   task = mlr_tasks$get("diabetes")
 
-  # before training states are NULL and learner_models are list()
+  # before training states are NULL and learner_model is the wrapped learner
   expect_null(po$state)
   expect_equal(po$learner$state, po$state)
-  expect_equal(po$learner_models, list())
+  expect_equal(po$learner, po$learner_model)
 
   # after training learner's state is NULL
   train_out = po$train(list(task))
   train_state = po$state
   expect_null(po$learner$state)
-  # after training models in the learner_models are equivalent to the models in the state
+  # after training learner_model is a Multiplicity of Learners, named by feature, with the models of the state
   models = po$state$model
-  expect_equal(names(models), names(po$learner_models))
-  expect_true(all(pmap_lgl(list(map(models, .f = "model"), map(po$learner_models, .f = "model")), .f = all.equal)))
+  expect_class(po$learner_model, "Multiplicity")
+  expect_equal(names(models), names(po$learner_model))
+  expect_true(all(pmap_lgl(list(map(models, .f = "model"), map(po$learner_model, .f = "model")), .f = all.equal)))
 
   # after predicting state is unchanged and models still are equivalent
   predict_out = po$predict(list(task))
   expect_equal(po$state, train_state)
   expect_null(po$learner$state)
-  expect_equal(names(models), names(po$learner_models))
-  expect_true(all(pmap_lgl(list(map(models, .f = "model"), map(po$learner_models, .f = "model")), .f = all.equal)))
+  expect_equal(names(models), names(po$learner_model))
+  expect_true(all(pmap_lgl(list(map(models, .f = "model"), map(po$learner_model, .f = "model")), .f = all.equal)))
+
+  # deprecated learner_models still works, but warns
+  expect_warning({learner_models = po$learner_models}, "deprecated")
+  expect_equal(map(learner_models, .f = "model"), map(po$learner_model, .f = "model"))
+})
+
+test_that("PipeOpImputeLearner - learner_model omits features imputed by sampling, handles Multiplicity", {
+  task = tsk("mtcars")$select(c("cyl", "hp"))
+  task$cbind(data.table(..row_id = task$row_ids, allna = NA_real_))
+  po = PipeOpImputeLearner$new(learner = lrn("regr.featureless"))
+  po$train(list(task))
+  expect_true(is.atomic(po$state$model$allna))
+  expect_equal(names(po$learner_model), c("cyl", "hp"))
+
+  po$train(list(Multiplicity(task, task)))
+  expect_class(po$learner_model, "Multiplicity")
+  expect_length(po$learner_model, 2)
+  expect_class(po$learner_model[[1]], "Multiplicity")
+  expect_equal(names(po$learner_model[[1]]), c("cyl", "hp"))
 })
 
 test_that("marshal", {
