@@ -81,6 +81,12 @@
 #'   For more details on the possible values, see [`mlr3::Learner`].
 #' * `marshaled` :: `logical(1)`\cr
 #'   Whether the learner is marshaled.
+#' * `graph_class` :: `character`\cr
+#'   Classes that this `GraphLearner` contributes to the `$graph_class` of a [`Graph`] in which it is a base learner,
+#'   see [`as_learner.Graph()`].
+#'   This is the `$graph_class` of `$graph`, so a [`Graph`] containing a `GraphLearner` is converted to the same kind of
+#'   [`Learner`][mlr3::Learner] as the [`Graph`] it wraps.
+#'   Read-only.
 #' * `impute_selected_features` :: `logical(1)`\cr
 #'   Whether to heuristically determine `$selected_features()` as all `$selected_features()` of all "base learner" Learners,
 #'   even if they do not have the `"selected_features"` property / do not implement `$selected_features()`.
@@ -393,6 +399,10 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     marshaled = function() {
       learner_marshaled(self)
     },
+    graph_class = function(rhs) {
+      assert_ro_binding(rhs)
+      private$.graph$graph_class
+    },
     hash = function() calculate_hash(class(self), self$id, self$graph$hash, private$.predict_type, private$.validate,
       self$fallback$hash, self$parallel_predict, private$.timeout, private$.deadline, private$.encapsulation, private$.when),
     phash = function() calculate_hash(class(self), self$id, self$graph$phash, private$.predict_type, private$.validate,
@@ -681,6 +691,28 @@ unmarshal_model.graph_learner_model_marshaled = function(model, inplace = FALSE,
 #' The arguments `id`, `param_vals`, `task_type`, and `predict_type` are passed on to the [`GraphLearner`] constructor.
 #' Unknown arguments raise an error.
 #'
+#' @section Specialized GraphLearners:
+#' Extension packages can make `as_learner()` return a subclass of [`GraphLearner`] with additional methods,
+#' for [`Graph`]s whose base learners are their [`Learner`][mlr3::Learner]s.
+#' For this, the [`Learner`][mlr3::Learner] gets a read-only `$graph_class` field,
+#' a `character` vector of class names, most specific first,
+#' and the package registers an `as_learner()` method for at least one of these classes,
+#' which takes the same arguments as `as_learner.Graph()`.
+#'
+#' `as_learner.Graph()` calls the method of the first class in the `$graph_class` field of `x` (see [`Graph`])
+#' that has one, and constructs a [`GraphLearner`] if there is none.
+#' The method receives the [`Graph`] as `x`, although `x` does not inherit from the class.
+#' It therefore has to construct the learner itself, e.g. via `$new()`, instead of calling `as_learner()` on `x` again.
+#'
+#' The `$graph_class` of `x` contains the classes that all possible base learners of `x` have in common,
+#' considering all branches.
+#' The resulting learner therefore has to cope with branching,
+#' as well as with [`Graph`]s that have several base learners, such as ensembles.
+#' It should throw an error from the methods that do not support the given [`Graph`], and not from its construction.
+#' A [`GraphLearner`] that is a base learner of `x` contributes the `$graph_class` of the [`Graph`] it wraps.
+#' The classes are determined when `as_learner()` is called, so changing `x` afterwards does not change the class of the
+#' resulting learner.
+#'
 #' @param x ([`Graph`] | [`PipeOp`])\cr
 #'   Object to convert.
 #' @param clone (`logical(1)`)\cr
@@ -709,7 +741,7 @@ unmarshal_model.graph_learner_model_marshaled = function(model, inplace = FALSE,
 #' @param predict_type (`character(1)` | `NULL`)\cr
 #'   Predict type of the resulting [`GraphLearner`].
 #'   If `NULL` (default), it is inferred from `x`.
-#' @return [`GraphLearner`]
+#' @return [`GraphLearner`], or a subclass of it if `x` has a `$graph_class`, see Section *Specialized GraphLearners*.
 #' @seealso [`mlr_learners_graph`] for details on [`GraphLearner`].
 #' @export
 #' @examplesIf requireNamespace("rpart")
@@ -730,6 +762,15 @@ as_learner.Graph = function(x, clone = FALSE, discard_state = FALSE, ..., id = N
   # It is accepted because resample() calls `as_learner(learner, clone = ..., discard_state = TRUE)`,
   # following the signature of mlr3's as_learner.Learner().
   assert_flag(discard_state)
+  # dispatch on the classes that the base learners request, see Section "Specialized GraphLearners";
+  # classes of the Graph itself are skipped, as they would dispatch back to this method.
+  for (graph_class in setdiff(x$graph_class, class(x))) {
+    method = getS3method("as_learner", graph_class, optional = TRUE)
+    if (!is.null(method)) {
+      return(method(x, clone = clone, discard_state = discard_state, id = id, param_vals = param_vals,
+        task_type = task_type, predict_type = predict_type))
+    }
+  }
   GraphLearner$new(x, id = id, param_vals = param_vals, task_type = task_type, predict_type = predict_type,
     clone_graph = clone)
 }
@@ -956,4 +997,20 @@ graph_base_learner = function(graph, resolve_branching = TRUE, lookup_field = "l
   }
 
   unique(search_base_learner_pipeops(last_pipeop_id))
+}
+
+# The `$graph_class` of a Graph: the classes in the `$graph_class` field that all of its possible base learners
+# have in common, considering all branches. Learners without the field contribute no classes.
+infer_graph_class = function(graph) {
+  if (nrow(graph$output) != 1L) return(character(0))
+  base_learners = unlist(
+    map(graph_base_learner(graph, resolve_branching = FALSE), function(po) multiplicity_flatten(po$learner_model)),
+    recursive = FALSE, use.names = FALSE
+  )
+  if (!length(base_learners)) return(character(0))
+  graph_classes = map(base_learners, function(learner) {
+    assert_character(get0("graph_class", learner, inherits = FALSE) %??% character(0), any.missing = FALSE,
+      .var.name = sprintf("$graph_class of base learner '%s'", learner$id))
+  })
+  unique(Reduce(intersect, graph_classes))
 }

@@ -62,6 +62,15 @@ Output channels of the \code{Graph}. For each channel lists the name, output typ
 \item \code{packages} :: \code{character}\cr
 Set of all required packages for the various methods in the \code{Graph}, a set union of all required packages of all contained
 \code{\link{PipeOp}} objects.
+\item \code{graph_class} :: \code{character}\cr
+Classes that \code{\link[mlr3:as_learner]{as_learner()}} dispatches on when converting the \code{Graph} to a
+\code{\link[mlr3:Learner]{Learner}}, see \code{\link[=as_learner.Graph]{as_learner.Graph()}}.
+These are the classes in the \verb{$graph_class} field that all possible base learners of the \code{Graph} have in common,
+where all paths behind a \code{\link{PipeOpBranch}} are considered, regardless of its \code{selection}
+(see \verb{$base_learner()} of \code{\link{GraphLearner}} for what the base learners are).
+A base learner without a \verb{$graph_class} field contributes no classes, so the result is then empty.
+It is also empty for \code{Graph}s without base learner or without a unique output.
+Read-only.
 \item \code{state} :: named \code{list}\cr
 Get / Set the \verb{$state} of each of the members of \code{\link{PipeOp}}.
 \item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}}\cr

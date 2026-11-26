@@ -4,6 +4,7 @@
 * Fix: `GraphLearner$graph_model` now throws an informative error asking to call `$unmarshal()` first when the `GraphLearner` is marshaled. This also affects `$pipeops`, `$base_learner()`, `$importance()`, `$selected_features()`, `$oob_error()`, and `$loglik()` (#1038).
 * `as_learner()` for `Graph` input defaults to `clone = FALSE` again, as it did before 0.12.0, consistent with `as_learner()` for `PipeOp` and `Learner` input (#1039).
 * Fix: `as_learner()` for `Graph` and `PipeOp` input now throws an error on unknown arguments instead of silently ignoring them (#1039).
+* feat: `as_learner()` for `Graph` and `PipeOp` input can now return a subclass of `GraphLearner` provided by an extension package: `Learner`s can have a `$graph_class` field, and `as_learner()` dispatches on the classes in it that all possible base learners of the `Graph` have in common, which the new `Graph$graph_class` field lists. `GraphLearner$graph_class` contributes the classes of its `Graph`, so this also works for nested `GraphLearner`s (#1022).
 * Fix: `GraphLearner$hash` and `$phash` now include the timeout, the deadline, the encapsulation method, and the `when` handler, matching `Learner$hash` in `mlr3`, so `GraphLearner`s differing only in these settings are no longer merged by `benchmark()`.
 * Fix: Deep-cloning a `GraphLearner` now also clones `R6` objects in its saved hyperparameter values (`$state$param_vals`).
 * Tests in `inst/testthat` no longer override `expect_equal`.
