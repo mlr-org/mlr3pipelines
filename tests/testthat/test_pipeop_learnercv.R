@@ -857,3 +857,52 @@ test_that("PipeOpLearnerCV cv_ensemble resolves ties randomly", {
     c("setosa", "versicolor")
   )
 })
+
+test_that("PipeOpLearnerCV drops prediction weights and extra columns", {
+  skip_on_cran()
+  skip_if_not_installed("rpart")
+
+  task = tsk("iris")
+  task$cbind(data.table(w = seq_len(task$nrow)))
+  task$set_col_roles("w", "weights_measure")
+
+  prob_cols = paste0("classif.rpart.prob.", task$class_names)
+  po_full = po("learner_cv", lrn("classif.rpart", predict_type = "prob"))
+  out_train = po_full$train(list(task))[[1L]]
+  out_pred = po_full$predict(list(task))[[1L]]
+  expect_setequal(out_train$feature_names, prob_cols)
+  expect_setequal(out_pred$feature_names, prob_cols)
+  expect_equal(out_train$col_roles$weights_measure, "w")
+
+  po_ens = po(
+    "learner_cv",
+    lrn("classif.rpart", predict_type = "prob"),
+    resampling.predict_method = "cv_ensemble"
+  )
+  out_ens_train = po_ens$train(list(task))[[1L]]
+  out_ens_pred = po_ens$predict(list(task))[[1L]]
+  expect_setequal(out_ens_train$feature_names, prob_cols)
+  expect_setequal(out_ens_pred$feature_names, prob_cols)
+
+  task_regr = tsk("mtcars")
+  task_regr$cbind(data.table(w = seq_len(task_regr$nrow)))
+  task_regr$set_col_roles("w", "weights_measure")
+  po_regr = po("learner_cv", lrn("regr.rpart"))
+  expect_equal(po_regr$train(list(task_regr))[[1L]]$feature_names, "regr.rpart.response")
+  expect_equal(po_regr$predict(list(task_regr))[[1L]]$feature_names, "regr.rpart.response")
+
+  learner_extra = R6::R6Class(
+    "LearnerClassifExtra",
+    inherit = LearnerClassifFeatureless,
+    private = list(
+      .predict = function(task) {
+        res = super$.predict(task)
+        res$extra = list(meta = seq_len(task$nrow))
+        res
+      }
+    )
+  )$new()
+  po_extra = po("learner_cv", learner_extra, resampling.method = "insample")
+  expect_equal(po_extra$train(list(tsk("iris")))[[1L]]$feature_names, "classif.featureless.response")
+  expect_equal(po_extra$predict(list(tsk("iris")))[[1L]]$feature_names, "classif.featureless.response")
+})

@@ -254,7 +254,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         rdesc = mlr_resamplings$get(pv$method)
         if (pv$method == "cv") rdesc$param_set$values = list(folds = pv$folds)
         rr = resample(task, private$.learner, rdesc, store_models = predict_method == "cv_ensemble")
-        prds = as.data.table(rr$prediction(predict_sets = "test"))
+        prds = rr$prediction(predict_sets = "test")
         if (predict_method == "cv_ensemble") {
           cv_model_states = map(rr$learners, "state")
           self$state = private$make_cv_state(cv_model_states)
@@ -263,7 +263,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         if (predict_method == "cv_ensemble") {
           stop("`resampling.predict_method = \"cv_ensemble\"` can not be combined with `resampling.method = \"insample\"`.")
         }
-        prds = as.data.table(private$.learner$predict(task))
+        prds = private$.learner$predict(task)
       }
 
       private$pred_to_task(prds, task)
@@ -280,13 +280,21 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         private$predict_from_cv_models(task, state$cv_model_states)
       } else {
         private$.learner$state = state
-        as.data.table(private$.learner$predict(task))
+        private$.learner$predict(task)
       }
       private$pred_to_task(prediction_dt, task)
     },
 
     pred_to_task = function(prds, task) {
-      if (!is.null(prds$truth)) prds[, truth := NULL]
+      extra_cols = character(0)
+      if (inherits(prds, "Prediction")) {
+        extra_cols = names(prds$data$extra)
+        prds = as.data.table(prds)
+      }
+      drop_cols = intersect(colnames(prds), c("truth", "weights", extra_cols))
+      if (length(drop_cols)) {
+        set(prds, j = drop_cols, value = NULL)
+      }
       if (!self$param_set$values$resampling.keep_response && self$learner$predict_type == "prob") {
         prds[, response := NULL]
       }
